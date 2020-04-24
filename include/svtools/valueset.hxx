@@ -22,8 +22,7 @@
 
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
-
-#include <vcl/ctrl.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/customweld.hxx>
 #include <memory>
 #include <vector>
@@ -47,7 +46,7 @@ enum class DrawFrameStyle;
 Description
 ============
 
-class ValueSet
+class SvtValueSet
 
 This class allows the selection of an item. In the process items are
 drawn side by side. The selection of items can be more clear than in a
@@ -178,7 +177,6 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
-typedef std::vector<std::unique_ptr<ValueSetItem>> ValueItemList;
 typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 
 #define WB_ITEMBORDER           (WinBits(0x00010000))
@@ -191,163 +189,6 @@ typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 
 #define VALUESET_APPEND         (size_t(-1))
 #define VALUESET_ITEM_NOTFOUND  (size_t(-1))
-
-
-class SVT_DLLPUBLIC ValueSet : public Control
-{
-private:
-    ValueItemList   mItemList;
-    std::unique_ptr<ValueSetItem> mpNoneItem;
-    VclPtr<ScrollBar> mxScrollBar;
-    tools::Rectangle       maNoneItemRect;
-    tools::Rectangle       maItemListRect;
-    long            mnItemWidth;
-    long            mnItemHeight;
-    long            mnTextOffset;
-    long            mnVisLines;
-    long            mnLines;
-    long            mnUserItemWidth;
-    long            mnUserItemHeight;
-    sal_uInt16      mnSelItemId;
-    sal_uInt16      mnHighItemId;
-    sal_uInt16      mnCols;
-    sal_uInt16      mnCurCol;
-    sal_uInt16      mnUserCols;
-    sal_uInt16      mnUserVisLines;
-    sal_uInt16      mnFirstLine;
-    DrawFrameStyle  mnFrameStyle;
-    Color           maColor;
-    Link<ValueSet*,void>  maSelectHdl;
-
-    bool            mbFormat : 1;
-    bool            mbHighlight : 1;
-    bool            mbNoSelection : 1;
-    bool            mbDrawSelection : 1;
-    bool            mbBlackSel : 1;
-    bool            mbDoubleSel : 1;
-    bool            mbScroll : 1;
-    bool            mbEdgeBlending : 1;
-    bool            mbHasVisibleItems : 1;
-
-    friend class ValueSetAcc;
-    friend class ValueItemAcc;
-
-    using Control::ImplInitSettings;
-    SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-
-    SVT_DLLPRIVATE void         ImplInitScrollBar();
-    SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
-    SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
-    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
-    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
-    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
-    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
-    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
-    SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
-    SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos );
-    SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
-    SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-    SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos );
-    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
-    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
-
-    ValueSet (const ValueSet &) = delete;
-    ValueSet & operator= (const ValueSet &) = delete;
-
-    SVT_DLLPRIVATE void Format(vcl::RenderContext& rRenderContext);
-
-protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
-
-public:
-                    ValueSet( vcl::Window* pParent, WinBits nWinStyle );
-    virtual         ~ValueSet() override;
-    virtual void    dispose() override;
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    Tracking( const TrackingEvent& rMEvt ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
-    virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-    virtual void    StateChanged( StateChangedType nStateChange ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
-    virtual FactoryFunction GetUITestFactory() const override;
-
-    void             Select();
-
-    /// Insert @rImage item with @rStr as either a legend or tooltip depending on @bShowLegend.
-    void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
-                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
-    /// Insert an @rColor item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
-                               const OUString& rStr);
-    /// Insert an User Drawn item.
-    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
-
-    void            Clear();
-
-    size_t          GetItemCount() const;
-    size_t          GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16      GetItemId( size_t nPos ) const;
-    sal_uInt16      GetItemId( const Point& rPos ) const;
-    tools::Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
-
-    void            SetColCount( sal_uInt16 nNewCols = 1 );
-    void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    void           SetItemWidth( long nItemWidth );
-    void           SetItemHeight( long nLineHeight );
-    Size           GetLargestItemSize();
-
-    void           SelectItem( sal_uInt16 nItemId );
-    sal_uInt16     GetSelectedItemId() const
-    {
-        return mnSelItemId;
-    }
-    bool IsItemSelected( sal_uInt16 nItemId ) const
-    {
-        return !mbNoSelection && (nItemId == mnSelItemId);
-    }
-    void SetNoSelection();
-
-    Color           GetItemColor( sal_uInt16 nItemId ) const;
-    OUString        GetItemText( sal_uInt16 nItemId ) const;
-    bool            IsColor() const
-    {
-        return maColor.GetTransparency() == 0;
-    }
-
-    void            EndSelection();
-
-    Size            CalcWindowSizePixel(const Size& rItemSize,
-                                        sal_uInt16 nCalcCols = 0,
-                                        sal_uInt16 nCalcLines = 0) const;
-    Size            CalcItemSizePixel(const Size& rSize) const;
-    long            GetScrollWidth() const;
-
-    void            SetSelectHdl(const Link<ValueSet*,void>& rLink)
-    {
-        maSelectHdl = rLink;
-    }
-
-    bool GetEdgeBlending() const
-    {
-        return mbEdgeBlending;
-    }
-    void SetEdgeBlending(bool bNew);
-};
 
 class SVT_DLLPUBLIC SvtValueSet : public weld::CustomWidgetController
 {
