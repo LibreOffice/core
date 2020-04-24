@@ -154,8 +154,8 @@ void SvxColorTabPage::ImpColorCountChanged()
 {
     if (!pColorList.is())
         return;
-    m_xValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
-    m_xValSetRecentList->SetColCount(SvxColorValueSet::getColumnCount());
+    m_xValSetColorList->SetColCount(ColorValueSet::getColumnCount());
+    m_xValSetRecentList->SetColCount(ColorValueSet::getColumnCount());
 }
 
 void SvxColorTabPage::FillPaletteLB()

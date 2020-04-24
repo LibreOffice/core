@@ -27,7 +27,6 @@
 #include <vector>
 #include <memory>
 
-class SvxColorValueSet;
 namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
