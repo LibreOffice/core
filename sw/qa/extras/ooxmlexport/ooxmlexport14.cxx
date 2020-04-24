@@ -366,6 +366,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
                              .Position);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf72511_commentIndent, "tdf72511_commentIndent.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    // Word ignores margins in comments. Either ignore it or don't import it.
+    // This is a preventative test - currently an exception prevents <w:ind w:left="2268"/> from being applied
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults.docx")
 {
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
