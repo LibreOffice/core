@@ -30,7 +30,6 @@
 
 class ListBox;
 class Edit;
-class ValueSet;
 class SdHtmlAttrPreview;
 class SdPublishingDesign;
 class ButtonSet;

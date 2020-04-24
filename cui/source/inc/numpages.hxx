@@ -37,7 +37,6 @@ class SvxNumValueSet;
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxBrushItem;
-class ValueSet;
 
 struct SvxNumSettings_Impl
 {
