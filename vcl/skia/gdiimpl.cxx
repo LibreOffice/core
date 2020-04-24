@@ -198,7 +198,6 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mFillColor(SALCOLOR_NONE)
     , mXorMode(false)
     , mFlush(new SkiaFlushIdle(this))
-    , mPendingPixelsToFlush(0)
 {
 }
 
@@ -337,20 +336,6 @@ void SkiaSalGraphicsImpl::postDraw()
             performFlush(); // otherwise nothing would trigger idle rendering
         else if (!mFlush->IsActive())
             mFlush->Start();
-    }
-    // Skia (at least when using Vulkan) queues drawing commands and executes them only later.
-    // But some operations may queue way too much data to draw, leading to Vulkan getting out of memory,
-    // which at least on Linux leads to driver problems affecting even the whole X11 session.
-    // One such problematic operation may be drawBitmap(SkBitmap), which is used by SkiaX11CairoTextRender
-    // to draw text, which is internally done by creating the SkBitmap from cairo surface data. Apparently
-    // the cairo surface's size matches the size of the destination (window), which may be large,
-    // and each text drawing allocates a new surface (and thus SkBitmap). So we may end up queueing up
-    // millions of pixels of bitmap data. So force a flush if such a possibly problematic operation
-    // has queued up too much data.
-    if (mPendingPixelsToFlush > 10 * 1024 * 1024)
-    {
-        mSurface->flush();
-        mPendingPixelsToFlush = 0;
     }
     SkiaZone::leave(); // matched in preDraw()
 }
@@ -1298,25 +1283,6 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
     SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     addXorRegion(aDestinationRect);
-    postDraw();
-}
-
-void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
-                                     SkBlendMode eBlendMode)
-{
-    SkRect aSourceRect
-        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
-    SkRect aDestinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
-                                               rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-
-    SkPaint aPaint;
-    aPaint.setBlendMode(eBlendMode);
-
-    preDraw();
-    SAL_INFO("vcl.skia.trace", "drawbitmap(" << this << "): " << rPosAry << ":" << int(eBlendMode));
-    getDrawCanvas()->drawBitmapRect(aBitmap, aSourceRect, aDestinationRect, &aPaint);
-    addXorRegion(aDestinationRect);
-    mPendingPixelsToFlush += aBitmap.width() * aBitmap.height();
     postDraw();
 }
 

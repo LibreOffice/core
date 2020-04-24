@@ -202,8 +202,6 @@ public:
     // Default blend mode for SkPaint is SkBlendMode::kSrcOver
     void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
-    void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
-                    SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
     enum class GlyphOrientation
     {
@@ -300,7 +298,6 @@ protected:
     std::unique_ptr<SkCanvas> mXorCanvas;
     SkRegion mXorRegion; // the area that needs updating for the xor operation
     std::unique_ptr<SkiaFlushIdle> mFlush;
-    int mPendingPixelsToFlush;
 };
 
 #endif

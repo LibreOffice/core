@@ -14,7 +14,6 @@
 #include <vcl/dllapi.h>
 
 #include <skia/gdiimpl.hxx>
-#include <skia/packedsurfaceatlas.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
 #include <o3tl/lru_map.hxx>
@@ -34,14 +33,11 @@ public:
 
     virtual std::unique_ptr<Texture> getAsMaskTexture() const override;
 
-    virtual bool wantsTextColorWhite() const override { return true; }
-
     sk_sp<SkImage> getAsImage() const;
     sk_sp<SkImage> getAsMaskImage() const;
     sk_sp<SkImage> getAsImageDiff(const SkiaCompatibleDC& white) const;
 
     struct Texture;
-    struct PackedTexture;
 };
 
 struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
@@ -50,14 +46,6 @@ struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
     virtual bool isValid() const { return image.get(); }
     virtual int GetWidth() const { return image->width(); }
     virtual int GetHeight() const { return image->height(); }
-};
-
-struct SkiaCompatibleDC::PackedTexture : public CompatibleDC::Texture
-{
-    SkiaPackedSurface packedSurface;
-    virtual bool isValid() const { return packedSurface.mSurface.get(); }
-    virtual int GetWidth() const { return packedSurface.mRect.GetWidth(); }
-    virtual int GetHeight() const { return packedSurface.mRect.GetHeight(); }
 };
 
 class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public WinSalGraphicsImplBase
@@ -78,15 +66,6 @@ public:
                                              int nY, ControlCacheKey& aControlCacheKey) override;
 
     virtual bool DrawTextLayout(const GenericSalLayout& layout) override;
-    // TODO This method of text drawing can probably be removed once DrawTextLayout()
-    // is fully usable.
-    virtual bool UseTextDraw() const override { return true; }
-    virtual void PreDrawText() override;
-    virtual void PostDrawText() override;
-    virtual void DrawTextMask(CompatibleDC::Texture* rTexture, Color nMaskColor,
-                              const SalTwoRect& rPosAry) override;
-    virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor,
-                                  const SalTwoRect& rPosAry) override;
     virtual void ClearDevFontCache() override;
 
     static void prepareSkia();

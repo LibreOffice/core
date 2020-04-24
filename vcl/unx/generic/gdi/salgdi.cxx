@@ -58,7 +58,6 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <skia/x11/gdiimpl.hxx>
-#include <skia/x11/cairotextrender.hxx>
 #include <skia/x11/textrender.hxx>
 #endif
 
@@ -87,11 +86,7 @@ X11SalGraphics::X11SalGraphics():
     if (m_bSkia)
     {
         mxImpl.reset(new X11SkiaSalGraphicsImpl(*this));
-#if 1
         mxTextRenderImpl.reset(new SkiaTextRender);
-#else // old method, probably can be removed once native Skia render works well
-        mxTextRenderImpl.reset(new SkiaX11CairoTextRender(*this));
-#endif
     }
     else
 #endif
