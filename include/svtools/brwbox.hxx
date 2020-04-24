@@ -61,7 +61,6 @@ enum class BrowserMode
     NONE                 = 0x000000,
     COLUMNSELECTION      = 0x000001,
     MULTISELECTION       = 0x000002,
-    THUMBDRAGGING        = 0x000004,
     KEEPHIGHLIGHT        = 0x000008,
     HLINES               = 0x000010,
     VLINES               = 0x000020,
@@ -88,7 +87,7 @@ enum class BrowserMode
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x2cf73f> {};
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x2cf73b> {};
 }
 
 #define BROWSER_NONE                      0
