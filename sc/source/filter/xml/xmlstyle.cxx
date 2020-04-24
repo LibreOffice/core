@@ -51,6 +51,7 @@ using namespace ::xmloff::token;
 using namespace ::formula;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_ODF13(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_013, false }
 // extensions import/export
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, false }
 // extensions import only
@@ -163,8 +164,8 @@ const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE|XML_TYPE_BOOL, 0 ),
     MAP( "PageStyle", XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, XML_TYPE_PROP_TABLE|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME ),
     MAP( "TableLayout", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE|XML_TYPE_TEXT_WRITING_MODE, 0 ),
-    MAP( "TabColor", XML_NAMESPACE_TABLE, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
-    MAP_EXT( "TabColor", XML_NAMESPACE_TABLE_EXT, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
+    MAP_ODF13( "TabColor", XML_NAMESPACE_TABLE, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
+    MAP_ODF13( "TabColor", XML_NAMESPACE_TABLE_EXT, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
     MAP_END()
 };
 
@@ -173,7 +174,9 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE|XML_TYPE_BOOL, 0 ),
     MAP( "PageStyle", XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, XML_TYPE_PROP_TABLE|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME ),
     MAP( "TableLayout", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE|XML_TYPE_TEXT_WRITING_MODE, 0 ),
-    MAP_EXT( "TabColor", XML_NAMESPACE_TABLE_EXT, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
+    // ODF 1.3 OFFICE-2173
+    MAP_ODF13( "TabColor", XML_NAMESPACE_TABLE, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
+    MAP_ODF13( "TabColor", XML_NAMESPACE_TABLE_EXT, XML_TAB_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORAUTO, 0 ),
     MAP_END()
 };
 
