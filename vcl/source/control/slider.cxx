@@ -530,9 +530,6 @@ long Slider::ImplDoAction()
             nDelta = ImplSlide( mnThumbPos+mnPageSize );
             break;
 
-        case ScrollType::Set:
-            nDelta = ImplSlide( ImplCalcThumbPos( GetPointerPosPixel().X() ) );
-            break;
         default:
             break;
     }
@@ -547,20 +544,6 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
     switch ( meScrollType )
     {
-        case ScrollType::Set:
-        {
-            const bool bUp = ImplIsPageUp( rMousePos ), bDown = ImplIsPageDown( rMousePos );
-
-            if ( bUp || bDown )
-            {
-                bAction = bCallAction;
-                mnStateFlags |= ( bUp ? SLIDER_STATE_CHANNEL1_DOWN : SLIDER_STATE_CHANNEL2_DOWN );
-            }
-            else
-                mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN );
-            break;
-        }
-
         case ScrollType::PageUp:
             if ( ImplIsPageUp( rMousePos ) )
             {
@@ -653,31 +636,16 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // store Start position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
-            ImplDoMouseAction( rMousePos, meScrollType != ScrollType::Set );
+            ImplDoMouseAction( rMousePos, /*bCallAction*/true );
             PaintImmediately();
 
-            if( meScrollType != ScrollType::Set )
-                StartTracking( nTrackFlags );
+            StartTracking( nTrackFlags );
         }
     }
 }
 
 void Slider::MouseButtonUp( const MouseEvent& )
 {
-    if( ScrollType::Set == meScrollType )
-    {
-        // reset Button and PageRect state
-        const sal_uInt16 nOldStateFlags = mnStateFlags;
-
-        mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN | SLIDER_STATE_THUMB_DOWN );
-
-        if ( nOldStateFlags != mnStateFlags )
-        {
-            Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
-        }
-        ImplDoAction();
-        meScrollType = ScrollType::DontKnow;
-    }
 }
 
 void Slider::Tracking( const TrackingEvent& rTEvt )
