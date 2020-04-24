@@ -66,6 +66,11 @@ void SvViewDataEntry::SetExpanded( bool bExpanded )
     mbExpanded = bExpanded;
 }
 
+void SvViewDataEntry::SetSelectable( bool bSelectable )
+{
+    mbSelectable = bSelectable;
+}
+
 void SvViewDataEntry::Init(size_t nSize)
 {
     maItems.resize(nSize);
