@@ -100,7 +100,7 @@ public:
     void            SetUserItemSize( const Size& rSz );
     void            EnableUserDraw( bool bUserDraw );
 
-    void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
+    void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawText, bool bDrawTextAtImagePos );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );
 
     void            SetSeparatorPos( sal_Int32  n );

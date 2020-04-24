@@ -89,7 +89,7 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 }
 
 SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent ) :
-    SvxColorValueSet( _pParent, WB_ITEMBORDER ),
+    SvxColorValueSet( _pParent ),
     DragSourceHelper( this ),
     mbLeftButton(true)
 {
