@@ -2101,7 +2101,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             // If only the paragraph attributes "Adjust" or "LRSpace" are set,
             // then the following should not delete those again.
             if( 0 == aFPos.nParaCnt + aFPos.nColumnCnt &&
-                ( FILL_INDENT == aFPos.eMode ||
+                ( SwFillMode::Indent == aFPos.eMode ||
                   ( text::HoriOrientation::NONE != aFPos.eOrient &&
                     0 == aFPos.nTabCnt + aFPos.nSpaceCnt )) &&
                 pCNd && pCNd->Len() )
@@ -2147,7 +2147,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             *m_pCurrentCursor->GetPoint() = aPos;
             switch( aFPos.eMode )
             {
-            case FILL_INDENT:
+            case SwFillMode::Indent:
                 if( nullptr != (pCNd = aPos.nNode.GetNode().GetContentNode() ))
                 {
                     SfxItemSet aSet(
@@ -2173,12 +2173,12 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                 }
                 break;
 
-            case FILL_TAB:
-            case FILL_TAB_SPACE:
-            case FILL_SPACE:
+            case SwFillMode::Tab:
+            case SwFillMode::TabSpace:
+            case SwFillMode::Space:
                 {
                     OUStringBuffer sInsert;
-                    if (aFPos.eMode == FILL_SPACE)
+                    if (aFPos.eMode == SwFillMode::Space)
                     {
                         comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceOnlyCnt, ' ');
                     }
@@ -2193,7 +2193,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                         GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurrentCursor, sInsert.makeStringAndClear());
                 }
                 [[fallthrough]]; // still need to set orientation
-            case FILL_MARGIN:
+            case SwFillMode::Margin:
                 if( text::HoriOrientation::NONE != aFPos.eOrient )
                 {
                     SvxAdjustItem aAdj( SvxAdjust::Left, RES_PARATR_ADJUST );

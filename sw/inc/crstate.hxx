@@ -25,13 +25,13 @@
 
 #include <memory>
 
-enum SwFillMode
+enum class SwFillMode
 {
-    FILL_TAB,       ///< default, fill with tabs
-    FILL_TAB_SPACE, ///< fill with spaces and tabs
-    FILL_SPACE,     ///< fill with spaces
-    FILL_MARGIN,    ///< only align left, center, right
-    FILL_INDENT     ///< by left paragraph indention
+    Tab,       ///< default, fill with tabs
+    TabSpace,  ///< fill with spaces and tabs
+    Space,     ///< fill with spaces
+    Margin,    ///< only align left, center, right
+    Indent     ///< by left paragraph indention
 };
 
 struct SwFillCursorPos

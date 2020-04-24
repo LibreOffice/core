@@ -1202,7 +1202,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
 {
     const SfxPoolItem* pItem = nullptr;
-    sal_uInt8 eMode = SwFillMode::FILL_TAB;
+    SwFillMode eMode = SwFillMode::Tab;
     bool bIsOn = false;
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
@@ -1213,7 +1213,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     }
     m_xOnOffCB->set_active( bIsOn );
 
-    m_xDirectCursorFillMode->set_active( eMode );
+    m_xDirectCursorFillMode->set_active( static_cast<int>(eMode) );
     if(SfxItemState::SET != rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         || !(static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
         return;
@@ -1252,8 +1252,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     SwShadowCursorItem aOpt;
     aOpt.SetOn( m_xOnOffCB->get_active() );
 
-    sal_uInt8 eMode;
-    eMode = m_xDirectCursorFillMode->get_active();
+    SwFillMode eMode = static_cast<SwFillMode>(m_xDirectCursorFillMode->get_active());
     aOpt.SetMode( eMode );
 
     bool bRet = false;
@@ -1301,7 +1300,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = nullptr;
-    sal_uInt8 eMode = SwFillMode::FILL_TAB;
+    SwFillMode eMode = SwFillMode::Tab;
     bool bIsOn = false;
 
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
@@ -1312,7 +1311,7 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
     m_xOnOffCB->set_active( bIsOn );
 
-    m_xDirectCursorFillMode->set_active( eMode );
+    m_xDirectCursorFillMode->set_active( static_cast<int>(eMode) );
     if (m_pWrtShell) {
         m_xMathBaselineAlignmentCB->set_active( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
         m_xMathBaselineAlignmentCB->save_state();

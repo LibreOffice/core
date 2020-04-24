@@ -33,6 +33,7 @@ namespace vcl { class Window; }
 class OutputDevice;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
+enum class SwFillMode;
 
 enum class ViewOptFlags1 : sal_uInt32 {
     UseHeaderFooterMenu = 0x00000001,
@@ -157,7 +158,7 @@ class SW_DLLPUBLIC SwViewOption
     short           m_nDivisionY;
     sal_uInt8       m_nPagePreviewRow;       // Page Preview Row/Columns.
     sal_uInt8       m_nPagePreviewCol;       // Page Preview Row/Columns.
-    sal_uInt8       m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
+    SwFillMode      m_nShadowCursorFillMode;  // FillMode for ShadowCursor.
     bool            m_bReadonly : 1;      // Readonly-Doc.
     bool            m_bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
     bool            m_bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
@@ -607,8 +608,8 @@ public:
     bool            IsPagePreview() const {return m_bIsPagePreview; }
     void            SetPagePreview(bool bSet) { m_bIsPagePreview= bSet; }
 
-    sal_uInt8           GetShdwCursorFillMode() const { return m_nShadowCursorFillMode; }
-    void            SetShdwCursorFillMode( sal_uInt8 nMode ) { m_nShadowCursorFillMode = nMode; };
+    SwFillMode      GetShdwCursorFillMode() const { return m_nShadowCursorFillMode; }
+    void            SetShdwCursorFillMode( SwFillMode nMode ) { m_nShadowCursorFillMode = nMode; };
 
     bool        IsShowPlaceHolderFields() const { return m_bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(bool bSet) { m_bShowPlaceHolderFields = bSet; }

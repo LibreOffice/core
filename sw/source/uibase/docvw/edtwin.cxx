@@ -4218,7 +4218,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 {
                     SwRect aRect;
                     sal_Int16 eOrient;
-                    SwFillMode eMode = static_cast<SwFillMode>(rSh.GetViewOptions()->GetShdwCursorFillMode());
+                    SwFillMode eMode = rSh.GetViewOptions()->GetShdwCursorFillMode();
                     if( rSh.GetShadowCursorPos( aDocPt, eMode, aRect, eOrient ))
                     {
                         if( !m_pShadCursor )
@@ -4712,7 +4712,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     rSh.Undo();
                                 }
                             }
-                            SwFillMode eMode = static_cast<SwFillMode>(rSh.GetViewOptions()->GetShdwCursorFillMode());
+                            SwFillMode eMode = rSh.GetViewOptions()->GetShdwCursorFillMode();
                             rSh.SetShadowCursorPos( aDocPt, eMode );
                         }
                     }

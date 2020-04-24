@@ -1438,7 +1438,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             SwTwips nRight = rFill.Right() - rLRSpace.GetRight();
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );
-            if( FILL_MARGIN == rFill.Mode() )
+            if( SwFillMode::Margin == rFill.Mode() )
             {
                 if( rFill.bEmpty )
                 {
@@ -1468,7 +1468,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             else
             {
                 SwTwips nSpace = 0;
-                if( FILL_TAB != rFill.Mode() )
+                if( SwFillMode::Tab != rFill.Mode() )
                 {
                     const OUString aTmp("  ");
                     SwDrawTextInfo aDrawInf( pSh, *pOut, aTmp, 0, 2 );
@@ -1476,7 +1476,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 }
                 if( rFill.X() >= nRight )
                 {
-                    if( FILL_INDENT != rFill.Mode() && ( rFill.bEmpty ||
+                    if( SwFillMode::Indent != rFill.Mode() && ( rFill.bEmpty ||
                         rFill.X() > rFill.nLineWidth + FILL_MIN_DIST ) )
                     {
                         rFill.SetOrient( text::HoriOrientation::RIGHT );
@@ -1485,7 +1485,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     else
                         bFill = false;
                 }
-                else if( FILL_INDENT == rFill.Mode() )
+                else if( SwFillMode::Indent == rFill.Mode() )
                 {
                     SwTwips nIndent = rFill.X();
                     if( !rFill.bEmpty || nIndent > nRight )
@@ -1555,7 +1555,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     }
                     while( rFill.X() > nRightTab );
                     --nTabCnt;
-                    if( FILL_TAB_SPACE == rFill.Mode() )
+                    if( SwFillMode::TabSpace == rFill.Mode() )
                     {
                         if( nSpace > 0 )
                         {
@@ -1606,7 +1606,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                             }
                         }
                     }
-                    else if( FILL_SPACE == rFill.Mode() )
+                    else if( SwFillMode::Space == rFill.Mode() )
                     {
                         SwTwips nLeftSpace = nLeft;
                         while( nLeftSpace < rFill.X() )

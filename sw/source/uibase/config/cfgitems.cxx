@@ -185,7 +185,7 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 // Item for Settings dialog, ShadowCursorPage
 SwShadowCursorItem::SwShadowCursorItem()
     : SfxPoolItem( FN_PARAM_SHADOWCURSOR ),
-    eMode( FILL_TAB )
+    eMode( SwFillMode::Tab )
     ,bOn( false )
 {
 }
