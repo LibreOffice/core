@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a97e3c5_3c36d53c",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-24T17:14:14Z",
+      "side": 1,
+      "message": "Interesting if the dummy parameter is needed, or is there a reason why this couldn\u0027t be implemented this way?\n\n    template\u003c class derived_type \u003e\n        inline Reference(\n            const Reference\u003c std::enable_if_t\u003cstd::is_base_of_v\u003creference_type, derived_type\u003e, derived_type\u003e \u003e \u0026 rRef)",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 84
+      },
+      "revId": "b95ead7b2a39bf52e2293d7e8094b9520af74ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
