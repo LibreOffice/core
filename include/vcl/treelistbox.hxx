@@ -734,35 +734,6 @@ public:
     void            SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
 };
 
-class SvInplaceEdit2
-{
-    Link<SvInplaceEdit2&,void> aCallBackHdl;
-    Accelerator   aAccReturn;
-    Accelerator   aAccEscape;
-    Idle          aIdle;
-    VclPtr<Edit>  pEdit;
-    bool          bCanceled;
-    bool          bAlreadyInCallBack;
-
-    void        CallCallBackHdl_Impl();
-    DECL_LINK( Timeout_Impl, Timer *, void );
-    DECL_LINK( ReturnHdl_Impl, Accelerator&, void );
-    DECL_LINK( EscapeHdl_Impl, Accelerator&, void );
-
-public:
-                SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,
-                   const OUString& rData, const Link<SvInplaceEdit2&,void>& rNotifyEditEnd,
-                   const Selection& );
-               ~SvInplaceEdit2();
-    bool        KeyInput( const KeyEvent& rKEvt );
-    void        LoseFocus();
-    bool        EditingCanceled() const { return bCanceled; }
-    OUString    GetText() const;
-    OUString const & GetSavedValue() const;
-    void        StopEditing( bool bCancel );
-    void        Hide();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
