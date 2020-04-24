@@ -1219,88 +1219,91 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     if ( nArgCount < 3 || nArgCount > 6 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return;
+    }
+
+    sal_Int32 lStartPos = 1;
+    if (nArgCount >= 4)
+    {
+        if (rPar.Get32(4)->GetType() != SbxEMPTY)
+        {
+            lStartPos = rPar.Get32(4)->GetLong();
+        }
+        if (lStartPos < 1)
+        {
+            StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+            return;
+        }
+    }
+
+    sal_Int32 lCount = -1;
+    if (nArgCount >= 5)
+    {
+        if (rPar.Get32(5)->GetType() != SbxEMPTY)
+        {
+            lCount = rPar.Get32(5)->GetLong();
+        }
+        if (lCount < -1)
+        {
+            StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+            return;
+        }
+    }
+
+    bool bCaseInsensitive;
+    if (nArgCount == 6)
+    {
+        bCaseInsensitive = rPar.Get32(6)->GetInteger();
     }
     else
     {
-        OUString aExpStr = rPar.Get32(1)->GetOUString();
-        OUString aFindStr = rPar.Get32(2)->GetOUString();
-        OUString aReplaceStr = rPar.Get32(3)->GetOUString();
-
-        sal_Int32 lStartPos = 1;
-        if ( nArgCount >= 4 )
-        {
-            if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            {
-                lStartPos = rPar.Get32(4)->GetLong();
-            }
-            if( lStartPos < 1)
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                lStartPos = 1;
-            }
-        }
-
-        sal_Int32 lCount = -1;
-        if( nArgCount >=5 )
-        {
-            if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            {
-                lCount = rPar.Get32(5)->GetLong();
-            }
-            if( lCount < -1)
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                lCount = -1;
-            }
-        }
-
         SbiInstance* pInst = GetSbData()->pInst;
-        bool bTextMode;
-        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-        if( bCompatibility )
+        if (pInst && pInst->IsCompatibility())
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
+            bCaseInsensitive = pRT && pRT->IsImageFlag(SbiImageFlags::COMPARETEXT);
         }
         else
         {
-            bTextMode = true;
+            bCaseInsensitive = true;
         }
-        if ( nArgCount == 6 )
-        {
-            bTextMode = rPar.Get32(6)->GetInteger();
-        }
-        sal_Int32 nExpStrLen = aExpStr.getLength();
-        sal_Int32 nFindStrLen = aFindStr.getLength();
-        sal_Int32 nReplaceStrLen = aReplaceStr.getLength();
-
-        if( lStartPos <= nExpStrLen )
-        {
-            sal_Int32 nPos = lStartPos - 1;
-            sal_Int32 nCounts = 0;
-            while( lCount == -1 || lCount > nCounts )
-            {
-                OUString aSrcStr( aExpStr );
-                if( bTextMode )
-                {
-                    aSrcStr = aSrcStr.toAsciiUpperCase();
-                    aFindStr = aFindStr.toAsciiUpperCase();
-                }
-                nPos = aSrcStr.indexOf( aFindStr, nPos );
-                if( nPos >= 0 )
-                {
-                    aExpStr = aExpStr.replaceAt( nPos, nFindStrLen, aReplaceStr );
-                    nPos = nPos + nReplaceStrLen;
-                    nCounts++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
-        rPar.Get32(0)->PutString( aExpStr.copy( lStartPos - 1 )  );
     }
+
+    const OUString aExpStr = rPar.Get32(1)->GetOUString();
+    OUString aFindStr = rPar.Get32(2)->GetOUString();
+    const OUString aReplaceStr = rPar.Get32(3)->GetOUString();
+    const sal_Int32 nExpStrLen = aExpStr.getLength();
+    const sal_Int32 nFindStrLen = aFindStr.getLength();
+
+    OUString aSrcStr(aExpStr);
+    if (bCaseInsensitive)
+    {
+        // FIXME: case insensitivity should not be ASCII-only
+        aSrcStr = aSrcStr.toAsciiUpperCase();
+        aFindStr = aFindStr.toAsciiUpperCase();
+    }
+
+    // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
+    sal_Int32 nPrevPos = std::min(lStartPos - 1, nExpStrLen);
+    OUStringBuffer sResult(nExpStrLen - nPrevPos);
+    sal_Int32 nCounts = 0;
+    while (lCount == -1 || lCount > nCounts)
+    {
+        sal_Int32 nPos = aSrcStr.indexOf(aFindStr, nPrevPos);
+        if (nPos >= 0)
+        {
+            sResult.append(aExpStr.getStr() + nPrevPos, nPos - nPrevPos);
+            sResult.append(aReplaceStr);
+            nPrevPos = nPos + nFindStrLen;
+            nCounts++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    sResult.append(aExpStr.getStr() + nPrevPos, nExpStrLen - nPrevPos);
+    rPar.Get32(0)->PutString(sResult.makeStringAndClear());
 }
 
 void SbRtl_Right(StarBASIC *, SbxArray & rPar, bool)
