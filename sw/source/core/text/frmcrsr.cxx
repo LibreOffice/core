@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 /*
  * - SurvivalKit: For how long do we get past the last char of the line.
  * - RightMargin abstains from adjusting position with -1
- * - GetCharRect returns a GetEndCharRect for MV_RIGHTMARGIN
+ * - GetCharRect returns a GetEndCharRect for CursorMoveState::RightMargin
  * - GetEndCharRect sets bRightMargin to true
  * - SwTextCursor::bRightMargin is set to false by CharCursorToLine
  */
@@ -190,7 +190,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     //   needs to be formatted
 
     // Optimisation: reading ahead saves us a GetAdjFrameAtPos
-    const bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->m_eState );
+    const bool bRightMargin = pCMS && ( CursorMoveState::RightMargin == pCMS->m_eState );
     const bool bNoScroll = pCMS && pCMS->m_bNoScroll;
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), rPos, bRightMargin,
                                      bNoScroll );
@@ -425,7 +425,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 
         SwTextSizeInfo aInf( pFrame );
         SwTextCursor aLine( pFrame, &aInf );
-        SwCursorMoveState aTmpState( MV_SETONLYTEXT );
+        SwCursorMoveState aTmpState( CursorMoveState::SetOnlyText );
         aTmpState.m_bRealHeight = true;
         aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY );
         if( aTmpState.m_aRealHeight.X() >= 0 )
@@ -603,8 +603,8 @@ bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& r
 
         TextFrameIndex nOffset = aLine.GetModelPositionForViewPoint(pPos, rPoint, bChgFrame, pCMS);
 
-        if( pCMS && pCMS->m_eState == MV_NONE && aLine.GetEnd() == nOffset )
-            pCMS->m_eState = MV_RIGHTMARGIN;
+        if( pCMS && pCMS->m_eState == CursorMoveState::NONE && aLine.GetEnd() == nOffset )
+            pCMS->m_eState = CursorMoveState::RightMargin;
 
     // pPos is a pure IN parameter and must not be evaluated.
     // pIter->GetModelPositionForViewPoint returns from a nesting with COMPLETE_STRING.
@@ -661,7 +661,7 @@ bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& r
 bool SwTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& rPoint,
                                SwCursorMoveState* pCMS, bool ) const
 {
-    const bool bChgFrame = !(pCMS && MV_UPDOWN == pCMS->m_eState);
+    const bool bChgFrame = !(pCMS && CursorMoveState::UpDown == pCMS->m_eState);
     return GetModelPositionForViewPoint_( pPos, rPoint, bChgFrame, pCMS );
 }
 

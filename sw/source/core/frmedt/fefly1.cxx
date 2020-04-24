@@ -139,7 +139,7 @@ static bool lcl_FindAnchorPos(
             {
                 // textnode should be found, as only in those
                 // a content bound frame can be anchored
-                SwCursorMoveState aState( MV_SETONLYTEXT );
+                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                 aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
                 if( !pNewAnch->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState ) )
                 {
@@ -172,7 +172,7 @@ static bool lcl_FindAnchorPos(
         {
             // starting from the upper-left corner of the Fly
             // search nearest SwFlyFrame
-            SwCursorMoveState aState( MV_SETONLYTEXT );
+            SwCursorMoveState aState( CursorMoveState::SetOnlyText );
             SwPosition aPos( rDoc.GetNodes() );
             aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
             rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
@@ -350,7 +350,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
 
     SwFrame *pTextFrame;
     {
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         SwNodeIndex aSwNodeIndex( GetDoc()->GetNodes() );
         SwPosition aPos( aSwNodeIndex );
         Point aPoint( aTmpPos );
@@ -492,7 +492,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     // of the fly
     SwContentFrame *pTextFrame = nullptr;
     {
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
@@ -942,7 +942,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     // find anchor position
     SwPaM aPam( mxDoc->GetNodes() );
     {
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         Point aTmpPt( rInsertPosition );
         GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmpPt, &aState );
         const SwFrame* pFrame = aPam.GetContentNode()->getLayoutFrame(GetLayout(), nullptr, nullptr);

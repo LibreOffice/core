@@ -1296,7 +1296,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     if( bRightOver )
         x = nRightMargin;
 
-    const bool bRightAllowed = pCMS && ( pCMS->m_eState == MV_NONE );
+    const bool bRightAllowed = pCMS && ( pCMS->m_eState == CursorMoveState::NONE );
 
     // Until here everything in document coordinates.
     x -= nLeftMargin;
@@ -1843,7 +1843,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                     }
                     // Looking for the position of the left border of the rectangle
                     // in this text line
-                    SwCursorMoveState aState( MV_UPDOWN );
+                    SwCursorMoveState aState( CursorMoveState::UpDown );
                     if( GetModelPositionForViewPoint( &aPosL, aPoint, &aState ) )
                     {
                         if( aRectFnSet.IsVert() )

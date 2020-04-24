@@ -807,7 +807,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // Search the closest SwFlyFrame starting from the upper left corner.
                     SwFrame *pTextFrame;
                     {
-                        SwCursorMoveState aState( MV_SETONLYTEXT );
+                        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                         SwPosition aPos( GetNodes() );
                         Point aPoint( aPt );
                         aPoint.setX(aPoint.getX() - 1);
@@ -877,7 +877,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     {
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.
-                        SwCursorMoveState aState( MV_SETONLYTEXT );
+                        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                         getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
                     }
                     else
