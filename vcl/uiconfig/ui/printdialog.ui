@@ -344,8 +344,8 @@
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
-                    <property name="min_content_width">500</property>
                     <property name="max_content_height">450</property>
                     <child>
                       <object class="GtkViewport">
