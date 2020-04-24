@@ -95,7 +95,7 @@ PageStylesPanel::PageStylesPanel(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame, true),
+    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame),
     mpBindings( pBindings ),
     mpPageColumnItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) ),
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),

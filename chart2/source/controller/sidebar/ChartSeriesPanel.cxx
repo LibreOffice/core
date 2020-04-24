@@ -276,7 +276,7 @@ ChartSeriesPanel::ChartSeriesPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame, true)
+    : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame)
     , mxCBLabel(m_xBuilder->weld_check_button("checkbutton_label"))
     , mxCBTrendline(m_xBuilder->weld_check_button("checkbutton_trendline"))
     , mxCBXError(m_xBuilder->weld_check_button("checkbutton_x_error"))

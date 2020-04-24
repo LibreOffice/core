@@ -143,7 +143,7 @@ VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
 
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame, true)
+    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
     , mxValueSet(new SvtValueSet(nullptr))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
 {

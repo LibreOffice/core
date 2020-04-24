@@ -28,6 +28,7 @@
 #include <tools/fract.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <basegfx/range/b2drange.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 

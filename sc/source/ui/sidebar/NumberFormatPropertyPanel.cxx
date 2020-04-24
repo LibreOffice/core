@@ -34,7 +34,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame, true)
+    : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame)
     , mxLbCategory(m_xBuilder->weld_combo_box("numberformatcombobox"))
     , mxTBCategory(m_xBuilder->weld_toolbar("numberformat"))
     , mxCatagoryDispatch(new ToolbarUnoDispatcher(*mxTBCategory, *m_xBuilder, rxFrame))

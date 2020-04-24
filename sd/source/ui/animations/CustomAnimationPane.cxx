@@ -119,7 +119,7 @@ void fillRepeatComboBox(weld::ComboBox& rBox)
 
 CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
-    : PanelLayout(pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame, true)
+    : PanelLayout(pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame)
     , mrBase(rBase)
     // load resources
     , mxFTAnimation(m_xBuilder->weld_label("effectlabel"))

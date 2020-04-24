@@ -508,7 +508,7 @@ VclPtr<vcl::Window> SwNavigationPI::Create(vcl::Window* pParent,
 SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame, true)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame)
     , m_aDocFullName(SID_DOCFULLNAME, *_pBindings, *this)
     , m_aPageStats(FN_STAT_PAGE, *_pBindings, *this)
     , m_xContent1ToolBox(m_xBuilder->weld_toolbar("content1"))
