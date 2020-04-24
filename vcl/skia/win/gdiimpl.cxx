@@ -84,6 +84,10 @@ bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const&
         return false;
 
     preDraw();
+    SAL_INFO("vcl.skia.trace", "tryrendercachednativecontrol("
+                                   << this << "): "
+                                   << SkIRect::MakeXYWH(nX, nY, iterator->second->width(),
+                                                        iterator->second->height()));
     mSurface->getCanvas()->drawImage(iterator->second, nX, nY);
     postDraw();
     return true;
@@ -99,6 +103,9 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     sk_sp<SkImage> image = static_cast<SkiaCompatibleDC&>(rBlack).getAsImageDiff(
         static_cast<SkiaCompatibleDC&>(rWhite));
     preDraw();
+    SAL_INFO("vcl.skia.trace",
+             "renderandcachednativecontrol("
+                 << this << "): " << SkIRect::MakeXYWH(nX, nY, image->width(), image->height()));
     mSurface->getCanvas()->drawImage(image, nX, nY);
     postDraw();
 
