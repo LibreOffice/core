@@ -24,8 +24,6 @@
 #include <svtools/valueset.hxx>
 #include <vcl/customweld.hxx>
 
-class ValueSet;
-
 // enum to index light images
 #define FROM_TOP_LEFT       0
 #define FROM_TOP            1
