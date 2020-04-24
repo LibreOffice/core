@@ -58,7 +58,7 @@ MasterPagesSelector::MasterPagesSelector (
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout( pParent, "MasterPagePanel", "modules/simpress/ui/masterpagepanel.ui", nullptr, true ),
+    : PanelLayout( pParent, "MasterPagePanel", "modules/simpress/ui/masterpagepanel.ui", nullptr ),
       maMutex(),
       mpContainer(rpContainer),
       mxPreviewValueSet(new PreviewValueSet),

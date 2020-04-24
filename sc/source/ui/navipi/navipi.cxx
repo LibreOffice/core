@@ -316,7 +316,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
 }
 
 ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr, true)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
     , rBindings(*pB)
     , m_xEdCol(m_xBuilder->weld_spin_button("column"))
     , m_xEdRow(m_xBuilder->weld_spin_button("row"))

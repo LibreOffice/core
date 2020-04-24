@@ -102,7 +102,7 @@ private:
 public:
     TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase )
         : PanelLayout(pParent, "TableDesignPanel",
-            "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>(), true)
+            "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>())
         , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
     }

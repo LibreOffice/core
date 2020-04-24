@@ -53,6 +53,7 @@
 #include <sfx2/bindings.hxx>
 #include <editeng/lrspitem.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/tstpitem.hxx>

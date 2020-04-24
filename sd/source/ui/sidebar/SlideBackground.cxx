@@ -93,7 +93,7 @@ SlideBackground::SlideBackground(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings
      ) :
-    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame, true ),
+    PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui", rxFrame ),
     mrBase( rBase ),
     mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("paperformat"))),
     mxPaperOrientation(m_xBuilder->weld_combo_box("orientation")),

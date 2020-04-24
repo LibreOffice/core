@@ -45,7 +45,7 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame, true)
+    : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame)
     , mxFTLeftIndent(m_xBuilder->weld_label("leftindentlabel"))
     , mxMFLeftIndent(m_xBuilder->weld_metric_spin_button("leftindent", FieldUnit::POINT))
     , mxCBXWrapText(m_xBuilder->weld_check_button("wraptext"))

@@ -61,7 +61,7 @@ const sal_Int32 AreaPropertyPanelBase::DEFAULT_BORDER = 0;
 AreaPropertyPanelBase::AreaPropertyPanelBase(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame, true),
+    : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
