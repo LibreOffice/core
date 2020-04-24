@@ -31,9 +31,9 @@ using namespace ::xmloff::token;
 #define PLMAP_12(name,prefix,token,type,context) \
         MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_012)
 #define PLMAP_EXT(name,prefix,token,type,context) \
-        MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
+        MAP(name, prefix, token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED)
 #define PLMAP_EXT_IMPORT(name,prefix,token,type,context) \
-        MAP_IMPORT(name, prefix,token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
+        MAP_IMPORT(name, prefix,token, type|XML_TYPE_PROP_PAGE_LAYOUT, context, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED)
 #define HFMAP(name,prefix,token,type,context) \
         MAP(name, prefix, token, type|XML_TYPE_PROP_HEADER_FOOTER, context, SvtSaveOptions::ODFSVER_010)
 
