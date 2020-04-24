@@ -88,7 +88,7 @@ const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Ireland)") , LANGUAGE_ENGLISH_EIRE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (South Africa)") , LANGUAGE_ENGLISH_SAFRICA },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Jamaica)") , LANGUAGE_ENGLISH_JAMAICA },
-    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Caribbean)") , LANGUAGE_ENGLISH_CARRIBEAN },
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Caribbean)") , LANGUAGE_ENGLISH_CARIBBEAN },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Belize)") , LANGUAGE_ENGLISH_BELIZE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Trinidad)") , LANGUAGE_ENGLISH_TRINIDAD },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Zimbabwe)") , LANGUAGE_ENGLISH_ZIMBABWE },
