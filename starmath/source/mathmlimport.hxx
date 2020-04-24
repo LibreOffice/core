@@ -107,97 +107,13 @@ public:
 };
 
 
-enum SmXMLMathElemTokenMap
-{
-    XML_TOK_MATH
-};
-
-enum SmXMLPresLayoutElemTokenMap
-{
-    XML_TOK_SEMANTICS,
-    XML_TOK_MSTYLE,
-    XML_TOK_MERROR,
-    XML_TOK_MPHANTOM,
-    XML_TOK_MROW,
-    XML_TOK_MENCLOSE,
-    XML_TOK_MFRAC,
-    XML_TOK_MSQRT,
-    XML_TOK_MROOT,
-    XML_TOK_MSUB,
-    XML_TOK_MSUP,
-    XML_TOK_MSUBSUP,
-    XML_TOK_MMULTISCRIPTS,
-    XML_TOK_MUNDER,
-    XML_TOK_MOVER,
-    XML_TOK_MUNDEROVER,
-    XML_TOK_MTABLE,
-    XML_TOK_MACTION,
-    XML_TOK_MFENCED,
-    XML_TOK_MPADDED
-};
-
-enum SmXMLPresLayoutAttrTokenMap
-{
-    XML_TOK_FONTWEIGHT,
-    XML_TOK_FONTSTYLE,
-    XML_TOK_FONTSIZE,
-    XML_TOK_FONTFAMILY,
-    XML_TOK_COLOR,
-    XML_TOK_MATHCOLOR,
-    XML_TOK_MATHVARIANT
-};
-
-
-enum SmXMLFencedAttrTokenMap
-{
-    XML_TOK_OPEN,
-    XML_TOK_CLOSE
-};
-
-
-enum SmXMLPresTableElemTokenMap
-{
-    XML_TOK_MTR,
-    XML_TOK_MTD
-};
-
-enum SmXMLPresElemTokenMap
-{
-    XML_TOK_ANNOTATION,
-    XML_TOK_MI,
-    XML_TOK_MN,
-    XML_TOK_MO,
-    XML_TOK_MTEXT,
-    XML_TOK_MSPACE,
-    XML_TOK_MS,
-    XML_TOK_MALIGNGROUP
-};
-
 enum SmXMLPresScriptEmptyElemTokenMap
 {
     XML_TOK_MPRESCRIPTS,
     XML_TOK_NONE
 };
 
-enum SmXMLOperatorAttrTokenMap
-{
-    XML_TOK_STRETCHY
-};
 
-enum SmXMLAnnotationAttrTokenMap
-{
-    XML_TOK_ENCODING
-};
-
-enum SmXMLActionAttrTokenMap
-{
-    XML_TOK_SELECTION
-};
-
-enum SmXMLMspaceAttrTokenMap
-{
-    XML_TOK_WIDTH
-};
 
 #endif
 

@@ -276,13 +276,6 @@ enum class VclPolicyType
     NEVER
 };
 
-enum class VclTextAlignment
-{
-    LEFT,
-    CENTER,
-    RIGHT
-};
-
 enum class WizardButtonFlags : sal_Int16
 {
     NONE                = 0x0000,

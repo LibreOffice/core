@@ -41,19 +41,18 @@ class SfxModelessDialogController;
 
 enum class SfxChildWindowFlags
 {
-    NONE            = 0x00,
-    ZOOMIN          = 0x01, // Fully retracted Float
-    FORCEDOCK       = 0x04, // Float forbidden
-    TASK            = 0x10, // ChildWindow inside the Task
-    CANTGETFOCUS    = 0x20, // ChildWindow can not get focus
-    ALWAYSAVAILABLE = 0x40, // ChildWindow is never disabled
-    NEVERHIDE       = 0x80, // ChildWindow is always visible
+    NONE            = 0x000,
+    FORCEDOCK       = 0x004, // Float forbidden
+    TASK            = 0x010, // ChildWindow inside the Task
+    CANTGETFOCUS    = 0x020, // ChildWindow can not get focus
+    ALWAYSAVAILABLE = 0x040, // ChildWindow is never disabled
+    NEVERHIDE       = 0x080, // ChildWindow is always visible
     NEVERCLONE      = 0x100, // ChildWindow is not recreated in new view
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxChildWindowFlags> : is_typed_flags<SfxChildWindowFlags, 0x1f5> {};
+    template<> struct typed_flags<SfxChildWindowFlags> : is_typed_flags<SfxChildWindowFlags, 0x1f4> {};
 }
 
 

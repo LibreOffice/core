@@ -26,8 +26,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
-enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
-
 class DXF2GDIMetaFile {
 private:
 
