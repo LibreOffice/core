@@ -479,18 +479,7 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int
     }
     else
     {
-        if ( !(nDragDropMode & DragDropMode::APP_DROP ) )
-            return false; // no drop
-        if ( DND_ACTION_MOVE == nAction )
-        {
-            if ( !(nDragDropMode & DragDropMode::APP_MOVE) )
-                return false; // no global move
-        }
-        else
-        {
-            if ( !(nDragDropMode & DragDropMode::APP_COPY))
-                return false; // no global copy
-        }
+        return false; // no drop
     }
     return true;
 }
