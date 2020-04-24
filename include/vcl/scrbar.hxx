@@ -30,7 +30,7 @@ enum class ScrollType
     DontKnow,
     LineUp, LineDown,
     PageUp, PageDown,
-    Drag, Set
+    Drag
 };
 
 
