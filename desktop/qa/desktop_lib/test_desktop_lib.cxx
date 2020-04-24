@@ -19,11 +19,11 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <vcl/combobox.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
+#include <vcl/ctrl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/math.hxx>
 #include <rtl/uri.hxx>
@@ -1754,16 +1754,15 @@ void DesktopLOKTest::testDialogInput()
 
     Control* pCtrlFocused = GetFocusControl(pWindow.get());
     CPPUNIT_ASSERT(pCtrlFocused);
-    ComboBox* pCtrlURL = dynamic_cast<ComboBox*>(pCtrlFocused);
-    CPPUNIT_ASSERT(pCtrlURL);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pCtrlURL->GetText());
+    CPPUNIT_ASSERT_EQUAL(WindowType::COMBOBOX, pCtrlFocused->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pCtrlFocused->GetText());
 
     vcl::LOKWindowId nDialogId = pWindow->GetLOKWindowId();
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT, "wiki.");
     pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT_END, "wiki.");
     pDocument->pClass->removeTextContext(pDocument, nDialogId, 1, 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("wiki"), pCtrlURL->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("wiki"), pCtrlFocused->GetText());
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
@@ -2650,9 +2649,8 @@ void DesktopLOKTest::testDialogPaste()
 
     Control* pCtrlFocused = GetFocusControl(pWindow.get());
     CPPUNIT_ASSERT(pCtrlFocused);
-    ComboBox* pCtrlURL = dynamic_cast<ComboBox*>(pCtrlFocused);
-    CPPUNIT_ASSERT(pCtrlURL);
-    CPPUNIT_ASSERT_EQUAL(OUString("www.softwarelibre.org.bo"), pCtrlURL->GetText());
+    CPPUNIT_ASSERT_EQUAL(WindowType::COMBOBOX, pCtrlFocused->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString("www.softwarelibre.org.bo"), pCtrlFocused->GetText());
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
