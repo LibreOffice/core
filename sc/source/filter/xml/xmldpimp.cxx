@@ -756,6 +756,7 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                         pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
                 }
                 break;
+                case XML_ELEMENT( LO_EXT, XML_NAME ):
                 case XML_ELEMENT( TABLE, XML_NAME ):
                     pDataPilotTable->SetSourceRangeName(aIter.toString());
                 break;
