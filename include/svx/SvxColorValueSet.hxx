@@ -25,27 +25,16 @@
 
 class XColorList;
 
-class SVXCORE_DLLPUBLIC SvxColorValueSet : public ValueSet
-{
-public:
-    SvxColorValueSet(vcl::Window* pParent);
-
-    virtual void Resize() override;
-
-    static sal_uInt32 getMaxRowCount();
-    static sal_uInt32 getEntryEdgeLength();
-    static sal_uInt32 getColumnCount();
-
-    void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
-    Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
-};
-
 class SVXCORE_DLLPUBLIC ColorValueSet : public SvtValueSet
 {
 public:
     ColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);
 
     virtual void Resize() override;
+
+    static sal_uInt32 getMaxRowCount();
+    static sal_uInt32 getEntryEdgeLength();
+    static sal_uInt32 getColumnCount();
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
     void addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix);

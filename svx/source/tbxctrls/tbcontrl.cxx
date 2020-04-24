@@ -1826,7 +1826,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
     mxPaletteManager->ReloadColorSet(*mxColorSet);
-    const sal_uInt32 nMaxItems(SvxColorValueSet::getMaxRowCount() * SvxColorValueSet::getColumnCount());
+    const sal_uInt32 nMaxItems(ColorValueSet::getMaxRowCount() * ColorValueSet::getColumnCount());
     Size aSize = mxColorSet->layoutAllVisible(nMaxItems);
     mxColorSet->set_size_request(aSize.Width(), aSize.Height());
 
