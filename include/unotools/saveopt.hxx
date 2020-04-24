@@ -79,6 +79,7 @@ public:
         ODFSVER_012_EXTENDED = 11,  ///< ODF 1.2 extended
         ODFSVER_013 = 12,           ///< ODF 1.3
         ODFSVER_013_EXTENDED = 13,  ///< ODF 1.3 extended
+        ODFSVER_FUTURE_EXTENDED = 1000 | ODFSVER_EXTENDED, ///< current extension, unknown future ODF version
 
         // The latest defined standard. Adapt when a new one is published.
         ODFSVER_LATEST = ODFSVER_012,                   ///< @internal DO NOT USE in comparisons
