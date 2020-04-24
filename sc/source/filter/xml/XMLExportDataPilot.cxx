@@ -432,7 +432,7 @@ void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
 {
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
     boost::optional<OUString> pLayoutName;
-    if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+    if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         // Export display names only for 1.2 extended or later.
         pLayoutName = pDim->GetSubtotalName();
 
@@ -464,7 +464,7 @@ void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rpMember->GetName());
 
-            if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+            if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
             {
                 // Export display names only for ODF 1.2 extended or later.
                 const boost::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
@@ -492,7 +492,7 @@ void ScXMLExportDataPilot::WriteLevels(const ScDPSaveDimension* pDim)
         ::sax::Converter::convertBool(sBuffer, pDim->GetShowEmpty());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     }
-    if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+    if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, pDim->GetRepeatItemLabels());
@@ -675,7 +675,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
 {
     OUString aSrcDimName = ScDPUtil::getSourceDimensionName(pDim->GetName());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcDimName);
-    if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+    if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         // Export display names only for ODF 1.2 extended or later.
         const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
@@ -700,7 +700,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
 
     if (eOrientation == sheet::DataPilotFieldOrientation_PAGE)
     {
-        if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+        if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_IGNORE_SELECTED_PAGE, "true");
         }
@@ -813,7 +813,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
         // grand total elements.
 
         const boost::optional<OUString> & pGrandTotalName = pDPSave->GetGrandTotalName();
-        if (pGrandTotalName && rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+        if (pGrandTotalName && rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             // Use the new data-pilot-grand-total element.
             if (bRowGrand && bColumnGrand)
@@ -832,7 +832,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
         {
             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i].GetSheetDesc();
 
-            if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+            if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
             {
                 if (pSheetSource->HasRangeName())
                 {

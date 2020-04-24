@@ -489,9 +489,9 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                         sValueBuffer.append( GetXMLToken( XML_EXPONENTIAL ));
                     else if (aServiceName == "com.sun.star.chart2.PotentialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POWER ));
-                    else if (nCurrentVersion > SvtSaveOptions::ODFSVER_012 && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
+                    else if (nCurrentVersion & SvtSaveOptions::ODFSVER_EXTENDED && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POLYNOMIAL ));
-                    else if (nCurrentVersion > SvtSaveOptions::ODFSVER_012 && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
+                    else if (nCurrentVersion & SvtSaveOptions::ODFSVER_EXTENDED && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_MOVING_AVERAGE ));
                 }
                 break;

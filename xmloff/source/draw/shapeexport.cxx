@@ -727,8 +727,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // export draw:display (do not export in ODF 1.2 or older)
-    if (xSet.is() && (mrExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012))
+    // export draw:display (do not export in ODF 1.3 or older)
+    if (xSet.is() && (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
     {
         if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
             aShapeInfo.meShapeType != XmlShapeTypeHandoutShape && aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape )
@@ -1563,9 +1563,9 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
 {
     if (eExtensionNS == TextPNS::EXTENSION)
     {
-        if (mrExport.getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+        if ((mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
         {
-            return; // do not export to ODF 1.1/1.2
+            return; // do not export to ODF 1.1/1.2/1.3
         }
     }
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
@@ -2471,7 +2471,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     ImpExportDescription( xShape ); // #i68101#
 
     // Signature Line, QR Code - needs to be after the images!
-    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         ImpExportSignatureLine(xShape);
         ImpExportQRCode(xShape);
@@ -4112,7 +4112,7 @@ static void ImpExportEnhancedPath( SvXMLExport& rExport,
     }
     aStr = aStrBuffer.makeStringAndClear();
     rExport.AddAttribute( bExtended ? XML_NAMESPACE_DRAW_EXT : XML_NAMESPACE_DRAW, XML_ENHANCED_PATH, aStr );
-    if (!bExtended && bNeedExtended && (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012))
+    if (!bExtended && bNeedExtended && (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
         ImpExportEnhancedPath( rExport, rCoordinates, rSegments, true );
 }
 
@@ -4574,8 +4574,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                 {
                                     case EAS_SubViewSize:
                                     {
-                                        // export draw:sub-view-size (do not export in ODF 1.2 or older)
-                                        if (rExport.getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+                                        // export draw:sub-view-size (do not export in ODF 1.3 or older)
+                                        if ((rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
                                         {
                                             continue;
                                         }
