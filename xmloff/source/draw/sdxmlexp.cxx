@@ -2551,9 +2551,15 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 OUString aInitials( xAnnotation->getInitials() );
                 if( !aInitials.isEmpty() )
                 {
-                    // TODO: see OFFICE-3776 export meta:creator-initials for ODF 1.3
-                    SvXMLElementExport aInitialsElem( *this, XML_NAMESPACE_LO_EXT,
-                            XML_SENDER_INITIALS, true, false );
+                    // OFFICE-3776 export meta:creator-initials for ODF 1.3
+                    SvXMLElementExport aInitialsElem( *this,
+                            (SvtSaveOptions::ODFSVER_013 <= getSaneDefaultVersion())
+                                ? XML_NAMESPACE_META
+                                : XML_NAMESPACE_LO_EXT,
+                            (SvtSaveOptions::ODFSVER_013 <= getSaneDefaultVersion())
+                                ? XML_CREATOR_INITIALS
+                                : XML_SENDER_INITIALS,
+                            true, false );
                     Characters(aInitials);
                 }
 
