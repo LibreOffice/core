@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/opengl/x11/gdiimpl \
     vcl/opengl/x11/salvd \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
-        vcl/skia/x11/cairotextrender \
         vcl/skia/x11/gdiimpl \
         vcl/skia/x11/salvd \
         vcl/skia/x11/textrender \

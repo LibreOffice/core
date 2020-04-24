@@ -84,8 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/win/window/salmenu \
     vcl/win/window/salobj \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
-        vcl/skia/win/gdiimpl \
-        vcl/skia/win/winlayout) \
+        vcl/skia/win/gdiimpl ) \
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\

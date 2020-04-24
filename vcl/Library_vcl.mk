@@ -593,7 +593,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/OpenGLHelper \
     vcl/skia/SkiaHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
-        vcl/skia/packedsurfaceatlas \
         vcl/skia/salbmp \
         vcl/skia/zone \
         vcl/skia/gdiimpl \

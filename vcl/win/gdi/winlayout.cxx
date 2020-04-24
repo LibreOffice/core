@@ -36,10 +36,6 @@
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>
 #include <outdev.h>
-#include <vcl/skia/SkiaHelper.hxx>
-#if HAVE_FEATURE_SKIA
-#include <skia/win/winlayout.hxx>
-#endif
 
 #include <win/DWriteTextRenderer.hxx>
 #include <win/scoped_gdi.hxx>
@@ -63,11 +59,6 @@ GlobalWinGlyphCache * GlobalWinGlyphCache::get()
     SalData *data = GetSalData();
     if (!data->m_pGlobalWinGlyphCache)
     {
-#if HAVE_FEATURE_SKIA
-        if (SkiaHelper::isVCLSkiaEnabled())
-            data->m_pGlobalWinGlyphCache.reset(new SkiaGlobalWinGlyphCache);
-        else
-#endif
         if (OpenGLHelper::isVCLOpenGLEnabled())
             data->m_pGlobalWinGlyphCache.reset(new OpenGLGlobalWinGlyphCache);
     }
@@ -170,8 +161,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex,
     auto pRT = pTxt->GetRenderTarget();
 
     ID2D1SolidColorBrush* pBrush = nullptr;
-    D2D1::ColorF textColor = aDC->wantsTextColorWhite() ? D2D1::ColorF::White : D2D1::ColorF::Black;
-    if (!SUCCEEDED(pRT->CreateSolidColorBrush(textColor, &pBrush)))
+    if (!SUCCEEDED(pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &pBrush)))
         return false;
 
     D2D1_POINT_2F baseline = {

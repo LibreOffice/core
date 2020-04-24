@@ -67,6 +67,7 @@ struct GlobalWinGlyphCache
 
     virtual ~GlobalWinGlyphCache() {}
     virtual bool AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc) = 0;
+    virtual void NotifyElementUsed(WinGlyphDrawElement& /*rElement*/) {}
     virtual void Prune() {}
 };
 
@@ -99,7 +100,9 @@ public:
     {
         assert(GlobalWinGlyphCache::get());
         assert(IsGlyphCached(nGlyphIndex));
-        return maWinTextureCache[nGlyphIndex];
+        WinGlyphDrawElement& element = maWinTextureCache[nGlyphIndex];
+        GlobalWinGlyphCache::get()->NotifyElementUsed(element);
+        return element;
     }
 
     bool IsGlyphCached(int nGlyphIndex) const

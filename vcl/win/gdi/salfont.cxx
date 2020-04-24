@@ -63,8 +63,6 @@
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
 
-#include <vcl/skia/SkiaHelper.hxx>
-
 using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;

@@ -141,9 +141,6 @@ public:
 
     /// Obtain the texture in format for WinSalGraphicsImplBase::DrawTextMask().
     virtual std::unique_ptr<Texture> getAsMaskTexture() const { abort(); };
-
-    /// Return true if text glyphs should be drawn as white instead of black.
-    virtual bool wantsTextColorWhite() const { return false; }
 };
 
 struct CompatibleDC::Texture
