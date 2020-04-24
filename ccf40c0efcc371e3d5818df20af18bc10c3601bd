@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d45175c2_db78b065",
+        "filename": "include/vcl/treelistbox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-04-24T13:20:03Z",
+      "side": 1,
+      "message": "What about \"156     ALL             \u003d 0x003f\"?\nWill it be taken into account?\nI mean either we should let \"ALL\" to \"0x003f\" and put \"is_typed_flags\u003cDragDropMode, 0x003f\u003e\"\nor let \"is_typed_flags\u003cDragDropMode, 0x003b\u003e\" and put \"ALL\" to \"0x003b\" ?",
+      "range": {
+        "startLine": 160,
+        "startChar": 79,
+        "endLine": 160,
+        "endChar": 85
+      },
+      "revId": "ccf40c0efcc371e3d5818df20af18bc10c3601bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
