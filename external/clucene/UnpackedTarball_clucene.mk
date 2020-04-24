@@ -30,6 +30,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 # https://connect.microsoft.com/VisualStudio/feedback/details/1424082/vs2015-rc-c-compiler-mixes-up-template-parameter-with-identical-named-inherited-typedef
 # ostream-wchar_t.patch was proposed upstream, see
 #  <https://sourceforge.net/p/clucene/mailman/message/36989348/>
+# heap-buffer-overflow.patch was proposed upstream, see
+#  <https://sourceforge.net/p/clucene/mailman/message/36991067/>
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-debug.patch \
 	external/clucene/patches/clucene-multimap-put.patch \
