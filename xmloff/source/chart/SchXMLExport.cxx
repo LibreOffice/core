@@ -288,7 +288,7 @@ CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
         return CustomLabelSeq();
 
     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
-    if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
+    if ((nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) == 0) // do not export to ODF 1.3 or older
         return CustomLabelSeq();
 
     if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
@@ -1195,7 +1195,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
 
         Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xNewDoc->getDataProvider(), uno::UNO_QUERY);
-        if (xPivotTableDataProvider.is() && nCurrentODFVersion > SvtSaveOptions::ODFSVER_012)
+        if (xPivotTableDataProvider.is() && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE, sPivotTableName);
@@ -2191,7 +2191,7 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExp
         return bExportDateScale;
 
     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
-    if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
+    if ((nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) == 0) //do not export to ODF 1.3 or older
         return bExportDateScale;
 
     chart2::ScaleData aScale( rChart2Axis->getScaleData() );
@@ -2648,7 +2648,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
                                 const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
-                                if( nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 )
+                                if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) // do not export to ODF 1.3 or older
                                 {
                                     if (xPropSet.is())
                                     {
@@ -2819,7 +2819,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         nSeriesLength, xNewDiagram, bExportContent );
 
                     const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
-                    if (bExportContent && nCurrentODFVersion > SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
+                    if (bExportContent && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED) // do not export to ODF 1.3 or older
                     {
                         Sequence< OUString > aSupportedMappings = rChartType->getSupportedPropertyRoles();
                         exportPropertyMapping( xSource, aSupportedMappings );

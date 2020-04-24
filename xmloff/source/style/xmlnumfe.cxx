@@ -739,7 +739,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
     if ( !aIntegerFractionDelimiterString.isEmpty() && aIntegerFractionDelimiterString != " "
         && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
-    {   // Export only for 1.2 with extensions or 1.3 and later.
+    {   // Export only for 1.2/1.3 with extensions.
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_INTEGER_FRACTION_DELIMITER,
                               aIntegerFractionDelimiterString );
     }
@@ -749,7 +749,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
         nMinNumeratorDigits++;
     rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,
                           OUString::number( nMinNumeratorDigits ) );
-    // Export only for 1.2 with extensions or 1.3 and later.
+    // Export only for 1.2/1.3 with extensions.
     if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
     {
         // For extended ODF use loext namespace
@@ -1205,9 +1205,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             LanguageTag aLanguageTag( aAttr.Locale);
             OUString aLanguage, aScript, aCountry;
             aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
-            rExport.AddAttribute( ((eVersion < SvtSaveOptions::ODFSVER_013) ?
-                        XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+            // For 1.2/1.3+ use loext namespace.
+            rExport.AddAttribute( /*((eVersion < SvtSaveOptions::ODFSVER_)
+                        ? */ XML_NAMESPACE_LO_EXT /*: XML_NAMESPACE_NUMBER)*/,
                     XML_TRANSLITERATION_SPELLOUT, aAttr.Spellout );
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
                                   aLanguage );

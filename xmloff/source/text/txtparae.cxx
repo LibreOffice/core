@@ -2231,7 +2231,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if (!bAutoStyles)
                 {
-                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
                         Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
                         if (xBookmark.is())
@@ -2297,7 +2297,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
 
-                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
@@ -2333,7 +2333,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 if (!bAutoStyles)
                 {
-                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
                         Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
                         if (xBookmark.is())
