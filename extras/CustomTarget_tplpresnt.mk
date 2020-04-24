@@ -50,7 +50,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Blue_Curve/content.xml \
 	Blue_Curve/META-INF/manifest.xml \
 	Blue_Curve/meta.xml \
-	Blue_Curve/Pictures/1000000000000421000000B8A3E59788A01B5109.jpg \
 	Blue_Curve/styles.xml \
 	Blue_Curve/Thumbnails/thumbnail.png \
 	Blueprint_Plans/content.xml \
