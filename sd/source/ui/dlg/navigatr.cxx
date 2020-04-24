@@ -53,7 +53,7 @@
  * SdNavigatorWin - FloatingWindow
  */
 SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui", nullptr, true)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui", nullptr)
     , mxToolbox(m_xBuilder->weld_toolbar("toolbox"))
     , mxTlbObjects(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
     , mxLbDocs(m_xBuilder->weld_combo_box("documents"))

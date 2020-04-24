@@ -40,7 +40,7 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
 }
 
 TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame )
-    : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame, true)
+    : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame)
     , mxFont(m_xBuilder->weld_toolbar("font"))
     , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
     , mxFontHeight(m_xBuilder->weld_toolbar("fontheight"))

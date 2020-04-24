@@ -54,7 +54,7 @@ PageFooterPanel::PageFooterPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings) :
-    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame, true),
+    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_FOOTER, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),

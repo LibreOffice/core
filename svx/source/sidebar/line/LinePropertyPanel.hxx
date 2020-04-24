@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
-
+#include <vcl/EnumContext.hxx>
 
 class XLineStyleItem;
 class XLineDashItem;

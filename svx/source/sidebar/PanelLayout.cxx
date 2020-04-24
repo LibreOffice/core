@@ -16,7 +16,7 @@
 using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-                         const css::uno::Reference<css::frame::XFrame> &rFrame, bool bInterimBuilder)
+                         const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
     , m_bInClose(false)
     , mxFrame(rFrame)
@@ -26,20 +26,11 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
     m_aPanelLayoutIdle.SetDebugName("svx::PanelLayout m_aPanelLayoutIdle");
 
-    // VclBuilder will trigger resize and start Idle
-    if (!bInterimBuilder)
-    {
-        m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
-        if (GetSettings().GetStyleSettings().GetAutoMnemonic())
-           Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
-    }
-    else
-    {
-        m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-        m_xVclContentArea->Show();
-        m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
-        m_xContainer = m_xBuilder->weld_container(rID);
-    }
+    // Builder will trigger resize and start Idle
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xContainer = m_xBuilder->weld_container(rID);
 }
 
 PanelLayout::~PanelLayout()
@@ -54,7 +45,6 @@ void PanelLayout::dispose()
     m_xContainer.reset();
     m_xBuilder.reset();
     m_xVclContentArea.disposeAndClear();
-    disposeBuilder();
     Control::dispose();
 }
 

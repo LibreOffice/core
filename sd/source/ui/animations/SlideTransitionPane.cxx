@@ -395,7 +395,7 @@ SlideTransitionPane::SlideTransitionPane(
     ViewShellBase & rBase,
     SdDrawDocument* pDoc,
     const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame, true ),
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),

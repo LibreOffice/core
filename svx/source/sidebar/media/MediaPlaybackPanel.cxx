@@ -32,7 +32,7 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui", rxFrame, true),
+    : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui", rxFrame),
     MediaControlBase(),
     maMediaController(SID_AVMEDIA_TOOLBOX, *pBindings, *this),
     maIdle("MediaPlaybackPanel"),

@@ -153,7 +153,7 @@ LayoutMenu::LayoutMenu (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui", nullptr, true ),
+    : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui", nullptr ),
       mrBase(rViewShellBase),
       mxLayoutValueSet(new LayoutValueSet(*this)),
       mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLayoutValueSet)),

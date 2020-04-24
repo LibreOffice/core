@@ -59,7 +59,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
-    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame, true)
+    : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
     , mpBindings(pBindings)
     // spacing
     , nTop(0)

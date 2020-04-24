@@ -57,7 +57,7 @@ PageHeaderPanel::PageHeaderPanel(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame, true),
+    PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),

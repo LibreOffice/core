@@ -29,6 +29,7 @@
 
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/EnumContext.hxx>
 
 class ToolbarUnoDispatcher;
 

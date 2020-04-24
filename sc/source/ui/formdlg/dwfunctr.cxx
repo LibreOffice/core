@@ -45,7 +45,7 @@
 #************************************************************************/
 
 ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame, true)
+    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame)
     , xCatBox(m_xBuilder->weld_combo_box("category"))
     , xFuncList(m_xBuilder->weld_tree_view("funclist"))
     , xInsertButton(m_xBuilder->weld_button("insert"))

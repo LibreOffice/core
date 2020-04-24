@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include "PosSizePropertyPanel.hxx"
+#include <sal/log.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -55,7 +56,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-:   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui", rxFrame, true),
+:   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui", rxFrame),
     mxFtPosX(m_xBuilder->weld_label("horizontallabel")),
     mxMtrPosX(m_xBuilder->weld_metric_spin_button("horizontalpos", FieldUnit::CM)),
     mxFtPosY(m_xBuilder->weld_label("verticallabel")),

@@ -414,7 +414,7 @@ VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
 
 ThemePanel::ThemePanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame, true)
+    : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame)
     , mxListBoxFonts(m_xBuilder->weld_tree_view("listbox_fonts"))
     , mxValueSetColors(new SvtValueSet(nullptr))
     , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))

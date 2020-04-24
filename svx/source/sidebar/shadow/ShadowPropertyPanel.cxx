@@ -31,7 +31,7 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame, true),
+:   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame),
     maShadowController(SID_ATTR_FILL_SHADOW, *pBindings, *this),
     maShadowTransController(SID_ATTR_SHADOW_TRANSPARENCE, *pBindings, *this),
     maShadowColorController(SID_ATTR_SHADOW_COLOR, *pBindings, *this),
