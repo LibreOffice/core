@@ -731,6 +731,7 @@ private:
 
     bool            bOwnerOfPool:1;
     bool            bModified:1;
+    bool            bDisableAttributeExpanding:1;
 
 private:
     void            ImplDestroyContents();
@@ -744,6 +745,8 @@ public:
 
     bool            IsModified() const      { return bModified; }
     void            SetModified( bool b );
+
+    void            DisableAttributeExpanding() { bDisableAttributeExpanding = true; }
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
 

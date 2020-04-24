@@ -1112,6 +1112,8 @@ void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
                pDrawingArea->get_text_height() * 6);
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     WeldEditView::SetDrawingArea(pDrawingArea);
+    // tdf#132288 don't merge equal adjacent attributes
+    m_xEditEngine->DisableAttributeExpanding();
 }
 
 SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
