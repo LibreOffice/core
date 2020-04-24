@@ -123,63 +123,6 @@ AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
 {
 }
 
-namespace {
-
-enum AnimationNodeAttributes
-{
-    ANA_Begin,
-    ANA_Dur,
-    ANA_End,
-    ANA_Fill,
-    ANA_FillDefault,
-    ANA_Restart,
-    ANA_RestartDefault,
-    ANA_Accelerate,
-    ANA_Decelerate,
-    ANA_AutoReverse,
-    ANA_RepeatCount,
-    ANA_RepeatDur,
-    ANA_EndSync,
-    ANA_Node_Type,
-    ANA_Preset_ID,
-    ANA_Preset_Sub_Type,
-    ANA_Preset_Class,
-    ANA_After_Effect,
-    ANA_Target,
-    ANA_XLink,
-    ANA_MasterElement,
-    ANA_SubItem,
-    ANA_AttributeName,
-    ANA_Values,
-    ANA_From,
-    ANA_By,
-    ANA_To,
-    ANA_KeyTimes,
-    ANA_CalcMode,
-    ANA_Accumulate,
-    ANA_AdditiveMode,
-    ANA_KeySplines,
-    ANA_Path,
-    ANA_ColorSpace,
-    ANA_ColorDirection,
-    ANA_TransformType,
-    ANA_TransitionType,
-    ANA_TransitionSubType,
-    ANA_Mode,
-    ANA_Direction,
-    ANA_FadeColor,
-    ANA_IterateType,
-    ANA_IterateInterval,
-    ANA_Formula,
-    ANA_ANIMID,
-    ANA_XMLID,
-    ANA_Group_Id,
-    ANA_Command,
-    ANA_Volume
-};
-
-}
-
 static bool isDouble( const OUString& rValue )
 {
     sal_Int32 nLength = rValue.getLength();

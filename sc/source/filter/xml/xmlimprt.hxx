@@ -51,36 +51,10 @@ class ScDocumentImport;
 class ScMyImpDetectiveOpArray;
 
 namespace sc {
-
 struct ImportPostProcessData;
 struct PivotTableSources;
-
 }
 
-enum ScXMLDocTokens
-{
-    XML_TOK_DOC_FONTDECLS,
-    XML_TOK_DOC_STYLES,
-    XML_TOK_DOC_AUTOSTYLES,
-    XML_TOK_DOC_MASTERSTYLES,
-    XML_TOK_DOC_META,
-    XML_TOK_DOC_SCRIPTS,
-    XML_TOK_DOC_BODY,
-    XML_TOK_DOC_SETTINGS
-};
-
-enum ScXMLContentValidationElemTokens
-{
-    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE,
-    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE,
-    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO,
-    XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS
-};
-
-enum ScXMLContentValidationMessageElemTokens
-{
-    XML_TOK_P
-};
 
 enum ScXMLTableTokens
 {
