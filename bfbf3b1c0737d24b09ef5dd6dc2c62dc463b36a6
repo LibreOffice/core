@@ -16,6 +16,24 @@
       "revId": "bfbf3b1c0737d24b09ef5dd6dc2c62dc463b36a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df1b1ae4_c9b3e613",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-04-24T08:48:58Z",
+      "side": 1,
+      "message": "That seems broken to me. AFAICT this -1 matters only when only line color is set and not fill color, so all that code could just as well pass correct values directly.",
+      "parentUuid": "f8f950de_c346d820",
+      "revId": "bfbf3b1c0737d24b09ef5dd6dc2c62dc463b36a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
