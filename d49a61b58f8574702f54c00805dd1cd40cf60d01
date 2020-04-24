@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea0fb035_611a9785",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-24T08:26:34Z",
+      "side": 1,
+      "message": "Destkop \u003d\u003e Desktop",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "d49a61b58f8574702f54c00805dd1cd40cf60d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
