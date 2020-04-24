@@ -34,7 +34,7 @@ namespace svx::sidebar
 GlowPropertyPanel::GlowPropertyPanel(vcl::Window* pParent,
                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                      SfxBindings* pBindings)
-    : PanelLayout(pParent, "GlowPropertyPanel", "svx/ui/sidebarglow.ui", rxFrame, true)
+    : PanelLayout(pParent, "GlowPropertyPanel", "svx/ui/sidebarglow.ui", rxFrame)
     , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)

@@ -233,7 +233,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 ChartErrorBarPanel::ChartErrorBarPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame, ChartController* pController)
-    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame, true)
+    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame)
     , mxRBPosAndNeg(m_xBuilder->weld_radio_button("radiobutton_positive_negative"))
     , mxRBPos(m_xBuilder->weld_radio_button("radiobutton_positive"))
     , mxRBNeg(m_xBuilder->weld_radio_button("radiobutton_negative"))

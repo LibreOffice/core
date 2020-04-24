@@ -300,7 +300,7 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
 ChartElementsPanel::ChartElementsPanel(
     vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame, true)
+    : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame)
     , mxCBTitle(m_xBuilder->weld_check_button("checkbutton_title"))
     , mxCBSubtitle(m_xBuilder->weld_check_button("checkbutton_subtitle"))
     , mxCBXAxis(m_xBuilder->weld_check_button("checkbutton_x_axis"))

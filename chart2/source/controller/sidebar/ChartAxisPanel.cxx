@@ -205,7 +205,7 @@ ChartAxisPanel::ChartAxisPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame, true)
+    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame)
     , mxCBShowLabel(m_xBuilder->weld_check_button("checkbutton_show_label"))
     , mxCBReverse(m_xBuilder->weld_check_button("checkbutton_reverse"))
     , mxLBLabelPos(m_xBuilder->weld_combo_box("comboboxtext_label_position"))

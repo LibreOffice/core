@@ -87,7 +87,7 @@ PageFormatPanel::PageFormatPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings) :
-    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame, true),
+    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame),
     mpBindings( pBindings ),
     mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("papersize"))),
     mxPaperWidth(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("paperwidth", FieldUnit::CM))),

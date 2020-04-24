@@ -28,7 +28,7 @@ namespace svx::sidebar {
 DefaultShapesPanel::DefaultShapesPanel (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui", rxFrame, true)
+    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui", rxFrame)
     , SvxShapeCommandsMap()
     , mxLineArrowSet(new SvtValueSet(nullptr))
     , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))

@@ -47,7 +47,7 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame, true),
+:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
 
     mxTBCellBorder(m_xBuilder->weld_toolbar("cellbordertype")),
     mxTBCellBackground(m_xBuilder->weld_toolbar("cellbackgroundcolor")),

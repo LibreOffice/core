@@ -43,7 +43,7 @@ namespace chart::sidebar
 ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                ::chart::ChartController* pController)
-    : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui", rxFrame, true)
+    : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui", rxFrame)
     , maContext()
     , mxModel(pController->getModel())
     , mxListener(new ChartSidebarModifyListener(this))

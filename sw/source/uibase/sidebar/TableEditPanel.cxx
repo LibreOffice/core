@@ -93,8 +93,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
 TableEditPanel::TableEditPanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
-    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame,
-                  true)
+    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame)
     , m_pBindings(pBindings)
     , m_xRowHeightEdit(
           new SvxRelativeField(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM)))
