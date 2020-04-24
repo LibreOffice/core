@@ -2802,6 +2802,10 @@ bool EditEngine::IsPageOverflow() {
     return pImpEditEngine->IsPageOverflow();
 }
 
+void EditEngine::DisableAttributeExpanding() {
+    pImpEditEngine->GetEditDoc().DisableAttributeExpanding();
+}
+
 EFieldInfo::EFieldInfo()
 {
 }
