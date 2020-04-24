@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39fd439a_29c78c0e",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002200
+      },
+      "writtenOn": "2020-04-24T11:32:25Z",
+      "side": 1,
+      "message": "These colors are the ones used a couple of lines above. The tokens are used as aliases only, for simplicity.",
+      "parentUuid": "7497527b_338424ad",
+      "range": {
+        "startLine": 127,
+        "startChar": 2,
+        "endLine": 130,
+        "endChar": 50
+      },
+      "revId": "e9e757ba6f8c590aead38b8f5c7bbc8299ca201d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d2cddc7_bea4dc9f",
         "filename": "oox/source/helper/attributelist.cxx",
         "patchSetId": 10
