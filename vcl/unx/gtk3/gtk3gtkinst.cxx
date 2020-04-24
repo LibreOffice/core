@@ -13862,7 +13862,7 @@ public:
     virtual int find_text(const OUString& rStr) const override
     {
         int nPos = find_text_including_mru(rStr, false);
-        if (m_nMRUCount)
+        if (nPos != -1 && m_nMRUCount)
             nPos -= (m_nMRUCount + 1);
         return nPos;
     }
@@ -13870,7 +13870,7 @@ public:
     virtual int find_id(const OUString& rId) const override
     {
         int nPos = find_id_including_mru(rId, false);
-        if (m_nMRUCount)
+        if (nPos != -1 && m_nMRUCount)
             nPos -= (m_nMRUCount + 1);
         return nPos;
     }
