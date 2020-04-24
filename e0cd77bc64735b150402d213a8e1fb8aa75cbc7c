@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "e66258fe_c2c6368e",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-24T09:33:44Z",
+      "side": 1,
+      "message": "(And FYI, I plan to replace the UpCast code with std::is_base_of for css::uno::Reference, even if that needs fixing lots of .cxx to make types complete (where the amount of required work is the reason I haven\u0027t finished it yet).  I came to the conclusion that relying on (in-)completeness of types in template instantiations is at best brittle and at worst an ODR violation.)",
+      "parentUuid": "71f6c765_38450fa8",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7883587c_69981bed",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
