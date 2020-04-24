@@ -50,24 +50,19 @@ void PanelLayout::dispose()
 
 Size PanelLayout::GetOptimalSize() const
 {
-    if (isLayoutEnabled(this))
-    {
-        Size aSize = m_xContainer ? m_xContainer->get_preferred_size()
-                                  : VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
-        if (mxFrame)
-        {
-            SidebarController* pController
-                = SidebarController::GetSidebarControllerForFrame(mxFrame);
-            if (pController)
-                aSize.setWidth(std::min<long>(
-                    aSize.Width(), (pController->getMaximumWidth() - TabBar::GetDefaultWidth())
-                                       * GetDPIScaleFactor()));
-        }
+    Size aSize = m_xContainer->get_preferred_size();
 
-        return aSize;
+    if (mxFrame)
+    {
+        SidebarController* pController
+            = SidebarController::GetSidebarControllerForFrame(mxFrame);
+        if (pController)
+            aSize.setWidth(std::min<long>(
+                aSize.Width(), (pController->getMaximumWidth() - TabBar::GetDefaultWidth())
+                                   * GetDPIScaleFactor()));
     }
 
-    return Control::GetOptimalSize();
+    return aSize;
 }
 
 void PanelLayout::queue_resize(StateChangedType /*eReason*/)
@@ -75,8 +70,6 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
     if (m_bInClose)
         return;
     if (m_aPanelLayoutIdle.IsActive())
-        return;
-    if (!isLayoutEnabled(this))
         return;
     InvalidateSizeCache();
     m_aPanelLayoutIdle.Start();
@@ -94,10 +87,9 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
     bool bCanHandleSmallerWidth = false;
     bool bCanHandleSmallerHeight = false;
 
-    bool bIsLayoutEnabled = isLayoutEnabled(this);
     vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
 
-    if (bIsLayoutEnabled && pChild->GetType() == WindowType::SCROLLWINDOW)
+    if (pChild->GetType() == WindowType::SCROLLWINDOW)
     {
         WinBits nStyle = pChild->GetStyle();
         if (nStyle & (WB_AUTOHSCROLL | WB_HSCROLL))
@@ -114,7 +106,7 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
 
     Control::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
-    if (bIsLayoutEnabled && (nFlags & PosSizeFlags::Size))
+    if (nFlags & PosSizeFlags::Size)
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
