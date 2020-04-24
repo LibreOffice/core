@@ -1908,7 +1908,8 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     mnRotation(TextRotation::NONE),
     bIsFixedCellHeight(false),
     bOwnerOfPool(pPool == nullptr),
-    bModified(false)
+    bModified(false),
+    bDisableAttributeExpanding(false)
 {
     // Don't create an empty node, Clear() will be called in EditEngine-CTOR
 };
@@ -2368,6 +2369,15 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
     RemoveAttribs( pNode, nStart, nEnd, pStartingAttrib, pEndingAttrib, rPoolItem.Which() );
+
+    // tdf#132288  By default inserting an attribute beside another that is of
+    // the same type expands the original instead of inserting another. But the
+    // spell check dialog doesn't want that behaviour
+    if (bDisableAttributeExpanding)
+    {
+        pStartingAttrib = nullptr;
+        pEndingAttrib = nullptr;
+    }
 
     if ( pStartingAttrib && pEndingAttrib &&
          ( *(pStartingAttrib->GetItem()) == rPoolItem ) &&

@@ -623,6 +623,11 @@ public:
     sal_Int32 GetOverflowingLineNum() const;
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
+
+    // tdf#132288  By default inserting an attribute beside another that is of
+    // the same type expands the original instead of inserting another. But the
+    // spell check dialog doesn't want that behaviour
+    void DisableAttributeExpanding();
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
