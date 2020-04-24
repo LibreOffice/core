@@ -22,6 +22,30 @@
       "revId": "d49a61b58f8574702f54c00805dd1cd40cf60d01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06aebefc_505672c4",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-24T08:48:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea0fb035_611a9785",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "d49a61b58f8574702f54c00805dd1cd40cf60d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
