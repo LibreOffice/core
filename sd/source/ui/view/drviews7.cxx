@@ -1805,9 +1805,15 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
                 {
                     const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
-                    XFillGradientItem aGradient( XGradient::fromJSON(pJSON->GetValue()) );
+                    XFillGradientItem aGradientItem( XGradient::fromJSON(pJSON->GetValue()) );
+
+                    // MigrateItemSet guarantees unique gradient names
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                    aMigrateSet.Put( aGradientItem );
+                    SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDrawView->GetModel() );
+
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                    rPageProperties.PutItem( aGradient );
+                    rPageProperties.PutItemSet( *pTempSet );
                 }
                 else
                 {
