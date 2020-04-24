@@ -2824,7 +2824,7 @@ void SvImpLBox::SetSelectionMode( SelectionMode eSelMode  )
 
 void SvImpLBox::SetDragDropMode( DragDropMode eDDMode )
 {
-    if( eDDMode != DragDropMode::NONE && eDDMode != DragDropMode::APP_DROP )
+    if( eDDMode != DragDropMode::NONE )
     {
         m_aSelEng.ExpandSelectionOnMouseMove( false );
         m_aSelEng.EnableDrag( true );
