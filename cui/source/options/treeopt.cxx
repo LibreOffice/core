@@ -99,6 +99,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

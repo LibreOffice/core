@@ -30,6 +30,7 @@
 #include <svtools/valueset.hxx>
 
 #include <vcl/weld.hxx>
+#include <vcl/outdev.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart
