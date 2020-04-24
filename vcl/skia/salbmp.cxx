@@ -679,6 +679,9 @@ void SkiaSalBitmap::EnsureBitmapData()
                                                        << static_cast<int>(mScaleQuality));
         mPixelsSize = mSize;
         mScaleQuality = kNone_SkFilterQuality;
+        // Information about the pending scaling has been discarded, so make sure we do not
+        // keep around any cached images would still need scaling.
+        ResetCachedDataBySize();
     }
     else
         canvas.drawImage(mImage, 0, 0, &paint);
@@ -767,8 +770,8 @@ void SkiaSalBitmap::ResetCachedData()
     // mBuffer from it if needed, in that case ResetToSkImage() should be used.
     assert(mBuffer.get() || !mImage);
     mBitmap.reset();
-    mAlphaImage.reset();
     mImage.reset();
+    mAlphaImage.reset();
 }
 
 void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
@@ -776,8 +779,21 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
     SkiaZone zone;
     mBuffer.reset();
     mBitmap.reset();
-    mAlphaImage.reset();
     mImage = image;
+    mAlphaImage.reset();
+}
+
+void SkiaSalBitmap::ResetCachedDataBySize()
+{
+    SkiaZone zone;
+    assert(!mBitmap.isNull());
+    assert(mBitmap.width() == mSize.getWidth() && mBitmap.height() == mSize.getHeight());
+    assert(mSize == mPixelsSize);
+    if (mImage && (mImage->width() != mSize.getWidth() || mImage->height() != mSize.getHeight()))
+        mImage.reset();
+    if (mAlphaImage
+        && (mAlphaImage->width() != mSize.getWidth() || mAlphaImage->height() != mSize.getHeight()))
+        mAlphaImage.reset();
 }
 
 #ifdef DBG_UTIL

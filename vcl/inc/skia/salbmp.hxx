@@ -76,6 +76,8 @@ private:
     void ResetCachedData();
     // Sets the data only as SkImage (will be converted as needed).
     void ResetToSkImage(sk_sp<SkImage> image);
+    // Resets all data that does not match mSize.
+    void ResetCachedDataBySize();
     // Call to ensure mBuffer has data (will convert from mImage if necessary).
     void EnsureBitmapData();
     void EnsureBitmapData() const { return const_cast<SkiaSalBitmap*>(this)->EnsureBitmapData(); }
