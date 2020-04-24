@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7497527b_338424ad",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-24T09:33:47Z",
+      "side": 1,
+      "message": "It seems, these values are not correct. See color constants in include/tools/color.hxx used by TransColToIco().",
+      "range": {
+        "startLine": 127,
+        "startChar": 2,
+        "endLine": 130,
+        "endChar": 50
+      },
+      "revId": "e9e757ba6f8c590aead38b8f5c7bbc8299ca201d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d2cddc7_bea4dc9f",
+        "filename": "oox/source/helper/attributelist.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-24T09:33:47Z",
+      "side": 1,
+      "message": "It\u0027s better to warn about the invalid tokens, helping also the implementation of the future export.\n\nSTRING_TO_TOKEN(none);\nreturn XML_TOKEN_INVALID;",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 20
+      },
+      "revId": "e9e757ba6f8c590aead38b8f5c7bbc8299ca201d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
