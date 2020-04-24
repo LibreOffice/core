@@ -492,8 +492,8 @@ void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
     SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
     if (eVersion > SvtSaveOptions::ODFSVER_012)
     {
-        FinishTextElement_Impl(true);
-        // For 1.2+ use loext namespace, for 1.3 use number namespace.
+        FinishTextElement_Impl(eVersion < SvtSaveOptions::ODFSVER_013);
+        // OFFICE-3765 For 1.2+ use loext namespace, for 1.3 use number namespace.
         SvXMLElementExport aElem( rExport,
                                   ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                   XML_FILL_CHARACTER, true, false );
@@ -547,7 +547,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
         SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // OFFICE-3860 For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute(
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MIN_DECIMAL_PLACES,
@@ -636,7 +636,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
         // Export only for 1.2 with extensions or 1.3 and later.
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // OFFICE-3860 For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute(
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MIN_DECIMAL_PLACES,
@@ -670,7 +670,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
         // Export only for 1.2 with extensions or 1.3 and later.
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // OFFICE-1828 For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute(
                     ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                     XML_EXPONENT_INTERVAL, OUString::number( nExpInterval ) );
@@ -681,7 +681,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     // Export only for 1.2 with extensions or 1.3 and later.
     if (eVersion > SvtSaveOptions::ODFSVER_012)
     {
-        // For 1.2+ use loext namespace, for 1.3 use number namespace.
+        // OFFICE-3860 For 1.2+ use loext namespace, for 1.3 use number namespace.
         rExport.AddAttribute(
             ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                              XML_FORCED_EXPONENT_SIGN,
@@ -779,7 +779,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
                               OUString::number( nMinDenominatorDigits ) );
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
-            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // OFFICE-3695 For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute(
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MAX_DENOMINATOR_VALUE,
