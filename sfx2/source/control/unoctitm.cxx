@@ -1070,6 +1070,13 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertRowsAfter" ||
              aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
              aEvent.FeatureURL.Path == "InsertColumnsAfter" ||
+             aEvent.FeatureURL.Path == "MergeCells" ||
+             aEvent.FeatureURL.Path == "InsertObjectChart" ||
+             aEvent.FeatureURL.Path == "InsertSection" ||
+             aEvent.FeatureURL.Path == "InsertAnnotation" ||
+             aEvent.FeatureURL.Path == "InsertPagebreak" ||
+             aEvent.FeatureURL.Path == "InsertColumnBreak" ||
+             aEvent.FeatureURL.Path == "HyperlinkDialog" ||
              aEvent.FeatureURL.Path == "InsertSymbol" ||
              aEvent.FeatureURL.Path == "InsertPage" ||
              aEvent.FeatureURL.Path == "DeletePage" ||
@@ -1124,8 +1131,12 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "OutlineRight" ||
              aEvent.FeatureURL.Path == "OutlineLeft" ||
              aEvent.FeatureURL.Path == "OutlineDown" ||
-             aEvent.FeatureURL.Path == "OutlineUp")
-
+             aEvent.FeatureURL.Path == "OutlineUp" ||
+             aEvent.FeatureURL.Path == "FormatArea" ||
+             aEvent.FeatureURL.Path == "FormatLine" ||
+             aEvent.FeatureURL.Path == "FormatColumns" ||
+             aEvent.FeatureURL.Path == "Watermark" ||
+             aEvent.FeatureURL.Path == "ResetAttributes")
     {
         aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
     }
