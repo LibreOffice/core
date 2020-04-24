@@ -101,7 +101,6 @@ private:
     DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, ImplListBoxWindow*, void );
     DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
     DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
     DECL_DLLPRIVATE_LINK( ImplFocusHdl, sal_Int32, void );
     DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl, LinkParamNone*, void );
 
@@ -129,7 +128,6 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        StateChanged( StateChangedType nType ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        Select();
     void                DoubleClick();

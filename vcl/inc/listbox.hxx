@@ -579,7 +579,6 @@ public:
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
     void            SetMBDownHdl( const Link<void*,void>& rLink ) { maMBDownHdl = rLink; }
-    void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maUserDrawHdl = rLink; }
 
     void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }

@@ -300,18 +300,12 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/lstbox.hxx:135
-    void ListBox::DoubleClick()
-include/vcl/treelistbox.hxx:458
-    _Bool SvTreeListBox::NotifyAcceptDrop(class SvTreeListEntry *,)
-include/vcl/treelistbox.hxx:470
-    enum TriState SvTreeListBox::NotifyCopying(class SvTreeListEntry *,class SvTreeListEntry *,class SvTreeListEntry *&,unsigned long &,)
-include/vcl/treelistbox.hxx:493
-    class rtl::OUString SvTreeListBox::GetEntryAltText(class SvTreeListEntry *,)const
-include/vcl/treelistbox.hxx:494
-    class rtl::OUString SvTreeListBox::GetEntryLongDescription(class SvTreeListEntry *,)const
-include/vcl/treelistbox.hxx:669
-    long SvTreeListBox::GetTabPos(const class SvTreeListEntry *,class SvLBoxTab *,)
+include/vcl/lstbox.hxx:132
+    void ListBox::UserDraw(const class UserDrawEvent &,)
+include/vcl/treelistbox.hxx:686
+    _Bool SvTreeListBox::Expand(class SvTreeListEntry *,)
+include/vcl/treelistbox.hxx:687
+    _Bool SvTreeListBox::Collapse(class SvTreeListEntry *,)
 include/vcl/weld.hxx:103
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -418,9 +412,9 @@ vcl/inc/salframe.hxx:194
     void SalFrame::Flush(const class tools::Rectangle &,)
 vcl/inc/salframe.hxx:264
     void SalFrame::BeginSheet(class SalFrame *,)const
-vcl/inc/salinst.hxx:92
+vcl/inc/salinst.hxx:93
     _Bool SalInstance::SVMainHook(int *,)
-vcl/inc/salinst.hxx:202
+vcl/inc/salinst.hxx:203
     void SalInstance::releaseMainThread()
 vcl/inc/salmenu.hxx:80
     _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
@@ -432,7 +426,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:222
+vcl/inc/skia/gdiimpl.hxx:226
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)

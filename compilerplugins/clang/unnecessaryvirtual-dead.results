@@ -8,6 +8,8 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
+include/vcl/lstbox.hxx:132
+    void ListBox::UserDraw(const class UserDrawEvent &,)
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
 slideshow/source/engine/animationfactory.cxx:437
@@ -16,7 +18,7 @@ vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:264
     void SalFrame::BeginSheet(class SalFrame *,)const
-vcl/inc/salinst.hxx:202
+vcl/inc/salinst.hxx:203
     void SalInstance::releaseMainThread()
 vcl/inc/salmenu.hxx:81
     void SalMenu::RemoveMenuBarButton(unsigned short,)
