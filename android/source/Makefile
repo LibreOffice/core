@@ -28,7 +28,9 @@ clean:
 	rm -f liboSettings.gradle
 
 build-gradle: liboSettings.gradle local.properties link-so
+ifeq ($(ENABLE_JAVA),TRUE)
 	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then ./gradlew $(if $(verbose),--info) $(if $(versionCode),-PcmdVersionCode=$(versionCode)) assemble$(if $(DISABLE_UI),StrippedUI,FullUI)$(if $(ENABLE_ANDROID_EDITING),Editing)$(if $(ENABLE_RELEASE_BUILD),Release,Debug) ; fi
+endif
 
 run:
 	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then $(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(ANDROID_PACKAGE_NAME)/.ui.LibreOfficeUIActivity ; fi
