@@ -152,7 +152,7 @@ SwViewOption::SwViewOption() :
     mnViewLayoutColumns( 0 ),
     m_nPagePreviewRow( 1 ),
     m_nPagePreviewCol( 2 ),
-    m_nShadowCursorFillMode( FILL_TAB ),
+    m_nShadowCursorFillMode( SwFillMode::Tab ),
     m_bReadonly(false),
     m_bStarOneSetting(false),
     m_bIsPagePreview(false),

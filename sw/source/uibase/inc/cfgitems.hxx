@@ -35,6 +35,7 @@ class SwViewShell;
 class SwViewOption;
 class SwContentOptPage;
 class SwShdwCursorOptionsTabPage;
+enum class SwFillMode;
 
 // OS 12.01.95
 // Item for settings dialog - document view
@@ -111,7 +112,7 @@ public:
 // Item for settings dialog, ShadowCursorPage
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
-    sal_uInt8 eMode;
+    SwFillMode eMode;
     bool bOn;
 public:
     SwShadowCursorItem();
@@ -122,10 +123,10 @@ public:
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 
-    sal_uInt8 GetMode() const               { return eMode; }
+    SwFillMode GetMode() const          { return eMode; }
     bool IsOn() const                   { return bOn; }
 
-    void SetMode( sal_uInt8 eM )            { eMode = eM; }
+    void SetMode( SwFillMode eM )       { eMode = eM; }
     void SetOn( bool bFlag )            { bOn = bFlag; }
 };
 

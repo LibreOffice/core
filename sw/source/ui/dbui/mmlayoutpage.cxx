@@ -394,7 +394,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     const SwRect& rPageRect = rShell.GetAnyCurRect(CurRectType::Page);
     const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
 
-    const bool bRet = rShell.SetShadowCursorPos( aGreetingPos, FILL_TAB_SPACE );
+    const bool bRet = rShell.SetShadowCursorPos( aGreetingPos, SwFillMode::TabSpace );
 
     if(!bRet)
     {

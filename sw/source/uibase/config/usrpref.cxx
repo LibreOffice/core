@@ -534,7 +534,7 @@ void SwCursorConfig::Load()
                 switch(nProp)
                 {
                     case  0: rParent.SetShadowCursor(bSet);                  break; // "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCursorFillMode(static_cast<sal_uInt8>(nSet)); break; // "DirectCursor/Insert",
+                    case  1: rParent.SetShdwCursorFillMode(static_cast<SwFillMode>(nSet)); break; // "DirectCursor/Insert",
                     case  2: rParent.SetCursorInProtectedArea(bSet);         break; // "Option/ProtectedArea"
                 }
             }
