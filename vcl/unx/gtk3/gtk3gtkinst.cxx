@@ -12538,7 +12538,6 @@ private:
     GtkWindow* m_pMenuWindow;
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pButtonTextRenderer;
-    GtkCellRenderer* m_pMenuTextRenderer;
     GtkWidget* m_pToggleButton;
     GtkWidget* m_pEntry;
     GtkCellView* m_pCellView;
@@ -13534,11 +13533,11 @@ public:
 
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
         // move the cell renderers from the combobox to the replacement treeview
-        m_pMenuTextRenderer = static_cast<GtkCellRenderer*>(cells->data);
+        GtkCellRenderer* pMenuTextRenderer = static_cast<GtkCellRenderer*>(cells->data);
         for (GList* pRenderer = g_list_first(cells); pRenderer; pRenderer = g_list_next(pRenderer))
         {
             GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-            bool bTextRenderer = pCellRenderer == m_pMenuTextRenderer;
+            bool bTextRenderer = pCellRenderer == pMenuTextRenderer;
             gtk_tree_view_column_pack_end(pCol, pCellRenderer, bTextRenderer);
             if (!bTextRenderer)
             {
@@ -13549,7 +13548,7 @@ public:
             }
         }
 
-        gtk_tree_view_column_set_attributes(pCol, m_pMenuTextRenderer, "text", m_nTextCol, nullptr);
+        gtk_tree_view_column_set_attributes(pCol, pMenuTextRenderer, "text", m_nTextCol, nullptr);
 
         if (gtk_combo_box_get_has_entry(m_pComboBox))
         {
