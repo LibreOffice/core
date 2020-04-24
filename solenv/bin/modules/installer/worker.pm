@@ -343,6 +343,9 @@ sub install_simple ($$$$$$)
         if ( -l "$sourcepath" ) {
             symlink (readlink ("$sourcepath"), "$destdir$destination") || die "Can't symlink $destdir$destination -> " . readlink ("$sourcepath") . "$!";
         }
+        elsif ( -d $sourcepath && installer::systemactions::is_empty_dir($sourcepath) ) {
+            `mkdir -p "$destdir$destination"`;
+        }
         else {
             copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
             my $sourcestat = stat($sourcepath);
