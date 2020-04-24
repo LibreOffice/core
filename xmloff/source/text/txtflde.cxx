@@ -1794,16 +1794,22 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
-        if (SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+        if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // initials
             OUString aInitials( GetStringProperty(gsPropertyInitials, rPropSet) );
             if( !aInitials.isEmpty() )
             {
-                // TODO: see OFFICE-3776 export meta:creator-initials for ODF 1.3
-                SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                        XML_SENDER_INITIALS, true,
-                        false );
+                // ODF 1.3 OFFICE-3776 export meta:creator-initials for ODF 1.3
+                SvXMLElementExport aCreatorElem( GetExport(),
+                        (SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion())
+                            ? XML_NAMESPACE_META
+                            : XML_NAMESPACE_LO_EXT,
+
+                        (SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion())
+                            ? XML_CREATOR_INITIALS
+                            : XML_SENDER_INITIALS,
+                        true, false );
                 GetExport().Characters(aInitials);
             }
         }
