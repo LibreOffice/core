@@ -2131,8 +2131,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     bHLines = ( nMode & BrowserMode::HLINES ) == BrowserMode::HLINES;
     bVLines = ( nMode & BrowserMode::VLINES ) == BrowserMode::VLINES;
 
-    WinBits nVScrollWinBits =
-        WB_VSCROLL | ( ( nMode & BrowserMode::THUMBDRAGGING ) ? WB_DRAG : 0 );
+    constexpr WinBits nVScrollWinBits = WB_VSCROLL;
     pVScroll = ( nMode & BrowserMode::TRACKING_TIPS ) == BrowserMode::TRACKING_TIPS
                 ? VclPtr<BrowserScrollBar>::Create( this, nVScrollWinBits, pDataWin.get() )
                 : VclPtr<ScrollBar>::Create( this, nVScrollWinBits );
