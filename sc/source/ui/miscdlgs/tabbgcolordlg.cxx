@@ -38,7 +38,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
     m_xTabBgColorSet->SetDialog(this);
-    m_xTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
+    m_xTabBgColorSet->SetColCount(ColorValueSet::getColumnCount());
 
     m_xDialog->set_title(rTitle);
 
@@ -46,9 +46,9 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     m_xTabBgColorSet->SetStyle(nBits);
     m_xTabBgColorSet->SetText(rTabBgColorNoColorText);
 
-    const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
+    const sal_uInt32 nColCount = ColorValueSet::getColumnCount();
     const sal_uInt32 nRowCount(10);
-    const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
+    const sal_uInt32 nLength = ColorValueSet::getEntryEdgeLength();
     Size aSize(m_xTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
     m_xTabBgColorSetWin->set_size_request(aSize.Width() + 8, aSize.Height() + 8);
 

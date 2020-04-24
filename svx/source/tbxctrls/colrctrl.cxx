@@ -208,10 +208,10 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
         }
     }
 
-    aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
-    aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
+    aItemSize = xColorSet->CalcItemSizePixel(Size(ColorValueSet::getEntryEdgeLength(), ColorValueSet::getEntryEdgeLength()));
+    aItemSize.setWidth( aItemSize.Width() + ColorValueSet::getEntryEdgeLength() );
     aItemSize.setWidth( aItemSize.Width() / 2 );
-    aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
+    aItemSize.setHeight( aItemSize.Height() + ColorValueSet::getEntryEdgeLength() );
     aItemSize.setHeight( aItemSize.Height() / 2 );
 
     fprintf(stderr, "size is %ld %ld\n", aItemSize.Width(), aItemSize.Height());
@@ -256,7 +256,7 @@ void SvxColorDockingWindow::FillValueSet()
     xColorSet->addEntriesForXColorList(*pColorList, 2);
 
     // create the last entry for 'invisible/none'
-    const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
+    const Size aColorSize(ColorValueSet::getEntryEdgeLength(), ColorValueSet::getEntryEdgeLength());
     long nPtX = aColorSize.Width() - 1;
     long nPtY = aColorSize.Height() - 1;
     ScopedVclPtrInstance< VirtualDevice > pVD;

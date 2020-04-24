@@ -24,7 +24,6 @@
 
 class Color;
 class ColorValueSet;
-class SvxColorValueSet;
 
 typedef std::pair<Color, OUString> NamedColor;
 
