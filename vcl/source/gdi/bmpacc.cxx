@@ -461,21 +461,4 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
     }
 }
 
-void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
-{
-    SAL_WARN_IF( ( !HasPalette() || !rReadAcc.HasPalette() ) && ( HasPalette() || rReadAcc.HasPalette() ), "vcl", "No copying possible between palette bitmap and TC bitmap!" );
-
-    if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
-        ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
-    {
-        const long  nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() );
-        const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
-
-        memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
-    }
-    else
-        for( long nY = 0, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
-            CopyScanline( nY, rReadAcc );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
