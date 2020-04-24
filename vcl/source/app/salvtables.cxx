@@ -3492,7 +3492,9 @@ public:
 
         if (bChildrenOnDemand)
         {
-            m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            SvTreeListEntry* pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
+            pViewData->SetSelectable(false);
         }
         enable_notify_events();
     }
@@ -4259,7 +4261,11 @@ public:
         SvTreeListEntry* pPlaceHolder = GetPlaceHolderChild(rVclIter.iter);
 
         if (bChildrenOnDemand && !pPlaceHolder)
-            m_xTreeView->InsertEntry("<dummy>", rVclIter.iter, false, 0, nullptr);
+        {
+            pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", rVclIter.iter, false, 0, nullptr);
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
+            pViewData->SetSelectable(false);
+        }
         else if (!bChildrenOnDemand && pPlaceHolder)
             m_xTreeView->RemoveEntry(pPlaceHolder);
 
@@ -4801,7 +4807,9 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
         //expand disallowed, restore placeholder
         if (!bRet)
         {
-            m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
+            pViewData->SetSelectable(false);
         }
         m_aExpandingPlaceHolderParents.erase(pEntry);
     }
