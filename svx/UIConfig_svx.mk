@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/directionwindow \
 	svx/uiconfig/ui/docking3deffects \
 	svx/uiconfig/ui/dockingcolorreplace \
+	svx/uiconfig/ui/dockingcolorwindow \
 	svx/uiconfig/ui/dockingfontwork \
 	svx/uiconfig/ui/docrecoverybrokendialog \
 	svx/uiconfig/ui/docrecoveryprogressdialog \
