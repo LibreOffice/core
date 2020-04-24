@@ -118,7 +118,6 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
         mpImplWin = VclPtr<ImplWin>::Create( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
         mpImplWin->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
-        mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
         mpImplWin->SetEdgeBlending(false);
@@ -138,7 +137,6 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
-    mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
     mpImplLB->SetPosPixel( Point() );
@@ -1317,15 +1315,6 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
         rnCols = static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth);
         rnLines = 1;
     }
-}
-
-IMPL_LINK( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent, void )
-{
-    UserDraw( *pEvent );
-}
-
-void ListBox::UserDraw( const UserDrawEvent& )
-{
 }
 
 void ListBox::SetReadOnly( bool bReadOnly )
