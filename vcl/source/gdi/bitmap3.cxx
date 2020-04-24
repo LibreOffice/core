@@ -30,7 +30,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 #include <vcl/BitmapMonochromeFilter.hxx>
-#include <vcl/BitmapMonochromeMatrixFilter.hxx>
 
 #include <BitmapScaleSuperFilter.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
@@ -266,14 +265,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BmpConversion::N1BitMatrix:
-        {
-            BitmapEx aBmpEx(*this);
-            bRet = BitmapFilter::Filter(aBmpEx, BitmapMonochromeMatrixFilter());
-            *this = aBmpEx.GetBitmap();
-        }
-        break;
-
         case BmpConversion::N4BitGreys:
             bRet = ImplMakeGreyscales( 16 );
         break;
@@ -332,10 +323,6 @@ bool Bitmap::Convert( BmpConversion eConversion )
             else
                 bRet = true;
         }
-        break;
-
-        case BmpConversion::Ghosted:
-            bRet = ImplConvertGhosted();
         break;
 
         default:
@@ -675,80 +662,6 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
             maPrefMapMode = aMap;
             maPrefSize = aSize;
         }
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplConvertGhosted()
-{
-    Bitmap aNewBmp;
-    ScopedReadAccess pR(*this);
-    bool bRet = false;
-
-    if( pR )
-    {
-        if( pR->HasPalette() )
-        {
-            BitmapPalette aNewPal( pR->GetPaletteEntryCount() );
-
-            for( long i = 0, nCount = aNewPal.GetEntryCount(); i < nCount; i++ )
-            {
-                const BitmapColor& rOld = pR->GetPaletteColor( static_cast<sal_uInt16>(i) );
-                aNewPal[ static_cast<sal_uInt16>(i) ] = BitmapColor( ( rOld.GetRed() >> 1 ) | 0x80,
-                                                     ( rOld.GetGreen() >> 1 ) | 0x80,
-                                                     ( rOld.GetBlue() >> 1 ) | 0x80 );
-            }
-
-            aNewBmp = Bitmap( GetSizePixel(), GetBitCount(), &aNewPal );
-            BitmapScopedWriteAccess pW(aNewBmp);
-
-            if( pW )
-            {
-                pW->CopyBuffer( *pR );
-                bRet = true;
-            }
-        }
-        else
-        {
-            aNewBmp = Bitmap( GetSizePixel(), 24 );
-
-            BitmapScopedWriteAccess pW(aNewBmp);
-
-            if( pW )
-            {
-                const long nWidth = pR->Width(), nHeight = pR->Height();
-
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    Scanline pScanline = pW->GetScanline(nY);
-                    Scanline pScanlineRead = pR->GetScanline(nY);
-                    for( long nX = 0; nX < nWidth; nX++ )
-                    {
-                        const BitmapColor aOld( pR->GetPixelFromData( pScanlineRead, nX ) );
-                        pW->SetPixelOnData( pScanline, nX, BitmapColor( ( aOld.GetRed() >> 1 ) | 0x80,
-                                                                        ( aOld.GetGreen() >> 1 ) | 0x80,
-                                                                        ( aOld.GetBlue() >> 1 ) | 0x80 ) );
-
-                    }
-                }
-
-                bRet = true;
-            }
-        }
-
-        pR.reset();
-    }
-
-    if( bRet )
-    {
-        const MapMode aMap( maPrefMapMode );
-        const Size aSize( maPrefSize );
-
-        *this = aNewBmp;
-
-        maPrefMapMode = aMap;
-        maPrefSize = aSize;
     }
 
     return bRet;

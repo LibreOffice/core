@@ -66,7 +66,6 @@ enum class BmpConversion
 {
     NNONE,
     N1BitThreshold,
-    N1BitMatrix, // aka Dithered, used in export to bitmap
     N4BitGreys,
     N4BitColors,
     N8BitGreys,
@@ -74,7 +73,6 @@ enum class BmpConversion
     N24Bit,
     N32Bit,
     N8BitTrans,
-    Ghosted,
     N8BitNoConversion // make 8bit without color conversion (e.g. take the red channel)
 };
 
@@ -536,8 +534,6 @@ public:
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
     SAL_DLLPRIVATE bool ImplConvertDown(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
-
-    SAL_DLLPRIVATE bool ImplConvertGhosted();
 
 private:
     std::shared_ptr<SalBitmap> mxSalBmp;
