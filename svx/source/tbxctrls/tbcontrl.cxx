@@ -25,7 +25,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/customweld.hxx>
