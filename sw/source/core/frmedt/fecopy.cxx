@@ -338,7 +338,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     SwPosition aPos( *GetCursor()->GetPoint() );
                     Point aPt( rInsPt );
                     aPt -= rSttPt - pObj->GetSnapRect().TopLeft();
-                    SwCursorMoveState aState( MV_SETONLYTEXT );
+                    SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                     GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                     const SwNode *pNd;
                     if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )
@@ -485,7 +485,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 SwPosition aPos( *GetCursor()->GetPoint() );
                 Point aPt( rInsPt );
                 aPt -= rSttPt - pFly->getFrameArea().Pos();
-                SwCursorMoveState aState( MV_SETONLYTEXT );
+                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                 GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                 const SwNode *pNd;
                 if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )

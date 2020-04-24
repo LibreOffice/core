@@ -686,7 +686,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     }
     else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
         pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
@@ -1265,7 +1265,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
                             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
-                                SwCursorMoveState aState( MV_SETONLYTEXT );
+                                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
                                 pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
                             }
@@ -1286,7 +1286,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
                             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                             {
-                                SwCursorMoveState aState( MV_SETONLYTEXT );
+                                SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
                                 pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmp, &aState );
                             }

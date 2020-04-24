@@ -1334,7 +1334,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         if( IsAutoPos() && pCnt->IsTextFrame() )
         {
             SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(pCnt));
-            SwCursorMoveState eTmpState( MV_SETONLYTEXT );
+            SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
             Point aPt( rNew );
             if( pCnt->GetModelPositionForViewPoint( &pos, aPt, &eTmpState )
                 && FrameContainsNode(*pTextFrame, pos.nNode.GetIndex()))

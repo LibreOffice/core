@@ -2018,7 +2018,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 DisableCallbackAction a(rLayout);
                 std::pair<Point, bool> const tmp(aPt, true);
                 pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
-                SwCursorMoveState eTmpState( MV_UPDOWN );
+                SwCursorMoveState eTmpState( CursorMoveState::UpDown );
                 eTmpState.m_bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
                 pFrame->GetCharRect( aTmpRect, *GetPoint(), &eTmpState );

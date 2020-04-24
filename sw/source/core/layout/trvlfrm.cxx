@@ -479,7 +479,7 @@ bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
          GetFormat()->GetProtect().IsContentProtected() )
         return false;
 
-    if ( pCMS && pCMS->m_eState == MV_TBLSEL )
+    if ( pCMS && pCMS->m_eState == CursorMoveState::TableSel )
     {
         const SwTabFrame *pTab = FindTabFrame();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
@@ -550,7 +550,7 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
     //If a Frame contains a graphic, but only text was requested, it basically
     //won't accept the Cursor.
-    if ( bInside && pCMS && pCMS->m_eState == MV_SETONLYTEXT &&
+    if ( bInside && pCMS && pCMS->m_eState == CursorMoveState::SetOnlyText &&
          (!Lower() || Lower()->IsNoTextFrame()) )
         bInside = false;
 
@@ -1323,7 +1323,7 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
     OSL_ENSURE( !bBodyOnly || pActual->IsInDocBody(), "Content not in Body." );
 
     //Special case for selecting tables not in repeated TableHeadlines.
-    if ( pActual->IsInTab() && pCMS && pCMS->m_eState == MV_TBLSEL )
+    if ( pActual->IsInTab() && pCMS && pCMS->m_eState == CursorMoveState::TableSel )
     {
         const SwTabFrame *pTab = pActual->FindTabFrame();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
@@ -1458,7 +1458,7 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     }
     else
     {
-        SwCursorMoveState aTmpState( MV_SETONLYTEXT );
+        SwCursorMoveState aTmpState( CursorMoveState::SetOnlyText );
         pAct->GetModelPositionForViewPoint( &rPos, aAct, &aTmpState );
     }
 }
@@ -2113,7 +2113,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
         }
     } while( false );
 
-    SwCursorMoveState aTmpState( MV_NONE );
+    SwCursorMoveState aTmpState( CursorMoveState::NONE );
     aTmpState.m_b2Lines = true;
     aTmpState.m_bNoScroll = true;
     aTmpState.m_nCursorBidiLevel = pStartFrame->IsRightToLeft() ? 1 : 0;

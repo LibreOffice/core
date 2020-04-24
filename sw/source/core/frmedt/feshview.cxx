@@ -1804,7 +1804,7 @@ bool SwFEShell::ImpEndCreate()
     if( dynamic_cast<const SdrUnoObj*>( &rSdrObj) !=  nullptr )
     {
         SwPosition aPos( GetDoc()->GetNodes() );
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         Point aPoint( aPt.getX(), aPt.getY() + rBound.GetHeight()/2 );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
@@ -1849,7 +1849,7 @@ bool SwFEShell::ImpEndCreate()
         bool bBodyOnly = 0xFFFF == nIdent;
         bool bAtPage = false;
         const SwFrame* pPage = nullptr;
-        SwCursorMoveState aState( MV_SETONLYTEXT );
+        SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         Point aPoint( aPt );
         SwPosition aPos( GetDoc()->GetNodes() );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );

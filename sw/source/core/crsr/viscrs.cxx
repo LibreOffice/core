@@ -238,7 +238,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                 SwPaM* pCursor = m_pCursorShell->GetCursor();
                 SwPosition aPos(*pCursor->GetPoint());
                 Point aPt = aRect.Pos();
-                SwCursorMoveState eTmpState(MV_SETONLYTEXT);
+                SwCursorMoveState eTmpState(CursorMoveState::SetOnlyText);
                 SwTextNode *pNode = nullptr;
                 if (m_pCursorShell->GetLayout()->GetModelPositionForViewPoint(&aPos, aPt, &eTmpState))
                     pNode = aPos.nNode.GetNode().GetTextNode();

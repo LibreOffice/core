@@ -344,7 +344,7 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         if( pContentFrame )
         {
             SwRect aCharRect;
-            SwCursorMoveState aTmpState( MV_NONE );
+            SwCursorMoveState aTmpState( CursorMoveState::NONE );
             pContentFrame->GetCharRect( aCharRect, *pShellTableCursor->Start(), &aTmpState );
             aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
         }

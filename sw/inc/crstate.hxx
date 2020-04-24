@@ -118,14 +118,14 @@ struct SwSpecialPos
 };
 
 // CursorTravelling-States (for GetModelPositionForViewPoint)
-enum CursorMoveState
+enum class CursorMoveState
 {
-    MV_NONE,            ///< default
-    MV_UPDOWN,          ///< Cursor Up/Down
-    MV_RIGHTMARGIN,     ///< at right margin
-    MV_LEFTMARGIN,      ///< at left margin
-    MV_SETONLYTEXT,     ///< stay with the cursor inside text
-    MV_TBLSEL           ///< not in repeated headlines
+    NONE,            ///< default
+    UpDown,          ///< Cursor Up/Down
+    RightMargin,     ///< at right margin
+    LeftMargin,      ///< at left margin
+    SetOnlyText,     ///< stay with the cursor inside text
+    TableSel         ///< not in repeated headlines
 };
 
 // struct for later extensions
@@ -163,7 +163,7 @@ struct SwCursorMoveState
     bool m_bInNumPortion;         ///< point is in number portion #i23726#
     int m_nInNumPortionOffset;        ///< distance from number portion's start
 
-    SwCursorMoveState( CursorMoveState eSt = MV_NONE ) :
+    SwCursorMoveState( CursorMoveState eSt = CursorMoveState::NONE ) :
         m_pFill( nullptr ),
         m_pSpecialPos( nullptr ),
         m_eState( eSt ),
@@ -188,7 +188,7 @@ struct SwCursorMoveState
     SwCursorMoveState( SwFillCursorPos *pInitFill ) :
         m_pFill( pInitFill ),
         m_pSpecialPos( nullptr ),
-        m_eState( MV_SETONLYTEXT ),
+        m_eState( CursorMoveState::SetOnlyText ),
         m_nCursorBidiLevel( 0 ),
         m_bStop( false ),
         m_bRealHeight( false ),
