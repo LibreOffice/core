@@ -715,31 +715,6 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
     bDontCheckPasswd = false;
 }
 
-#if 0
-IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox, void )
-{
-    if( pBox->GetSelectionCount() )
-        return;
-
-    m_xHideCB->set_sensitive(false);
-    m_xProtectCB->set_sensitive(false);
-    // edit in readonly sections
-    m_xEditInReadonlyCB->set_sensitive(false);
-
-    m_xPasswdCB->set_sensitive(false);
-    m_xConditionFT->set_sensitive(false);
-    m_xConditionED->set_sensitive(false);
-    m_xFileCB->set_sensitive(false);
-    m_xDDEFrame->set_sensitive(false);
-    m_xDDECB->set_sensitive(false);
-    m_xCurName->set_sensitive(false);
-
-    UseFileHdl(*m_xFileCB);
-    DDEHdl(m_xDDECB);
-
-}
-#endif
-
 // in OkHdl the modified settings are being applied and reversed regions are deleted
 IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
 {
