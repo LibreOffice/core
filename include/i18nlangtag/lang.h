@@ -193,7 +193,7 @@ namespace o3tl
 #define LANGUAGE_ENGLISH_BAHRAIN            LanguageType(0x5009)
 #define LANGUAGE_ENGLISH_BELIZE             LanguageType(0x2809)
 #define LANGUAGE_ENGLISH_CAN                LanguageType(0x1009)
-#define LANGUAGE_ENGLISH_CARRIBEAN          LanguageType(0x2409)
+#define LANGUAGE_ENGLISH_CARIBBEAN          LanguageType(0x2409)
 #define LANGUAGE_ENGLISH_EGYPT              LanguageType(0x5409)
 #define LANGUAGE_ENGLISH_EIRE               LanguageType(0x1809)
 #define LANGUAGE_ENGLISH_HONG_KONG_SAR      LanguageType(0x3C09)

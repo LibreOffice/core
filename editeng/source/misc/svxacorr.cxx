@@ -301,7 +301,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
         LANGUAGE_ENGLISH_EIRE,
         LANGUAGE_ENGLISH_SAFRICA,
         LANGUAGE_ENGLISH_JAMAICA,
-        LANGUAGE_ENGLISH_CARRIBEAN))
+        LANGUAGE_ENGLISH_CARIBBEAN))
         nRet &= ~ACFlags(ACFlags::ChgQuotes|ACFlags::ChgSglQuotes);
     return nRet;
 }
@@ -1232,7 +1232,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
         LANGUAGE_ENGLISH_EIRE,
         LANGUAGE_ENGLISH_SAFRICA,
         LANGUAGE_ENGLISH_JAMAICA,
-        LANGUAGE_ENGLISH_CARRIBEAN))
+        LANGUAGE_ENGLISH_CARIBBEAN))
     {
         rDoc.Replace( nInsPos-1, "I" );
     }

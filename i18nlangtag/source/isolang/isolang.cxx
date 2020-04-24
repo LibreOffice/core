@@ -247,7 +247,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CZECH,                       "cs", "CZ", k0    },
     { LANGUAGE_CZECH,                       "cz", ""  , kSAME },
     { LANGUAGE_ENGLISH_JAMAICA,             "en", "JM", k0    },
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "en", "BS", k0    },    // not 100%, because AG is Bahamas
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "en", "BS", k0    },    // not 100%, because AG is Bahamas
     { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ", k0    },
     { LANGUAGE_ENGLISH_TRINIDAD,            "en", "TT", k0    },
     { LANGUAGE_ENGLISH_ZIMBABWE,            "en", "ZW", k0    },
@@ -872,22 +872,22 @@ static IsoLangEngEntry const aImplIsoLangEngEntries[] =
     { LANGUAGE_ENGLISH_US,                  "GU" },         // Guam
     { LANGUAGE_ENGLISH_US,                  "MH" },         // Marshall Islands
     { LANGUAGE_ENGLISH_US,                  "PW" },         // Palau
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "AI" },         // Anguilla
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "AG" },         // Antigua and Barbuda
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "BS" },         // Bahamas
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "BB" },         // Barbados
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "BM" },         // Bermuda
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "KY" },         // Cayman Islands
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "GD" },         // Grenada
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "DM" },         // Dominica
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "HT" },         // Haiti
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "MS" },         // Montserrat
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "FM" },         // Micronesia
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "VC" },         // St. Vincent / Grenadines
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "LC" },         // Saint Lucia
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "TC" },         // Turks & Caicos Islands
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "GY" },         // Guyana
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "TT" },         // Trinidad and Tobago
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "AI" },         // Anguilla
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "AG" },         // Antigua and Barbuda
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "BS" },         // Bahamas
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "BB" },         // Barbados
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "BM" },         // Bermuda
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "KY" },         // Cayman Islands
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "GD" },         // Grenada
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "DM" },         // Dominica
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "HT" },         // Haiti
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "MS" },         // Montserrat
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "FM" },         // Micronesia
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "VC" },         // St. Vincent / Grenadines
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "LC" },         // Saint Lucia
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "TC" },         // Turks & Caicos Islands
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "GY" },         // Guyana
+    { LANGUAGE_ENGLISH_CARIBBEAN,           "TT" },         // Trinidad and Tobago
     { LANGUAGE_ENGLISH_AUS,                 "CX" },         // Christmas Islands
     { LANGUAGE_ENGLISH_AUS,                 "CC" },         // Cocos (Keeling) Islands
     { LANGUAGE_ENGLISH_AUS,                 "NF" },         // Norfolk Island
