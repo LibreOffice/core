@@ -1707,7 +1707,7 @@ void ScXMLExport::SetBodyAttributes()
                 {
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                  ScPassHashHelper::getHashURI(PASSHASH_XL));
-                    if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                    if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
                                 ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                 }
@@ -2830,7 +2830,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
                         {
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                          ScPassHashHelper::getHashURI(PASSHASH_XL));
-                            if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                            if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                                 AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
                                         ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                         }
@@ -2859,7 +2859,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
     SvXMLElementExport aElemT(*this, sElemTab, true, true);
 
-    if (pProtect && pProtect->isProtected() && getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+    if (pProtect && pProtect->isProtected() && getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS))
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
@@ -2981,7 +2981,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
             WriteNamedRange(pRangeName);
         }
 
-        if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             //export new conditional format information
             ExportConditionalFormat(nTable);
@@ -3138,7 +3138,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             {
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                     aCell.nNumberFormat, aCell.maBaseCell.mfValue);
-                if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             aCell.nNumberFormat, aCell.maBaseCell.mfValue, false, XML_NAMESPACE_CALC_EXT, false);
             }
@@ -3149,7 +3149,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sCellString, sFormattedString);
-                if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             sCellString, sFormattedString, false, XML_NAMESPACE_CALC_EXT);
             }
@@ -3185,7 +3185,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     {
                         AddAttribute(sAttrValueType, XML_STRING);
                         AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));
-                        if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         {
                             //export calcext:value-type="error"
                             AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, OUString("error"));
@@ -3200,7 +3200,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         {
                             GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                     aCell.nNumberFormat, pDoc->GetValue(aCell.maCellAddress));
-                            if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                            if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                             {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                         aCell.nNumberFormat, pDoc->GetValue(aCell.maCellAddress), false, XML_NAMESPACE_CALC_EXT, false );
@@ -3213,7 +3213,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         {
                             AddAttribute(sAttrValueType, XML_STRING);
                             AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));
-                            if (getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                            if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                             {
                                 AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
                             }
@@ -3998,7 +3998,7 @@ void ScXMLExport::WriteExternalDataMapping()
     if (!pDoc)
         return;
 
-    if (getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
         // Export this only for 1.2 extended and above.
         return;
 
@@ -4331,7 +4331,7 @@ void ScXMLExport::WriteDataStream()
         // Export this only in experimental mode.
         return;
 
-    if (getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
         // Export this only for 1.2 extended and above.
         return;
 
