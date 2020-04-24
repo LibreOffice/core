@@ -124,6 +124,8 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     }
     else
     {
+        auto const nVersion(GetExport().getSaneDefaultVersion());
+
         aAny = rPropSet->getPropertyValue( gsHeaderOn );
         bool bHeader = false;
         aAny >>= bHeader;
@@ -162,12 +164,17 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xHeaderTextLeft, false );
         }
 
-        if( xHeaderTextFirst.is() && xHeaderTextFirst != xHeaderText )
+        if (xHeaderTextFirst.is() && xHeaderTextFirst != xHeaderText
+            && SvtSaveOptions::ODFSVER_012 < nVersion)
         {
             if (bHeaderFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+            // ODF 1.3 OFFICE-3789
+            SvXMLElementExport aElem( GetExport(),
+                                        SvtSaveOptions::ODFSVER_013 <= nVersion
+                                            ? XML_NAMESPACE_STYLE
+                                            : XML_NAMESPACE_LO_EXT,
                                         XML_HEADER_FIRST, true, true );
             exportHeaderFooterContent( xHeaderTextFirst, false );
         }
@@ -210,12 +217,17 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             exportHeaderFooterContent( xFooterTextLeft, false );
         }
 
-        if( xFooterTextFirst.is() && xFooterTextFirst != xFooterText )
+        if (xFooterTextFirst.is() && xFooterTextFirst != xFooterText
+            && SvtSaveOptions::ODFSVER_012 < nVersion)
         {
             if (bFooterFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
+            // ODF 1.3 OFFICE-3789
+            SvXMLElementExport aElem( GetExport(),
+                                        SvtSaveOptions::ODFSVER_013 <= nVersion
+                                            ? XML_NAMESPACE_STYLE
+                                            : XML_NAMESPACE_LO_EXT,
                                         XML_FOOTER_FIRST, true, true );
             exportHeaderFooterContent( xFooterTextFirst, false );
         }

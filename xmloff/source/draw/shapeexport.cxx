@@ -2411,8 +2411,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
                 }
                 if (!sOutMimeType.isEmpty())
-                {
-                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", sOutMimeType);
+                {   // ODF 1.3 OFFICE-3943
+                    GetExport().AddAttribute(
+                        SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion()
+                            ? XML_NAMESPACE_DRAW
+                            : XML_NAMESPACE_LO_EXT,
+                        "mime-type", sOutMimeType);
                 }
             }
 
@@ -2453,7 +2457,13 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 }
 
                 if (!aMimeType.isEmpty() && GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
-                    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+                {   // ODF 1.3 OFFICE-3943
+                    mrExport.AddAttribute(
+                        SvtSaveOptions::ODFSVER_013 <= GetExport().getSaneDefaultVersion()
+                            ? XML_NAMESPACE_DRAW
+                            : XML_NAMESPACE_LO_EXT,
+                        "mime-type", aMimeType);
+                }
 
                 SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 

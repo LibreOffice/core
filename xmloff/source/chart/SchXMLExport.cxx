@@ -1384,8 +1384,14 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                             {
                                 awt::Size aSize( xLegendShape->getSize() );
                                 // tdf#131966: chart legend attributes width and height shouldn't be exported to ODF 1.2 (strict)
-                                if (nCurrentODFVersion > SvtSaveOptions::ODFSVER_012)
+                                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_013)
+                                {   // ODF 1.3 OFFICE-3883
+                                    addSize( aSize, false );
+                                }
+                                else if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+                                {
                                     addSize( aSize, true );
+                                }
                                 OUStringBuffer aAspectRatioString;
                                 ::sax::Converter::convertDouble(
                                     aAspectRatioString,
@@ -2083,7 +2089,10 @@ void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< char
     addPosition( awt::Point(aRect.X,aRect.Y) );
     addSize( awt::Size(aRect.Width,aRect.Height) );
 
-    SvXMLElementExport aCoordinateRegion( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, true, true );//#i100778# todo: change to chart namespace in future - dependent on fileformat
+    // ODF 1.3 OFFICE-3928
+    SvXMLElementExport aCoordinateRegion( mrExport,
+        (SvtSaveOptions::ODFSVER_013 <= nCurrentODFVersion) ? XML_NAMESPACE_CHART : XML_NAMESPACE_CHART_EXT,
+        XML_COORDINATE_REGION, true, true );
 }
 
 namespace
