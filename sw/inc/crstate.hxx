@@ -31,7 +31,7 @@ enum class SwFillMode
     TabSpace,  ///< fill with spaces and tabs
     Space,     ///< fill with spaces
     Margin,    ///< only align left, center, right
-    Indent     ///< by left paragraph indention
+    Indent     ///< by left paragraph indentation
 };
 
 struct SwFillCursorPos
