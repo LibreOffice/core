@@ -632,7 +632,7 @@ private:
 
     std::vector<css::uno::Reference<css::graphic::XGraphic>> m_aGraphics;
 
-    std::unique_ptr<SvtValueSet> m_xTbSymbol;
+    std::unique_ptr<ValueSet> m_xTbSymbol;
     std::unique_ptr<weld::CustomWeld> m_xTbSymbolWin;
     std::unique_ptr<weld::Label>      m_xFtNote;
     std::unique_ptr<weld::Button>     m_xBtnImport;
@@ -656,7 +656,7 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
         GetSelectedIcon();
 
-    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(SelectHdl, ValueSet*, void);
     DECL_LINK(ImportHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };

@@ -58,7 +58,7 @@ public:
 
 private:
     rtl::Reference<svt::PopupWindowController> mxControl;
-    std::unique_ptr<SvtValueSet> mxDirectionSet;
+    std::unique_ptr<ValueSet> mxDirectionSet;
     std::unique_ptr<weld::CustomWeld> mxDirectionSetWin;
     std::unique_ptr<weld::RadioButton> mxPerspective;
     std::unique_ptr<weld::RadioButton> mxParallel;
@@ -66,7 +66,7 @@ private:
     Image       maImgDirection[9];
 
     DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
-    DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
+    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled );
@@ -138,7 +138,7 @@ class ExtrusionLightingWindow final : public WeldToolbarPopup
 {
 private:
     rtl::Reference<svt::PopupWindowController> mxControl;
-    std::unique_ptr<SvtValueSet> mxLightingSet;
+    std::unique_ptr<ValueSet> mxLightingSet;
     std::unique_ptr<weld::CustomWeld> mxLightingSetWin;
     std::unique_ptr<weld::RadioButton> mxBright;
     std::unique_ptr<weld::RadioButton> mxNormal;
@@ -152,7 +152,7 @@ private:
     void    implSetDirection( int nDirection, bool bEnabled );
 
     DECL_LINK( SelectToolbarMenuHdl, weld::Button&, void );
-    DECL_LINK( SelectValueSetHdl, SvtValueSet*, void );
+    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
 public:
     ExtrusionLightingWindow(svt::PopupWindowController* pControl, weld::Widget* pParentWindow);
     virtual void GrabFocus() override;

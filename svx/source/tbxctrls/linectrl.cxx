@@ -239,12 +239,12 @@ class SvxLineEndWindow final : public WeldToolbarPopup
 private:
     XLineEndListRef mpLineEndList;
     rtl::Reference<SvxLineEndToolBoxControl> mxControl;
-    std::unique_ptr<SvtValueSet> mxLineEndSet;
+    std::unique_ptr<ValueSet> mxLineEndSet;
     std::unique_ptr<weld::CustomWeld> mxLineEndSetWin;
     sal_uInt16 mnLines;
     Size maBmpSize;
 
-    DECL_LINK( SelectHdl, SvtValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
     void FillValueSet();
     void SetSize();
 
@@ -265,7 +265,7 @@ static constexpr sal_uInt16 gnCols = 2;
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
     , mxControl(pControl)
-    , mxLineEndSet(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
     , mnLines(12)
 {
@@ -291,7 +291,7 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     AddStatusListener( ".uno:LineEndListState");
 }
 
-IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;
@@ -503,7 +503,7 @@ com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
 SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglinestyle.ui", "FloatingLineStyle")
     , mxControl(pControl)
-    , mxLineStyleSet(new SvtValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineStyleSet))
 {
     mxLineStyleSet->SetStyle(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
@@ -569,7 +569,7 @@ void SvxLineBox::Fill( const XDashListRef &pList )
     mxLineStyleSet->SetOutputSizePixel(aSize);
 }
 
-IMPL_LINK_NOARG(SvxLineBox, SelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
 {
     drawing::LineStyle eXLS;
     sal_Int32 nPos = mxLineStyleSet->GetSelectedItemId();

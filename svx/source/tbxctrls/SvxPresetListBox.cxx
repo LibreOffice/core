@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 
 SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
-    : SvtValueSet(std::move(pWindow))
+    : ValueSet(std::move(pWindow))
     , aIconSize(60, 64)
 {
     SetEdgeBlending(true);
@@ -37,7 +37,7 @@ void SvxPresetListBox::Resize()
     WinBits aWinBits(GetStyle());
     aWinBits |= WB_VSCROLL;
     SetStyle(aWinBits);
-    SvtValueSet::Resize();
+    ValueSet::Resize();
 }
 
 bool SvxPresetListBox::Command(const CommandEvent& rEvent)

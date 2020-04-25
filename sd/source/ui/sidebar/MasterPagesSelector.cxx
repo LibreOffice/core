@@ -157,7 +157,7 @@ OUString MasterPagesSelector::GetContextMenuUIFile() const
     return "modules/simpress/ui/mastermenu.ui";
 }
 
-IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, SvtValueSet*, void)
+IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
 {
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not

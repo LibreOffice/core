@@ -97,7 +97,7 @@ LineWidthPopup::~LineWidthPopup()
 {
 }
 
-IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
 {
     sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
     if (iPos >= 1 && iPos <= 8)

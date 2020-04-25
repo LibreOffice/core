@@ -1393,7 +1393,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/linewindow.ui"))
     , m_xTopLevel(m_xBuilder->weld_widget("line_popup_window"))
     , m_xNoneButton(m_xBuilder->weld_button("none_line_button"))
-    , m_xLineSet(new SvtValueSet(nullptr))
+    , m_xLineSet(new ValueSet(nullptr))
     , m_xLineSetWin(new weld::CustomWeld(*m_xBuilder, "lineset", *m_xLineSet))
     , m_nWidth( 5 )
     , aVirDev(VclPtr<VirtualDevice>::Create())
@@ -1565,7 +1565,7 @@ Color SvtLineListBox::GetColorDist( sal_Int32 nPos )
     return pData->GetColorDist( GetColor( ), rResult );
 }
 
-IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvtLineListBox, ValueSelectHdl, ValueSet*, void)
 {
     maSelectHdl.Call(*this);
     UpdatePreview();

@@ -61,13 +61,13 @@ public:
 private:
     rtl::Reference<DisplayModeController> mxControl;
     std::unique_ptr<weld::Frame> mxFrame1;
-    std::unique_ptr<SvtValueSet> mxDisplayModeSet1;
+    std::unique_ptr<ValueSet> mxDisplayModeSet1;
     std::unique_ptr<weld::CustomWeld> mxDisplayModeSetWin1;
     std::unique_ptr<weld::Frame> mxFrame2;
-    std::unique_ptr<SvtValueSet> mxDisplayModeSet2;
+    std::unique_ptr<ValueSet> mxDisplayModeSet2;
     std::unique_ptr<weld::CustomWeld> mxDisplayModeSetWin2;
 
-    DECL_LINK(SelectValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(SelectValueSetHdl, ValueSet*, void);
 };
 
 struct snewfoil_value_info
@@ -119,7 +119,7 @@ static const snewfoil_value_info mastermodes[] =
 };
 
 
-static void fillLayoutValueSet(SvtValueSet* pValue, const snewfoil_value_info* pInfo)
+static void fillLayoutValueSet(ValueSet* pValue, const snewfoil_value_info* pInfo)
 {
     Size aLayoutItemSize;
     for( ; pInfo->mnId; pInfo++ )
@@ -148,10 +148,10 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu(DisplayModeController* pControl, 
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "modules/simpress/ui/displaywindow.ui", "DisplayWindow")
     , mxControl(pControl)
     , mxFrame1(m_xBuilder->weld_frame("editframe"))
-    , mxDisplayModeSet1(new SvtValueSet(nullptr))
+    , mxDisplayModeSet1(new ValueSet(nullptr))
     , mxDisplayModeSetWin1(new weld::CustomWeld(*m_xBuilder, "valueset1", *mxDisplayModeSet1))
     , mxFrame2(m_xBuilder->weld_frame("masterframe"))
-    , mxDisplayModeSet2(new SvtValueSet(nullptr))
+    , mxDisplayModeSet2(new ValueSet(nullptr))
     , mxDisplayModeSetWin2(new weld::CustomWeld(*m_xBuilder, "valueset2", *mxDisplayModeSet2))
 {
     mxDisplayModeSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
@@ -169,7 +169,7 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu(DisplayModeController* pControl, 
     fillLayoutValueSet( mxDisplayModeSet2.get(), &mastermodes[0] );
 }
 
-IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, SvtValueSet*, pControl, void )
+IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
 {
     OUString sCommandURL;
     OUString sImage;

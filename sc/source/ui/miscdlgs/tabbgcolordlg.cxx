@@ -95,7 +95,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 }
 
 //    Handler, called when color selection is changed
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
     Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;

@@ -62,7 +62,7 @@ private:
     void FillPaletteLB();
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
-    DECL_LINK(TabBgColorDblClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(TabBgColorDblClickHdl_Impl, ValueSet*, void);
     DECL_LINK(TabBgColorOKHdl_Impl, weld::Button&, void);
 };
 

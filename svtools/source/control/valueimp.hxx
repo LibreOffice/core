@@ -45,12 +45,12 @@ enum ValueSetItemType
     VALUESETITEM_USERDRAW
 };
 
-class SvtValueItemAcc;
-class SvtValueSet;
+class ValueItemAcc;
+class ValueSet;
 
-struct SvtValueSetItem
+struct ValueSetItem
 {
-    SvtValueSet&        mrParent;
+    ValueSet&        mrParent;
     sal_uInt16          mnId;
     sal_uInt8           meType;
     bool                mbVisible;
@@ -58,10 +58,10 @@ struct SvtValueSetItem
     Color               maColor;
     OUString            maText;
     void*               mpData;
-    rtl::Reference< SvtValueItemAcc > mxAcc;
+    rtl::Reference< ValueItemAcc > mxAcc;
 
-    explicit SvtValueSetItem( SvtValueSet& rParent );
-    ~SvtValueSetItem();
+    explicit ValueSetItem( ValueSet& rParent );
+    ~ValueSetItem();
 
     css::uno::Reference< css::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
@@ -76,19 +76,19 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XUnoTunnel >
     ValueSetAccComponentBase;
 
-class SvtValueSetAcc :
+class ValueSetAcc :
     public ::cppu::BaseMutex,
     public ValueSetAccComponentBase
 {
 public:
 
-    explicit SvtValueSetAcc(SvtValueSet* pParent);
-    virtual ~SvtValueSetAcc() override;
+    explicit ValueSetAcc(ValueSet* pParent);
+    virtual ~ValueSetAcc() override;
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static SvtValueSetAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static ValueSetAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:
 
@@ -148,7 +148,7 @@ public:
 private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
-    SvtValueSet*                                                    mpParent;
+    ValueSet*                                                    mpParent;
     /// The current FOCUSED state.
     bool mbIsFocused;
 
@@ -170,7 +170,7 @@ private:
         @return
             Returns NULL when the given index is out of range.
     */
-    SvtValueSetItem* getItem (sal_uInt16 nIndex) const;
+    ValueSetItem* getItem (sal_uInt16 nIndex) const;
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).  If that is the case then
@@ -189,7 +189,7 @@ private:
     bool HasNoneField() const;
 };
 
-class SvtValueItemAcc : public ::cppu::WeakImplHelper< css::accessibility::XAccessible,
+class ValueItemAcc : public ::cppu::WeakImplHelper< css::accessibility::XAccessible,
                                                      css::accessibility::XAccessibleEventBroadcaster,
                                                      css::accessibility::XAccessibleContext,
                                                      css::accessibility::XAccessibleComponent,
@@ -200,19 +200,19 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
-    SvtValueSetItem*                                                    mpParent;
+    ValueSetItem*                                                    mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 
-    SvtValueItemAcc(SvtValueSetItem* pParent, bool bIsTransientChildrenDisabled);
-    virtual ~SvtValueItemAcc() override;
+    ValueItemAcc(ValueSetItem* pParent, bool bIsTransientChildrenDisabled);
+    virtual ~ValueItemAcc() override;
 
     void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 
-    static SvtValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static ValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:
 

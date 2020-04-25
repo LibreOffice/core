@@ -290,7 +290,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
         return;
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
     weld::Button& rOk = GetDialogController()->GetOKButton();
@@ -440,7 +440,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
         return;
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
     weld::Button& rOk = GetDialogController()->GetOKButton();
@@ -625,7 +625,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 }
 
 // all levels are changed here
-IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
         return;
@@ -707,7 +707,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
     weld::Button& rOk = GetDialogController()->GetOKButton();
@@ -867,7 +867,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
         return;
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_xExamplesVS.get());
     weld::Button& rOk = GetDialogController()->GetOKButton();

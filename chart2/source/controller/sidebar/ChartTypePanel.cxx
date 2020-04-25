@@ -60,7 +60,7 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     , m_nChangingCalls(0)
     , m_aTimerTriggeredControllerLock(m_xChartModel)
     , m_xMainTypeList(m_xBuilder->weld_combo_box("cmb_chartType"))
-    , m_xSubTypeList(new SvtValueSet(m_xBuilder->weld_scrolled_window("subtypewin")))
+    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window("subtypewin")))
     , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, "subtype", *m_xSubTypeList))
 {
     Size aSize(m_xSubTypeList->GetDrawingArea()->get_ref_device().LogicToPixel(
@@ -151,7 +151,7 @@ void ChartTypePanel::dispose()
 
 IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, weld::ComboBox&, void) { selectMainType(); }
 
-IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
 {
     if (m_pCurrentMainType)
     {

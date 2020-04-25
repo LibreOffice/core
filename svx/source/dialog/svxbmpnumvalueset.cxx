@@ -392,7 +392,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 }
 
 SvxNumValueSet::SvxNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-    : SvtValueSet(std::move(pScrolledWindow))
+    : ValueSet(std::move(pScrolledWindow))
     , ePageType(NumberingPageType::BULLET)
     , pVDev(nullptr)
 {

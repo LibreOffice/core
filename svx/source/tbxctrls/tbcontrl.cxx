@@ -410,7 +410,7 @@ public:
 
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
-class SvxFrmValueSet_Impl final : public SvtValueSet
+class SvxFrmValueSet_Impl final : public ValueSet
 {
 private:
     sal_uInt16 nModifier;
@@ -418,12 +418,12 @@ private:
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override
     {
         nModifier = rMEvt.GetModifier();
-        return SvtValueSet::MouseButtonUp(rMEvt);
+        return ValueSet::MouseButtonUp(rMEvt);
     }
 
 public:
     SvxFrmValueSet_Impl()
-        : SvtValueSet(nullptr)
+        : ValueSet(nullptr)
         , nModifier(0)
     {
     }
@@ -447,7 +447,7 @@ private:
 
     void InitImageList();
     void CalcSizeValueSet();
-    DECL_LINK( SelectHdl, SvtValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
 
 public:
     SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
@@ -477,7 +477,7 @@ private:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 };
 
-    class LineListBox final : public SvtValueSet
+    class LineListBox final : public ValueSet
     {
     public:
         typedef Color (*ColorFunc)(Color);
@@ -621,7 +621,7 @@ private:
     }
 
     LineListBox::LineListBox()
-        : SvtValueSet(nullptr)
+        : ValueSet(nullptr)
         , m_nWidth( 5 )
         , m_sNone()
         , aVirDev(VclPtr<VirtualDevice>::Create())
@@ -635,7 +635,7 @@ private:
 
     void LineListBox::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     {
-        SvtValueSet::SetDrawingArea(pDrawingArea);
+        ValueSet::SetDrawingArea(pDrawingArea);
 
         OutputDevice& rDevice = pDrawingArea->get_ref_device();
 
@@ -787,7 +787,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xLineStyleLbWin;
     bool                m_bIsWriter;
 
-    DECL_LINK( SelectHdl, SvtValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
 
 public:
     SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::Widget* pParent);
@@ -1860,7 +1860,7 @@ ColorWindow::~ColorWindow()
 {
 }
 
-NamedColor ColorWindow::GetSelectEntryColor(SvtValueSet const * pColorSet)
+NamedColor ColorWindow::GetSelectEntryColor(ValueSet const * pColorSet)
 {
     Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectedItemId());
     OUString sColorName = pColorSet->GetItemText(pColorSet->GetSelectedItemId());
@@ -1924,7 +1924,7 @@ NamedColor ColorWindow::GetSelectEntryColor() const
     return GetAutoColor();
 }
 
-IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
+IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 {
     NamedColor aNamedColor = GetSelectEntryColor(pColorSet);
 
@@ -2196,7 +2196,7 @@ namespace o3tl {
 // By default unset lines remain unchanged.
 // Via Shift unset lines are reset
 
-IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 {
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
@@ -2436,7 +2436,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     m_xLineStyleLb->SetOutputSizePixel(aSize);
 }
 
-IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ValueSet*, void)
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     SvxBorderLineStyle  nStyle = m_xLineStyleLb->GetSelectEntryStyle();

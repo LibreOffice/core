@@ -33,7 +33,7 @@ class NumberingPopup : public WeldToolbarPopup
     std::unique_ptr<SvxNumValueSet> mxValueSet;
     std::unique_ptr<weld::CustomWeld> mxValueSetWin;
     std::unique_ptr<weld::Button> mxMoreButton;
-    DECL_LINK(VSSelectValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(VSSelectValueSetHdl, ValueSet*, void);
     DECL_LINK(VSButtonClickSetHdl, weld::Button&, void);
 
     virtual void GrabFocus() override;
@@ -141,7 +141,7 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         mxValueSet->SelectItem( nSelItem );
 }
 
-IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
 {
     sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
     if ( mePageType == NumberingPageType::BULLET )

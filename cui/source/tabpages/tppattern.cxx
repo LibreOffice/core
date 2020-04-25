@@ -238,7 +238,7 @@ std::unique_ptr<SfxTabPage> SvxPatternTabPage::Create( weld::Container* pPage, w
     return std::make_unique<SvxPatternTabPage>(pPage, pController, *rSet);
 }
 
-IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
     size_t nPos = m_xPatternLB->GetSelectItemPos();

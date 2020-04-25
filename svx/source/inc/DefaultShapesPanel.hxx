@@ -47,33 +47,33 @@ public:
     virtual void dispose() override;
 
 private:
-    std::unique_ptr<SvtValueSet> mxLineArrowSet;
+    std::unique_ptr<ValueSet> mxLineArrowSet;
     std::unique_ptr<weld::CustomWeld> mxLineArrowSetWin;
-    std::unique_ptr<SvtValueSet> mxCurveSet;
+    std::unique_ptr<ValueSet> mxCurveSet;
     std::unique_ptr<weld::CustomWeld> mxCurveSetWin;
-    std::unique_ptr<SvtValueSet> mxConnectorSet;
+    std::unique_ptr<ValueSet> mxConnectorSet;
     std::unique_ptr<weld::CustomWeld> mxConnectorSetWin;
-    std::unique_ptr<SvtValueSet> mxBasicShapeSet;
+    std::unique_ptr<ValueSet> mxBasicShapeSet;
     std::unique_ptr<weld::CustomWeld> mxBasicShapeSetWin;
-    std::unique_ptr<SvtValueSet> mxSymbolShapeSet;
+    std::unique_ptr<ValueSet> mxSymbolShapeSet;
     std::unique_ptr<weld::CustomWeld> mxSymbolShapeSetWin;
-    std::unique_ptr<SvtValueSet> mxBlockArrowSet;
+    std::unique_ptr<ValueSet> mxBlockArrowSet;
     std::unique_ptr<weld::CustomWeld> mxBlockArrowSetWin;
-    std::unique_ptr<SvtValueSet> mxFlowchartSet;
+    std::unique_ptr<ValueSet> mxFlowchartSet;
     std::unique_ptr<weld::CustomWeld> mxFlowchartSetWin;
-    std::unique_ptr<SvtValueSet> mxCalloutSet;
+    std::unique_ptr<ValueSet> mxCalloutSet;
     std::unique_ptr<weld::CustomWeld> mxCalloutSetWin;
-    std::unique_ptr<SvtValueSet> mxStarSet;
+    std::unique_ptr<ValueSet> mxStarSet;
     std::unique_ptr<weld::CustomWeld> mxStarSetWin;
-    std::unique_ptr<SvtValueSet> mx3DObjectSet;
+    std::unique_ptr<ValueSet> mx3DObjectSet;
     std::unique_ptr<weld::CustomWeld> mx3DObjectSetWin;
 
     Reference< XFrame >       mxFrame;
-    std::map<SvtValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
+    std::map<ValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
 
     void populateShapes();
     void Initialize();
-    DECL_LINK( ShapeSelectHdl, SvtValueSet*, void );
+    DECL_LINK( ShapeSelectHdl, ValueSet*, void );
 };
 
 } } // end of namespace sd::sidebar

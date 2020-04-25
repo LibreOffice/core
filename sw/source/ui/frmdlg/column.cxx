@@ -1262,7 +1262,7 @@ DeactivateRC SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(SwColumnPage, SetDefaultsHdl, SvtValueSet *, pVS, void)
+IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
 {
     const sal_uInt16 nItem = pVS->GetSelectedItemId();
     if( nItem < 4 )
@@ -1381,7 +1381,7 @@ void ColumnValueSet::StyleUpdated()
 {
     SetFormat();
     Invalidate();
-    SvtValueSet::StyleUpdated();
+    ValueSet::StyleUpdated();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

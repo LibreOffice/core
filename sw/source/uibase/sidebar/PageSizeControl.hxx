@@ -31,7 +31,7 @@ namespace svx { namespace sidebar {
 } }
 
 class PageSizePopup;
-class SvtValueSet;
+class ValueSet;
 
 namespace sw { namespace sidebar {
 
@@ -54,7 +54,7 @@ private:
 
     static void ExecuteSizeChange( const Paper ePaper );
 
-    DECL_LINK(ImplSizeHdl, SvtValueSet*, void);
+    DECL_LINK(ImplSizeHdl, ValueSet*, void);
     DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 };
 

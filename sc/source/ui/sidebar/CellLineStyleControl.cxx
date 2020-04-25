@@ -92,7 +92,7 @@ void CellLineStylePopup::SetAllNoSel()
     mxCellLineStyleValueSet->Invalidate();
 }
 
-IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(CellLineStylePopup, VSSelectHdl, ValueSet*, void)
 {
     const sal_uInt16 iPos(mxCellLineStyleValueSet->GetSelectedItemId());
     SvxLineItem aLineItem(SID_FRAME_LINESTYLE);

@@ -240,7 +240,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen()
     {
         css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
         css::uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(xParentContext, css::uno::UNO_QUERY);
-        OSL_ENSURE( xParentComponent.is(), "SvtValueSetAcc::getLocationOnScreen: no parent component!" );
+        OSL_ENSURE( xParentComponent.is(), "ValueSetAcc::getLocationOnScreen: no parent component!" );
         if ( xParentComponent.is() )
         {
             awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );

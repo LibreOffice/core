@@ -340,7 +340,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
     m_aCtlPreview.Invalidate();
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
 {
     ChangeHatchHdl_Impl();
 }

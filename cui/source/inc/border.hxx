@@ -41,7 +41,7 @@ namespace editeng
 class ShadowControlsWrapper
 {
 public:
-    explicit ShadowControlsWrapper(SvtValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor);
+    explicit ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor);
 
     SvxShadowItem GetControlValue(const SvxShadowItem& rItem) const;
     void SetControlValue(const SvxShadowItem& rItem);
@@ -50,7 +50,7 @@ public:
     bool get_value_changed_from_saved() const;
 
 private:
-    SvtValueSet&                        mrVsPos;
+    ValueSet&                        mrVsPos;
     weld::MetricSpinButton&             mrMfSize;
     ColorListBox&                       mrLbColor;
 };
@@ -121,7 +121,7 @@ private:
 
     // Controls
     svx::FrameSelector m_aFrameSel;
-    std::unique_ptr<SvtValueSet> m_xWndPresets;
+    std::unique_ptr<ValueSet> m_xWndPresets;
     std::unique_ptr<weld::CustomWeld> m_xWndPresetsWin;
     std::unique_ptr<weld::Label> m_xUserDefFT;
     std::unique_ptr<weld::CustomWeld> m_xFrameSelWin;
@@ -142,7 +142,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xSynchronizeCB;
 
     std::unique_ptr<weld::Container> m_xShadowFrame;
-    std::unique_ptr<SvtValueSet> m_xWndShadows;
+    std::unique_ptr<ValueSet> m_xWndShadows;
     std::unique_ptr<weld::CustomWeld> m_xWndShadowsWin;
     std::unique_ptr<weld::Label> m_xFtShadowSize;
     std::unique_ptr<weld::MetricSpinButton> m_xEdShadowSize;
@@ -161,8 +161,8 @@ private:
     // Handler
     DECL_LINK(SelStyleHdl_Impl, SvtLineListBox&, void);
     DECL_LINK(SelColHdl_Impl, ColorListBox&, void);
-    DECL_LINK(SelPreHdl_Impl, SvtValueSet*, void);
-    DECL_LINK(SelSdwHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(SelPreHdl_Impl, ValueSet*, void);
+    DECL_LINK(SelSdwHdl_Impl, ValueSet*, void);
     DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
     DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyWidthHdl_Impl, weld::MetricSpinButton&, void);

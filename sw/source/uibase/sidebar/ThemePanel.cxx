@@ -416,7 +416,7 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame)
     , mxListBoxFonts(m_xBuilder->weld_tree_view("listbox_fonts"))
-    , mxValueSetColors(new SvtValueSet(nullptr))
+    , mxValueSetColors(new ValueSet(nullptr))
     , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
     , mxApplyButton(m_xBuilder->weld_button("apply"))
     , maColorSets()
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG(ThemePanel, ClickHdl, weld::Button&, void)
     DoubleClickHdl();
 }
 
-IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
 {
     DoubleClickHdl();
 }

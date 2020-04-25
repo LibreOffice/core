@@ -33,7 +33,7 @@
 namespace svx
 {
 
-    class SuggestionSet : public SvtValueSet
+    class SuggestionSet : public ValueSet
     {
     public:
         SuggestionSet(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
@@ -60,7 +60,7 @@ namespace svx
         OUString GetSelectedEntry() const;
 
         DECL_LINK( SelectSuggestionListBoxHdl, weld::TreeView&, void );
-        DECL_LINK( SelectSuggestionValueSetHdl, SvtValueSet*, void );
+        DECL_LINK( SelectSuggestionValueSetHdl, ValueSet*, void );
         void SelectSuggestionHdl(bool bListBox);
 
         void SetHelpIds();

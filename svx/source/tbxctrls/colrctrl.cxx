@@ -281,7 +281,7 @@ bool SvxColorDockingWindow::Close()
     return true;
 }
 
-IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = xColorSet->GetSelectedItemId();

@@ -80,7 +80,7 @@ public:
     }
 };
 
-class MaskSet : public SvtValueSet
+class MaskSet : public ValueSet
 {
     VclPtr<SvxBmpMask> pSvxBmpMask;
 
@@ -92,7 +92,7 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pArea) override
     {
         Size aSize(pArea->get_ref_device().LogicToPixel(Size(24, 12), MapMode(MapUnit::MapAppFont)));
-        SvtValueSet::SetDrawingArea(pArea);
+        ValueSet::SetDrawingArea(pArea);
         pArea->set_size_request(aSize.Width(), aSize.Height());
         SetOutputSizePixel(aSize);
         SetHelpId(HID_BMPMASK_CTL_QCOL_1);
@@ -101,21 +101,21 @@ public:
 };
 
 MaskSet::MaskSet(SvxBmpMask* pMask)
-    : SvtValueSet(nullptr)
+    : ValueSet(nullptr)
     , pSvxBmpMask(pMask)
 {
 }
 
 void MaskSet::Select()
 {
-    SvtValueSet::Select();
+    ValueSet::Select();
 
     pSvxBmpMask->onSelect( this );
 }
 
 void MaskSet::GetFocus()
 {
-    SvtValueSet::GetFocus();
+    ValueSet::GetFocus();
     SelectItem( 1 );
     pSvxBmpMask->onSelect( this );
 }
@@ -129,7 +129,7 @@ bool MaskSet::KeyInput( const KeyEvent& rKEvt )
     // if the key has a modifier we don't care
     if( aCode.GetModifier() )
     {
-        bRet = SvtValueSet::KeyInput( rKEvt );
+        bRet = ValueSet::KeyInput( rKEvt );
     }
     else
     {
@@ -141,7 +141,7 @@ bool MaskSet::KeyInput( const KeyEvent& rKEvt )
                 bRet = true;
                 break;
             default:
-                bRet = SvtValueSet::KeyInput( rKEvt );
+                bRet = ValueSet::KeyInput( rKEvt );
         }
     }
     return bRet;

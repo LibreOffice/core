@@ -102,13 +102,13 @@ private:
     weld::Button* mpDefaultButton;
 
     Link<const NamedColor&, void> maSelectedLink;
-    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(SelectHdl, ValueSet*, void);
     DECL_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_LINK(OpenPickerClickHdl, weld::Button&, void);
 
     static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
-    static NamedColor GetSelectEntryColor(SvtValueSet const * pColorSet);
+    static NamedColor GetSelectEntryColor(ValueSet const * pColorSet);
     NamedColor GetAutoColor() const;
 
 public:

@@ -114,7 +114,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/directionwindow.ui", "DirectionWindow")
     , mxControl(pControl)
-    , mxDirectionSet(new SvtValueSet(nullptr))
+    , mxDirectionSet(new ValueSet(nullptr))
     , mxDirectionSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxDirectionSet))
     , mxPerspective(m_xBuilder->weld_radio_button("perspective"))
     , mxParallel(m_xBuilder->weld_radio_button("parallel"))
@@ -219,7 +219,7 @@ void ExtrusionDirectionWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, void)
 {
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name = OUString(g_sExtrusionDirection).copy(5);
@@ -569,7 +569,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
                                                  weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/lightingwindow.ui", "LightingWindow")
     , mxControl(pControl)
-    , mxLightingSet(new SvtValueSet(nullptr))
+    , mxLightingSet(new ValueSet(nullptr))
     , mxLightingSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLightingSet))
     , mxBright(m_xBuilder->weld_radio_button("bright"))
     , mxNormal(m_xBuilder->weld_radio_button("normal"))
@@ -694,7 +694,7 @@ void ExtrusionLightingWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, void)
 {
     sal_Int32 nDirection = mxLightingSet->GetSelectedItemId();
 

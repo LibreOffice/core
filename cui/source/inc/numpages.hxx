@@ -69,8 +69,8 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
-    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
     SvxSingleNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -99,8 +99,8 @@ class SvxBulletPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
-    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 public:
     SvxBulletPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SvxBulletPickTabPage() override;
@@ -136,8 +136,8 @@ class SvxNumPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
-    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
     SvxNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -174,8 +174,8 @@ class SvxBitmapPickTabPage final : public SfxTabPage
     std::unique_ptr<SvxBmpNumValueSet> m_xExamplesVS;
     std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
 
-    DECL_LINK(NumSelectHdl_Impl, SvtValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
+    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
     DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
 
 public:

@@ -26,7 +26,7 @@
 namespace sc::sidebar {
 
 CellLineStyleValueSet::CellLineStyleValueSet()
-    : SvtValueSet(nullptr)
+    : ValueSet(nullptr)
     , nSelItem(0)
 {
 }
@@ -37,7 +37,7 @@ CellLineStyleValueSet::~CellLineStyleValueSet()
 
 void CellLineStyleValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SvtValueSet::SetDrawingArea(pDrawingArea);
+    ValueSet::SetDrawingArea(pDrawingArea);
     Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(80, 12 * 9), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);

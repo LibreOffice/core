@@ -65,16 +65,16 @@ public:
     virtual ~SwColumnDlg() override;
 };
 
-class ColumnValueSet : public SvtValueSet
+class ColumnValueSet : public ValueSet
 {
 public:
     ColumnValueSet()
-        : SvtValueSet(nullptr)
+        : ValueSet(nullptr)
     {
     }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
-        SvtValueSet::SetDrawingArea(pDrawingArea);
+        ValueSet::SetDrawingArea(pDrawingArea);
         SetStyle(WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER);
     }
     virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
@@ -142,7 +142,7 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK(GapModify, weld::MetricSpinButton&, void);
     DECL_LINK(EdModify, weld::MetricSpinButton&, void);
     DECL_LINK(AutoWidthHdl, weld::ToggleButton&, void );
-    DECL_LINK(SetDefaultsHdl, SvtValueSet *, void);
+    DECL_LINK(SetDefaultsHdl, ValueSet *, void);
 
     DECL_LINK(Up, weld::Button&, void);
     DECL_LINK(Down, weld::Button&, void);
