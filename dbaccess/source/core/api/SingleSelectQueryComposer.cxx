@@ -999,7 +999,7 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode const * pConditio
     }
     else if (SQL_ISRULE(pCondition, comparison_predicate))
     {
-        return setComparsionPredicate(pCondition,_rIterator,rFilter,xFormatter);
+        return setComparisonPredicate(pCondition,_rIterator,rFilter,xFormatter);
     }
     else if (SQL_ISRULE(pCondition,like_predicate))
     {
@@ -1166,10 +1166,10 @@ bool OSingleSelectQueryComposer::setLikePredicate(OSQLParseNode const * pConditi
     return true;
 }
 
-bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
+bool OSingleSelectQueryComposer::setComparisonPredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
                                             std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
-    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition is not a ComparsionPredicate");
+    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparisonPredicate: pCondition is not a ComparisonPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
     {

@@ -220,7 +220,7 @@ namespace connectivity
          // does not change the pLiteral argument
         sal_Int16 buildNode(OSQLParseNode*& pAppend,OSQLParseNode* pCompare,OSQLParseNode* pLiteral,OSQLParseNode* pLiteral2);
 
-        sal_Int16 buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
+        sal_Int16 buildComparisonRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral);
         // pCompre will be deleted if it is not used
         sal_Int16 buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* const pLiteral,OSQLParseNode* pCompare,OSQLParseNode* pLiteral2 = nullptr);
 
