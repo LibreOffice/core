@@ -63,8 +63,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	BrightBlue/content.xml \
 	BrightBlue/META-INF/manifest.xml \
 	BrightBlue/meta.xml \
-	BrightBlue/Pictures/1000020100000520000000CCF41AC5B79CBB20DE.png \
-	BrightBlue/Pictures/100010580000879200001508D21A14F0A9096EB5.svg \
 	BrightBlue/styles.xml \
 	BrightBlue/Thumbnails/thumbnail.png \
 	Classy_Red/content.xml \
