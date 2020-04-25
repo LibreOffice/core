@@ -175,7 +175,7 @@ void XSheetOutline::testShowLevel()
     std::cout << " verify showLevel row after" << OUStringToOString(getVisibleAdress("OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
 
     // verify rows visible 0..3 & 24..29
-    // verfiy rows hidden 4..23
+    // verify rows hidden 4..23
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString("OutlineSheet.A1:A4"), getVisibleAdress("OutlineSheet.A1:A4"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testShowLevel Row", OUString("OutlineSheet.A25:A30"), getVisibleAdress("OutlineSheet.A25:A30"));
