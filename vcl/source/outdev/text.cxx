@@ -37,7 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/controllayout.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #ifdef MACOSX
 # include <vcl/opengl/OpenGLHelper.hxx>
 #endif
