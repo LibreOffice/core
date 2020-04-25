@@ -327,7 +327,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
     }
 }
-void ChartTypeDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
 }
@@ -416,7 +416,7 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         {"com.sun.star.chart2.template.ThreeDColumnDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -493,7 +493,7 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         {"com.sun.star.chart2.template.ThreeDBarDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -570,7 +570,7 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     {"com.sun.star.chart2.template.ThreeDDonutAllExploded" , ChartTypeParameter(4,false,true)}};
     return s_aTemplateMap;
 }
-void PieChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -640,7 +640,7 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     {"com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true)}};
     return s_aTemplateMap;
 }
-void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -780,7 +780,7 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     return s_aTemplateMap;
 }
 
-void XYChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -890,7 +890,7 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     return s_aTemplateMap;
 }
 
-void AreaChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -986,7 +986,7 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     {"com.sun.star.chart2.template.PercentStackedFilledNet" ,ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false)}};
     return s_aTemplateMap;
 }
-void NetChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1065,7 +1065,7 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     return s_aTemplateMap;
 }
 
-void StockChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_STOCK_1));
@@ -1108,7 +1108,7 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     return s_aTemplateMap;
 }
 
-void CombiColumnLineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_COLUMN_LINE));
@@ -1236,7 +1236,7 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
         {"com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true)}};
     return s_aTemplateMap;
 }
-void BubbleChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(StockImage::Yes, BMP_BUBBLE_1));

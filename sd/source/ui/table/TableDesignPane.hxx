@@ -48,7 +48,7 @@ enum TableCheckBox : sal_uInt16
     CB_COUNT            = CB_BANDED_COLUMNS + 1
 };
 
-class TableValueSet : public SvtValueSet
+class TableValueSet : public ValueSet
 {
 private:
     bool m_bModal;
@@ -80,7 +80,7 @@ private:
     void FillDesignPreviewControl();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
-    DECL_LINK(implValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(implValueSetHdl, ValueSet*, void);
     DECL_LINK(implCheckBoxHdl, weld::ToggleButton&, void);
 
 private:

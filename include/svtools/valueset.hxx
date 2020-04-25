@@ -37,7 +37,6 @@ class UserDrawEvent;
 class VirtualDevice;
 
 struct ValueSetItem;
-struct SvtValueSetItem;
 
 enum class DrawFrameStyle;
 
@@ -46,7 +45,7 @@ enum class DrawFrameStyle;
 Description
 ============
 
-class SvtValueSet
+class ValueSet
 
 This class allows the selection of an item. In the process items are
 drawn side by side. The selection of items can be more clear than in a
@@ -177,7 +176,7 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
-typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
+typedef std::vector<std::unique_ptr<ValueSetItem>> ValueItemList;
 
 #define WB_ITEMBORDER           (WinBits(0x00010000))
 #define WB_DOUBLEBORDER         (WinBits(0x00020000))
@@ -190,13 +189,13 @@ typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 #define VALUESET_APPEND         (size_t(-1))
 #define VALUESET_ITEM_NOTFOUND  (size_t(-1))
 
-class SVT_DLLPUBLIC SvtValueSet : public weld::CustomWidgetController
+class SVT_DLLPUBLIC ValueSet : public weld::CustomWidgetController
 {
 private:
     ScopedVclPtr<VirtualDevice> maVirDev;
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
-    SvtValueItemList   mItemList;
-    std::unique_ptr<SvtValueSetItem> mpNoneItem;
+    ValueItemList   mItemList;
+    std::unique_ptr<ValueSetItem> mpNoneItem;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
     tools::Rectangle  maItemListRect;
@@ -220,8 +219,8 @@ private:
     Color           maColor;
     OUString        maText;
     WinBits         mnStyle;
-    Link<SvtValueSet*,void>  maDoubleClickHdl;
-    Link<SvtValueSet*,void>  maSelectHdl;
+    Link<ValueSet*,void>  maDoubleClickHdl;
+    Link<ValueSet*,void>  maSelectHdl;
 
     bool            mbFormat : 1;
     bool            mbHighlight : 1;
@@ -234,21 +233,21 @@ private:
     bool            mbEdgeBlending : 1;
     bool            mbHasVisibleItems : 1;
 
-    friend class SvtValueSetAcc;
-    friend class SvtValueItemAcc;
+    friend class ValueItemAcc;
+    friend class ValueSetAcc;
 
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtValueSetItem* pItem, tools::Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
-    SVT_DLLPRIVATE SvtValueSetItem*    ImplGetItem( size_t nPos );
-    SVT_DLLPRIVATE SvtValueSetItem*    ImplGetFirstItem();
+    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
+    SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<SvtValueSetItem> pItem, const size_t nPos );
+    SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos );
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
@@ -258,16 +257,16 @@ private:
 
     Size           GetLargestItemSize();
 
-    SvtValueSet (const SvtValueSet &) = delete;
-    SvtValueSet & operator= (const SvtValueSet &) = delete;
+    ValueSet (const ValueSet &) = delete;
+    ValueSet & operator= (const ValueSet &) = delete;
 
 protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     weld::ScrolledWindow* GetScrollBar() const { return mxScrolledWindow.get(); }
 
 public:
-    SvtValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
-    virtual         ~SvtValueSet() override;
+    ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
+    virtual         ~ValueSet() override;
 
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
@@ -379,12 +378,12 @@ public:
     Size            CalcItemSizePixel(const Size& rSize) const;
     int             GetScrollWidth() const;
 
-    void            SetSelectHdl(const Link<SvtValueSet*,void>& rLink)
+    void            SetSelectHdl(const Link<ValueSet*,void>& rLink)
     {
         maSelectHdl = rLink;
     }
 
-    void            SetDoubleClickHdl(const Link<SvtValueSet*,void>& rLink)
+    void            SetDoubleClickHdl(const Link<ValueSet*,void>& rLink)
     {
         maDoubleClickHdl = rLink;
     }

@@ -25,7 +25,7 @@
 
 namespace svx { namespace sidebar {
 
-class LineWidthValueSet final : public SvtValueSet
+class LineWidthValueSet final : public ValueSet
 {
 public:
     explicit LineWidthValueSet();

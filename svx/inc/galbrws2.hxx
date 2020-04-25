@@ -106,7 +106,7 @@ private:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                         DECL_LINK( SelectObjectHdl, weld::TreeView&, void );
-                        DECL_LINK( SelectObjectValueSetHdl, SvtValueSet*, void );
+                        DECL_LINK( SelectObjectValueSetHdl, ValueSet*, void );
                         DECL_LINK( SelectTbxHdl, weld::ToggleButton&, void );
                         DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
                         DECL_LINK( KeyInputHdl, const KeyEvent&, bool );

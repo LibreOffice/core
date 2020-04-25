@@ -40,7 +40,7 @@ private:
     void Initialize();
     void SetAllNoSel();
 
-    DECL_LINK(VSSelectHdl, SvtValueSet*, void);
+    DECL_LINK(VSSelectHdl, ValueSet*, void);
     DECL_LINK(PBClickHdl, weld::Button&, void);
 
 public:

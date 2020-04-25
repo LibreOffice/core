@@ -25,7 +25,7 @@
 
 class XColorList;
 
-class SVXCORE_DLLPUBLIC SvxColorValueSet : public SvtValueSet
+class SVXCORE_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
 public:
     SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);

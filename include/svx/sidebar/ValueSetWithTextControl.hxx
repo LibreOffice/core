@@ -33,7 +33,7 @@ namespace svx { namespace sidebar {
 
     Especially, used for sidebar related controls.
 */
-class SVX_DLLPUBLIC ValueSetWithTextControl final : public SvtValueSet
+class SVX_DLLPUBLIC ValueSetWithTextControl final : public ValueSet
 {
 public:
     ValueSetWithTextControl();

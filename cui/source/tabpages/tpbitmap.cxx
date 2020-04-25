@@ -458,7 +458,7 @@ void SvxBitmapTabPage::CalculateBitmapPresetSize()
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
     size_t nPos = m_xBitmapLB->GetSelectItemPos();

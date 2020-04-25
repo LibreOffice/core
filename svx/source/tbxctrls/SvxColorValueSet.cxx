@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 
 SvxColorValueSet::SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
-    : SvtValueSet(std::move(pWindow))
+    : ValueSet(std::move(pWindow))
 {
     SetEdgeBlending(true);
 }
@@ -119,7 +119,7 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
 void SvxColorValueSet::Resize()
 {
     layoutToGivenHeight(GetOutputSizePixel().Height(), GetItemCount());
-    SvtValueSet::Resize();
+    ValueSet::Resize();
 }
 
 Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount)

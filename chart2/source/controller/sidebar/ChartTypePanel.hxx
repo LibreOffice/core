@@ -99,7 +99,7 @@ private:
     void selectMainType();
 
     DECL_LINK(SelectMainTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectSubTypeHdl, SvtValueSet*, void);
+    DECL_LINK(SelectSubTypeHdl, ValueSet*, void);
 
     vcl::EnumContext maContext;
 
@@ -126,7 +126,7 @@ private:
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
     std::unique_ptr<weld::ComboBox> m_xMainTypeList;
-    std::unique_ptr<SvtValueSet> m_xSubTypeList;
+    std::unique_ptr<ValueSet> m_xSubTypeList;
     std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
 };
 }

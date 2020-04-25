@@ -26,19 +26,19 @@
 
 class XLineWidthItem;
 class SfxObjectShell;
-class SvtValueSet;
+class ValueSet;
 class SvxLineStyleToolBoxControl;
 
 class SvxLineBox final : public WeldToolbarPopup
 {
     rtl::Reference<SvxLineStyleToolBoxControl> mxControl;
-    std::unique_ptr<SvtValueSet> mxLineStyleSet;
+    std::unique_ptr<ValueSet> mxLineStyleSet;
     std::unique_ptr<weld::CustomWeld> mxLineStyleSetWin;
 
     void FillControl();
     void Fill(const XDashListRef &pList);
 
-    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(SelectHdl, ValueSet*, void);
 
     virtual void GrabFocus() override;
 

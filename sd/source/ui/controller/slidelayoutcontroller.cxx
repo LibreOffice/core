@@ -61,16 +61,16 @@ public:
 
 protected:
     DECL_LINK(SelectToolbarMenuHdl, weld::Button&, void);
-    DECL_LINK(SelectValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(SelectValueSetHdl, ValueSet*, void);
     void SelectHdl(AutoLayout eLayout);
 private:
     rtl::Reference<SlideLayoutController> mxControl;
     bool const mbInsertPage;
     std::unique_ptr<weld::Frame> mxFrame1;
-    std::unique_ptr<SvtValueSet> mxLayoutSet1;
+    std::unique_ptr<ValueSet> mxLayoutSet1;
     std::unique_ptr<weld::CustomWeld> mxLayoutSetWin1;
     std::unique_ptr<weld::Frame> mxFrame2;
-    std::unique_ptr<SvtValueSet> mxLayoutSet2;
+    std::unique_ptr<ValueSet> mxLayoutSet2;
     std::unique_ptr<weld::CustomWeld> mxLayoutSetWin2;
     std::unique_ptr<weld::Button> mxMoreButton;
 };
@@ -128,7 +128,7 @@ static const snewfoil_value_info_layout v_standard[] =
     {nullptr, nullptr, AUTOLAYOUT_NONE}
 };
 
-static void fillLayoutValueSet( SvtValueSet* pValue, const snewfoil_value_info_layout* pInfo )
+static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mpStrResId; pInfo++ )
@@ -157,10 +157,10 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     , mxControl(pControl)
     , mbInsertPage(bInsertPage)
     , mxFrame1(m_xBuilder->weld_frame("horiframe"))
-    , mxLayoutSet1(new SvtValueSet(nullptr))
+    , mxLayoutSet1(new ValueSet(nullptr))
     , mxLayoutSetWin1(new weld::CustomWeld(*m_xBuilder, "valueset1", *mxLayoutSet1))
     , mxFrame2(m_xBuilder->weld_frame("vertframe"))
-    , mxLayoutSet2(new SvtValueSet(nullptr))
+    , mxLayoutSet2(new ValueSet(nullptr))
     , mxLayoutSetWin2(new weld::CustomWeld(*m_xBuilder, "valueset2", *mxLayoutSet2))
     , mxMoreButton(m_xBuilder->weld_button("more"))
 {
@@ -247,7 +247,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     }
 }
 
-IMPL_LINK(LayoutToolbarMenu, SelectValueSetHdl, SvtValueSet*, pLayoutSet, void)
+IMPL_LINK(LayoutToolbarMenu, SelectValueSetHdl, ValueSet*, pLayoutSet, void)
 {
     SelectHdl(static_cast<AutoLayout>(pLayoutSet->GetSelectedItemId()-1));
 }

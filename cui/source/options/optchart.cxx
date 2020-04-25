@@ -258,7 +258,7 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, SelectPaletteLbHdl, weld::ComboBox&, vo
     m_xValSetColorBox->Resize();
 }
 
-IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
 {
     sal_Int32 nIdx = m_xLbChartColors->get_selected_index();
     if (nIdx != -1)

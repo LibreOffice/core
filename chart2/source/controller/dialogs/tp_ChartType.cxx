@@ -53,7 +53,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aTimerTriggeredControllerLock( m_xChartModel )
     , m_xFT_ChooseType(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
     , m_xMainTypeList(m_xBuilder->weld_tree_view("charttype"))
-    , m_xSubTypeList(new SvtValueSet(m_xBuilder->weld_scrolled_window("subtypewin")))
+    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window("subtypewin")))
     , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, "subtype", *m_xSubTypeList))
 {
     Size aSize(m_xSubTypeList->GetDrawingArea()->get_ref_device().LogicToPixel(Size(150, 50), MapMode(MapUnit::MapAppFont)));
@@ -204,7 +204,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
     return pTypeController;
 }
 
-IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
     {

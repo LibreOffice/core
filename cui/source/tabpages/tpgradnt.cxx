@@ -486,7 +486,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
     }
 }
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl, ValueSet*, void)
 {
     ChangeGradientHdl_Impl();
 }

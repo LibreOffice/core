@@ -362,11 +362,11 @@ size_t getPresetOffset( const sd::impl::TransitionEffect &rEffect )
 namespace sd
 {
 
-class TransitionPane : public SvtValueSet
+class TransitionPane : public ValueSet
 {
 public:
     explicit TransitionPane(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-        : SvtValueSet(std::move(pScrolledWindow))
+        : ValueSet(std::move(pScrolledWindow))
     {
     }
 
@@ -380,7 +380,7 @@ public:
     {
         Size aSize = pDrawingArea->get_ref_device().LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
         pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
-        SvtValueSet::SetDrawingArea(pDrawingArea);
+        ValueSet::SetDrawingArea(pDrawingArea);
         SetOutputSizePixel(aSize);
 
         SetStyle(GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL);
@@ -1011,7 +1011,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, weld::Button&, void)
     playCurrentEffect();
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, SvtValueSet*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet*, void)
 {
     updateVariants( mxVS_TRANSITION_ICONS->GetSelectedItemId() - 1 );
     applyToSelectedPages();

@@ -196,7 +196,7 @@ inline Color sameDistColor( Color /*rMain*/, Color rDefault )
     return rDefault;
 }
 
-class SvtValueSet;
+class ValueSet;
 
 class SVT_DLLPUBLIC SvtLineListBox
 {
@@ -249,7 +249,7 @@ private:
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
     void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
-    DECL_LINK(ValueSelectHdl, SvtValueSet*, void);
+    DECL_LINK(ValueSelectHdl, ValueSet*, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(NoneHdl, weld::Button&, void);
@@ -274,7 +274,7 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xTopLevel;
     std::unique_ptr<weld::Button> m_xNoneButton;
-    std::unique_ptr<SvtValueSet> m_xLineSet;
+    std::unique_ptr<ValueSet> m_xLineSet;
     std::unique_ptr<weld::CustomWeld> m_xLineSetWin;
 
     std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;

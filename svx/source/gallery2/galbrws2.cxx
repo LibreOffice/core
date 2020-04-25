@@ -1227,7 +1227,7 @@ OUString GalleryBrowser2::GetFilterName() const
     return aFilterName;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
 {
     ImplUpdateSelection();
 }

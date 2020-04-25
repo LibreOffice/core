@@ -144,7 +144,7 @@ VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
 StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
-    , mxValueSet(new SvtValueSet(nullptr))
+    , mxValueSet(new ValueSet(nullptr))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
 {
     mxValueSet->SetColCount(2);
@@ -191,7 +191,7 @@ void StylePresetsPanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
 {
     sal_Int32 nItemId = mxValueSet->GetSelectedItemId();
     TemplateEntry* pEntry = static_cast<TemplateEntry*>(mxValueSet->GetItemData(nItemId));

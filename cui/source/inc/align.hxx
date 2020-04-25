@@ -79,7 +79,7 @@ private:
     weld::TriStateEnabled m_aHyphenState;
     weld::TriStateEnabled m_aShrinkState;
 
-    SvtValueSet m_aVsRefEdge;
+    ValueSet m_aVsRefEdge;
 
     std::unique_ptr<weld::ComboBox> m_xLbHorAlign;
     std::unique_ptr<weld::Label> m_xFtIndent;

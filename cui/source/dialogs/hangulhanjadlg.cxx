@@ -266,7 +266,7 @@ namespace svx
     }
 
     SuggestionSet::SuggestionSet(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
-        : SvtValueSet(std::move(xScrolledWindow))
+        : ValueSet(std::move(xScrolledWindow))
 
     {
     }
@@ -340,7 +340,7 @@ namespace svx
         implUpdateDisplay();
     }
 
-    IMPL_LINK_NOARG(SuggestionDisplay, SelectSuggestionValueSetHdl, SvtValueSet*, void)
+    IMPL_LINK_NOARG(SuggestionDisplay, SelectSuggestionValueSetHdl, ValueSet*, void)
     {
         SelectSuggestionHdl(false);
     }

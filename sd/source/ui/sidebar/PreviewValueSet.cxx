@@ -26,7 +26,7 @@ static const int gnBorderWidth(3);
 static const int gnBorderHeight(3);
 
 PreviewValueSet::PreviewValueSet()
-    : SvtValueSet(nullptr)
+    : ValueSet(nullptr)
     , maPreviewSize(10,10)
 {
     SetStyle (
@@ -38,7 +38,7 @@ PreviewValueSet::PreviewValueSet()
 
 void PreviewValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SvtValueSet::SetDrawingArea(pDrawingArea);
+    ValueSet::SetDrawingArea(pDrawingArea);
 
     SetColCount(2);
     SetExtraSpacing (2);
@@ -65,12 +65,12 @@ bool PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
         maRightMouseClickHandler.Call(rEvent);
         return true;
     }
-    return SvtValueSet::MouseButtonDown(rEvent);
+    return ValueSet::MouseButtonDown(rEvent);
 }
 
 void PreviewValueSet::Resize()
 {
-    SvtValueSet::Resize();
+    ValueSet::Resize();
 
     Size aWindowSize (GetOutputSizePixel());
     if (!aWindowSize.IsEmpty())

@@ -142,7 +142,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
         return nullptr;
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)
 {
     ApplyStyle();
 }
@@ -280,7 +280,7 @@ void TableDesignWidget::onSelectionChanged()
 
 void TableValueSet::Resize()
 {
-    SvtValueSet::Resize();
+    ValueSet::Resize();
     // Calculate the number of rows and columns.
     if( GetItemCount() <= 0 )
         return;
@@ -316,7 +316,7 @@ void TableValueSet::Resize()
 }
 
 TableValueSet::TableValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-    : SvtValueSet(std::move(pScrolledWindow))
+    : ValueSet(std::move(pScrolledWindow))
     , m_bModal(false)
 {
 }

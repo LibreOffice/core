@@ -127,13 +127,13 @@ static const snewfoil_value_info standard[] =
     {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-class LayoutValueSet : public SvtValueSet
+class LayoutValueSet : public ValueSet
 {
 private:
     LayoutMenu& mrMenu;
 public:
     LayoutValueSet(LayoutMenu& rMenu)
-        : SvtValueSet(nullptr)
+        : ValueSet(nullptr)
         , mrMenu(rMenu)
     {
     }
@@ -379,7 +379,7 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     return nRowCount;
 }
 
-IMPL_LINK_NOARG(LayoutMenu, ClickHandler, SvtValueSet*, void)
+IMPL_LINK_NOARG(LayoutMenu, ClickHandler, ValueSet*, void)
 {
     AssignLayoutToSelectedSlides( GetSelectedAutoLayout() );
 }

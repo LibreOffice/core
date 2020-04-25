@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
 {
     insertSelectedFontwork();
     m_xDialog->response(RET_OK);

@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 #include <array>
 
-class SvtValueSet;
+class ValueSet;
 
 namespace svx { namespace sidebar {
 
@@ -59,7 +59,7 @@ private:
     std::unique_ptr<LineWidthValueSet> m_xVSWidth;
     std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
 
-    DECL_LINK(VSSelectHdl, SvtValueSet*, void);
+    DECL_LINK(VSSelectHdl, ValueSet*, void);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);
 };

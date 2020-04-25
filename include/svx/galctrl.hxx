@@ -86,7 +86,7 @@ public:
     bool                SetGraphic( const INetURLObject& );
 };
 
-class GalleryIconView final : public SvtValueSet
+class GalleryIconView final : public ValueSet
 {
 private:
     std::unique_ptr<GalleryDragDrop> mxDragDropTargetHelper;

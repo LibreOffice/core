@@ -216,7 +216,7 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
 }
 
 
-IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, SvtValueSet*, void)
+IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, ValueSet*, void)
 {
     mxSizeValueSet->SetNoSelection();
     const sal_uInt16 nSelectedPaper = mxSizeValueSet->GetSelectedItemId();

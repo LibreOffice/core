@@ -43,7 +43,7 @@ private:
     virtual void dispose() override;
 
     std::unique_ptr<weld::TreeView> mxListBoxFonts;
-    std::unique_ptr<SvtValueSet> mxValueSetColors;
+    std::unique_ptr<ValueSet> mxValueSetColors;
     std::unique_ptr<weld::CustomWeld> mxValueSetColorsWin;
     std::unique_ptr<weld::Button> mxApplyButton;
 
@@ -51,7 +51,7 @@ private:
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
-    DECL_LINK(DoubleClickValueSetHdl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickValueSetHdl, ValueSet*, void);
     void DoubleClickHdl();
 
 };

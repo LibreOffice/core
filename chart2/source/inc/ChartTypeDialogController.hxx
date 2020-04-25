@@ -83,7 +83,7 @@ class XMultiServiceFactory;
 }
 }
 
-class SvtValueSet;
+class ValueSet;
 
 namespace chart
 {
@@ -140,7 +140,7 @@ public:
     virtual OUString getName() = 0;
     virtual OUString getImage() = 0;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter);
+    virtual void fillSubTypeList(ValueSet& rSubTypeList, const ChartTypeParameter& rParameter);
 
     virtual bool shouldShow_3DLookControl() const;
     virtual bool shouldShow_StackingControl() const;
@@ -199,7 +199,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
 };
 
@@ -212,7 +212,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
 };
 
@@ -225,7 +225,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
@@ -241,7 +241,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter) override;
@@ -259,7 +259,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
@@ -276,7 +276,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter) override;
@@ -293,7 +293,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
@@ -309,7 +309,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };
@@ -322,7 +322,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
@@ -352,7 +352,7 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(SvtValueSet& rSubTypeList,
+    virtual void fillSubTypeList(ValueSet& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };

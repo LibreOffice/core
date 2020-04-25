@@ -54,7 +54,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
 
     std::vector<BitmapEx> maFavoritesHorizontal;
 
-    SvtValueSet maCtlFavorites;
+    ValueSet maCtlFavorites;
     std::unique_ptr<weld::CustomWeld> mxCtlFavorites;
     std::unique_ptr<weld::Button> mxOKButton;
 
@@ -62,7 +62,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     void            insertSelectedFontwork();
     void            fillFavorites(sal_uInt16 nThemeId);
 
-    DECL_LINK(DoubleClickFavoriteHdl, SvtValueSet*, void);
+    DECL_LINK(DoubleClickFavoriteHdl, ValueSet*, void);
     DECL_LINK(ClickOKHdl, weld::Button&, void );
 
 public:

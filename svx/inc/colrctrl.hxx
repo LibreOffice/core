@@ -79,7 +79,7 @@ private:
 
     void                FillValueSet();
 
-    DECL_LINK(SelectHdl, SvtValueSet*, void);
+    DECL_LINK(SelectHdl, ValueSet*, void);
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the color value set so that it can be controlled with

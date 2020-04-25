@@ -31,7 +31,7 @@
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 namespace weld { class CustomWeld; }
 
-class SvtValueSet;
+class ValueSet;
 
 namespace chart
 {
@@ -67,7 +67,7 @@ private:
     void selectMainType();
 
     DECL_LINK(SelectMainTypeHdl, weld::TreeView&, void);
-    DECL_LINK(SelectSubTypeHdl, SvtValueSet*, void );
+    DECL_LINK(SelectSubTypeHdl, ValueSet*, void );
 
     std::unique_ptr<Dim3DLookResourceGroup>     m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup>      m_pStackingResourceGroup;
@@ -86,7 +86,7 @@ private:
 
     std::unique_ptr<weld::Label>  m_xFT_ChooseType;
     std::unique_ptr<weld::TreeView> m_xMainTypeList;
-    std::unique_ptr<SvtValueSet> m_xSubTypeList;
+    std::unique_ptr<ValueSet> m_xSubTypeList;
     std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
 };
 

@@ -28,13 +28,13 @@
 namespace svx::sidebar {
 
 ValueSetWithTextControl::ValueSetWithTextControl()
-    : SvtValueSet(nullptr)
+    : ValueSet(nullptr)
 {
 }
 
 void ValueSetWithTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SvtValueSet::SetDrawingArea(pDrawingArea);
+    ValueSet::SetDrawingArea(pDrawingArea);
 
     Size aSize(250, 300);
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());

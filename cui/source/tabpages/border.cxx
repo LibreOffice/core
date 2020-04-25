@@ -87,7 +87,7 @@ const sal_uInt16 SVX_BORDER_PRESET_COUNT = 5;
 // number of shadow images to show
 const sal_uInt16 SVX_BORDER_SHADOW_COUNT = 5;
 
-ShadowControlsWrapper::ShadowControlsWrapper(SvtValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor)
+ShadowControlsWrapper::ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor)
     : mrVsPos(rVsPos)
     , mrMfSize(rMfSize)
     , mrLbColor(rLbColor)
@@ -245,7 +245,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , mbSync(true)
     , mbRemoveAdjacentCellBorders(false)
     , bIsCalcDoc(false)
-    , m_xWndPresets(new SvtValueSet(nullptr))
+    , m_xWndPresets(new ValueSet(nullptr))
     , m_xWndPresetsWin(new weld::CustomWeld(*m_xBuilder, "presets", *m_xWndPresets))
     , m_xUserDefFT(m_xBuilder->weld_label("userdefft"))
     , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, "framesel", m_aFrameSel))
@@ -263,7 +263,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xBottomMF(m_xBuilder->weld_metric_spin_button("bottommf", FieldUnit::MM))
     , m_xSynchronizeCB(m_xBuilder->weld_check_button("sync"))
     , m_xShadowFrame(m_xBuilder->weld_container("shadow"))
-    , m_xWndShadows(new SvtValueSet(nullptr))
+    , m_xWndShadows(new ValueSet(nullptr))
     , m_xWndShadowsWin(new weld::CustomWeld(*m_xBuilder, "shadows", *m_xWndShadows))
     , m_xFtShadowSize(m_xBuilder->weld_label("distanceft"))
     , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FieldUnit::MM))
@@ -1070,7 +1070,7 @@ void SvxBorderTabPage::HideShadowControls()
 #define IID_PRE_TABLE_ALL       20
 #define IID_PRE_TABLE_OUTER2    21
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 {
     const svx::FrameBorderState SHOW = svx::FrameBorderState::Show;
     const svx::FrameBorderState HIDE = svx::FrameBorderState::Hide;
@@ -1140,7 +1140,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, SvtValueSet*, void)
     UpdateRemoveAdjCellBorderCB( nLine + 1 );
 }
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, SvtValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 {
     bool bEnable = m_xWndShadows->GetSelectedItemId() > 1;
     m_xFtShadowSize->set_sensitive(bEnable);

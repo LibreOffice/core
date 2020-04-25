@@ -25,7 +25,7 @@
 
 namespace sc { namespace sidebar {
 
-class CellLineStyleValueSet : public SvtValueSet
+class CellLineStyleValueSet : public ValueSet
 {
 private:
     sal_uInt16      nSelItem;

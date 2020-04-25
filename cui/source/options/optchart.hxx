@@ -52,7 +52,7 @@ private:
     DECL_LINK(ResetToDefaults, weld::Button&, void);
     DECL_LINK(AddChartColor, weld::Button&, void);
     DECL_LINK(RemoveChartColor, weld::Button&, void);
-    DECL_LINK(BoxClickedHdl, SvtValueSet*, void);
+    DECL_LINK(BoxClickedHdl, ValueSet*, void);
     DECL_LINK(SelectPaletteLbHdl, weld::ComboBox&, void);
 
     void FillPaletteLB();
