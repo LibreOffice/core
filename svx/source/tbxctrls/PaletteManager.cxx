@@ -125,8 +125,7 @@ void PaletteManager::LoadPalettes()
     }
 }
 
-
-void PaletteManager::ReloadColorSet(ColorValueSet &rColorSet)
+void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 {
     if( mnCurrentPalette == 0)
     {
@@ -160,7 +159,7 @@ void PaletteManager::ReloadColorSet(ColorValueSet &rColorSet)
     }
 }
 
-void PaletteManager::ReloadRecentColorSet(ColorValueSet& rColorSet)
+void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
 {
     maRecentColors.clear();
     rColorSet.Clear();

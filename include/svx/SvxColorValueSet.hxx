@@ -25,10 +25,10 @@
 
 class XColorList;
 
-class SVXCORE_DLLPUBLIC ColorValueSet : public SvtValueSet
+class SVXCORE_DLLPUBLIC SvxColorValueSet : public SvtValueSet
 {
 public:
-    ColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);
+    SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);
 
     virtual void Resize() override;
 

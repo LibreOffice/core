@@ -34,7 +34,7 @@ public:
 
     void GetSelectedColor( Color& rColor ) const;
 
-    class ScTabBgColorValueSet : public ColorValueSet
+    class ScTabBgColorValueSet : public SvxColorValueSet
     {
     public:
         ScTabBgColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);

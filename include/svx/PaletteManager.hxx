@@ -53,8 +53,8 @@ public:
     PaletteManager(const PaletteManager&) = delete;
     PaletteManager& operator=(const PaletteManager&) = delete;
     void        LoadPalettes();
-    void        ReloadColorSet(ColorValueSet& rColorSet);
-    void        ReloadRecentColorSet(ColorValueSet& rColorSet);
+    void        ReloadColorSet(SvxColorValueSet& rColorSet);
+    void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );
     sal_Int32   GetPalette() const;

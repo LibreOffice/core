@@ -38,7 +38,7 @@ PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
     LoadPalette();
 }
 
-void PaletteASE::LoadColorSet( ColorValueSet& rColorSet )
+void PaletteASE::LoadColorSet(SvxColorValueSet& rColorSet)
 {
     rColorSet.Clear();
     int nIx = 1;
@@ -197,7 +197,7 @@ const OUString& PaletteGPL::GetPath()
     return maFPath;
 }
 
-void PaletteGPL::LoadColorSet( ColorValueSet& rColorSet )
+void PaletteGPL::LoadColorSet(SvxColorValueSet& rColorSet)
 {
     LoadPalette();
 
@@ -343,7 +343,7 @@ const OUString& PaletteSOC::GetPath()
     return maFPath;
 }
 
-void PaletteSOC::LoadColorSet( ColorValueSet& rColorSet )
+void PaletteSOC::LoadColorSet(SvxColorValueSet& rColorSet)
 {
     if( !mbLoadedPalette )
     {
