@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_CONTROLLAYOUT_HXX
 #define INCLUDED_VCL_CONTROLLAYOUT_HXX
 
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
+
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vector>

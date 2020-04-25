@@ -7350,7 +7350,6 @@ include/vcl/checksum.hxx
 include/vcl/combobox.hxx
 include/vcl/commandevent.hxx
 include/vcl/commandinfoprovider.hxx
-include/vcl/controllayout.hxx
 include/vcl/ctrl.hxx
 include/vcl/cursor.hxx
 include/vcl/cvtgrf.hxx
@@ -7467,6 +7466,7 @@ include/vcl/textview.hxx
 include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
+include/vcl/toolkit/controllayout.hxx
 include/vcl/toolkit/dialog.hxx
 include/vcl/toolkit/field.hxx
 include/vcl/toolkit/fixedhyper.hxx
