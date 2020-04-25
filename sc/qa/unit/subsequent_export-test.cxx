@@ -4274,7 +4274,7 @@ void ScExportTest::testExtendedLCIDXLSX()
     ScDocument& rDoc = xDocSh->GetDocument();
     SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
     sal_uInt32 nNumberFormat;
-    const OUString aLang[5] = { "[$-41E]", "[$-411]", "[$-40D]", "[$-401]", "[$-500]" };
+    const OUString aLang[5] = { "[$-41E]", "[$-411]", "[$-40D]", "[$-401]", "[$-412]" };
     const OUString aCalendar[5] = { "[~buddhist]DD-MM-YYYY", "[~gengou]DD-MM-EE", "[~jewish]DD-MM-YYYY", "[~hijri]DD-MM-YYYY", "[~dangi]YYYY/MM/DD" };
     for ( sal_Int16 nCol = 1; nCol <= 2; nCol++ )
     {
