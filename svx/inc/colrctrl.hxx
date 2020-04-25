@@ -78,7 +78,6 @@ private:
     Size                aItemSize;
 
     void                FillValueSet();
-    void                SetSize();
 
     DECL_LINK(SelectHdl, SvtValueSet*, void);
 
@@ -89,8 +88,6 @@ private:
     virtual void GetFocus() override;
 
     virtual bool    Close() override;
-    virtual void    Resize() override;
-    virtual void    Resizing( Size& rSize ) override;
 
     void SetupDrag(const OUString& rItemText, const Color& rItemColor, css::drawing::FillStyle eStyle);
 

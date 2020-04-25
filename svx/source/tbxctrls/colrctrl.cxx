@@ -86,6 +86,7 @@ void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ColorValueSet::SetDrawingArea(pDrawingArea);
     SetAccessibleName(SvxResId(STR_COLORTABLE));
+    SetStyle(GetStyle() | WB_ITEMBORDER);
 }
 
 SvxColorValueSet_docking::SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> xWindow)
@@ -178,8 +179,6 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
 
     xColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
     xColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
-    Size aSize(LogicToPixel(Size(146, 18), MapMode(MapUnit::MapAppFont)));
-    xColorSet->set_size_request(aSize.Width(), aSize.Height());
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.
@@ -215,7 +214,8 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setHeight( aItemSize.Height() / 2 );
 
-    SetSize();
+    fprintf(stderr, "size is %ld %ld\n", aItemSize.Width(), aItemSize.Height());
+
     if (_pBindings != nullptr)
         StartListening(*_pBindings, DuplicateHandling::Prevent);
 }
@@ -270,47 +270,6 @@ void SvxColorDockingWindow::FillValueSet()
     BitmapEx aBmp( pVD->GetBitmapEx( Point(), aColorSize ) );
 
     xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
-}
-
-void SvxColorDockingWindow::SetSize()
-{
-    // calculate the size for ValueSet
-    Size aSize = GetOutputSizePixel();
-    aSize.AdjustWidth( -4 );
-    aSize.AdjustHeight( -4 );
-
-    // calculate rows and columns
-    nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
-    if( nLines == 0 )
-        nLines++;
-
-    // set/remove scroll bar
-    WinBits nBits = xColorSet->GetStyle();
-    if ( static_cast<long>(nLines) * nCols >= nCount )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    xColorSet->SetStyle( nBits );
-
-    // scroll bar?
-    long nScrollWidth = xColorSet->GetScrollWidth();
-    if( nScrollWidth > 0 )
-    {
-        // calculate columns with scroll bar
-        nCols = static_cast<sal_uInt16>( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
-    }
-    xColorSet->SetColCount( nCols );
-
-    if( IsFloatingMode() )
-        xColorSet->SetLineCount( nLines );
-    else
-    {
-        xColorSet->SetLineCount(); // otherwise line height is ignored
-        xColorSet->SetItemHeight( aItemSize.Height() );
-    }
-
-//TODO    xColorSet->SetPosSizePixel( Point( 2, 2 ), aSize );
 }
 
 bool SvxColorDockingWindow::Close()
@@ -424,56 +383,6 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, SvtValueSet*, void)
                     { &aRightColorItem });
         }
     }
-}
-
-void SvxColorDockingWindow::Resizing( Size& rNewSize )
-{
-    rNewSize.AdjustWidth( -4 );
-    rNewSize.AdjustHeight( -4 );
-
-    // determine columns and rows
-    nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Height()) / static_cast<float>(aItemSize.Height()) + 0.5 );
-    if( nLines == 0 )
-        nLines = 1;
-
-    // set/remove scroll bar
-    WinBits nBits = xColorSet->GetStyle();
-    if ( static_cast<long>(nLines) * nCols >= nCount )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    xColorSet->SetStyle( nBits );
-
-    // scroll bar?
-    long nScrollWidth = xColorSet->GetScrollWidth();
-    if( nScrollWidth > 0 )
-    {
-        // calculate columns with scroll bar
-        nCols = static_cast<sal_uInt16>( ( static_cast<float>(rNewSize.Width()) - static_cast<float>(nScrollWidth) )
-                               / static_cast<float>(aItemSize.Width()) + 0.5 );
-    }
-    if( nCols <= 1 )
-        nCols = 2;
-
-    // calculate max. rows using the given columns
-    long nMaxLines = nCount / nCols;
-    if( nCount %  nCols )
-        nMaxLines++;
-
-    nLines = sal::static_int_cast< sal_uInt16 >(
-        std::min< long >( nLines, nMaxLines ) );
-
-    // set size of the window
-    rNewSize.setWidth( nCols * aItemSize.Width() + nScrollWidth + 4 );
-    rNewSize.setHeight( nLines * aItemSize.Height() + 4 );
-}
-
-void SvxColorDockingWindow::Resize()
-{
-    if ( !IsFloatingMode() || !GetFloatingWindow()->IsRollUp() )
-        SetSize();
-    SfxDockingWindow::Resize();
 }
 
 void SvxColorDockingWindow::GetFocus()
