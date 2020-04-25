@@ -1118,7 +1118,7 @@ boolean_primary:
                         }
                         else
                         {
-                            nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
+                            nErg = xxx_pGLOBAL_SQLPARSER->buildComparisonRule($$,$1);
                         }
                         if(nErg == 1)
                         {
@@ -4760,7 +4760,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 	return 1;
 }
 
-sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
+sal_Int16 OSQLParser::buildComparisonRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
     OSQLParseNode* pComp = new OSQLInternalNode("=", SQLNodeType::Equal);
     return buildPredicateRule(pAppend,pLiteral,pComp);
