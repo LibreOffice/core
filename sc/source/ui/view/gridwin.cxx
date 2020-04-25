@@ -1063,6 +1063,22 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // aPos is now view-zoom adjusted and in pixels an more importantly this is pixel aligned to the view-zoom,
+        // but once we use this to set the position of the floating window, it has no information of view-zoom level
+        // so if we don't reverse the zoom now, a simple PixelToLogic(aPos, MapMode(MapUnit::MapTwip)) employed in
+        // FloatingWindow::ImplCalcPos will produce a 'scaled' twips position which will again get zoom scaled in the
+        // client (effective double scaling) causing wrong positioning/size.
+        double fZoomX(pViewData->GetZoomX());
+        double fZoomY(pViewData->GetZoomY());
+        aPos.setX(aPos.getX() / fZoomX);
+        aPos.setY(aPos.getY() / fZoomY);
+        nSizeX = nSizeX / fZoomX;
+        nSizeY = nSizeY / fZoomY;
+    }
+
     if ( bLayoutRTL )
         aPos.AdjustX( -nSizeX );
 
