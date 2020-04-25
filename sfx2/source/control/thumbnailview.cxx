@@ -406,6 +406,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
             nPageSize = 1;
         mpScrBar->SetPageSize( nPageSize );
         mpScrBar->Show( mbScroll );
+        mpScrBar->Enable( mbScroll );
     }
 
     // delete ScrollBar
