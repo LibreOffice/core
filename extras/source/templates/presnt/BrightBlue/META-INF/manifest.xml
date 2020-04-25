@@ -4,7 +4,5 @@
   <manifest:file-entry manifest:full-path="Thumbnails/thumbnail.png" manifest:media-type="image/png"/>
   <manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>
   <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
-  <manifest:file-entry manifest:full-path="Pictures/1000020100000520000000CCF41AC5B79CBB20DE.png" manifest:media-type="image/png"/>
-  <manifest:file-entry manifest:full-path="Pictures/100010580000879200001508D21A14F0A9096EB5.svg" manifest:media-type="image/svg+xml"/>
   <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
 </manifest:manifest>
