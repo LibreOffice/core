@@ -149,15 +149,15 @@ enum class DragDropMode
     NONE            = 0x0000,
     CTRL_MOVE       = 0x0001,
     CTRL_COPY       = 0x0002,
-    APP_COPY        = 0x0008,
+    APP_COPY        = 0x0004,
     // Entries may be dropped via the uppermost Entry
     // The DropTarget is 0 in that case
-    ENABLE_TOP      = 0x0020,
-    ALL             = 0x003f,
+    ENABLE_TOP      = 0x0010,
+    ALL             = 0x0017,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DragDropMode> : is_typed_flags<DragDropMode, 0x003b> {};
+    template<> struct typed_flags<DragDropMode> : is_typed_flags<DragDropMode, 0x0017> {};
 }
 
 enum class SvTreeListBoxFlags
