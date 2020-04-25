@@ -78,6 +78,13 @@ struct ImpSwapFile
     }
 };
 
+OUString ImpGraphic::getSwapFileURL()
+{
+    if (mpSwapFile)
+        return mpSwapFile->aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    return OUString();
+}
+
 ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
