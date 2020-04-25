@@ -40,19 +40,9 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_graphic_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_graphic_test))
-
 $(eval $(call gb_CppunitTest_use_ure,vcl_graphic_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_graphic_test))
-
-$(eval $(call gb_CppunitTest_use_components,vcl_graphic_test,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
-    unotools/util/utl \
-    emfio/emfio \
-    drawinglayer/drawinglayer \
-))
-
+$(eval $(call gb_CppunitTest_use_rdb,vcl_graphic_test,services))
 $(eval $(call gb_CppunitTest_use_configuration,vcl_graphic_test))
 
 # we need to explicitly depend on Library_gie because it's dynamically loaded for .gif

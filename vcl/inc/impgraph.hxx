@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPGRAPH_HXX
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
@@ -46,7 +47,7 @@ struct ImpSwapFile;
 class GraphicConversionParameters;
 class ImpGraphic;
 
-class ImpGraphic final
+class VCL_DLLPUBLIC ImpGraphic final
 {
     friend class Graphic;
     friend class GraphicID;
@@ -175,13 +176,9 @@ private:
     bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
 
-    bool                ImplSwapIn();
     bool                ImplSwapIn( SvStream* pIStm );
-
-    bool                ImplSwapOut();
     bool                ImplSwapOut( SvStream* pOStm );
 
-    bool                ImplIsSwapOut() const { return mbSwapOut;}
     bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const std::shared_ptr<GfxLink>& );
     std::shared_ptr<GfxLink> ImplGetSharedGfxLink() const;
@@ -205,6 +202,12 @@ private:
     bool loadPrepared();
 
     sal_Int32 getPageNumber() const;
+
+public:
+    OUString getSwapFileURL();
+    bool ImplSwapIn();
+    bool ImplSwapOut();
+    bool ImplIsSwapOut() const { return mbSwapOut; }
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
