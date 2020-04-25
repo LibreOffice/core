@@ -2202,11 +2202,19 @@ new_window_name:
 	window_name
 	;
 window_specification:
-	'(' window_specification_details ')'
+	'('
+		opt_existing_window_name
+		opt_window_partition_clause
+		opt_order_by_clause
+		opt_window_frame_clause
+	')'
 	{
 		$$ = SQL_NEW_RULE;
 		$$->append(newNode("(", SQLNodeType::Punctuation));
 		$$->append($2);
+		$$->append($3);
+		$$->append($4);
+		$$->append($5);
 		$$->append(newNode(")", SQLNodeType::Punctuation));
 	}
 	;
@@ -2221,12 +2229,6 @@ opt_window_partition_clause:
 opt_window_frame_clause:
 	/* empty */      {$$ = SQL_NEW_RULE;}
 	|	window_frame_clause
-	;
-window_specification_details:
-	opt_existing_window_name
-	opt_window_partition_clause
-	opt_order_by_clause
-	opt_window_frame_clause
 	;
 existing_window_name:
 	window_name
