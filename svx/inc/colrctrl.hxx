@@ -42,7 +42,7 @@ class SvxColorValueSetData;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SvxColorValueSet_docking final : public ColorValueSet
+class SAL_WARN_UNUSED SvxColorValueSet_docking final : public SvxColorValueSet
 {
     bool            mbLeftButton;
 

@@ -84,13 +84,13 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 
 void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    ColorValueSet::SetDrawingArea(pDrawingArea);
+    SvxColorValueSet::SetDrawingArea(pDrawingArea);
     SetAccessibleName(SvxResId(STR_COLORTABLE));
     SetStyle(GetStyle() | WB_ITEMBORDER);
 }
 
 SvxColorValueSet_docking::SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> xWindow)
-    : ColorValueSet(std::move(xWindow))
+    : SvxColorValueSet(std::move(xWindow))
     , mbLeftButton(true)
 {
 }
@@ -103,7 +103,7 @@ bool SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
-        bRet = ColorValueSet::MouseButtonDown( rMEvt );
+        bRet = SvxColorValueSet::MouseButtonDown( rMEvt );
     }
     else
     {
@@ -113,7 +113,7 @@ bool SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        bRet = ColorValueSet::MouseButtonDown( aMEvt );
+        bRet = SvxColorValueSet::MouseButtonDown( aMEvt );
     }
 
     return bRet;
@@ -127,7 +127,7 @@ bool SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
-        bRet = ColorValueSet::MouseButtonUp( rMEvt );
+        bRet = SvxColorValueSet::MouseButtonUp( rMEvt );
     }
     else
     {
@@ -137,7 +137,7 @@ bool SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        bRet = ColorValueSet::MouseButtonUp( aMEvt );
+        bRet = SvxColorValueSet::MouseButtonUp( aMEvt );
     }
     SetNoSelection();
 
@@ -208,10 +208,10 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
         }
     }
 
-    aItemSize = xColorSet->CalcItemSizePixel(Size(ColorValueSet::getEntryEdgeLength(), ColorValueSet::getEntryEdgeLength()));
-    aItemSize.setWidth( aItemSize.Width() + ColorValueSet::getEntryEdgeLength() );
+    aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setWidth( aItemSize.Width() / 2 );
-    aItemSize.setHeight( aItemSize.Height() + ColorValueSet::getEntryEdgeLength() );
+    aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setHeight( aItemSize.Height() / 2 );
 
     fprintf(stderr, "size is %ld %ld\n", aItemSize.Width(), aItemSize.Height());
@@ -256,7 +256,7 @@ void SvxColorDockingWindow::FillValueSet()
     xColorSet->addEntriesForXColorList(*pColorList, 2);
 
     // create the last entry for 'invisible/none'
-    const Size aColorSize(ColorValueSet::getEntryEdgeLength(), ColorValueSet::getEntryEdgeLength());
+    const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
     long nPtX = aColorSize.Width() - 1;
     long nPtY = aColorSize.Height() - 1;
     ScopedVclPtrInstance< VirtualDevice > pVD;

@@ -1750,8 +1750,8 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     , mxPaletteManager(rPaletteManager)
     , mrColorStatus(rColorStatus)
     , maColorSelectFunction(aFunction)
-    , mxColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
-    , mxRecentColorSet(new ColorValueSet(nullptr))
+    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , mxRecentColorSet(new SvxColorValueSet(nullptr))
     , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
     , mxButtonAutoColor(m_xBuilder->weld_button("auto_color_button"))
     , mxButtonNoneColor(m_xBuilder->weld_button("none_color_button"))
@@ -1826,7 +1826,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
 
     mxPaletteManager->ReloadColorSet(*mxColorSet);
-    const sal_uInt32 nMaxItems(ColorValueSet::getMaxRowCount() * ColorValueSet::getColumnCount());
+    const sal_uInt32 nMaxItems(SvxColorValueSet::getMaxRowCount() * SvxColorValueSet::getColumnCount());
     Size aSize = mxColorSet->layoutAllVisible(nMaxItems);
     mxColorSet->set_size_request(aSize.Width(), aSize.Height());
 
@@ -2026,7 +2026,7 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     }
 }
 
-bool ColorWindow::SelectValueSetEntry(ColorValueSet* pColorSet, const Color& rColor)
+bool ColorWindow::SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor)
 {
     for (size_t i = 1; i <= pColorSet->GetItemCount(); ++i)
     {

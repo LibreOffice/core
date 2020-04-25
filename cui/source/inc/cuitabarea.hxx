@@ -648,8 +648,8 @@ private:
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
     SvxXRectPreview m_aCtlPreviewNew;
-    std::unique_ptr<ColorValueSet> m_xValSetColorList;
-    std::unique_ptr<ColorValueSet> m_xValSetRecentList;
+    std::unique_ptr<SvxColorValueSet> m_xValSetColorList;
+    std::unique_ptr<SvxColorValueSet> m_xValSetRecentList;
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<weld::RadioButton> m_xRbRGB;
     std::unique_ptr<weld::RadioButton> m_xRbCMYK;

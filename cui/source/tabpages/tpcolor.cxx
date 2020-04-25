@@ -46,8 +46,8 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
     , m_context(comphelper::getProcessComponentContext())
-    , m_xValSetColorList(new ColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
-    , m_xValSetRecentList(new ColorValueSet(nullptr))
+    , m_xValSetColorList(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , m_xValSetRecentList(new SvxColorValueSet(nullptr))
     , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
     , m_xRbRGB(m_xBuilder->weld_radio_button("RGB"))
     , m_xRbCMYK(m_xBuilder->weld_radio_button("CMYK"))
@@ -154,8 +154,8 @@ void SvxColorTabPage::ImpColorCountChanged()
 {
     if (!pColorList.is())
         return;
-    m_xValSetColorList->SetColCount(ColorValueSet::getColumnCount());
-    m_xValSetRecentList->SetColCount(ColorValueSet::getColumnCount());
+    m_xValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
+    m_xValSetRecentList->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
 void SvxColorTabPage::FillPaletteLB()
