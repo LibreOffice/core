@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-26 17:28:59 using:
+ Generated on 2020-04-25 20:55:23 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -209,6 +209,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>

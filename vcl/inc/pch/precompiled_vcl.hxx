@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:17:45 using:
+ Generated on 2020-04-25 20:56:04 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -87,7 +88,6 @@
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -95,7 +95,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
@@ -214,7 +213,6 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
-#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>

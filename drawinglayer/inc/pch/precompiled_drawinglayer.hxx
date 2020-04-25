@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:15:30 using:
+ Generated on 2020-04-25 20:54:59 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstring>
 #include <deque>
 #include <limits.h>
 #include <limits>
@@ -42,15 +43,15 @@
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
+#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>

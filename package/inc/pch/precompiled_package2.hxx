@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:51 using:
+ Generated on 2020-04-25 20:55:04 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstring>
 #include <initializer_list>
@@ -59,7 +60,6 @@
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
-#include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
@@ -78,7 +78,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>

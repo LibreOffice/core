@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:17:52 using:
+ Generated on 2020-04-25 20:56:05 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <float.h>
 #include <functional>
@@ -30,6 +31,7 @@
 #include <limits.h>
 #include <limits>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>

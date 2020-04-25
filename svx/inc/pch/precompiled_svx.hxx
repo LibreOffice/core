@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:12:39 using:
+ Generated on 2020-04-25 20:55:32 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,6 +47,7 @@
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
@@ -55,6 +56,7 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -142,9 +144,20 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -153,6 +166,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -282,7 +296,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/weldutils.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
@@ -324,6 +340,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>

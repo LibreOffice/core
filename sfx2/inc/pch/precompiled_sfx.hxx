@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:16:49 using:
+ Generated on 2020-04-25 20:55:30 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,7 +25,6 @@
 #include <assert.h>
 #include <cassert>
 #include <cstddef>
-#include <cstring>
 #include <functional>
 #include <initializer_list>
 #include <map>
@@ -68,7 +67,6 @@
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>

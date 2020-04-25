@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:14:25 using:
+ Generated on 2020-04-25 20:54:58 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,12 +34,14 @@
 #include <optional>
 #include <ostream>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>

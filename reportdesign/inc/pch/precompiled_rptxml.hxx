@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:46 using:
+ Generated on 2020-04-25 20:55:05 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -63,7 +63,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -76,7 +76,6 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -86,6 +85,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/factory.hxx>
@@ -98,13 +98,13 @@
 #include <tools/toolsdllapi.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/options.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/txtimp.hxx>

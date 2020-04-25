@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:13:06 using:
+ Generated on 2020-04-25 20:54:48 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <atomic>
 #include <cassert>
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <cstring>
 #include <deque>
@@ -71,10 +72,7 @@
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
-#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -91,7 +89,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
