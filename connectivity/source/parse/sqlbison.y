@@ -2224,9 +2224,9 @@ opt_window_frame_clause:
 	;
 window_specification_details:
 	opt_existing_window_name
-	opt_window_partition_clause
-	opt_order_by_clause
-	opt_window_frame_clause
+	|	opt_window_partition_clause
+	|	opt_order_by_clause
+	|	opt_window_frame_clause
 	;
 existing_window_name:
 	window_name
