@@ -1822,13 +1822,4 @@ void AquaSalFrame::EndSetClipRegion()
     // shadow is invalidated when view gets drawn again
 }
 
-void AquaSalFrame::BeginSheet(SalFrame* pSheetFrame) const
-{
-    NSWindow* pSheetNSWindow = static_cast<AquaSalFrame*>(pSheetFrame)->mpNSWindow;
-//    [mpNSWindow beginSheet:pSheetNSWindow];
-//    beginSheet(mpNSWindow];
-
-    [mpNSWindow beginSheet:pSheetNSWindow completionHandler:nil ];
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
