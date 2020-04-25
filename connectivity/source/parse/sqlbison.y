@@ -250,7 +250,7 @@ using namespace connectivity;
 %type <pParseNode> window_function window_function_type ntile_function number_of_tiles lead_or_lag_function lead_or_lag lead_or_lag_extent offset default_expression null_treatment
 %type <pParseNode> first_or_last_value_function first_or_last_value nth_value_function nth_row from_first_or_last window_name_or_specification in_line_window_specification opt_lead_or_lag_function
 %type <pParseNode> opt_null_treatment opt_from_first_or_last simple_value_specification dynamic_parameter_specification window_name window_clause window_definition_list window_definition
-%type <pParseNode> new_window_name window_specification_details existing_window_name window_partition_clause window_partition_column_reference_list window_partition_column_reference window_frame_clause
+%type <pParseNode> new_window_name existing_window_name window_partition_clause window_partition_column_reference_list window_partition_column_reference window_frame_clause
 %type <pParseNode> window_frame_units window_frame_extent window_frame_start window_frame_preceding window_frame_between window_frame_bound_1 window_frame_bound_2 window_frame_bound window_frame_following window_frame_exclusion
 %type <pParseNode> opt_window_frame_clause opt_window_partition_clause opt_existing_window_name window_specification opt_window_frame_exclusion opt_window_clause opt_offset
 %type <pParseNode> opt_fetch_first_row_count fetch_first_clause offset_row_count fetch_first_row_count first_or_next row_or_rows opt_result_offset_clause result_offset_clause
@@ -2202,11 +2202,19 @@ new_window_name:
 	window_name
 	;
 window_specification:
-	'(' window_specification_details ')'
+	'('
+		opt_existing_window_name
+		opt_window_partition_clause
+		opt_order_by_clause
+		opt_window_frame_clause
+	')'
 	{
 		$$ = SQL_NEW_RULE;
 		$$->append(newNode("(", SQLNodeType::Punctuation));
 		$$->append($2);
+		$$->append($3);
+		$$->append($4);
+		$$->append($5);
 		$$->append(newNode(")", SQLNodeType::Punctuation));
 	}
 	;
@@ -2221,12 +2229,6 @@ opt_window_partition_clause:
 opt_window_frame_clause:
 	/* empty */      {$$ = SQL_NEW_RULE;}
 	|	window_frame_clause
-	;
-window_specification_details:
-	opt_existing_window_name
-	opt_window_partition_clause
-	opt_order_by_clause
-	opt_window_frame_clause
 	;
 existing_window_name:
 	window_name
