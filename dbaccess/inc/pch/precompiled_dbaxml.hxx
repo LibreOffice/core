@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:14:21 using:
+ Generated on 2020-04-25 20:54:57 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,8 +23,13 @@
 #if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
+#include <cstring>
 #include <functional>
+#include <limits>
 #include <memory>
+#include <new>
+#include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -34,8 +39,11 @@
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>

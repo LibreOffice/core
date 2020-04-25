@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:17:22 using:
+ Generated on 2020-04-25 20:55:41 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <cassert>
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <cstring>
 #include <deque>

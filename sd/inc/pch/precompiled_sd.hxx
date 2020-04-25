@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:16:46 using:
+ Generated on 2020-04-25 20:55:27 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -48,6 +48,7 @@
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
@@ -59,6 +60,7 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
+#include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -216,6 +218,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/extract.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -448,6 +451,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>
+#include <tools/wintypes.hxx>
 #include <typelib/typedescription.h>
 #include <undo/undomanager.hxx>
 #include <undo/undoobjects.hxx>

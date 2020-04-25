@@ -13,15 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-05-18 14:37:42 using:
+ Generated on 2020-04-25 20:55:00 using:
  ./bin/update_pch external/libmwaw mwaw --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect .\external/libmwaw\inc\pch\precompiled_mwaw.hxx "make external/libmwaw.build" --find-conflicts
+ ./bin/update_pch_bisect ./external/libmwaw/inc/pch/precompiled_mwaw.hxx "make external/libmwaw.build" --find-conflicts
 */
 
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <cstdarg>
 #include <cstdio>
