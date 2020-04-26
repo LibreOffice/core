@@ -1072,8 +1072,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    double fListWindowZoom = 1.0;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bLOKActive)
     {
         // aPos is now view-zoom adjusted and in pixels an more importantly this is pixel aligned to the view-zoom,
         // but once we use this to set the position of the floating window, it has no information of view-zoom level
@@ -1084,8 +1086,17 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         double fZoomY(pViewData->GetZoomY());
         aPos.setX(aPos.getX() / fZoomX);
         aPos.setY(aPos.getY() / fZoomY);
+        // Reverse the zooms from sizes too
+        // nSizeX : because we need to rescale with another (trimmed) zoom level below.
         nSizeX = nSizeX / fZoomX;
+        // nSizeY : because this is used by vcl::FloatingWindow later to compute its vertical position
+        // since we pass the flag FloatWinPopupFlags::Down setup the popup.
         nSizeY = nSizeY / fZoomY;
+        // Limit zoom scale for Listwindow in the dropdown.
+        fListWindowZoom = std::max(std::min(fZoomY, 2.0), 0.5);
+        // nSizeX is only used in setting the width of dropdown, so rescale with
+        // the trimmed zoom.
+        nSizeX = nSizeX * fListWindowZoom;
     }
 
     if ( bLayoutRTL )
@@ -1097,12 +1108,14 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     aPos.AdjustY( nSizeY - 1 );
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bLOKActive)
     {
         mpFilterFloat->SetLOKNotifier(SfxViewShell::Current());
     }
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
+    if (bLOKActive)
+        mpFilterBox->SetZoom(Fraction(fListWindowZoom));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();
@@ -1138,12 +1151,16 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         // minimum width in pixel
         const long nMinLOKWinWidth = static_cast<long>(1.3 * STD_COL_WIDTH * pViewData->GetPPTX());
-        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
         if (bLOKActive && nSizeX < nMinLOKWinWidth)
             nSizeX = nMinLOKWinWidth;
 
-        if (bLOKActive && aStrings.size() < SC_FILTERLISTBOX_LINES)
-            nHeight = nHeight * (aStrings.size() + 1) / SC_FILTERLISTBOX_LINES;
+        if (bLOKActive)
+        {
+            if (aStrings.size() < SC_FILTERLISTBOX_LINES)
+                nHeight = nHeight * (aStrings.size() + 1) / SC_FILTERLISTBOX_LINES;
+
+            nHeight = nHeight * fListWindowZoom;
+        }
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
         Size aSize( nSizeX, nHeight );
