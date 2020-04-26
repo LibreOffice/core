@@ -3100,7 +3100,7 @@ void SdImportTest::testTdf119187()
         CPPUNIT_ASSERT(pObj);
         const sdr::properties::BaseProperties & rProperties = pObj->GetProperties();
 
-        // chcek text vertical alignment
+        // check text vertical alignment
         const SdrTextVertAdjustItem& rSdrTextVertAdjustItem = rProperties.GetItem(SDRATTR_TEXT_VERTADJUST);
         const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
         CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
