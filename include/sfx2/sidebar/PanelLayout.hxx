@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
-#define INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
+#pragma once
 
-#include <svx/svxdllapi.h>
+#include <sfx2/dllapi.h>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
@@ -20,7 +19,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 /// This class is the base for the Widget Layout-based sidebar panels.
-class SVXCORE_DLLPUBLIC PanelLayout : public Control
+class SFX2_DLLPUBLIC PanelLayout : public Control
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
@@ -45,7 +44,5 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

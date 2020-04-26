@@ -25,7 +25,7 @@
 #include "MasterPageContainer.hxx"
 #include "PreviewValueSet.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 #include <osl/mutex.hxx>
 

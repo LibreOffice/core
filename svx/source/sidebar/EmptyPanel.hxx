@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_EMPTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_EMPTYPANEL_HXX
 
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 namespace svx { namespace sidebar {
 

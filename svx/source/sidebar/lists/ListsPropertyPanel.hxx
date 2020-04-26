@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_LISTS_LISTSPROPERTYPANEL_HXX
 
 #include <sfx2/weldutils.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 namespace svx

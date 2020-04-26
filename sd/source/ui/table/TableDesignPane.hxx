@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
 
 #include <svtools/valueset.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }

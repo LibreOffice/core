@@ -24,7 +24,7 @@
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include "content.hxx"
 
 class SfxPoolItem;

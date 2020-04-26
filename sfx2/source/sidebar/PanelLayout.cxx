@@ -9,7 +9,7 @@
 
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/accel.hxx>
 
@@ -24,7 +24,7 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
     m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
-    m_aPanelLayoutIdle.SetDebugName("svx::PanelLayout m_aPanelLayoutIdle");
+    m_aPanelLayoutIdle.SetDebugName("sfx2::PanelLayout m_aPanelLayoutIdle");
 
     // Builder will trigger resize and start Idle
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);

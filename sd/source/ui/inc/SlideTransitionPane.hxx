@@ -22,7 +22,7 @@
 #include "SlideSorterViewShell.hxx"
 
 #include <svtools/valueset.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
 #include <vector>
