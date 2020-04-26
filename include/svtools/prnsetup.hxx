@@ -27,6 +27,7 @@
 
 class Printer;
 class QueueInfo;
+class VclSimpleEvent;
 
 class SVT_DLLPUBLIC PrinterSetupDialog final : public weld::GenericDialogController
 {

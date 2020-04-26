@@ -21,7 +21,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/uitest/factory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
@@ -62,9 +62,10 @@ typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
 enum class PointerStyle;
-class SvNumberFormatter;
+class CommandEvent;
 class KeyEvent;
 class MouseEvent;
+class SvNumberFormatter;
 class TransferDataContainer;
 class OutputDevice;
 class VirtualDevice;
@@ -73,6 +74,7 @@ struct SystemEnvData;
 namespace vcl
 {
 class ILibreOfficeKitNotifier;
+typedef OutputDevice RenderContext;
 }
 
 namespace weld
