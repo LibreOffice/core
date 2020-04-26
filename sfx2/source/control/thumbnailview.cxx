@@ -387,7 +387,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         Size aSize( nScrBarWidth, aWinSize.Height() );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
-        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*gnFineness/mnCols);
+        mpScrBar->SetRangeMax( (mnLines - mnVisLines + 1)*gnFineness);
         mpScrBar->SetVisibleSize( mnVisLines );
         if (!bScrollBarUsed)
             mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*gnFineness );
