@@ -37,14 +37,14 @@ namespace chart
 {
 
 RegressionCurveCalculator::RegressionCurveCalculator() :
-        m_fCorrelationCoeffitient(0.0),
+        m_fCorrelationCoefficient(0.0),
         mDegree(2),
         mForceIntercept(false),
         mInterceptValue(0.0),
         mPeriod(2),
         mXName("x"), mYName("f(x)")
 {
-    rtl::math::setNan( &m_fCorrelationCoeffitient );
+    rtl::math::setNan( &m_fCorrelationCoefficient );
     rtl::math::setNan( &mInterceptValue );
 }
 
@@ -167,7 +167,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
 
 double SAL_CALL RegressionCurveCalculator::getCorrelationCoefficient()
 {
-    return m_fCorrelationCoeffitient;
+    return m_fCorrelationCoefficient;
 }
 
 OUString SAL_CALL RegressionCurveCalculator::getRepresentation()

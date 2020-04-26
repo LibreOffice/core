@@ -56,7 +56,7 @@ protected:
 
     static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, const sal_Int32* pMaxLength );
 
-    double m_fCorrelationCoeffitient;
+    double m_fCorrelationCoefficient;
 
     sal_Int32 mDegree;
     bool  mForceIntercept;

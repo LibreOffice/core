@@ -80,9 +80,9 @@ void PolynomialRegressionCurveCalculator::computeCorrelationCoefficient(
     }
 
     if (aRSquared > 0.0)
-        m_fCorrelationCoeffitient = std::sqrt(aRSquared);
+        m_fCorrelationCoefficient = std::sqrt(aRSquared);
     else
-        m_fCorrelationCoeffitient = 0.0;
+        m_fCorrelationCoefficient = 0.0;
 }
 
 // ____ XRegressionCurveCalculator ____
@@ -90,7 +90,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
 {
-    rtl::math::setNan(&m_fCorrelationCoeffitient);
+    rtl::math::setNan(&m_fCorrelationCoefficient);
 
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
