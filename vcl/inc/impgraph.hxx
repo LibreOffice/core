@@ -56,7 +56,7 @@ private:
 
     GDIMetaFile                  maMetaFile;
     BitmapEx                     maBitmapEx;
-    /// If maEx is empty, this preferred size will be set on it when it gets initialized.
+    /// If maBitmapEx is empty, this preferred size will be set on it when it gets initialized.
     Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
     std::unique_ptr<Animation>   mpAnimation;
