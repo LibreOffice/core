@@ -52,6 +52,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 using namespace ::com::sun::star;
 

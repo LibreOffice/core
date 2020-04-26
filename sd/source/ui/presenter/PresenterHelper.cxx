@@ -24,6 +24,7 @@
 #include "PresenterHelper.hxx"
 #include "PresenterCanvas.hxx"
 #include <cppcanvas/vclfactory.hxx>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>

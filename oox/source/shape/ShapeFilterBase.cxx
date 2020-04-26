@@ -25,6 +25,7 @@
 #include <oox/drawingml/theme.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 namespace oox::shape {

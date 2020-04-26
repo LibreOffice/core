@@ -22,6 +22,7 @@
 #include <fmdocumentclassification.hxx>
 #include <fmcontrollayout.hxx>
 
+#include <com/sun/star/form/XForms.hpp>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 
@@ -91,7 +92,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 
     if ( pToBeRemovedPage )
     {
-        Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ), css::uno::UNO_QUERY );
+        Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ) );
         if ( xForms.is() )
             m_pImpl->mxUndoEnv->RemoveForms( xForms );
     }
@@ -116,7 +117,7 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 
     if ( pPage )
     {
-        Reference< XNameContainer > xForms( pPage->GetForms( false ), css::uno::UNO_QUERY );
+        Reference< XNameContainer > xForms( pPage->GetForms( false ) );
         if ( xForms.is() )
             m_pImpl->mxUndoEnv->RemoveForms( xForms );
     }

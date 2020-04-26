@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

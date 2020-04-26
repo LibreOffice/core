@@ -30,6 +30,7 @@
 #include <xmloff/prstylei.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

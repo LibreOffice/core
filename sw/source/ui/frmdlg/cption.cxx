@@ -30,6 +30,7 @@
 #include <doc.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>

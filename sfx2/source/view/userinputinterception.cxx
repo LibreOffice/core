@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/awt/XMouseClickHandler.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <comphelper/interfacecontainer2.hxx>

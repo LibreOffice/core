@@ -24,6 +24,7 @@
 #include "xmlDataSource.hxx"
 #include "xmlDocuments.hxx"
 #include "xmlEnums.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

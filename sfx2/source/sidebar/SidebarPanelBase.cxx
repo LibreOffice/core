@@ -23,7 +23,7 @@
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <vcl/layout.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 

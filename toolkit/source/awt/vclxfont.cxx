@@ -19,6 +19,7 @@
 
 #include <memory>
 
+#include <com/sun/star/awt/XDevice.hpp>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>

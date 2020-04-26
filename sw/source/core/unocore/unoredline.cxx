@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-
+#include <com/sun/star/text/XTextSection.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 

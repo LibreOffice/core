@@ -19,6 +19,7 @@
 
 #include <oox/ole/axcontrolfragment.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>

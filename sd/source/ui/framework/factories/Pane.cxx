@@ -23,6 +23,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <cppcanvas/vclfactory.hxx>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
@@ -168,7 +169,7 @@ Reference<rendering::XCanvas> Pane::CreateCanvas()
         ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
             cppcanvas::VCLFactory::createSpriteCanvas(*mpWindow));
         if (pCanvas.get() != nullptr)
-            xCanvas.set(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
+            xCanvas.set(pCanvas->getUNOSpriteCanvas());
     }
 
     return xCanvas;

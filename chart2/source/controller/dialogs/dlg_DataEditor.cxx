@@ -22,6 +22,7 @@
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 using namespace ::com::sun::star;

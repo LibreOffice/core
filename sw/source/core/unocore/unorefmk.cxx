@@ -48,6 +48,7 @@
 #include <fmtmeta.hxx>
 #include <docsh.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/rdf/Statement.hpp>

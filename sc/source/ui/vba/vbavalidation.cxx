@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XlDVType.hpp>
 #include <ooo/vba/excel/XlDVAlertStyle.hpp>

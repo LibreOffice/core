@@ -12,6 +12,8 @@
 #include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <ooxml/resourceids.hxx>
 

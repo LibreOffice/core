@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include "XMLExportIterator.hxx"
@@ -651,7 +654,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
                 static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
 
         xTable.set(rxTable);
-        xCellRange.set(xTable, uno::UNO_QUERY);
+        xCellRange.set(xTable);
     }
 }
 

@@ -29,7 +29,7 @@
 #include "Tickmarks_Equidistant.hxx"
 #include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
-
+#include <com/sun/star/chart2/XAxis.hpp>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/color.hxx>

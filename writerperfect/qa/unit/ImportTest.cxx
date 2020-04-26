@@ -12,6 +12,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>

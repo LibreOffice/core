@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <svl/srchitem.hxx>

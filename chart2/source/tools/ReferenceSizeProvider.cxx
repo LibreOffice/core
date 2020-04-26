@@ -22,7 +22,7 @@
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <AxisHelper.hxx>
-
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>

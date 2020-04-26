@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include "XMLTextNumRuleInfo.hxx"
 #include <xmloff/XMLTextListAutoStylePool.hxx>

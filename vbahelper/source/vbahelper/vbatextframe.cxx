@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <vbahelper/vbatextframe.hxx>
 
 using namespace ::ooo::vba;

@@ -19,6 +19,7 @@
 
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>

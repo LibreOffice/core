@@ -26,6 +26,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

@@ -19,6 +19,7 @@
 
 #include <svx/svxids.hrc>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <svx/drawitem.hxx>
 #include <doc.hxx>
 #include <drawdoc.hxx>

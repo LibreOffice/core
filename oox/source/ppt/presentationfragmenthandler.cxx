@@ -28,7 +28,9 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -143,7 +145,7 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                         Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
                         aURL = "#" + xNamed->getName();
                         xPropSet->setPropertyValue( sURL, Any( aURL ) );
-                        Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
+                        Reference< text::XTextContent > xContent( rTextField.xTextField);
                         Reference< text::XTextRange > xTextRange = rTextField.xTextCursor;
                         rTextField.xText->insertTextContent( xTextRange, xContent, true );
                     }

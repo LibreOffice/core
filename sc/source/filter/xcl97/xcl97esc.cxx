@@ -20,6 +20,7 @@
 #include <memory>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -209,7 +210,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             if( mbIsRootDff )
             {
                 //! not-const because GetObjRef may load the OLE object
-                Reference < XClassifiedObject > xObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), UNO_QUERY );
+                Reference < XClassifiedObject > xObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef() );
                 if ( xObj.is() )
                 {
                     SvGlobalName aObjClsId( xObj->getClassID() );

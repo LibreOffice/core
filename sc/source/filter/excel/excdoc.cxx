@@ -48,6 +48,7 @@
 #include <xltools.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <o3tl/safeint.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>

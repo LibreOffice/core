@@ -26,6 +26,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

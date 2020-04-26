@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>

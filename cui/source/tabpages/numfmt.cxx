@@ -41,6 +41,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/flagsdef.hxx>
 #include <vector>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <memory>
 

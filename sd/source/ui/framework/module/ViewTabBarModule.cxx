@@ -22,6 +22,7 @@
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 #include <strings.hrc>
 #include <sdresid.hxx>

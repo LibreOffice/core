@@ -30,7 +30,7 @@
 #include "odbcconfig.hxx"
 #include "optionalboolitem.hxx"
 #include <sqlmessage.hxx>
-
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

@@ -19,7 +19,7 @@
 
 #include <time.h>
 #include <sfx2/sfxbasecontroller.hxx>
-
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>

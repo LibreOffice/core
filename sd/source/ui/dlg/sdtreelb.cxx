@@ -45,6 +45,7 @@
 #include <ViewShellBase.hxx>
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/embedtransfer.hxx>

@@ -20,6 +20,7 @@
 #include <writer/WDatabaseMetaData.hxx>
 #include <writer/WConnection.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 using namespace ::com::sun::star;

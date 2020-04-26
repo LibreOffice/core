@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/errinf.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -344,7 +345,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
         SetNumberFormatsSupplier(xNum);
 
-        uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        uno::Reference<XComponent> xModel(GetModel());
         ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"

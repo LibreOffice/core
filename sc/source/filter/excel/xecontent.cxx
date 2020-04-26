@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>

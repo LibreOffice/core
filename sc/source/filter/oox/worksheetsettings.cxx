@@ -20,6 +20,7 @@
 #include <memory>
 #include <worksheetsettings.hxx>
 
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <oox/core/binarycodec.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>

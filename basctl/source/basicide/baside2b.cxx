@@ -36,6 +36,7 @@
 #include <basic/sbuno.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>

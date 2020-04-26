@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
+#include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/sequence.hxx>

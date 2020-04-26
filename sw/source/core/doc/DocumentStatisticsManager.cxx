@@ -31,6 +31,7 @@
 #include <docufld.hxx>
 #include <docstat.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
 

@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/XCellRange.hpp>

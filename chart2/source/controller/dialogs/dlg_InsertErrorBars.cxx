@@ -27,6 +27,7 @@
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using ::com::sun::star::uno::Reference;

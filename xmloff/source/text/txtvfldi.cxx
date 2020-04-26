@@ -31,6 +31,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

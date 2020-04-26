@@ -27,6 +27,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 
 using namespace ::accessibility;
@@ -168,7 +169,7 @@ OUString
 
         default:
             sName = "UnknownAccessibleOLEShape";
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
+            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape);
             if (xDescriptor.is())
                 sName += ": " + xDescriptor->getShapeType();
     }

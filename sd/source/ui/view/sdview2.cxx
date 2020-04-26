@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/svdoole2.hxx>

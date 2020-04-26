@@ -22,6 +22,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <algorithm>
 #include <map>

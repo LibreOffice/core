@@ -55,6 +55,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include "xltoolbar.hxx"
 #include <oox/ole/vbaproject.hxx>

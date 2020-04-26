@@ -72,6 +72,7 @@
 #include <strings.hrc>
 #include <globstr.hrc>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

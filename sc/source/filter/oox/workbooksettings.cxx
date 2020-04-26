@@ -20,6 +20,7 @@
 #include <workbooksettings.hxx>
 
 #include <com/sun/star/sheet/XCalculatable.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

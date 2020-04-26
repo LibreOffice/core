@@ -23,6 +23,7 @@
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

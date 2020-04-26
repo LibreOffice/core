@@ -18,6 +18,7 @@
  */
 #include "vbasections.hxx"
 #include "vbasection.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include "wordvbahelper.hxx"

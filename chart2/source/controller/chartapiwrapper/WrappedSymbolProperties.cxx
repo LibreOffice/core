@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <vcl/GraphicLoader.hxx>

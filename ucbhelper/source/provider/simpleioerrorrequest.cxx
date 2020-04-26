@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include "simpleioerrorrequest.hxx"
 
 using namespace com::sun::star;

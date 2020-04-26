@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>

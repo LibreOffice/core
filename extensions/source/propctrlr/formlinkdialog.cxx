@@ -38,7 +38,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 namespace pcr
 {

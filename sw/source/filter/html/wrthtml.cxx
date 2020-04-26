@@ -44,6 +44,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <fmthdft.hxx>
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
