@@ -55,7 +55,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
             fSumY += pY[i];
     }
 
-    m_fCorrelationCoeffitient = 0.0;
+    m_fCorrelationCoefficient = 0.0;
 
     if( nMax == 0 )
     {
@@ -79,7 +79,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
                 }
             }
             OSL_ASSERT( fErrorSum >= 0.0 );
-            m_fCorrelationCoeffitient = sqrt( fErrorSum / (nMax - 1 ));
+            m_fCorrelationCoefficient = sqrt( fErrorSum / (nMax - 1 ));
         }
     }
 }
