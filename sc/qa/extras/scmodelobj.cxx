@@ -56,7 +56,7 @@ public:
     // XCalculatable
     CPPUNIT_TEST(testCalculate);
     CPPUNIT_TEST(testCalculateAll);
-    CPPUNIT_TEST(testEnableAutomaticCaclulation);
+    CPPUNIT_TEST(testEnableAutomaticCalculation);
 
     // XConsolidatable
     CPPUNIT_TEST(testCreateConsolidationDescriptor);
