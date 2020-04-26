@@ -3433,9 +3433,13 @@ public:
         }
     }
 
-    virtual void set_column_custom_renderer(int nColumn) override
+    virtual void set_column_custom_renderer(int nColumn, bool bEnable) override
     {
-        m_aCustomRenders.insert(nColumn);
+        assert(n_children() == 0 && "tree must be empty");
+        if (bEnable)
+            m_aCustomRenders.insert(nColumn);
+        else
+            m_aCustomRenders.erase(nColumn);
     }
 
     virtual void show() override

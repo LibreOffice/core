@@ -158,6 +158,9 @@ VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::Tree
 
 // an entry is visible if all parents are expanded
 VCL_DLLPUBLIC bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
+
+// A Parent's Children are turned into Children of the Parent which comes next in hierarchy
+VCL_DLLPUBLIC void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent);
 }
 
 #endif

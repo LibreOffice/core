@@ -123,13 +123,11 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             break;
         case SID_STYLE_NEW_BY_EXAMPLE:
 
-            rTemplateDlg.EnableExample_Impl(
-                GetId(), SfxItemState::DISABLED != eState );
+            rTemplateDlg.EnableExample_Impl(nSID, SfxItemState::DISABLED != eState);
             break;
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            rTemplateDlg.EnableExample_Impl(
-                GetId(), eState != SfxItemState::DISABLED );
+            rTemplateDlg.EnableExample_Impl(nSID, eState != SfxItemState::DISABLED);
             break;
         }
         case SID_STYLE_NEW:
