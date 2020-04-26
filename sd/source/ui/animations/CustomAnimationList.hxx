@@ -30,6 +30,7 @@
 
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
+struct ImplSVEvent;
 class VclBuilder;
 
 namespace sd {

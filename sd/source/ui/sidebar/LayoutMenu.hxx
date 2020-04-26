@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 
 #include <svtools/valueset.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
