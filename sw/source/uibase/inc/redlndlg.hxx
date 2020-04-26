@@ -21,7 +21,7 @@
 #include <swdllapi.h>
 #include "chldwrap.hxx"
 #include <redline.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/lstner.hxx>
 #include <svx/ctredlin.hxx>

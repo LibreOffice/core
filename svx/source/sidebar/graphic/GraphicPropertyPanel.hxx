@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_GRAPHIC_GRAPHICPROPERTYPANEL_HXX
 
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
 namespace svx { namespace sidebar {

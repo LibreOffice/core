@@ -12,7 +12,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/ColorSets.hxx>

@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_INC_GALLERYCONTROL_HXX
 
 #include <config_options.h>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
 class SfxBindings;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
 #include "motionpathtag.hxx"

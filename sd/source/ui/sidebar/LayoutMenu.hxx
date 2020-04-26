@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_LAYOUTMENU_HXX
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 #include <svtools/valueset.hxx>
 #include <vcl/transfer.hxx>

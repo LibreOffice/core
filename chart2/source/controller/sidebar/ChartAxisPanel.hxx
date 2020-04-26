@@ -14,7 +14,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"

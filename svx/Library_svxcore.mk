@@ -272,7 +272,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/properties/connectorproperties \
     svx/source/sdr/properties/e3dcompoundproperties \
     svx/source/sdr/properties/oleproperties \
-    svx/source/sidebar/PanelLayout \
     svx/source/svdraw/clonelist \
     svx/source/svdraw/charthelper \
     svx/source/svdraw/gradtrns \
