@@ -30,6 +30,7 @@ class ScLinkTransferObj;
 class ScDocument;
 class ScDocShell;
 class ScNavigatorDlg;
+struct ImplSVEvent;
 
 enum class ScContentId {
     ROOT, TABLE, RANGENAME, DBAREA,

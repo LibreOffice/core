@@ -37,6 +37,7 @@ class SdrObject;
 class SdrObjList;
 class SdPage;
 class SvTreeListEntry;
+struct ImplSVEvent;
 
 namespace sd {
 class ViewShell;

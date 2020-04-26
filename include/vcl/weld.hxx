@@ -21,7 +21,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/uitest/factory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
@@ -62,9 +62,10 @@ typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
 enum class PointerStyle;
-class SvNumberFormatter;
+class CommandEvent;
 class KeyEvent;
 class MouseEvent;
+class SvNumberFormatter;
 class TransferDataContainer;
 class OutputDevice;
 class VirtualDevice;
@@ -73,6 +74,7 @@ struct SystemEnvData;
 namespace vcl
 {
 class ILibreOfficeKitNotifier;
+typedef OutputDevice RenderContext;
 }
 
 namespace weld
@@ -1138,7 +1140,7 @@ public:
     void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
     // call set_column_custom_renderer after setting custom callbacks
-    virtual void set_column_custom_renderer(int nColumn) = 0;
+    virtual void set_column_custom_renderer(int nColumn, bool bEnable) = 0;
 
     // for dnd
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;

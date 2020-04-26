@@ -9767,19 +9767,29 @@ public:
         gtk_tree_view_column_set_title(pColumn, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    virtual void set_column_custom_renderer(int nColumn) override
+    virtual void set_column_custom_renderer(int nColumn, bool bEnable) override
     {
+        assert(n_children() == 0 && "tree must be empty");
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, nColumn));
         assert(pColumn && "wrong count");
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
-        GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
-        GValue value = G_VALUE_INIT;
-        g_value_init(&value, G_TYPE_POINTER);
-        g_value_set_pointer(&value, static_cast<gpointer>(this));
-        g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
-        gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
-        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
-        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        if (bEnable)
+        {
+            GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+            GValue value = G_VALUE_INIT;
+            g_value_init(&value, G_TYPE_POINTER);
+            g_value_set_pointer(&value, static_cast<gpointer>(this));
+            g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
+            gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        }
+        else
+        {
+            GtkCellRenderer *pRenderer = gtk_cell_renderer_text_new();
+            gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+            gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+        }
     }
 
     virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,

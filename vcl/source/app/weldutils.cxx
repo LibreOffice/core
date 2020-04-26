@@ -105,6 +105,25 @@ void TriStateEnabled::ButtonToggled(weld::ToggleButton& rToggle)
     }
     eState = rToggle.get_state();
 }
+
+void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent)
+{
+    if (rTreeView.iter_has_child(rParent))
+    {
+        std::unique_ptr<weld::TreeIter> xNewParent(rTreeView.make_iterator(&rParent));
+        if (!rTreeView.iter_parent(*xNewParent))
+            xNewParent.reset();
+
+        while (true)
+        {
+            std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator(&rParent));
+            if (!rTreeView.iter_children(*xChild))
+                break;
+            rTreeView.move_subtree(*xChild, xNewParent.get(), -1);
+        }
+    }
+    rTreeView.remove(rParent);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

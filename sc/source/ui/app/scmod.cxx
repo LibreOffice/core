@@ -2253,12 +2253,12 @@ std::unique_ptr<SfxStyleFamilies> ScModule::CreateStyleFamilies()
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScResId(STR_STYLE_FAMILY_CELL),
-                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_CELL),
+                                                    BMP_STYLES_FAMILY_CELL,
                                                     RID_CELLSTYLEFAMILY, SC_MOD()->GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScResId(STR_STYLE_FAMILY_PAGE),
-                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_PAGE),
+                                                    BMP_STYLES_FAMILY_PAGE,
                                                     RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
 
     return pStyleFamilies;

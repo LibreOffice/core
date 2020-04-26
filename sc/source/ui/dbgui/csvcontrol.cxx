@@ -18,6 +18,7 @@
  */
 
 #include <csvcontrol.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 

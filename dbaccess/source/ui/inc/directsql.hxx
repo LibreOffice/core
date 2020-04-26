@@ -35,6 +35,8 @@
 
 #include <svx/weldeditview.hxx>
 
+struct ImplSVEvent;
+
 namespace dbaui
 {
     class SQLEditView : public WeldEditView

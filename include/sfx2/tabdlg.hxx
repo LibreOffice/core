@@ -38,6 +38,8 @@ struct TabPageImpl;
 
 struct TabDlg_Impl;
 
+namespace com::sun::star::frame { class XFrame; }
+
 #define RET_USER        100
 #define RET_USER_CANCEL 101
 
