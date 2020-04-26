@@ -8613,7 +8613,9 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        filter::PDFObjectElement* pPage = aPages[0];
+        size_t nPageIndex = rEmit.m_nPDFPageIndex >= 0 ? rEmit.m_nPDFPageIndex : 0;
+
+        filter::PDFObjectElement* pPage = aPages[nPageIndex];
         if (!pPage)
         {
             SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: no page");
@@ -9205,7 +9207,10 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
+    {
+        rEmit.m_nPDFPageIndex = rGraphic.getVectorGraphicData()->getPageIndex();
         rEmit.m_aPDFData = *pPDFData;
+    }
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetPrefSize();
