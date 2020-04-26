@@ -20,7 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 
 #include <comphelper/configurationlistener.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 class ScFuncDesc;
 namespace formula { class IFunctionDescription; }

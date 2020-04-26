@@ -6451,6 +6451,7 @@ include/sfx2/sidebar/FocusManager.hxx
 include/sfx2/sidebar/IContextChangeReceiver.hxx
 include/sfx2/sidebar/ILayoutableWindow.hxx
 include/sfx2/sidebar/Panel.hxx
+include/sfx2/sidebar/PanelLayout.hxx
 include/sfx2/sidebar/ResourceManager.hxx
 include/sfx2/sidebar/Sidebar.hxx
 include/sfx2/sidebar/SidebarChildWindow.hxx
@@ -6887,7 +6888,6 @@ include/svx/sidebar/AreaTransparencyGradientPopup.hxx
 include/svx/sidebar/ContextChangeEventMultiplexer.hxx
 include/svx/sidebar/LinePropertyPanelBase.hxx
 include/svx/sidebar/LineWidthPopup.hxx
-include/svx/sidebar/PanelLayout.hxx
 include/svx/sidebar/SelectionAnalyzer.hxx
 include/svx/sidebar/SelectionChangeHandler.hxx
 include/svx/sidebar/ValueSetWithTextControl.hxx
@@ -12266,6 +12266,7 @@ sfx2/source/sidebar/MenuButton.cxx
 sfx2/source/sidebar/Paint.cxx
 sfx2/source/sidebar/Panel.cxx
 sfx2/source/sidebar/PanelDescriptor.cxx
+sfx2/source/sidebar/PanelLayout.cxx
 sfx2/source/sidebar/PanelTitleBar.cxx
 sfx2/source/sidebar/ResourceManager.cxx
 sfx2/source/sidebar/Sidebar.cxx
@@ -13718,7 +13719,6 @@ svx/source/sidebar/ContextChangeEventMultiplexer.cxx
 svx/source/sidebar/EmptyPanel.cxx
 svx/source/sidebar/EmptyPanel.hxx
 svx/source/sidebar/PanelFactory.cxx
-svx/source/sidebar/PanelLayout.cxx
 svx/source/sidebar/SelectionAnalyzer.cxx
 svx/source/sidebar/SelectionChangeHandler.cxx
 svx/source/sidebar/area/AreaPropertyPanel.cxx

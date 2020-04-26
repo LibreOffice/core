@@ -23,7 +23,7 @@
 #include <memory>
 #include <svl/intitem.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/itemwin.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/papersizelistbox.hxx>

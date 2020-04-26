@@ -279,6 +279,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/Paint \
     sfx2/source/sidebar/Panel \
     sfx2/source/sidebar/PanelDescriptor \
+    sfx2/source/sidebar/PanelLayout \
     sfx2/source/sidebar/PanelTitleBar \
     sfx2/source/sidebar/ResourceManager \
     sfx2/source/sidebar/TabBar \

@@ -31,7 +31,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
 #include <sfx2/sidebar/Panel.hxx>
