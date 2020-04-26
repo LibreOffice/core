@@ -184,15 +184,15 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
 }
 
-static void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVectorOfProperyValues )
+static void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVectorOfPropertyValues )
 {
-    if (!rPropSet.hasProperty(PROP_CharInteropGrabBag) || aVectorOfProperyValues.empty())
+    if (!rPropSet.hasProperty(PROP_CharInteropGrabBag) || aVectorOfPropertyValues.empty())
         return;
     Sequence<PropertyValue> aGrabBag;
     Any aAnyGrabBag = rPropSet.getAnyProperty(PROP_CharInteropGrabBag);
     aAnyGrabBag >>= aGrabBag;
 
-    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(comphelper::concatSequences(aGrabBag, aVectorOfProperyValues)));
+    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(comphelper::concatSequences(aGrabBag, aVectorOfPropertyValues)));
 }
 
 void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const
