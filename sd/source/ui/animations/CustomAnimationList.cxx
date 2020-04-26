@@ -438,7 +438,7 @@ CustomAnimationList::CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeVi
     mxTreeView->connect_drag_begin(LINK(this, CustomAnimationList, DragBeginHdl));
     mxTreeView->connect_custom_get_size(LINK(this, CustomAnimationList, CustomGetSizeHdl));
     mxTreeView->connect_custom_render(LINK(this, CustomAnimationList, CustomRenderHdl));
-    mxTreeView->set_column_custom_renderer(0);
+    mxTreeView->set_column_custom_renderer(0, true);
 }
 
 CustomAnimationListDropTarget::CustomAnimationListDropTarget(CustomAnimationList& rTreeView)

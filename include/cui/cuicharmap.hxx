@@ -29,6 +29,7 @@
 #include <svx/ucsubset.hxx>
 #include <sfx2/charwin.hxx>
 #include <cui/cuidllapi.h>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
 class SubsetMap;

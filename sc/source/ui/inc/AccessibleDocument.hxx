@@ -33,6 +33,7 @@ class ScTabViewShell;
 class ScAccessibleSpreadsheet;
 class ScChildrenShapes;
 class ScAccessibleEditObject;
+class VclWindowEvent;
 
 namespace utl
 {
