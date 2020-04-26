@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
@@ -465,7 +466,7 @@ void FontNameBox::Fill( const FontList* pList )
 
 void FontNameBox::EnableWYSIWYG()
 {
-    if (mbWYSIWYG)
+    if (mbWYSIWYG || comphelper::LibreOfficeKit::isActive())
         return;
     mbWYSIWYG = true;
 
