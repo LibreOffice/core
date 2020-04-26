@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>

@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>

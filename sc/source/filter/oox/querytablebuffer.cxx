@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>

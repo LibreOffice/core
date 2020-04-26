@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/base64.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

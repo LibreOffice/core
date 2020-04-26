@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>

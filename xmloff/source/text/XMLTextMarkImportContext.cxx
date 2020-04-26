@@ -30,6 +30,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/odffields.hxx>
 #include <xmloff/xmlement.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextContent.hpp>

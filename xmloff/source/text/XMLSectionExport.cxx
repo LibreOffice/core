@@ -22,8 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

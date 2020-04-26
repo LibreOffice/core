@@ -21,6 +21,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 
 using namespace ::ooo::vba;

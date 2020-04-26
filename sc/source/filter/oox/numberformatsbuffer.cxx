@@ -21,6 +21,7 @@
 #include <biffhelper.hxx>
 
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

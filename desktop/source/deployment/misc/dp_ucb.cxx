@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/content.hxx>
 #include <xmlscript/xml_helper.hxx>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>

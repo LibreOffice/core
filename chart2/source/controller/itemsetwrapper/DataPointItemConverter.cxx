@@ -37,7 +37,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <svx/xflclit.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>

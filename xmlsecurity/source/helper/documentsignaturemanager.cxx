@@ -34,6 +34,7 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>

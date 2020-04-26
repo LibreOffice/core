@@ -35,7 +35,7 @@
 
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <sax/tools/converter.hxx>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>

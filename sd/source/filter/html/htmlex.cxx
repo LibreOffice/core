@@ -20,6 +20,7 @@
 #include "htmlex.hxx"
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <sal/log.hxx>

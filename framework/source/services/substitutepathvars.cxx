@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 #include <unordered_map>

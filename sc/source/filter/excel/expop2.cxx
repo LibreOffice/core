@@ -37,6 +37,7 @@
 #include <officecfg/Office/Calc.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace com::sun::star::document { class XDocumentProperties; }
 

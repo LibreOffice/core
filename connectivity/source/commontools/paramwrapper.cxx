@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <tools/diagnose_ex.h>

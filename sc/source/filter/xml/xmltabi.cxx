@@ -43,6 +43,7 @@
 
 #include <tools/urlobj.hxx>
 #include <sax/fastattribs.hxx>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;

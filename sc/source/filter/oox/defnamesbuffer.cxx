@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/binaryinputstream.hxx>

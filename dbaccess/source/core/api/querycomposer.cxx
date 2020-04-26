@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>

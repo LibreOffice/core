@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <osl/diagnose.h>

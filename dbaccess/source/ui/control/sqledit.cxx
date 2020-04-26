@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <sqledit.hxx>
 #include <QueryTextView.hxx>

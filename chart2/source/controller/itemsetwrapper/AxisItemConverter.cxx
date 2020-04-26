@@ -37,6 +37,7 @@
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

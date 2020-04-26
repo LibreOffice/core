@@ -29,6 +29,7 @@
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

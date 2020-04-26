@@ -19,6 +19,7 @@
 
 #include <drawingml/textrun.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

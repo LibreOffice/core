@@ -19,6 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <iconview.hxx>

@@ -19,6 +19,8 @@
 
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <AxisHelper.hxx>
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"

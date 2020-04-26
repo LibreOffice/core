@@ -29,7 +29,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>

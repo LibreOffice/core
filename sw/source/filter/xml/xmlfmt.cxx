@@ -43,6 +43,7 @@
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "xmlimp.hxx"
 #include <cellatr.hxx>

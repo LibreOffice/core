@@ -19,6 +19,7 @@
 
 #include <oox/dump/pptxdumper.hxx>
 
+#include <com/sun/star/io/XInputStream.hpp>
 #include <oox/dump/oledumper.hxx>
 #include <oox/dump/xlsbdumper.hxx>
 #include <oox/helper/zipstorage.hxx>

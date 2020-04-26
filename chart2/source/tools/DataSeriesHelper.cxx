@@ -29,6 +29,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

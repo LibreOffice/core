@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>

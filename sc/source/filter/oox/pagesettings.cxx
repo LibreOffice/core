@@ -24,7 +24,9 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>

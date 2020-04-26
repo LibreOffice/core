@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -10,6 +10,7 @@
 #include "EPUBPackage.hxx"
 
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

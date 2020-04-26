@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>

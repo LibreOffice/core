@@ -24,6 +24,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>

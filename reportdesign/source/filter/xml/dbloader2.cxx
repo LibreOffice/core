@@ -24,6 +24,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 
 namespace rptxml
 {

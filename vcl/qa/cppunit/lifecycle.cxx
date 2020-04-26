@@ -20,6 +20,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 class LifecycleTest : public test::BootstrapFixture

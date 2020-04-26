@@ -26,6 +26,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/extract.hxx>
 #include <tools/diagnose_ex.h>
 #include "strings.hxx"

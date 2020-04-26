@@ -19,6 +19,7 @@
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
 #include <swtable.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <unoparagraph.hxx>

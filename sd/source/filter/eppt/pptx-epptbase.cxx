@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/style/XStyle.hpp>

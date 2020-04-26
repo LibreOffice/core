@@ -26,6 +26,7 @@
 #include "PagePropertySetContext.hxx"
 #include "PageHeaderFooterContext.hxx"
 #include <PageMasterStyleMap.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 

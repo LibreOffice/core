@@ -20,6 +20,7 @@
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <tools/color.hxx>

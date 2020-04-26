@@ -31,6 +31,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
@@ -881,7 +882,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
         m_xMoreDictsLink->hide();
 
     xProp = LinguMgr::GetLinguPropertySet();
-    xDicList.set( LinguMgr::GetDictionaryList(), UNO_QUERY );
+    xDicList.set( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
     {
         // keep references to all **currently** available dictionaries,

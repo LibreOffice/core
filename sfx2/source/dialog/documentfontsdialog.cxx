@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;

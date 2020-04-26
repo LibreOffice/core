@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>

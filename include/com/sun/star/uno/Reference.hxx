@@ -135,7 +135,9 @@ inline Reference< interface_type >::Reference( Reference< interface_type > && rR
 template< class interface_type > template< class derived_type >
 inline Reference< interface_type >::Reference(
     const Reference< derived_type > & rRef,
-    typename detail::UpCast< interface_type, derived_type >::t )
+    std::enable_if_t<
+        std::is_base_of_v<interface_type, derived_type>
+        && !std::is_same_v<interface_type, XInterface>, void *>)
 {
     interface_type * p = rRef.get();
     _pInterface = p;

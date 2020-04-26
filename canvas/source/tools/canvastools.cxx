@@ -34,6 +34,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>

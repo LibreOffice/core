@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>

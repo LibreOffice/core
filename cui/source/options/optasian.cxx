@@ -25,6 +25,7 @@
 #include <o3tl/any.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/asiancfg.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>

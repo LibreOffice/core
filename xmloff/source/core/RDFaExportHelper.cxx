@@ -27,6 +27,7 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/rdf/Statement.hpp>

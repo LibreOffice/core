@@ -30,6 +30,7 @@
 
 #include <algorithm>
 
+#include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

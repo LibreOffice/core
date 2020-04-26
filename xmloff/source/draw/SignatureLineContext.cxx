@@ -11,6 +11,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

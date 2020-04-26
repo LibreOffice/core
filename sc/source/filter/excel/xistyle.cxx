@@ -73,6 +73,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using ::std::vector;
 using namespace ::com::sun::star;

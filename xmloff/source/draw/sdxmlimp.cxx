@@ -33,6 +33,7 @@
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

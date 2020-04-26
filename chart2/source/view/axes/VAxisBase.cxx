@@ -23,6 +23,7 @@
 #include "Tickmarks.hxx"
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

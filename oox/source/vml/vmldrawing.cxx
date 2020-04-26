@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -145,7 +146,7 @@ void Drawing::finalizeFragmentImport()
 
 void Drawing::convertAndInsert() const
 {
-    Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );
+    Reference< XShapes > xShapes( mxDrawPage );
     mxShapes->convertAndInsert( xShapes );
 
     // Group together form control radio buttons that are in the same groupBox

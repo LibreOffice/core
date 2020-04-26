@@ -26,6 +26,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/ProgressBarHelper.hxx>

@@ -25,6 +25,7 @@
 #include "BarPositionHelper.hxx"
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 

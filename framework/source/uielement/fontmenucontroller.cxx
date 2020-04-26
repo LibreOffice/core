@@ -23,6 +23,7 @@
 
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>

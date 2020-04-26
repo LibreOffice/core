@@ -34,6 +34,7 @@
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

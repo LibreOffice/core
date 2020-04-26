@@ -26,6 +26,9 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/filterbase.hxx>

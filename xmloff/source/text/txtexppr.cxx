@@ -21,6 +21,7 @@
 
 #include "txtexppr.hxx"
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

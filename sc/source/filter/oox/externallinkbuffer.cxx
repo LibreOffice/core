@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XDDELinks.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

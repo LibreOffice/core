@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
 
 // Includes for string resources.

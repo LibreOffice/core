@@ -49,6 +49,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
 

@@ -42,6 +42,7 @@
 #include <signal.h>
 
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 
 #include <global.hxx>

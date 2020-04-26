@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

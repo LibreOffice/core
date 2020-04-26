@@ -18,7 +18,9 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <oox/ppt/timenode.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
@@ -129,7 +131,7 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 
-    Reference< XShapes > xShapes( getPage(), UNO_QUERY );
+    Reference< XShapes > xShapes( getPage() );
 
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
     for (auto const& shape : rShapes)

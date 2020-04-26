@@ -22,6 +22,7 @@
 #include "register.hxx"
 #include <smdll.hxx>
 #include <document.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

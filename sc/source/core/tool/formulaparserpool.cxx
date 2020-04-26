@@ -19,6 +19,7 @@
 
 #include <formulaparserpool.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>

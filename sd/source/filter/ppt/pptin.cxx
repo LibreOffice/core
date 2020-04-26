@@ -83,7 +83,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 

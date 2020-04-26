@@ -22,7 +22,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/flagguard.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>

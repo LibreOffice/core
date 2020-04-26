@@ -20,6 +20,7 @@
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>

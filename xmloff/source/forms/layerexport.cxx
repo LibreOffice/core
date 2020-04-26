@@ -32,6 +32,7 @@
 #include "controlpropertymap.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <linguistic/misc.hxx>
 #include <rtl/ustring.hxx>
@@ -214,7 +215,7 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
     std::vector< LanguageType > aHyphAvailLang;
     std::vector< LanguageType > aThesAvailLang;
     Sequence< sal_Int16 > aSpellUsedLang;
-    Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
+    Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr() );
     if (xAvail.is())
     {
         Sequence< css::lang::Locale > aTmp;

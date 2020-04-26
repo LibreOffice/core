@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <sfx2/viewfrm.hxx>

@@ -35,6 +35,7 @@
 #include <vcl/EnumContext.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
 
 #include <map>

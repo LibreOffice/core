@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>

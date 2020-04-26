@@ -25,7 +25,7 @@
 #include <sot/storage.hxx>
 #include <comphelper/fileformat.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/embed/XStorage.hpp>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objsh.hxx>

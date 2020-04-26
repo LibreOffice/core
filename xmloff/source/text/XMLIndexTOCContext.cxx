@@ -18,6 +18,7 @@
  */
 
 #include "XMLIndexTOCContext.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>

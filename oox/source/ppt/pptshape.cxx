@@ -23,7 +23,9 @@
 #include <drawingml/table/tableproperties.hxx>
 
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>

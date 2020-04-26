@@ -31,6 +31,7 @@
 #include <sdpage.hxx>
 #include <FrameView.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

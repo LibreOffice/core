@@ -20,6 +20,7 @@
 #include <ChartViewHelper.hxx>
 #include <servicenames.hxx>
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

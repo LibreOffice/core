@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>

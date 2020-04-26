@@ -33,6 +33,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>

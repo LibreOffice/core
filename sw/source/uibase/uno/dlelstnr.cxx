@@ -20,6 +20,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
+#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
 #include <unotools/lingucfg.hxx>

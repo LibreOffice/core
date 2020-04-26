@@ -47,6 +47,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/report/XShape.hpp>
@@ -1098,7 +1099,7 @@ void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoS
 static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
 {
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource;
-    uno::Reference< embed::XComponentSupplier > xCompSupp(_xObj,uno::UNO_QUERY);
+    uno::Reference< embed::XComponentSupplier > xCompSupp(_xObj);
     if( xCompSupp.is())
     {
         uno::Reference< chart2::XChartDocument> xChartDoc( xCompSupp->getComponent(), uno::UNO_QUERY );
@@ -1142,7 +1143,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
         uno::Reference< chart2::data::XDataReceiver > xReceiver;
-        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj );
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
         OSL_ASSERT( xReceiver.is());
@@ -1168,7 +1169,7 @@ void OOle2Obj::initializeOle()
     OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
     rRptModel.GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
-    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj );
     if( xCompSupp.is() )
     {
         uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
@@ -1182,7 +1183,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
     uno::Reference< chart2::data::XDataReceiver > xReceiver;
-    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj );
     if( xCompSupp.is())
         xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
     OSL_ASSERT( xReceiver.is());

@@ -34,6 +34,7 @@
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/Language.hpp>
 
@@ -183,7 +184,7 @@ OUString getLabelName(const Reference< css::beans::XPropertySet>& xControlModel)
 
 CursorWrapper::CursorWrapper(const Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned)
 {
-    ImplConstruct(Reference< css::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
+    ImplConstruct(Reference< css::sdbc::XResultSet>(_rxCursor), bUseCloned);
 }
 
 
@@ -225,7 +226,7 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
 
 CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
 {
-    m_xMoveOperations.set(_rxCursor, UNO_QUERY);
+    m_xMoveOperations.set(_rxCursor);
     m_xBookmarkOperations.set(_rxCursor, UNO_QUERY);
     m_xColumnsSupplier.set(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())

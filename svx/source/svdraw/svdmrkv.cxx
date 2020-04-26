@@ -56,6 +56,7 @@
 
 #include <array>
 
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <boost/property_tree/json_parser.hpp>

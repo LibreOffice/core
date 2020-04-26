@@ -19,6 +19,7 @@
 
 #include "SchXMLCalculationSettingsContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <sax/tools/converter.hxx>

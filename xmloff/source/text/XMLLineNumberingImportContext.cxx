@@ -20,6 +20,7 @@
 #include <XMLLineNumberingImportContext.hxx>
 #include "XMLLineNumberingSeparatorImportContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>

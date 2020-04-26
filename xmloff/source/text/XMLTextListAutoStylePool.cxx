@@ -21,6 +21,7 @@
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

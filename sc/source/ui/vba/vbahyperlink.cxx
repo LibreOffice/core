@@ -24,6 +24,7 @@
 #include <vbahelper/helperdecl.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>

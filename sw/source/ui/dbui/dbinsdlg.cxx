@@ -23,6 +23,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/frame/XModel.hpp>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
