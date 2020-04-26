@@ -197,6 +197,24 @@
     },
     {
       "key": {
+        "uuid": "ff492ab0_01a651f7",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-26T20:39:29Z",
+      "side": 1,
+      "message": "(see \u003chttps://gerrit.libreoffice.org/c/core/+/92950\u003e \"Make upcasting css::uno::Reference ctor require complete types\")",
+      "parentUuid": "e66258fe_c2c6368e",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7883587c_69981bed",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2

@@ -22,6 +22,30 @@
       "revId": "b95ead7b2a39bf52e2293d7e8094b9520af74ade",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad2ece8_7502cf1b",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-26T20:39:29Z",
+      "side": 1,
+      "message": "derived_type could not be determined by the compiler then, and would always need to be explicitly specified",
+      "parentUuid": "5a97e3c5_3c36d53c",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 84
+      },
+      "revId": "b95ead7b2a39bf52e2293d7e8094b9520af74ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
