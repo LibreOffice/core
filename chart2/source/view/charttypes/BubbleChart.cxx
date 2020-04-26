@@ -108,9 +108,9 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
     double fMaxSize = m_fMaxLogicBubbleSize;
 
     double fMaxRadius = sqrt( fMaxSize / F_PI );
-    double fRaduis = sqrt( fLogicSize / F_PI );
+    double fRadius = sqrt( fLogicSize / F_PI );
 
-    aRet.DirectionX = m_fBubbleSizeFactorToScreen * fRaduis / fMaxRadius;
+    aRet.DirectionX = m_fBubbleSizeFactorToScreen * fRadius / fMaxRadius;
     aRet.DirectionY = aRet.DirectionX;
 
     return aRet;
