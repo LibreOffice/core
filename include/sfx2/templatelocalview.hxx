@@ -12,6 +12,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/templateproperties.hxx>
+#include <vcl/menu.hxx>
 #include <functional>
 #include <memory>
 #include <set>

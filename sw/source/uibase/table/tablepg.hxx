@@ -25,6 +25,7 @@
 
 class SwWrtShell;
 class SwTableRep;
+struct ImplSVEvent;
 
 struct TColumn
 {

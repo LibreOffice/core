@@ -88,10 +88,6 @@
 
 #define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
 
-#define RID_SFXBMP_WATERCAN                 "res/sc05554.png"
-#define RID_SFXBMP_NEW_BY_EXAMPLE           "res/sc05555.png"
-#define RID_SFXBMP_UPDATE_BY_EXAMPLE        "res/sc05556.png"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

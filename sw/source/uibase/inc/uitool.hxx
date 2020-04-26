@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 
 #include <vcl/weld.hxx>
+#include <vcl/menu.hxx>
 #include <swtypes.hxx>
 #include <swdllapi.h>
 
