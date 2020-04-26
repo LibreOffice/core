@@ -22,7 +22,7 @@ using namespace com::sun::star::uno;
 
 namespace apitest
 {
-void XCalculatable::testEnableAutomaticCaclulation()
+void XCalculatable::testEnableAutomaticCalculation()
 {
     uno::Reference<sheet::XCalculatable> xCalculatable(init(), UNO_QUERY_THROW);
 

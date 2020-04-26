@@ -27,7 +27,7 @@ public:
 
     void testCalculate();
     void testCalculateAll();
-    void testEnableAutomaticCaclulation();
+    void testEnableAutomaticCalculation();
 
 protected:
     ~XCalculatable() {}
