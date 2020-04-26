@@ -1129,8 +1129,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         // minimum width in pixel
         const long nMinLOKWinWidth = static_cast<long>(1.3 * STD_COL_WIDTH * pViewData->GetPPTX());
-        if (comphelper::LibreOfficeKit::isActive() && nSizeX < nMinLOKWinWidth)
+        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+        if (bLOKActive && nSizeX < nMinLOKWinWidth)
             nSizeX = nMinLOKWinWidth;
+
+        if (bLOKActive && aStrings.size() < SC_FILTERLISTBOX_LINES)
+            nHeight = nHeight * (aStrings.size() + 1) / SC_FILTERLISTBOX_LINES;
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
         Size aSize( nSizeX, nHeight );
