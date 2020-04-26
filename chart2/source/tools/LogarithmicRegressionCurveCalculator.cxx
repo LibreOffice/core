@@ -55,7 +55,7 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
     {
         ::rtl::math::setNan( & m_fSlope );
         ::rtl::math::setNan( & m_fIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+        ::rtl::math::setNan( & m_fCorrelationCoefficient );
         return;
     }
 
@@ -84,7 +84,7 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
 
     m_fSlope = fQxy / fQx;
     m_fIntercept = fAverageY - m_fSlope * fAverageX;
-    m_fCorrelationCoeffitient = fQxy / sqrt( fQx * fQy );
+    m_fCorrelationCoefficient = fQxy / sqrt( fQx * fQy );
 }
 
 double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )

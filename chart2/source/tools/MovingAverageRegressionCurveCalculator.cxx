@@ -40,7 +40,7 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
 {
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+    ::rtl::math::setNan( & m_fCorrelationCoefficient );
 
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup(
