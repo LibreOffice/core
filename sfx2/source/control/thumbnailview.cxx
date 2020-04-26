@@ -263,7 +263,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     float nScrollRatio;
     if( bScrollBarUsed && mpScrBar )
         nScrollRatio = static_cast<float>(mpScrBar->GetThumbPos()) /
-                        static_cast<float>(mpScrBar->GetRangeMax()-2);
+                        static_cast<float>(mpScrBar->GetRangeMax() - mpScrBar->GetVisibleSize());
     else
         nScrollRatio = 0;
 
@@ -296,11 +296,10 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     mbHasVisibleItems = true;
 
+    long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
+
     long nItemHeightOffset = mnItemHeight + nVItemSpace;
-    long nHiddenLines = (static_cast<long>(
-        ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio ) -
-        nVItemSpace ) /
-        nItemHeightOffset;
+    long nHiddenLines = static_cast<long>((nFullSteps - 1) * nScrollRatio);
 
     // calculate offsets
     long nStartX = nHItemSpace;
@@ -308,8 +307,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     // calculate and draw items
     long x = nStartX;
-    long y = nStartY - ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio +
-        nHiddenLines * nItemHeightOffset;
+    long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
 
     // draw items
     // Unless we are scrolling (via scrollbar) we just use the precalculated
@@ -387,8 +385,8 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         Size aSize( nScrBarWidth, aWinSize.Height() );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
-        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*gnFineness/mnCols);
-        mpScrBar->SetVisibleSize( mnVisLines );
+        mpScrBar->SetRangeMax(mnLines * gnFineness);
+        mpScrBar->SetVisibleSize(mnVisLines * gnFineness);
         if (!bScrollBarUsed)
             mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*gnFineness );
         long nPageSize = mnVisLines;
