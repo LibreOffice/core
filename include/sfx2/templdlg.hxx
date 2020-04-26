@@ -36,7 +36,6 @@ public:
     virtual void dispose() override;
 
     virtual void Resize() override;
-    virtual void StateChanged( StateChangedType nStateChange ) override;
 
 private:
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;

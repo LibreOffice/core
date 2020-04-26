@@ -414,25 +414,6 @@ void SfxTemplatePanelControl::Resize()
     Window::Resize();
 }
 
-void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
-{
-    if (nStateChange == StateChangedType::InitShow)
-    {
-        SfxViewFrame* pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
-        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
-
-        Size aSize = pEditWin->GetSizePixel();
-        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
-        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
-        Size aWinSize = GetSizePixel();
-        aPoint.AdjustX(aSize.Width() - aWinSize.Width() - 20 );
-        aPoint.AdjustY(aSize.Height() / 2 - aWinSize.Height() / 2 );
-        // SetFloatingPos( aPoint );
-    }
-
-    Window::StateChanged( nStateChange );
-}
-
 void StyleTreeListBox_Impl::MakeExpanded_Impl(std::vector<OUString>& rEntries) const
 {
     SvTreeListEntry* pEntry;
