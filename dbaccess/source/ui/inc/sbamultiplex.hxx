@@ -131,13 +131,13 @@ namespace dbaui
     }                                                                                       \
 
     // helper for classes which do event multiplexing
-    #define IMPLEMENT_LISTENER_ADMINISTRATION(classname, listenernamespace, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define IMPLEMENT_LISTENER_ADMINISTRATION(classname, listenernamespace, listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     void SAL_CALL classname::add##listenerdesc(const css::uno::Reference< css::listenernamespace::X##listenerdesc >& l)\
     {                                                                                       \
         multiplexer.addInterface(l);                                                            \
         if (multiplexer.getLength() == 1)                                                   \
         {                                                                                   \
-            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->add##listenerdesc(&multiplexer);                              \
         }                                                                                   \
@@ -146,25 +146,25 @@ namespace dbaui
     {                                                                                       \
         if (multiplexer.getLength() == 1)                                                   \
         {                                                                                   \
-            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->remove##listenerdesc(&multiplexer);                           \
         }                                                                                   \
         multiplexer.removeInterface(l);                                                     \
     }                                                                                       \
 
-    #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                            \
     {                                                                                   \
-        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                          \
             xBroadcaster->remove##listenerdesc(&multiplexer);                           \
     }                                                                                   \
 
-    #define START_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define START_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                        \
     {                                                                                   \
-        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                          \
             xBroadcaster->add##listenerdesc(&multiplexer);                              \
     }                                                                                   \
@@ -286,13 +286,13 @@ namespace dbaui
     }                                                                                       \
 
     // helper for classes which do property event multiplexing
-    #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     void SAL_CALL classname::add##listenerdesc(const OUString& rName, const css::uno::Reference< css::beans::X##listenerdesc >& l )\
     {                                                                                       \
         multiplexer.addInterface(rName, l);                                                 \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
-            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                           \
         }                                                                                   \
@@ -301,25 +301,25 @@ namespace dbaui
     {                                                                                       \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
-            css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+            css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
                 xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                        \
         }                                                                                   \
         multiplexer.removeInterface(rName, l);                                              \
     }                                                                                       \
 
-    #define STOP_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define STOP_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getOverallLen())                                                        \
     {                                                                                       \
-        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
             xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                            \
     }                                                                                       \
 
-    #define START_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
+    #define START_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, broadcasterclass, broadcaster) \
     if (multiplexer.getOverallLen())                                                        \
     {                                                                                       \
-        css::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
+        css::uno::Reference< broadcasterclass > xBroadcaster(broadcaster, css::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
             xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                               \
     }                                                                                       \
