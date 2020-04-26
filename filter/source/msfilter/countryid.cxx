@@ -121,7 +121,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_GERMANY,              LANGUAGE_SORBIAN,                       false   },
     { COUNTRY_PERU,                 LANGUAGE_SPANISH_PERU,                  true    },
     { COUNTRY_MEXICO,               LANGUAGE_SPANISH_MEXICAN,               true    },
-    { COUNTRY_ARGENTINIA,           LANGUAGE_SPANISH_ARGENTINA,             true    },
+    { COUNTRY_ARGENTINA,            LANGUAGE_SPANISH_ARGENTINA,             true    },
     { COUNTRY_BRAZIL,               LANGUAGE_PORTUGUESE_BRAZILIAN,          true    },
     { COUNTRY_CHILE,                LANGUAGE_SPANISH_CHILE,                 true    },
     { COUNTRY_COLOMBIA,             LANGUAGE_SPANISH_COLOMBIA,              true    },
