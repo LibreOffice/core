@@ -525,7 +525,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime&
 }
 
 
-// void OPreaparedStatement::set
+// void OPreparedStatement::set
 void OPreparedStatement::openBlobForWriting(isc_blob_handle& rBlobHandle, ISC_QUAD& rBlobId)
 {
     ISC_STATUS aErr;

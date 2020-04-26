@@ -220,7 +220,7 @@ namespace svt { namespace table
         /// shows a tracking rectangle
         virtual void    showTracking( tools::Rectangle const & i_location, ShowTrackFlags const i_flags ) = 0;
 
-        /// hides a prviously shown tracking rectangle
+        /// hides a previously shown tracking rectangle
         virtual void    hideTracking() = 0;
 
         /// does a hit test for the given pixel coordinates

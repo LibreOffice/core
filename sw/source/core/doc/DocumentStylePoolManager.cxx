@@ -360,14 +360,14 @@ static const char* STR_POOLCOLL_EXTRA_ARY[]
     STR_POOLCOLL_HEADER,
     STR_POOLCOLL_HEADERL,
     STR_POOLCOLL_HEADERR,
-    // Subcategroy Footer
+    // Subcategory Footer
     STR_POOLCOLL_FOOTER,
     STR_POOLCOLL_FOOTERL,
     STR_POOLCOLL_FOOTERR,
-    // Subcategroy Table
+    // Subcategory Table
     STR_POOLCOLL_TABLE,
     STR_POOLCOLL_TABLE_HDLN,
-    // Subcategroy Labels
+    // Subcategory Labels
     STR_POOLCOLL_LABEL,
     STR_POOLCOLL_LABEL_ABB,
     STR_POOLCOLL_LABEL_TABLE,
