@@ -26,12 +26,10 @@ class SfxTemplateControllerItem;
 #include <array>
 #include <memory>
 
-#include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/treelistbox.hxx>
 #include <svl/eitem.hxx>
 
 #include <svl/style.hxx>
@@ -55,95 +53,48 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XModuleManager2;
 }}}}
 
-class DropListBox_Impl : public SvTreeListBox
+class DropListBox_Impl
 {
-private:
-    DECL_LINK(OnAsyncExecuteDrop, void *, void);
-
 protected:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
     SfxCommonTemplateDialog_Impl* pDialog;
     sal_uInt16 nModifier;
 
 public:
-    DropListBox_Impl(vcl::Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD)
-        : SvTreeListBox(pParent, nWinBits)
+    DropListBox_Impl(std::unique_ptr<weld::TreeView> xTreeView, SfxCommonTemplateDialog_Impl* pD)
+        : m_xTreeView(std::move(xTreeView))
         , pDialog(pD)
         , nModifier(0)
     {
-        SetHighlightRange();
     }
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt) override;
-    using SvTreeListBox::ExecuteDrop;
-    virtual sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt) override;
+    void set_visible(bool bShow) { m_xTreeView->set_visible(bShow); }
+    void set_selection_mode(SelectionMode eMode) { m_xTreeView->set_selection_mode(eMode); }
+    int count_selected_rows() const { return m_xTreeView->count_selected_rows(); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
+    void unselect_all() { m_xTreeView->unselect_all(); }
+    void freeze() { m_xTreeView->freeze(); }
+    void clear() { m_xTreeView->clear(); }
+    void thaw() { m_xTreeView->thaw(); }
+    virtual std::unique_ptr<weld::TreeIter> make_iterator() const { return m_xTreeView->make_iterator(); }
+    void scroll_to_row(const weld::TreeIter& rIter) { m_xTreeView->scroll_to_row(rIter); }
+    bool is_selected(const weld::TreeIter& rIter) const { return m_xTreeView->is_selected(rIter); }
+    bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
+    void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
+    OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
+    OUString get_selected_text() const { return m_xTreeView->get_selected_text(); }
+    bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
+    void append_text(const OUString& rStr) { m_xTreeView->append_text(rStr); }
 
     sal_uInt16 GetModifier() const
     {
         return nModifier;
     }
 
-    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
-    virtual void RequestHelp(const HelpEvent& rHEvt) override;
-};
-
-
-/** TreeListBox class for displaying the hierarchical view of the templates
-*/
-class StyleTreeListBox_Impl : public DropListBox_Impl
-{
-private:
-    SvTreeListEntry* pCurEntry;
-    Link<LinkParamNone*,void> aDoubleClickLink;
-    Link<StyleTreeListBox_Impl&,bool> aDropLink;
-    OUString  aParent;
-    OUString  aStyle;
-
-protected:
-    virtual bool EventNotify(NotifyEvent& rNEvt) override;
-    virtual bool DoubleClickHdl() override;
-    virtual bool ExpandingHdl() override;
-    virtual void ExpandedHdl() override;
-    virtual TriState NotifyMoving(
-                SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
-                SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos) override;
-public:
-    StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle);
-
-    void Recalc();
-
-    void SetDoubleClickHdl(const Link<LinkParamNone*,void> &rLink)
+    virtual ~DropListBox_Impl()
     {
-        aDoubleClickLink = rLink;
     }
-    void SetDropHdl(const Link<StyleTreeListBox_Impl&,bool> &rLink)
-    {
-        aDropLink = rLink;
-    }
-
-    using SvTreeListBox::GetParent;
-
-    const OUString& GetParent() const
-    {
-        return aParent;
-    }
-    const OUString& GetStyle() const
-    {
-        return aStyle;
-    }
-    void MakeExpanded_Impl(std::vector<OUString>& rEntries) const;
-
-    virtual VclPtr<PopupMenu> CreateContextMenu() override;
-};
-
-class SfxActionListBox : public DropListBox_Impl
-{
-protected:
-public:
-    SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
-
-    virtual VclPtr<PopupMenu> CreateContextMenu() override;
-    void Recalc();
 };
 
 enum class StyleFlags {
@@ -152,6 +103,8 @@ enum class StyleFlags {
 namespace o3tl {
     template<> struct typed_flags<StyleFlags> : is_typed_flags<StyleFlags, 3> {};
 }
+
+class TreeViewDropTarget;
 
 class SfxCommonTemplateDialog_Impl : public SfxListener
 {
@@ -176,8 +129,8 @@ protected:
     std::array<std::unique_ptr<SfxTemplateControllerItem>, COUNT_BOUND_FUNC> pBoundItems;
 
     VclPtr<vcl::Window> pWindow;
-    std::unique_ptr<VclBuilder> mxBuilder;
-    VclPtr<PopupMenu> mxMenu;
+    std::unique_ptr<weld::Builder> mxMenuBuilder;
+    std::unique_ptr<weld::Menu> mxMenu;
     OString sLastItemIdent;
     SfxModule* pModule;
     std::unique_ptr<Idle> pIdle;
@@ -189,10 +142,12 @@ protected:
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
-    VclPtr<SfxActionListBox> aFmtLb;
-    VclPtr<StyleTreeListBox_Impl> pTreeBox;
-    VclPtr<CheckBox> aPreviewCheckbox;
-    VclPtr<ListBox> aFilterLb;
+    std::unique_ptr<weld::TreeView> mxFmtLb;
+    std::unique_ptr<weld::TreeView> mxTreeBox;
+    std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxFilterLb;
+    std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
+    std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
@@ -211,32 +166,40 @@ protected:
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
     bool bTreeDrag :1;
+    bool bAllowReParentDrop:1;
     bool bHierarchical :1;
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
+    bool m_bNewHasMenu : 1;
 
-    DECL_LINK( FilterSelectHdl, ListBox&, void );
-    DECL_LINK( FmtSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( ApplyHdl, LinkParamNone*, void );
-    DECL_LINK( TreeListApplyHdl, SvTreeListBox*, bool );
-    DECL_LINK( DropHdl, StyleTreeListBox_Impl&, bool );
-    DECL_LINK( TimeOut, Timer*, void );
-    DECL_LINK( PreviewHdl, Button*, void);
+    void FmtSelect(weld::TreeView* pTreeView);
 
-    virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
+    DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
+    DECL_LINK(FmtSelectHdl, weld::TreeView&, void);
+    DECL_LINK(TreeListApplyHdl, weld::TreeView&, bool);
+    DECL_LINK(TimeOut, Timer*, void );
+    DECL_LINK(PreviewHdl, weld::Button&, void);
+    DECL_LINK(PopupFlatMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(PopupTreeMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_LINK(OnAsyncExecuteDrop, void *, void);
+    DECL_LINK(DragBeginHdl, bool&, bool);
+
+    void DropHdl(const OUString& rStyle, const OUString& rParent);
+
+    virtual void EnableItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
     {}
-    virtual void CheckItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
+    virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true)
     {}
-    virtual bool IsCheckedItem(sal_uInt16 /*nMesId*/ )
+    virtual bool IsCheckedItem(const OString& /*rMesId*/ )
     {
         return true;
     }
-    virtual void LoadedFamilies()
-    {}
 
     void InvalidateBindings();
-    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem& rItem ) = 0;
-    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) = 0;
+    virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) = 0;
+    virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) = 0;
     virtual void ClearFamilyList() = 0;
     virtual void ReplaceUpdateButtonByMenu();
 
@@ -280,7 +243,7 @@ protected:
 
     void FamilySelect( sal_uInt16 nId, bool bPreviewRefresh = false );
     void SetFamily(SfxStyleFamily nFamily);
-    void ActionSelect( sal_uInt16 nId );
+    void ActionSelect(const OString& rId);
 
     sal_Int32 LoadFactoryStyleFilter( SfxObjectShell const * i_pObjSh );
     void SaveFactoryStyleFilter( SfxObjectShell const * i_pObjSh, sal_Int32 i_nFilter );
@@ -288,10 +251,10 @@ protected:
 
 public:
 
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* );
+    SfxCommonTemplateDialog_Impl(SfxBindings* pB, vcl::Window*, weld::Builder* pBuilder);
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
-    DECL_LINK( MenuSelectHdl, Menu*, bool );
+    void MenuSelect(const OString& rIdent);
     DECL_LINK( MenuSelectAsyncHdl, void*, void );
 
     virtual void EnableEdit( bool b )
@@ -335,55 +298,50 @@ public:
         return pCurObjShell;
     }
 
-    // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    VclPtr<PopupMenu> const & CreateContextMenu();
+    sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
+    sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
+
+    void CreateContextMenu();
 };
 
-class DropToolBox_Impl : public ToolBox, public DropTargetHelper
-{
-    SfxTemplateDialog_Impl&     rParent;
-protected:
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
-public:
-    DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
-};
+class ToolbarDropTarget;
+class DropTargetHelper;
 
 class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
 {
 private:
     friend class SfxTemplateControllerItem;
-    friend class DropToolBox_Impl;
     friend class SfxTemplatePanelControl;
 
-    VclPtr<vcl::Window>         m_pFloat;
-    VclPtr<DropToolBox_Impl>    m_aActionTbL;
-    VclPtr<ToolBox>             m_aActionTbR;
+    std::unique_ptr<ToolbarDropTarget> m_xToolbarDropTargetHelper;
+    std::unique_ptr<weld::Toolbar> m_xActionTbL;
+    std::unique_ptr<weld::Toolbar> m_xActionTbR;
+    std::unique_ptr<weld::Menu> m_xToolMenu;
+    int m_nActionTbLVisible;
 
-    DECL_LINK( ToolBoxLSelect, ToolBox*, void );
-    DECL_LINK( ToolBoxRSelect, ToolBox*, void );
-    DECL_LINK( ToolBoxRClick, ToolBox*, void );
-    DECL_LINK( MenuSelectHdl, Menu*, bool );
+    void FillToolMenu();
+
+    DECL_LINK(ToolBoxLSelect, const OString&, void);
+    DECL_LINK(ToolBoxRSelect, const OString&, void);
+    DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
 protected:
     virtual void EnableEdit( bool ) override;
-    virtual void EnableItem( sal_uInt16 nMesId, bool bCheck = true ) override;
-    virtual void CheckItem( sal_uInt16 nMesId, bool bCheck = true ) override;
-    virtual bool IsCheckedItem( sal_uInt16 nMesId ) override;
-    virtual void LoadedFamilies() override;
-    virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem& rItem ) override;
-    virtual void EnableFamilyItem( sal_uInt16 nId, bool bEnabled ) override;
+    virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
+    virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
+    virtual bool IsCheckedItem(const OString& rMesId) override;
+    virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) override;
+    virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) override;
     virtual void ClearFamilyList() override;
     virtual void ReplaceUpdateButtonByMenu() override;
-
-    void Resize();
-    Size GetMinOutputSizePixel();
 
 public:
     friend class SfxTemplateDialog;
 
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
     virtual ~SfxTemplateDialog_Impl() override;
+
+    sal_Int8 AcceptToolbarDrop(const AcceptDropEvent& rEvt, const DropTargetHelper& rHelper);
 
     void Initialize();
 };

@@ -20,7 +20,7 @@
 #include <sfx2/styfitem.hxx>
 #include <unotools/resmgr.hxx>
 
-SfxStyleFamilyItem::SfxStyleFamilyItem(SfxStyleFamily nFamily_, const OUString &rName, const Image& rImage, const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rResLocale)
+SfxStyleFamilyItem::SfxStyleFamilyItem(SfxStyleFamily nFamily_, const OUString &rName, const OUString& rImage, const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rResLocale)
     : nFamily(nFamily_)
     , aText(rName)
     , aImage(rImage)

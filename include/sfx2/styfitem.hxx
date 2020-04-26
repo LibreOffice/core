@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/image.hxx>
 #include <svl/style.hxx>
 #include <vector>
 
@@ -43,16 +42,16 @@ class SFX2_DLLPUBLIC SfxStyleFamilyItem
 {
     SfxStyleFamily  nFamily;
     OUString        aText;
-    Image           aImage;
+    OUString        aImage;
     SfxStyleFilter  aFilterList;
 
 public:
-    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const Image& rImage, const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rLocale);
+    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const OUString& rImage, const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rLocale);
 
     const OUString& GetText() const { return aText; }
     SfxStyleFamily  GetFamily() const { return nFamily; }
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
-    const Image&    GetImage() const { return aImage; }
+    const OUString&    GetImage() const { return aImage; }
 };
 
 using SfxStyleFamilies = std::vector<SfxStyleFamilyItem>;
