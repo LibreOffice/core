@@ -209,6 +209,7 @@ public:
         Size m_aPixelSize;
         /// PDF data from the graphic object, if not writing a reference XObject.
         std::vector<sal_Int8> m_aPDFData;
+        sal_Int32 m_nPDFPageIndex;
 
         ReferenceXObjectEmit()
             : m_nFormObject(0),
