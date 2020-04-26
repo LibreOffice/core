@@ -23,20 +23,24 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/window.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 
 class SfxBindings;
 class SfxTemplateDialog_Impl;
 
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final : public vcl::Window
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final : public PanelLayout
 {
 public:
     SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl() override;
     virtual void dispose() override;
 
+    weld::Builder* get_builder() { return m_xBuilder.get(); }
+
+#if 0
     virtual void Resize() override;
     virtual void StateChanged( StateChangedType nStateChange ) override;
+#endif
 
 private:
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
