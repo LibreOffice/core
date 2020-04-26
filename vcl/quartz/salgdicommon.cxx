@@ -740,7 +740,7 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
     // create new context
     NSGraphicsContext* pDrawNSCtx = [NSGraphicsContext graphicsContextWithCGContext: maContextHolder.get() flipped: IsFlipped()];
-    // set it, setCurrentContext also releases the prviously set one
+    // set it, setCurrentContext also releases the previously set one
     [NSGraphicsContext setCurrentContext: pDrawNSCtx];
 
     // draw the EPS

@@ -93,7 +93,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
     /** Returns the index of this object in its accessible parent.
 
-        <p>If you call getAccessibeChild on the object's parent with the
+        <p>If you call getAccessibleChild on the object's parent with the
         index returned by this function you get a reference to this
         object.</p>
 
