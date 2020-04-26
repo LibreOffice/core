@@ -22,6 +22,30 @@
       "revId": "4d03bd252274308f64332e7c0523068c38ac684a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42051ee7_d3b777c6",
+        "filename": "vcl/inc/impgraph.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-26T11:58:58Z",
+      "side": 1,
+      "message": "Fixed in a follow up commit, thanks.",
+      "parentUuid": "e57f5ba8_2f8dce82",
+      "range": {
+        "startLine": 59,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 15
+      },
+      "revId": "4d03bd252274308f64332e7c0523068c38ac684a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
