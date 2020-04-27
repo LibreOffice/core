@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <memory>
 #include <swmodeltestbase.hxx>
 #include <config_features.h>
@@ -501,10 +502,8 @@ DECLARE_ODFEXPORT_TEST(testSenderInitials, "sender-initials.fodt")
     }
 }
 
-#ifndef _WIN32
 DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
 {
-    // TODO find out why does this break testFdo58949 on Windows.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -513,7 +512,6 @@ DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropertySet, "Resolved"));
 }
-#endif
 
 DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 {
@@ -721,7 +719,25 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
     uno::Sequence<uno::Any> aArgs(1);
     aArgs[0] <<= aTempFile.GetURL();
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
+    const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    // The exported document must have three objects named ObjNNN. The names are assigned in
+    // OLEHandler::copyOLEOStream using a static counter, and actual numbers depend on previous
+    // tests; so just count the matching names here.
+    int nMatches = 0;
+    for (const OUString& sName : aNames)
+    {
+        OUString sRest;
+        if (sName.startsWith("Obj", &sRest))
+        {
+            // all following characters must be decimal digits; minimal value is 100
+            bool bMatch = sRest.getLength() >= 3
+                          && std::all_of(sRest.getStr(), sRest.getStr() + sRest.getLength(),
+                                 [](sal_Unicode ch) { return ch >= '0' && ch <= '9'; });
+            if (bMatch)
+                ++nMatches;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nMatches);
 }
 
 DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
