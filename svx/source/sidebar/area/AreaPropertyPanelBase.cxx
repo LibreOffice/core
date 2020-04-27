@@ -75,7 +75,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maGradientRect(),
       mxColorTextFT(m_xBuilder->weld_label("filllabel")),
       mxLbFillType(m_xBuilder->weld_combo_box("fillstylearea")),
-      mxLbFillAttr(m_xBuilder->weld_combo_box("fillattr")),
+      mxLbFillAttr(m_xBuilder->weld_combo_box("fillattrhb")),
       mxLbFillGradFrom(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad1"), GetFrameWeld())),
       mxLbFillGradTo(new ColorListBox(m_xBuilder->weld_menu_button("fillgrad2"), GetFrameWeld())),
       mxToolBoxColor(m_xBuilder->weld_toolbar("selectcolor")),
