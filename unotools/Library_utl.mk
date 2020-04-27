@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/i18n/transliterationwrapper \
     unotools/source/misc/closeveto \
     unotools/source/misc/datetime \
+    unotools/source/misc/defaultencoding \
     unotools/source/misc/desktopterminationobserver \
     unotools/source/misc/eventlisteneradapter \
     unotools/source/misc/fontcvt \

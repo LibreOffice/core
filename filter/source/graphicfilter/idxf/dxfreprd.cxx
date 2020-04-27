@@ -20,8 +20,7 @@
 
 #include "dxfreprd.hxx"
 #include <osl/nlsupport.h>
-#include <officecfg/Setup.hxx>
-#include <officecfg/Office/Linguistic.hxx>
+#include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -134,21 +133,6 @@ DXFRepresentation::~DXFRepresentation()
 {
 }
 
-namespace {
-
-OUString getLODefaultLanguage()
-{
-    if (utl::ConfigManager::IsFuzzing())
-        return "en-US";
-
-    OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
-    if (result.isEmpty())
-        result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
-    return result;
-}
-
-}
-
 rtl_TextEncoding DXFRepresentation::getTextEncoding() const
 {
     return (isTextEncodingSet()) ?
@@ -229,7 +213,8 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     // only if the encoding is not set yet
                     // e.g. by previous $DWGCODEPAGE
                     if (!isTextEncodingSet())
-                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage(), true));
+                        setTextEncoding(utl_getWinTextEncodingFromLangStr(
+                            utl_getLocaleForGlobalDefaultEncoding(), true));
                 }
                 else if (rDGR.GetS() >= "AC1021")
                     setTextEncoding(RTL_TEXTENCODING_UTF8);
@@ -239,7 +224,8 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     // only if the encoding is not set yet
                     // e.g. by previous $DWGCODEPAGE
                     if (!isTextEncodingSet())
-                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage()));
+                        setTextEncoding(utl_getWinTextEncodingFromLangStr(
+                            utl_getLocaleForGlobalDefaultEncoding()));
                 }
             }
             else if (rDGR.GetS() == "$DWGCODEPAGE")
