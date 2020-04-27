@@ -16,6 +16,24 @@
       "revId": "323f5fd110fe2a88c5a1399c606279f354c0c3ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f64d52d5_985bb453",
+        "filename": "extensions/source/scanner/sane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-04-27T09:32:34Z",
+      "side": 1,
+      "message": "I mean \n\n\"libsane\" SAL_DLLEXTENSION \" could not be opened: \"\n\nrather than\n\n\"libsane\" SAL_DLLEXTENSION \u003c\u003c \" could not be opened: \"",
+      "parentUuid": "57696be2_cde5634b",
+      "revId": "323f5fd110fe2a88c5a1399c606279f354c0c3ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
