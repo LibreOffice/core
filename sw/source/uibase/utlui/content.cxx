@@ -925,6 +925,14 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
     rUnsetDragIcon = true;
 
+    // don't allow if tree root is selected
+    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+    bool bEntry = m_xTreeView->get_selected(xEntry.get());
+    if (!bEntry || lcl_IsContentType(*xEntry, *m_xTreeView))
+    {
+        return false; // return true doesn't work correctly for gtk3
+    }
+
     bool bDisallow = true;
 
     rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
@@ -940,10 +948,6 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
         std::unique_ptr<weld::TreeIter> xScratch(m_xTreeView->make_iterator());
 
-        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-        bool bEntry = m_xTreeView->get_selected(xEntry.get());
-        if (!bEntry)
-            return true; // disallow
         // Find first selected of continuous siblings
         while (true)
         {
