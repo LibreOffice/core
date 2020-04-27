@@ -3014,15 +3014,12 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
 
             pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
-            // Not sure if these setParent() and InsertEmbeddedObject() calls are really
-            // needed, it seems to work without, but logic from code elsewhere suggests
-            // they should be done.
-            SfxObjectShell& rPers = *pDoc->GetPersist();
-            uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( rPers.GetModel() );
-            OUString rName;
-            rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
+            // Do not call here container::XChild(obj)->setParent() and
+            // pDoc->GetPersist()->GetEmbeddedObjectContainer().InsertEmbeddedObject:
+            // they are called indirectly by pDoc->getIDocumentContentOperations().InsertEmbObject
+            // below. Calling them twice will add the same object twice to EmbeddedObjectContainer's
+            // pImpl->maNameToObjectMap, and then it will misbehave in
+            // EmbeddedObjectContainer::StoreAsChildren and SfxObjectShell::SaveCompletedChildren.
 
             SwFlyFrameFormat* pFrameFormat
                 = pDoc->getIDocumentContentOperations().InsertEmbObject(aPam, xObj, &aFrameSet);
