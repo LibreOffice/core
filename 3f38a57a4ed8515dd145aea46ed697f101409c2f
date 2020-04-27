@@ -22,6 +22,29 @@
       "revId": "3f38a57a4ed8515dd145aea46ed697f101409c2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7db7220_e81d05bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-27T12:04:33Z",
+      "side": 1,
+      "message": "see \u003chttps://listarchives.libreoffice.org/global/l10n/msg12598.html\u003e \"[libreoffice-l10n] Re: [Libreoffice-commits] core.git: Properly escape desktop file string values\"",
+      "range": {
+        "startLine": 198,
+        "startChar": 43,
+        "endLine": 199,
+        "endChar": 50
+      },
+      "revId": "3f38a57a4ed8515dd145aea46ed697f101409c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
