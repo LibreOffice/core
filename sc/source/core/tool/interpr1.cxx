@@ -1736,13 +1736,14 @@ void ScInterpreter::ScPi()
     PushDouble(F_PI);
 }
 
-void ScInterpreter::ScRandom()
+void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, double fLast )>& RandomFunc,
+        double fFirst, double fLast )
 {
     if (bMatrixFormula)
     {
         SCCOL nCols = 0;
         SCROW nRows = 0;
-        if(pMyFormulaCell)
+        if (pMyFormulaCell)
             pMyFormulaCell->GetMatColsRows( nCols, nRows);
 
         if (nCols == 1 && nRows == 1)
@@ -1752,7 +1753,7 @@ void ScInterpreter::ScRandom()
             // default are executed in array context unless
             // FA.setPropertyValue("IsArrayFunction",False) was set, return a
             // scalar double instead of a 1x1 matrix object. tdf#128218
-            PushDouble( comphelper::rng::uniform_real_distribution());
+            PushDouble( RandomFunc( fFirst, fLast));
             return;
         }
 
@@ -1773,7 +1774,7 @@ void ScInterpreter::ScRandom()
             {
                 for (SCROW j=0; j < nRows; ++j)
                 {
-                    pResMat->PutDouble( comphelper::rng::uniform_real_distribution(),
+                    pResMat->PutDouble( RandomFunc( fFirst, fLast),
                             static_cast<SCSIZE>(i), static_cast<SCSIZE>(j));
                 }
             }
@@ -1782,8 +1783,39 @@ void ScInterpreter::ScRandom()
     }
     else
     {
-        PushDouble( comphelper::rng::uniform_real_distribution());
+        PushDouble( RandomFunc( fFirst, fLast));
     }
+}
+
+void ScInterpreter::ScRandom()
+{
+    auto RandomFunc = []( double, double )
+    {
+        return comphelper::rng::uniform_real_distribution();
+    };
+    ScRandomImpl( RandomFunc, 0.0, 0.0);
+}
+
+void ScInterpreter::ScRandbetween()
+{
+    if (!MustHaveParamCount( GetByte(), 2))
+        return;
+
+    // Same like scaddins/source/analysis/analysis.cxx
+    // AnalysisAddIn::getRandbetween()
+    double fMax = rtl::math::round( GetDouble(), 0, rtl_math_RoundingMode_Up);
+    double fMin = rtl::math::round( GetDouble(), 0, rtl_math_RoundingMode_Up);
+    if (nGlobalError != FormulaError::NONE || fMin > fMax)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    fMax = std::nextafter( fMax+1, -DBL_MAX);
+    auto RandomFunc = []( double fFirst, double fLast )
+    {
+        return floor( comphelper::rng::uniform_real_distribution( fFirst, fLast));
+    };
+    ScRandomImpl( RandomFunc, fMin, fMax);
 }
 
 void ScInterpreter::ScTrue()

@@ -221,6 +221,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocQuartile_Inc,    {{ Reference, Value                                     }, 0, Value }},
     { ocRSQ,             {{ ForceArray, ForceArray                               }, 0, Value }},
     { ocRandom,          {{ Bounds                                               }, 0, Value }},
+    { ocRandomNV,        {{ Bounds                                               }, 0, Value }},
     { ocRange,           {{ Reference, Reference                                 }, 0, Reference }},
     { ocRank,            {{ Value, Reference, Value                              }, 0, Value }},
     { ocRank_Avg,        {{ Value, Reference, Value                              }, 0, Value }},
