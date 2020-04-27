@@ -59,7 +59,6 @@ using namespace css::document;
 using namespace css::ui::dialogs;
 using namespace css::container;
 using namespace com::sun::star::task;
-using namespace css::frame;
 
 using namespace sfx2;
 
