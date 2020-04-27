@@ -213,7 +213,6 @@ protected:
     SfxStyleFamily                  eStyleFamily;
     int                             m_nMaxUserDrawFontWidth;
     bool                            bRelease;
-    bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
@@ -301,7 +300,6 @@ class SvxFontNameBox_Base
 {
 protected:
     SvxFontNameToolBoxControl& m_rCtrl;
-    int m_nCharWidth;
 
     std::unique_ptr<FontNameBox>   m_xWidget;
     const FontList*                pFontList;
@@ -834,7 +832,6 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     , eStyleFamily( eFamily )
     , m_nMaxUserDrawFontWidth(0)
     , bRelease( true )
-    , bVisible(false)
     , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
     , m_aCommand( rCommand )
@@ -1444,7 +1441,6 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
                                          const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
-    , m_nCharWidth(xWidget->get_approximate_digit_width() * COMBO_WIDTH_IN_CHARS)
     , m_xWidget(new FontNameBox(std::move(xWidget)))
     , pFontList(nullptr)
     , nFtCount(0)
@@ -1464,7 +1460,8 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
 
     // set width in chars low so the size request will not be overridden
     m_xWidget->set_entry_width_chars(1);
-    m_xWidget->set_size_request(m_nCharWidth, -1);
+    int nCharWidth = xWidget->get_approximate_digit_width() * COMBO_WIDTH_IN_CHARS;
+    m_xWidget->set_size_request(nCharWidth, -1);
 }
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl(vcl::Window* pParent, const Reference<XDispatchProvider>& rDispatchProvider,

@@ -270,8 +270,8 @@ void SvxColorDockingWindow::FillValueSet()
     BitmapEx aBmp( pVD->GetBitmapEx( Point(), aColorSize ) );
 
     xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
-}
 
+}
 bool SvxColorDockingWindow::Close()
 {
     SfxBoolItem aItem( SID_COLOR_CONTROL, false );
