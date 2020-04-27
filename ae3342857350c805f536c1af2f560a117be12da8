@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0c4f7d0_66553207",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-04-27T20:35:57Z",
+      "side": 0,
+      "message": "bit unrelated, those whitespace changes?",
+      "revId": "ae3342857350c805f536c1af2f560a117be12da8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
