@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79cff661_e01d8cba",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-27T10:08:46Z",
+      "side": 1,
+      "message": "typo: were not",
+      "range": {
+        "startLine": 828,
+        "startChar": 35,
+        "endLine": 828,
+        "endChar": 45
+      },
+      "revId": "378b7a73f24e5f8cae7e676a3f278d91afdde43f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d743af5c_d030430b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-27T10:08:46Z",
+      "side": 1,
+      "message": "Use indexOf() instead of unconditional copy(30, 6), which could result unspecified behavior, according to https://api.libreoffice.org/docs/cpp/ref/a00153.html#a6f53787b1dc0641249bf9cf3512d772e:\n\n// This data was missing\nCPPUNIT_ASSERT(aXmlVal.indexOf(\"margin-left:139.95\")\u003e-1);",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 834,
+        "endChar": 33
+      },
+      "revId": "378b7a73f24e5f8cae7e676a3f278d91afdde43f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
