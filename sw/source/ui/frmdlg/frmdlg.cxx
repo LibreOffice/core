@@ -37,6 +37,7 @@
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/drawitem.hxx>
+#include <comphelper/lok.hxx>
 
 // the dialog's carrier
 SwFrameDlg::SwFrameDlg(SfxViewFrame const * pViewFrame,
@@ -106,6 +107,9 @@ SwFrameDlg::SwFrameDlg(SfxViewFrame const * pViewFrame,
             RemoveTabPage("transparence");
         }
     }
+
+    if(comphelper::LibreOfficeKit::isActive())
+        RemoveTabPage("macro");
 
     if (m_bNew)
         SetCurPageId("type");
