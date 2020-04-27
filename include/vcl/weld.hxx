@@ -2154,6 +2154,10 @@ public:
     // return what modifiers are held
     virtual sal_uInt16 get_modifier_state() const = 0;
 
+    // This function returns the position a new item should be inserted if dnd
+    // is dropped at rPoint
+    virtual int get_drop_index(const Point& rPoint) const = 0;
+
     void connect_clicked(const Link<const OString&, void>& rLink) { m_aClickHdl = rLink; }
     void connect_menu_toggled(const Link<const OString&, void>& rLink) { m_aToggleMenuHdl = rLink; }
 };

@@ -1012,6 +1012,14 @@ public:
         return m_xToolBox->GetModifier();
     }
 
+    int get_drop_index(const Point& rPoint) const override
+    {
+        auto nRet = m_xToolBox->GetItemPos(rPoint);
+        if (nRet == ToolBox::ITEM_NOTFOUND)
+            return 0;
+        return nRet;
+    }
+
     virtual ~SalInstanceToolbar() override
     {
         m_xToolBox->SetDropdownClickHdl(Link<ToolBox*, void>());
