@@ -187,8 +187,6 @@ SvxColorDockingWindow::SvxColorDockingWindow
     SfxDockingWindow( _pBindings, pCW, _pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE ),
     pColorList      (),
     aColorSet       ( VclPtr<SvxColorValueSet_docking>::Create(this) ),
-    nCols           ( 20 ),
-    nLines          ( 1 ),
     nCount          ( 0 )
 {
     SetText(SvxResId(STR_COLORTABLE));
@@ -301,8 +299,8 @@ void SvxColorDockingWindow::SetSize()
     aSize.AdjustHeight( -4 );
 
     // calculate rows and columns
-    nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
+    sal_uInt16 nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
+    sal_uInt16 nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
     if( nLines == 0 )
         nLines++;
 
@@ -449,8 +447,8 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     rNewSize.AdjustHeight( -4 );
 
     // determine columns and rows
-    nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Height()) / static_cast<float>(aItemSize.Height()) + 0.5 );
+    sal_uInt16 nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
+    sal_uInt16 nLines = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Height()) / static_cast<float>(aItemSize.Height()) + 0.5 );
     if( nLines == 0 )
         nLines = 1;
 

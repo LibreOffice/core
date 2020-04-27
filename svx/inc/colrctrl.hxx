@@ -76,8 +76,6 @@ friend class SvxColorChildWindow;
 private:
     XColorListRef       pColorList;
     VclPtr<SvxColorValueSet_docking> aColorSet;
-    sal_uInt16          nCols;
-    sal_uInt16          nLines;
     long                nCount;
     Size                aItemSize;
 

@@ -87,7 +87,6 @@ namespace dbaccess
         std::unique_ptr<SelectColumnsMetaData>                m_pParameterNames;      // contains all parameter names
         std::unique_ptr<SelectColumnsMetaData>                m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
-        css::uno::Reference< css::container::XIndexAccess>      m_xTableKeys;
         // we need a different SQL (statement) for each different combination
         // of NULLness of key & foreign columns;
         // each subclause is either "colName = ?" or "colName IS NULL"
@@ -145,7 +144,6 @@ namespace dbaccess
         virtual ~OKeySet() override;
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
-                const css::uno::Reference< css::container::XIndexAccess>& _xTableKeys,
                 const OUString& _rUpdateTableName,
                 const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                 const ORowSetValueVector& _aParameterValueForCache,
