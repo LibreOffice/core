@@ -34,9 +34,8 @@
 #include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
 #include <o3tl/safeint.hxx>
-#include <officecfg/Setup.hxx>
-#include <officecfg/Office/Linguistic.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -164,20 +163,6 @@ namespace emfio
         bClosed = true;
     }
 
-    namespace {
-
-    OUString getLODefaultLanguage()
-    {
-        if (utl::ConfigManager::IsFuzzing())
-            return "en-US";
-        OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
-        if (result.isEmpty())
-            result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
-        return result;
-    }
-
-    }
-
     WinMtfFontStyle::WinMtfFontStyle( LOGFONTW const & rFont )
     {
         rtl_TextEncoding eCharSet;
@@ -185,7 +170,7 @@ namespace emfio
          || (rFont.alfFaceName == "MT Extra"))
             eCharSet = RTL_TEXTENCODING_SYMBOL;
         else if ((rFont.lfCharSet == DEFAULT_CHARSET) || (rFont.lfCharSet == OEM_CHARSET))
-            eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage(),
+            eCharSet = utl_getWinTextEncodingFromLangStr(utl_getLocaleForGlobalDefaultEncoding(),
                                                          rFont.lfCharSet == OEM_CHARSET);
         else
             eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
