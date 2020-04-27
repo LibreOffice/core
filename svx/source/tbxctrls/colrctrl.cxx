@@ -270,6 +270,49 @@ void SvxColorDockingWindow::FillValueSet()
     BitmapEx aBmp( pVD->GetBitmapEx( Point(), aColorSize ) );
 
     xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
+
+}
+
+void SvxColorDockingWindow::SetSize()
+{
+    // calculate the size for ValueSet
+    Size aSize = GetOutputSizePixel();
+    aSize.AdjustWidth( -4 );
+    aSize.AdjustHeight( -4 );
+
+    // calculate rows and columns
+    sal_uInt16 nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
+    sal_uInt16 nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
+    if( nLines == 0 )
+        nLines++;
+
+    // set/remove scroll bar
+    WinBits nBits = aColorSet->GetStyle();
+    if ( static_cast<long>(nLines) * nCols >= nCount )
+        nBits &= ~WB_VSCROLL;
+    else
+        nBits |= WB_VSCROLL;
+    aColorSet->SetStyle( nBits );
+
+    // scroll bar?
+    long nScrollWidth = aColorSet->GetScrollWidth();
+    if( nScrollWidth > 0 )
+    {
+        // calculate columns with scroll bar
+        nCols = static_cast<sal_uInt16>( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
+    }
+    aColorSet->SetColCount( nCols );
+
+    if( IsFloatingMode() )
+        aColorSet->SetLineCount( nLines );
+    else
+    {
+        aColorSet->SetLineCount(); // otherwise line height is ignored
+        aColorSet->SetItemHeight( aItemSize.Height() );
+    }
+
+    aColorSet->SetPosSizePixel( Point( 2, 2 ), aSize );
+>>>>>>> loplugin:unusedfields
 }
 
 bool SvxColorDockingWindow::Close()
