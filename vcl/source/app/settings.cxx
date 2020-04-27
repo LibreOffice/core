@@ -596,7 +596,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseFlatBorders(rData.mnUseFlatBorders),
     mbPreferredUseImagesInMenus(rData.mbPreferredUseImagesInMenus),
     mnMinThumbSize(rData.mnMinThumbSize),
-    mIconThemeScanner(rData.mIconThemeScanner?new vcl::IconThemeScanner(*rData.mIconThemeScanner):nullptr),
     mIconThemeSelector(std::make_shared<vcl::IconThemeSelector>(*rData.mIconThemeSelector)),
     mIconTheme(rData.mIconTheme),
     mbSkipDisabledInMenus(rData.mbSkipDisabledInMenus),
@@ -618,6 +617,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maPersonaFooterBitmap( rData.maPersonaFooterBitmap ),
     maPersonaMenuBarTextColor( rData.maPersonaMenuBarTextColor )
 {
+    if (rData.mIconThemeScanner)
+        mIconThemeScanner = std::make_shared<vcl::IconThemeScanner>(*rData.mIconThemeScanner);
 }
 
 void ImplStyleData::SetStandardStyles()
