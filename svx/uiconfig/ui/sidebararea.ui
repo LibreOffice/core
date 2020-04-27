@@ -80,16 +80,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-SvxFillAttrBox" id="fillattr">
+                  <object class="svxlo-SvxFillAttrBox" id="fillattrhb">
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebararea|fillattr|tooltip_text">Select the effect to apply.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebararea|fillattrhb|tooltip_text">Select the effect to apply.</property>
                     <accessibility>
                       <relation type="labelled-by" target="filllabel"/>
                     </accessibility>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="fillattr-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillattr-atkobject">Hatching/Bitmap</property>
+                      <object class="AtkObject" id="fillattrhb-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillattrhb-atkobject">Hatching/Bitmap</property>
                       </object>
                     </child>
                   </object>
@@ -372,7 +372,7 @@
     <property name="mode">both</property>
     <widgets>
       <widget name="selectcolor"/>
-      <widget name="fillattr"/>
+      <widget name="fillattrhb"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
