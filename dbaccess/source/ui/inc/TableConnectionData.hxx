@@ -62,7 +62,7 @@ namespace dbaui
 
             @note does NOT have to be initialised
          */
-        virtual OTableConnectionData* NewInstance() const;
+        virtual std::shared_ptr<OTableConnectionData> NewInstance() const;
 
         void SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
         bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );

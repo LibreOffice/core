@@ -40,7 +40,7 @@ namespace dbaui
         virtual ~OQueryTableConnectionData() override;
 
         virtual void CopyFrom(const OTableConnectionData& rSource) override;
-        virtual OTableConnectionData* NewInstance() const override;
+        virtual std::shared_ptr<OTableConnectionData> NewInstance() const override;
 
 
         /** Update create a new connection

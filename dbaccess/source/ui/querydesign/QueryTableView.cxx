@@ -303,10 +303,9 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     if (pTabConn == nullptr)
     {
         // the new data ...
-        OQueryTableConnectionData* pNewData = static_cast< OQueryTableConnectionData*>(rNewConn.GetData()->NewInstance());
+        auto pNewData = std::static_pointer_cast<OQueryTableConnectionData>(rNewConn.GetData()->NewInstance());
         pNewData->CopyFrom(*rNewConn.GetData());
-        TTableConnectionData::value_type aData(pNewData);
-        VclPtrInstance<OQueryTableConnection> pNewConn(this, aData);
+        VclPtrInstance<OQueryTableConnection> pNewConn(this, pNewData);
         GetConnection(pNewConn);
 
         connectionModified(this,pNewConn,_bCreateUndoAction);
