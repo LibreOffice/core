@@ -721,7 +721,28 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
     uno::Sequence<uno::Any> aArgs(1);
     aArgs[0] <<= aTempFile.GetURL();
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
+    const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    // The exported document must have three objects named ObjNNN. The names are assigned in
+    // OLEHandler::copyOLEOStream using a static counter, and actual numbers depend on previous
+    // tests; so just count the matching names here.
+    int nMatches = 0;
+    for (const OUString& sName : aNames)
+    {
+        if (sName.startsWith("Obj"))
+        {
+            // all following characters must be decimal digits
+            bool bMatch = true;
+            for (sal_Int32 i = 3; bMatch && i < sName.getLength(); ++i)
+            {
+                sal_Unicode ch = sName[i];
+                if (ch < '0' || ch > '9')
+                    bMatch = false;
+            }
+            if (bMatch)
+                ++nMatches;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nMatches);
 }
 
 DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
