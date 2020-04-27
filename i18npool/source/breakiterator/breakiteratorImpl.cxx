@@ -53,7 +53,9 @@ BreakIteratorImpl::~BreakIteratorImpl()
 sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
-    if (nCount < 0) throw RuntimeException();
+    if (nCount < 0)
+        throw RuntimeException("BreakIteratorImpl::nextCharacters: expected nCount >=0, got "
+                               + OUString::number(nCount));
 
     return LBI->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
@@ -61,7 +63,9 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
 sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
-    if (nCount < 0) throw RuntimeException();
+    if (nCount < 0)
+        throw RuntimeException("BreakIteratorImpl::previousCharacters: expected nCount >=0, got "
+                               + OUString::number(nCount));
 
     return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
@@ -647,7 +651,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
             return xBI;
         }
     }
-    throw RuntimeException();
+    throw RuntimeException("getLocaleSpecificBreakIterator: iterator not found");
 }
 
 OUString SAL_CALL
