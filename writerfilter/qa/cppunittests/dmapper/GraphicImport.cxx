@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 using namespace ::com::sun::star;
 
@@ -113,6 +114,25 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineInShapeAnchoredZOrder)
     // - Actual  : Text Box 2
     // i.e. the image was behind the textbox that was hosting it.
     CPPUNIT_ASSERT_EQUAL(OUString("Picture 1"), xOval->getName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "relfromh-insidemargin.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nRelation = 0;
+    xShape->getPropertyValue("HoriOrientRelation") >>= nRelation;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7 (PAGE_FRAME)
+    // - Actual  : 0 (FRAME)
+    // i.e. the horizontal position was relative to the paragraph area, not to the entire page.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nRelation);
+    bool bPageToggle = false;
+    xShape->getPropertyValue("PageToggle") >>= bPageToggle;
+    CPPUNIT_ASSERT(bPageToggle);
 }
 }
 

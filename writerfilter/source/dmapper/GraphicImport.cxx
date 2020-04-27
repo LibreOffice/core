@@ -201,6 +201,7 @@ public:
 
     sal_Int16 nHoriOrient;
     sal_Int16 nHoriRelation;
+    bool bPageToggle = false;
     sal_Int16 nVertOrient;
     sal_Int16 nVertRelation;
     text::WrapTextMode nWrap;
@@ -357,8 +358,8 @@ public:
                                                        uno::makeAny(nLeftPosition));
         xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_RELATION ),
                 uno::makeAny(nHoriRelation));
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_PAGE_TOGGLE ),
-                uno::makeAny(false));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_PAGE_TOGGLE),
+                                                   uno::makeAny(bPageToggle));
         if (!bRelativeOnly)
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_POSITION),
                                                        uno::makeAny(nTopPosition));
@@ -1102,6 +1103,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                 if( !m_pImpl->bUseSimplePos )
                 {
                     m_pImpl->nHoriRelation = pHandler->relation();
+                    m_pImpl->bPageToggle = pHandler->GetPageToggle();
                     m_pImpl->nHoriOrient = pHandler->orientation();
                     m_pImpl->nLeftPosition = pHandler->position();
 

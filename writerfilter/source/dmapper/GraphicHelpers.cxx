@@ -98,6 +98,11 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         m_nRelation =  text::RelOrientation::PAGE_FRAME;
                         break;
 
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_insideMargin:
+                        m_nRelation = text::RelOrientation::PAGE_FRAME;
+                        m_bPageToggle = true;
+                        break;
+
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_column:
                         m_nRelation = text::RelOrientation::FRAME;
                         break;
