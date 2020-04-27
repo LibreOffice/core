@@ -476,7 +476,7 @@ public:
     virtual             ~DropTargetHelper();
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
-    bool                IsDropFormatSupported( SotClipboardFormatId nFormat );
+    bool                IsDropFormatSupported(SotClipboardFormatId nFormat) const;
 
     const DataFlavorExVector& GetDataFlavorExVector() const {return maFormats; }
 
