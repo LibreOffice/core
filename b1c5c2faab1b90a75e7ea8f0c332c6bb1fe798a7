@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17da0668_50c4b0a9",
+        "filename": "comphelper/source/misc/xmlsechelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-27T09:28:48Z",
+      "side": 1,
+      "message": "The previous code guaranteed the listed aID usage, but the recent one doesn\u0027t, so I suggest the following improvement:\n\nreturn retVal.isEmpty() ? _rRawString : retVal;",
+      "range": {
+        "startLine": 282,
+        "startChar": 8,
+        "endLine": 282,
+        "endChar": 22
+      },
+      "revId": "b1c5c2faab1b90a75e7ea8f0c332c6bb1fe798a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
