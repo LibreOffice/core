@@ -82,6 +82,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
+#ifdef _WIN32
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+
 #include <comphelper/lok.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
