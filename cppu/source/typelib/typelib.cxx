@@ -497,7 +497,9 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
         }
         else
         {
-            SAL_INFO( "cppu.typelib", "type cannot be completed: " <<  (*ppTypeDescr)->pTypeName );
+            SAL_INFO(
+                "cppu.typelib",
+                "type cannot be completed: " << OUString::unacquired(&(*ppTypeDescr)->pTypeName));
             return false;
         }
     }
