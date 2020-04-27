@@ -100,9 +100,9 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     AppendConnLine(rDragLeft->GetField(), rDragRight->GetField());
 }
 
-OTableConnectionData* OQueryTableConnectionData::NewInstance() const
+std::shared_ptr<OTableConnectionData> OQueryTableConnectionData::NewInstance() const
 {
-    return new OQueryTableConnectionData();
+    return std::make_shared<OQueryTableConnectionData>();
 }
 
 bool OQueryTableConnectionData::Update()

@@ -57,7 +57,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     , m_xPB_OK(m_xBuilder->weld_button("ok"))
 {
     // Copy connection
-    m_pConnData.reset( pConnectionData->NewInstance() );
+    m_pConnData = pConnectionData->NewInstance();
     m_pConnData->CopyFrom( *pConnectionData );
 
     Init(m_pConnData);

@@ -55,7 +55,7 @@ namespace dbaui
         virtual ~ORelationTableConnectionData() override;
 
         virtual void CopyFrom(const OTableConnectionData& rSource) override;
-        virtual OTableConnectionData* NewInstance() const override { return new ORelationTableConnectionData(); }
+        virtual std::shared_ptr<OTableConnectionData> NewInstance() const override { return std::make_shared<ORelationTableConnectionData>(); }
 
         /** Update create a new relation
 

@@ -61,7 +61,7 @@ DlgQryJoin::DlgQryJoin(const OQueryTableView* pParent,
     m_xML_HelpText->set_size_request(aSize.Width(), aSize.Height());
 
     // Copy connection
-    m_pConnData.reset(_pData->NewInstance());
+    m_pConnData = _pData->NewInstance();
     m_pConnData->CopyFrom(*_pData);
 
     m_xTableControl.reset(new OTableListBoxControl(m_xBuilder.get(), _pTableMap, this));
