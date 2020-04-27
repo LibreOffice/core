@@ -84,12 +84,12 @@ namespace
             A new RegionBand object is returned that contains the bands that
             represent the given poly-polygon.
     */
-    std::unique_ptr<RegionBand> ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
+    std::shared_ptr<RegionBand> ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
     {
         OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
 
         // Create a new RegionBand object as container of the bands.
-        std::unique_ptr<RegionBand> pRegionBand( std::make_unique<RegionBand>() );
+        std::shared_ptr<RegionBand> pRegionBand( std::make_shared<RegionBand>() );
         long nLineId = 0;
 
         // Iterate over all polygons.
@@ -182,12 +182,12 @@ namespace
     /** Convert a general polygon (one for which ImplIsPolygonRectilinear()
         returns <FALSE/>) to bands.
     */
-    std::unique_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rPolygonBoundingBox)
+    std::shared_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rPolygonBoundingBox)
     {
         long nLineID = 0;
 
         // initialisation and creation of Bands
-        std::unique_ptr<RegionBand> pRegionBand( std::make_unique<RegionBand>() );
+        std::shared_ptr<RegionBand> pRegionBand( std::make_shared<RegionBand>() );
         pRegionBand->CreateBandRange(rPolygonBoundingBox.Top(), rPolygonBoundingBox.Bottom());
 
         // insert polygons
@@ -231,9 +231,9 @@ bool vcl::Region::IsEmpty() const
 }
 
 
-static std::unique_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
+static std::shared_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
 {
-    std::unique_ptr<RegionBand> pRetval;
+    std::shared_ptr<RegionBand> pRetval;
 
     if(rPolyPolygon.Count())
     {
@@ -558,7 +558,7 @@ void vcl::Region::Union( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew = std::make_shared<RegionBand>(*pCurrent);
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -649,7 +649,7 @@ void vcl::Region::Intersect( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -728,7 +728,7 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
         return;
     }
 
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -811,7 +811,7 @@ void vcl::Region::XOr( const tools::Rectangle& rRect )
     }
 
     // only region band mode possibility left here or null/empty
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*getRegionBand()));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*getRegionBand()));
 
     // get justified rectangle
     const long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -906,7 +906,7 @@ void vcl::Region::Union( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // union with source
     pNew->Union(*pSource);
@@ -1024,7 +1024,7 @@ void vcl::Region::Intersect( const vcl::Region& rRegion )
     else
     {
         // prepare new regionBand
-        std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+        std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
         // intersect with source
         pNew->Intersect(*pSource);
@@ -1108,7 +1108,7 @@ void vcl::Region::Exclude( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // union with source
     const bool bSuccess(pNew->Exclude(*pSource));
@@ -1195,7 +1195,7 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
     }
 
     // prepare source and target
-    std::unique_ptr<RegionBand> pNew( std::make_unique<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // union with source
     pNew->XOr(*pSource);
