@@ -229,7 +229,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     // only if the encoding is not set yet
                     // e.g. by previous $DWGCODEPAGE
                     if (!isTextEncodingSet())
-                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr(), true));
+                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage(), true));
                 }
                 else if (rDGR.GetS() >= "AC1021")
                     setTextEncoding(RTL_TEXTENCODING_UTF8);
@@ -239,7 +239,7 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     // only if the encoding is not set yet
                     // e.g. by previous $DWGCODEPAGE
                     if (!isTextEncodingSet())
-                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr()));
+                        setTextEncoding(utl_getWinTextEncodingFromLangStr(getLODefaultLanguage()));
                 }
             }
             else if (rDGR.GetS() == "$DWGCODEPAGE")

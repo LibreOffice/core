@@ -12,11 +12,12 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 
 /** Map from an ISO-639 language code (and optionally ISO-3166 country/region code)
 to a text encoding of corresponding Windows ANSI or OEM codepage.
 
-@param pLanguage
+@param sLanguage
 Any language-country string.  Must not be null.
 
 @param bOEM
@@ -28,7 +29,7 @@ If no mapping is found, RTL_TEXTENCODING_IBM_850 is returned when bOEM is true,
 RTL_TEXTENCODING_MS_1252 otherwise.
 */
 UNOTOOLS_DLLPUBLIC rtl_TextEncoding utl_getWinTextEncodingFromLangStr(
-    const char* pLanguage, bool bOEM = false);
+    const OUString& sLanguage, bool bOEM = false);
 
 #endif  // INCLUDED_UNOTOOLS_WINCODEPAGE_HXX
 

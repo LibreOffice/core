@@ -185,7 +185,7 @@ namespace emfio
          || (rFont.alfFaceName == "MT Extra"))
             eCharSet = RTL_TEXTENCODING_SYMBOL;
         else if ((rFont.lfCharSet == DEFAULT_CHARSET) || (rFont.lfCharSet == OEM_CHARSET))
-            eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr(),
+            eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage(),
                                                          rFont.lfCharSet == OEM_CHARSET);
         else
             eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
