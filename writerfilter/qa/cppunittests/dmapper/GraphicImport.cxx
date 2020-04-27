@@ -16,6 +16,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -69,6 +70,25 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeRotation)
     // i.e. the group shape had a so low vertical position that the line shape did not point into
     // it.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1221), nVertPosition);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "relfromh-insidemargin.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nRelation = 0;
+    xShape->getPropertyValue("HoriOrientRelation") >>= nRelation;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7 (PAGE_FRAME)
+    // - Actual  : 0 (FRAME)
+    // i.e. the horizontal position was relative to the paragraph area, not to the entire page.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, nRelation);
+    bool bPageToggle = false;
+    xShape->getPropertyValue("PageToggle") >>= bPageToggle;
+    CPPUNIT_ASSERT(bPageToggle);
 }
 }
 
