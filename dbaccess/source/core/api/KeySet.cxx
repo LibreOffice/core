@@ -103,7 +103,6 @@ namespace
 
 
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
-                 const Reference< XIndexAccess>& _xTableKeys,
                  const OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                  const ORowSetValueVector& _aParameterValueForCache,
@@ -112,7 +111,6 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             :OCacheSet(i_nMaxRows)
             ,m_aParameterValueForCache(new ORowSetValueVector(_aParameterValueForCache))
             ,m_xTable(_xTable)
-            ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
             ,m_rRowCount(o_nRowCount)
