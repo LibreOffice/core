@@ -106,6 +106,7 @@ enum OpCode : sal_uInt16
         ocGetActTime        = SC_OPCODE_GET_ACT_TIME,
         ocNotAvail          = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
+        ocRandomNV          = SC_OPCODE_RANDOM_NV,
     // Functions with one parameter
         ocNot               = SC_OPCODE_NOT,
         ocNeg               = SC_OPCODE_NEG,
@@ -501,6 +502,7 @@ enum OpCode : sal_uInt16
         ocErfc_MS           = SC_OPCODE_ERFC_MS,
         ocEncodeURL         = SC_OPCODE_ENCODEURL,
         ocFourier           = SC_OPCODE_FOURIER,
+        ocRandbetweenNV     = SC_OPCODE_RANDBETWEEN_NV,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -586,6 +588,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocNegSub: return "NegSub";
     case ocPi: return "Pi";
     case ocRandom: return "Random";
+    case ocRandomNV: return "RandomNV";
     case ocTrue: return "True";
     case ocFalse: return "False";
     case ocGetActDate: return "GetActDate";
@@ -974,6 +977,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocErfc_MS: return "Erfc_MS";
     case ocEncodeURL: return "EncodeURL";
     case ocFourier: return "Fourier";
+    case ocRandbetweenNV: return "RandbetweenNV";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

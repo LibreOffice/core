@@ -4134,6 +4134,22 @@ const char* SC_OPCODE_FOURIER_ARY[] =
     NC_("SC_OPCODE_FOURIER", "In case of Polar=TRUE, the frequency components below this magnitude are clipped out (default 0.0).")
 };
 
+// -=*# Resource for function RAND.NV #*=-
+const char* SC_OPCODE_RANDOM_NV_ARY[] =
+{
+    NC_("SC_OPCODE_RANDOM_NV", "Returns a random number between 0 and 1, non-volatile.")
+};
+
+// -=*# Resource for function RANDBETWEEN.NV #*=-
+const char* SC_OPCODE_RANDBETWEEN_NV_ARY[] =
+{
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "Returns a random integer between the numbers you specify, non-volatile."),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "Bottom"),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "The smallest integer returned."),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "Top"),
+    NC_("SC_OPCODE_RANDBETWEEN_NV", "The largest integer returned.")
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

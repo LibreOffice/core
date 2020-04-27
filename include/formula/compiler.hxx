@@ -112,7 +112,8 @@
 #define SC_OPCODE_GET_ACT_TIME       80
 #define SC_OPCODE_NO_VALUE           81
 #define SC_OPCODE_CURRENT            82
-#define SC_OPCODE_STOP_NO_PAR        83
+#define SC_OPCODE_RANDOM_NV          83
+#define SC_OPCODE_STOP_NO_PAR        84
 
 /*** Functions with one parameter ***/
 #define SC_OPCODE_START_1_PAR        90
@@ -507,7 +508,8 @@
 #define SC_OPCODE_SEARCHB           496
 #define SC_OPCODE_REGEX             497
 #define SC_OPCODE_FOURIER           498
-#define SC_OPCODE_STOP_2_PAR        499     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_RANDBETWEEN_NV    499
+#define SC_OPCODE_STOP_2_PAR        500     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
