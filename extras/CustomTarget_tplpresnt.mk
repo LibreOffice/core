@@ -79,7 +79,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	DNA/content.xml \
 	DNA/META-INF/manifest.xml \
 	DNA/meta.xml \
-	DNA/Pictures/100000000000055600000300C32362E53F69C13D.png \
 	DNA/styles.xml \
 	DNA/Thumbnails/thumbnail.png \
 	Focus/content.xml \
