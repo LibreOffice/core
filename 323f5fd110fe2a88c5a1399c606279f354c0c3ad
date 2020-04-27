@@ -34,6 +34,24 @@
       "revId": "323f5fd110fe2a88c5a1399c606279f354c0c3ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1830b65d_2d785829",
+        "filename": "extensions/source/scanner/sane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-04-27T09:32:50Z",
+      "side": 1,
+      "message": "Oh. You are right!",
+      "parentUuid": "57696be2_cde5634b",
+      "revId": "323f5fd110fe2a88c5a1399c606279f354c0c3ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
