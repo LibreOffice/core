@@ -4062,6 +4062,8 @@ StackVar ScInterpreter::Interpret()
                 case ocPercentSign      : ScPercentSign();              break;
                 case ocPi               : ScPi();                       break;
                 case ocRandom           : ScRandom();                   break;
+                case ocRandomNV         : ScRandom();                   break;
+                case ocRandbetweenNV    : ScRandbetween();              break;
                 case ocTrue             : ScTrue();                     break;
                 case ocFalse            : ScFalse();                    break;
                 case ocGetActDate       : ScGetActDate();               break;

@@ -579,6 +579,8 @@
 #define HID_FUNC_SEARCHB                                        "SC_HID_FUNC_SEARCHB"
 #define HID_FUNC_REGEX                                          "SC_HID_FUNC_REGEX"
 #define HID_FUNC_FOURIER                                        "SC_HID_FUNC_FOURIER"
+#define HID_FUNC_RAND_NV                                        "SC_HID_FUNC_RAND_NV"
+#define HID_FUNC_RANDBETWEEN_NV                                 "SC_HID_FUNC_RANDBETWEEN_NV"
 
 #endif
 
