@@ -1011,7 +1011,14 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
         {
             try
             {
-                xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                if (xCompFactory.is())
+                {
+                    xSvc.set(xCompFactory->createInstanceWithContext(xContext), uno::UNO_QUERY);
+                }
+                else
+                {
+                    xSvc.set(xFactory->createInstance(), uno::UNO_QUERY);
+                }
             }
             catch (const uno::Exception &)
             {
