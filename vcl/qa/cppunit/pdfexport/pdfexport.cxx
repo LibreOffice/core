@@ -91,7 +91,7 @@ public:
     PdfExportTest();
     virtual void setUp() override;
     virtual void tearDown() override;
-    void topdf(const OUString& rFile);
+    void saveAsPDF(const OUString& rFile);
     void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
@@ -241,7 +241,7 @@ void PdfExportTest::tearDown()
 
 char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
 
-void PdfExportTest::topdf(const OUString& rFile)
+void PdfExportTest::saveAsPDF(const OUString& rFile)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
@@ -256,7 +256,7 @@ void PdfExportTest::topdf(const OUString& rFile)
 
 void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
 {
-    topdf(rFile);
+    saveAsPDF(rFile);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1681,7 +1681,7 @@ void PdfExportTest::testTdf113143()
 void PdfExportTest::testForcePoint71()
 {
     // I just care it doesn't crash
-    topdf("forcepoint71.key");
+    saveAsPDF("forcepoint71.key");
 }
 
 void PdfExportTest::testTdf115262()
