@@ -1484,8 +1484,11 @@
              The replacement graphic is a png which browsers are more likely able to render than the
              original graphic which might have arbitrary formats. -->
         <xsl:if test="(@loext:mime-type = 'image/svg+xml') or
+                      (@draw:mime-type = 'image/svg+xml') or
                             (not(following-sibling::draw:image) and
-                             not(preceding-sibling::draw:image[1]/@loext:mime-type = 'image/svg+xml'))">
+                             not((preceding-sibling::draw:image[1]/@loext:mime-type = 'image/svg+xml')
+                                 or
+                                 (preceding-sibling::draw:image[1]/@draw:mime-type = 'image/svg+xml')))">
             <xsl:choose>
                 <xsl:when test="ancestor::text:p or parent::text:span or parent::text:h or parent::draw:a or parent::text:a or text:ruby-base">
                     <!-- XHTML does not allow the mapped elements to contain paragraphs -->
@@ -1551,7 +1554,16 @@
             <xsl:attribute name="src">
                 <xsl:call-template name="create-href">
                     <xsl:with-param name="href" select="@xlink:href"/>
-                    <xsl:with-param name="mimetype" select="@loext:mime-type"/>
+                    <xsl:with-param name="mimetype">
+                        <xsl:choose>
+                            <xsl:when test="@draw:mime-type">
+                                <xsl:value-of select="@draw:mime-type"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@loext:mime-type"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
                 </xsl:call-template>
             </xsl:attribute>
 
