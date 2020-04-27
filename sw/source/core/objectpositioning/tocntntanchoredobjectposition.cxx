@@ -1112,8 +1112,13 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
     }
 
     // Get the list of objects.
-    const SwSortedObjs& rSortedObjs = *pAnchorFrameForVertPos->GetDrawObjs();
-    for (const auto& pAnchoredObj : rSortedObjs)
+    auto pSortedObjs = pAnchorFrameForVertPos->GetDrawObjs();
+    if (!pSortedObjs)
+    {
+        return;
+    }
+
+    for (const auto& pAnchoredObj : *pSortedObjs)
     {
         if (pAnchoredObj == &GetAnchoredObj())
         {
