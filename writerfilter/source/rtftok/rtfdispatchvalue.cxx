@@ -841,9 +841,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CPG:
         {
             rtl_TextEncoding nEncoding
-                = (nParam == 0)
-                      ? utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr())
-                      : rtl_getTextEncodingFromWindowsCodePage(nParam);
+                = (nParam == 0) ? utl_getWinTextEncodingFromLangStr(getLODefaultLanguage())
+                                : rtl_getTextEncodingFromWindowsCodePage(nParam);
             if (nKeyword == RTF_ANSICPG)
                 m_aDefaultState.setCurrentEncoding(nEncoding);
             else

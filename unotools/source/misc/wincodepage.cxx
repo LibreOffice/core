@@ -13,60 +13,54 @@
 
 namespace{
 
-// See https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756
-rtl_TextEncoding impl_getWinTextEncodingFromLangStrANSI(const char* pLanguage)
+struct LangEncodingDef
 {
-    auto nLangLen = rtl_str_getLength(pLanguage);
+    const OUStringLiteral msLangStr;
+    rtl_TextEncoding meTextEncoding;
+};
 
-    struct LangEncodingDef
+// See https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756
+rtl_TextEncoding impl_getWinTextEncodingFromLangStrANSI(const OUString& sLanguage)
+{
+    static constexpr LangEncodingDef aLanguageTab[] =
     {
-        const char*        mpLangStr;
-        decltype(nLangLen) mnLangStrLen;
-        rtl_TextEncoding   meTextEncoding;
-    };
-    static LangEncodingDef const aLanguageTab[] =
-    {
-        { "en",    2, RTL_TEXTENCODING_MS_1252 }, // Most used -> first in list
-        { "th",    2, RTL_TEXTENCODING_MS_874 },
-        { "ja",    2, RTL_TEXTENCODING_MS_932 },
-        { "zh-cn", 5, RTL_TEXTENCODING_MS_936 },  // Chinese (simplified) - must go before "zh"
-        { "ko",    2, RTL_TEXTENCODING_MS_949 },
-        { "zh",    2, RTL_TEXTENCODING_MS_950 },  // Chinese (traditional)
-        { "bs",    2, RTL_TEXTENCODING_MS_1250 },
-        { "cs",    2, RTL_TEXTENCODING_MS_1250 },
-        { "hr",    2, RTL_TEXTENCODING_MS_1250 },
-        { "hu",    2, RTL_TEXTENCODING_MS_1250 },
-        { "pl",    2, RTL_TEXTENCODING_MS_1250 },
-        { "ro",    2, RTL_TEXTENCODING_MS_1250 },
-        { "sk",    2, RTL_TEXTENCODING_MS_1250 },
-        { "sl",    2, RTL_TEXTENCODING_MS_1250 },
-//        { "sr",    2, RTL_TEXTENCODING_MS_1250 },
-        { "sq",    2, RTL_TEXTENCODING_MS_1250 },
-        { "be",    2, RTL_TEXTENCODING_MS_1251 },
-        { "bg",    2, RTL_TEXTENCODING_MS_1251 },
-        { "mk",    2, RTL_TEXTENCODING_MS_1251 },
-        { "ru",    2, RTL_TEXTENCODING_MS_1251 },
-        { "sr",    2, RTL_TEXTENCODING_MS_1251 },
-        { "uk",    2, RTL_TEXTENCODING_MS_1251 },
-        { "es",    2, RTL_TEXTENCODING_MS_1252 },
-        { "el",    2, RTL_TEXTENCODING_MS_1253 },
-        { "tr",    2, RTL_TEXTENCODING_MS_1254 },
-        { "he",    2, RTL_TEXTENCODING_MS_1255 },
-        { "ar",    2, RTL_TEXTENCODING_MS_1256 },
-        { "et",    2, RTL_TEXTENCODING_MS_1257 },
-        { "lt",    2, RTL_TEXTENCODING_MS_1257 },
-        { "lv",    2, RTL_TEXTENCODING_MS_1257 },
-        { "vi",    2, RTL_TEXTENCODING_MS_1258 },
+        { "en",    RTL_TEXTENCODING_MS_1252 }, // Most used -> first in list
+        { "th",    RTL_TEXTENCODING_MS_874 },
+        { "ja",    RTL_TEXTENCODING_MS_932 },
+        { "zh-cn", RTL_TEXTENCODING_MS_936 },  // Chinese (simplified) - must go before "zh"
+        { "ko",    RTL_TEXTENCODING_MS_949 },
+        { "zh",    RTL_TEXTENCODING_MS_950 },  // Chinese (traditional)
+        { "bs",    RTL_TEXTENCODING_MS_1250 },
+        { "cs",    RTL_TEXTENCODING_MS_1250 },
+        { "hr",    RTL_TEXTENCODING_MS_1250 },
+        { "hu",    RTL_TEXTENCODING_MS_1250 },
+        { "pl",    RTL_TEXTENCODING_MS_1250 },
+        { "ro",    RTL_TEXTENCODING_MS_1250 },
+        { "sk",    RTL_TEXTENCODING_MS_1250 },
+        { "sl",    RTL_TEXTENCODING_MS_1250 },
+//        { "sr",    RTL_TEXTENCODING_MS_1250 },
+        { "sq",    RTL_TEXTENCODING_MS_1250 },
+        { "be",    RTL_TEXTENCODING_MS_1251 },
+        { "bg",    RTL_TEXTENCODING_MS_1251 },
+        { "mk",    RTL_TEXTENCODING_MS_1251 },
+        { "ru",    RTL_TEXTENCODING_MS_1251 },
+        { "sr",    RTL_TEXTENCODING_MS_1251 },
+        { "uk",    RTL_TEXTENCODING_MS_1251 },
+        { "es",    RTL_TEXTENCODING_MS_1252 },
+        { "el",    RTL_TEXTENCODING_MS_1253 },
+        { "tr",    RTL_TEXTENCODING_MS_1254 },
+        { "he",    RTL_TEXTENCODING_MS_1255 },
+        { "ar",    RTL_TEXTENCODING_MS_1256 },
+        { "et",    RTL_TEXTENCODING_MS_1257 },
+        { "lt",    RTL_TEXTENCODING_MS_1257 },
+        { "lv",    RTL_TEXTENCODING_MS_1257 },
+        { "vi",    RTL_TEXTENCODING_MS_1258 },
     };
 
     for (auto& def : aLanguageTab)
     {
-        if (rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(pLanguage, nLangLen,
-                                                               def.mpLangStr, def.mnLangStrLen,
-                                                               def.mnLangStrLen) == 0)
-        {
+        if (sLanguage.startsWithIgnoreAsciiCase(def.msLangStr))
             return def.meTextEncoding;
-        }
     }
 
     return RTL_TEXTENCODING_MS_1252;
@@ -76,69 +70,57 @@ rtl_TextEncoding impl_getWinTextEncodingFromLangStrANSI(const char* pLanguage)
 
 // See https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756
 // See http://shapelib.maptools.org/codepage.html
-rtl_TextEncoding impl_getWinTextEncodingFromLangStrOEM(const char* pLanguage)
+rtl_TextEncoding impl_getWinTextEncodingFromLangStrOEM(const OUString& sLanguage)
 {
-    auto nLangLen = rtl_str_getLength(pLanguage);
-
-    struct LangEncodingDef
+    static constexpr LangEncodingDef aLanguageTab[] =
     {
-        const char*        mpLangStr;
-        decltype(nLangLen) mnLangStrLen;
-        rtl_TextEncoding   meTextEncoding;
-    };
-    static LangEncodingDef const aLanguageTab[] =
-    {
-        { "de",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "en-us", 5, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "fi",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "fr-ca", 5, RTL_TEXTENCODING_IBM_863 }, // OEM French Canadian; French Canadian (DOS)
-        { "fr",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "it",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "nl",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "sv",    2, RTL_TEXTENCODING_IBM_437 }, // OEM United States
-        { "el",    2, RTL_TEXTENCODING_IBM_737 }, // OEM Greek (formerly 437G); Greek (DOS)
-        { "et",    2, RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
-        { "lt",    2, RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
-        { "lv",    2, RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
-        { "en",    2, RTL_TEXTENCODING_IBM_850 }, // OEM Multilingual Latin 1; Western European (DOS)
-        { "bs",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "cs",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "hr",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "hu",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "pl",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "ro",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "sk",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "sl",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-//        { "sr",    2, RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
-        { "bg",    2, RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
-        { "mk",    2, RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
-        { "sr",    2, RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
-        { "tr",    2, RTL_TEXTENCODING_IBM_857 }, // OEM Turkish; Turkish (DOS)
-        { "pt",    2, RTL_TEXTENCODING_IBM_860 }, // OEM Portuguese; Portuguese (DOS)
-        { "is",    2, RTL_TEXTENCODING_IBM_861 }, // OEM Icelandic; Icelandic (DOS)
-        { "he",    2, RTL_TEXTENCODING_IBM_862 }, // OEM Hebrew; Hebrew (DOS)
-        { "ar",    2, RTL_TEXTENCODING_IBM_864 }, // OEM Arabic; Arabic (864)
-        { "da",    2, RTL_TEXTENCODING_IBM_865 }, // OEM Nordic; Nordic (DOS)
-        { "nn",    2, RTL_TEXTENCODING_IBM_865 }, // OEM Nordic; Nordic (DOS)
-        { "be",    2, RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
-        { "ru",    2, RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
-        { "uk",    2, RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
-        { "th",    2, RTL_TEXTENCODING_MS_874 },  // ANSI/OEM Thai (ISO 8859-11); Thai (Windows)
-        { "ja",    2, RTL_TEXTENCODING_MS_932 },  // ANSI/OEM Japanese; Japanese (Shift-JIS)
-        { "zh-cn", 5, RTL_TEXTENCODING_MS_936 },  // ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB2312)
-        { "ko",    2, RTL_TEXTENCODING_MS_949 },  // ANSI/OEM Korean (Unified Hangul Code)
-        { "zh",    2, RTL_TEXTENCODING_MS_950 },  // ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Traditional (Big5)
-        { "vi",    2, RTL_TEXTENCODING_MS_1258 }, // ANSI/OEM Vietnamese; Vietnamese (Windows)
+        { "de",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "en-us", RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "fi",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "fr-ca", RTL_TEXTENCODING_IBM_863 }, // OEM French Canadian; French Canadian (DOS)
+        { "fr",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "it",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "nl",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "sv",    RTL_TEXTENCODING_IBM_437 }, // OEM United States
+        { "el",    RTL_TEXTENCODING_IBM_737 }, // OEM Greek (formerly 437G); Greek (DOS)
+        { "et",    RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
+        { "lt",    RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
+        { "lv",    RTL_TEXTENCODING_IBM_775 }, // OEM Baltic; Baltic (DOS)
+        { "en",    RTL_TEXTENCODING_IBM_850 }, // OEM Multilingual Latin 1; Western European (DOS)
+        { "bs",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "cs",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "hr",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "hu",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "pl",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "ro",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "sk",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "sl",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+//        { "sr",    RTL_TEXTENCODING_IBM_852 }, // OEM Latin 2; Central European (DOS)
+        { "bg",    RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
+        { "mk",    RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
+        { "sr",    RTL_TEXTENCODING_IBM_855 }, // OEM Cyrillic (primarily Russian)
+        { "tr",    RTL_TEXTENCODING_IBM_857 }, // OEM Turkish; Turkish (DOS)
+        { "pt",    RTL_TEXTENCODING_IBM_860 }, // OEM Portuguese; Portuguese (DOS)
+        { "is",    RTL_TEXTENCODING_IBM_861 }, // OEM Icelandic; Icelandic (DOS)
+        { "he",    RTL_TEXTENCODING_IBM_862 }, // OEM Hebrew; Hebrew (DOS)
+        { "ar",    RTL_TEXTENCODING_IBM_864 }, // OEM Arabic; Arabic (864)
+        { "da",    RTL_TEXTENCODING_IBM_865 }, // OEM Nordic; Nordic (DOS)
+        { "nn",    RTL_TEXTENCODING_IBM_865 }, // OEM Nordic; Nordic (DOS)
+        { "be",    RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
+        { "ru",    RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
+        { "uk",    RTL_TEXTENCODING_IBM_866 }, // OEM Russian; Cyrillic (DOS)
+        { "th",    RTL_TEXTENCODING_MS_874 },  // ANSI/OEM Thai (ISO 8859-11); Thai (Windows)
+        { "ja",    RTL_TEXTENCODING_MS_932 },  // ANSI/OEM Japanese; Japanese (Shift-JIS)
+        { "zh-cn", RTL_TEXTENCODING_MS_936 },  // ANSI/OEM Simplified Chinese (PRC, Singapore); Chinese Simplified (GB2312)
+        { "ko",    RTL_TEXTENCODING_MS_949 },  // ANSI/OEM Korean (Unified Hangul Code)
+        { "zh",    RTL_TEXTENCODING_MS_950 },  // ANSI/OEM Traditional Chinese (Taiwan; Hong Kong SAR, PRC); Chinese Traditional (Big5)
+        { "vi",    RTL_TEXTENCODING_MS_1258 }, // ANSI/OEM Vietnamese; Vietnamese (Windows)
     };
 
     for (auto& def : aLanguageTab)
     {
-        if (rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(pLanguage, nLangLen,
-                                                               def.mpLangStr, def.mnLangStrLen,
-                                                               def.mnLangStrLen) == 0)
-        {
+        if (sLanguage.startsWithIgnoreAsciiCase(def.msLangStr))
             return def.meTextEncoding;
-        }
     }
 
     return RTL_TEXTENCODING_IBM_850;
@@ -146,11 +128,11 @@ rtl_TextEncoding impl_getWinTextEncodingFromLangStrOEM(const char* pLanguage)
 
 } // namespace
 
-rtl_TextEncoding utl_getWinTextEncodingFromLangStr(const char* pLanguage, bool bOEM)
+rtl_TextEncoding utl_getWinTextEncodingFromLangStr(const OUString& sLanguage, bool bOEM)
 {
     return bOEM ?
-        impl_getWinTextEncodingFromLangStrOEM(pLanguage) :
-        impl_getWinTextEncodingFromLangStrANSI(pLanguage);
+        impl_getWinTextEncodingFromLangStrOEM(sLanguage) :
+        impl_getWinTextEncodingFromLangStrANSI(sLanguage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
