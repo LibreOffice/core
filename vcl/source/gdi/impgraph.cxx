@@ -1384,7 +1384,7 @@ bool ImpGraphic::swapOut()
         }
     }
 
-    // Check if writing was successfull
+    // Check if writing was successful
     if (bResult)
     {
         // We have swapped out, so can clean memory and prepare swap info
