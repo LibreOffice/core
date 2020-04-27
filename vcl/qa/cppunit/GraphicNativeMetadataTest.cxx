@@ -40,7 +40,7 @@ void GraphicNativeMetadataTest::testReadFromGraphic()
     SvFileStream aFileStream(getFullUrl("Exif1_180.jpg"), StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-    // don't load the grpahic, but try to get the metadata
+    // don't load the graphic, but try to get the metadata
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aFileStream);
 
     {
