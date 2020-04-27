@@ -8040,6 +8040,11 @@ public:
         return GtkSalFrame::GetKeyModCode(nState);
     }
 
+    int get_drop_index(const Point& rPoint) const override
+    {
+        return gtk_toolbar_get_drop_index(m_pToolbar, rPoint.X(), rPoint.Y());
+    }
+
     virtual ~GtkInstanceToolbar() override
     {
         for (auto& a : m_aMap)
