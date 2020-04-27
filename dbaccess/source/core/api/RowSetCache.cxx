@@ -303,7 +303,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache,i_nMaxRows,m_nRowCount);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable, aUpdateTableName ,_xAnalyzer,_aParameterValueForCache,i_nMaxRows,m_nRowCount);
             try
             {
                 m_xCacheSet = pKeySet;
