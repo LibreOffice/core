@@ -18,6 +18,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
