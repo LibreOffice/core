@@ -65,6 +65,7 @@
 #define ODFVER_010_TEXT "1.0"
 #define ODFVER_011_TEXT "1.1"
 #define ODFVER_012_TEXT "1.2"
+#define ODFVER_013_TEXT "1.3"
 
 // filter flags
 // TODO/LATER: The flags should be part of the UNO specification

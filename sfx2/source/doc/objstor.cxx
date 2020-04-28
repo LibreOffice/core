@@ -357,7 +357,14 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         try
         {
             // older versions can not have this property set, it exists only starting from ODF1.2
-            xProps->setPropertyValue("Version", uno::makeAny<OUString>( ODFVER_012_TEXT ) );
+            if (SvtSaveOptions::ODFSVER_013 <= nDefVersion)
+            {
+                xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_013_TEXT));
+            }
+            else
+            {
+                xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_012_TEXT));
+            }
         }
         catch( uno::Exception& )
         {
@@ -1185,7 +1192,7 @@ bool SfxObjectShell::SaveTo_Impl
             // document, but technically this is not correct, so this prevents old
             // signatures to be copied over to a version 1.2 document
             bNoPreserveForOasis = (
-                                   (aODFVersion == ODFVER_012_TEXT && nVersion < SvtSaveOptions::ODFSVER_012) ||
+                                   (0 <= aODFVersion.compareTo(ODFVER_012_TEXT) && nVersion < SvtSaveOptions::ODFSVER_012) ||
                                    (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFSVER_012)
                                   );
         }
