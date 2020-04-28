@@ -888,8 +888,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 {
     // Given: A document (docx) with a signature line and a valid signature
     uno::Reference<security::XDocumentDigitalSignatures> xSignatures(
-        security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), "1.2"));
+        security::DocumentDigitalSignatures::createDefault(
+            comphelper::getProcessComponentContext()));
 
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(

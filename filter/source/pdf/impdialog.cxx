@@ -1494,8 +1494,8 @@ ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, void)
 {
     Reference< security::XDocumentDigitalSignatures > xSigner(
-        security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), "1.2" ) );
+        security::DocumentDigitalSignatures::createDefault(
+            comphelper::getProcessComponentContext()));
     xSigner->setParentWindow(GetFrameWeld()->GetXWindow());
 
     // The use may provide a description while choosing a certificate.

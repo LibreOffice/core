@@ -1776,8 +1776,9 @@ void SwEditShell::SignParagraph()
 
     // 2. Get certificate.
     uno::Reference<security::XDocumentDigitalSignatures> xSigner(
-        security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), "1.2" ) );
+        // here none of the version-dependent methods are called
+        security::DocumentDigitalSignatures::createDefault(
+            comphelper::getProcessComponentContext()));
 
     uno::Sequence<css::beans::PropertyValue> aProperties;
     uno::Reference<security::XCertificate> xCertificate = xSigner->chooseCertificateWithProps(aProperties);

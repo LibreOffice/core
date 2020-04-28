@@ -1266,8 +1266,8 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         {
             // Get the document signatures
             Reference<security::XDocumentDigitalSignatures> xSignatures(
-                security::DocumentDigitalSignatures::createWithVersion(
-                    comphelper::getProcessComponentContext(), "1.2"));
+                security::DocumentDigitalSignatures::createDefault(
+                    comphelper::getProcessComponentContext()));
 
             uno::Reference<embed::XStorage> xStorage
                 = comphelper::OStorageHelper::GetStorageOfFormatFromURL(

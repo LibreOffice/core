@@ -469,8 +469,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     uno::Sequence< beans::NamedValue > aEncryptionData(1);
 
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
-        security::DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), "1.2" ) );
+        // here none of the version-dependent methods are called
+        security::DocumentDigitalSignatures::createDefault(
+            comphelper::getProcessComponentContext()));
 
     // fire up certificate chooser dialog - user can multi-select!
     uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
