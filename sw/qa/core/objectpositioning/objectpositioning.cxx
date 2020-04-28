@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/VertOrientation.hpp>
+
 #include <comphelper/classids.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svx/svdpage.hxx>
@@ -46,6 +48,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     // Without the accompanying fix in place, this test would have crashed.
     pWrtShell->SplitNode();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
+{
+    // Create a document, insert a shape and position it 1cm above the bottom of the body area.
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("AnchorType",
+                                  uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
+    xShapeProps->setPropertyValue("VertOrientRelation",
+                                  uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    xShapeProps->setPropertyValue("VertOrientPosition",
+                                  uno::makeAny(static_cast<sal_Int32>(-11000)));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Verify that the distance between the body and anchored object bottom is indeed around 1cm.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32();
+    sal_Int32 nAnchoredBottom
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "bottom").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 564
+    // - Actual  : 9035
+    // i.e. the vertical position was from-top, not from-bottom.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(564), nBodyBottom - nAnchoredBottom);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
