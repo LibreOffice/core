@@ -3913,7 +3913,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         OUString aName;
         pParameter->second >>= aName;
-        assert( aName.getLength() < 21 && "jluth seeing if following documentation will cause problems." );
         const sal_Int32 nLen = std::min( sal_Int32(20), aName.getLength() );
         ffname = aName.copy(0, nLen);
     }
@@ -3991,7 +3990,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             {
                 OUString aDefaultText;
                 pParameter->second >>= aDefaultText;
-                assert( aDefaultText.getLength() < 256 && "jluth seeing if following documentation will cause problems." );
                 const sal_Int32 nLen = std::min( sal_Int32(255), aDefaultText.getLength() );
                 ffdeftext = aDefaultText.copy (0, nLen);
             }
@@ -4002,7 +4000,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         {
             sal_uInt16 nLength = 0;
             pParameter->second >>= nLength;
-            assert( nLength < 32768 && "jluth seeing if following documentation will cause problems." );
             nLength = std::min( sal_uInt16(32767), nLength );
             aFieldHeader.cch = nLength;
         }
@@ -4013,7 +4010,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             OUString aFormat;
             pParameter->second >>= aFormat;
             const sal_Int32 nLen = std::min( sal_Int32(64), aFormat.getLength() );
-            assert( nLen < 65 && "jluth seeing if following documentation will cause problems." );
             ffformat = aFormat.copy(0, nLen);
         }
     }
@@ -4047,7 +4043,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         OUString aEntryMacro;
         pParameter->second >>= aEntryMacro;
-        assert( aEntryMacro.getLength() < 33 && "jluth seeing if following documentation will cause problems." );
         const sal_Int32 nLen = std::min( sal_Int32(32), aEntryMacro.getLength() );
         ffentrymcr = aEntryMacro.copy (0, nLen);
     }
@@ -4057,7 +4052,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         OUString aExitMacro;
         pParameter->second >>= aExitMacro;
-        assert( aExitMacro.getLength() < 33 && "jluth seeing if following documentation will cause problems." );
         const sal_Int32 nLen = std::min( sal_Int32(32), aExitMacro.getLength() );
         ffexitmcr = aExitMacro.copy (0, nLen);
     }
