@@ -765,7 +765,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
 {
     uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
     // This was 1, i.e. the numbering on the second level was "1", not "1.1".
-    // Check the praragraph properties, not the list ones, since they can differ due to overrides
+    // Check the paragraph properties, not the list ones, since they can differ due to overrides
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
     CPPUNIT_ASSERT_EQUAL(OUString("1.1"), getProperty<OUString>(xPara, "ListLabelString"));

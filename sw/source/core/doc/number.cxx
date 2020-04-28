@@ -648,7 +648,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
             if (!sLevelFormat.isEmpty())
             {
                 // In this case we are ignoring GetIncludeUpperLevels: we put all
-                // level nubers requested by level format
+                // level numbers requested by level format
                 for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
                 {
                     OUString sReplacement;

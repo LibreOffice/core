@@ -1553,7 +1553,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108995, "xml_space.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testGroupShapeTextHighlight, "tdf131841_HighlightColorGroupedShape.docx")
 {
-    // tdf#131841 Highligh color of text in grouped shapes was not imported.
+    // tdf#131841 Highlight color of text in grouped shapes was not imported.
 
     // These are the possible highlight colors in MSO Word. Check that we import them properly.
     const std::vector<sal_uInt32> xColors {

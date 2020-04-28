@@ -53,7 +53,7 @@ void test(
     CPPUNIT_ASSERT(t.operator ==(t));
 
     // `P == nullptr` for P of pointer type is awkward to write with CPPUNIT_ASSERT_EQUAL, and the
-    // actual pointer values that would be printed if CPPUNIT_ASSERT_EQUAL failed would likey not be
+    // actual pointer values that would be printed if CPPUNIT_ASSERT_EQUAL failed would likely not be
     // very meaningful, so let it use CPPUNIT_ASSERT (but stick to CPPUNIT_ASSERT_EQUAL for
     // consistency in the unlikely case that P is of type std::nullptr_t):
     CPPUNIT_ASSERT(p == nullptr);
