@@ -34,7 +34,7 @@ namespace slideshow::internal {
     return res;
 }
 
-FigureWipe * FigureWipe::createTriangleWipe()
+std::shared_ptr<FigureWipe> FigureWipe::createTriangleWipe()
 {
     const double s60 = sin( basegfx::deg2rad(60.0) );
     const double s30 = sin( basegfx::deg2rad(30.0) );
@@ -43,10 +43,10 @@ FigureWipe * FigureWipe::createTriangleWipe()
     figure.append( ::basegfx::B2DPoint( 0.0, -0.5 - s60 ) );
     figure.append( ::basegfx::B2DPoint( -0.5 - s30, 0.5 ) );
     figure.setClosed(true);
-    return new FigureWipe(figure);
+    return std::make_shared<FigureWipe>(figure);
 }
 
-FigureWipe * FigureWipe::createArrowHeadWipe()
+std::shared_ptr<FigureWipe> FigureWipe::createArrowHeadWipe()
 {
     const double s60 = sin( basegfx::deg2rad(60.0) );
     const double s30 = sin( basegfx::deg2rad(30.0) );
@@ -57,10 +57,10 @@ FigureWipe * FigureWipe::createArrowHeadWipe()
     figure.append( ::basegfx::B2DPoint( -0.5 - s30 - off, 0.5 + off ) );
     figure.append( ::basegfx::B2DPoint( 0.0, 0.5 ) );
     figure.setClosed(true);
-    return new FigureWipe(figure);
+    return std::make_shared<FigureWipe>(figure);
 }
 
-FigureWipe * FigureWipe::createPentagonWipe()
+std::shared_ptr<FigureWipe> FigureWipe::createPentagonWipe()
 {
     const double s = sin( basegfx::deg2rad(18.0) );
     const double c = cos( basegfx::deg2rad(18.0) );
@@ -71,10 +71,10 @@ FigureWipe * FigureWipe::createPentagonWipe()
     figure.append( ::basegfx::B2DPoint( -0.5 - s, 0.5 - c ) );
     figure.append( ::basegfx::B2DPoint( -0.5, 0.5 ) );
     figure.setClosed(true);
-    return new FigureWipe(figure);
+    return std::make_shared<FigureWipe>(figure);
 }
 
-FigureWipe * FigureWipe::createHexagonWipe()
+std::shared_ptr<FigureWipe> FigureWipe::createHexagonWipe()
 {
     const double s = sin( basegfx::deg2rad(30.0) );
     const double c = cos( basegfx::deg2rad(30.0) );
@@ -86,10 +86,10 @@ FigureWipe * FigureWipe::createHexagonWipe()
     figure.append( ::basegfx::B2DPoint( -0.5 - s, 0.0 ) );
     figure.append( ::basegfx::B2DPoint( -0.5, c ) );
     figure.setClosed(true);
-    return new FigureWipe(figure);
+    return std::make_shared<FigureWipe>(figure);
 }
 
-FigureWipe * FigureWipe::createStarWipe( sal_Int32 nPoints )
+std::shared_ptr<FigureWipe> FigureWipe::createStarWipe( sal_Int32 nPoints )
 {
     const double v = M_PI / nPoints;
     const ::basegfx::B2DPoint p_( 0.0, -M_SQRT2 );
@@ -109,7 +109,7 @@ FigureWipe * FigureWipe::createStarWipe( sal_Int32 nPoints )
         figure.append(p);
     }
     figure.setClosed(true);
-    return new FigureWipe(figure);
+    return std::make_shared<FigureWipe>(figure);
 }
 
 }

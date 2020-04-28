@@ -853,8 +853,8 @@ NumberAnimationSharedPtr createPluginTransition(
     const SoundPlayerSharedPtr&              pSoundPlayer,
     EventMultiplexer&                        rEventMultiplexer)
 {
-    std::unique_ptr<PluginSlideChange> pTransition(
-        new PluginSlideChange(
+    auto pTransition =
+        std::make_shared<PluginSlideChange>(
             nTransitionType,
             nTransitionSubType,
             pLeavingSlide,
@@ -863,14 +863,11 @@ NumberAnimationSharedPtr createPluginTransition(
             rScreenUpdater,
             xFactory,
             pSoundPlayer,
-            rEventMultiplexer ));
+            rEventMultiplexer );
 
-    if( pTransition->Success() )
-        return NumberAnimationSharedPtr( pTransition.release() );
-    else
-    {
-        return NumberAnimationSharedPtr();
-    }
+    if( !pTransition->Success() )
+        return nullptr;
+    return pTransition;
 }
 
 } // anon namespace
