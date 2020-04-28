@@ -976,10 +976,16 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     {
         const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
 
+<<<<<<< HEAD   (6d3733 Sifr Dark: tdf#32490: Missing Set Reminder icons)
         std::vector<StreamDataSequence> aCustomFragments;
         std::vector<OUString> aCustomFragmentTypes;
         std::vector<OUString> aCustomFragmentTargets;
         for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+=======
+        // Preserve non-standard (i.e. custom) entries.
+        if (!sType.match("http://schemas.openxmlformats.org") // OOXML/ECMA Transitional
+            && !sType.match("http://purl.oclc.org")) // OOXML Strict
+>>>>>>> CHANGE (9be543 tdf#119087 Don't treat OOXML strict namespace as custom XML)
         {
             OUString sType;
             OUString sTarget;
