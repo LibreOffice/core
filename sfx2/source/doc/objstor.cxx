@@ -315,7 +315,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
     }
 
-    SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_012;
+    SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_013;
     if (!utl::ConfigManager::IsFuzzing())
     {
         SvtSaveOptions aSaveOpt;
