@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+<office:document-styles xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" office:version="1.2">
   <office:font-face-decls>
     <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-adornments="Book" style:font-pitch="variable"/>
     <style:font-face style:name="DejaVu Sans Condensed" svg:font-family="'DejaVu Sans Condensed'" style:font-adornments="Condensed" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
   </office:font-face-decls>
   <office:styles>
+    <draw:gradient draw:name="Filled" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Blue" draw:display-name="Filled Blue" draw:style="linear" draw:start-color="#729fcf" draw:end-color="#355269" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Green" draw:display-name="Filled Green" draw:style="linear" draw:start-color="#77bc65" draw:end-color="#127622" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Red" draw:display-name="Filled Red" draw:style="linear" draw:start-color="#ff6d6d" draw:end-color="#c9211e" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Filled_20_Yellow" draw:display-name="Filled Yellow" draw:style="linear" draw:start-color="#ffde59" draw:end-color="#b47804" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
+    <draw:gradient draw:name="Gradient_20_1" draw:display-name="Gradient 1" draw:style="linear" draw:start-color="#3465a4" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
+    <draw:gradient draw:name="Shapes" draw:style="rectangular" draw:cx="50%" draw:cy="50%" draw:start-color="#cccccc" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
+    <draw:hatch draw:name="Hatching_20_1" draw:display-name="Hatching 1" draw:style="single" draw:color="#3465a4" draw:distance="0.02cm" draw:rotation="0"/>
+    <draw:fill-image draw:name="Bitmap_20_1" draw:display-name="Bitmap 1" xlink:href="Pictures/1000000000000020000000204B249CA79A42C6D7.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
     <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_1" draw:display-name="Dashed (var) 1" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
     <style:default-style style:family="graphic">
@@ -13,10 +22,10 @@
       <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Sans" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-size="24pt" fo:language="de" fo:country="AT" style:font-name-asian="Segoe UI" style:font-size-asian="24pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Tahoma" style:font-size-complex="24pt" style:language-complex="hi" style:country-complex="IN"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
-      <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0cm" svg:stroke-color="#3465a4" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#729fcf" draw:textarea-horizontal-align="justify" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080">
+      <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0.05cm" svg:stroke-color="#e8a202" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#fff5ce" draw:textarea-horizontal-align="justify" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.03cm" draw:shadow-offset-y="0.03cm" draw:shadow-color="#ffe994">
         <text:list-style style:name="standard">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -61,80 +70,128 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-    </style:style>
-    <style:style style:name="objectwitharrow" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.15cm" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.7cm" draw:marker-start-center="true" draw:marker-end-width="0.3cm"/>
-    </style:style>
-    <style:style style:name="objectwithshadow" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties svg:stroke-color="#000000" draw:fill="none"/>
+      <style:graphic-properties svg:stroke-color="#e8a202" draw:fill="none"/>
     </style:style>
-    <style:style style:name="text" style:family="graphic" style:parent-style-name="standard">
+    <style:style style:name="Object_20_with_20_no_20_fill_20_and_20_no_20_line" style:display-name="Object with no fill and no line" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
     </style:style>
-    <style:style style:name="textbody" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+    <style:style style:name="Text" style:family="graphic">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#cccccc" draw:fill="solid" draw:fill-color="#eeeeee"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-family="&apos;Noto Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
     </style:style>
-    <style:style style:name="textbodyjustfied" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:paragraph-properties fo:text-align="justify"/>
+    <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
+      <style:graphic-properties draw:fill="none"/>
+      <style:text-properties fo:font-size="18pt"/>
     </style:style>
-    <style:style style:name="textbodyindent" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0.6cm"/>
+    <style:style style:name="Title_20_A4" style:display-name="Title A4" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
+      <style:text-properties fo:font-size="44pt"/>
     </style:style>
-    <style:style style:name="title" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:text-properties fo:font-size="44pt" style:font-size-asian="44pt" style:font-size-complex="44pt"/>
+    <style:style style:name="Heading_20_A4" style:display-name="Heading A4" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
+      <style:text-properties fo:font-size="24pt"/>
     </style:style>
-    <style:style style:name="title1" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#008080" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+    <style:style style:name="Text_20_A4" style:display-name="Text A4" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
     </style:style>
-    <style:style style:name="title2" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties svg:stroke-width="0.05cm" draw:fill-color="#ffcc99" draw:shadow="visible" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0.2cm" fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="36pt" style:font-size-asian="36pt" style:font-size-complex="36pt"/>
+    <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
+      <style:graphic-properties draw:fill="none"/>
+      <style:text-properties fo:font-size="18pt"/>
     </style:style>
-    <style:style style:name="headline" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+    <style:style style:name="Title_20_A0" style:display-name="Title A0" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
+      <style:text-properties fo:font-size="96pt"/>
     </style:style>
-    <style:style style:name="headline1" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    <style:style style:name="Heading_20_A0" style:display-name="Heading A0" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
+      <style:text-properties fo:font-size="72pt"/>
     </style:style>
-    <style:style style:name="headline2" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
-      <style:paragraph-properties fo:margin-top="0.42cm" fo:margin-bottom="0.21cm"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+    <style:style style:name="Text_20_A0" style:display-name="Text A0" style:family="graphic" style:parent-style-name="A4">
+      <style:graphic-properties draw:stroke="none"/>
     </style:style>
-    <style:style style:name="measure" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#000000" draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:fill="none" draw:show-unit="true"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    <style:style style:name="Graphic" style:family="graphic">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
+      <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt"/>
     </style:style>
+    <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
+      <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
+      <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
+    </style:style>
+    <style:style style:name="Filled" style:family="graphic" style:parent-style-name="Shapes">
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled"/>
+    </style:style>
+    <style:style style:name="Filled_20_Blue" style:display-name="Filled Blue" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Blue"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Filled_20_Green" style:display-name="Filled Green" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Green"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+    </style:style>
+    <style:style style:name="Filled_20_Red" style:display-name="Filled Red" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Red"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Filled_20_Yellow" style:display-name="Filled Yellow" style:family="graphic" style:parent-style-name="Filled">
+      <style:graphic-properties draw:fill-gradient-name="Filled_20_Yellow"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Outlined" style:family="graphic" style:parent-style-name="Shapes">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-width="0.081cm" svg:stroke-color="#000000" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="Outlined_20_Blue" style:display-name="Outlined Blue" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties svg:stroke-color="#355269"/>
+      <style:text-properties fo:color="#355269" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Outlined_20_Green" style:display-name="Outlined Green" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties svg:stroke-color="#127622"/>
+      <style:text-properties fo:color="#127622" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Outlined_20_Red" style:display-name="Outlined Red" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties svg:stroke-color="#c9211e"/>
+      <style:text-properties fo:color="#c9211e" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Outlined_20_Yellow" style:display-name="Outlined Yellow" style:family="graphic" style:parent-style-name="Outlined">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#b47804"/>
+      <style:text-properties fo:color="#b47804" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Lines" style:family="graphic" style:parent-style-name="Graphic">
+      <style:graphic-properties draw:stroke="solid" svg:stroke-color="#000000" draw:fill="none"/>
+    </style:style>
+    <style:style style:name="Arrow_20_Line" style:display-name="Arrow Line" style:family="graphic" style:parent-style-name="Lines">
+      <style:graphic-properties draw:marker-start="Arrow" draw:marker-start-width="0.2cm" draw:marker-end="Arrow" draw:marker-end-width="0.2cm" draw:show-unit="true"/>
+    </style:style>
+    <style:style style:name="Arrow_20_Dashed" style:display-name="Arrow Dashed" style:family="graphic" style:parent-style-name="Lines">
+      <style:graphic-properties draw:stroke="dash"/>
+    </style:style>
+    <style:style style:name="Accent" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:fill-gradient-name="Gradient_20_1" draw:fill-hatch-name="Hatching_20_1" draw:fill-image-name="Bitmap_20_1"/>
+    </style:style>
+    <style:style style:name="Accent_20_1" style:display-name="Accent 1" style:family="graphic" style:parent-style-name="Accent">
+      <style:graphic-properties svg:stroke-color="#f10d0c" draw:fill="solid" draw:fill-color="#ffd7d7" draw:shadow="hidden" draw:shadow-color="#ffa6a6"/>
+    </style:style>
+    <style:style style:name="Accent_20_2" style:display-name="Accent 2" style:family="graphic" style:parent-style-name="Accent">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffde59"/>
+    </style:style>
+    <style:style style:name="Accent_20_3" style:display-name="Accent 3" style:family="graphic" style:parent-style-name="Accent"/>
     <style:style style:name="Focus-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Focus-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="Focus-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans Condensed" fo:font-family="'DejaVu Sans Condensed'" style:font-style-name="Condensed" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans Condensed1" fo:font-family="&apos;DejaVu Sans Condensed&apos;" style:font-style-name="Condensed" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
         <text:list-style style:name="Focus-outline1">
           <text:list-level-style-number text:level="1" style:num-format="">
             <style:list-level-properties fo:text-align="center"/>
@@ -178,46 +235,54 @@
           </text:list-level-style-number>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.5cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus-outline2" style:family="presentation" style:parent-style-name="Focus-outline1">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.4cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="18pt"/>
     </style:style>
     <style:style style:name="Focus-outline3" style:family="presentation" style:parent-style-name="Focus-outline2">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="13.5pt"/>
     </style:style>
     <style:style style:name="Focus-outline4" style:family="presentation" style:parent-style-name="Focus-outline3">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.149cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="10.1000003814697pt"/>
     </style:style>
     <style:style style:name="Focus-outline5" style:family="presentation" style:parent-style-name="Focus-outline4">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="7.59999990463257pt"/>
     </style:style>
     <style:style style:name="Focus-outline6" style:family="presentation" style:parent-style-name="Focus-outline5">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="5.69999980926514pt"/>
     </style:style>
     <style:style style:name="Focus-outline7" style:family="presentation" style:parent-style-name="Focus-outline6">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm" fo:text-align="center">
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-align="center" fo:text-indent="0cm">
         <style:tab-stops/>
       </style:paragraph-properties>
+      <style:text-properties fo:font-size="4.30000019073486pt"/>
     </style:style>
     <style:style style:name="Focus-outline8" style:family="presentation" style:parent-style-name="Focus-outline7">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="3.20000004768372pt"/>
     </style:style>
     <style:style style:name="Focus-outline9" style:family="presentation" style:parent-style-name="Focus-outline8">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="2.40000009536743pt"/>
     </style:style>
     <style:style style:name="Focus-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -265,7 +330,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32t" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -313,7 +378,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="44pt" style:font-size-asian="44pt" style:font-size-complex="44pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus1-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -321,15 +386,15 @@
     </style:style>
     <style:style style:name="Focus1-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="Focus1-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus1-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
         <text:list-style style:name="Focus1-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -373,32 +438,40 @@
           </text:list-level-style-bullet>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.5cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="26pt" style:font-size-asian="26pt" style:font-size-complex="26pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus1-outline2" style:family="presentation" style:parent-style-name="Focus1-outline1">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.4cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="14.6000003814697pt"/>
     </style:style>
     <style:style style:name="Focus1-outline3" style:family="presentation" style:parent-style-name="Focus1-outline2">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.3cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="11pt"/>
     </style:style>
     <style:style style:name="Focus1-outline4" style:family="presentation" style:parent-style-name="Focus1-outline3">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.2cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.149cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="8.19999980926514pt"/>
     </style:style>
     <style:style style:name="Focus1-outline5" style:family="presentation" style:parent-style-name="Focus1-outline4">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="6.09999990463257pt"/>
     </style:style>
     <style:style style:name="Focus1-outline6" style:family="presentation" style:parent-style-name="Focus1-outline5">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="4.59999990463257pt"/>
     </style:style>
     <style:style style:name="Focus1-outline7" style:family="presentation" style:parent-style-name="Focus1-outline6">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="3.5pt"/>
     </style:style>
     <style:style style:name="Focus1-outline8" style:family="presentation" style:parent-style-name="Focus1-outline7">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="2.59999990463257pt"/>
     </style:style>
     <style:style style:name="Focus1-outline9" style:family="presentation" style:parent-style-name="Focus1-outline8">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="1.89999997615814pt"/>
     </style:style>
     <style:style style:name="Focus1-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -446,7 +519,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus1-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -494,7 +567,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="21pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus2-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -502,15 +575,15 @@
     </style:style>
     <style:style style:name="Focus2-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-pitch="variable" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="Focus2-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans Condensed" fo:font-family="'DejaVu Sans Condensed'" style:font-style-name="Condensed" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans Condensed1" fo:font-family="&apos;DejaVu Sans Condensed&apos;" style:font-style-name="Condensed" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus2-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
         <text:list-style style:name="Focus2-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -554,35 +627,40 @@
           </text:list-level-style-bullet>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.5cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="26pt" style:font-size-asian="26pt" style:font-size-complex="26pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus2-outline2" style:family="presentation" style:parent-style-name="Focus2-outline1">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.4cm"/>
-      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Focus2-outline3" style:family="presentation" style:parent-style-name="Focus2-outline2">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.3cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus2-outline4" style:family="presentation" style:parent-style-name="Focus2-outline3">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.2cm"/>
-      <style:text-properties fo:font-size="16pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.15cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
     </style:style>
     <style:style style:name="Focus2-outline5" style:family="presentation" style:parent-style-name="Focus2-outline4">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="9pt"/>
     </style:style>
     <style:style style:name="Focus2-outline6" style:family="presentation" style:parent-style-name="Focus2-outline5">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="6.69999980926514pt"/>
     </style:style>
     <style:style style:name="Focus2-outline7" style:family="presentation" style:parent-style-name="Focus2-outline6">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="5pt"/>
     </style:style>
     <style:style style:name="Focus2-outline8" style:family="presentation" style:parent-style-name="Focus2-outline7">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="3.79999995231628pt"/>
     </style:style>
     <style:style style:name="Focus2-outline9" style:family="presentation" style:parent-style-name="Focus2-outline8">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="2.79999995231628pt"/>
     </style:style>
     <style:style style:name="Focus2-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -630,7 +708,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus2-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -678,7 +756,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="21pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="28pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="28pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus3-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
@@ -686,15 +764,15 @@
     </style:style>
     <style:style style:name="Focus3-backgroundobjects" style:family="presentation">
       <style:graphic-properties draw:textarea-horizontal-align="justify" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" style:letter-kerning="true"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="14pt" style:letter-kerning="true" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="Focus3-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus3-outline1" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
         <text:list-style style:name="Focus3-outline1">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
@@ -738,40 +816,40 @@
           </text:list-level-style-bullet>
         </text:list-style>
       </style:graphic-properties>
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.5cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.374cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus3-outline2" style:family="presentation" style:parent-style-name="Focus3-outline1">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.4cm"/>
-      <style:text-properties fo:font-size="28pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.3cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="21pt" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
     </style:style>
     <style:style style:name="Focus3-outline3" style:family="presentation" style:parent-style-name="Focus3-outline2">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.3cm"/>
-      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Focus3-outline4" style:family="presentation" style:parent-style-name="Focus3-outline3">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.2cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.149cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-outline5" style:family="presentation" style:parent-style-name="Focus3-outline4">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-outline6" style:family="presentation" style:parent-style-name="Focus3-outline5">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-outline7" style:family="presentation" style:parent-style-name="Focus3-outline6">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-outline8" style:family="presentation" style:parent-style-name="Focus3-outline7">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-outline9" style:family="presentation" style:parent-style-name="Focus3-outline8">
-      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.1cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="15pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
     </style:style>
     <style:style style:name="Focus3-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -819,7 +897,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" style:font-size-asian="32pt" style:font-size-complex="32pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#666666" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Focus3-title" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
@@ -867,7 +945,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans" fo:font-family="'DejaVu Sans'" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="40pt" style:font-size-asian="40pt" style:font-size-complex="40pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#333333" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="DejaVu Sans2" fo:font-family="&apos;DejaVu Sans&apos;" style:font-style-name="Book" style:font-pitch="variable" fo:font-size="30pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="40pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="40pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -891,7 +969,7 @@
       <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="21.59cm" fo:page-height="27.94cm" style:print-orientation="portrait"/>
     </style:page-layout>
     <style:page-layout style:name="PM1">
-      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="21cm" style:print-orientation="landscape"/>
+      <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
     </style:page-layout>
     <style:style style:name="Mdp1" style:family="drawing-page">
       <style:drawing-page-properties draw:background-size="border" draw:fill="none"/>
@@ -901,129 +979,254 @@
     </style:style>
     <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
-    </style:style>
-    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:color-mode="standard" draw:luminance="0%" draw:contrast="0%" draw:gamma="100%" draw:red="0%" draw:green="0%" draw:blue="0%" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:image-opacity="100%" style:mirror="none"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ea7500" draw:textarea-vertical-align="middle"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
     </style:style>
-    <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+    <style:style style:name="Mpr4" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#3465a4" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr5" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+    <style:style style:name="Mpr8" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr6" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+    <style:style style:name="Mpr9" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr7" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+    <style:style style:name="Mpr10" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr11" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ea7500" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr12" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr13" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr14" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#3465a4" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr15" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr16" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr8" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+    <style:style style:name="Mpr17" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr9" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+    <style:style style:name="Mpr18" style:family="presentation" style:parent-style-name="Focus1-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr10" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+    <style:style style:name="Mpr19" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr20" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#ea7500" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr21" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr22" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr23" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#3465a4" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr24" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr25" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr11" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+    <style:style style:name="Mpr26" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mpr12" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+    <style:style style:name="Mpr27" style:family="presentation" style:parent-style-name="Focus2-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Mpr28" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#780373" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr29" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#f10d0c" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr30" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#e8a202" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr31" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#168253" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="Mpr32" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Mpr33" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="Mpr34" style:family="presentation" style:parent-style-name="Focus3-backgroundobjects">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
     <style:style style:name="MP1" style:family="paragraph">
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP2" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP3" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP4" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="end"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP5" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#f10d0c"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP6" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ea7500"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP7" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none"/>
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#e8a202"/>
       <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MP8" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="justify"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#168253"/>
+      <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MP9" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="justify"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#3465a4"/>
+      <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MP10" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#780373"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP11" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP12" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP13" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:paragraph-properties fo:text-align="end"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:paragraph-properties fo:text-align="justify" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP14" style:family="paragraph">
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="justify" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP15" style:family="paragraph">
-      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP16" style:family="paragraph">
-      <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:color="#808080" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MP17" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP18" style:family="paragraph">
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP19" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#f10d0c"/>
       <style:paragraph-properties fo:text-align="center"/>
-      <style:text-properties fo:color="#808080" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP20" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ea7500"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP21" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#e8a202"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP22" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#168253"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP23" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#3465a4"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP24" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#780373"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP25" style:family="paragraph">
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP26" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP27" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#808080" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP28" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#808080" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT1" style:family="text">
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT2" style:family="text">
-      <style:text-properties fo:color="#dddddd" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <style:style style:name="MT3" style:family="text">
-      <style:text-properties fo:color="#808080" style:font-name="DejaVu Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:color="#808080" loext:opacity="100%" style:font-name="DejaVu Sans2" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
     <text:list-style style:name="ML1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
@@ -1119,12 +1322,6 @@
       <draw:layer draw:name="measurelines"/>
     </draw:layer-set>
     <style:handout-master presentation:presentation-page-layout-name="AL0T26" style:page-layout-name="PM0" draw:style-name="Mdp2">
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="1cm" svg:y="2.435cm"/>
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="1cm" svg:y="10.483cm"/>
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="1cm" svg:y="18.531cm"/>
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="11.295cm" svg:y="2.435cm"/>
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="11.295cm" svg:y="10.483cm"/>
-      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="6.97cm" svg:x="11.295cm" svg:y="18.531cm"/>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
           <text:p text:style-name="MP1">
@@ -1156,15 +1353,38 @@
         <draw:text-box>
           <text:p text:style-name="MP3">
             <text:span text:style-name="MT1">
-              <text:page-number/>
+              <text:page-number>&lt;number&gt;</text:page-number>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="1cm" svg:y="3.307cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="1cm" svg:y="11.355cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="1cm" svg:y="19.403cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="11.295cm" svg:y="3.307cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="11.295cm" svg:y="11.355cm"/>
+      <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="11.295cm" svg:y="19.403cm"/>
     </style:handout-master>
     <style:master-page style:name="Focus" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="1.4cm" svg:y="19.131cm" presentation:class="date-time">
+      <draw:polygon presentation:style-name="Mpr1" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="13.499cm" svg:height="7.999cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 13500 8000" draw:points="0,0 0,500 10404,8000 13500,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr2" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="15.999cm" svg:height="5.999cm" svg:x="12cm" svg:y="0cm" svg:viewBox="0 0 16000 6000" draw:points="16000,0 2500,0 0,6000 16000,2500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="12.499cm" svg:height="10.499cm" svg:x="15.5cm" svg:y="3.5cm" svg:viewBox="0 0 12500 10500" draw:points="12500,10500 12500,0 0,2500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr4" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="12.499cm" svg:height="7.249cm" svg:x="15.5cm" svg:y="8.5cm" svg:viewBox="0 0 12500 7250" draw:points="12500,7250 12500,6500 2000,0 0,7250">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr5" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="15.999cm" svg:height="5.291cm" svg:x="0cm" svg:y="10.458cm" svg:viewBox="0 0 16000 5292" draw:points="0,5292 14500,5292 16000,0 0,2542">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr6" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="11.999cm" svg:height="10.499cm" svg:x="0cm" svg:y="1.5cm" svg:viewBox="0 0 12000 10500" draw:points="0,0 0,10500 12000,8500">
+        <text:p/>
+      </draw:polygon>
+      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
           <text:p text:style-name="MP1">
             <text:span text:style-name="MT1">
@@ -1173,204 +1393,33 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.131cm" presentation:class="footer">
+      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP12" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP5">
+          <text:p text:style-name="MP11">
             <text:span text:style-name="MT1">
               <presentation:footer/>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="20.076cm" svg:y="19.131cm" presentation:class="page-number">
+      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP3">
             <text:span text:style-name="MT1">
-              <text:page-number/>
+              <text:page-number>&lt;number&gt;</text:page-number>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28.294cm" svg:height="21.1cm" svg:x="-0.1cm" svg:y="0cm">
-        <draw:image xlink:href="Pictures/2000000E0000634100004A4C8B8C0B6EC20B2683.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
-          <text:p/>
-        </draw:image>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus-outline1" draw:layer="backgroundobjects" svg:width="7.116cm" svg:height="6.865cm" svg:x="10.404cm" svg:y="7.079cm" presentation:class="outline" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Focus-outline1" draw:layer="backgroundobjects" svg:width="7cm" svg:height="5cm" svg:x="10.5cm" svg:y="5.5cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Focus-title" draw:layer="backgroundobjects" svg:width="11.221cm" svg:height="3.506cm" svg:x="1.4cm" svg:y="0.837cm" presentation:class="title" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Focus-title" draw:layer="backgroundobjects" svg:width="11cm" svg:height="2.5cm" svg:x="1.5cm" svg:y="0.5cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
         <draw:page-thumbnail presentation:style-name="Focus-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
         <draw:frame presentation:style-name="Focus-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
-          <draw:text-box/>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
-          <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:header/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
-          <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <presentation:date-time/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
-          <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:footer/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
-          <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <text:page-number/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-      </presentation:notes>
-    </style:master-page>
-    <style:master-page style:name="Focus1" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28.296cm" svg:height="21.107cm" svg:x="-0.102cm" svg:y="0cm">
-        <draw:image xlink:href="Pictures/2000000E0000634100004A4C2A08177FA3DF9654.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
-          <text:p/>
-        </draw:image>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus1-title" draw:layer="backgroundobjects" svg:width="12.14cm" svg:height="3.506cm" svg:x="7.912cm" svg:y="3.839cm" presentation:class="title" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus1-outline1" draw:layer="backgroundobjects" svg:width="12.244cm" svg:height="9.423cm" svg:x="7.911cm" svg:y="7.582cm" presentation:class="outline" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="0.398cm" svg:y="19.852cm" presentation:class="date-time">
-        <draw:text-box>
-          <text:p text:style-name="MP8">
-            <text:span text:style-name="MT2">
-              <presentation:date-time/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.852cm" presentation:class="footer">
-        <draw:text-box>
-          <text:p text:style-name="MP10">
-            <text:span text:style-name="MT2">
-              <presentation:footer/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="21.171cm" svg:y="19.852cm" presentation:class="page-number">
-        <draw:text-box>
-          <text:p text:style-name="MP12">
-            <text:span text:style-name="MT2">
-              <text:page-number/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Focus1-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Focus1-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
-          <draw:text-box/>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
-          <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:header/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr5" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
-          <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <presentation:date-time/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
-          <draw:text-box>
-            <text:p text:style-name="MP1">
-              <text:span text:style-name="MT1">
-                <presentation:footer/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-        <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
-          <draw:text-box>
-            <text:p text:style-name="MP3">
-              <text:span text:style-name="MT1">
-                <text:page-number/>
-              </text:span>
-            </text:p>
-          </draw:text-box>
-        </draw:frame>
-      </presentation:notes>
-    </style:master-page>
-    <style:master-page style:name="Focus2" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28.296cm" svg:height="21.107cm" svg:x="-0.102cm" svg:y="0cm">
-        <draw:image xlink:href="Pictures/2000000E0000634100004A4CCD2247D4D39A5527.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
-          <text:p/>
-        </draw:image>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus2-title" draw:layer="backgroundobjects" svg:width="18.313cm" svg:height="3.506cm" svg:x="4.903cm" svg:y="0.837cm" presentation:class="title" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus2-outline1" draw:layer="backgroundobjects" svg:width="18.313cm" svg:height="13.529cm" svg:x="4.903cm" svg:y="4.914cm" presentation:class="outline" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP15" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="0.398cm" svg:y="19.852cm" presentation:class="date-time">
-        <draw:text-box>
-          <text:p text:style-name="MP14">
-            <text:span text:style-name="MT2">
-              <presentation:date-time/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP17" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.852cm" presentation:class="footer">
-        <draw:text-box>
-          <text:p text:style-name="MP16">
-            <text:span text:style-name="MT3">
-              <presentation:footer/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="21.171cm" svg:y="19.852cm" presentation:class="page-number">
-        <draw:text-box>
-          <text:p text:style-name="MP12">
-            <text:span text:style-name="MT2">
-              <text:page-number/>
-            </text:span>
-          </text:p>
-        </draw:text-box>
-      </draw:frame>
-      <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Focus2-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Focus2-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
@@ -1404,59 +1453,71 @@
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number/>
+                <text:page-number>&lt;number&gt;</text:page-number>
               </text:span>
             </text:p>
           </draw:text-box>
         </draw:frame>
       </presentation:notes>
     </style:master-page>
-    <style:master-page style:name="Focus3" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="28.296cm" svg:height="21.107cm" svg:x="-0.102cm" svg:y="0cm">
-        <draw:image xlink:href="Pictures/2000000C0000634100004A4C3651558E9C43717A.svm" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad">
-          <text:p/>
-        </draw:image>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus3-title" draw:layer="backgroundobjects" svg:width="24.108cm" svg:height="3.333cm" svg:x="1.946cm" svg:y="1.239cm" presentation:class="title" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Focus3-outline1" draw:layer="backgroundobjects" svg:width="24.108cm" svg:height="12.37cm" svg:x="1.946cm" svg:y="5.114cm" presentation:class="outline" presentation:placeholder="true">
-        <draw:text-box/>
-      </draw:frame>
-      <draw:frame presentation:style-name="Mpr10" draw:text-style-name="MP15" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="0.398cm" svg:y="19.852cm" presentation:class="date-time">
+    <style:master-page style:name="Focus1" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:polygon presentation:style-name="Mpr10" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9.101cm" svg:height="8.999cm" svg:x="-0.102cm" svg:y="0cm" svg:viewBox="0 0 9102 9000" draw:points="0,0 9102,0 6102,9000 102,4500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr11" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="14.999cm" svg:height="2.999cm" svg:x="9cm" svg:y="0cm" svg:viewBox="0 0 15000 3000" draw:points="1000,0 0,3000 15000,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr12" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="10.999cm" svg:height="10.499cm" svg:x="17cm" svg:y="0cm" svg:viewBox="0 0 11000 10500" draw:points="11000,0 0,2500 11000,10500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr13" draw:text-style-name="MP8" draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="8.749cm" svg:x="19cm" svg:y="7cm" svg:viewBox="0 0 9000 8750" draw:points="9000,4500 3000,0 0,8750 9000,8750">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr14" draw:text-style-name="MP9" draw:layer="backgroundobjects" svg:width="13.999cm" svg:height="3.249cm" svg:x="5cm" svg:y="12.5cm" svg:viewBox="0 0 14000 3250" draw:points="0,3250 13000,3250 14000,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr15" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="11.101cm" svg:height="9.829cm" svg:x="-0.102cm" svg:y="6cm" svg:viewBox="0 0 11102 9830" draw:points="0,9830 1602,9830 11102,7500 102,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP14">
+          <text:p text:style-name="MP13">
             <text:span text:style-name="MT2">
               <presentation:date-time/>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr10" draw:text-style-name="MP17" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.448cm" svg:x="9.576cm" svg:y="19.852cm" presentation:class="footer">
+      <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP16" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP16">
-            <text:span text:style-name="MT3">
+          <text:p text:style-name="MP15">
+            <text:span text:style-name="MT2">
               <presentation:footer/>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr10" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.448cm" svg:x="21.171cm" svg:y="19.852cm" presentation:class="page-number">
+      <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP18" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP12">
+          <text:p text:style-name="MP17">
             <text:span text:style-name="MT2">
-              <text:page-number/>
+              <text:page-number>&lt;number&gt;</text:page-number>
             </text:span>
           </text:p>
         </draw:text-box>
       </draw:frame>
+      <draw:frame presentation:style-name="Focus1-title" draw:layer="backgroundobjects" svg:width="12cm" svg:height="3cm" svg:x="8cm" svg:y="2.5cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Focus1-outline1" draw:layer="backgroundobjects" svg:width="12cm" svg:height="7cm" svg:x="8cm" svg:y="6cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
       <presentation:notes style:page-layout-name="PM0">
-        <draw:page-thumbnail presentation:style-name="Focus3-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
-        <draw:frame presentation:style-name="Focus3-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+        <draw:page-thumbnail presentation:style-name="Focus1-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Focus1-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr11" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+        <draw:frame presentation:style-name="Mpr17" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1465,7 +1526,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr11" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
+        <draw:frame presentation:style-name="Mpr17" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
@@ -1474,7 +1535,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr12" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
+        <draw:frame presentation:style-name="Mpr18" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
           <draw:text-box>
             <text:p text:style-name="MP1">
               <text:span text:style-name="MT1">
@@ -1483,11 +1544,195 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame presentation:style-name="Mpr12" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
+        <draw:frame presentation:style-name="Mpr18" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number/>
+                <text:page-number>&lt;number&gt;</text:page-number>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="Focus2" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:polygon presentation:style-name="Mpr19" draw:text-style-name="MP19" draw:layer="backgroundobjects" svg:width="5.499cm" svg:height="9.499cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 5500 9500" draw:points="0,0 0,8000 2500,9500 5500,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr20" draw:text-style-name="MP20" draw:layer="backgroundobjects" svg:width="5.499cm" svg:height="0.999cm" svg:x="6.5cm" svg:y="0cm" svg:viewBox="0 0 5500 1000" draw:points="500,0 0,1000 5500,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr21" draw:text-style-name="MP21" draw:layer="backgroundobjects" svg:width="9.999cm" svg:height="7.499cm" svg:x="18cm" svg:y="0cm" svg:viewBox="0 0 10000 7500" draw:points="10000,0 1000,0 0,500 10000,7500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr22" draw:text-style-name="MP22" draw:layer="backgroundobjects" svg:width="5.499cm" svg:height="9.249cm" svg:x="22.5cm" svg:y="6.5cm" svg:viewBox="0 0 5500 9250" draw:points="5500,9250 5500,2000 3000,0 0,9250">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr23" draw:text-style-name="MP23" draw:layer="backgroundobjects" svg:width="4.999cm" svg:height="1.249cm" svg:x="16.5cm" svg:y="14.5cm" svg:viewBox="0 0 5000 1250" draw:points="4500,1250 5000,0 0,1250">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr24" draw:text-style-name="MP24" draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="6.749cm" svg:x="0cm" svg:y="9cm" svg:viewBox="0 0 9000 6750" draw:points="0,0 0,6750 9000,6750">
+        <text:p/>
+      </draw:polygon>
+      <draw:frame presentation:style-name="Focus2-title" draw:layer="backgroundobjects" svg:width="18cm" svg:height="2.5cm" svg:x="5cm" svg:y="1cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Focus2-outline1" draw:layer="backgroundobjects" svg:width="18cm" svg:height="10cm" svg:x="5cm" svg:y="4cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr25" draw:text-style-name="MP26" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p text:style-name="MP25">
+            <text:span text:style-name="MT2">
+              <presentation:date-time/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr25" draw:text-style-name="MP28" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP27">
+            <text:span text:style-name="MT3">
+              <presentation:footer/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr25" draw:text-style-name="MP18" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP17">
+            <text:span text:style-name="MT2">
+              <text:page-number>&lt;number&gt;</text:page-number>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM0">
+        <draw:page-thumbnail presentation:style-name="Focus2-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Focus2-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr26" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr26" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr27" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr27" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <text:page-number>&lt;number&gt;</text:page-number>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+      </presentation:notes>
+    </style:master-page>
+    <style:master-page style:name="Focus3" style:page-layout-name="PM1" draw:style-name="Mdp1">
+      <draw:polygon presentation:style-name="Mpr28" draw:text-style-name="MP24" draw:layer="backgroundobjects" svg:width="5.499cm" svg:height="3.749cm" svg:x="0cm" svg:y="12cm" svg:viewBox="0 0 5500 3750" draw:points="0,0 0,3750 5500,3750">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr29" draw:text-style-name="MP19" draw:layer="backgroundobjects" svg:width="2.999cm" svg:height="9.499cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 3000 9500" draw:points="0,0 0,9500 3000,0">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr30" draw:text-style-name="MP21" draw:layer="backgroundobjects" svg:width="6.499cm" svg:height="4.499cm" svg:x="21.5cm" svg:y="0cm" svg:viewBox="0 0 6500 4500" draw:points="6500,0 0,0 6500,4500">
+        <text:p/>
+      </draw:polygon>
+      <draw:polygon presentation:style-name="Mpr31" draw:text-style-name="MP22" draw:layer="backgroundobjects" svg:width="2.999cm" svg:height="8.749cm" svg:x="25cm" svg:y="7cm" svg:viewBox="0 0 3000 8750" draw:points="3000,8750 3000,0 0,8750">
+        <text:p/>
+      </draw:polygon>
+      <draw:frame presentation:style-name="Mpr32" draw:text-style-name="MP26" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
+        <draw:text-box>
+          <text:p text:style-name="MP25">
+            <text:span text:style-name="MT2">
+              <presentation:date-time/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr32" draw:text-style-name="MP28" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
+        <draw:text-box>
+          <text:p text:style-name="MP27">
+            <text:span text:style-name="MT3">
+              <presentation:footer/>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Mpr32" draw:text-style-name="MP18" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
+        <draw:text-box>
+          <text:p text:style-name="MP17">
+            <text:span text:style-name="MT2">
+              <text:page-number>&lt;number&gt;</text:page-number>
+            </text:span>
+          </text:p>
+        </draw:text-box>
+      </draw:frame>
+      <draw:frame presentation:style-name="Focus3-title" draw:layer="backgroundobjects" svg:width="24cm" svg:height="2.5cm" svg:x="2cm" svg:y="1cm" presentation:class="title" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <draw:frame presentation:style-name="Focus3-outline1" draw:layer="backgroundobjects" svg:width="24cm" svg:height="10cm" svg:x="2cm" svg:y="4cm" presentation:class="outline" presentation:placeholder="true">
+        <draw:text-box/>
+      </draw:frame>
+      <presentation:notes style:page-layout-name="PM0">
+        <draw:page-thumbnail presentation:style-name="Focus3-title" draw:layer="backgroundobjects" svg:width="13.968cm" svg:height="10.476cm" svg:x="3.81cm" svg:y="2.123cm" presentation:class="page"/>
+        <draw:frame presentation:style-name="Focus3-notes" draw:layer="backgroundobjects" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr33" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:header/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr33" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="0cm" presentation:class="date-time">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <presentation:date-time/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr34" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="0cm" svg:y="26.543cm" presentation:class="footer">
+          <draw:text-box>
+            <text:p text:style-name="MP1">
+              <text:span text:style-name="MT1">
+                <presentation:footer/>
+              </text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="Mpr34" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.369cm" svg:height="1.396cm" svg:x="12.22cm" svg:y="26.543cm" presentation:class="page-number">
+          <draw:text-box>
+            <text:p text:style-name="MP3">
+              <text:span text:style-name="MT1">
+                <text:page-number>&lt;number&gt;</text:page-number>
               </text:span>
             </text:p>
           </draw:text-box>
