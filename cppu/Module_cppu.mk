@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_check_targets,cppu,\
 	CppunitTest_cppu_qa_reference \
 	CppunitTest_cppu_qa_unotype \
 	CppunitTest_cppu_test_cppumaker \
+	CppunitTest_cppu_typelib \
 ))
 
 # vim: set noet sw=4 ts=4:
