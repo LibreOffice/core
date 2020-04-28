@@ -128,6 +128,7 @@ public:
     void testRedlineNotificationDuringSave();
     void testHyperlink();
     void testFieldmark();
+    void testDropDownFormFieldButton();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testRedlineNotificationDuringSave);
     CPPUNIT_TEST(testHyperlink);
     CPPUNIT_TEST(testFieldmark);
+    CPPUNIT_TEST(testDropDownFormFieldButton);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -214,6 +216,7 @@ private:
     int m_nTrackedChangeIndex;
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
+    OString m_aFormFieldButton;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -363,6 +366,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
             m_sHyperlinkText = aChild.get("text", "").c_str();
             m_sHyperlinkLink = aChild.get("link", "").c_str();
         }
+    }
+    break;
+    case LOK_CALLBACK_FORM_FIELD_BUTTON:
+    {
+        m_aFormFieldButton = OString(pPayload);
     }
     break;
     }
@@ -2535,6 +2543,79 @@ void SwTiledRenderingTest::testFieldmark()
 {
     // Without the accompanying fix in place, this crashed on load.
     createDoc("fieldmark.docx");
+}
+
+void SwTiledRenderingTest::testDropDownFormFieldButton()
+{
+    SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field.odt");
+    pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Move the cursor to trigger displaying of the field button.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
+
+    // First we have a button with an empty text area.
+    {
+        std::stringstream aStream(m_aFormFieldButton.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+
+        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+
+        OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("0, 0, -1, -1"), sTextArea);
+    }
+
+    // Do a tile rendering to trigger the button message with a valide text area
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+
+    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
+    {
+        std::stringstream aStream(m_aFormFieldButton.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+
+        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+
+        OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("1538, 1418, 1026, 275"), sTextArea);
+    }
+
+    // Move the cursor back so the button becomes hidden.
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
+    {
+        std::stringstream aStream(m_aFormFieldButton.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
+
+        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);

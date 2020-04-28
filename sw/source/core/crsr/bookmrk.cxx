@@ -39,6 +39,10 @@
 #include <DateFormFieldButton.hxx>
 #include <DropDownFormFieldButton.hxx>
 #include <DocumentContentOperationsManager.hxx>
+#include <comphelper/lok.hxx>
+#include <view.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <wrtsh.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -664,6 +668,7 @@ namespace sw::mark
 
     DropDownFieldmark::~DropDownFieldmark()
     {
+        SendLOKMessage("hide");
     }
 
     void DropDownFieldmark::ShowButton(SwEditWin* pEditWin)
@@ -674,7 +679,20 @@ namespace sw::mark
                 m_pButton = VclPtr<DropDownFormFieldButton>::Create(pEditWin, *this);
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
             m_pButton->Show();
+            SendLOKMessage("show");
         }
+    }
+
+    void DropDownFieldmark::HideButton()
+    {
+        SendLOKMessage("hide");
+        FieldmarkWithDropDownButton::HideButton();
+    }
+
+    void DropDownFieldmark::RemoveButton()
+    {
+        SendLOKMessage("hide");
+        FieldmarkWithDropDownButton::RemoveButton();
     }
 
     void DropDownFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
@@ -689,6 +707,33 @@ namespace sw::mark
             m_pButton->Show();
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
             m_pButton->Invalidate();
+            SendLOKMessage("show");
+        }
+    }
+
+    void DropDownFieldmark::SendLOKMessage(const OString& sAction)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (!m_pButton)
+              return;
+
+            SwEditWin* pEditWin = dynamic_cast<SwEditWin*>(m_pButton->GetParent());
+            if (!pEditWin)
+                return;
+
+            OString sPayload;
+            if (sAction == "show")
+            {
+                sPayload = OStringLiteral("{\"action\": \"show\","
+                           " \"type\": \"drop-down\", \"textArea\": \"") +
+                           m_aPortionPaintArea.SVRect().toString() + "\"}";
+            }
+            else
+            {
+                sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
+            }
+            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.getStr());
         }
     }
 
