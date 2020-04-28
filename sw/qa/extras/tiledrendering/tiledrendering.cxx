@@ -121,6 +121,7 @@ public:
     void testVisCursorInvalidation();
     void testDeselectCustomShape();
     void testSemiTransparent();
+    void testHighlightNumbering();
     void testClipText();
     void testAnchorTypes();
     void testLanguageStatus();
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testSemiTransparent);
+    CPPUNIT_TEST(testHighlightNumbering);
     CPPUNIT_TEST(testClipText);
     CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST(testLanguageStatus);
@@ -2384,6 +2386,31 @@ void SwTiledRenderingTest::testSemiTransparent()
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.R));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.G));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.B));
+}
+
+void SwTiledRenderingTest::testHighlightNumbering()
+{
+    // Load a document where the top left tile contains a semi-transparent rectangle shape.
+    SwXTextDocument* pXTextDocument = createDoc("tdf114799.docx");
+
+    // Render a larger area, and then get the color of the bottom right corner of our tile.
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+
+    // Yellow highlighting over numbering
+    Color aColor(pAccess->GetPixel(103, 148));
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 }
 
 void SwTiledRenderingTest::testClipText()
