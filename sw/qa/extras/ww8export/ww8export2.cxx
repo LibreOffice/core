@@ -55,6 +55,17 @@ DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPaddi
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf60378_mergedBorders, "tdf60378_mergedBorders.doc")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // The border width was zero
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xTable->getCellByName("B2"), "RightBorder");
+    CPPUNIT_ASSERT(aBorder.LineWidth > 0);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf55528_relativeTableWidth, "tdf55528_relativeTableWidth.doc")
 {
 

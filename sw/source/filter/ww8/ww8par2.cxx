@@ -3239,21 +3239,7 @@ void WW8TabDesc::AdjustNewBand()
 
         SetTabBorders(pBox, j);
 
-        // #i18128# word has only one line between adjoining vertical cells
-        // we have to mimic this in the filter by picking the larger of the
-        // sides and using that one on one side of the line (right)
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
-        if (i != 0)
-        {
-            SwTableBox* pBox2 = (*m_pTabBoxes)[i-1];
-            SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrameFormat()), RES_BOX));
-            if( aOldBox.CalcLineWidth(SvxBoxItemLine::RIGHT) > aCurrentBox.CalcLineWidth(SvxBoxItemLine::LEFT) )
-                aCurrentBox.SetLine(aOldBox.GetLine(SvxBoxItemLine::RIGHT), SvxBoxItemLine::LEFT);
-
-            aOldBox.SetLine(nullptr, SvxBoxItemLine::RIGHT);
-            pBox2->GetFrameFormat()->SetFormatAttr(aOldBox);
-        }
-
         pBox->GetFrameFormat()->SetFormatAttr(aCurrentBox);
 
         SetTabVertAlign(pBox, j);
