@@ -18,6 +18,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmlsechelper.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
@@ -166,8 +167,19 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     if (!pShell->PrepareForSigning(m_xDialog.get()))
         return;
 
-    Reference<XDocumentDigitalSignatures> xSigner(DocumentDigitalSignatures::createWithVersion(
-        comphelper::getProcessComponentContext(), "1.2"));
+    Reference<XDocumentDigitalSignatures> xSigner;
+    if (pShell->GetMedium()->GetFilter()->IsAlienFormat())
+    {
+        xSigner
+            = DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
+    }
+    else
+    {
+        OUString const aODFVersion(
+            comphelper::OStorageHelper::GetODFVersionFromStorage(pShell->GetStorage()));
+        xSigner = DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), aODFVersion);
+    }
     xSigner->setParentWindow(m_xDialog->GetXWindow());
     OUString aDescription;
     CertificateKind certificateKind = CertificateKind_NONE;
