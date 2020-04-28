@@ -46,7 +46,8 @@ private:
     void checkExpr(
         SourceRange range, StringRef name, Expr const * expr, bool negated);
 
-    void reportEquals(SourceRange range, StringRef name, bool negative);
+    void reportEquals(
+        SourceRange range, StringRef name, bool negative, Expr const * lhs, Expr const * rhs);
 
     bool isCompileTimeConstant(Expr const * expr);
 };
@@ -187,7 +188,7 @@ void CppunitAssertEquals::checkExpr(
     if (auto const e = dyn_cast<BinaryOperator>(expr)) {
         auto const op = e->getOpcode();
         if ((!negated && op == BO_EQ) || (negated && op == BO_NE)) {
-            reportEquals(range, name, op == BO_NE);
+            reportEquals(range, name, op == BO_NE, e->getLHS(), e->getRHS());
             return;
         }
 #if 0 // TODO: enable later
@@ -206,7 +207,7 @@ void CppunitAssertEquals::checkExpr(
         if ((!negated && op == OO_EqualEqual)
             || (negated && op == OO_ExclaimEqual))
         {
-            reportEquals(range, name, op == OO_ExclaimEqual);
+            reportEquals(range, name, op == OO_ExclaimEqual, e->getArg(0), e->getArg(1));
             return;
         }
         return;
@@ -214,8 +215,13 @@ void CppunitAssertEquals::checkExpr(
 }
 
 void CppunitAssertEquals::reportEquals(
-    SourceRange range, StringRef name, bool negative)
+    SourceRange range, StringRef name, bool negative, Expr const * lhs, Expr const * rhs)
 {
+    if (lhs->IgnoreImpCasts()->getType()->isNullPtrType()
+        != rhs->IgnoreImpCasts()->getType()->isNullPtrType())
+    {
+        return;
+    }
     report(
         DiagnosticsEngine::Warning,
         ("rather call"
