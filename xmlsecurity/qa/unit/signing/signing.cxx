@@ -1002,6 +1002,23 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
     CPPUNIT_ASSERT(pBaseModel);
     pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
+
+    // export and import again
+    utl::TempFile aTempFile;
+    {
+        uno::Sequence<beans::PropertyValue> props(
+            comphelper::InitPropertySequence({ { "FilterName", uno::Any(OUString("writer8")) } }));
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        xDocStorable->storeToURL(aTempFile.GetURL(), props);
+    }
+
+    createDoc(aTempFile.GetURL());
+    pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+
+    aTempFile.EnableKillingFile();
 }
 
 #endif
