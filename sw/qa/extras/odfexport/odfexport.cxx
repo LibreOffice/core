@@ -2030,7 +2030,7 @@ DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
     if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
     {
         // Original image (svg)
-        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/svg+xml']");
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@draw:mime-type='image/svg+xml']");
     }
 }
 
