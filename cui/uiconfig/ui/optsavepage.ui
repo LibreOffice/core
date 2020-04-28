@@ -288,7 +288,7 @@
                       <object class="GtkLabel" id="odfwarning_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optsavepage|odfwarning_label" comments="EN-US, the term 'extended' must not be translated.">Not using ODF 1.2 Extended may cause information to be lost.</property>
+                        <property name="label" translatable="yes" context="optsavepage|odfwarning_label" comments="EN-US, the term 'extended' must not be translated.">Not using ODF 1.3 Extended may cause information to be lost.</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -321,7 +321,9 @@
                       <item translatable="yes" context="optsavepage|odfversion">1.0/1.1</item>
                       <item translatable="yes" context="optsavepage|odfversion">1.2</item>
                       <item translatable="yes" context="optsavepage|odfversion">1.2 Extended (compatibility mode)</item>
-                      <item translatable="yes" context="optsavepage|odfversion">1.2 Extended (recommended)</item>
+                      <item translatable="yes" context="optsavepage|odfversion">1.2 Extended</item>
+                      <item translatable="yes" context="optsavepage|odfversion">1.3</item>
+                      <item translatable="yes" context="optsavepage|odfversion">1.3 Extended (recommended)</item>
                     </items>
                   </object>
                   <packing>
