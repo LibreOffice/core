@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "36d903a2_26f748b6",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-28T11:38:18Z",
+      "side": 1,
+      "message": "\"image blobs\" is a term that makes me wonder whether this is about images or some sub-image entities",
+      "range": {
+        "startLine": 913,
+        "startChar": 41,
+        "endLine": 913,
+        "endChar": 52
+      },
+      "revId": "47ef6d4f6f6d56ccb2bd1174ae315ab5afd23356",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10867534_e2f0cb16",
+        "filename": "vcl/source/gdi/pdfwriter_impl2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-28T11:38:18Z",
+      "side": 1,
+      "message": "obtaining a configuration value at library load time looks like a bad idea?  (is it even useful to have this value configurable in the configuration?)",
+      "revId": "47ef6d4f6f6d56ccb2bd1174ae315ab5afd23356",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2d9affe_73dd9975",
         "filename": "vcl/source/gdi/pdfwriter_impl2.cxx",
         "patchSetId": 1
