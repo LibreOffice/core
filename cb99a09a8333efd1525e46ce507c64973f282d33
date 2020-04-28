@@ -22,6 +22,30 @@
       "revId": "cb99a09a8333efd1525e46ce507c64973f282d33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0062ed0_95cd02d4",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-04-28T09:37:31Z",
+      "side": 1,
+      "message": "I should have done that, indeed. :-) When I added the member, I though this is just an impl struct with no member functions. It would make sense to prefix all of these on master.",
+      "parentUuid": "575ac327_36ddbc6f",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 21
+      },
+      "revId": "cb99a09a8333efd1525e46ce507c64973f282d33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
