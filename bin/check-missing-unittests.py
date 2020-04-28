@@ -15,8 +15,11 @@ def main(ignoredBugs):
     results = {
         'export': {
             'docx': {},
+            'doc': {},
             'pptx': {},
-            'xlsx': {}
+            'xlsx': {},
+            'xhtml': {},
+            'html': {},
         }
     }
     hasTestSet = set()
@@ -64,12 +67,27 @@ def main(ignoredBugs):
             if 'qa' in changedFiles:
                 hasTestSet.add(bugId)
                 continue
-            elif 'sw/source/filter/ww8/docx' in changedFiles:
+
+            elif 'sw/source/filter/ww8/docx' in changedFiles or \
+                    'writerfilter/source/dmapper' in changedFiles or \
+                    'starmath/source/ooxmlimport' in changedFiles:
                 results['export']['docx'][bugId] = summary
+
+            elif 'sw/source/filter/ww8/ww8' in changedFiles:
+                results['export']['doc'][bugId] = summary
+
             elif 'sc/source/filter/excel/xe' in changedFiles:
                 results['export']['xlsx'][bugId] = summary
+
             elif 'oox/source/export/' in changedFiles:
                 results['export']['pptx'][bugId] = summary
+
+            elif 'filter/source/xslt/odf2xhtml/export' in changedFiles:
+                results['export']['xhtml'][bugId] = summary
+
+            elif 'sw/source/filter/html/' in changedFiles:
+                results['export']['html'][bugId] = summary
+
             # Add others here
 
     print()
