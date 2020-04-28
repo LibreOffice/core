@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b75b8eaf_5dc67d2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-28T12:03:03Z",
+      "side": 1,
+      "message": "i.e., \u003chttps://gerrit.libreoffice.org/c/core/+/93062\u003e \"tdf#115399: Don\u0027t kill pre-existing typelib_TypeDescription members\"\n\nwe may also want to revisit needlessly awkward uses of\n\n  CPPUNIT_ASSERT_EQUAL(cast_to_some_pointer_type(nullptr), actual_pointer_value)\n\nin existing code",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "3d6214624128626c056b0a15ff6d654f57f149d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
