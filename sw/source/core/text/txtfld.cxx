@@ -466,17 +466,19 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
-            if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+            if (pItem->Which() == RES_CHRATR_BACKGROUND)
+            {
+                Color aBackColor(static_cast<const SvxBackgroundColorItem&>(*pItem).GetValue());
+                pNumFnt->SetHighlightColor(aBackColor);
+            }
+            else if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
                 pCleanedSet->ClearItem(pItem->Which());
             else if (pFormat && pFormat->HasItem(pItem->Which()))
                 pCleanedSet->ClearItem(pItem->Which());
 
             pItem = aIter.NextItem();
         } while (pItem);
-        // Highlightcolor also needed to be untouched, but we can't have that just by clearing the item
-        Color nSaveHighlight = pNumFnt->GetHighlightColor();
         pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
-        pNumFnt->SetHighlightColor(nSaveHighlight);
     }
 }
 
