@@ -181,7 +181,7 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd()
 
     weld::Dialog* pDialog = mpDialog->getDialog();
 
-    mxMarkWnd = std::make_unique<SvxHlinkDlgMarkWnd>(pDialog, this);
+    mxMarkWnd = std::make_shared<SvxHlinkDlgMarkWnd>(pDialog, this);
 
     // Size of dialog-window in screen pixels
     Point aDlgPos(pDialog->get_position());
