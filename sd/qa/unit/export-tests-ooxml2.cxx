@@ -182,6 +182,7 @@ public:
     void testTdf127372();
     void testTdf127379();
     void testTdf98603();
+    void testTdf119087();
     void testTdf131554();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
@@ -283,6 +284,7 @@ public:
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
+    CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2633,6 +2635,13 @@ void SdOOXMLExportTest2::testTdf98603()
     xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
     CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
+}
+
+void SdOOXMLExportTest2::testTdf119087()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf119087.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    // This would fail both on export validation, and reloading the saved pptx file.
 }
 
 void SdOOXMLExportTest2::testTdf131554()
