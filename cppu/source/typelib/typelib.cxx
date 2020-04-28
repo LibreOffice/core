@@ -23,6 +23,7 @@
 #include <cassert>
 #include <list>
 #include <set>
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -1486,23 +1487,100 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 
                 if (pTDR->pType->pWeakRef) // if init
                 {
-                    typelib_typedescription_destructExtendedMembers( pTDR->pType );
+                    switch (pTDR->pType->eTypeClass) {
+                    case typelib_TypeClass_ENUM:
+                        {
+                            auto const src = reinterpret_cast<typelib_EnumTypeDescription *>(
+                                *ppNewDescription);
+                            auto const dst = reinterpret_cast<typelib_EnumTypeDescription *>(
+                                pTDR->pType);
+                            assert(dst->nEnumValues == 0);
+                            assert(dst->ppEnumNames == nullptr);
+                            assert(dst->pEnumValues == nullptr);
+                            std::swap(src->nEnumValues, dst->nEnumValues);
+                            std::swap(src->ppEnumNames, dst->ppEnumNames);
+                            std::swap(src->pEnumValues, dst->pEnumValues);
+                            break;
+                        }
+                    case typelib_TypeClass_STRUCT:
+                    case typelib_TypeClass_EXCEPTION:
+                        {
+                            auto const src = reinterpret_cast<typelib_CompoundTypeDescription *>(
+                                *ppNewDescription);
+                            auto const dst = reinterpret_cast<typelib_CompoundTypeDescription *>(
+                                pTDR->pType);
+                            assert(
+                                (dst->pBaseTypeDescription == nullptr)
+                                == (src->pBaseTypeDescription == nullptr));
+                            assert(dst->nMembers == src->nMembers);
+                            assert((dst->pMemberOffsets == nullptr) == (dst->nMembers == 0));
+                            assert((dst->ppTypeRefs == nullptr) == (dst->nMembers == 0));
+                            assert(dst->ppMemberNames == nullptr);
+                            assert(
+                                pTDR->pType->eTypeClass != typelib_TypeClass_STRUCT
+                                || ((reinterpret_cast<typelib_StructTypeDescription *>(
+                                         dst)->pParameterizedTypes
+                                     == nullptr)
+                                    == (reinterpret_cast<typelib_StructTypeDescription *>(
+                                            src)->pParameterizedTypes
+                                        == nullptr)));
+                            std::swap(src->ppMemberNames, dst->ppMemberNames);
+                            break;
+                        }
+                    case typelib_TypeClass_INTERFACE:
+                        {
+                            auto const src = reinterpret_cast<typelib_InterfaceTypeDescription *>(
+                                *ppNewDescription);
+                            auto const dst = reinterpret_cast<typelib_InterfaceTypeDescription *>(
+                                pTDR->pType);
+                            assert(
+                                (dst->pBaseTypeDescription == nullptr)
+                                == (src->pBaseTypeDescription == nullptr));
+                            assert(dst->nMembers == 0);
+                            assert(dst->ppMembers == nullptr);
+                            assert(dst->nAllMembers == 0);
+                            assert(dst->ppAllMembers == nullptr);
+                            assert(dst->pMapMemberIndexToFunctionIndex == nullptr);
+                            assert(dst->nMapFunctionIndexToMemberIndex == 0);
+                            assert(dst->pMapFunctionIndexToMemberIndex == nullptr);
+                            assert(dst->nBaseTypes == src->nBaseTypes);
+                            assert((dst->ppBaseTypes == nullptr) == (src->ppBaseTypes == nullptr));
+                            std::swap(src->nMembers, dst->nMembers);
+                            std::swap(src->ppMembers, dst->ppMembers);
+                            std::swap(src->nAllMembers, dst->nAllMembers);
+                            std::swap(src->ppAllMembers, dst->ppAllMembers);
+                            std::swap(
+                                src->pMapMemberIndexToFunctionIndex,
+                                dst->pMapMemberIndexToFunctionIndex);
+                            std::swap(
+                                src->nMapFunctionIndexToMemberIndex,
+                                dst->nMapFunctionIndexToMemberIndex);
+                            std::swap(
+                                src->pMapFunctionIndexToMemberIndex,
+                                dst->pMapFunctionIndexToMemberIndex);
+                            break;
+                        }
+                    default:
+                        assert(false); // this cannot happen
+                    }
                 }
+                else
+                {
+                    // pTDR->pType->pWeakRef == 0 means that the description is empty
+                    // description is not weak and the not the same
+                    sal_Int32 nSize = getDescriptionSize( (*ppNewDescription)->eTypeClass );
 
-                // pTDR->pType->pWeakRef == 0 means that the description is empty
-                // description is not weak and the not the same
-                sal_Int32 nSize = getDescriptionSize( (*ppNewDescription)->eTypeClass );
+                    // copy all specific data for the descriptions
+                    memcpy(
+                        pTDR->pType +1,
+                        *ppNewDescription +1,
+                        nSize - sizeof(typelib_TypeDescription) );
 
-                // copy all specific data for the descriptions
-                memcpy(
-                    pTDR->pType +1,
-                    *ppNewDescription +1,
-                    nSize - sizeof(typelib_TypeDescription) );
-
-                memset(
-                    *ppNewDescription +1,
-                    0,
-                    nSize - sizeof( typelib_TypeDescription ) );
+                    memset(
+                        *ppNewDescription +1,
+                        0,
+                        nSize - sizeof( typelib_TypeDescription ) );
+                }
 
                 pTDR->pType->bComplete = (*ppNewDescription)->bComplete;
                 pTDR->pType->nSize = (*ppNewDescription)->nSize;
