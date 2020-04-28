@@ -838,10 +838,10 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 {
     if ( Attribs.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( Attribs );
-        auto aIter( pAttribList->find( XML_ELEMENT( OFFICE, XML_VERSION ) ) );
-        if( aIter != pAttribList->end() )
+        sax_fastparser::FastAttributeList& rAttribList =
+            sax_fastparser::castToFastAttributeList( Attribs );
+        auto aIter( rAttribList.find( XML_ELEMENT( OFFICE, XML_VERSION ) ) );
+        if( aIter != rAttribList.end() )
         {
             mpImpl->aODFVersion = aIter.toString();
 

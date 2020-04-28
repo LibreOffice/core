@@ -244,7 +244,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     if (pExternalRefInfo)
     {

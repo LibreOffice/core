@@ -92,9 +92,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
     RealPoint2D aPosition;
     RealSize2D aSize;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
 
@@ -247,9 +245,7 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
 , mxShapes( rShapes )
 , mxAnnotationAccess( rShapes, UNO_QUERY )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         if( aIter.getToken() == XML_ELEMENT(DRAW, XML_NAV_ORDER) )
         {

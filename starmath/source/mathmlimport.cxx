@@ -599,9 +599,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
     xml::sax::XFastAttributeList > & xAttrList )
 {
     bool bMvFound = false;
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         // sometimes they have namespace, sometimes not?
@@ -767,9 +765,7 @@ public:
 
 void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch(aIter.getToken())
@@ -1077,9 +1073,7 @@ public:
 void SmXMLFencedContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
     xml::sax::XFastAttributeList > & xAttrList )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch(aIter.getToken())
@@ -1227,9 +1221,7 @@ public:
 void SmXMLAnnotationContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
     xml::sax::XFastAttributeList > & xAttrList )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         // sometimes they have namespace, sometimes not?
@@ -1443,9 +1435,7 @@ void SmXMLOperatorContext_Impl::startFastElement(sal_Int32 /*nElement*/, const u
 {
     maTokenAttrHelper.RetrieveAttrs(xAttrList);
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch(aIter.getToken())
@@ -1510,9 +1500,7 @@ void SmXMLSpaceContext_Impl::startFastElement(sal_Int32 /*nElement*/,
     MathMLAttributeLengthValue aLV;
     sal_Int32 nWide = 0, nNarrow = 0;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch (aIter.getToken())
@@ -1671,9 +1659,9 @@ public:
 void SmXMLUnderContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
     xml::sax::XFastAttributeList > & xAttrList )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    nAttrCount = pAttribList->getFastAttributeTokens().size();
+    sax_fastparser::FastAttributeList& rAttribList =
+        sax_fastparser::castToFastAttributeList( xAttrList );
+    nAttrCount = rAttribList.getFastAttributeTokens().size();
 }
 
 void SmXMLUnderContext_Impl::HandleAccent()
@@ -1735,9 +1723,9 @@ public:
 void SmXMLOverContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<
     xml::sax::XFastAttributeList > & xAttrList )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    nAttrCount = pAttribList->getFastAttributeTokens().size();
+    sax_fastparser::FastAttributeList& rAttribList =
+        sax_fastparser::castToFastAttributeList( xAttrList );
+    nAttrCount = rAttribList.getFastAttributeTokens().size();
 }
 
 
@@ -2559,9 +2547,7 @@ void SmXMLMultiScriptsContext_Impl::endFastElement(sal_Int32 )
 
 void SmXMLActionContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch(aIter.getToken())

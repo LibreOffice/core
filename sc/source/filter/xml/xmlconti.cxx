@@ -80,9 +80,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::c
     if (nElement == XML_ELEMENT(TEXT, XML_S))
     {
         sal_Int32 nRepeat(0);
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
                 nRepeat = aIter.toInt32();

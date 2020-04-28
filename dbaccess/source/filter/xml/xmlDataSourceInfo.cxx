@@ -37,9 +37,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     PropertyValue aProperty;
     bool bAutoEnabled = false;
     bool bFoundField = false,bFoundThousand = false, bFoundCharset = false;
-    sax_fastparser::FastAttributeList *pAttribList =
-                sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

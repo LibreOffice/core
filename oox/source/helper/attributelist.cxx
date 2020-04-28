@@ -139,7 +139,7 @@ sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
 {
     if( mpAttribList == nullptr )
     {
-        mpAttribList = sax_fastparser::FastAttributeList::castToFastAttributeList( mxAttribs );
+        mpAttribList = &sax_fastparser::castToFastAttributeList( mxAttribs );
     }
     return mpAttribList;
 }

@@ -61,9 +61,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     if ( !m_pCell )
         m_pCell = this;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

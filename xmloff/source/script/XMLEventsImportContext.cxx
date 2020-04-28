@@ -165,9 +165,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext
     // a) search for script:language and script:event-name attribute
     OUString sLanguage;
     OUString sEventName;
-    sax_fastparser::FastAttributeList *pAttribList =
-               sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
 

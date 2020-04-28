@@ -151,7 +151,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidations
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -219,7 +219,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {

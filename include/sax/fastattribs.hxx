@@ -70,6 +70,7 @@ class SAX_DLLPUBLIC FastTokenHandlerBase :
                          const char *pStr, size_t nLength );
 };
 
+
 class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::xml::sax::XFastAttributeList >
 {
 public:
@@ -116,13 +117,6 @@ public:
             if (maAttributeTokens[i] == Token)
                 return i;
         return -1;
-    }
-
-    static FastAttributeList* castToFastAttributeList(
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
-    {
-        assert( dynamic_cast <FastAttributeList *> ( xAttrList.get() ) != nullptr );
-        return static_cast <FastAttributeList *> ( xAttrList.get() );
     }
 
     /// Use for fast iteration and conversion of attributes
@@ -209,6 +203,13 @@ private:
     UnknownAttributeList maUnknownAttributes;
     FastTokenHandlerBase * mpTokenHandler;
 };
+
+inline FastAttributeList& castToFastAttributeList(
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    assert( dynamic_cast <FastAttributeList *> ( xAttrList.get() ) != nullptr );
+    return *static_cast <FastAttributeList *> ( xAttrList.get() );
+}
 
 }
 

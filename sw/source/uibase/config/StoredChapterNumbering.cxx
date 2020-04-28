@@ -277,10 +277,7 @@ public:
         OUString displayName;
         XmlStyleFamily nFamily(XmlStyleFamily::DATA_STYLE);
 
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
             if (aIter.getToken() == (XML_NAMESPACE_STYLE | XML_FAMILY))
             {
                 if (IsXMLToken(aIter.toString(), XML_TEXT))

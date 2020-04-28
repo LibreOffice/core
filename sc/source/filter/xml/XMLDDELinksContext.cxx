@@ -77,7 +77,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::cr
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -233,7 +233,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -294,7 +294,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::cre
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_TABLE_CELL ))
         pContext = new ScXMLDDECellContext(GetScImport(), pAttribList, pDDELink);

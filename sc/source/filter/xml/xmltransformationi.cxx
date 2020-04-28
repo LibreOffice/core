@@ -32,7 +32,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
+        = &sax_fastparser::castToFastAttributeList(xAttrList);
 
     switch (nElement)
     {
@@ -103,7 +103,7 @@ uno::Reference<xml::sax::XFastContextHandler>
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
+        = &sax_fastparser::castToFastAttributeList(xAttrList);
 
     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
 
@@ -208,25 +208,19 @@ uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnMergeContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
-                        break;
+                        maColumns.insert(aIter.toInt32());
                     }
+                    break;
                 }
             }
         }
@@ -302,27 +296,19 @@ uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnTextContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
-
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
-                        break;
+                        maColumns.insert(aIter.toInt32());
                     }
+                    break;
                 }
             }
         }
@@ -381,26 +367,19 @@ uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnAggregateContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
-
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
-                        break;
+                        maColumns.insert(aIter.toInt32());
                     }
+                    break;
                 }
             }
         }
@@ -482,26 +461,19 @@ uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnNumberContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
-
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
-                        break;
+                        maColumns.insert(aIter.toInt32());
                     }
+                    break;
                 }
             }
         }
@@ -545,25 +517,19 @@ uno::Reference<xml::sax::XFastContextHandler>
     SAL_CALL ScXMLColumnRemoveNullContext::createFastChildContext(
         sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
-                        break;
+                        maColumns.insert(aIter.toInt32());
                     }
+                    break;
                 }
             }
         }
@@ -647,24 +613,17 @@ ScXMLDateTimeContext::~ScXMLDateTimeContext()
 uno::Reference<xml::sax::XFastContextHandler> SAL_CALL ScXMLDateTimeContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
-    sax_fastparser::FastAttributeList* pAttribList
-        = sax_fastparser::FastAttributeList::castToFastAttributeList(xAttrList);
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
-
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                for (auto& aIter : *rAttrList)
+                switch (aIter.getToken())
                 {
-                    switch (aIter.getToken())
+                    case XML_ELEMENT(CALC_EXT, XML_COLUMN):
                     {
-                        case XML_ELEMENT(CALC_EXT, XML_COLUMN):
-                        {
-                            maColumns.insert(aIter.toInt32());
-                        }
+                        maColumns.insert(aIter.toInt32());
                         break;
                     }
                 }

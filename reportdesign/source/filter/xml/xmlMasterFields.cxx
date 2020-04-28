@@ -41,9 +41,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
 ,m_pReport(_pReport)
 {
     OUString sMasterField,sDetailField;
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

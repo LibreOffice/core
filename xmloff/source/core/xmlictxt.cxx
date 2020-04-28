@@ -88,10 +88,7 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamesp
 
     if ( Attribs.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( Attribs );
-
-        for( auto &it : *pAttribList )
+        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
         {
             sal_Int32 nToken = it.getToken();
             const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetImport().GetNamespaceMap());
