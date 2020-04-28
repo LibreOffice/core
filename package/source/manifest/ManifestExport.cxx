@@ -79,6 +79,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString sAlgorithmAttribute          ( ATTRIBUTE_ALGORITHM );
     const OUString sCipherDataElement           ( ELEMENT_CIPHERDATA );
     const OUString sCipherValueElement          ( ELEMENT_CIPHERVALUE );
+    const OUString sManifestKeyInfoElement13    ( ELEMENT_MANIFEST13_KEYINFO );
+    const OUString sEncryptedKeyElement13       ( ELEMENT_ENCRYPTEDKEY13 );
+    const OUString sEncryptionMethodElement13   ( ELEMENT_ENCRYPTIONMETHOD13 );
+    const OUString sPgpDataElement13            ( ELEMENT_PGPDATA13 );
+    const OUString sPgpKeyIDElement13           ( ELEMENT_PGPKEYID13 );
+    const OUString sPGPKeyPacketElement13       ( ELEMENT_PGPKEYPACKET13 );
+    const OUString sAlgorithmAttribute13        ( ATTRIBUTE_ALGORITHM13 );
+    const OUString sCipherDataElement13         ( ELEMENT_CIPHERDATA13 );
+    const OUString sCipherValueElement13        ( ELEMENT_CIPHERVALUE13 );
     const OUString sKeyInfo                     ( "KeyInfo" );
     const OUString sPgpKeyIDProperty            ( "KeyId" );
     const OUString sPgpKeyPacketProperty        ( "KeyPacket" );
@@ -232,7 +241,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
             // ==== manifest:keyinfo & children
-            xHandler->startElement( sManifestKeyInfoElement, nullptr );
+            bool const isODF13(aDocVersion.compareTo(ODFVER_013_TEXT) >= 0);
+            if (!isODF13)
+            {
+                xHandler->startElement(sManifestKeyInfoElement, nullptr);
+            }
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
             uno::Sequence< uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
@@ -255,64 +268,70 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
                 {
                     // ==== manifest:encrypted-key & children - one for each recipient
-                    xHandler->startElement( sEncryptedKeyElement, nullptr );
+                    xHandler->startElement(isODF13 ? sEncryptedKeyElement13 : sEncryptedKeyElement, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
                     uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
                     // TODO: the algorithm should rather be configurable
-                    pNewAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute,
+                    pNewAttrList->AddAttribute(
+                        isODF13 ? sAlgorithmAttribute13 : sAlgorithmAttribute,
+                        sCdataAttribute,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
-                    xHandler->startElement( sEncryptionMethodElement, xNewAttrList );
-                    xHandler->endElement( sEncryptionMethodElement );
+                    xHandler->startElement(isODF13 ? sEncryptionMethodElement13 : sEncryptionMethodElement, xNewAttrList);
+                    xHandler->endElement(isODF13 ? sEncryptionMethodElement13 :  sEncryptionMethodElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sKeyInfoElement, nullptr );
+                    // note: the mismatch here corresponds to ODF 1.3 cs01 schema
+                    xHandler->startElement(isODF13 ? sManifestKeyInfoElement13 : sKeyInfoElement, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sPgpDataElement, nullptr );
+                    xHandler->startElement(isODF13 ? sPgpDataElement13 : sPgpDataElement, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sPgpKeyIDElement, nullptr );
+                    xHandler->startElement(isODF13 ? sPgpKeyIDElement13 : sPgpKeyIDElement, nullptr);
                     ::comphelper::Base64::encode(aBuffer, aPgpKeyID);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement( sPgpKeyIDElement );
+                    xHandler->endElement(isODF13 ? sPgpKeyIDElement13 : sPgpKeyIDElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     // key packet is optional
                     if (aPgpKeyPacket.hasElements())
                     {
-                        xHandler->startElement( sPGPKeyPacketElement, nullptr );
+                        xHandler->startElement(isODF13 ? sPGPKeyPacketElement13 : sPGPKeyPacketElement, nullptr);
                         ::comphelper::Base64::encode(aBuffer, aPgpKeyPacket);
                         xHandler->characters( aBuffer.makeStringAndClear() );
-                        xHandler->endElement( sPGPKeyPacketElement );
+                        xHandler->endElement(isODF13 ? sPGPKeyPacketElement13 :  sPGPKeyPacketElement);
                         xHandler->ignorableWhitespace ( sWhiteSpace );
                     }
 
-                    xHandler->endElement( sPgpDataElement );
+                    xHandler->endElement(isODF13 ? sPgpDataElement13 : sPgpDataElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement( sKeyInfoElement );
+                    xHandler->endElement(isODF13 ? sManifestKeyInfoElement13 : sKeyInfoElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sCipherDataElement, nullptr );
+                    xHandler->startElement(isODF13 ? sCipherDataElement13 : sCipherDataElement, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement( sCipherValueElement, nullptr );
+                    xHandler->startElement(isODF13 ? sCipherValueElement13 : sCipherValueElement, nullptr);
                     ::comphelper::Base64::encode(aBuffer, aCipherValue);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement( sCipherValueElement );
+                    xHandler->endElement(isODF13 ? sCipherValueElement13 : sCipherValueElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement( sCipherDataElement );
+                    xHandler->endElement(isODF13 ? sCipherDataElement13 : sCipherDataElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement( sEncryptedKeyElement );
+                    xHandler->endElement(isODF13 ? sEncryptedKeyElement13 : sEncryptedKeyElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
                 }
             }
 
-            xHandler->endElement( sManifestKeyInfoElement );
+            if (!isODF13)
+            {
+                xHandler->endElement(sManifestKeyInfoElement);
+            }
             xHandler->ignorableWhitespace ( sWhiteSpace );
         }
     }
