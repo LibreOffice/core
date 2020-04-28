@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87af0d95_9f7f3595",
+        "filename": "sc/source/core/data/dptabsrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-04-28T21:35:04Z",
+      "side": 1,
+      "message": "Nice catch, but this is a bit hairy. The mistyped service name is there since the beginning and extensions may rely on it when asking for supported service names. We should have both names here, which should be possible as getSupportedServiceNames() returns uno::Sequence\u003c OUString \u003e.\n\nI\u0027ll come up with a solution.",
+      "revId": "e3f4e2935f4395dbee57d50b3db413eed58e7ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
