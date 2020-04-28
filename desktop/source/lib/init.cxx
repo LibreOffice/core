@@ -3829,9 +3829,8 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
         return;
     }
 
-    Size aOffset(pWindow->GetOutOffXPixel(), pWindow->GetOutOffYPixel());
-    Point aPos(nX, nY);
-    aPos.Move(aOffset);
+    const Point aPos(nX, nY);
+
     MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
 
     vcl::EnableDialogInput(pWindow);
