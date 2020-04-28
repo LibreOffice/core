@@ -576,7 +576,7 @@ void ScInputWindow::NotifyLOKClient()
         {
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("type", "calc-input-win");
-            aItems.emplace_back(std::make_pair("position", Point(0, 0).toString()));
+            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
             aItems.emplace_back(std::make_pair("size", aSize.toString()));
             aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
             pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
