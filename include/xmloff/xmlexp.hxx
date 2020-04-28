@@ -534,9 +534,6 @@ public:
     /// returns value of ODF version attribute
     char const* GetODFVersionAttributeValue() const;
 
-    /// returns the currently configured default version for odf export
-    SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
-
     /// returns the deterministic version for odf export
     SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
 
