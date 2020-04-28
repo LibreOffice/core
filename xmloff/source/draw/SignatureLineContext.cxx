@@ -71,10 +71,6 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
     try
     {
         // Get the document signatures
-        Reference<XDocumentDigitalSignatures> xSignatures(
-            security::DocumentDigitalSignatures::createWithVersion(
-                comphelper::getProcessComponentContext(), "1.2"));
-
         css::uno::Reference<XStorable> xStorable(GetImport().GetModel(), UNO_QUERY_THROW);
         Reference<XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, xStorable->getLocation(), ElementModes::READ);
@@ -84,6 +80,11 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
             SAL_WARN("xmloff", "No xStorage!");
             return;
         }
+
+        OUString const aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(xStorage));
+        Reference<XDocumentDigitalSignatures> xSignatures(
+            security::DocumentDigitalSignatures::createWithVersion(
+                comphelper::getProcessComponentContext(), aODFVersion));
 
         Sequence<DocumentSignatureInformation> xSignatureInfo
             = xSignatures->verifyDocumentContentSignatures(xStorage, Reference<XInputStream>());
