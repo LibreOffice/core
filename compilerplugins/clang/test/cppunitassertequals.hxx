@@ -12,11 +12,14 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
+
 #include "rtl/ustring.hxx"
 
 struct T { bool operator ==(T); };
 
-void test(bool b1, bool b2, OUString const & s1, OUString const & s2, T t);
+void test(
+    bool b1, bool b2, OUString const & s1, OUString const & s2, T t, void * p, std::nullptr_t n);
 
 #endif
 
