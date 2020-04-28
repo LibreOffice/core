@@ -618,6 +618,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDateControl, "date-control.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u"mi\u00E9rcoles, 05 de marzo de 2014");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf115030, "tdf115030.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    sal_Unicode aDot = {0x02D9};
+    sal_Unicode aDobleDot = {0x00A8};
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[2]/m:acc/m:accPr/m:chr", "val", OUString(aDobleDot));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
