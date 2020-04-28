@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2dd822a_66b04970",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T07:28:40Z",
+      "side": 1,
+      "message": "I\u0027ve found three bad bad constants, maybe there are more. Please, check and fix all the values.",
+      "range": {
+        "startLine": 145,
+        "startChar": 3,
+        "endLine": 151,
+        "endChar": 98
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d9f96ab_65bb659a",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T07:28:40Z",
+      "side": 1,
+      "message": "typo: 64-\u003e80",
+      "range": {
+        "startLine": 151,
+        "startChar": 44,
+        "endLine": 151,
+        "endChar": 46
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b927c2b9_f67e0b31",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T07:28:40Z",
+      "side": 1,
+      "message": "typo: B-\u003e0",
+      "range": {
+        "startLine": 152,
+        "startChar": 43,
+        "endLine": 152,
+        "endChar": 44
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
