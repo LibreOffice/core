@@ -531,6 +531,9 @@ public:
 
     css::uno::Reference< css::embed::XStorage > const & GetTargetStorage() const;
 
+    /// returns value of ODF version attribute
+    char const* GetODFVersionAttributeValue() const;
+
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
 
