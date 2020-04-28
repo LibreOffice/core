@@ -1198,6 +1198,20 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupS
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineColorGroupedShapes.docx")
+{
+    // tdf#132491 : Check if correct color is used for underline.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color", "FF0000");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color", "00B050");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[3]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
