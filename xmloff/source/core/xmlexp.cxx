@@ -106,8 +106,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-sal_Char const sXML_1_2[] = "1.2";
-
 #define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
 #define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
 #define XML_MODEL_SERVICE_DRAW      "com.sun.star.drawing.DrawingDocument"
@@ -1220,6 +1218,25 @@ void SvXMLExport::addChaffWhenEncryptedStorage()
     }
 }
 
+auto SvXMLExport::GetODFVersionAttributeValue() const -> char const*
+{
+    char const* pVersion(nullptr);
+    switch (getSaneDefaultVersion())
+    {
+    case SvtSaveOptions::ODFSVER_013_EXTENDED: [[fallthrough]];
+    case SvtSaveOptions::ODFSVER_013: pVersion = "1.3"; break;
+    case SvtSaveOptions::ODFSVER_012_EXTENDED: [[fallthrough]];
+    case SvtSaveOptions::ODFSVER_012_EXT_COMPAT: [[fallthrough]];
+    case SvtSaveOptions::ODFSVER_012: pVersion = "1.2"; break;
+    case SvtSaveOptions::ODFSVER_011: pVersion = "1.1"; break;
+    case SvtSaveOptions::ODFSVER_010: break;
+
+    default:
+        assert(!"xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
+    }
+    return pVersion;
+}
+
 ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     bool bOwnGraphicResolver = false;
@@ -1314,18 +1331,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     }
 
     // office:version = ...
-    const sal_Char* pVersion = nullptr;
-    switch (getDefaultVersion())
-    {
-    case SvtSaveOptions::ODFVER_LATEST: pVersion = sXML_1_2; break;
-    case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = sXML_1_2; break;
-    case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
-    case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
-    case SvtSaveOptions::ODFVER_010: break;
-
-    default:
-        SAL_WARN("xmloff.core", "xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
-    }
+    const char*const pVersion = GetODFVersionAttributeValue();
 
     if (pVersion)
     {
