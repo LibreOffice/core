@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "f398eb46_d55212bb",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T08:06:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d9f96ab_65bb659a",
+      "range": {
+        "startLine": 151,
+        "startChar": 44,
+        "endLine": 151,
+        "endChar": 46
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b61fca8f_892af493",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T08:06:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2dd822a_66b04970",
+      "range": {
+        "startLine": 145,
+        "startChar": 3,
+        "endLine": 151,
+        "endChar": 98
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b927c2b9_f67e0b31",
         "filename": "oox/source/drawingml/color.cxx",
         "patchSetId": 18
@@ -65,6 +113,47 @@
         "endLine": 152,
         "endChar": 44
       },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e97a36c_7012d605",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T08:06:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b927c2b9_f67e0b31",
+      "range": {
+        "startLine": 152,
+        "startChar": 43,
+        "endLine": 152,
+        "endChar": 44
+      },
+      "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1c4e503_b99364f2",
+        "filename": "oox/source/drawingml/color.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-28T08:06:24Z",
+      "side": 1,
+      "message": "Could you add this line later, please?\n\nOSL_ENSURE( nToken !\u003d XML_TOKEN_INVALID, \"Color::setHighlightClr - invalid color token\" );",
       "revId": "20f89514393fd8adb309eac3d84217e9a33a323f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
