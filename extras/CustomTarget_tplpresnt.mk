@@ -131,7 +131,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Midnightblue/content.xml \
 	Midnightblue/META-INF/manifest.xml \
 	Midnightblue/meta.xml \
-	Midnightblue/Pictures/1000000000000020000000204B249CA79A42C6D7.png \
 	Midnightblue/styles.xml \
 	Midnightblue/Thumbnails/thumbnail.png \
 	Nature_Illustration/content.xml \
