@@ -2499,6 +2499,16 @@
                 <desc>ODFVER_012_EXT_COMPAT</desc>
               </info>
             </enumeration>
+            <enumeration oor:value="9">
+              <info>
+                <desc>ODFVER_012_EXTENDED</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="10">
+              <info>
+                <desc>ODFVER_013</desc>
+              </info>
+            </enumeration>
             <enumeration oor:value="3">
               <info>
                 <desc>ODFVER_LATEST</desc>

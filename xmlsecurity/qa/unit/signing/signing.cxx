@@ -1076,14 +1076,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 
     // the loaded document is a OTT with a valid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_012_TEXT);
+                   SignatureState::OK, ODFVER_013_TEXT);
 
     // load saved ODT document
     createDoc(aTempFileSaveAsODT.GetURL());
 
     // the loaded document is a ODT with a macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_012_TEXT);
+                   SignatureState::OK, ODFVER_013_TEXT);
 
     // save as new OTT template
     utl::TempFile aTempFileSaveAsODT_OTT;
@@ -1110,7 +1110,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 
     // the loaded document is a OTT with a valid macro signature
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::OK, ODFVER_012_TEXT);
+                   SignatureState::OK, ODFVER_013_TEXT);
 }
 
 /// Test if a macro signature from an OTT 1.0 is dropped for ODT 1.2
@@ -1160,7 +1160,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 
     // the loaded document is a 1.2 ODT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-                   SignatureState::NOSIGNATURES, ODFVER_012_TEXT);
+                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 
     // load the template as-is to validate signatures
     mxComponent->dispose();
@@ -1198,7 +1198,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 
     // the loaded document is a 1.2 OTT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
-                   SignatureState::NOSIGNATURES, ODFVER_012_TEXT);
+                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
 }
 
 namespace
