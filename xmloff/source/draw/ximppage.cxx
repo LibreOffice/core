@@ -144,7 +144,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > DrawAnnotationContext:
 {
     if( mxAnnotation.is() )
     {
-        if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_DC))
+        if (IsTokenInNamespace(nElement, XML_NAMESPACE_DC))
         {
             if( (nElement & TOKEN_MASK) == XML_CREATOR )
                 return new XMLStringBufferImportContext(GetImport(), maAuthorBuffer);
