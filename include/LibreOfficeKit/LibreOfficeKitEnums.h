@@ -726,6 +726,27 @@ typedef enum
      * Sends the tab stop list for the current of the current cursor position.
      */
     LOK_CALLBACK_TAB_STOP_LIST = 48,
+
+    /**
+     * Sends all informations for displaying form field button for a text based field.
+     *
+     * It contains the position where the frame with the button should be displayed and
+     * also contains all information that the popup window needs.
+     *
+     * The payload example:
+     * {
+     *      "action": "show",
+     *      "type": "drop-down",
+     *      "textArea": "1418, 3906, 3111, 919"
+     * }
+     *
+     * or
+     * {
+     *      "action": "hide",
+     *      "type": "drop-down"
+     * }
+     */
+    LOK_CALLBACK_FORM_FIELD_BUTTON = 49,
 }
 LibreOfficeKitCallbackType;
 
@@ -852,6 +873,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_CALC_FUNCTION_LIST";
     case LOK_CALLBACK_TAB_STOP_LIST:
         return "LOK_CALLBACK_TAB_STOP_LIST";
+    case LOK_CALLBACK_FORM_FIELD_BUTTON:
+        return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

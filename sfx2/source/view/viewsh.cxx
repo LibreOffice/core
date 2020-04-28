@@ -1462,7 +1462,10 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
 {
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledPainting())
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (comphelper::LibreOfficeKit::isTiledPainting() && nType != LOK_CALLBACK_FORM_FIELD_BUTTON)
         return;
 
     if (pImpl->m_bTiledSearching)
