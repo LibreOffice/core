@@ -66,8 +66,8 @@ public:
         {
             return new SvXMLSectionListContext(GetImport());
         }
-        if ((Element & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_TEXT) ||
-            (Element & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_TEXT_OOO))
+        if (IsTokenInNamespace(Element, XML_NAMESPACE_TEXT) ||
+            IsTokenInNamespace(Element, XML_NAMESPACE_TEXT_OOO))
         {
             auto nToken = Element & TOKEN_MASK;
             if (nToken == XML_P ||
