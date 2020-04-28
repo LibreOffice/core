@@ -216,7 +216,7 @@ void SAL_CALL SvXMLMetaDocumentContext::characters( const OUString& /*rChars*/ )
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_META ) )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_META) )
         return new XMLDocumentBuilderContext(
                 GetImport(), nElement, xAttrList, mxDocBuilder);
     return nullptr;
