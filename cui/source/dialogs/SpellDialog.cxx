@@ -1124,8 +1124,9 @@ namespace
 {
     const EECharAttrib* FindCharAttrib(int nPosition, sal_uInt16 nWhich, std::vector<EECharAttrib>& rAttribList)
     {
-        for (const auto& rTextAtr : rAttribList)
+        for (auto it = rAttribList.rbegin(); it != rAttribList.rend(); ++it)
         {
+            const auto& rTextAtr = *it;
             if (rTextAtr.pAttr->Which() != nWhich)
                 continue;
             if (rTextAtr.nStart <= nPosition && rTextAtr.nEnd >= nPosition)
