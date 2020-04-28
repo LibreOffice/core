@@ -191,6 +191,7 @@ public:
     void testTdf98603();
     void testTdf129372();
     void testShapeGlowEffect();
+    void testTdf119087();
     void testTdf131554();
     void testTdf132282();
 
@@ -301,6 +302,7 @@ public:
     CPPUNIT_TEST(testTdf98603);
     CPPUNIT_TEST(testTdf129372);
     CPPUNIT_TEST(testShapeGlowEffect);
+    CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
 
@@ -2804,6 +2806,13 @@ void SdOOXMLExportTest2::testShapeGlowEffect()
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
 }
 
+void SdOOXMLExportTest2::testTdf119087()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf119087.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    // This would fail both on export validation, and reloading the saved pptx file.
+}
+
 void SdOOXMLExportTest2::testTdf131554()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf131554.pptx"), PPTX);
@@ -2812,6 +2821,7 @@ void SdOOXMLExportTest2::testTdf131554()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13251), xShape->getPosition().Y);
 }
+
 
 void SdOOXMLExportTest2::testTdf132282()
 {
