@@ -625,6 +625,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_OpeningBrace, "2120112713_OpenBrace.doc
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf132305, "tdf132305.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:bar/m:barPr/m:pos","val","top");
+}
+
 // Checks that all runs of the field have text properties.
 // Old behaviour: only first run has text properties of the field
 //
