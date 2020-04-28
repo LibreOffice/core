@@ -109,7 +109,7 @@ Reference<XFastContextHandler>
 BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
                                               const Reference<XFastAttributeList>& xAttributes)
 {
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
+    if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
@@ -211,7 +211,7 @@ BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement(
 Reference<XFastContextHandler> BasicEmbeddedLibraryElement::createFastChildContext(
     sal_Int32 nElement, const Reference<XFastAttributeList>& xAttributes)
 {
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
+    if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
@@ -253,7 +253,7 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
 {
     // TODO: <byte-code>
 
-    if ((nElement & NMSP_MASK) != NAMESPACE_TOKEN(XML_NAMESPACE_OOO))
+    if (!IsTokenInNamespace(nElement, XML_NAMESPACE_OOO))
     {
         throw xml::sax::SAXException("illegal namespace!", Reference<XInterface>(), Any());
     }
