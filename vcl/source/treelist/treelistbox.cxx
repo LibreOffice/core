@@ -3287,22 +3287,6 @@ void SvTreeListBox::Command(const CommandEvent& rCEvt)
         Control::Command(rCEvt);
 }
 
-void SvTreeListBox::RemoveParentKeepChildren( SvTreeListEntry* pParent )
-{
-    assert(pParent);
-    SvTreeListEntry* pNewParent = GetParent( pParent );
-    if( pParent->HasChildren())
-    {
-        SvTreeListEntry* pChild = FirstChild( pParent );
-        while( pChild )
-        {
-            pModel->Move( pChild, pNewParent, TREELIST_APPEND );
-            pChild = FirstChild( pParent );
-        }
-    }
-    pModel->Remove( pParent );
-}
-
 SvLBoxTab* SvTreeListBox::GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rPos )
 {
     sal_uInt16 nTabCount = aTabs.size();
