@@ -103,7 +103,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \
-	Inspiration/Pictures/1000000000000CEC000009B16D3849F3A43CBBBC.png \
 	Inspiration/styles.xml \
 	Inspiration/Thumbnails/thumbnail.png \
 	Lights/content.xml \
