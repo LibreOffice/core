@@ -211,7 +211,7 @@ private:
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
     mxCtx(rxCtx),
-    m_sODFVersion(ODFVER_012_TEXT),
+    m_sODFVersion(ODFVER_013_TEXT),
     m_nArgumentsCount(0),
     m_bHasDocumentSignature(false)
 {
