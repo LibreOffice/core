@@ -821,7 +821,7 @@ UUIInteractionHelper::handleRequest_impl(
                 handleMacroConfirmRequest(
                     aMacroConfirmRequest.DocumentURL,
                     aMacroConfirmRequest.DocumentStorage,
-                    !aMacroConfirmRequest.DocumentVersion.isEmpty() ? aMacroConfirmRequest.DocumentVersion : ODFVER_012_TEXT,
+                    !aMacroConfirmRequest.DocumentVersion.isEmpty() ? aMacroConfirmRequest.DocumentVersion : ODFVER_013_TEXT,
                     aMacroConfirmRequest.DocumentSignatureInformation,
                     rRequest->getContinuations());
                 return true;

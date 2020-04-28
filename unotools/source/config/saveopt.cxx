@@ -955,6 +955,10 @@ SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion()
             return ODFSVER_012;
         case ODFVER_012_EXT_COMPAT:
             return ODFSVER_012_EXT_COMPAT;
+        case ODFVER_012_EXTENDED:
+            return ODFSVER_012_EXTENDED;
+        case ODFVER_013:
+            return ODFSVER_013;
     }
     return ODFSVER_LATEST_EXTENDED;
 }
