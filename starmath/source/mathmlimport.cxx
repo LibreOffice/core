@@ -2614,7 +2614,7 @@ SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
         }
         break;
         default:
-            if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE))
+            if (IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE))
                 pContext = new SmXMLOfficeContext_Impl(*this);
             else
                 pContext = new SmXMLDocContext_Impl(*this);

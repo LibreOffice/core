@@ -59,24 +59,23 @@ namespace com { namespace sun { namespace star { namespace util { class XNumberF
 namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
 namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastAttributeList; } } } } }
 namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastContextHandler; } } } } }
-namespace comphelper { class AttributeList; }
-
-class ProgressBarHelper;
-
-#define NAMESPACE_TOKEN( prefixToken ) ( ( sal_Int32( prefixToken + 1 ) ) << NMSP_SHIFT )
-#define XML_ELEMENT( prefix, name ) ( NAMESPACE_TOKEN( XML_NAMESPACE_##prefix ) | name )
-
-const size_t NMSP_SHIFT = 16;
-const sal_Int32 TOKEN_MASK = 0xffff;
-const sal_Int32 NMSP_MASK = 0xffff0000;
-
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
     namespace rdf { class XMetadatable; }
 } } }
-namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
+namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
+namespace comphelper { class AttributeList; }
+
+namespace xmloff {
+    class RDFaImportHelper;
+}
+namespace xmloff::token {
+    class FastTokenHandler;
+}
+
+class ProgressBarHelper;
 class SvXMLNamespaceMap;
 class SvXMLImport_Impl;
 class SvXMLUnitConverter;
@@ -87,12 +86,28 @@ class XMLErrors;
 class StyleMap;
 enum class SvXMLErrorFlags;
 
-namespace xmloff {
-    class RDFaImportHelper;
+constexpr sal_Int32 LAST_NAMESPACE = 121;
+constexpr size_t NMSP_SHIFT = 16;
+constexpr sal_Int32 TOKEN_MASK = 0xffff;
+constexpr sal_Int32 NMSP_MASK = 0xffff0000;
+
+
+#define XML_ELEMENT( prefix, name ) ( NAMESPACE_TOKEN( XML_NAMESPACE_##prefix ) | name )
+
+constexpr sal_Int32 NAMESPACE_TOKEN( sal_Int32 prefixToken )
+{
+    assert(prefixToken >= 0 && prefixToken <= nLastNamespace);
+    return ( prefixToken + 1 ) << NMSP_SHIFT;
 }
-namespace xmloff::token {
-    class FastTokenHandler;
+
+constexpr bool IsTokenInNamespace(sal_Int32 nElement, sal_Int32 nNamespace)
+{
+    assert(nNamespace >= 0 && nNamespace <= nLastNamespace);
+    auto nTmp = (nElement & NMSP_MASK) >> NMSP_SHIFT;
+    assert(nTmp >= 0 && nNamespace <= nTmp);
+    return nTmp == nNamespace;
 }
+
 
 enum class SvXMLImportFlags {
     NONE            = 0x0000,

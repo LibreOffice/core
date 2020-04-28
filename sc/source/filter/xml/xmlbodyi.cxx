@@ -95,7 +95,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     for (auto &it : *rAttrList)
     {
         sal_Int32 nToken = it.getToken();
-        if( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) == ( nToken & NMSP_MASK ) )
+        if( IsTokenInNamespace(nToken, XML_NAMESPACE_TABLE) )
         {
             const sal_Int32 nLocalToken = nToken & TOKEN_MASK;
             if( nLocalToken == XML_STRUCTURE_PROTECTED )

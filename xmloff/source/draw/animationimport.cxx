@@ -562,7 +562,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             OUString rValue = aIter.toString();
-            switch( aIter.getToken() )
+            auto nToken = aIter.getToken();
+            switch( nToken )
             {
             case XML_ELEMENT(SMIL, XML_BEGIN):
             case XML_ELEMENT(SMIL_COMPAT, XML_BEGIN):
@@ -1077,12 +1078,11 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
 
             default:
             {
-                auto nNamespace = (aIter.getToken() & NMSP_MASK);
                 // push all unknown attributes within the presentation namespace as user data
-                if (nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION)
-                    || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_SO52)
-                    || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_OASIS)
-                    || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_OOO))
+                if (IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION)
+                    || IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION_SO52)
+                    || IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION_OASIS)
+                    || IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION_OOO))
                 {
                     aUserData.emplace_back( SvXMLImport::getNameFromToken(aIter.getToken()), makeAny( rValue ) );
                 }
