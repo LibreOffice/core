@@ -543,6 +543,18 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                                 aRectFnSet.GetTop(aPgPrtRect),
                                                 nTopOfOrient );
                 }
+                else if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+                {
+                    // The anchored object is relative from the bottom of the page's print area.
+                    SwRect aPgPrtRect(rPageAlignLayFrame.getFrameArea());
+                    if (rPageAlignLayFrame.IsPageFrame())
+                    {
+                        auto& rPageFrame = static_cast<const SwPageFrame&>(rPageAlignLayFrame);
+                        aPgPrtRect = rPageFrame.PrtWithoutHeaderAndFooter();
+                    }
+                    SwTwips nPageBottom = aRectFnSet.GetBottom(aPgPrtRect);
+                    nVertOffsetToFrameAnchorPos += aRectFnSet.YDiff(nPageBottom, nTopOfOrient);
+                }
                 nRelPosY = nVertOffsetToFrameAnchorPos + aVert.GetPos();
             }
 
