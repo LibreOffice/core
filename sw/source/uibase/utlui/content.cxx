@@ -1644,7 +1644,7 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
                 }
                 while (m_xTreeView->iter_next(*xEntry));
             }
-            return true;
+            return false; // return false to notify caller not to do collapse
         }
         SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rParent).toInt64());
         const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
