@@ -134,18 +134,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
 
-        const sal_Char* pVersion = nullptr;
-        switch( getDefaultVersion() )
-        {
-        case SvtSaveOptions::ODFVER_LATEST: pVersion = "1.2"; break;
-        case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = "1.2"; break;
-        case SvtSaveOptions::ODFVER_012: pVersion = "1.2"; break;
-        case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
-        case SvtSaveOptions::ODFVER_010: break;
-
-        default:
-            OSL_FAIL("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
-        }
+        const char*const pVersion = GetODFVersionAttributeValue();
 
         if( pVersion )
             AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
