@@ -32,21 +32,43 @@
 #include <osl/diagnose.h>
 #include "scdllapi.h"
 
-#define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
-OUString SAL_CALL ClassName::getImplementationName()                      \
-{                                                                                    \
-    return ClassNameAscii;                         \
-}                                                                                    \
+#define SC_SIMPLE_SERVICE_INFO_IMPL( ClassName, ClassNameAscii )            \
+OUString SAL_CALL ClassName::getImplementationName()                        \
+{                                                                           \
+    return ClassNameAscii;                                                  \
+}                                                                           \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
+{                                                                           \
+    return cppu::supportsService(this, ServiceName);                        \
+}
+
+#define SC_SIMPLE_SERVICE_INFO_NAME( ClassName, ServiceAscii ) \
+css::uno::Sequence< OUString >                                 \
+    SAL_CALL ClassName::getSupportedServiceNames()             \
+{                                                              \
+    css::uno::Sequence< OUString > aRet { ServiceAscii };      \
+    return aRet;                                               \
+}
+
+// Place the old mistyped variant as first element so existing code can
+// continue to ask aRet[0] if it doesn't iterate; new code can iterate over the
+// sequence. This mostly should be used by supportsService() iterating anyway.
+#define SC_SIMPLE_SERVICE_INFO_TYPO( ClassName, ServiceAscii, ServiceAsciiMistyped ) \
+css::uno::Sequence< OUString >                                                       \
+    SAL_CALL ClassName::getSupportedServiceNames()                                   \
 {                                                                                    \
-    return cppu::supportsService(this, ServiceName);                                \
-}                                                                                    \
-css::uno::Sequence< OUString >                                   \
-    SAL_CALL ClassName::getSupportedServiceNames()                           \
-{                                                                                    \
-    css::uno::Sequence< OUString > aRet { ServiceAscii };                  \
+    css::uno::Sequence< OUString > aRet { ServiceAsciiMistyped, ServiceAscii };      \
     return aRet;                                                                     \
 }
+
+#define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii ) \
+    SC_SIMPLE_SERVICE_INFO_IMPL( ClassName, ClassNameAscii )              \
+    SC_SIMPLE_SERVICE_INFO_NAME( ClassName, ServiceAscii )
+
+#define SC_SIMPLE_SERVICE_INFO_COMPAT( ClassName, ClassNameAscii, ServiceAscii, ServiceAsciiMistyped ) \
+    SC_SIMPLE_SERVICE_INFO_IMPL( ClassName, ClassNameAscii )                                           \
+    SC_SIMPLE_SERVICE_INFO_TYPO( ClassName, ServiceAscii, ServiceAsciiMistyped )
+
 
 #define SC_IMPL_DUMMY_PROPERTY_LISTENER( ClassName )                                \
     void SAL_CALL ClassName::addPropertyChangeListener( const OUString&,       \
