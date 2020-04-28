@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2d9affe_73dd9975",
+        "filename": "vcl/source/gdi/pdfwriter_impl2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-28T11:29:13Z",
+      "side": 1,
+      "message": "there is also o3tl::lru_map",
+      "revId": "47ef6d4f6f6d56ccb2bd1174ae315ab5afd23356",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
