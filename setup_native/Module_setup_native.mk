@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 ))
 
 ifeq ($(OS),WNT)
+ifeq ($(PKGFORMAT),msi)
 $(eval $(call gb_Module_add_targets,setup_native,\
 	Library_instooofiltmsi \
 	Library_inst_msu_msi \
@@ -35,7 +36,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	StaticLibrary_quickstarter \
 	StaticLibrary_seterror \
 ))
-
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
