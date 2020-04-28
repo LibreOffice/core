@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "575ac327_36ddbc6f",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-28T09:18:27Z",
+      "side": 1,
+      "message": "I can\u0027t believe you didn\u0027t prefix it with m! ;-P",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 21
+      },
+      "revId": "cb99a09a8333efd1525e46ce507c64973f282d33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
