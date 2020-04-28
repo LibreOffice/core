@@ -201,6 +201,13 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moUnderline = XML_dash;
             else if (attrib == "none")
                 mrTextCharacterProperties.moUnderline = XML_none;
+            auto colorAttrib = rAttribs.getIntegerHex(W_TOKEN(color));
+            if (colorAttrib.has())
+            {
+                oox::drawingml::Color theColor;
+                theColor.setSrgbClr(colorAttrib.get());
+                mrTextCharacterProperties.maUnderlineColor = theColor;
+            }
             break;
         }
         case W_TOKEN( spacing ):
