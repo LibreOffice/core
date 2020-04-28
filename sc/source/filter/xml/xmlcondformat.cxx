@@ -39,7 +39,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -110,7 +110,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -381,7 +381,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorSca
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -515,7 +515,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -607,7 +607,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetF
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {

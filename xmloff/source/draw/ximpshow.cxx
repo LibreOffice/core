@@ -89,9 +89,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
             bIsMouseVisible = false;
 
         // read attributes
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             OUString sValue = aIter.toString();
 
@@ -206,9 +204,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::cre
         OUString aPages;
 
         // read attributes
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             OUString sValue = aIter.toString();
 

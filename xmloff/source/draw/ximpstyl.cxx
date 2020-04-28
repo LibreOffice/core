@@ -725,9 +725,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     const bool bHandoutMaster = (nElement & TOKEN_MASK) == XML_HANDOUT_MASTER;
     OUString sStyleName, sPageMasterName;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         const OUString sValue = aIter.toString();
         switch(aIter.getToken())

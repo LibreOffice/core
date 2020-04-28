@@ -103,21 +103,15 @@ ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
 void SAL_CALL ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( xAttrList.is() )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
-                    maStyleName = aIter.toString();
-                break;
-                default:
-                    ;
-            }
+            case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
+                maStyleName = aIter.toString();
+            break;
+            default:
+                ;
         }
     }
 }
@@ -255,27 +249,21 @@ void ScXMLCellFieldURLContext::SetStyleName(const OUString& rStyleName)
 void SAL_CALL ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( xAttrList.is() )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( XLINK, XML_HREF ):
-                    maURL = aIter.toString();
-                break;
-                case XML_ELEMENT( XLINK, XML_TYPE ):
-                    // Ignored for now.
-                break;
-                case XML_ELEMENT( OFFICE, XML_TARGET_FRAME_NAME ):
-                    maTargetFrame = aIter.toString();
-                break;
-                default:
-                    ;
-            }
+            case XML_ELEMENT( XLINK, XML_HREF ):
+                maURL = aIter.toString();
+            break;
+            case XML_ELEMENT( XLINK, XML_TYPE ):
+                // Ignored for now.
+            break;
+            case XML_ELEMENT( OFFICE, XML_TARGET_FRAME_NAME ):
+                maTargetFrame = aIter.toString();
+            break;
+            default:
+                ;
         }
     }
 }
@@ -306,23 +294,17 @@ void ScXMLCellFieldSContext::SetStyleName(const OUString& rStyleName)
 void SAL_CALL ScXMLCellFieldSContext::startFastElement( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( xAttrList.is() )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_ELEMENT( TEXT, XML_C ):
-                    mnCount = aIter.toInt32();
-                    if (mnCount <= 0)
-                        mnCount = 1;     // worth a warning?
-                break;
-                default:
-                    ;
-            }
+            case XML_ELEMENT( TEXT, XML_C ):
+                mnCount = aIter.toInt32();
+                if (mnCount <= 0)
+                    mnCount = 1;     // worth a warning?
+            break;
+            default:
+                ;
         }
     }
 }

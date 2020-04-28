@@ -217,9 +217,7 @@ static SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_Int32
     SvXMLImportContext *pContext = nullptr;
 
     rProp.Name.clear();
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         if (aIter.getToken() == XML_ELEMENT(CONFIG, XML_NAME))
             rProp.Name = aIter.toString();
@@ -255,9 +253,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >  XMLDocumentSettingsCo
     SvXMLImportContext *pContext = nullptr;
     OUString sName;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         if (aIter.getToken() == XML_ELEMENT(CONFIG, XML_NAME))
             sName = aIter.toString();
@@ -400,9 +396,7 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport,
     mrItemName(rTempItemName),
     mpBaseContext(pTempBaseContext)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         if (aIter.getToken() == XML_ELEMENT(CONFIG, XML_TYPE))
             msType = aIter.toString();

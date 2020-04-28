@@ -53,9 +53,7 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
     SvXMLImportContext( rImport )
     ,m_pContainer(_pContainer)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

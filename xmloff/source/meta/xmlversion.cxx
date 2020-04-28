@@ -151,12 +151,12 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
                                         const Reference< XFastAttributeList > & xAttrList )
     : SvXMLImportContext( rImport )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    if ( pAttribList->getFastAttributeTokens().empty() )
+    sax_fastparser::FastAttributeList& rAttribList =
+        sax_fastparser::castToFastAttributeList( xAttrList );
+    if ( rAttribList.getFastAttributeTokens().empty() )
         return;
     util::RevisionTag aInfo;
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : rAttribList)
     {
         switch( aIter.getToken() )
         {

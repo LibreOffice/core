@@ -64,7 +64,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDatabaseRangesCont
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch( nElement )
     {
@@ -196,7 +196,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDatabaseRangeConte
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -474,7 +474,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceSQLContext::
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     if ( nElement == XML_ELEMENT( FORM, XML_CONNECTION_RESOURCE ) && sDBName.isEmpty() )
     {
@@ -524,7 +524,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceTableContext
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     if ( nElement == XML_ELEMENT( FORM, XML_CONNECTION_RESOURCE ) && sDBName.isEmpty() )
     {
@@ -573,7 +573,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceQueryContext
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     if ( nElement == XML_ELEMENT( FORM, XML_CONNECTION_RESOURCE ) && sDBName.isEmpty() )
     {
@@ -644,7 +644,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSubTotalRulesConte
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
@@ -751,7 +751,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSubTotalRuleContex
 {
     SvXMLImportContext *pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {

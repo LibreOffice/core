@@ -155,9 +155,7 @@ XMLCharContext::XMLCharContext(
 {
     if( bCount )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             if( aIter.getToken() == XML_ELEMENT(TEXT, XML_C) )
             {

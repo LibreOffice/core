@@ -46,9 +46,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     ,m_bHidden(false)
 {
     OUString sType;
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

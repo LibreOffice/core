@@ -110,7 +110,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::creat
 {
     SvXMLImportContext *pContext(nullptr);
     sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+        &sax_fastparser::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {

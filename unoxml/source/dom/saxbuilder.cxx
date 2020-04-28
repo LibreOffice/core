@@ -258,10 +258,7 @@ namespace DOM
 
     void CSAXDocumentBuilder::setElementFastAttributes(const Reference< XElement >& aElement, const Reference< XFastAttributeList >& xAttribs)
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttribs );
-
-        for (auto &it : *pAttribList)
+        for (auto &it : sax_fastparser::castToFastAttributeList( xAttribs ))
         {
             sal_Int32 nAttrToken = it.getToken();
             const OUString& aAttrPrefix(SvXMLImport::getNamespacePrefixFromToken(nAttrToken, nullptr));

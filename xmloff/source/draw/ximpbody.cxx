@@ -48,9 +48,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     bool bHaveXmlId( false );
     OUString sXmlId, sStyleName, sContextName, sMasterPageName, sHREF;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         OUString sValue = aIter.toString();
         switch(aIter.getToken())

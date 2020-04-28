@@ -49,9 +49,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     m_xFunction = m_xFunctions->createFunction();
 
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

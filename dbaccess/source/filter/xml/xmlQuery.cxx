@@ -41,9 +41,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     OXMLTable( rImport, _xAttrList,_xParentContainer, "com.sun.star.sdb.CommandDefinition" )
         ,m_bEscapeProcessing(true)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

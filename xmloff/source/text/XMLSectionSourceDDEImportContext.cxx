@@ -61,10 +61,7 @@ void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
     OUString sItem;
     bool bAutomaticUpdate = false;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         switch (aIter.getToken())
         {

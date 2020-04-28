@@ -181,24 +181,18 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChil
 void ConvDicXMLDictionaryContext_Impl::startFastElement( sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
-    if ( rxAttrList.is() )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( rxAttrList ))
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
-
-        for (auto &aIter : *pAttribList)
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_NAMESPACE_TCD | XML_LANG:
-                    nLanguage = LanguageTag::convertToLanguageType( aIter.toString() );
-                break;
-                case XML_NAMESPACE_TCD | XML_CONVERSION_TYPE:
-                    nConversionType = GetConversionTypeFromText( aIter.toString() );
-                break;
-                default:
-                    ;
-            }
+            case XML_NAMESPACE_TCD | XML_LANG:
+                nLanguage = LanguageTag::convertToLanguageType( aIter.toString() );
+            break;
+            case XML_NAMESPACE_TCD | XML_CONVERSION_TYPE:
+                nConversionType = GetConversionTypeFromText( aIter.toString() );
+            break;
+            default:
+                ;
         }
     }
     GetConvDicImport().SetLanguage( nLanguage );
@@ -228,13 +222,7 @@ void ConvDicXMLEntryTextContext_Impl::startFastElement(
     sal_Int32 /*Element*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
-    if ( !rxAttrList.is() )
-        return;
-
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
-
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( rxAttrList ))
     {
         switch (aIter.getToken())
         {

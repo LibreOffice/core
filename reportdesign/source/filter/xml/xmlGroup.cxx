@@ -60,9 +60,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 
     m_xGroup->setSortAscending(false);// the default value has to be set
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

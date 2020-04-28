@@ -105,10 +105,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
     if( NAMESPACE_TOKEN(XML_NAMESPACE_DRAW) == nNamespace ||
         NAMESPACE_TOKEN(XML_NAMESPACE_DRAW_OOO) == nNamespace )
     {
-        sax_fastparser::FastAttributeList *pFastAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( rAttrList );
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList;
-        for (auto& aIter : *pFastAttribList)
+        for (auto& aIter : sax_fastparser::castToFastAttributeList( rAttrList ))
             pAttrList->AddAttribute(
                 SvXMLImport::getNamespacePrefixFromToken(aIter.getToken(), nullptr) + ":" +
                 GetXMLToken(static_cast<XMLTokenEnum>(aIter.getToken() & TOKEN_MASK)),

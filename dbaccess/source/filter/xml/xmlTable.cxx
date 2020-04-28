@@ -49,9 +49,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     ,m_bApplyFilter(false)
     ,m_bApplyOrder(false)
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 
@@ -200,9 +198,7 @@ void OXMLTable::fillAttributes(const uno::Reference< XFastAttributeList > & _xAt
                                 ,OUString& _rsTableCatalog
                                 )
 {
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

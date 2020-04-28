@@ -63,9 +63,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
 
     OSL_ENSURE(m_xControl.is(),"Control is NULL!");
 
-    sax_fastparser::FastAttributeList *pAttribList =
-                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-    for (auto &aIter : *pAttribList)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
         OUString sValue = aIter.toString();
 

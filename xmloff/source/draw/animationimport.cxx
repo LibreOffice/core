@@ -472,9 +472,7 @@ AnimationNodeContext::AnimationNodeContext(
                 pServiceName = "com.sun.star.animations.Command"; break;
             case XML_PAR:
                 {
-                    sax_fastparser::FastAttributeList *pAttribList =
-                        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-                    for (auto &aIter : *pAttribList)
+                    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
                     {
                         if( (aIter.getToken() & TOKEN_MASK) == XML_PRESET_ID)
                         {
@@ -561,9 +559,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         OUString sXmlId;
 
         sal_Int16 nEnum;
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
             OUString rValue = aIter.toString();
             switch( aIter.getToken() )
