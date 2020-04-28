@@ -1621,7 +1621,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
 
     if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
-      || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion != ODFVER_012_TEXT && !bHasSign) )
+      || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion.compareTo(ODFVER_012_TEXT) < 0 && !bHasSign))
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 
@@ -1803,7 +1803,7 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
 
     if (IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
-      || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion != ODFVER_012_TEXT && !bHasSign))
+      || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion.compareTo(ODFVER_012_TEXT) < 0 && !bHasSign))
     {
         if (nVersion >= SvtSaveOptions::ODFSVER_012)
         {
