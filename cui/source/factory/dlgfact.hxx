@@ -143,7 +143,7 @@ class CuiAbstractTabController_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit CuiAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit CuiAbstractTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -219,7 +219,7 @@ class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
 {
     std::shared_ptr<SvxThesaurusDialog> m_xDlg;
 public:
-    explicit AbstractThesaurusDialog_Impl(std::unique_ptr<SvxThesaurusDialog> p)
+    explicit AbstractThesaurusDialog_Impl(std::shared_ptr<SvxThesaurusDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -272,7 +272,7 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
 {
     std::shared_ptr<svx::SpellDialog> m_xDlg;
 public:
-    explicit AbstractSpellDialog_Impl(std::unique_ptr<svx::SpellDialog> p)
+    explicit AbstractSpellDialog_Impl(std::shared_ptr<svx::SpellDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -377,8 +377,8 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 {
     std::shared_ptr<SvxTransformTabDialog> m_xDlg;
 public:
-    explicit AbstractSvxTransformTabDialog_Impl(SvxTransformTabDialog* p)
-        : m_xDlg(p)
+    explicit AbstractSvxTransformTabDialog_Impl(std::shared_ptr<SvxTransformTabDialog> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -395,7 +395,7 @@ class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
     std::shared_ptr<SvxCaptionTabDialog> m_xDlg;
 public:
-    explicit AbstractSvxCaptionDialog_Impl(std::unique_ptr<SvxCaptionTabDialog> p)
+    explicit AbstractSvxCaptionDialog_Impl(std::shared_ptr<SvxCaptionTabDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -529,7 +529,7 @@ class AbstractSvxHpLinkDlg_Impl : public AbstractSvxHpLinkDlg
 protected:
     std::shared_ptr<SvxHpLinkDlg> m_xDlg;
 public:
-    explicit AbstractSvxHpLinkDlg_Impl(std::unique_ptr<SvxHpLinkDlg> p)
+    explicit AbstractSvxHpLinkDlg_Impl(std::shared_ptr<SvxHpLinkDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -571,7 +571,7 @@ class AbstractSvxAreaTabDialog_Impl : public AbstractSvxAreaTabDialog
 {
     std::shared_ptr<SvxAreaTabDialog> m_xDlg;
 public:
-    explicit AbstractSvxAreaTabDialog_Impl(std::unique_ptr<SvxAreaTabDialog> p)
+    explicit AbstractSvxAreaTabDialog_Impl(std::shared_ptr<SvxAreaTabDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -602,7 +602,7 @@ class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
     std::shared_ptr<SvPasteObjectDialog> m_xDlg;
 public:
-    explicit AbstractPasteDialog_Impl(std::unique_ptr<SvPasteObjectDialog> p)
+    explicit AbstractPasteDialog_Impl(std::shared_ptr<SvPasteObjectDialog> p)
         : m_xDlg(std::move(p))
     {
     }
