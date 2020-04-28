@@ -84,10 +84,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Focus/content.xml \
 	Focus/META-INF/manifest.xml \
 	Focus/meta.xml \
-	Focus/Pictures/2000000C0000634100004A4C3651558E9C43717A.svm \
-	Focus/Pictures/2000000E0000634100004A4C2A08177FA3DF9654.svm \
-	Focus/Pictures/2000000E0000634100004A4C8B8C0B6EC20B2683.svm \
-	Focus/Pictures/2000000E0000634100004A4CCD2247D4D39A5527.svm \
 	Focus/styles.xml \
 	Focus/Thumbnails/thumbnail.png \
 	Forestbird/content.xml \
