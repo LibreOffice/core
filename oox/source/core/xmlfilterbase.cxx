@@ -988,7 +988,8 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
         }
 
         // Preserve non-standard (i.e. custom) entries.
-        if (!sType.match("http://schemas.openxmlformats.org"))
+        if (!sType.match("http://schemas.openxmlformats.org") // OOXML/ECMA Transitional
+            && !sType.match("http://purl.oclc.org")) // OOXML Strict
         {
             StreamDataSequence aDataSeq;
             if (importBinaryData(aDataSeq, sTarget))
