@@ -184,6 +184,7 @@ public:
     void testTdf98603();
     void testTdf119087();
     void testTdf131554();
+    void testTdf132282();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testTdf98603);
     CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
+    CPPUNIT_TEST(testTdf132282);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2651,6 +2653,18 @@ void SdOOXMLExportTest2::testTdf131554()
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13251), xShape->getPosition().Y);
+}
+
+void SdOOXMLExportTest2::testTdf132282()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf132282.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // Without the fix in place, the position would be 0,0, height = 1 and width = 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1736), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(763), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30523), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2604), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
