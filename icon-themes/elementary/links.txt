@@ -2326,6 +2326,8 @@ sw/res/sc20172.png cmd/sc_prevrecord.png
 sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
+sw/res/sc20177.png cmd/sc_insertfooter.png
+sw/res/sc20179.png cmd/sc_insertheader.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
 sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
