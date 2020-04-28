@@ -208,17 +208,13 @@ namespace slideshow::internal
                         nSubType == FANINVERTICAL ||
                         nSubType == FANINHORIZONTAL );
             case TRIANGLEWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    FigureWipe::createTriangleWipe() );
+                return FigureWipe::createTriangleWipe();
             case ARROWHEADWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    FigureWipe::createArrowHeadWipe() );
+                return FigureWipe::createArrowHeadWipe();
             case PENTAGONWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    FigureWipe::createPentagonWipe() );
+                return FigureWipe::createPentagonWipe();
             case HEXAGONWIPE:
-                return ParametricPolyPolygonSharedPtr(
-                    FigureWipe::createHexagonWipe() );
+                return FigureWipe::createHexagonWipe();
             case STARWIPE: {
                 sal_Int32 points;
                 switch (nSubType) {
@@ -232,8 +228,7 @@ namespace slideshow::internal
                     points = 4;
                     break;
                 }
-                return ParametricPolyPolygonSharedPtr(
-                    FigureWipe::createStarWipe(points) );
+                return FigureWipe::createStarWipe(points);
             }
             case MISCDIAGONALWIPE: {
                 switch (nSubType) {

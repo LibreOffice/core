@@ -29,15 +29,15 @@ namespace internal {
 class FigureWipe : public ParametricPolyPolygon
 {
 public:
-    static FigureWipe * createTriangleWipe();
-    static FigureWipe * createArrowHeadWipe();
-    static FigureWipe * createStarWipe( sal_Int32 nPoints );
-    static FigureWipe * createPentagonWipe();
-    static FigureWipe * createHexagonWipe();
+    static std::shared_ptr<FigureWipe> createTriangleWipe();
+    static std::shared_ptr<FigureWipe> createArrowHeadWipe();
+    static std::shared_ptr<FigureWipe> createStarWipe( sal_Int32 nPoints );
+    static std::shared_ptr<FigureWipe> createPentagonWipe();
+    static std::shared_ptr<FigureWipe> createHexagonWipe();
 
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
-private:
     explicit FigureWipe( ::basegfx::B2DPolygon const & figure ) : m_figure(figure) {}
+private:
     const ::basegfx::B2DPolygon m_figure;
 };
 
