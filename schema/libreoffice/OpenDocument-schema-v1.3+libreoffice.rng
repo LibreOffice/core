@@ -958,43 +958,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:zeroOrMore>
     </rng:define>
 
-    <!-- FIXME this is not extensible -->
-    <rng:define name="office-annotation">
-      <rng:element name="office:annotation">
-        <rng:ref name="office-annotation-attlist"/>
-        <rng:ref name="draw-caption-attlist"/>
-        <rng:ref name="common-draw-position-attlist"/>
-        <rng:ref name="common-draw-size-attlist"/>
-        <rng:ref name="common-draw-shape-with-text-and-styles-attlist"/>
-        <rng:optional>
-          <rng:ref name="dc-creator"/>
-        </rng:optional>
-        <rng:optional>
-          <rng:ref name="dc-date"/>
-        </rng:optional>
-        <rng:optional>
-          <rng:ref name="meta-date-string"/>
-        </rng:optional>
-        <rng:optional>
-          <rng:element name="meta:creator-initials">
-            <rng:text/>
-          </rng:element>
-        </rng:optional>
-        <!-- https://issues.oasis-open.org/browse/OFFICE-3776 -->
-        <rng:optional>
-          <rng:element name="loext:sender-initials">
-            <rng:text/>
-          </rng:element>
-        </rng:optional>
-        <rng:zeroOrMore>
-          <rng:choice>
-            <rng:ref name="text-p"/>
-            <rng:ref name="text-list"/>
-          </rng:choice>
-        </rng:zeroOrMore>
-      </rng:element>
-    </rng:define>
-
     <rng:define name="office-annotation-attlist" combine="interleave">
       <rng:interleave>
         <rng:optional>
@@ -1393,23 +1356,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
           <rng:ref name="chart-grid"/>
         </rng:zeroOrMore>
       </rng:element>
-    </rng:define>
-
-      <!-- https://issues.oasis-open.org/browse/OFFICE-3765 -->
-    <rng:define name="number-text-with-fillchar">
-      <rng:optional>
-        <rng:optional>
-          <rng:element name="loext:text">
-            <rng:text/>
-          </rng:element>
-        </rng:optional>
-        <rng:element name="loext:fill-character">
-          <rng:text/>
-        </rng:element>
-      </rng:optional>
-      <rng:optional>
-        <rng:ref name="number-text"/>
-      </rng:optional>
     </rng:define>
 
     <rng:define name="table-table">
@@ -1918,32 +1864,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
-  <!-- https://issues.oasis-open.org/browse/OFFICE-3928 -->
-  <rng:define name="chart-coordinate-region" combine="choice">
-    <rng:element name="chartooo:coordinate-region">
-      <rng:ref name="chart-coordinate-region-attlist"/>
-      <rng:empty/>
-    </rng:element>
-  </rng:define>
-
-  <rng:define name="common-decimal-places-attlist" combine="interleave">
-    <rng:optional>
-      <!-- OFFICE-3860 -->
-      <rng:attribute name="loext:min-decimal-places">
-        <rng:ref name="integer"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
-  <!-- https://issues.oasis-open.org/browse/OFFICE-3943 -->
-  <rng:define name="common-draw-mime-type-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:mime-type">
-        <rng:ref name="string"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
   <rng:define name="common-draw-rel-size-attlist" combine="interleave">
     <!-- OFFICE-3854 -->
     <rng:optional>
@@ -1989,22 +1909,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <rng:define name="style-footer-first" combine="choice">
-    <rng:element name="loext:footer-first">
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
-      <rng:ref name="common-style-header-footer-attlist"/>
-      <rng:ref name="header-footer-content"/>
-    </rng:element>
-  </rng:define>
-
-  <rng:define name="style-header-first" combine="choice">
-    <rng:element name="loext:header-first">
-       <!-- https://issues.oasis-open.org/browse/OFFICE-3789 -->
-      <rng:ref name="common-style-header-footer-attlist"/>
-      <rng:ref name="header-footer-content"/>
-    </rng:element>
-  </rng:define>
-
   <rng:define name="style-list-level-label-alignment-attlist" combine="interleave">
     <rng:optional>
     <!-- TODO no proposal -->
@@ -2015,15 +1919,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
           <rng:value>nothing</rng:value>
           <rng:value>newline</rng:value>
         </rng:choice>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
-  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
-    <rng:optional>
-      <!-- https://issues.oasis-open.org/browse/OFFICE-3767 -->
-      <rng:attribute name="loext:contextual-spacing">
-        <rng:ref name="boolean"/>
       </rng:attribute>
     </rng:optional>
   </rng:define>
@@ -2124,15 +2019,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <rng:define name="style-chart-properties-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:try-staggering-first">
-        <rng:ref name="boolean"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
-      <!-- OFFICE-3860 -->
-  <rng:define name="number-scientific-number-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:forced-exponent-sign">
         <rng:ref name="boolean"/>
       </rng:attribute>
     </rng:optional>
@@ -2263,15 +2149,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- https://issues.oasis-open.org/browse/OFFICE-1828 -->
-  <rng:define name="number-scientific-number-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:exponent-interval">
-        <rng:ref name="positiveInteger"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
   <!-- https://issues.oasis-open.org/browse/OFFICE-2317 -->
   <rng:define name="vertJustifyValues">
     <rng:choice>
@@ -2313,11 +2190,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
 
   <rng:define name="number-fraction-attlist" combine="interleave">
     <!-- OFFICE-3695 -->
-    <rng:optional>
-      <rng:attribute name="loext:max-denominator-value">
-        <rng:ref name="positiveInteger"/>
-      </rng:attribute>
-    </rng:optional>
     <!-- TODO no proposal, 1544a26ac9f7dd60605dd21e9cbe29d490aafdce -->
     <rng:optional>
       <rng:attribute name="loext:max-numerator-digits">
