@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+     Open Document Format for Office Applications (OpenDocument) Version 1.3
+     Committee Specification 01
+     25 December 2019
+     Copyright (c) OASIS Open 2019. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.3/cs01/schemas/
+     Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part1-introduction.html
+     TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+-->
+<!--
         Open Document Format for Office Applications (OpenDocument) Version 1.3
         OASIS Standard, In progress
 	OWL Metadata Manifest Description
-        Source: https://tools.oasis-open.org/version-control/svn/office/
-        Copyright (c) OASIS Open 2002-2015. All Rights Reserved.
 
-	All capitalized terms in the following text have the meanings assigned to them
-   	in the OASIS Intellectual Property Rights Policy (the "OASIS IPR Policy"). The
-	full Policy may be found at the OASIS website.
+        Copyright © OASIS Open [2002-2018]. All Rights Reserved.
+        Distributed under the terms of the OASIS IPR Policy, [http://www.oasis-open.org/policies-guidelines/ipr],
+        AS-IS, WITHOUT ANY IMPLIED OR EXPRESS WARRANTY; there is no warranty of MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE or NONINFRINGEMENT of the rights of others.
 
-	This document and translations of it may be copied and furnished to others, and
-	derivative works that comment on or otherwise explain it or assist in its
-	implementation may be prepared, copied, published, and distributed, in whole or
-	in part, without restriction of any kind, provided that the above copyright
-	notice and this section are included on all such copies and derivative works.
-	However, this document itself may not be modified in any way, including by
-	removing the copyright notice or references to OASIS, except as needed for the
-	purpose of developing any document or deliverable produced by an OASIS
-	Technical Committee (in which case the rules applicable to copyrights, as set
-	forth in the OASIS IPR Policy, must be followed) or as required to translate it
-	into languages other than English.
-
-	The limited permissions granted above are perpetual and will not be revoked by
-	OASIS or its successors or assigns.
-
-	This document and the information contained herein is provided on an "AS IS"
-	basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT
-	LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
-	INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
-	FITNESS FOR A PARTICULAR PURPOSE. 
 -->
+
+<!-- https://issues.oasis-open.org/browse/OFFICE-2153 -->
+
 <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:odf="http://docs.oasis-open.org/ns/office/1.2/meta/odf#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:pkg="http://docs.oasis-open.org/ns/office/1.2/meta/pkg#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/01/rdf-schema#">
 
 <owl:Ontology rdf:about="http://docs.oasis-open.org/ns/office/1.2/meta/odf#">
