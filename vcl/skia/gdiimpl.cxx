@@ -778,12 +778,6 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     const basegfx::B2DVector aLineWidth(rLineWidth.equalZero() ? basegfx::B2DVector(1.0, 1.0)
                                                                : rObjectToDevice * rLineWidth);
 
-    // Skia does not support B2DLineJoin::NONE; return false to use
-    // the fallback (own geometry preparation),
-    // linejoin-mode and thus the above only applies to "fat" lines.
-    if ((basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidth.getX() > 1.3))
-        return false;
-
     // MM01 need to do line dashing as fallback stuff here now
     const double fDotDashLength(
         nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
@@ -857,21 +851,44 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeWidth(aLineWidth.getX());
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
-    SkPath aPath;
-
-    // MM01 checked/verified for Skia (on Win)
-    for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+    if (eLineJoin != basegfx::B2DLineJoin::NONE)
     {
-        const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
-        addPolygonToPath(aPolyLine, aPath);
+        SkPath aPath;
+        aPath.setFillType(SkPathFillType::kEvenOdd);
+        for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
+            addPolygonToPath(aPolyPolygonLine.getB2DPolygon(a), aPath);
+        // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
+        // case as it seems to produce better results.
+        aPath.offset(0.5, 0.5, nullptr);
+        getDrawCanvas()->drawPath(aPath, aPaint);
+        addXorRegion(aPath.getBounds());
+    }
+    else // Skia does not support basegfx::B2DLineJoin::NONE, draw each line separately
+    {
+        for (sal_uInt32 i = 0; i < aPolyPolygonLine.count(); ++i)
+        {
+            const basegfx::B2DPolygon& rPolygon = aPolyPolygonLine.getB2DPolygon(i);
+            sal_uInt32 nPoints = rPolygon.count();
+            bool bClosed = rPolygon.isClosed();
+            for (sal_uInt32 j = 0; j < (bClosed ? nPoints : nPoints - 1); ++j)
+            {
+                sal_uInt32 index1 = (j + 0) % nPoints;
+                sal_uInt32 index2 = (j + 1) % nPoints;
+                SkPath aPath;
+                aPath.moveTo(rPolygon.getB2DPoint(index1).getX(),
+                             rPolygon.getB2DPoint(index1).getY());
+                aPath.lineTo(rPolygon.getB2DPoint(index2).getX(),
+                             rPolygon.getB2DPoint(index2).getY());
+
+                // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
+                // case as it seems to produce better results.
+                aPath.offset(0.5, 0.5, nullptr);
+                getDrawCanvas()->drawPath(aPath, aPaint);
+                addXorRegion(aPath.getBounds());
+            }
+        }
     }
 
-    aPath.setFillType(SkPathFillType::kEvenOdd);
-    // Apply the same adjustment as toSkX()/toSkY() do. Do it here even in the non-GPU
-    // case as it seems to produce better results.
-    aPath.offset(0.5, 0.5, nullptr);
-    getDrawCanvas()->drawPath(aPath, aPaint);
-    addXorRegion(aPath.getBounds());
     postDraw();
 
     return true;
