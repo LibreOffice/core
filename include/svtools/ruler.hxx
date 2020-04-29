@@ -772,7 +772,10 @@ public:
     void            SetMargin2( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
     long            GetMargin2() const;
 
+    long            GetParagraphFirstLineIndent();
+    long            GetLeftParagraphIndent();
     void            SetLeftFrameMargin( long nPos );
+    long            GetRightParagraphIndent();
     void            SetRightFrameMargin( long nPos );
     void            SetLines( sal_uInt32 n = 0, const RulerLine* pLineAry = nullptr );
     void            SetBorders( sal_uInt32 n = 0, const RulerBorder* pBrdAry = nullptr );

@@ -274,6 +274,9 @@ std::string SwCommentRuler::CreateJsonNotification()
     jsonNotif.put("margin2", convertTwipToMm100(GetMargin2()));
     jsonNotif.put("leftOffset", convertTwipToMm100(GetNullOffset()));
     jsonNotif.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+    jsonNotif.put("firstLineIndent", convertTwipToMm100(GetParagraphFirstLineIndent()));
+    jsonNotif.put("leftIndent", convertTwipToMm100(GetLeftParagraphIndent()));
+    jsonNotif.put("rightIndent", convertTwipToMm100(GetRightParagraphIndent()));
 
     // GetPageWidth() on the other hand does return a value in twips.
     // So here convertTwipToMm100() really does produce actual mm100. Fun.

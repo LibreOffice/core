@@ -3340,6 +3340,9 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      *      "margin2": "...",
      *      "leftOffset": "...",
      *      "pageOffset": "...",
+     *      "firstLineIndent": "...",
+     *      "leftIndent": "...",
+     *      "rightIndent": "...",
      *      "pageWidth": "...",
      *      "unit": "..."
      *  }

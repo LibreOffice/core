@@ -3547,12 +3547,38 @@ void SvxRuler::SetTabsRelativeToIndent( bool bRel )
 
 void SvxRuler::SetValues(RulerChangeType type, long diffValue)
 {
-    if (diffValue == 0)
-        return;
-
-    if (type == RulerChangeType::MARGIN1)
-        AdjustMargin1(diffValue);
-    else if (type == RulerChangeType::MARGIN2)
-        SetMargin2( GetMargin2() - diffValue);
-    ApplyMargins();
+    if (type == RulerChangeType::MARGIN1 || type == RulerChangeType::MARGIN2)
+    {
+        if (diffValue == 0){
+            return;
+        }
+        else{
+            if (type == RulerChangeType::MARGIN1)
+            {
+                AdjustMargin1(diffValue);
+            }
+            else if (type == RulerChangeType::MARGIN2)
+            {
+                SetMargin2( GetMargin2() - diffValue);
+            }
+            ApplyMargins();
+        }
+    }
+    else
+    {
+        if (type == RulerChangeType::FIRST_LINE_INDENT)
+        {
+            mxParaItem->SetTextFirstLineOffset(diffValue);
+        }
+        else if (type == RulerChangeType::PARA_LEFT_INDENT)
+        {
+            mxParaItem->SetLeftValue(diffValue);
+        }
+        else if (type == RulerChangeType::PARA_RIGHT_INDENT)
+        {
+            mxParaItem->SetRightValue(diffValue);
+        }
+        UpdatePara();
+        ApplyIndents();
+    }
 }

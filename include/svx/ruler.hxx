@@ -44,7 +44,10 @@ struct SvxRuler_Impl;
 enum class RulerChangeType
 {
     MARGIN1,
-    MARGIN2
+    MARGIN2,
+    FIRST_LINE_INDENT,
+    PARA_LEFT_INDENT,
+    PARA_RIGHT_INDENT
 };
 
 enum class SvxRulerDragFlags
