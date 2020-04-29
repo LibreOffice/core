@@ -39,21 +39,17 @@ class XFormsSubmissionContext : public TokenContext
 
 public:
     XFormsSubmissionContext( SvXMLImport& rImport,
-                             sal_uInt16 nPrefix,
-                             const OUString& rLocalName,
                              const css::uno::Reference<css::xforms::XModel2>& xModel );
 
     // implement TokenContext methods:
 
 protected:
-    virtual void HandleAttribute( sal_uInt16 nToken,
+    virtual bool HandleAttribute( sal_Int32 nElement,
                                   const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_uInt16 nToken,
-        sal_uInt16 nNamespace,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 
 };
 

@@ -53,37 +53,11 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-static const SvXMLTokenMapEntry aAttributes[] =
-{
-    TOKEN_MAP_ENTRY( NONE, BASE ),
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XSD, LENGTH         ),
-    TOKEN_MAP_ENTRY( XSD, MINLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MAXLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MININCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MINEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXINCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, PATTERN        ),
-    // ??? XML_ENUMERATION
-    TOKEN_MAP_ENTRY( XSD, WHITESPACE     ),
-    TOKEN_MAP_ENTRY( XSD, TOTALDIGITS    ),
-    TOKEN_MAP_ENTRY( XSD, FRACTIONDIGITS ),
-    XML_TOKEN_MAP_END
-};
-
-
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<css::xforms::XDataTypeRepository> const & rRepository,
     const OUString& sTypeName ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+        TokenContext( rImport ),
         mxRepository( rRepository ),
         msTypeName( sTypeName ),
         msBaseName()
@@ -116,14 +90,16 @@ void SchemaRestrictionContext::CreateDataType()
     SAL_WARN_IF( !mxDataType.is(), "xmloff", "can't create type" );
 }
 
-void SchemaRestrictionContext::HandleAttribute(
-    sal_uInt16 nToken,
+bool SchemaRestrictionContext::HandleAttribute(
+    sal_Int32 nElement,
     const OUString& rValue )
 {
-    if( nToken == XML_BASE )
+    if( nElement == XML_ELEMENT(NONE, XML_BASE) )
     {
         msBaseName = rValue;
+        return true;
     }
+    return false;
 }
 
 typedef Any (*convert_t)( const OUString& );
@@ -210,59 +186,55 @@ static Any xforms_time( const OUString& rValue )
     return aAny;
 }
 
-
 SvXMLImportContext* SchemaRestrictionContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& xAttrList )
+    sal_Int32 nElement,
+    const Reference<css::xml::sax::XFastAttributeList>& xAttrList )
 {
     // find value
     OUString sValue;
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 n = 0; n < nLength; n++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        if( IsXMLToken( xAttrList->getNameByIndex( n ), XML_VALUE ) )
-            sValue = xAttrList->getValueByIndex( n );
+        if( (aIter.getToken() & TOKEN_MASK) == XML_VALUE )
+            sValue = aIter.toString();
     }
 
     // determine property name + suitable converter
     OUString sPropertyName;
     convert_t pConvert = nullptr;
-    switch( nToken )
+    switch( nElement )
     {
-    case XML_LENGTH:
+    case XML_ELEMENT(XSD, XML_LENGTH):
         sPropertyName = "Length";
         pConvert = &xforms_int32;
         break;
-    case XML_MINLENGTH:
+    case XML_ELEMENT(XSD, XML_MINLENGTH):
         sPropertyName = "MinLength";
         pConvert = &xforms_int32;
         break;
-    case XML_MAXLENGTH:
+    case XML_ELEMENT(XSD, XML_MAXLENGTH):
         sPropertyName = "MaxLength";
         pConvert = &xforms_int32;
         break;
-    case XML_TOTALDIGITS:
+    case XML_ELEMENT(XSD, XML_TOTALDIGITS):
         sPropertyName = "TotalDigits";
         pConvert = &xforms_int32;
         break;
-    case XML_FRACTIONDIGITS:
+    case XML_ELEMENT(XSD, XML_FRACTIONDIGITS):
         sPropertyName = "FractionDigits";
         pConvert = &xforms_int32;
         break;
-    case XML_PATTERN:
+    case XML_ELEMENT(XSD, XML_PATTERN):
         sPropertyName = "Pattern";
         pConvert = &xforms_string;
         break;
-    case XML_WHITESPACE:
+    case XML_ELEMENT(XSD, XML_WHITESPACE):
         sPropertyName = "WhiteSpace";
         pConvert = &xforms_whitespace;
         break;
-    case XML_MININCLUSIVE:
-    case XML_MINEXCLUSIVE:
-    case XML_MAXINCLUSIVE:
-    case XML_MAXEXCLUSIVE:
+    case XML_ELEMENT(XSD, XML_MININCLUSIVE):
+    case XML_ELEMENT(XSD, XML_MINEXCLUSIVE):
+    case XML_ELEMENT(XSD, XML_MAXINCLUSIVE):
+    case XML_ELEMENT(XSD, XML_MAXEXCLUSIVE):
         {
             // these attributes are mapped to different properties.
             // To determine the property name, we use an attribute
@@ -270,18 +242,18 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             // converter is only type dependent.
 
             // first, attribute-dependent prefix
-            switch( nToken )
+            switch( nElement )
             {
-            case XML_MININCLUSIVE:
+            case XML_ELEMENT(XSD, XML_MININCLUSIVE):
                 sPropertyName = "MinInclusive";
                 break;
-            case XML_MINEXCLUSIVE:
+            case XML_ELEMENT(XSD, XML_MINEXCLUSIVE):
                 sPropertyName = "MinExclusive";
                 break;
-            case XML_MAXINCLUSIVE:
+            case XML_ELEMENT(XSD, XML_MAXINCLUSIVE):
                 sPropertyName = "MaxInclusive";
                 break;
-            case XML_MAXEXCLUSIVE:
+            case XML_ELEMENT(XSD, XML_MAXEXCLUSIVE):
                 sPropertyName = "MaxExclusive";
                 break;
             }
@@ -336,7 +308,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         break;
 
     default:
-        OSL_FAIL( "unknown facet" );
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
     // finally, set the property
@@ -356,7 +328,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         }
     }
 
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return new SvXMLImportContext( GetImport() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
