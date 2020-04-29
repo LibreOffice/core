@@ -111,6 +111,7 @@
 #include <sfx2/lokcharthelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdview.hxx>
@@ -883,10 +884,10 @@ void ExecuteOrientationChange()
         mxUndoManager->leaveUndoContext();
 }
 
-void setupSidebar(bool bShow)
+void setupSidebar(bool bShow, const OUString& sidebarDeckId = "")
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
     if (pViewFrame)
     {
         if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
@@ -905,6 +906,11 @@ void setupSidebar(bool bShow)
         auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
         if (!pDockingWin)
             return;
+
+        if (!sidebarDeckId.isEmpty())
+        {
+            pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
+        }
         pDockingWin->SyncUpdate();
     }
     else
@@ -3744,6 +3750,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    OUString sidebarDeckId = "PropertyDeck";
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
@@ -3897,9 +3904,15 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             return;
         }
     }
+    else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
+    {
+        sidebarDeckId = "WriterPageDeck";
+        setupSidebar(true, sidebarDeckId);
+        return;
+    }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
-        setupSidebar(true);
+        setupSidebar(true, sidebarDeckId);
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")
