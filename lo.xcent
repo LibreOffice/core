@@ -20,5 +20,7 @@
 	<true/>
 	<key>com.apple.security.print</key>
 	<true/>
+        <key>com.apple.security.cs.disable-executable-page-protection</key>
+        <true/>
 </dict>
 </plist>
