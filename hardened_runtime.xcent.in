@@ -11,5 +11,6 @@
         <!-- allow use of third-party plugins/frameworks (aka Java) -->
         <key>com.apple.security.cs.disable-library-validation</key>
         <true/>
+        @GET_TASK_ALLOW_ENTITLEMENT@
     </dict>
 </plist>
