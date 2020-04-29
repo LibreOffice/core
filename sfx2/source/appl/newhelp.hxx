@@ -22,17 +22,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame2.hpp>
 
-#include <vcl/window.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <vcl/builderpage.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/splitwin.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/treelistbox.hxx>
+#include <vcl/window.hxx>
 
 #include <srchdlg.hxx>
 
@@ -45,47 +40,21 @@ namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::text { class XTextRange; }
 
-
-// ContentListBox_Impl ---------------------------------------------------
-
-class ContentListBox_Impl : public SvTreeListBox
-{
-private:
-    Image           aOpenBookImage;
-    Image           aClosedBookImage;
-    Image           aDocumentImage;
-
-    void            InitRoot();
-    void            ClearChildren( SvTreeListEntry* pParent );
-
-public:
-    ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ContentListBox_Impl() override;
-    virtual void dispose() override;
-
-    virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
-    OUString        GetSelectedEntry() const;
-};
-
 // class HelpTabPage_Impl ------------------------------------------------
 
 class SfxHelpIndexWindow_Impl;
 
-class HelpTabPage_Impl : public TabPage
+class HelpTabPage_Impl : public BuilderPage
 {
 protected:
-    VclPtr<SfxHelpIndexWindow_Impl>    m_pIdxWin;
+    SfxHelpIndexWindow_Impl*    m_pIdxWin;
 
 public:
-    HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+    HelpTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
         const OString& rID, const OUString& rUIXMLDescription);
     virtual ~HelpTabPage_Impl() override;
-    virtual void dispose() override;
 
-    virtual Control*    GetLastFocusControl() = 0;
+    virtual weld::Widget* GetLastFocusControl() = 0;
 };
 
 // class ContentTabPage_Impl ---------------------------------------------
@@ -93,41 +62,39 @@ public:
 class ContentTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    VclPtr<ContentListBox_Impl> m_pContentBox;
+    std::unique_ptr<weld::TreeView> m_xContentBox;
+    OUString aOpenBookImage;
+    OUString aClosedBookImage;
+    OUString aDocumentImage;
 
+    Link<LinkParamNone*, void> aDoubleClickHdl;
+
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
+    DECL_LINK(CollapsingHdl, const weld::TreeIter&, bool);
+
+    void            ClearChildren(weld::TreeIter* pParent);
+    void            InitRoot();
 public:
-    ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
+    ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
     virtual ~ContentTabPage_Impl() override;
-    virtual void dispose() override;
 
-    virtual void        ActivatePage() override;
-    virtual Control*    GetLastFocusControl() override;
+    virtual weld::Widget* GetLastFocusControl() override;
 
-    void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
-    OUString GetSelectedEntry() const { return m_pContentBox->GetSelectedEntry(); }
-    void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
-};
-
-// class IndexTabPage_Impl -----------------------------------------------
-
-class IndexBox_Impl : public ComboBox
-{
-public:
-    IndexBox_Impl(vcl::Window* pParent, WinBits nStyle);
-
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt ) override;
-    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
-
-    void                SelectExecutableEntry();
+    void     SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
+    OUString GetSelectedEntry() const;
+    void     SetFocusOnBox() { m_xContentBox->grab_focus(); }
 };
 
 class IndexTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    VclPtr<IndexBox_Impl>      m_pIndexCB;
-    VclPtr<PushButton>         m_pOpenBtn;
+    std::unique_ptr<weld::Entry> m_xIndexEntry;
+    std::unique_ptr<weld::TreeView> m_xIndexList;
+    std::unique_ptr<weld::Button> m_xOpenBtn;
 
     Idle                aFactoryIdle;
+    Idle                aAutoCompleteIdle;
     Timer               aKeywordTimer;
     Link<IndexTabPage_Impl&,void> aKeywordLink;
 
@@ -135,211 +102,182 @@ private:
     OUString            sKeyword;
 
     bool                bIsActivated;
+    int                 nRowHeight;
+    int                 nAllHeight;
 
     void                InitializeIndex();
     void                ClearIndex();
 
-    DECL_LINK(OpenHdl, Button*, void);
+    Link<LinkParamNone*, void> aDoubleClickHdl;
+
+    DECL_LINK(OpenHdl, weld::Button&, void);
     DECL_LINK(IdleHdl, Timer*, void);
+    DECL_LINK(AutoCompleteHdl, Timer*, void);
     DECL_LINK(TimeoutHdl, Timer*, void);
+    DECL_LINK(TreeChangeHdl, weld::TreeView&, void);
+    DECL_LINK(EntryChangeHdl, weld::Entry&, void);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(CustomGetSizeHdl, weld::TreeView::get_size_args, Size);
+    DECL_LINK(CustomRenderHdl, weld::TreeView::render_args, void);
+    DECL_LINK(ResizeHdl, const Size&, void);
+
+    int starts_with(const OUString& rStr, int nStartRow, bool bCaseSensitive);
 
 public:
-    IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
     virtual ~IndexTabPage_Impl() override;
-    virtual void dispose() override;
 
-    virtual void        ActivatePage() override;
-    virtual Control*    GetLastFocusControl() override;
+    virtual void        Activate() override;
+    virtual weld::Widget* GetLastFocusControl() override;
 
-    void                SetDoubleClickHdl( const Link<ComboBox&,void>& rLink );
+    void                SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     void                SetFactory( const OUString& rFactory );
     const OUString&     GetFactory() const { return sFactory; }
     OUString            GetSelectedEntry() const;
-    void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
-    bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
+    void                SetFocusOnBox() { m_xIndexEntry->grab_focus(); }
+    bool                HasFocusOnEdit() const { return m_xIndexEntry->has_focus(); }
 
-    void         SetKeywordHdl( const Link<IndexTabPage_Impl&,void>& rLink ) { aKeywordLink = rLink; }
+    void                SetKeywordHdl( const Link<IndexTabPage_Impl&,void>& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
     bool                HasKeyword() const;
     bool                HasKeywordIgnoreCase();
     void                OpenKeyword();
 
-    void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
-};
-
-// class SearchTabPage_Impl ----------------------------------------------
-
-class SearchBox_Impl : public ComboBox
-{
-private:
-    Link<LinkParamNone*,void>  aSearchLink;
-
-public:
-    SearchBox_Impl(vcl::Window* pParent, WinBits nStyle)
-        : ComboBox(pParent, nStyle)
-    {
-        SetDropDownLineCount(5);
-    }
-
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void        Select() override;
-
-    void         SetSearchLink( const Link<LinkParamNone*,void>& rLink ) { aSearchLink = rLink; }
-};
-
-class SearchResultsBox_Impl : public ListBox
-{
-public:
-    SearchResultsBox_Impl(vcl::Window* pParent, WinBits nStyle)
-        : ListBox(pParent, nStyle)
-    {
-    }
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    void         SelectExecutableEntry();
 };
 
 class SearchTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    VclPtr<SearchBox_Impl>         m_pSearchED;
-    VclPtr<PushButton>             m_pSearchBtn;
-    VclPtr<CheckBox>               m_pFullWordsCB;
-    VclPtr<CheckBox>               m_pScopeCB;
-    VclPtr<SearchResultsBox_Impl>  m_pResultsLB;
-    VclPtr<PushButton>             m_pOpenBtn;
+    std::unique_ptr<weld::ComboBox> m_xSearchED;
+    std::unique_ptr<weld::Button> m_xSearchBtn;
+    std::unique_ptr<weld::CheckButton> m_xFullWordsCB;
+    std::unique_ptr<weld::CheckButton> m_xScopeCB;
+    std::unique_ptr<weld::TreeView> m_xResultsLB;
+    std::unique_ptr<weld::Button> m_xOpenBtn;
+
+    Link<LinkParamNone*, void> aDoubleClickHdl;
 
     OUString                       aFactory;
 
     css::uno::Reference< css::i18n::XBreakIterator >
                                    xBreakIterator;
 
-    void                ClearSearchResults();
-    void                RememberSearchText( const OUString& rSearchText );
+    void ClearSearchResults();
+    void RememberSearchText( const OUString& rSearchText );
+    void Search();
 
-    DECL_LINK(SearchHdl, LinkParamNone*, void);
-    DECL_LINK(ClickHdl, Button*, void);
-    DECL_LINK(OpenHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(OpenHdl, weld::Button&, void);
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
 
 public:
-    SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
     virtual ~SearchTabPage_Impl() override;
-    virtual void dispose() override;
 
-    virtual void        ActivatePage() override;
-    virtual Control*    GetLastFocusControl() override;
+    virtual weld::Widget* GetLastFocusControl() override;
 
-    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
+    void         SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
-    OUString            GetSelectedEntry() const;
-    void                ClearPage();
-    void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
-    bool         HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
-    OUString     GetSearchText() const { return m_pSearchED->GetText(); }
-    bool         IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
-    bool                OpenKeyword( const OUString& rKeyword );
-};
-
-// class BookmarksTabPage_Impl -------------------------------------------
-
-class BookmarksBox_Impl : public ListBox
-{
-private:
-    void                DoAction( sal_uInt16 nAction );
-
-public:
-    BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~BookmarksBox_Impl() override;
-    virtual void dispose() override;
-
-    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+    OUString     GetSelectedEntry() const;
+    void         ClearPage();
+    void         SetFocusOnBox() { m_xResultsLB->grab_focus(); }
+    bool         HasFocusOnEdit() const { return m_xSearchED->has_focus(); }
+    OUString     GetSearchText() const { return m_xSearchED->get_active_text(); }
+    bool         IsFullWordSearch() const { return m_xFullWordsCB->get_active(); }
+    bool         OpenKeyword( const OUString& rKeyword );
 };
 
 class BookmarksTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    VclPtr<BookmarksBox_Impl>  m_pBookmarksBox;
-    VclPtr<PushButton>         m_pBookmarksPB;
+    std::unique_ptr<weld::TreeView> m_xBookmarksBox;
+    std::unique_ptr<weld::Button> m_xBookmarksPB;
 
-    DECL_LINK(OpenHdl, Button*, void);
+    Link<LinkParamNone*, void> aDoubleClickHdl;
+
+    DECL_LINK(OpenHdl, weld::Button&, void);
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+    void DoAction(const OString& rAction);
 
 public:
-    BookmarksTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
     virtual ~BookmarksTabPage_Impl() override;
-    virtual void dispose() override;
 
-    virtual void        ActivatePage() override;
-    virtual Control*    GetLastFocusControl() override;
+    virtual weld::Widget* GetLastFocusControl() override;
 
-    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
+    void                SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
-    void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
+    void                SetFocusOnBox() { m_xBookmarksBox->grab_focus(); }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
 class SfxHelpWindow_Impl;
 
-class SfxHelpIndexWindow_Impl : public vcl::Window, public VclBuilderContainer
+class SfxHelpIndexWindow_Impl
 {
 private:
-    VclPtr<ListBox>            m_pActiveLB;
-    VclPtr<TabControl>         m_pTabCtrl;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::ComboBox> m_xActiveLB;
+    std::unique_ptr<weld::Notebook> m_xTabCtrl;
 
     Idle                aIdle;
 
     Link<SfxHelpIndexWindow_Impl*,void> aSelectFactoryLink;
-    Link<Control*,bool>                 aPageDoubleClickLink;
+    Link<LinkParamNone*,void>           aPageDoubleClickLink;
     Link<IndexTabPage_Impl&,void>       aIndexKeywordLink;
     OUString                            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
 
-    VclPtr<ContentTabPage_Impl>    pCPage;
-    VclPtr<IndexTabPage_Impl>      pIPage;
-    VclPtr<SearchTabPage_Impl>     pSPage;
-    VclPtr<BookmarksTabPage_Impl>  pBPage;
+    std::unique_ptr<ContentTabPage_Impl> xCPage;
+    std::unique_ptr<IndexTabPage_Impl> xIPage;
+    std::unique_ptr<SearchTabPage_Impl> xSPage;
+    std::unique_ptr<BookmarksTabPage_Impl> xBPage;
 
-    bool                bWasCursorLeftOrRight;
     bool                bIsInitDone;
 
     void                Initialize();
     void                SetActiveFactory();
-    HelpTabPage_Impl*   GetCurrentPage( sal_uInt16& rCurId );
+    HelpTabPage_Impl*   GetPage(const OString&);
+    HelpTabPage_Impl*   GetCurrentPage();
 
     inline ContentTabPage_Impl*     GetContentPage();
     inline IndexTabPage_Impl*       GetIndexPage();
     inline SearchTabPage_Impl*      GetSearchPage();
     inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
-    DECL_LINK(ActivatePageHdl, TabControl*, void );
-    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(ActivatePageHdl, const OString&, void);
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(InitHdl, Timer *, void);
     DECL_LINK(SelectFactoryHdl, Timer *, void);
     DECL_LINK(KeywordHdl, IndexTabPage_Impl&, void);
-    DECL_LINK(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
-    DECL_LINK(TabPageDoubleClickHdl, ListBox&, void);
-    DECL_LINK(IndexTabPageDoubleClickHdl, ComboBox&, void);
+    DECL_LINK(ContentTabPageDoubleClickHdl, LinkParamNone*, void);
+    DECL_LINK(TabPageDoubleClickHdl, LinkParamNone*, void);
+    DECL_LINK(IndexTabPageDoubleClickHdl, LinkParamNone*, void);
 
 public:
-    explicit SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
-    virtual ~SfxHelpIndexWindow_Impl() override;
-    virtual void dispose() override;
+    explicit SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* pParent, weld::Container* pContainer);
+    ~SfxHelpIndexWindow_Impl();
 
-    virtual void        Resize() override;
-    virtual Size        GetOptimalSize() const override;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void                SetDoubleClickHdl( const Link<Control*,bool>& rLink );
-    void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
+    void                SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
+    void                SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
-    OUString const &    GetFactory() const { return pIPage->GetFactory(); }
+    OUString const &    GetFactory() const { return xIPage->GetFactory(); }
     OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
-    OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectedEntry(); }
+    OUString            GetActiveFactoryTitle() const { return m_xActiveLB->get_active_text(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     bool                HasFocusOnEdit() const;
@@ -347,60 +285,54 @@ public:
     bool                IsFullWordSearch() const;
     void                OpenKeyword( const OUString& rKeyword );
     void                SelectExecutableEntry();
-    inline bool         WasCursorLeftOrRight();
+
+    weld::Window*       GetFrameWeld() const;
 };
 
 // inlines ---------------------------------------------------------------
 
 ContentTabPage_Impl* SfxHelpIndexWindow_Impl::GetContentPage()
 {
-    if ( !pCPage )
+    if (!xCPage)
     {
-        pCPage = VclPtr<ContentTabPage_Impl>::Create( m_pTabCtrl, this );
-        pCPage->SetOpenHdl( LINK(this, SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl) );
+        xCPage.reset(new ContentTabPage_Impl(m_xTabCtrl->get_page("contents"), this));
+        xCPage->SetDoubleClickHdl(LINK(this, SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl));
     }
-    return pCPage;
+    return xCPage.get();
 }
+
 IndexTabPage_Impl* SfxHelpIndexWindow_Impl::GetIndexPage()
 {
-    if ( !pIPage )
+    if (!xIPage)
     {
-        pIPage = VclPtr<IndexTabPage_Impl>::Create( m_pTabCtrl, this );
-        pIPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl) );
-        pIPage->SetKeywordHdl( aIndexKeywordLink );
+        xIPage.reset(new IndexTabPage_Impl(m_xTabCtrl->get_page("index"), this));
+        xIPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl) );
+        xIPage->SetKeywordHdl( aIndexKeywordLink );
     }
-    return pIPage;
+    return xIPage.get();
 }
 
 SearchTabPage_Impl* SfxHelpIndexWindow_Impl::GetSearchPage()
 {
-    if ( !pSPage )
+    if (!xSPage)
     {
-        pSPage = VclPtr<SearchTabPage_Impl>::Create( m_pTabCtrl, this );
-        pSPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
+        xSPage.reset(new SearchTabPage_Impl(m_xTabCtrl->get_page("find"), this));
+        xSPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
     }
-    return pSPage;
+    return xSPage.get();
 }
 
 BookmarksTabPage_Impl* SfxHelpIndexWindow_Impl::GetBookmarksPage()
 {
-    if ( !pBPage )
+    if (!xBPage)
     {
-        pBPage = VclPtr<BookmarksTabPage_Impl>::Create( m_pTabCtrl, this );
-        pBPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
+        xBPage.reset(new BookmarksTabPage_Impl(m_xTabCtrl->get_page("bookmarks"), this));
+        xBPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
     }
-    return pBPage;
-}
-
-bool SfxHelpIndexWindow_Impl::WasCursorLeftOrRight()
-{
-    bool bRet = bWasCursorLeftOrRight;
-    bWasCursorLeftOrRight = false;
-    return bRet;
+    return xBPage.get();
 }
 
 // class TextWin_Impl ----------------------------------------------------
-
 class TextWin_Impl : public DockingWindow
 {
 public:
@@ -417,18 +349,19 @@ class SfxHelpWindow_Impl;
 class SfxHelpTextWindow_Impl : public vcl::Window
 {
 private:
-    VclPtr<ToolBox>         aToolBox;
-    VclPtr<CheckBox>        aOnStartupCB;
+    std::unique_ptr<weld::Toolbar> xToolBox;
+    std::unique_ptr<weld::CheckButton>  xOnStartupCB;
+    std::unique_ptr<weld::Menu>  xMenu;
     Idle                    aSelectIdle;
-    Image                   aIndexOnImage;
-    Image                   aIndexOffImage;
+    OUString                aIndexOnImage;
+    OUString                aIndexOffImage;
     OUString                aIndexOnText;
     OUString                aIndexOffText;
     OUString                aSearchText;
     OUString                aOnStartupText;
     OUString                sCurrentFactory;
 
-    VclPtr<SfxHelpWindow_Impl>     pHelpWin;
+    VclPtr<SfxHelpWindow_Impl>     xHelpWin;
     VclPtr<vcl::Window>            pTextWin;
     std::shared_ptr<sfx2::SearchDialog> m_xSrchDlg;
     css::uno::Reference < css::frame::XFrame2 >
@@ -437,7 +370,6 @@ private:
                             xBreakIterator;
     css::uno::Reference< css::uno::XInterface >
                             xConfiguration;
-    long                    nMinPos;
     bool                    bIsDebug;
     bool                    bIsIndexOn;
     bool                    bIsInClose;
@@ -446,7 +378,6 @@ private:
     bool                    HasSelection() const;
     void                    InitToolBoxImages();
     void                    InitOnStartupBox();
-    void                    SetOnStartupBoxPosition();
 
     css::uno::Reference< css::i18n::XBreakIterator > const &
                             GetBreakIterator();
@@ -458,11 +389,11 @@ private:
     DECL_LINK(        NotifyHdl, LinkParamNone*, void );
     DECL_LINK(        FindHdl, sfx2::SearchDialog&, void );
     DECL_LINK(        CloseHdl, LinkParamNone*, void );
-    DECL_LINK(        CheckHdl, Button*, void );
+    DECL_LINK(        CheckHdl, weld::Button&, void );
     void                    FindHdl(sfx2::SearchDialog*);
 
 public:
-    explicit SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
+    explicit SfxHelpTextWindow_Impl(SfxHelpWindow_Impl* pHelpWin, weld::Builder& rBuilder, vcl::Window* pParent);
     virtual ~SfxHelpTextWindow_Impl() override;
     virtual void dispose() override;
 
@@ -474,11 +405,11 @@ public:
     const css::uno::Reference < css::frame::XFrame2 >&
                             getFrame() const { return xFrame; }
 
-    void             SetSelectHdl( const Link<ToolBox *, void>& rLink ) { aToolBox->SetSelectHdl( rLink ); }
+    void                    SetSelectHdl(const Link<const OString&, void>& rLink) { xToolBox->connect_clicked(rLink); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
-    ToolBox&         GetToolBox() { return *aToolBox; }
+    weld::Toolbar&          GetToolBox() { return *xToolBox; }
     void                    CloseFrame();
     void                    DoSearch();
 };
@@ -487,45 +418,50 @@ public:
 
 class HelpInterceptor_Impl;
 class HelpListener_Impl;
-class SfxHelpWindow_Impl : public SplitWindow
+class SfxHelpWindow_Impl : public DockingWindow
 {
 private:
 friend class SfxHelpIndexWindow_Impl;
+
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    VclPtr<vcl::Window> m_xVclContentArea;
+    std::unique_ptr<weld::Paned> m_xContainer;
+    std::unique_ptr<weld::Container> m_xHelpPaneWindow;
+    std::unique_ptr<weld::Container> m_xHelpTextWindow;
+    css::uno::Reference<css::awt::XWindow> m_xHelpTextXWindow;
 
     css::uno::Reference < css::awt::XWindow >
                                 xWindow;
     css::uno::Reference < css::frame::XFrame2 >
                                 xFrame;
 
-    VclPtr<SfxHelpIndexWindow_Impl>    pIndexWin;
+    std::unique_ptr<SfxHelpIndexWindow_Impl> xIndexWin;
     VclPtr<SfxHelpTextWindow_Impl>     pTextWin;
     HelpInterceptor_Impl*       pHelpInterceptor;
     rtl::Reference<HelpListener_Impl> pHelpListener;
 
-    sal_Int32           nExpandWidth;
-    sal_Int32           nCollapseWidth;
-    sal_Int32           nHeight;
-    long                nIndexSize;
-    long                nTextSize;
     bool                bIndex;
     bool                bGrabFocusToToolBox;
+    bool                bSplit;
+    int                 nWidth;
+    int                 nIndexSize;
     Point               aWinPos;
+    Size                aWinSize;
     OUString            sTitle;
 
-    virtual void        Resize() override;
-    virtual void        Split() override;
     virtual void        GetFocus() override;
 
     void                MakeLayout();
-    void                InitSizes();
     void                LoadConfig();
     void                SaveConfig();
     void                ShowStartPage();
+    void                Split();
 
-    DECL_LINK(    SelectHdl, ToolBox*, void );
-    DECL_LINK(    OpenHdl, Control*, bool );
-    DECL_LINK(    SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void );
-    DECL_LINK(    ChangeHdl, HelpListener_Impl&, void );
+    DECL_LINK(SelectHdl, const OString&, void);
+    DECL_LINK(OpenHdl, LinkParamNone*, void);
+    DECL_LINK(SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void);
+    DECL_LINK(ChangeHdl, HelpListener_Impl&, void);
+    DECL_LINK(ResizeHdl, const Size&, void);
 
 public:
     SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,
@@ -541,11 +477,13 @@ public:
 
     void                SetFactory( const OUString& rFactory );
     void                SetHelpURL( const OUString& rURL );
-    void                DoAction( sal_uInt16 nActionId );
+    void                DoAction(const OString& rAction);
     void                CloseWindow();
 
+    weld::Container*    GetContainer() { return m_xHelpTextWindow.get(); }
+
     void                UpdateToolbox();
-    void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
+    void                OpenKeyword( const OUString& rKeyword ) { xIndexWin->OpenKeyword( rKeyword ); }
 
     bool                HasHistoryPredecessor() const;      // forward to interceptor
     bool                HasHistorySuccessor() const;        // forward to interceptor
@@ -567,7 +505,7 @@ private:
     std::unique_ptr<weld::Entry> m_xTitleED;
     std::unique_ptr<weld::Label> m_xAltTitle;
 public:
-    SfxAddHelpBookmarkDialog_Impl(weld::Window* pParent, bool bRename);
+    SfxAddHelpBookmarkDialog_Impl(weld::Widget* pParent, bool bRename);
 
     void SetTitle( const OUString& rTitle );
     OUString GetTitle() const { return m_xTitleED->get_text(); }
