@@ -3357,6 +3357,8 @@ namespace xmloff::token {
 
         XML_RESOLVED,
 
+        XML_PAGE_CONTENT_BOTTOM,
+
         XML_TOKEN_END
     };
 

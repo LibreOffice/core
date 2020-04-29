@@ -3353,6 +3353,8 @@ namespace xmloff::token {
         // For recording whether comments/annotations are resolved
         TOKEN( "resolved",                        XML_RESOLVED ),
 
+        TOKEN( "page-content-bottom",             XML_PAGE_CONTENT_BOTTOM ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else
