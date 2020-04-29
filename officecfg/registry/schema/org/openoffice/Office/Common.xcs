@@ -908,6 +908,14 @@
         </info>
         <value>25</value>
       </prop>
+      <prop oor:name="PDFExportImageCacheSize" oor:type="xs:int" oor:nillable="false">
+        <info>
+           <desc>Specifies number of PDF image instances to cache on
+           export - can save potentially huge amount of CPU time on
+           re-compressing the same JPEG image over and over again.</desc>
+        </info>
+        <value>15</value>
+      </prop>
     </group>
     <group oor:name="InternalMSExport">
       <info>
