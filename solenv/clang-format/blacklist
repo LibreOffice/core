@@ -3756,7 +3756,6 @@ drawinglayer/source/processor2d/vclhelperbufferdevice.cxx
 drawinglayer/source/processor2d/vclhelperbufferdevice.hxx
 drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx
 drawinglayer/source/processor2d/vclmetafileprocessor2d.hxx
-drawinglayer/source/processor2d/vclpixelprocessor2d.cxx
 drawinglayer/source/processor3d/baseprocessor3d.cxx
 drawinglayer/source/processor3d/cutfindprocessor3d.cxx
 drawinglayer/source/processor3d/defaultprocessor3d.cxx
