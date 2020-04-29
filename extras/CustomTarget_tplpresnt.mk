@@ -89,10 +89,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Forestbird/content.xml \
 	Forestbird/META-INF/manifest.xml \
 	Forestbird/meta.xml \
-	Forestbird/Pictures/10000000000003FB000002FE917E6CB003A83232.png \
-	Forestbird/Pictures/10000000000003FD000002FE4C4CDF0F4A7ED9F9.png \
-	Forestbird/Pictures/10000000000003FD000002FE92464623A3FB3F6D.png \
-	Forestbird/Pictures/10000201000003FC000002FE87524FDDC56B0E9E.png \
 	Forestbird/styles.xml \
 	Forestbird/Thumbnails/thumbnail.png \
 	Impress/content.xml \
