@@ -47,6 +47,7 @@ public:
 
     void SetReadyToDrag( bool bStartDrag ) { mbIsReadyToDrag = bStartDrag; }
     bool IsReadyToDrag() const { return mbIsReadyToDrag; }
+    auto& GetSidebarController() const { return mpSidebarController; }
 
     /// Force generation of all panels by completion.
     void SyncUpdate();
