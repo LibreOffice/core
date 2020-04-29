@@ -511,6 +511,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             case text::RelOrientation::PAGE_PRINT_AREA:
                 relativeFromV = "margin";
                 break;
+            case text::RelOrientation::PAGE_PRINT_AREA_BOTTOM:
+                relativeFromV = "bottomMargin";
+                break;
             case text::RelOrientation::PAGE_FRAME:
                 relativeFromV = "page";
                 break;

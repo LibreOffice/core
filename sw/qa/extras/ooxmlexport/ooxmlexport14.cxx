@@ -418,6 +418,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123116_oversizedRowSplit, "tdf123116_oversizedRo
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 4 pages", 4, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10 (PAGE_PRINT_AREA_BOTTOM)
+    // - Actual  : 0 (FRAME)
+    // i.e. the bottom-of-body relation was lost.
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
 {
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
