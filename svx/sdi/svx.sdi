@@ -7190,7 +7190,7 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
 ]
 
 SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
-(SfxStringItem Margin1 SID_RULER_MARGIN1, SfxStringItem Margin2 SID_RULER_MARGIN2)
+(SfxStringItem Margin1 SID_RULER_MARGIN1, SfxStringItem Margin2 SID_RULER_MARGIN2, SfxStringItem FirstLineIndent SID_RULER_FIRST_LINE_INDENT, SfxStringItem LeftParaIndent SID_RULER_LEFT_PARA_INDENT, SfxStringItem RightParaIndent SID_RULER_RIGHT_PARA_INDENT)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
