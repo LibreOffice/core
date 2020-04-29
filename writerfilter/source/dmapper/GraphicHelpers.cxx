@@ -71,6 +71,10 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         m_nRelation =  text::RelOrientation::PAGE_FRAME;
                         break;
 
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_bottomMargin:
+                        m_nRelation = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
+                        break;
+
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_paragraph:
                         m_nRelation = text::RelOrientation::FRAME;
                         break;
