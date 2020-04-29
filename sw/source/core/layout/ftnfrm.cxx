@@ -2722,6 +2722,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
     return bMoved;
 }
 
+/// Return value guarantees that a new page was not created. See SwFlowFrame::MoveFwd.
 bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pOldBoss )
 {
     OSL_ENSURE( IsInFootnote(), "no footnote." );
