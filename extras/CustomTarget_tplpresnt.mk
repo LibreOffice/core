@@ -104,8 +104,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Lights/content.xml \
 	Lights/META-INF/manifest.xml \
 	Lights/meta.xml \
-	Lights/Pictures/100000000000042100000319935403CE7B0BE43B.jpg \
-	Lights/Pictures/1000000000000423000000634B59AC09AB41D853.jpg \
 	Lights/styles.xml \
 	Lights/Thumbnails/thumbnail.png \
 	LushGreen/content.xml \
