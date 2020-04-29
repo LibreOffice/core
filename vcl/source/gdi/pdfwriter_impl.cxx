@@ -41,6 +41,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/digest.h>
@@ -1152,6 +1153,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
+        m_aPDFBmpCache(
+            officecfg::Office::Common::VCL::PDFExportImageCacheSize::get() ),
         m_nCurrentPage( -1 ),
         m_nCatalogObject(0),
         m_nSignatureObject( -1 ),

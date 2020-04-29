@@ -46,6 +46,7 @@
 #include <vcl/wall.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/lru_map.hxx>
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 
@@ -708,6 +709,10 @@ private:
     std::map<const PhysicalFontFace*, EmbedFont> m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
+
+    /// Cache some most recent bitmaps we've exported, in case we encounter them again..
+    o3tl::lru_map<BitmapChecksum,
+                  std::shared_ptr<SvMemoryStream>> m_aPDFBmpCache;
 
     sal_Int32                           m_nCurrentPage;
 

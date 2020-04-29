@@ -43,7 +43,6 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <o3tl/lru_map.hxx>
 
 #include <sal/log.hxx>
 #include <memory>
@@ -54,9 +53,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
-
-/// Cache some last 15 bitmaps we've exported, in case we encounter them again..
-static o3tl::lru_map<BitmapChecksum, std::shared_ptr<SvMemoryStream>> lcl_PDFBmpCache(15);
 
 void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
                                        VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
@@ -182,9 +178,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             // from trying conversion & stores before...
             if ( !aBitmapEx.IsTransparent() )
             {
-                const auto& rCacheEntry=lcl_PDFBmpCache.find(
+                const auto& rCacheEntry=m_aPDFBmpCache.find(
                     aBitmapEx.GetChecksum());
-                if ( rCacheEntry != lcl_PDFBmpCache.end() )
+                if ( rCacheEntry != m_aPDFBmpCache.end() )
                 {
                     m_rOuterFace.DrawJPGBitmap( *rCacheEntry->second, true, aSizePixel,
                                                 tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
@@ -266,7 +262,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if (!aBitmapEx.IsTransparent() && bTrueColorJPG)
             {
                 // Cache last jpeg export
-                lcl_PDFBmpCache.insert(
+                m_aPDFBmpCache.insert(
                     {aBitmapEx.GetChecksum(), pStrm});
             }
         }
