@@ -1574,7 +1574,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label22">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="docking3deffects|label22">_Mode</property>
                     <property name="use_underline">True</property>
@@ -1712,8 +1712,8 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texblend">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="visible">False</property>
+                    <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
                     <property name="halign">start</property>
