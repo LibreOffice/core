@@ -5,7 +5,7 @@
         <!-- AppleScript support -->
         <key>com.apple.security.automation.apple-events</key>
         <true/>
-        <!-- for extension manager, "exception in synchronize" -->
+        <!-- Needed for our runtime machine code generation -->
         <key>com.apple.security.cs.disable-executable-page-protection</key>
         <true/>
         <!-- allow use of third-party plugins/frameworks (aka Java) -->
