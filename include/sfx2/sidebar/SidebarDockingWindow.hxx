@@ -49,7 +49,7 @@ public:
     void SyncUpdate();
 
     void NotifyResize();
-
+    auto& GetSidebarController() const { return mpSidebarController; }
     using SfxDockingWindow::Close;
 
 private:
