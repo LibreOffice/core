@@ -1826,7 +1826,8 @@ bool SwFlowFrame::ForbiddenForFootnoteCntFwd() const
     return m_rThis.IsTabFrame() || m_rThis.IsInTab();
 }
 
-/// Return value tells us whether the Frame has changed the page.
+/// Return value tells us whether the Frame has remained on the same page.
+/// i.e. false = moved. Note that this is the opposite result compared to others like MoveBwd.
 bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 {
 //!!!!MoveFootnoteCntFwd might need to be updated as well.
@@ -2025,7 +2026,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
     return bSamePage;
 }
 
-/** Return value tells whether the Frame should change the page.
+/** Return value tells whether the Frame has changed to a different page.
  *
  * @note This should be called by derived classes.
  * @note The actual moving must be implemented in the subclasses.
