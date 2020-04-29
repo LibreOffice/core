@@ -111,10 +111,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	LushGreen/content.xml \
 	LushGreen/META-INF/manifest.xml \
 	LushGreen/meta.xml \
-	LushGreen/Pictures/1000020100000640000004AD17A4D9F0A443E0A2.png \
-	LushGreen/Pictures/1000020100000640000004AD5A95F4B7B86B2ED1.png \
-	LushGreen/Pictures/1000020100000640000004AD88FC52DBCACCDD82.png \
-	LushGreen/Pictures/1000020100000640000004ADF67714D670705C1E.png \
 	LushGreen/styles.xml \
 	LushGreen/Thumbnails/thumbnail.png \
 	Metropolis/content.xml \
