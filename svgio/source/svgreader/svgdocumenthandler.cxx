@@ -405,7 +405,7 @@ namespace svgio::svgreader
                 default:
                 {
                     /// invalid token, ignore
-                    SAL_WARN( "svgio", "Unknown Base SvgToken <" + aName + "> (!)" );
+                    SAL_INFO( "svgio", "Unknown Base SvgToken <" + aName + "> (!)" );
                     break;
                 }
             }
