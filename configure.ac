@@ -2334,11 +2334,17 @@ AC_MSG_CHECKING([whether build target is Release Build])
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_RELEASE_BUILD=
+    GET_TASK_ALLOW_ENTITLEMENT='
+        <!-- We want to be able to debug a hardened process when not building for release -->
+        <key>com.apple.security.get-task-allow</key>
+        <true/>'
 else
     AC_MSG_RESULT([yes])
     ENABLE_RELEASE_BUILD=TRUE
+    GET_TASK_ALLOW_ENTITLEMENT=''
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
+AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build
@@ -13400,6 +13406,7 @@ AC_CONFIG_FILES([config_host.mk
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
+                 hardened_runtime.xcent
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
