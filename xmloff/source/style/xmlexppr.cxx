@@ -1030,11 +1030,20 @@ void SvXMLExportPropertyMapper::_exportXML(
             if( bRemove )
                 rAttrList.RemoveAttribute( sName );
 
+            // We don't seem to have a generic mechanism to write an attribute in the extension
+            // namespace in case of certain attribute values only, so do this manually.
             if (IsXMLToken(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex), XML_WRITING_MODE))
             {
-                // We don't seem to have a generic mechanism to write an attribute in the extension
-                // namespace in case of certain attribute values only, so do this manually.
                 if (IsXMLToken(aValue, XML_BT_LR))
+                {
+                    sName = rNamespaceMap.GetQNameByKey(
+                            XML_NAMESPACE_LO_EXT,
+                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
+                }
+            }
+            else if (IsXMLToken(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex), XML_VERTICAL_REL))
+            {
+                if (IsXMLToken(aValue, XML_PAGE_CONTENT_BOTTOM))
                 {
                     sName = rNamespaceMap.GetQNameByKey(
                             XML_NAMESPACE_LO_EXT,
