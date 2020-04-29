@@ -2254,6 +2254,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         sal_uInt16 const nAttrPrefix(mrImport->mpNamespaceMap->GetKeyByAttrName(
                 rAttrName, nullptr, &aLocalAttrName, &aNamespace));
+        SAL_WARN("xmloff", "nAttrPrefix=" << nAttrPrefix);
         if( XML_NAMESPACE_XMLNS != nAttrPrefix )
         {
             Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(

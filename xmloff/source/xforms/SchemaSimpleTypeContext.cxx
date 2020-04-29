@@ -25,6 +25,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <osl/diagnose.h>
 
@@ -34,49 +35,34 @@ using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 
 
-static const SvXMLTokenMapEntry aAttributes[] =
-{
-    TOKEN_MAP_ENTRY( NONE, NAME ),
-    XML_TOKEN_MAP_END
-};
-
-static const SvXMLTokenMapEntry aChildren[] =
-{
-    TOKEN_MAP_ENTRY( XSD, RESTRICTION ),
-    XML_TOKEN_MAP_END
-};
-
 SchemaSimpleTypeContext::SchemaSimpleTypeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
-        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+        TokenContext( rImport ),
         mxRepository( rRepository )
 {
 }
 
-void SchemaSimpleTypeContext::HandleAttribute(
-    sal_uInt16 nToken,
+bool SchemaSimpleTypeContext::HandleAttribute(
+    sal_Int32 nElement,
     const OUString& rValue )
 {
-    if( nToken == XML_NAME )
+    if( nElement == XML_ELEMENT(NONE, XML_NAME) )
     {
         msTypeName = rValue;
+        return true;
     }
+    return false;
 }
 
 SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
-    sal_uInt16 nToken,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList>& )
+    sal_Int32 nElement,
+    const Reference<css::xml::sax::XFastAttributeList>& )
 {
-    switch( nToken )
+    switch( nElement )
     {
-    case XML_RESTRICTION:
+    case XML_ELEMENT(XSD, XML_RESTRICTION):
         return new SchemaRestrictionContext( GetImport(),
-                                                 nPrefix, rLocalName,
                                                  mxRepository, msTypeName );
         break;
     }
