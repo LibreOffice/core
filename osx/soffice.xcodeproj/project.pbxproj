@@ -98,7 +98,6 @@
 		BE02FCEA171335B80069F37F /* util.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = util.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/util.cxx; sourceTree = "<group>"; };
 		BE02FCEB171335B80069F37F /* vendorbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorbase.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx; sourceTree = "<group>"; };
 		BE02FCEC171335B80069F37F /* vendorlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorlist.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorlist.cxx; sourceTree = "<group>"; };
-		BE09705E20B2E1E000A6C26A /* file.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../../../../sal/osl/unx/file.cxx; sourceTree = "<group>"; };
 		BE145F5C17B24BA4004CBBBA /* sunjavaplugin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sunjavaplugin.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx; sourceTree = "<group>"; };
 		BE2DACF1182D0CBB00A4D2F7 /* formulagroupcl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroupcl.cxx; path = ../sc/source/core/opencl/formulagroupcl.cxx; sourceTree = "<group>"; };
 		BE2DACF2182D0CBB00A4D2F7 /* op_database.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_database.cxx; path = ../sc/source/core/opencl/op_database.cxx; sourceTree = "<group>"; };
@@ -353,13 +352,25 @@
 		BE82C42418C86E010050EB79 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
 		BE82C42518C86E010050EB79 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
 		BE82C42618C86E010050EB79 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
-		BEB6E30D1FFF988700B0BDB0 /* framegrabber.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = framegrabber.mm; path = ../../../avmedia/source/macavf/framegrabber.mm; sourceTree = "<group>"; };
-		BEB6E30E1FFF988700B0BDB0 /* manager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = manager.mm; path = ../../../avmedia/source/macavf/manager.mm; sourceTree = "<group>"; };
-		BEB6E30F1FFF988700B0BDB0 /* window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = window.mm; path = ../../../avmedia/source/macavf/window.mm; sourceTree = "<group>"; };
-		BEB6E3101FFF988700B0BDB0 /* player.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = player.mm; path = ../../../avmedia/source/macavf/player.mm; sourceTree = "<group>"; };
-		BEB6E3111FFF988800B0BDB0 /* macavfuno.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = macavfuno.mm; path = ../../../avmedia/source/macavf/macavfuno.mm; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BECB749D17189A3B001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
+		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
+		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
+		BEDCC8BB2459A10600FB02BD /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
+		BEDCC8BC2459A10600FB02BD /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
+		BEDCC8BD2459A10600FB02BD /* bridge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bridge.cxx; path = ../../bridges/source/cpp_uno/shared/bridge.cxx; sourceTree = "<group>"; };
+		BEDCC8BE2459A10600FB02BD /* component.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component.cxx; path = ../../bridges/source/cpp_uno/shared/component.cxx; sourceTree = "<group>"; };
+		BEDCC8BF2459A10600FB02BD /* cppinterfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppinterfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx; sourceTree = "<group>"; };
+		BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx"; sourceTree = "<group>"; };
+		BEDCC8C22459A12E00FB02BD /* cpp2uno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx"; sourceTree = "<group>"; };
+		BEDCC8C32459A12E00FB02BD /* share.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"; sourceTree = "<group>"; };
+		BEDCC8C42459A12E00FB02BD /* except.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx"; sourceTree = "<group>"; };
+		BEDCC8C52459A12E00FB02BD /* abi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = abi.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx"; sourceTree = "<group>"; };
+		BEDCC8C62459A12E00FB02BD /* call.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = call.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.cxx"; sourceTree = "<group>"; };
+		BEDCC8C72459A12E00FB02BD /* call.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = call.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.hxx"; sourceTree = "<group>"; };
+		BEDCC8C82459A12E00FB02BD /* abi.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = abi.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.hxx"; sourceTree = "<group>"; };
+		BEDCC8C92459A12E00FB02BD /* callvirtualmethod.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = callvirtualmethod.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.hxx"; sourceTree = "<group>"; };
+		BEDCC8CA2459A12E00FB02BD /* callvirtualmethod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = callvirtualmethod.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.cxx"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -474,30 +485,6 @@
 				BE0264B0237975E8008D3E52 /* viewdataentry.cxx */,
 			);
 			name = treelist;
-			sourceTree = "<group>";
-		};
-		BE09705B20B2E19A00A6C26A /* sal */ = {
-			isa = PBXGroup;
-			children = (
-				BE09705C20B2E1AC00A6C26A /* osl */,
-			);
-			path = sal;
-			sourceTree = "<group>";
-		};
-		BE09705C20B2E1AC00A6C26A /* osl */ = {
-			isa = PBXGroup;
-			children = (
-				BE09705D20B2E1B300A6C26A /* unx */,
-			);
-			path = osl;
-			sourceTree = "<group>";
-		};
-		BE09705D20B2E1B300A6C26A /* unx */ = {
-			isa = PBXGroup;
-			children = (
-				BE09705E20B2E1E000A6C26A /* file.cxx */,
-			);
-			path = unx;
 			sourceTree = "<group>";
 		};
 		BE2DACF9182FAB3800A4D2F7 /* window */ = {
@@ -848,31 +835,10 @@
 			name = control;
 			sourceTree = "<group>";
 		};
-		BEB6E30B1FFF984200B0BDB0 /* avmedia */ = {
-			isa = PBXGroup;
-			children = (
-				BEB6E30C1FFF985300B0BDB0 /* macavf */,
-			);
-			path = avmedia;
-			sourceTree = "<group>";
-		};
-		BEB6E30C1FFF985300B0BDB0 /* macavf */ = {
-			isa = PBXGroup;
-			children = (
-				BEB6E30D1FFF988700B0BDB0 /* framegrabber.mm */,
-				BEB6E3111FFF988800B0BDB0 /* macavfuno.mm */,
-				BEB6E30E1FFF988700B0BDB0 /* manager.mm */,
-				BEB6E3101FFF988700B0BDB0 /* player.mm */,
-				BEB6E30F1FFF988700B0BDB0 /* window.mm */,
-			);
-			path = macavf;
-			sourceTree = "<group>";
-		};
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
-				BE09705B20B2E19A00A6C26A /* sal */,
-				BEB6E30B1FFF984200B0BDB0 /* avmedia */,
+				BEDCC8B62459A0DA00FB02BD /* bridges */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE2DAD28182FAB7900A4D2F7 /* sw */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
@@ -880,6 +846,54 @@
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
 			);
+			sourceTree = "<group>";
+		};
+		BEDCC8B62459A0DA00FB02BD /* bridges */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8B72459A0E600FB02BD /* cpp_uno */,
+			);
+			name = bridges;
+			sourceTree = "<group>";
+		};
+		BEDCC8B72459A0E600FB02BD /* cpp_uno */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8C02459A11C00FB02BD /* gcc3_macosx_x86-64 */,
+				BEDCC8B82459A0ED00FB02BD /* shared */,
+			);
+			path = cpp_uno;
+			sourceTree = "<group>";
+		};
+		BEDCC8B82459A0ED00FB02BD /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8BD2459A10600FB02BD /* bridge.cxx */,
+				BEDCC8BE2459A10600FB02BD /* component.cxx */,
+				BEDCC8BF2459A10600FB02BD /* cppinterfaceproxy.cxx */,
+				BEDCC8BA2459A10600FB02BD /* types.cxx */,
+				BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */,
+				BEDCC8BC2459A10600FB02BD /* vtablefactory.cxx */,
+				BEDCC8BB2459A10600FB02BD /* vtables.cxx */,
+			);
+			name = shared;
+			sourceTree = "<group>";
+		};
+		BEDCC8C02459A11C00FB02BD /* gcc3_macosx_x86-64 */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8C52459A12E00FB02BD /* abi.cxx */,
+				BEDCC8C82459A12E00FB02BD /* abi.hxx */,
+				BEDCC8C62459A12E00FB02BD /* call.cxx */,
+				BEDCC8C72459A12E00FB02BD /* call.hxx */,
+				BEDCC8CA2459A12E00FB02BD /* callvirtualmethod.cxx */,
+				BEDCC8C92459A12E00FB02BD /* callvirtualmethod.hxx */,
+				BEDCC8C22459A12E00FB02BD /* cpp2uno.cxx */,
+				BEDCC8C42459A12E00FB02BD /* except.cxx */,
+				BEDCC8C32459A12E00FB02BD /* share.hxx */,
+				BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */,
+			);
+			path = "gcc3_macosx_x86-64";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
