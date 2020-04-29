@@ -429,6 +429,15 @@ void ResourceManager::ReadPanelList()
         if (!aPanelNode.isValid())
             continue;
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Hide these panels in LOK as they aren't fully functional.
+            OUString aPanelId = getString(aPanelNode, "Id");
+            if (aPanelId == "PageStylesPanel" || aPanelId == "PageHeaderPanel"
+                || aPanelId == "PageFooterPanel")
+                continue;
+        }
+
         maPanels.push_back(std::make_shared<PanelDescriptor>());
         PanelDescriptor& rPanelDescriptor(*maPanels.back());
 
