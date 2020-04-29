@@ -7661,6 +7661,7 @@ class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolba
 {
 private:
     GtkToolbar* m_pToolbar;
+    GtkCssProvider *m_pMenuButtonProvider;
 
     std::map<OString, GtkToolItem*> m_aMap;
     std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
@@ -7718,6 +7719,39 @@ private:
             // left in the main document and not in the toolbar
             gtk_button_set_focus_on_click(GTK_BUTTON(pMenuButton), false);
             g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
+
+            if (pMenuButton)
+            {
+                // by default the GtkMenuButton down arrow button is as wide as
+                // a normal button and LibreOffice's original ones are very
+                // narrow, that assumption is fairly baked into the toolbar and
+                // sidebar designs, try and minimize the width of the dropdown
+                // zone.
+                GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(pMenuButton));
+
+                if (!m_pMenuButtonProvider)
+                {
+                    m_pMenuButtonProvider = gtk_css_provider_new();
+                    static const gchar data[] = "* { "
+                      "padding: 0;"
+                      "margin-left: 0px;"
+                      "margin-right: 0px;"
+                      "min-width: 4px;"
+                      "}";
+                    const gchar olddata[] = "* { "
+                      "padding: 0;"
+                      "margin-left: 0px;"
+                      "margin-right: 0px;"
+                      "}";
+                    gtk_css_provider_load_from_data(m_pMenuButtonProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+                }
+
+                gtk_style_context_add_provider(pButtonContext,
+                                               GTK_STYLE_PROVIDER(m_pMenuButtonProvider),
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                gtk_style_context_add_class(pButtonContext, "small-button");
+            }
+
         }
         if (!GTK_IS_TOOL_BUTTON(pToolItem))
             return;
@@ -7788,6 +7822,7 @@ public:
     GtkInstanceToolbar(GtkToolbar* pToolbar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pToolbar), pBuilder, bTakeOwnership)
         , m_pToolbar(pToolbar)
+        , m_pMenuButtonProvider(nullptr)
     {
         gtk_container_foreach(GTK_CONTAINER(pToolbar), collect, this);
     }
