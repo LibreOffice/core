@@ -104,7 +104,7 @@
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
-#define COMBO_WIDTH_IN_CHARS        16
+#define COMBO_WIDTH_IN_CHARS        15
 
 // namespaces
 using namespace ::editeng;
@@ -301,7 +301,6 @@ class SvxFontNameBox_Base
 {
 protected:
     SvxFontNameToolBoxControl& m_rCtrl;
-    int m_nCharWidth;
 
     std::unique_ptr<FontNameBox>   m_xWidget;
     const FontList*                pFontList;
@@ -855,10 +854,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     m_xWidget->connect_custom_render(LINK(this, SvxStyleBox_Base, CustomRenderHdl));
     m_xWidget->set_custom_renderer();
 
-    int nCharWidth = m_xWidget->get_approximate_digit_width() * COMBO_WIDTH_IN_CHARS;
-    // set width in chars low so the size request will not be overridden
-    m_xWidget->set_entry_width_chars(1);
-    m_xWidget->set_size_request(nCharWidth, -1);
+    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
 }
 
 IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
@@ -1092,6 +1088,12 @@ bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rec
 
 void SvxStyleBox_Impl::SetOptimalSize()
 {
+    // set width in chars low so the size request will not be overridden
+    m_xWidget->set_entry_width_chars(1);
+    // tdf#132338 purely using this calculation to keep things their traditional width
+    Size aSize(LogicToPixel(Size(COMBO_WIDTH_IN_CHARS * 4, 0), MapMode(MapUnit::MapAppFont)));
+    m_xWidget->set_size_request(aSize.Width(), -1);
+
     SetSizePixel(get_preferred_size());
 }
 
@@ -1444,7 +1446,6 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
                                          const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
-    , m_nCharWidth(xWidget->get_approximate_digit_width() * COMBO_WIDTH_IN_CHARS)
     , m_xWidget(new FontNameBox(std::move(xWidget)))
     , pFontList(nullptr)
     , nFtCount(0)
@@ -1462,9 +1463,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     m_xWidget->connect_focus_out(LINK(this, SvxFontNameBox_Base, FocusOutHdl));
     m_xWidget->connect_get_property_tree(LINK(this, SvxFontNameBox_Base, DumpAsPropertyTreeHdl));
 
-    // set width in chars low so the size request will not be overridden
-    m_xWidget->set_entry_width_chars(1);
-    m_xWidget->set_size_request(m_nCharWidth, -1);
+    m_xWidget->set_entry_width_chars(COMBO_WIDTH_IN_CHARS);
 }
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl(vcl::Window* pParent, const Reference<XDispatchProvider>& rDispatchProvider,
@@ -1597,6 +1596,12 @@ IMPL_LINK_NOARG(SvxFontNameBox_Base, FocusOutHdl, weld::Widget&, void)
 
 void SvxFontNameBox_Impl::SetOptimalSize()
 {
+    // set width in chars low so the size request will not be overridden
+    m_xWidget->set_entry_width_chars(1);
+    // tdf#132338 purely using this calculation to keep things their traditional width
+    Size aSize(LogicToPixel(Size(COMBO_WIDTH_IN_CHARS * 4, 0), MapMode(MapUnit::MapAppFont)));
+    m_xWidget->set_size_request(aSize.Width(), -1);
+
     SetSizePixel(get_preferred_size());
 }
 
