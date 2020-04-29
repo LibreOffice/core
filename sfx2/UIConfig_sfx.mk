@@ -38,6 +38,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/helpindexpage \
 	sfx2/uiconfig/ui/helpmanual \
 	sfx2/uiconfig/ui/helpsearchpage \
+	sfx2/uiconfig/ui/helpwindow \
 	sfx2/uiconfig/ui/inputdialog \
 	sfx2/uiconfig/ui/licensedialog \
 	sfx2/uiconfig/ui/linefragment \
