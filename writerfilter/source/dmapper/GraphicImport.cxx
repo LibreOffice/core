@@ -1146,8 +1146,19 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
 
                 if (nPositivePercentage)
                 {
+                    OUString aProperty;
+                    bool bTextAutoGrowHeight = false;
                     uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                    OUString aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                    xPropertySet->getPropertyValue("TextAutoGrowHeight") >>= bTextAutoGrowHeight;
+
+                    if (bTextAutoGrowHeight != false && nSprmId == NS_ooxml::LN_CT_SizeRelV_pctHeight)
+                    {
+                        aProperty = "RelativeHeightRelation";
+                    }
+                    else
+                    {
+                        aProperty = nSprmId == NS_ooxml::LN_CT_SizeRelH_pctWidth ? OUString("RelativeWidth") : OUString("RelativeHeight");
+                    }
 
                     sal_Int32 nTextPreRotateAngle = 0;
                     uno::Any aAny;
