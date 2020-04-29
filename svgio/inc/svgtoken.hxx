@@ -179,7 +179,8 @@ namespace svgio
             SVGTokenText,
             SVGTokenBaselineShift,
 
-            SVGTokenFlowRoot
+            SVGTokenFlowRoot,
+            SVGTokenMetadata
         };
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent);

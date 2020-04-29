@@ -162,6 +162,7 @@ namespace svgio::svgreader
         static const char aSVGStrBaselineShift[] = "baseline-shift";
 
         static const char aSVGStrFlowRoot[] = "flowRoot";
+        static const char aSVGStrMetadata[] = "metadata";
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
         {
@@ -306,7 +307,8 @@ namespace svgio::svgreader
 
                 { aSVGStrText, SVGTokenText },
                 { aSVGStrBaselineShift, SVGTokenBaselineShift },
-                { aSVGStrFlowRoot, SVGTokenFlowRoot }
+                { aSVGStrFlowRoot, SVGTokenFlowRoot },
+                { aSVGStrMetadata, SVGTokenMetadata }
             };
 
             const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.startsWith("svg:") ? rStr.copy(4) : rStr));

@@ -402,6 +402,13 @@ namespace svgio::svgreader
                     break;
                 }
 
+                // ignore Metadata
+                case SVGTokenMetadata:
+                {
+                    bSkip = true;
+                    break;
+                }
+
                 default:
                 {
                     /// invalid token, ignore
