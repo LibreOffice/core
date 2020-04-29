@@ -842,7 +842,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 
     case SID_RULER_CHANGE_STATE:
         {
-            const SfxPoolItem *pMargin1, *pMargin2;
+            const SfxPoolItem *pMargin1, *pMargin2, *fLineIndent, *pLeftIndent, *pRightIndent;
             if ( pReqArgs &&
                  pReqArgs->GetItemState(SID_RULER_MARGIN1,true,&pMargin1) == SfxItemState::SET )
             {
@@ -854,6 +854,24 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 const OUString ratio = static_cast<const SfxStringItem*>(pMargin2)->GetValue();
                 GetHRuler().SetValues(RulerChangeType::MARGIN2, GetHRuler().GetPageWidth() * ratio.toFloat());
+            }
+            else if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_FIRST_LINE_INDENT,true,&fLineIndent) == SfxItemState::SET )
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(fLineIndent)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::FIRST_LINE_INDENT, GetHRuler().GetPageWidth() * ratio.toFloat());
+            }
+            else if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_LEFT_PARA_INDENT,true,&pLeftIndent) == SfxItemState::SET )
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pLeftIndent)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::PARA_LEFT_INDENT, GetHRuler().GetPageWidth() * ratio.toFloat());
+            }
+            else if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_RIGHT_PARA_INDENT,true,&pRightIndent) == SfxItemState::SET )
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pRightIndent)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::PARA_RIGHT_INDENT, GetHRuler().GetPageWidth() * ratio.toFloat());
             }
         }
         break;

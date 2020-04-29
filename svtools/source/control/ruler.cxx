@@ -2455,6 +2455,21 @@ void Ruler::SetNullOffset( long nPos )
     }
 }
 
+long Ruler::GetParagraphFirstLineIndent()
+{
+    return mpData->pIndents.size() > 0 ? mpData->pIndents[0].nPos: GetMargin1();
+}
+
+long Ruler::GetLeftParagraphIndent()
+{
+   return mpData->pIndents.size() > 1 ? mpData->pIndents[1].nPos: 0;
+}
+
+long Ruler::GetRightParagraphIndent()
+{
+    return mpData->pIndents.size() > 2 ? mpData->pIndents[2].nPos: 0;
+}
+
 void Ruler::SetLeftFrameMargin( long nPos )
 {
     if ( mpData->nLeftFrameMargin != nPos )
