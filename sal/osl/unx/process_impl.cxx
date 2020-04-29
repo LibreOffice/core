@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <osl/process.h>
 
 #include <limits.h>
@@ -224,6 +226,15 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             }
             if (ppArgs[0] != nullptr)
             {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+                // If we are called with a relative path in argv[0] in a sandboxed process
+                // osl::realpath() fails. So just use bootstrap_getExecutableFile() instead.
+                // Somewhat silly to use argv[0] and tediously figure out the absolute path from it
+                // anyway.
+                bootstrap_getExecutableFile(&ppArgs[0]);
+                OUString pArg0(ppArgs[0]);
+                osl_getFileURLFromSystemPath (pArg0.pData, &(ppArgs[0]));
+#else
 #if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), '/') == -1)
@@ -250,6 +261,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                 {
                     osl_getFileURLFromSystemPath (pArg0.pData, &(ppArgs[0]));
                 }
+#endif // !HAVE_FEATURE_MACOSX_SANDBOX
             }
             g_command_args.m_nCount = argc;
             g_command_args.m_ppArgs = ppArgs;
