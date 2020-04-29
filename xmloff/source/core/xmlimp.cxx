@@ -1710,9 +1710,8 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
         // check the consistency only for the ODF1.2 and later ( according to content.xml )
         // manifest.xml might have no version, it should be checked here and the correct version should be set
         try
-        {
-            uno::Reference< document::XStorageBasedDocument > xDoc( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< embed::XStorage > xStor = xDoc->getDocumentStorage();
+        {   // don't use getDocumentStorage(), it's temporary and latest version
+            uno::Reference<embed::XStorage> const xStor(GetSourceStorage());
             uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
 
             // the check should be done only for OASIS format
