@@ -136,8 +136,7 @@ void DocumentHandler::startElement(const char* psName,
         {
             size_t keyLength = strlen(i.key());
             OUString sName(i.key(), keyLength, RTL_TEXTENCODING_UTF8);
-            OUString sValue(i()->getStr().cstr(), strlen(i()->getStr().cstr()),
-                            RTL_TEXTENCODING_UTF8);
+            OUString sValue(i()->getStr().cstr(), i()->getStr().len(), RTL_TEXTENCODING_UTF8);
 
             // libodfgen xml-encodes some attribute's value, so check if the value is encoded or not
             for (int j = 0; j < 9; ++j)
@@ -153,10 +152,9 @@ void DocumentHandler::startElement(const char* psName,
                 {
                     librevenge::RVNGString decodedValue("");
                     unescapeXML(i()->getStr().cstr(),
-                                static_cast<unsigned long>(strlen(i()->getStr().cstr())),
-                                decodedValue);
-                    sValue = OUString(decodedValue.cstr(), strlen(decodedValue.cstr()),
-                                      RTL_TEXTENCODING_UTF8);
+                                static_cast<unsigned long>(i()->getStr().len()), decodedValue);
+                    sValue
+                        = OUString(decodedValue.cstr(), decodedValue.len(), RTL_TEXTENCODING_UTF8);
                     break;
                 }
             }
