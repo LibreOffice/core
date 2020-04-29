@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33707340_aa4d9482",
+        "filename": "sfx2/source/control/thumbnailview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-29T05:38:45Z",
+      "side": 1,
+      "message": "As mentioned in the CI error, this should be changed to\n\n    long nHiddenLines \u003d static_cast\u003clong\u003e((nFullSteps - 1) * nScrollRatio);\n\nThis is a formatting warning.",
+      "range": {
+        "startLine": 302,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 77
+      },
+      "revId": "b22b617b1731665561c66f2cfea7b282ffbd1328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
