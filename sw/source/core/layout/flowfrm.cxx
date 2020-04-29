@@ -1826,7 +1826,9 @@ bool SwFlowFrame::ForbiddenForFootnoteCntFwd() const
     return m_rThis.IsTabFrame() || m_rThis.IsInTab();
 }
 
-/// Return value tells us whether the Frame has changed the page.
+/// Return value guarantees that a new page was not created,
+/// although false does not NECESSARILY indicate that a new page was created.
+/// Either false or true(MoveFootnoteCntFwd) can be returned if no changes were made
 bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 {
 //!!!!MoveFootnoteCntFwd might need to be updated as well.
@@ -2025,10 +2027,11 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
     return bSamePage;
 }
 
-/** Return value tells whether the Frame should change the page.
+/** Return value tells whether any changes have been made.
+ *  If true, the frame has moved backwards to an earlier column/section/frame/page etc.
  *
  * @note This should be called by derived classes.
- * @note The actual moving must be implemented in the subclasses.
+ * @note The actual moving must be implemented in the subclasses via Cut()/Paste().
  */
 bool SwFlowFrame::MoveBwd( bool &rbReformat )
 {
