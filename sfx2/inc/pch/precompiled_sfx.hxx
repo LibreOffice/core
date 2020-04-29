@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:55:30 using:
+ Generated on 2020-04-30 12:39:28 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -94,6 +94,7 @@
 #include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
@@ -119,7 +120,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/treelistbox.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
@@ -140,6 +140,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbxdef.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
@@ -153,6 +154,8 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -165,6 +168,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -189,6 +193,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -233,12 +238,14 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -444,6 +451,7 @@
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
