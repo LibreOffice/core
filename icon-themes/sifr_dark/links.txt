@@ -117,6 +117,8 @@ cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectfloatingframe.png cmd/32/insertframe.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagefooter.png cmd/32/insertfooter.png
+cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertpivottable.png cmd/32/datadatapilotrun.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -172,6 +174,8 @@ cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectfloatingframe.png cmd/lc_insertframe.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
+cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpivottable.png cmd/lc_datadatapilotrun.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -225,6 +229,8 @@ cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectfloatingframe.png cmd/sc_insertframe.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
+cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpivottable.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
@@ -2157,6 +2163,7 @@ svtools/res/folder.png cmd/sc_open.png
 svtools/res/folderop.png cmd/sc_open.png
 svtools/res/info_large.png cmd/lc_alignleft.png
 svtools/res/info_small.png cmd/sc_alignleft.png
+svtools/res/list_add.png svtools/res/ed03.png
 svtools/res/my_docs.png cmd/lc_open.png
 svtools/res/new_doc.png cmd/lc_newdoc.png
 svtools/res/prnfont.png cmd/sc_charfontname.png
@@ -2429,8 +2436,8 @@ sw/res/sc20171.png cmd/sc_downsearch.png
 sw/res/sc20172.png cmd/sc_prevrecord.png
 sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
-sw/res/sc20177.png cmd/sc_insertpagefooter.png
-sw/res/sc20179.png cmd/sc_insertpageheader.png
+sw/res/sc20177.png cmd/sc_insertfooter.png
+sw/res/sc20179.png cmd/sc_insertheader.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
 sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20233.png cmd/sc_ok.png
