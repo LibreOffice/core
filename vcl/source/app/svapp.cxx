@@ -1133,54 +1133,60 @@ OUString Application::GetAppName()
         return OUString();
 }
 
-OUString Application::GetHWOSConfInfo()
+enum {hwAll=0, hwEnv=1, hwUI=2};
+
+OUString Application::GetHWOSConfInfo(const int bSelection)
 {
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
 
-    aDetails.append( VclResId(SV_APP_CPUTHREADS) );
-    aDetails.append( static_cast<sal_Int32>(std::thread::hardware_concurrency()) );
-    aDetails.append( "; " );
+    if (bSelection != hwUI) {
+        aDetails.append( VclResId(SV_APP_CPUTHREADS) );
+        aDetails.append( static_cast<sal_Int32>(std::thread::hardware_concurrency()) );
+        aDetails.append( "; " );
 
-    OUString aVersion;
-    if ( pSVData && pSVData->mpDefInst )
-        aVersion = pSVData->mpDefInst->getOSVersion();
-    else
-        aVersion = "-";
+        OUString aVersion;
+        if ( pSVData && pSVData->mpDefInst )
+            aVersion = pSVData->mpDefInst->getOSVersion();
+        else
+            aVersion = "-";
 
-    aDetails.append( VclResId(SV_APP_OSVERSION) );
-    aDetails.append( aVersion );
-    aDetails.append( "; " );
-
-    aDetails.append( VclResId(SV_APP_UIRENDER) );
-#if HAVE_FEATURE_SKIA
-    if ( SkiaHelper::isVCLSkiaEnabled() )
-    {
-        switch(SkiaHelper::renderMethodToUse())
-        {
-            case SkiaHelper::RenderVulkan:
-                aDetails.append( VclResId(SV_APP_SKIA_VULKAN) );
-                break;
-            case SkiaHelper::RenderRaster:
-                aDetails.append( VclResId(SV_APP_SKIA_RASTER) );
-                break;
-        }
+        aDetails.append( VclResId(SV_APP_OSVERSION) );
+        aDetails.append( aVersion );
+        aDetails.append( "; " );
     }
-    else
+
+    if (bSelection != hwEnv) {
+        aDetails.append( VclResId(SV_APP_UIRENDER) );
+#if HAVE_FEATURE_SKIA
+        if ( SkiaHelper::isVCLSkiaEnabled() )
+        {
+            switch(SkiaHelper::renderMethodToUse())
+            {
+                case SkiaHelper::RenderVulkan:
+                    aDetails.append( VclResId(SV_APP_SKIA_VULKAN) );
+                    break;
+                case SkiaHelper::RenderRaster:
+                    aDetails.append( VclResId(SV_APP_SKIA_RASTER) );
+                    break;
+            }
+        }
+        else
 #endif
 #if HAVE_FEATURE_OPENGL
-    if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-        aDetails.append( VclResId(SV_APP_GL) );
-    else
+        if ( OpenGLWrapper::isVCLOpenGLEnabled() )
+            aDetails.append( VclResId(SV_APP_GL) );
+        else
 #endif
-        aDetails.append( VclResId(SV_APP_DEFAULT) );
-    aDetails.append( "; " );
+            aDetails.append( VclResId(SV_APP_DEFAULT) );
+        aDetails.append( "; " );
 
 #if (defined LINUX || defined _WIN32 || defined MACOSX)
-    aDetails.append( SV_APP_VCLBACKEND );
-    aDetails.append( GetToolkitName() );
-    aDetails.append( "; " );
+        aDetails.append( SV_APP_VCLBACKEND );
+        aDetails.append( GetToolkitName() );
+        aDetails.append( "; " );
 #endif
+    }
 
     return aDetails.makeStringAndClear();
 }
