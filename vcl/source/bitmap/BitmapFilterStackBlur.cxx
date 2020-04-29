@@ -98,7 +98,7 @@ public:
     {
         for (long i = 0; i < maShared.mnDiv; i++)
         {
-            maPositionTable[i] = std::min(nLastIndex, std::max(0L, i - maShared.mnRadius));
+            maPositionTable[i] = std::clamp(i - maShared.mnRadius, 0L, nLastIndex);
             maWeightTable[i] = maShared.mnRadius + 1 - std::abs(i - maShared.mnRadius);
         }
     }
@@ -261,9 +261,15 @@ void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
         SumFunction::set(nInSum, 0L);
         SumFunction::set(nOutSum, 0L);
 
+        // Pre-initialize blur data for first pixel.
+        // aArrays.maPositionTable contains values like (for radius of 5): [0,0,0,0,0,0,1,2,3,4,5],
+        // which are used as pixels indices in the current row that we use to prepare information
+        // for the first pixel; aArrays.maWeightTable has [1,2,3,4,5,6,5,4,3,2,1]. Before looking at
+        // the first row pixel, we pretend to have processed fake previous pixels, as if the row was
+        // extended to the left with the same color as that of the first pixel.
         for (long i = 0; i < nDiv; i++)
         {
-            pSourcePointer = pReadAccess->GetScanline(pPositionPointer[i]);
+            pSourcePointer = pReadAccess->GetScanline(y) + nComponentWidth * pPositionPointer[i];
 
             pStackPtr = &pStack[nComponentWidth * i];
 
@@ -374,9 +380,15 @@ void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
         SumFunction::set(nInSum, 0L);
         SumFunction::set(nOutSum, 0L);
 
+        // Pre-initialize blur data for first pixel.
+        // aArrays.maPositionTable contains values like (for radius of 5): [0,0,0,0,0,0,1,2,3,4,5],
+        // which are used as pixels indices in the current column that we use to prepare information
+        // for the first pixel; aArrays.maWeightTable has [1,2,3,4,5,6,5,4,3,2,1]. Before looking at
+        // the first column pixels, we pretend to have processed fake previous pixels, as if the
+        // column was extended to the top with the same color as that of the first pixel.
         for (long i = 0; i < nDiv; i++)
         {
-            pSourcePointer = pReadAccess->GetScanline(pPositionPointer[i]);
+            pSourcePointer = pReadAccess->GetScanline(pPositionPointer[i]) + nComponentWidth * x;
 
             pStackPtr = &pStack[nComponentWidth * i];
 
