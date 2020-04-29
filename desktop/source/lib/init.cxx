@@ -112,6 +112,7 @@
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
@@ -1179,6 +1180,65 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
+<<<<<<< HEAD   (a84cb2 tdf#128502: Try to fix UnitCalc after 984bd2d5e4e1277cab47f8)
+=======
+void setupSidebar(bool bShow, OUString sidebarDeckId = "")
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
+    if (pViewFrame)
+    {
+        if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
+            pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
+
+        pViewFrame->ShowChildWindow(SID_SIDEBAR, bShow);
+
+        if (!bShow)
+            return;
+
+        // Force synchronous population of panels
+        SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+        if (!pChild)
+            return;
+
+        auto pDockingWin = dynamic_cast<sfx2::sidebar::SidebarDockingWindow *>(pChild->GetWindow());
+        if (!pDockingWin)
+            return;
+
+        if (!sidebarDeckId.isEmpty())
+        {
+            pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
+        }
+        pDockingWin->SyncUpdate();
+    }
+    else
+        SetLastExceptionMsg("No view shell or sidebar");
+}
+
+VclPtr<Window> getSidebarWindow()
+{
+    VclPtr<Window> xRet;
+
+    setupSidebar(true);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
+    if (!pViewFrame)
+        return xRet;
+
+    // really a SidebarChildWindow
+    SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
+    if (!pChild)
+        return xRet;
+
+    // really a SidebarDockingWindow
+    vcl::Window *pWin = pChild->GetWindow();
+    if (!pWin)
+        return xRet;
+    xRet = pWin;
+    return xRet;
+}
+
+>>>>>>> CHANGE (7f578e added ability to switch sidebar deck on init.cxx for mobilew)
 } // anonymous namespace
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent, int nDocumentId)
@@ -3795,6 +3855,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    OUString sidebarDeckId = "PropertyDeck";
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
@@ -3925,9 +3986,15 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             return;
         }
     }
+    else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
+    {
+        sidebarDeckId = "WriterPageDeck";
+        setupSidebar(true, sidebarDeckId);
+        return;
+    }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
-        setupSidebar(true);
+        setupSidebar(true, sidebarDeckId);
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")
