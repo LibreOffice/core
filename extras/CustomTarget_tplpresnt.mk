@@ -184,10 +184,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Vivid/content.xml \
 	Vivid/META-INF/manifest.xml \
 	Vivid/meta.xml \
-	Vivid/Pictures/1000000000000020000000204B249CA79A42C6D7.png \
-	Vivid/Pictures/10000000000004F900000322783ADE15FCCE3CBA.png \
-	Vivid/Pictures/10000000000004F900000322B6E66A5FF68F74A7.png \
-	Vivid/Pictures/10000000000005550000035C66CD1AA3E88406D5.png \
 	Vivid/styles.xml \
 	Vivid/Thumbnails/thumbnail.png \
 
