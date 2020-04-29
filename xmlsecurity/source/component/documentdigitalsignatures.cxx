@@ -515,85 +515,87 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     Sequence< css::security::DocumentSignatureInformation > aInfos(nInfos);
     css::security::DocumentSignatureInformation* arInfos = aInfos.getArray();
 
-    if ( nInfos )
+    for (int n = 0; n < nInfos; ++n)
     {
-        for( int n = 0; n < nInfos; ++n )
+        DocumentSignatureAlgorithm mode
+            = DocumentSignatureHelper::getDocumentAlgorithm(m_sODFVersion, aSignInfos[n]);
+        const std::vector<OUString> aElementsToBeVerified
+            = DocumentSignatureHelper::CreateElementList(rxStorage, eMode, mode);
+
+        const SignatureInformation& rInfo = aSignInfos[n];
+        css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
+
+        if (rInfo.ouGpgCertificate.isEmpty()) // X.509
         {
-            DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
-                m_sODFVersion, aSignInfos[n]);
-            const std::vector< OUString > aElementsToBeVerified =
-                DocumentSignatureHelper::CreateElementList(
-                rxStorage, eMode, mode);
+            if (!rInfo.ouX509Certificate.isEmpty())
+                rSigInfo.Signer = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+            if (!rSigInfo.Signer.is())
+                rSigInfo.Signer = xSecEnv->getCertificate(
+                    rInfo.ouX509IssuerName,
+                    xmlsecurity::numericStringToBigInteger(rInfo.ouX509SerialNumber));
 
-            const SignatureInformation& rInfo = aSignInfos[n];
-            css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
-
-            if (rInfo.ouGpgCertificate.isEmpty()) // X.509
+            // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
+            // to find the parent certificate. It does not take into account that there can be several certificates
+            // with the same subject name.
+            try
             {
-                if (!rInfo.ouX509Certificate.isEmpty())
-                    rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
-                if (!rSigInfo.Signer.is())
-                    rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName,
-                                                               xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-
-                // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
-                // to find the parent certificate. It does not take into account that there can be several certificates
-                // with the same subject name.
-
-                try {
-                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
-                                                                            Sequence<Reference<css::security::XCertificate> >());
-                } catch (SecurityException& ) {
-                    OSL_FAIL("Verification of certificate failed");
-                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
-                }
+                rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
+                    rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
             }
-            else if (xGpgSecEnv.is()) // GPG
+            catch (SecurityException&)
             {
-                // TODO not ideal to retrieve cert by keyID, might
-                // collide, or PGPKeyID format might change - can't we
-                // keep the xCert itself in rInfo?
-                rSigInfo.Signer = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger("") );
-                rSigInfo.CertificateStatus = xGpgSecEnv->verifyCertificate(rSigInfo.Signer,
-                                                                           Sequence<Reference<css::security::XCertificate> >());
+                OSL_FAIL("Verification of certificate failed");
+                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
+        }
+        else if (xGpgSecEnv.is()) // GPG
+        {
+            // TODO not ideal to retrieve cert by keyID, might
+            // collide, or PGPKeyID format might change - can't we
+            // keep the xCert itself in rInfo?
+            rSigInfo.Signer = xGpgSecEnv->getCertificate(
+                rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(""));
+            rSigInfo.CertificateStatus = xGpgSecEnv->verifyCertificate(
+                rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
+        }
 
-            // Time support again (#i38744#)
-            Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
-            tools::Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
-                        rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );
-            rSigInfo.SignatureDate = aDate.GetDate();
-            rSigInfo.SignatureTime = aTime.GetTime() / tools::Time::nanoPerCenti;
+        // Time support again (#i38744#)
+        Date aDate(rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year);
+        tools::Time aTime(rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
+                          rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds);
+        rSigInfo.SignatureDate = aDate.GetDate();
+        rSigInfo.SignatureTime = aTime.GetTime() / tools::Time::nanoPerCenti;
 
-            rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+        rSigInfo.SignatureIsValid
+            = (rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
 
-            // Signature line info (ID + Images)
-            if (!rInfo.ouSignatureLineId.isEmpty())
-                rSigInfo.SignatureLineId = rInfo.ouSignatureLineId;
+        // Signature line info (ID + Images)
+        if (!rInfo.ouSignatureLineId.isEmpty())
+            rSigInfo.SignatureLineId = rInfo.ouSignatureLineId;
 
-            if (rInfo.aValidSignatureImage.is())
-                rSigInfo.ValidSignatureLineImage = rInfo.aValidSignatureImage;
+        if (rInfo.aValidSignatureImage.is())
+            rSigInfo.ValidSignatureLineImage = rInfo.aValidSignatureImage;
 
-            if (rInfo.aInvalidSignatureImage.is())
-                rSigInfo.InvalidSignatureLineImage = rInfo.aInvalidSignatureImage;
+        if (rInfo.aInvalidSignatureImage.is())
+            rSigInfo.InvalidSignatureLineImage = rInfo.aInvalidSignatureImage;
 
-            // OOXML intentionally doesn't sign metadata.
-            if ( rSigInfo.SignatureIsValid && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
-            {
-                 rSigInfo.SignatureIsValid =
-                      DocumentSignatureHelper::checkIfAllFilesAreSigned(
-                      aElementsToBeVerified, rInfo, mode);
-            }
-            if (eMode == DocumentSignatureMode::Content)
-            {
-                if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
-                    rSigInfo.PartialDocumentSignature = true;
-                else
-                    rSigInfo.PartialDocumentSignature = !DocumentSignatureHelper::isOOo3_2_Signature(aSignInfos[n]);
-            }
-
+        // OOXML intentionally doesn't sign metadata.
+        if (rSigInfo.SignatureIsValid
+            && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
+        {
+            rSigInfo.SignatureIsValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
+                aElementsToBeVerified, rInfo, mode);
+        }
+        if (eMode == DocumentSignatureMode::Content)
+        {
+            if (aStreamHelper.nStorageFormat == embed::StorageFormats::OFOPXML)
+                rSigInfo.PartialDocumentSignature = true;
+            else
+                rSigInfo.PartialDocumentSignature
+                    = !DocumentSignatureHelper::isOOo3_2_Signature(aSignInfos[n]);
         }
     }
+
     return aInfos;
 
 }
