@@ -169,6 +169,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10 (PAGE_PRINT_AREA_BOTTOM)
+    // - Actual  : 0 (FRAME)
+    // i.e. the bottom-of-body relation was lost.
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
 {
     OUString aActual = getParagraph(1)->getString();
