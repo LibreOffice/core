@@ -2722,6 +2722,8 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
     return bMoved;
 }
 
+/// Return value tells us whether the Frame has remained on the same page.
+/// i.e. false = moved.
 bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pOldBoss )
 {
     OSL_ENSURE( IsInFootnote(), "no footnote." );
