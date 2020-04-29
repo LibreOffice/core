@@ -924,7 +924,8 @@ protected:
      */
     xmlDocPtr parseExportedFile()
     {
-        return parseXmlStream(maTempFile.GetStream(StreamMode::READ));
+        auto stream(SvFileStream(maTempFile.GetURL(), StreamMode::READ | StreamMode::TEMPORARY));
+        return parseXmlStream(&stream);
     }
 
     std::shared_ptr<SvStream> parseExportStream(const OUString& url, const OUString& rStreamName)
