@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+     Open Document Format for Office Applications (OpenDocument) Version 1.3
+     Committee Specification 01
+     25 December 2019
+     Copyright (c) OASIS Open 2019. All Rights Reserved.
+     Source: https://docs.oasis-open.org/office/OpenDocument/v1.3/cs01/schemas/
+     Latest stage of specification: https://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part1-introduction.html
+     TC IPR Statement: https://www.oasis-open.org/committees/office/ipr.php 
+-->
+<!--
         Open Document Format for Office Applications (OpenDocument) Version 1.3
         OASIS Standard, In progress
 	Relax-NG Schema
@@ -9790,6 +9799,10 @@
             <rng:value>none</rng:value>
             <rng:value>cubic-spline</rng:value>
             <rng:value>b-spline</rng:value>
+	    <rng:value>step-start</rng:value>
+	    <rng:value>step-end</rng:value>
+	    <rng:value>step-center-x</rng:value>
+	    <rng:value>step-center-y</rng:value>
           </rng:choice>
         </rng:attribute>
       </rng:optional>
