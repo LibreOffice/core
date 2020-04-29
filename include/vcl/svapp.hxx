@@ -903,8 +903,10 @@ public:
 
     /** Get useful OS, Hardware and configuration information,
      * cf. Help->About, and User-Agent
+     * bSelection = 0 to return all info, 1 for environment only,
+     *   and 2 for VCL/render related infos
      */
-    static OUString             GetHWOSConfInfo();
+    static OUString             GetHWOSConfInfo(const int bSelection = 0);
 
     /** Load a localized branding PNG file as a bitmap.
 

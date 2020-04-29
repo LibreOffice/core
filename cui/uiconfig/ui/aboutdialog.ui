@@ -75,6 +75,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="margin_left">12</property>
                 <property name="margin_right">12</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
@@ -89,14 +90,14 @@
               <object class="GtkImage" id="imBrand">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">center</property>
+                <property name="halign">start</property>
                 <property name="valign">center</property>
-                <property name="margin_left">24</property>
+                <property name="margin_left">30</property>
                 <property name="margin_top">24</property>
                 <property name="margin_bottom">24</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="xalign">0</property>
+                <property name="xalign">0.5</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -104,23 +105,172 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lbCopyright">
+              <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
-                <property name="margin_bottom">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="label" context="aboutdialog|copyright">This release was supplied by The Document Foundation.
-Copyright (c) 1980-2020 LibreOffice contributors.
-LibreOffice was based on OpenOffice.org</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">50</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkLabel" id="lbVersion">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbVersion">Version:</property>
+                    <property name="wrap">True</property>
+                    <property name="max_width_chars">50</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbBuild">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbBuild">Build:</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbEnvironment">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbEnvironment">Environment:</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbVersionString">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">6</property>
+                    <property name="label">7.0</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbEnvString">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">6</property>
+                    <property name="label">8 cores</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="lbBuildString">
+                    <property name="label">0815</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbMisc">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbExtra">Misc:</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbMiscString">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">6</property>
+                    <property name="label">Calc</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbLocale">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbLocale">Locale:</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbLocaleString">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">6</property>
+                    <property name="label">English</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbUI">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbUI">User Interface:</property>
+                    <property name="xalign">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbUIString">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">6</property>
+                    <property name="label">VCL: gtk</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -146,24 +296,23 @@ LibreOffice was based on OpenOffice.org</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lbVersion">
+              <object class="GtkLabel" id="lbCopyright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">end</property>
+                <property name="valign">start</property>
+                <property name="margin_bottom">6</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="label">Version: 7.0
-Build ID: 7.0
-CPU threads
-Locale:
-Calc:</property>
+                <property name="label" context="aboutdialog|copyright">This release was supplied by The Document Foundation.
+Copyright (c) 1980-2020 LibreOffice contributors.
+LibreOffice was based on OpenOffice.org</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
             <child>
