@@ -25,7 +25,6 @@
 #include "panelist.hxx"
 #include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
@@ -78,11 +77,14 @@
 #include <tools/urlobj.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
-#include <vcl/unohelp.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/weld.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -110,11 +112,6 @@ using namespace ::com::sun::star::ui;
 using namespace ::comphelper;
 
 // defines ---------------------------------------------------------------
-
-#define SPLITSET_ID         0
-#define COLSET_ID           1
-#define INDEXWIN_ID         2
-#define TEXTWIN_ID          3
 
 #define TOOLBOX_OFFSET      3
 
@@ -250,98 +247,48 @@ struct ContentEntry_Impl
 
 }
 
-// ContentListBox_Impl ---------------------------------------------------
-
-ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
-    : SvTreeListBox(pParent, nStyle)
-    , aOpenBookImage(StockImage::Yes, BMP_HELP_CONTENT_BOOK_OPEN)
-    , aClosedBookImage(StockImage::Yes, BMP_HELP_CONTENT_BOOK_CLOSED)
-    , aDocumentImage(StockImage::Yes, BMP_HELP_CONTENT_DOC)
-
-{
-    SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
-
-    SetEntryHeight( 16 );
-    SetSelectionMode( SelectionMode::Single );
-    SetSpaceBetweenEntries( 2 );
-    SetNodeBitmaps( aClosedBookImage, aOpenBookImage );
-
-    SetSublistOpenWithReturn();
-    SetSublistOpenWithLeftRight();
-
-    InitRoot();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeContentListBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeContentListBox)>);
-    WinBits nWinStyle = WB_TABSTOP;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    rRet = VclPtr<ContentListBox_Impl>::Create(pParent, nWinStyle);
-}
-
-ContentListBox_Impl::~ContentListBox_Impl()
-{
-    disposeOnce();
-}
-
-void ContentListBox_Impl::dispose()
-{
-    sal_uInt16 nPos = 0;
-    SvTreeListEntry* pEntry = GetEntry( nPos++ );
-    while ( pEntry )
-    {
-        ClearChildren( pEntry );
-        delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
-        pEntry = GetEntry( nPos++ );
-    }
-    SvTreeListBox::dispose();
-}
-
-void ContentListBox_Impl::InitRoot()
+void ContentTabPage_Impl::InitRoot()
 {
     std::vector< OUString > aList =
         SfxContentHelper::GetHelpTreeViewContents( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
 
-    for(const OUString & aRow : aList)
+    for (const OUString & aRow : aList)
     {
         sal_Int32 nIdx = 0;
         OUString aTitle = aRow.getToken( 0, '\t', nIdx );
         OUString aURL = aRow.getToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
         bool bIsFolder = ( '1' == cFolder );
-        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, nullptr, true );
-        if ( bIsFolder )
-            pEntry->SetUserData( new ContentEntry_Impl( aURL, true ) );
+        OUString sId;
+        if (bIsFolder)
+            sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
+        m_xContentBox->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, &aClosedBookImage, true, nullptr);
     }
 }
 
-
-void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
+void ContentTabPage_Impl::ClearChildren(weld::TreeIter* pParent)
 {
-    SvTreeListEntry* pEntry = FirstChild( pParent );
-    while ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry = m_xContentBox->make_iterator(pParent);
+    bool bEntry = m_xContentBox->iter_children(*xEntry);
+    while (bEntry)
     {
-        ClearChildren( pEntry );
-        delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
-        pEntry = pEntry->NextSibling();
+        ClearChildren(xEntry.get());
+        delete reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry).toInt64());
+        bEntry = m_xContentBox->iter_next_sibling(*xEntry);
     }
+
 }
 
-
-void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
+IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
-    try
+    ContentEntry_Impl* pContentEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(rIter).toInt64());
+    if (!m_xContentBox->iter_has_child(rIter))
     {
-        if ( !pParent->HasChildren() )
+        try
         {
-            if ( pParent->GetUserData() )
+            if (pContentEntry)
             {
-                std::vector<OUString > aList =
-                    SfxContentHelper::GetHelpTreeViewContents( static_cast<ContentEntry_Impl*>(pParent->GetUserData())->aURL );
+                std::vector<OUString > aList = SfxContentHelper::GetHelpTreeViewContents(pContentEntry->aURL);
 
                 for (const OUString & aRow : aList)
                 {
@@ -350,126 +297,117 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     OUString aURL = aRow.getToken( 0, '\t', nIdx );
                     sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
                     bool bIsFolder = ( '1' == cFolder );
-                    SvTreeListEntry* pEntry = nullptr;
                     if ( bIsFolder )
                     {
-                        pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, true );
-                        pEntry->SetUserData( new ContentEntry_Impl( aURL, true ) );
+                        OUString sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
+                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, &aClosedBookImage, true, nullptr);
                     }
                     else
                     {
-                        pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
                         Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, "TargetURL" ) );
+                        OUString sId;
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
-                            pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, false ) );
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aTargetURL, false)));
+                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, &aDocumentImage, true, nullptr);
                     }
                 }
             }
         }
+        catch (const Exception&)
+        {
+            OSL_FAIL( "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
+        }
     }
-    catch( Exception& )
-    {
-        OSL_FAIL( "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
-    }
+
+    if (!pContentEntry || pContentEntry->bIsFolder)
+        m_xContentBox->set_image(rIter, aOpenBookImage);
+
+    return true;
 }
 
-
-bool ContentListBox_Impl::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(ContentTabPage_Impl, CollapsingHdl, const weld::TreeIter&, rIter, bool)
 {
-    bool bHandled = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
-         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
-    {
-        GetDoubleClickHdl().Call( nullptr );
-        bHandled = true;
-    }
+    ContentEntry_Impl* pContentEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(rIter).toInt64());
+    if (!pContentEntry || pContentEntry->bIsFolder)
+        m_xContentBox->set_image(rIter, aClosedBookImage);
 
-    return bHandled || SvTreeListBox::EventNotify( rNEvt );
+    return true;
 }
 
-
-OUString ContentListBox_Impl::GetSelectedEntry() const
+OUString ContentTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
-    SvTreeListEntry* pEntry = FirstSelected();
-    if ( pEntry && !static_cast<ContentEntry_Impl*>(pEntry->GetUserData())->bIsFolder )
-        aRet = static_cast<ContentEntry_Impl*>(pEntry->GetUserData())->aURL;
+    ContentEntry_Impl* pEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_selected_id().toInt64());
+    if (pEntry && !pEntry->bIsFolder)
+        aRet = pEntry->aURL;
     return aRet;
 }
 
 // class HelpTabPage_Impl ------------------------------------------------
-HelpTabPage_Impl::HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+HelpTabPage_Impl::HelpTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin,
     const OString& rID, const OUString& rUIXMLDescription)
-    : TabPage( pParent, rID, rUIXMLDescription)
-    , m_pIdxWin( _pIdxWin )
+    : BuilderPage(pParent, nullptr, rUIXMLDescription, rID)
+    , m_pIdxWin(pIdxWin)
 {
 }
 
 HelpTabPage_Impl::~HelpTabPage_Impl()
 {
-    disposeOnce();
-}
-
-void HelpTabPage_Impl::dispose()
-{
-    m_pIdxWin.clear();
-    TabPage::dispose();
 }
 
 // class ContentTabPage_Impl ---------------------------------------------
-ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
-    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
+ContentTabPage_Impl::ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
+    : HelpTabPage_Impl(pParent, pIdxWin, "HelpContentPage",
         "sfx/ui/helpcontentpage.ui")
+    , m_xContentBox(m_xBuilder->weld_tree_view("content"))
+    , aOpenBookImage(BMP_HELP_CONTENT_BOOK_OPEN)
+    , aClosedBookImage(BMP_HELP_CONTENT_BOOK_CLOSED)
+    , aDocumentImage(BMP_HELP_CONTENT_DOC)
 {
-    get(m_pContentBox, "content");
-    Size aSize(LogicToPixel(Size(108 , 188), MapMode(MapUnit::MapAppFont)));
-    m_pContentBox->set_width_request(aSize.Width());
-    m_pContentBox->set_height_request(aSize.Height());
+    m_xContentBox->set_size_request(m_xContentBox->get_approximate_digit_width() * 30,
+                                    m_xContentBox->get_height_rows(20));
+    m_xContentBox->connect_row_activated(LINK(this, ContentTabPage_Impl, DoubleClickHdl));
+    m_xContentBox->connect_expanding(LINK(this, ContentTabPage_Impl, ExpandingHdl));
+    m_xContentBox->connect_collapsing(LINK(this, ContentTabPage_Impl, CollapsingHdl));
+
+    InitRoot();
+}
+
+IMPL_LINK_NOARG(ContentTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)
+{
+    aDoubleClickHdl.Call(nullptr);
+    return true;
+}
+
+void ContentTabPage_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
+{
+    aDoubleClickHdl = rLink;
 }
 
 ContentTabPage_Impl::~ContentTabPage_Impl()
 {
-    disposeOnce();
+    std::unique_ptr<weld::TreeIter> xEntry = m_xContentBox->make_iterator();
+    bool bEntry = m_xContentBox->get_iter_first(*xEntry);
+    while (bEntry)
+    {
+        ClearChildren(xEntry.get());
+        delete reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry).toInt64());
+        bEntry = m_xContentBox->iter_next_sibling(*xEntry);
+    }
 }
 
-void ContentTabPage_Impl::dispose()
+weld::Widget* ContentTabPage_Impl::GetLastFocusControl()
 {
-    m_pContentBox.clear();
-    HelpTabPage_Impl::dispose();
+    return m_xContentBox.get();
 }
 
-void ContentTabPage_Impl::ActivatePage()
-{
-    if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        SetFocusOnBox();
-}
-
-Control* ContentTabPage_Impl::GetLastFocusControl()
-{
-    return m_pContentBox;
-}
-
+#if 0
 // class IndexBox_Impl ---------------------------------------------------
-
 IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : ComboBox(pParent, nStyle)
 {
-    EnableAutocomplete(true);
     EnableUserDraw(true);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeIndexBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeIndexBox)>);
-    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    VclPtrInstance<IndexBox_Impl> pListBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
 }
 
 void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
@@ -489,73 +427,48 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         DrawEntry( rUDEvt, true, true );
 }
 
+#endif
 
-bool IndexBox_Impl::EventNotify( NotifyEvent& rNEvt )
+void IndexTabPage_Impl::SelectExecutableEntry()
 {
-    bool bHandled = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
-         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
-    {
-        GetDoubleClickHdl().Call( *this );
-        bHandled = true;
-    }
-
-    return bHandled || ComboBox::EventNotify( rNEvt );
-}
-
-
-void IndexBox_Impl::SelectExecutableEntry()
-{
-    sal_Int32 nPos = GetEntryPos( GetText() );
-    if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
+    sal_Int32 nPos = m_xIndexCB->find_text(m_xIndexCB->get_active_text());
+    if (nPos == -1)
         return;
 
     sal_Int32 nOldPos = nPos;
     OUString aEntryText;
-    IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( nPos ));
-    sal_Int32 nCount = GetEntryCount();
+    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexCB->get_id(nPos).toInt64());
+    sal_Int32 nCount = m_xIndexCB->get_count();
     while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
     {
-        pEntry = static_cast<IndexEntry_Impl*>(GetEntryData( ++nPos ));
-        aEntryText = GetEntry( nPos );
+        pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexCB->get_id(++nPos).toInt64());
+        aEntryText = m_xIndexCB->get_text(nPos);
     }
 
     if ( nOldPos != nPos )
-        SetText( aEntryText );
+        m_xIndexCB->set_entry_text(aEntryText);
 }
 
 // class IndexTabPage_Impl -----------------------------------------------
-
-IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
-    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpIndexPage",
-        "sfx/ui/helpindexpage.ui")
+IndexTabPage_Impl::IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
+    : HelpTabPage_Impl(pParent, pIdxWin, "HelpIndexPage", "sfx/ui/helpindexpage.ui")
+    , m_xIndexCB(m_xBuilder->weld_entry_tree_view("terms", "termentry", "termlist"))
+    , m_xOpenBtn(m_xBuilder->weld_button("display"))
     , aFactoryIdle("sfx2 appl IndexTabPage_Impl Factory")
     , bIsActivated(false)
 {
-    get(m_pIndexCB, "terms");
-    Size aSize(LogicToPixel(Size(108, 97), MapMode(MapUnit::MapAppFont)));
-    m_pIndexCB->set_width_request(aSize.Width());
-    m_pIndexCB->set_height_request(aSize.Height());
-    get(m_pOpenBtn, "display");
+    m_xIndexCB->set_size_request(m_xIndexCB->get_approximate_digit_width() * 30, -1);
 
-    m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
+    m_xOpenBtn->connect_clicked(LINK(this, IndexTabPage_Impl, OpenHdl));
     aFactoryIdle.SetInvokeHandler( LINK(this, IndexTabPage_Impl, IdleHdl ));
     aKeywordTimer.SetInvokeHandler( LINK( this, IndexTabPage_Impl, TimeoutHdl ) );
+    m_xIndexCB->connect_row_activated(LINK(this, IndexTabPage_Impl, DoubleClickHdl));
 }
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
 {
-    disposeOnce();
-}
-
-void IndexTabPage_Impl::dispose()
-{
     ClearIndex();
-    m_pIndexCB.clear();
-    m_pOpenBtn.clear();
-    HelpTabPage_Impl::dispose();
 }
-
 
 namespace sfx2 {
 
@@ -564,7 +477,7 @@ namespace sfx2 {
 
 void IndexTabPage_Impl::InitializeIndex()
 {
-    weld::WaitObject aWaitCursor(GetFrameWeld());
+//TODO    weld::WaitObject aWaitCursor(GetFrameWeld());
 
     // By now more than 256 equal entries are not allowed
     sal_Unicode append[256];
@@ -572,7 +485,7 @@ void IndexTabPage_Impl::InitializeIndex()
         k =  ' ';
 
     sfx2::KeywordInfo aInfo;
-    m_pIndexCB->SetUpdateMode( false );
+    m_xIndexCB->freeze();
 
     try
     {
@@ -602,7 +515,6 @@ void IndexTabPage_Impl::InitializeIndex()
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
             {
-                sal_Int32 nPos;
                 int ndx,tmp;
                 OUString aIndex, aTempString;
                 OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
@@ -630,36 +542,38 @@ void IndexTabPage_Impl::InitializeIndex()
                             aIndex = aTempString;
                             it = aInfo.emplace(aTempString, 0).first;
                             if ( (tmp = it->second++) != 0)
-                                m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
+                                m_xIndexCB->append_text(aTempString + OUString(append, tmp));
                             else
-                                m_pIndexCB->InsertEntry(aTempString);
+                                m_xIndexCB->append_text(aTempString);
                         }
                     }
                     else
                         aIndex.clear();
-
-                    // Assume the token is trimmed
-                    it = aInfo.emplace(aKeywordPair, 0).first;
-                    if ((tmp = it->second++) != 0)
-                        nPos = m_pIndexCB->InsertEntry(aKeywordPair + OUString(append, tmp));
-                    else
-                        nPos = m_pIndexCB->InsertEntry(aKeywordPair);
 
                     sal_uInt32 nRefListLen = aRefList.getLength();
 
                     DBG_ASSERT( aAnchorList.hasElements(), "*IndexTabPage_Impl::InitializeIndex(): AnchorList is empty!" );
                     DBG_ASSERT( nRefListLen, "*IndexTabPage_Impl::InitializeIndex(): RefList is empty!" );
 
+                    OUString sId;
+
                     if ( aAnchorList.hasElements() && nRefListLen )
                     {
                         if ( aAnchorList[0].getLength() > 0 )
                         {
                             aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
-                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
                         }
                         else
-                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aRefList[0], insert ) );
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[0], insert)));
                     }
+
+                    // Assume the token is trimmed
+                    it = aInfo.emplace(aKeywordPair, 0).first;
+                    if ((tmp = it->second++) != 0)
+                        m_xIndexCB->append(sId, aKeywordPair + OUString(append, tmp));
+                    else
+                        m_xIndexCB->append(sId, aKeywordPair);
 
                     for ( sal_uInt32 j = 1; j < nRefListLen ; ++j )
                     {
@@ -671,19 +585,22 @@ void IndexTabPage_Impl::InitializeIndex()
                             .append( aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();
-                        it = aInfo.emplace(aTempString, 0).first;
-                        if ( (tmp = it->second++) != 0 )
-                            nPos = m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
-                        else
-                            nPos = m_pIndexCB->InsertEntry(aTempString);
 
                         if ( aAnchorList[j].getLength() > 0 )
                         {
                             aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
-                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aData.makeStringAndClear(), insert ) );
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
                         }
                         else
-                            m_pIndexCB->SetEntryData( nPos, new IndexEntry_Impl( aRefList[j], insert ) );
+                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[j], insert)));
+
+                        it = aInfo.emplace(aTempString, 0).first;
+                        if ( (tmp = it->second++) != 0 )
+                            m_xIndexCB->append(sId, aTempString + OUString(append, tmp));
+                        else
+                            m_xIndexCB->append(sId, aTempString);
+
+//TODO                        set_extra_row_indent
                     }
                 }
             }
@@ -694,7 +611,7 @@ void IndexTabPage_Impl::InitializeIndex()
         OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
-    m_pIndexCB->SetUpdateMode( true );
+    m_xIndexCB->thaw();
 
     if ( !sKeyword.isEmpty() )
         aKeywordLink.Call( *this );
@@ -702,15 +619,21 @@ void IndexTabPage_Impl::InitializeIndex()
 
 void IndexTabPage_Impl::ClearIndex()
 {
-    const sal_Int32 nCount = m_pIndexCB->GetEntryCount();
+    const sal_Int32 nCount = m_xIndexCB->get_count();
     for ( sal_Int32 i = 0; i < nCount; ++i )
-        delete static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData(i));
-    m_pIndexCB->Clear();
+        delete reinterpret_cast<IndexEntry_Impl*>(m_xIndexCB->get_id(i).toInt64());
+    m_xIndexCB->clear();
 }
 
-IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl, Button*, void)
+IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl, weld::Button&, void)
 {
-    m_pIndexCB->GetDoubleClickHdl().Call(*m_pIndexCB);
+    aDoubleClickHdl.Call(nullptr);
+}
+
+IMPL_LINK_NOARG(IndexTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)
+{
+    aDoubleClickHdl.Call(nullptr);
+    return true;
 }
 
 IMPL_LINK( IndexTabPage_Impl, IdleHdl, Timer*, pIdle, void )
@@ -725,26 +648,23 @@ IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
         aKeywordLink.Call(*this);
 }
 
-void IndexTabPage_Impl::ActivatePage()
+void IndexTabPage_Impl::Activate()
 {
     if ( !bIsActivated )
     {
         bIsActivated = true;
         aFactoryIdle.Start();
     }
-
-    if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        SetFocusOnBox();
 }
 
-Control* IndexTabPage_Impl::GetLastFocusControl()
+weld::Widget* IndexTabPage_Impl::GetLastFocusControl()
 {
-    return m_pOpenBtn;
+    return m_xOpenBtn.get();
 }
 
-void IndexTabPage_Impl::SetDoubleClickHdl( const Link<ComboBox&,void>& rLink )
+void IndexTabPage_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
 {
-    m_pIndexCB->SetDoubleClickHdl( rLink );
+    aDoubleClickHdl = rLink;
 }
 
 void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
@@ -768,22 +688,21 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
     }
 }
 
-
 OUString IndexTabPage_Impl::GetSelectedEntry() const
 {
+    //TODO
     OUString aRet;
-    IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData( m_pIndexCB->GetEntryPos( m_pIndexCB->GetText() ) ));
-    if ( pEntry )
+    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexCB->get_id(m_xIndexCB->find_text(m_xIndexCB->get_active_text())).toInt64());
+    if (pEntry)
         aRet = pEntry->m_aURL;
     return aRet;
 }
-
 
 void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 {
     sKeyword = rKeyword;
 
-    if ( m_pIndexCB->GetEntryCount() > 0 )
+    if (m_xIndexCB->get_count() > 0)
         aKeywordTimer.Start();
     else if ( !bIsActivated )
         aFactoryIdle.Start();
@@ -795,8 +714,8 @@ bool IndexTabPage_Impl::HasKeyword() const
     bool bRet = false;
     if ( !sKeyword.isEmpty() )
     {
-        sal_Int32 nPos = m_pIndexCB->GetEntryPos( sKeyword );
-        bRet = ( nPos != LISTBOX_ENTRY_NOTFOUND );
+        sal_Int32 nPos = m_xIndexCB->find_text( sKeyword );
+        bRet = nPos != -1;
     }
 
     return bRet;
@@ -808,11 +727,11 @@ bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     bool bRet = false;
     if ( !sKeyword.isEmpty() )
     {
-        sal_Int32 nEntries = m_pIndexCB->GetEntryCount();
-        const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
+        sal_Int32 nEntries = m_xIndexCB->get_count();
+        const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
         for ( sal_Int32 n = 0; n < nEntries; n++)
         {
-            const OUString sIndexItem {m_pIndexCB->GetEntry( n )};
+            const OUString sIndexItem {m_xIndexCB->get_text(n)};
             if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
             {
                 sKeyword = sIndexItem;
@@ -824,99 +743,43 @@ bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     return bRet;
 }
 
-
 void IndexTabPage_Impl::OpenKeyword()
 {
     if ( !sKeyword.isEmpty() )
     {
-        m_pIndexCB->SetText( sKeyword );
-        m_pIndexCB->GetDoubleClickHdl().Call( *m_pIndexCB );
+        m_xIndexCB->set_entry_text(sKeyword);
+        aDoubleClickHdl.Call(nullptr);
         sKeyword.clear();
     }
 }
 
-// class SearchBox_Impl --------------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSearchBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+IMPL_LINK_NOARG(SearchTabPage_Impl, ActivateHdl, weld::ComboBox&, bool)
 {
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSearchBox)>);
-    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
-    VclPtrInstance<SearchBox_Impl> pComboBox(pParent, nWinBits);
-    pComboBox->EnableAutoSize(true);
-    rRet = pComboBox;
-}
-
-bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
-{
-    bool bHandled = false;
-    if ( !IsInDropDown() &&
-         rNEvt.GetWindow() == GetSubEdit() &&
-         rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
-         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
-    {
-        aSearchLink.Call( nullptr );
-        bHandled = true;
-    }
-    return bHandled || ComboBox::PreNotify( rNEvt );
-}
-
-
-void SearchBox_Impl::Select()
-{
-    if ( !IsTravelSelect() )
-        aSearchLink.Call( nullptr );
-}
-
-// class SearchResultsBox_Impl -------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSearchResultsBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeSearchResultsBox)>);
-    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    VclPtrInstance<SearchResultsBox_Impl> pListBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
-bool SearchResultsBox_Impl::EventNotify( NotifyEvent& rNEvt )
-{
-    bool bHandled = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
-         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
-    {
-        GetDoubleClickHdl().Call( *this );
-        bHandled = true;
-    }
-
-    return bHandled || ListBox::EventNotify( rNEvt );
+    Search();
+    return true;
 }
 
 // class SearchTabPage_Impl ----------------------------------------------
 
-SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
-    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpSearchPage",
+SearchTabPage_Impl::SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin)
+    : HelpTabPage_Impl(pParent, pIdxWin, "HelpSearchPage",
         "sfx/ui/helpsearchpage.ui")
+    , m_xSearchED(m_xBuilder->weld_combo_box("search"))
+    , m_xSearchBtn(m_xBuilder->weld_button("find"))
+    , m_xFullWordsCB(m_xBuilder->weld_check_button("completewords"))
+    , m_xScopeCB(m_xBuilder->weld_check_button("headings"))
+    , m_xResultsLB(m_xBuilder->weld_tree_view("results"))
+    , m_xOpenBtn(m_xBuilder->weld_button("display"))
     , xBreakIterator(vcl::unohelper::CreateBreakIterator())
 {
-    get(m_pSearchED, "search");
-    get(m_pSearchBtn, "find");
-    get(m_pFullWordsCB, "completewords");
-    get(m_pScopeCB, "headings");
-    get(m_pResultsLB, "results");
-    Size aSize(LogicToPixel(Size(128 , 30), MapMode(MapUnit::MapAppFont)));
-    m_pResultsLB->set_width_request(aSize.Width());
-    m_pResultsLB->set_height_request(aSize.Height());
-    get(m_pOpenBtn, "display");
+    m_xResultsLB->set_size_request(m_xResultsLB->get_approximate_digit_width() * 30,
+                                   m_xResultsLB->get_height_rows(15));
 
-    m_pSearchED->SetSearchLink( LINK( this, SearchTabPage_Impl, SearchHdl ) );
-    m_pSearchBtn->SetClickHdl(LINK( this, SearchTabPage_Impl, ClickHdl ));
-    m_pSearchED->SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
-    m_pOpenBtn->SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
+    m_xSearchBtn->connect_clicked(LINK(this, SearchTabPage_Impl, ClickHdl));
+    m_xSearchED->connect_changed(LINK(this, SearchTabPage_Impl, ModifyHdl));
+    m_xSearchED->connect_entry_activate(LINK(this, SearchTabPage_Impl, ActivateHdl));
+    m_xOpenBtn->connect_clicked(LINK(this, SearchTabPage_Impl, OpenHdl));
+    m_xResultsLB->connect_row_activated(LINK(this, SearchTabPage_Impl, DoubleClickHdl));
 
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
     if ( aViewOpt.Exists() )
@@ -927,40 +790,35 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
         {
             sal_Int32 nIdx {0};
             bool bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
-            m_pFullWordsCB->Check( bChecked );
+            m_xFullWordsCB->set_active(bChecked);
             bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
-            m_pScopeCB->Check( bChecked );
+            m_xScopeCB->set_active(bChecked);
 
             while ( nIdx > 0 )
             {
-                m_pSearchED->InsertEntry( INetURLObject::decode(
+                m_xSearchED->append_text( INetURLObject::decode(
                     aUserData.getToken(0, ';', nIdx),
                     INetURLObject::DecodeMechanism::WithCharset ) );
             }
         }
     }
 
-    ModifyHdl(*m_pSearchED);
+    ModifyHdl(*m_xSearchED);
 }
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
-    disposeOnce();
-}
-
-void SearchTabPage_Impl::dispose()
-{
     SvtViewOptions aViewOpt( EViewType::TabPage, CONFIGNAME_SEARCHPAGE );
     OUStringBuffer aUserData;
-    aUserData.append(OUString::number( m_pFullWordsCB->IsChecked() ? 1 : 0 ))
+    aUserData.append(OUString::number(m_xFullWordsCB->get_active() ? 1 : 0))
         .append(";")
-        .append(OUString::number( m_pScopeCB->IsChecked() ? 1 : 0 ));
-    sal_Int32 nCount = std::min( m_pSearchED->GetEntryCount(), sal_Int32(10) );  // save only 10 entries
+        .append(OUString::number( m_xScopeCB->get_active() ? 1 : 0 ));
+    sal_Int32 nCount = std::min( m_xSearchED->get_count(), sal_Int32(10) );  // save only 10 entries
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         aUserData.append(";").append(INetURLObject::encode(
-            m_pSearchED->GetEntry(i),
+            m_xSearchED->get_text(i),
             INetURLObject::PART_UNO_PARAM_VALUE,
             INetURLObject::EncodeMechanism::All ));
     }
@@ -968,147 +826,136 @@ void SearchTabPage_Impl::dispose()
     Any aUserItem = makeAny( aUserData.makeStringAndClear() );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 
-    m_pSearchED.clear();
-    m_pSearchBtn.clear();
-    m_pFullWordsCB.clear();
-    m_pScopeCB.clear();
-    m_pResultsLB.clear();
-    m_pOpenBtn.clear();
-    HelpTabPage_Impl::dispose();
+    m_xSearchED.reset();
+    m_xSearchBtn.reset();
+    m_xFullWordsCB.reset();
+    m_xScopeCB.reset();
+    m_xResultsLB.reset();
+    m_xOpenBtn.reset();
 }
-
 
 void SearchTabPage_Impl::ClearSearchResults()
 {
-    const sal_Int32 nCount = m_pResultsLB->GetEntryCount();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
-        delete static_cast<OUString*>(m_pResultsLB->GetEntryData(i));
-    m_pResultsLB->Clear();
-    m_pResultsLB->PaintImmediately();
+    m_xResultsLB->clear();
+//TODO    m_xResultsLB->PaintImmediately();
 }
-
 
 void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 {
-    for ( sal_Int32 i = 0; i < m_pSearchED->GetEntryCount(); ++i )
+    for (sal_Int32 i = 0, nEntryCount = m_xSearchED->get_count(); i < nEntryCount; ++i)
     {
-        if ( rSearchText == m_pSearchED->GetEntry(i) )
+        if (rSearchText == m_xSearchED->get_text(i))
         {
-            m_pSearchED->RemoveEntryAt(i);
+            m_xSearchED->remove(i);
             break;
         }
     }
 
-    m_pSearchED->InsertEntry( rSearchText, 0 );
+    m_xSearchED->insert_text(0, rSearchText);
 }
 
-
-IMPL_LINK_NOARG(SearchTabPage_Impl, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, ClickHdl, weld::Button&, void)
 {
-    SearchHdl(nullptr);
+    Search();
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
+void SearchTabPage_Impl::Search()
 {
-    OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
+    OUString aSearchText = comphelper::string::strip(m_xSearchED->get_active_text(), ' ');
     if ( aSearchText.isEmpty() )
         return;
 
-    EnterWait();
+//TODO    EnterWait();
     ClearSearchResults();
     RememberSearchText( aSearchText );
     OUStringBuffer aSearchURL(HELP_URL);
     aSearchURL.append(aFactory);
     aSearchURL.append(HELP_SEARCH_TAG);
-    if ( !m_pFullWordsCB->IsChecked() )
+    if (!m_xFullWordsCB->get_active())
         aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
     aSearchURL.append(aSearchText);
     AppendConfigToken(aSearchURL, false);
-    if ( m_pScopeCB->IsChecked() )
+    if (m_xScopeCB->get_active())
         aSearchURL.append("&Scope=Heading");
     std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
     for (const OUString & rRow : aFactories)
     {
         sal_Int32 nIdx = 0;
-        OUString aTitle = rRow.getToken( 0, '\t', nIdx );
-        OUString* pURL = new OUString( rRow.getToken( 1, '\t', nIdx ) );
-        const sal_Int32 nPos = m_pResultsLB->InsertEntry( aTitle );
-        m_pResultsLB->SetEntryData( nPos, pURL );
+        OUString aTitle = rRow.getToken(0, '\t', nIdx);
+        OUString sURL(rRow.getToken(1, '\t', nIdx));
+        m_xResultsLB->append(sURL, aTitle);
     }
-    LeaveWait();
+//TODO    LeaveWait();
 
     if ( aFactories.empty() )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
                                                                  VclMessageType::Info, VclButtonsType::Ok,
                                                                  SfxResId(STR_INFO_NOSEARCHRESULTS)));
         xBox->run();
     }
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl, Button*, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl, weld::Button&, void)
 {
-    m_pResultsLB->GetDoubleClickHdl().Call(*m_pResultsLB);
+    aDoubleClickHdl.Call(nullptr);
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl, Edit&, void)
+IMPL_LINK(SearchTabPage_Impl, ModifyHdl, weld::ComboBox&, rComboBox, void)
 {
-    OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
-    m_pSearchBtn->Enable(!aSearchText.isEmpty());
+    OUString aSearchText = comphelper::string::strip(m_xSearchED->get_active_text(), ' ');
+    m_xSearchBtn->set_sensitive(!aSearchText.isEmpty());
+
+    if (rComboBox.changed_by_direct_pick())
+    {
+        fprintf(stderr, "DIRECT PICK\n");
+        Search();
+    }
 }
 
-void SearchTabPage_Impl::ActivatePage()
+weld::Widget* SearchTabPage_Impl::GetLastFocusControl()
 {
-    if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        m_pSearchED->GrabFocus();
+    return m_xOpenBtn.get();
 }
 
-Control* SearchTabPage_Impl::GetLastFocusControl()
+IMPL_LINK_NOARG(SearchTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)
 {
-    return m_pOpenBtn;
+    aDoubleClickHdl.Call(nullptr);
+    return true;
 }
 
-void SearchTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
+void SearchTabPage_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
 {
-    m_pResultsLB->SetDoubleClickHdl( rLink );
+    aDoubleClickHdl = rLink;
 }
-
 
 OUString SearchTabPage_Impl::GetSelectedEntry() const
 {
-    OUString aRet;
-    OUString* pData = static_cast<OUString*>(m_pResultsLB->GetSelectedEntryData());
-    if ( pData )
-        aRet = *pData;
-    return aRet;
+    return m_xResultsLB->get_selected_id();
 }
-
 
 void SearchTabPage_Impl::ClearPage()
 {
     ClearSearchResults();
-    m_pSearchED->SetText( OUString() );
+    m_xSearchED->set_entry_text(OUString());
 }
-
 
 bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
     bool bRet = false;
-    m_pSearchED->SetText( rKeyword );
-    SearchHdl( nullptr );
-    if ( m_pResultsLB->GetEntryCount() > 0 )
+    m_xSearchED->set_entry_text(rKeyword);
+    Search();
+    if (m_xResultsLB->n_children() > 0)
     {
         // found keyword -> open it
-        m_pResultsLB->SelectEntryPos(0);
-        OpenHdl( nullptr );
+        m_xResultsLB->select(0);
+        OpenHdl(*m_xOpenBtn);
         bRet = true;
     }
-
     return bRet;
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
-
 static void GetBookmarkEntry_Impl
 (
     const Sequence< PropertyValue >& aBookmarkEntry,
@@ -1125,149 +972,83 @@ static void GetBookmarkEntry_Impl
     }
 }
 
-BookmarksBox_Impl::BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle)
-    : ListBox(pParent, nStyle)
+void BookmarksTabPage_Impl::DoAction(const OString& rAction)
 {
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeBookmarksBox(VclPtr<vcl::Window> & rRet, const VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    static_assert(std::is_same_v<std::remove_pointer_t<VclBuilder::customMakeWidget>,
-                                 decltype(makeBookmarksBox)>);
-    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-    VclPtrInstance<BookmarksBox_Impl> pListBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
-BookmarksBox_Impl::~BookmarksBox_Impl()
-{
-    disposeOnce();
-}
-
-void BookmarksBox_Impl::dispose()
-{
-    // save bookmarks to configuration
-    SvtHistoryOptions aHistOpt;
-    aHistOpt.Clear( eHELPBOOKMARKS );
-    const sal_Int32 nCount = GetEntryCount();
-    for ( sal_Int32 i = 0; i < nCount; ++i )
+    if (rAction == "display")
+        aDoubleClickHdl.Call(nullptr);
+    else if (rAction == "rename")
     {
-        OUString* pURL = static_cast<OUString*>(GetEntryData(i));
-        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", GetEntry(i), std::nullopt);
-        delete pURL;
-    }
-    ListBox::dispose();
-}
-
-
-void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
-{
-    switch ( nAction )
-    {
-        case MID_OPEN :
-            GetDoubleClickHdl().Call( *this );
-            break;
-
-        case MID_RENAME :
-           {
-            sal_Int32 nPos = GetSelectedEntryPos();
-            if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        sal_Int32 nPos = m_xBookmarksBox->get_selected_index();
+        if (nPos != -1)
+        {
+            SfxAddHelpBookmarkDialog_Impl aDlg(m_xBookmarksBox.get(), true);
+            aDlg.SetTitle(m_xBookmarksBox->get_text(nPos));
+            if (aDlg.run() == RET_OK)
             {
-                SfxAddHelpBookmarkDialog_Impl aDlg(GetFrameWeld(), true);
-                aDlg.SetTitle(GetEntry(nPos));
-                if (aDlg.run() == RET_OK)
-                {
-                    OUString* pURL = static_cast<OUString*>(GetEntryData( nPos ));
-                    RemoveEntry( nPos );
-                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( INetURLObject(IMAGE_URL+INetURLObject( *pURL ).GetHost()) ) );
-                    SetEntryData( nPos, new OUString( *pURL ) );
-                    SelectEntryPos( nPos );
-                    delete pURL;
-                }
+                OUString sURL = m_xBookmarksBox->get_id(nPos);
+                m_xBookmarksBox->remove(nPos);
+                m_xBookmarksBox->append(sURL, aDlg.GetTitle(), SvFileInformationManager::GetImageId(INetURLObject(IMAGE_URL+INetURLObject(sURL).GetHost())));
+                m_xBookmarksBox->select(m_xBookmarksBox->n_children() - 1);
             }
-            break;
         }
-
-        case MID_DELETE :
+    }
+    else if (rAction == "delete")
+    {
+        sal_Int32 nPos = m_xBookmarksBox->get_selected_index();
+        if (nPos != -1)
         {
-            sal_Int32 nPos = GetSelectedEntryPos();
-            if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            m_xBookmarksBox->remove(nPos);
+            const sal_Int32 nCount = m_xBookmarksBox->n_children();
+            if (nCount)
             {
-                RemoveEntry( nPos );
-                const sal_Int32 nCount = GetEntryCount();
-                if ( nCount )
-                {
-                    if ( nPos >= nCount )
-                        nPos = nCount - 1;
-                    SelectEntryPos( nPos );
-                }
+                if (nPos >= nCount)
+                    nPos = nCount - 1;
+                m_xBookmarksBox->select(nPos);
             }
-            break;
         }
     }
 }
 
-
-bool BookmarksBox_Impl::EventNotify( NotifyEvent& rNEvt )
+IMPL_LINK(BookmarksTabPage_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
-    bool bRet = false;
-    MouseNotifyEvent nType = rNEvt.GetType();
-    if ( MouseNotifyEvent::KEYINPUT == nType )
-    {
-        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-        if ( KEY_DELETE == nCode && GetEntryCount() > 0 )
-        {
-            DoAction( MID_DELETE );
-            bRet = true;
-        }
-        else if ( KEY_RETURN == nCode )
-        {
-            GetDoubleClickHdl().Call( *this );
-            bRet = true;
-        }
-    }
-    else if ( MouseNotifyEvent::COMMAND == nType )
-    {
-        const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        if ( pCEvt->GetCommand() == CommandEventId::ContextMenu )
-        {
-            VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "sfx/ui/bookmarkmenu.ui", "");
-            VclPtr<PopupMenu> aMenu(aBuilder.get_menu("menu"));
-            sal_uInt16 nId = aMenu->Execute(this, pCEvt->GetMousePosPixel());
-            if (nId != MENU_ITEM_NOTFOUND)
-            {
-                OString sIdent = aMenu->GetCurItemIdent();
-                if (sIdent == "display")
-                    DoAction(MID_OPEN);
-                else if (sIdent == "rename")
-                    DoAction(MID_RENAME);
-                else if (sIdent == "delete")
-                    DoAction(MID_DELETE);
-            }
-            bRet = true;
-        }
-    }
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
 
-    return bRet || ListBox::EventNotify( rNEvt );
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xBookmarksBox.get(), "sfx/ui/bookmarkmenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu("menu");
+
+    OString sIdent = xMenu->popup_at_rect(m_xBookmarksBox.get(), ::tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
+    if (!sIdent.isEmpty())
+        DoAction(sIdent);
+    return true;
+}
+
+IMPL_LINK(BookmarksTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    bool bHandled = false;
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    if (KEY_DELETE == nCode && m_xBookmarksBox->n_children() > 0)
+    {
+        DoAction("delete");
+        bHandled = true;
+    }
+    return bHandled;
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
-
-BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+BookmarksTabPage_Impl::BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpBookmarkPage",
         "sfx/ui/helpbookmarkpage.ui")
+    , m_xBookmarksBox(m_xBuilder->weld_tree_view("bookmarks"))
+    , m_xBookmarksPB(m_xBuilder->weld_button("display"))
 {
-    get(m_pBookmarksPB, "display");
-    get(m_pBookmarksBox, "bookmarks");
-    Size aSize(LogicToPixel(Size(120 , 200), MapMode(MapUnit::MapAppFont)));
-    m_pBookmarksBox->set_width_request(aSize.Width());
-    m_pBookmarksBox->set_height_request(aSize.Height());
+    m_xBookmarksBox->set_size_request(m_xBookmarksBox->get_approximate_digit_width() * 30,
+                                      m_xBookmarksBox->get_height_rows(20));
 
-    m_pBookmarksPB->SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
+    m_xBookmarksPB->connect_clicked( LINK(this, BookmarksTabPage_Impl, OpenHdl));
+    m_xBookmarksBox->connect_row_activated(LINK(this, BookmarksTabPage_Impl, DoubleClickHdl));
+    m_xBookmarksBox->connect_popup_menu(LINK(this, BookmarksTabPage_Impl, CommandHdl));
+    m_xBookmarksBox->connect_key_press(LINK(this, BookmarksTabPage_Impl, KeyInputHdl));
 
     // load bookmarks from configuration
     const Sequence< Sequence< PropertyValue > > aBookmarkSeq = SvtHistoryOptions().GetList( eHELPBOOKMARKS );
@@ -1284,53 +1065,47 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
 
 BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
 {
-    disposeOnce();
+    // save bookmarks to configuration
+    SvtHistoryOptions aHistOpt;
+    aHistOpt.Clear( eHELPBOOKMARKS );
+    const sal_Int32 nCount = m_xBookmarksBox->n_children();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+        aHistOpt.AppendItem(eHELPBOOKMARKS, m_xBookmarksBox->get_id(i), "", m_xBookmarksBox->get_text(i), std::nullopt);
+
+    m_xBookmarksBox.reset();
+    m_xBookmarksPB.reset();
 }
 
-void BookmarksTabPage_Impl::dispose()
+IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl, weld::Button&, void)
 {
-    m_pBookmarksBox.clear();
-    m_pBookmarksPB.clear();
-    HelpTabPage_Impl::dispose();
+    aDoubleClickHdl.Call(nullptr);
 }
 
-
-IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl, Button*, void)
+weld::Widget* BookmarksTabPage_Impl::GetLastFocusControl()
 {
-    m_pBookmarksBox->GetDoubleClickHdl().Call(*m_pBookmarksBox);
+    return m_xBookmarksPB.get();
 }
 
-void BookmarksTabPage_Impl::ActivatePage()
+IMPL_LINK_NOARG(BookmarksTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)
 {
-    if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        SetFocusOnBox();
+    aDoubleClickHdl.Call(nullptr);
+    return true;
 }
 
-Control* BookmarksTabPage_Impl::GetLastFocusControl()
+void BookmarksTabPage_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
 {
-    return m_pBookmarksPB;
-}
-
-void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
-{
-    m_pBookmarksBox->SetDoubleClickHdl(rLink);
+    aDoubleClickHdl = rLink;
 }
 
 OUString BookmarksTabPage_Impl::GetSelectedEntry() const
 {
-    OUString aRet;
-    OUString* pData = static_cast<OUString*>(m_pBookmarksBox->GetSelectedEntryData());
-    if ( pData )
-        aRet = *pData;
-    return aRet;
+    return m_xBookmarksBox->get_selected_id();
 }
 
-
-void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
+void BookmarksTabPage_Impl::AddBookmarks(const OUString& rTitle, const OUString& rURL)
 {
-    const OUString aImageURL {IMAGE_URL + INetURLObject( rURL ).GetHost()};
-    const sal_Int32 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
-    m_pBookmarksBox->SetEntryData( nPos, new OUString( rURL ) );
+    const OUString aImageURL {IMAGE_URL + INetURLObject(rURL).GetHost()};
+    m_xBookmarksBox->append(rURL, rTitle, SvFileInformationManager::GetImageId(INetURLObject(aImageURL)));
 }
 
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
@@ -1395,68 +1170,57 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
         LeaveWait();
 }
 
-SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
-    : Window(_pParent, 0)
+IMPL_LINK(SfxHelpIndexWindow_Impl, ActivatePageHdl, const OString&, rPage, void)
+{
+    GetPage(rPage)->Activate();
+}
+
+SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, weld::Container* pContainer)
+    : m_xBuilder(Application::CreateBuilder(pContainer, "sfx/ui/helpcontrol.ui"))
+    , m_xContainer(m_xBuilder->weld_container("HelpControl"))
+    , m_xActiveLB(m_xBuilder->weld_combo_box("active"))
+    , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , aIdle("sfx2 appl SfxHelpIndexWindow_Impl")
     , aIndexKeywordLink(LINK(this, SfxHelpIndexWindow_Impl, KeywordHdl))
     , pParentWin(_pParent)
-    , pCPage(nullptr)
-    , pIPage(nullptr)
-    , pSPage(nullptr)
-    , pBPage(nullptr)
-    , bWasCursorLeftOrRight(false)
     , bIsInitDone(false)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/helpcontrol.ui", "HelpControl"));
-    get(m_pActiveLB, "active");
-    get(m_pTabCtrl, "tabcontrol");
+//TODO    sfx2::AddToTaskPaneList( this );
 
-    sfx2::AddToTaskPaneList( this );
-
-    m_pTabCtrl->SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
+    // create the pages
+    GetContentPage();
+    GetIndexPage();
+    GetSearchPage();
+    GetBookmarksPage();
 
     OString sPageId("index");
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
         sPageId = aViewOpt.GetPageID();
-    m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(sPageId));
-    ActivatePageHdl( m_pTabCtrl );
-    m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
+    m_xTabCtrl->set_current_page(sPageId);
+    ActivatePageHdl(sPageId);
+    m_xActiveLB->connect_changed(LINK(this, SfxHelpIndexWindow_Impl, SelectHdl));
+
+    m_xTabCtrl->connect_enter_page(LINK(this, SfxHelpIndexWindow_Impl, ActivatePageHdl));
 
     aIdle.SetInvokeHandler( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aIdle.Start();
 
-    Show();
+    m_xContainer->show();
 }
-
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
-    disposeOnce();
+//TODO    sfx2::RemoveFromTaskPaneList( this );
+
+    SvtViewOptions aViewOpt(EViewType::TabDialog, CONFIGNAME_INDEXWIN);
+    aViewOpt.SetPageID(m_xTabCtrl->get_current_page_ident());
+
+    xCPage.reset();
+    xIPage.reset();
+    xSPage.reset();
+    xBPage.reset();
 }
-
-void SfxHelpIndexWindow_Impl::dispose()
-{
-    sfx2::RemoveFromTaskPaneList( this );
-
-    pCPage.disposeAndClear();
-    pIPage.disposeAndClear();
-    pSPage.disposeAndClear();
-    pBPage.disposeAndClear();
-
-    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
-        delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
-
-    SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
-    aViewOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
-
-    disposeBuilder();
-    m_pActiveLB.clear();
-    m_pTabCtrl.clear();
-    pParentWin.clear();
-    vcl::Window::dispose();
-}
-
 
 void SfxHelpIndexWindow_Impl::Initialize()
 {
@@ -1468,79 +1232,64 @@ void SfxHelpIndexWindow_Impl::Initialize()
         sal_Int32 nIdx = 0;
         OUString aTitle = rRow.getToken( 0, '\t', nIdx ); // token 0
         OUString aURL = rRow.getToken( 1, '\t', nIdx ); // token 2
-        OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
-        const sal_Int32 nPos = m_pActiveLB->InsertEntry( aTitle );
-        m_pActiveLB->SetEntryData( nPos, pFactory );
+        OUString aFactory(INetURLObject(aURL).GetHost());
+        m_xActiveLB->append(aFactory, aTitle);
     }
 
-    m_pActiveLB->SetDropDownLineCount( static_cast<sal_uInt16>(aFactories.size()) );
-    if ( m_pActiveLB->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    if (m_xActiveLB->get_active() == -1)
         SetActiveFactory();
 }
 
-
 void SfxHelpIndexWindow_Impl::SetActiveFactory()
 {
-    DBG_ASSERT( pIPage, "index page not initialized" );
-    if ( !bIsInitDone && !m_pActiveLB->GetEntryCount() )
+    DBG_ASSERT( xIPage, "index page not initialized" );
+    if (!bIsInitDone && !m_xActiveLB->get_count())
     {
         aIdle.Stop();
         InitHdl( nullptr );
     }
 
-    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+    for (sal_Int32 i = 0, nEntryCount = m_xActiveLB->get_count(); i < nEntryCount; ++i)
     {
-        OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
-        *pFactory = pFactory->toAsciiLowerCase();
-        if ( *pFactory == pIPage->GetFactory() )
+        OUString aFactory = m_xActiveLB->get_id(i);
+        aFactory = aFactory.toAsciiLowerCase();
+        if (aFactory == xIPage->GetFactory())
         {
-            if ( m_pActiveLB->GetSelectedEntryPos() != i )
+            if (m_xActiveLB->get_active() != i)
             {
-                m_pActiveLB->SelectEntryPos(i);
-                aSelectFactoryLink.Call( nullptr );
+                m_xActiveLB->set_active(i);
+                aSelectFactoryLink.Call(nullptr);
             }
             break;
         }
     }
 }
 
-
-HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
+HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(const OString& rName)
 {
-    rCurId = m_pTabCtrl->GetCurPageId();
     HelpTabPage_Impl* pPage = nullptr;
 
-    OString sName(m_pTabCtrl->GetPageName(rCurId));
-
-    if (sName == "contents")
-    {
+    if (rName == "contents")
         pPage = GetContentPage();
-    }
-    else if (sName == "index")
-    {
+    else if (rName == "index")
         pPage = GetIndexPage();
-    }
-    else if (sName == "find")
-    {
+    else if (rName == "find")
         pPage = GetSearchPage();
-    }
-    else if (sName == "bookmarks")
-    {
+    else if (rName == "bookmarks")
         pPage = GetBookmarksPage();
-    }
 
-    DBG_ASSERT( pPage, "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page" );
+    assert(pPage && "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page");
+
     return pPage;
 }
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl, void )
+HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage()
 {
-    sal_uInt16 nId = 0;
-    TabPage* pPage = GetCurrentPage( nId );
-    pTabCtrl->SetTabPage( nId, pPage );
+    OString sName(m_xTabCtrl->get_current_page_ident());
+    return GetPage(sName);
 }
 
-IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl, weld::ComboBox&, void)
 {
     aIdle.Start();
 }
@@ -1557,138 +1306,52 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl, Timer *, void)
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, void)
 {
-    OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectedEntryData());
-    if ( pFactory )
+    OUString aFactory = m_xActiveLB->get_active_id();
+    if (!aFactory.isEmpty())
     {
-        SetFactory( pFactory->toAsciiLowerCase(), false );
-        aSelectFactoryLink.Call( this );
+        SetFactory(aFactory.toAsciiLowerCase(), false);
+        aSelectFactoryLink.Call(this);
     }
 }
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
 {
     // keyword found on index?
-    bool bIndex = pIPage->HasKeyword();
+    bool bIndex = xIPage->HasKeyword();
 
     if( !bIndex)
-        bIndex = pIPage->HasKeywordIgnoreCase();
+        bIndex = xIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
-    sal_uInt16 nPageId = bIndex ? m_pTabCtrl->GetPageId("index") : m_pTabCtrl->GetPageId("find");
-    if ( nPageId != m_pTabCtrl->GetCurPageId() )
-    {
-        m_pTabCtrl->SetCurPageId( nPageId );
-        ActivatePageHdl( m_pTabCtrl );
-    }
+    OString sPageId = bIndex ? "index" : "find";
+    if (sPageId != m_xTabCtrl->get_current_page_ident())
+        m_xTabCtrl->set_current_page(sPageId);
 
     // at last we open the keyword
     if ( bIndex )
-        pIPage->OpenKeyword();
-    else if ( !pSPage->OpenKeyword( sKeyword ) )
+        xIPage->OpenKeyword();
+    else if ( !xSPage->OpenKeyword( sKeyword ) )
         pParentWin->ShowStartPage();
 }
 
-IMPL_LINK(SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl, ComboBox&, rBox, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl, LinkParamNone*, void)
 {
-    aPageDoubleClickLink.Call(&rBox);
+    aPageDoubleClickLink.Call(nullptr);
 }
 
-void SfxHelpIndexWindow_Impl::Resize()
-{
-    vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-    if (!pChild)
-        return;
-    VclContainer::setLayoutAllocation(*pChild, Point(0,0), GetSizePixel());
-}
-
-Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
-{
-    const vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
-    if (!pChild)
-        return Window::GetOptimalSize();
-    return VclContainer::getLayoutRequisition(*pChild);
-}
-
-bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
-{
-    bool bDone = false;
-    MouseNotifyEvent nType = rNEvt.GetType();
-    if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
-    {
-        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        sal_uInt16 nCode = rKeyCode.GetCode();
-
-        if (  KEY_TAB == nCode )
-        {
-            // don't exit index pane with <TAB>
-            sal_uInt16 nPageId = 0;
-            HelpTabPage_Impl* pCurPage = GetCurrentPage( nPageId );
-            Control* pControl = pCurPage->GetLastFocusControl();
-            bool bShift = rKeyCode.IsShift();
-            bool bCtrl = rKeyCode.IsMod1();
-            if ( !bCtrl && bShift && m_pActiveLB->HasChildPathFocus() )
-            {
-                pControl->GrabFocus();
-                bDone = true;
-            }
-            else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
-            {
-                m_pActiveLB->GrabFocus();
-                bDone = true;
-            }
-            else if ( bCtrl )
-            {
-                sal_uInt16 nPagePos = m_pTabCtrl->GetPagePos(nPageId);
-                sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
-
-                ++nPageId;
-                // <CTRL><TAB> moves through the pages
-                if (nPagePos >= nPageCount)
-                    nPagePos = 0;
-
-                m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(nPagePos));
-                ActivatePageHdl( m_pTabCtrl );
-                bDone = true;
-            }
-         }
-        else if ( m_pTabCtrl->HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
-        {
-            bWasCursorLeftOrRight = true;
-        }
-    }
-
-    return bDone || Window::PreNotify( rNEvt );
-}
-
-
-void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) ||
-           ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) ) &&
-         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-    {
-        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
-    }
-}
-
-
-void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<Control*,bool>& rLink )
+void SfxHelpIndexWindow_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
 {
     aPageDoubleClickLink = rLink;
 }
 
-IMPL_LINK(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, LinkParamNone*, void)
 {
-    aPageDoubleClickLink.Call(p);
-    return true;
+    aPageDoubleClickLink.Call(nullptr);
 }
 
-IMPL_LINK(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, ListBox&, r, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, LinkParamNone*, void)
 {
-    aPageDoubleClickLink.Call(&r);
+    aPageDoubleClickLink.Call(nullptr);
 }
-
 
 void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive )
 {
@@ -1707,23 +1370,23 @@ OUString SfxHelpIndexWindow_Impl::GetSelectedEntry() const
 {
     OUString sRet;
 
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    OString sName(m_xTabCtrl->get_current_page_ident());
 
     if (sName == "contents")
     {
-        sRet = pCPage->GetSelectedEntry();
+        sRet = xCPage->GetSelectedEntry();
     }
     else if (sName == "index")
     {
-        sRet = pIPage->GetSelectedEntry();
+        sRet = xIPage->GetSelectedEntry();
     }
     else if (sName == "find")
     {
-        sRet = pSPage->GetSelectedEntry();
+        sRet = xSPage->GetSelectedEntry();
     }
     else if (sName == "bookmarks")
     {
-        sRet = pBPage->GetSelectedEntry();
+        sRet = xBPage->GetSelectedEntry();
     }
 
     return sRet;
@@ -1734,14 +1397,13 @@ void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUStri
     GetBookmarksPage()->AddBookmarks( rTitle, rURL );
 }
 
-
 bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
     bool bValid = false;
-    for ( sal_Int32 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
+    for (sal_Int32 i = 0, nEntryCount = m_xActiveLB->get_count(); i < nEntryCount; ++i)
     {
-        OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
-        if ( *pFactory == _rFactory )
+        OUString aFactory = m_xActiveLB->get_id(i);
+        if (aFactory == _rFactory)
         {
             bValid = true;
             break;
@@ -1750,69 +1412,67 @@ bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
     return bValid;
 }
 
-
 void SfxHelpIndexWindow_Impl::ClearSearchPage()
 {
-    if ( pSPage )
-        pSPage->ClearPage();
+    if ( xSPage )
+        xSPage->ClearPage();
 }
 
 void SfxHelpIndexWindow_Impl::GrabFocusBack()
 {
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
+    OString sName(m_xTabCtrl->get_current_page_ident());
 
-    if (sName == "contents" && pCPage)
-        pCPage->SetFocusOnBox();
-    else if (sName == "index" && pIPage)
-        pIPage->SetFocusOnBox();
-    else if (sName == "find" && pSPage)
-        pSPage->SetFocusOnBox();
-    else if (sName == "bookmarks" && pBPage)
-        pBPage->SetFocusOnBox();
+    if (sName == "contents" && xCPage)
+        xCPage->SetFocusOnBox();
+    else if (sName == "index" && xIPage)
+        xIPage->SetFocusOnBox();
+    else if (sName == "find" && xSPage)
+        xSPage->SetFocusOnBox();
+    else if (sName == "bookmarks" && xBPage)
+        xBPage->SetFocusOnBox();
 }
 
 bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 {
     bool bRet = false;
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
-    if (sName == "index" && pIPage)
-        bRet = pIPage->HasFocusOnEdit();
-    else if (sName == "find" && pSPage)
-        bRet = pSPage->HasFocusOnEdit();
+    OString sName(m_xTabCtrl->get_current_page_ident());
+    if (sName == "index" && xIPage)
+        bRet = xIPage->HasFocusOnEdit();
+    else if (sName == "find" && xSPage)
+        bRet = xSPage->HasFocusOnEdit();
     return bRet;
 }
-
 
 OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
     OUString sRet;
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
-    if (sName == "find" && pSPage)
-        sRet = pSPage->GetSearchText();
+    OString sName(m_xTabCtrl->get_current_page_ident());
+    if (sName == "find" && xSPage)
+        sRet = xSPage->GetSearchText();
     return sRet;
 }
 
 bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 {
     bool bRet = false;
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
-    if (sName == "find" && pSPage)
-        bRet = pSPage->IsFullWordSearch();
+    OString sName(m_xTabCtrl->get_current_page_ident());
+    if (sName == "find" && xSPage)
+        bRet = xSPage->IsFullWordSearch();
     return bRet;
 }
 
 void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
 {
     sKeyword = rKeyword;
-    DBG_ASSERT( pIPage, "invalid index page" );
-    pIPage->SetKeyword( sKeyword );
+    DBG_ASSERT( xIPage, "invalid index page" );
+    xIPage->SetKeyword( sKeyword );
 }
 
 void SfxHelpIndexWindow_Impl::SelectExecutableEntry()
 {
-    OString sName(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
-    if (sName == "index" && pIPage )
-        pIPage->SelectExecutableEntry();
+    OString sName(m_xTabCtrl->get_current_page_ident());
+    if (sName == "index" && xIPage )
+        xIPage->SelectExecutableEntry();
 }
 
 // class TextWin_Impl ----------------------------------------------------
@@ -1838,7 +1498,7 @@ static void lcl_disableLayoutOfFrame(const Reference< XFrame2 >& xFrame)
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
-SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
+SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl(SfxHelpWindow_Impl* pHelpWin, vcl::Window* pParent) :
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
@@ -1850,7 +1510,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
     aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ) ),
-    pHelpWin            ( pParent ),
+    pHelpWin            ( pHelpWin ),
     pTextWin            ( VclPtr<TextWin_Impl>::Create( this ) ),
     nMinPos             ( 0 ),
     bIsDebug            ( false ),
@@ -2565,197 +2225,38 @@ void SfxHelpTextWindow_Impl::DoSearch()
     sfx2::SearchDialog::runAsync(m_xSrchDlg);
 }
 
-// class SfxHelpWindow_Impl ----------------------------------------------
-
-void SfxHelpWindow_Impl::Resize()
-{
-    SplitWindow::Resize();
-    InitSizes();
-}
-
-
-void SfxHelpWindow_Impl::Split()
-{
-    static const long nMinSplitSize = 5;
-    static const long nMaxSplitSize = 99 - nMinSplitSize;
-
-    SplitWindow::Split();
-
-    nIndexSize = GetItemSize( INDEXWIN_ID );
-    nTextSize = GetItemSize( TEXTWIN_ID );
-
-    bool        bMod = false;
-    if( nIndexSize < nMinSplitSize )
-    {
-        nIndexSize = nMinSplitSize;
-        nTextSize = nMaxSplitSize;
-
-        bMod = true;
-    }
-    else if( nTextSize < nMinSplitSize )
-    {
-        nTextSize = nMinSplitSize;
-        nIndexSize = nMaxSplitSize;
-
-        bMod = true;
-    }
-    else
-        bMod = false;
-
-    if( bMod )
-    {
-        SetItemSize( INDEXWIN_ID, nIndexSize );
-        SetItemSize( TEXTWIN_ID, nTextSize );
-    }
-
-    InitSizes();
-}
-
 void SfxHelpWindow_Impl::GetFocus()
 {
-    if( pTextWin )
+    if (pTextWin)
         pTextWin->GrabFocus();
     else
-        vcl::Window::GetFocus();
+        DockingWindow::GetFocus();
 }
 
 void SfxHelpWindow_Impl::MakeLayout()
 {
-    if ( nHeight > 0 && xWindow.is() )
-    {
-        VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow(xWindow);
-
-        /* #i55528#
-            Hide() / Show() will produce strange effects.
-            The returned size (used later to be written back into the configuration)
-            is not the right after a resize during the window is hidden.
-            If this resize is done if the window is visible everything works as expected.
-            Some VCL-patches could not solve this problem so I've established the
-            workaround: resize the help window if it's visible .-)
-        */
-        css::awt::Rectangle aRect = xWindow->getPosSize();
-        sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
-        sal_Int32 nWidth = bIndex ? nExpandWidth : nCollapseWidth;
-        xWindow->setPosSize( aRect.X, aRect.Y, nWidth, nHeight, css::awt::PosSize::SIZE );
-
-        if ( aRect.Width > 0 && aRect.Height > 0 )
-        {
-            tools::Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative();
-            Point aNewPos = aScreenRect.TopLeft();
-            sal_Int32 nDiffWidth = nOldWidth - nWidth;
-            aNewPos.AdjustX(nDiffWidth );
-            pScreenWin->SetPosPixel( aNewPos );
-        }
-        else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
-            pScreenWin->SetPosPixel( aWinPos );
-    }
-
-    Clear();
-
-    if ( bIndex )
-    {
-        pIndexWin->Show();
-        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
-        InsertItem( INDEXWIN_ID, pIndexWin, nIndexSize, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize );
-        InsertItem( TEXTWIN_ID, pTextWin, nTextSize, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize );
-    }
-    else
-    {
-        pIndexWin->Hide();
-        InsertItem( COLSET_ID, 100, SPLITWINDOW_APPEND, SPLITSET_ID, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
-        InsertItem( TEXTWIN_ID, pTextWin, 100, SPLITWINDOW_APPEND, 1, SplitWindowItemFlags::PercentSize );
-    }
+    m_xHelpPaneWindow->set_visible(bIndex);
 }
-
-
-void SfxHelpWindow_Impl::InitSizes()
-{
-    if ( !xWindow.is() )
-        return;
-
-    css::awt::Rectangle aRect = xWindow->getPosSize();
-    nHeight = aRect.Height;
-
-    if ( bIndex )
-    {
-        nExpandWidth = aRect.Width;
-        nCollapseWidth = nExpandWidth * nTextSize / 100;
-    }
-    else
-    {
-        nCollapseWidth = aRect.Width;
-        nExpandWidth = nTextSize ? nCollapseWidth * 100 / nTextSize : 0;
-    }
-}
-
 
 void SfxHelpWindow_Impl::LoadConfig()
 {
     SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
     if ( !aViewOpt.Exists() )
         return;
-
     bIndex = aViewOpt.IsVisible();
-    Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-    OUString aUserData;
-    if ( aUserItem >>= aUserData )
-    {
-        DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
-        sal_Int32 nIdx = 0;
-        nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
-        nTextSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
-        sal_Int32 nWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
-        nHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
-        aWinPos.setX( aUserData.getToken( 0, ';', nIdx ).toInt32() );
-        aWinPos.setY( aUserData.getToken( 0, ';', nIdx ).toInt32() );
-        if ( bIndex )
-        {
-            nExpandWidth = nWidth;
-            nCollapseWidth = nExpandWidth * nTextSize / 100;
-        }
-        else if (nTextSize != 0)
-        {
-            nCollapseWidth = nWidth;
-            nExpandWidth = nCollapseWidth * 100 / nTextSize;
-        }
-    }
-
     pTextWin->ToggleIndex( bIndex );
 }
-
 
 void SfxHelpWindow_Impl::SaveConfig()
 {
     SvtViewOptions aViewOpt( EViewType::Window, CONFIGNAME_HELPWIN );
-    sal_Int32 nW = 0, nH = 0;
-
-    if ( xWindow.is() )
-    {
-        css::awt::Rectangle aRect = xWindow->getPosSize();
-        nW = aRect.Width;
-        nH = aRect.Height;
-    }
-
-    aViewOpt.SetVisible( bIndex );
-
-    VclPtr<vcl::Window> pScreenWin = VCLUnoHelper::GetWindow( xWindow );
-    aWinPos = pScreenWin->GetWindowExtentsRelative( nullptr ).TopLeft();
-    const OUString aUserData = OUString::number( nIndexSize )
-        + ";" + OUString::number( nTextSize )
-        + ";" + OUString::number( nW )
-        + ";" + OUString::number( nH )
-        + ";" + OUString::number( aWinPos.X() )
-        + ";" + OUString::number( aWinPos.Y() );
-
-    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
+    aViewOpt.SetVisible(bIndex);
 }
-
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
-    loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(), "/start", OUString()));
+    loadHelpContent(SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), "/start", OUString()));
 }
-
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 {
@@ -2766,14 +2267,13 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
     }
 }
 
-
-IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
+IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
 {
-    pIndexWin->SelectExecutableEntry();
-    OUString aEntry = pIndexWin->GetSelectedEntry();
+    xIndexWin->SelectExecutableEntry();
+    OUString aEntry = xIndexWin->GetSelectedEntry();
 
     if ( aEntry.isEmpty() )
-        return false;
+        return;
 
     OUString sHelpURL;
 
@@ -2794,14 +2294,11 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
         else
             aId = aEntry;
 
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(), "/" + aId, aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), "/" + aId, aAnchor);
     }
 
     loadHelpContent(sHelpURL);
-
-    return false;
 }
-
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin, void )
 {
@@ -2810,11 +2307,11 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
 
     Reference< XTitle > xTitle(xFrame, UNO_QUERY);
     if (xTitle.is ())
-        xTitle->setTitle(sTitle + " - " + pIndexWin->GetActiveFactoryTitle());
+        xTitle->setTitle(sTitle + " - " + xIndexWin->GetActiveFactoryTitle());
 
     if ( pWin )
         ShowStartPage();
-    pIndexWin->ClearSearchPage();
+    xIndexWin->ClearSearchPage();
 }
 
 
@@ -2838,7 +2335,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
         bGrabFocusToToolBox = false;
     }
     else
-        pIndexWin->GrabFocusBack();
+        xIndexWin->GrabFocusBack();
     if ( !bSuccess )
         return;
 
@@ -2867,9 +2364,9 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
     }
 
     // When the SearchPage opens the help doc, then select all words, which are equal to its text
-    OUString sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
+    OUString sSearchText = comphelper::string::strip(xIndexWin->GetSearchText(), ' ');
     if ( !sSearchText.isEmpty() )
-        pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
+        pTextWin->SelectSearchText( sSearchText, xIndexWin->IsFullWordSearch() );
 
     // no page style header -> this prevents a print output of the URL
     pTextWin->SetPageStyleHeaderOff();
@@ -2880,33 +2377,37 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const css::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent ) :
 
-    SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
+    DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui"),
 
     xFrame              ( rFrame ),
-    pIndexWin           ( nullptr ),
     pTextWin            ( nullptr ),
     pHelpInterceptor    ( new HelpInterceptor_Impl() ),
     pHelpListener       ( new HelpListener_Impl( pHelpInterceptor ) ),
-    nExpandWidth        ( 0 ),
-    nCollapseWidth      ( 0 ),
-    nHeight             ( 0 ),
-    nIndexSize          ( 40 ),
-    nTextSize           ( 60 ),
     bIndex              ( true ),
     bGrabFocusToToolBox ( false ),
-    aWinPos             ( 0, 0 ),
     sTitle              ( pParent->GetText() )
 {
     SetHelpId( HID_HELP_WINDOW );
-    SetStyle( GetStyle() | WB_DIALOGCONTROL );
+
+    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
+    m_xVclContentArea->Show();
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "sfx/ui/helpwindow.ui"));
+    m_xContainer = m_xBuilder->weld_container("HelpWindow");
+    m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");
+    m_xHelpTextWindow = m_xBuilder->weld_container("helptextwindow");
+    m_xHelpTextWindow->set_size_request(m_xHelpTextWindow->get_approximate_digit_width() * 120, -1);
+    m_xHelpTextXWindow = m_xHelpTextWindow->CreateChildFrame();
 
     pHelpInterceptor->InitWaiter( this );
-    pIndexWin = VclPtr<SfxHelpIndexWindow_Impl>::Create( this );
-    pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
-    pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
-    pIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MapMode(MapUnit::MapAppFont)));
-    pIndexWin->Show();
-    pTextWin = VclPtr<SfxHelpTextWindow_Impl>::Create( this );
+    xIndexWin.reset(new SfxHelpIndexWindow_Impl(this, m_xHelpPaneWindow.get()));
+    xIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
+    xIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
+
+#if 0
+    xIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MapMode(MapUnit::MapAppFont)));
+#endif
+
+    pTextWin = VclPtr<SfxHelpTextWindow_Impl>::Create(this, VCLUnoHelper::GetWindow(m_xHelpTextXWindow));
     Reference < XFrames > xFrames = rFrame->getFrames();
     xFrames->append( Reference<XFrame>(pTextWin->getFrame(), UNO_QUERY_THROW) );
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow_Impl, SelectHdl ) );
@@ -2916,7 +2417,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     LoadConfig();
 }
 
-
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
     disposeOnce();
@@ -2925,10 +2425,19 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 void SfxHelpWindow_Impl::dispose()
 {
     SaveConfig();
-    pIndexWin.disposeAndClear();
+    xIndexWin.reset();
     pTextWin->CloseFrame();
     pTextWin.disposeAndClear();
-    SplitWindow::dispose();
+
+    m_xHelpTextXWindow->dispose();
+    m_xHelpTextXWindow.clear();
+    m_xHelpTextWindow.reset();
+    m_xHelpPaneWindow.reset();
+    m_xContainer.reset();
+    m_xBuilder.reset();
+    m_xVclContentArea.disposeAndClear();
+
+    DockingWindow::dispose();
 }
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
@@ -2940,7 +2449,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = rKeyCode.GetCode();
         if ( ( rKeyCode.IsMod2() && ( KEY_LEFT == nKey || KEY_RIGHT == nKey ) ) ||
-             ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !pIndexWin->HasFocusOnEdit() ) )
+             ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !xIndexWin->HasFocusOnEdit() ) )
         {
             DoAction( rKeyCode.GetCode() == KEY_RIGHT ? TBI_FORWARD : TBI_BACKWARD );
             bHandled = true;
@@ -2963,7 +2472,7 @@ void SfxHelpWindow_Impl::setContainerWindow( const Reference < css::awt::XWindow
 
 void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 {
-    pIndexWin->SetFactory( rFactory, true );
+    xIndexWin->SetFactory( rFactory, true );
 }
 
 
@@ -3057,7 +2566,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                             aDlg.SetTitle(aValue);
                             if (aDlg.run() == RET_OK )
                             {
-                                pIndexWin->AddBookmarks( aDlg.GetTitle(), aURL );
+                                xIndexWin->AddBookmarks( aDlg.GetTitle(), aURL );
                             }
                         }
                     }
@@ -3119,7 +2628,7 @@ bool SfxHelpWindow_Impl::HasHistorySuccessor() const
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 
-SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(weld::Window* pParent, bool bRename)
+SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(weld::Widget* pParent, bool bRename)
     : GenericDialogController(pParent, "sfx/ui/bookmarkdialog.ui", "BookmarkDialog")
     , m_xTitleED(m_xBuilder->weld_entry("entry"))
     , m_xAltTitle(m_xBuilder->weld_label("alttitle"))
