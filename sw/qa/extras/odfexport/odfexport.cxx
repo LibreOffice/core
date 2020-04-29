@@ -2418,5 +2418,12 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.odt")
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
+DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
