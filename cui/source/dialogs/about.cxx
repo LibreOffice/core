@@ -19,23 +19,23 @@
 
 #include <about.hxx>
 
-#include <osl/diagnose.h> //OSL_ENSURE
-#include <osl/process.h> //osl_getProcessLocale
+#include <osl/diagnose.h>    //OSL_ENSURE
+#include <osl/process.h>     //osl_getProcessLocale
 #include <rtl/character.hxx> //rtl::isAsciiHexDigit
-#include <sal/log.hxx> //SAL_WARN
-#include <vcl/settings.hxx> //GetSettings
+#include <sal/log.hxx>       //SAL_WARN
+#include <vcl/settings.hxx>  //GetSettings
+#include <vcl/svapp.hxx>     //Application::
+#include <vcl/virdev.hxx>    //VirtualDevice
 #include <vcl/weld.hxx>
-#include <vcl/svapp.hxx> //Application::
-#include <vcl/virdev.hxx> //VirtualDevice
 
+#include <config_buildid.h> //EXTRA_BUILDID
+#include <dialmgr.hxx>      //CuiResId
 #include <i18nlangtag/languagetag.hxx>
+#include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
+#include <strings.hrc>
 #include <svtools/langhelp.hxx>
 #include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildVersion
 #include <unotools/configmgr.hxx> //ConfigManager::
-#include <config_buildid.h> //EXTRA_BUILDID
-#include <dialmgr.hxx> //CuiResId
-#include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
-#include <strings.hrc>
 
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <vcl/unohelp2.hxx>
@@ -58,13 +58,36 @@ AboutDialog::AboutDialog(weld::Window *pParent)
       m_pCopyButton(m_xBuilder->weld_button("btnCopyVersion")),
       m_pBrandImage(m_xBuilder->weld_image("imBrand")),
       m_pAboutImage(m_xBuilder->weld_image("imAbout")),
-      m_pVersionLabel(m_xBuilder->weld_label("lbVersion")),
+      m_pVersionLabel(m_xBuilder->weld_label("lbVersionString")),
+      m_pBuildCaption(m_xBuilder->weld_label("lbBuild")),
+      m_pBuildLabel(m_xBuilder->weld_link_button("lbBuildString")),
+      m_pEnvLabel(m_xBuilder->weld_label("lbEnvString")),
+      m_pUILabel(m_xBuilder->weld_label("lbUIString")),
+      m_pLocaleLabel(m_xBuilder->weld_label("lbLocaleString")),
+      m_pMiscLabel(m_xBuilder->weld_label("lbMiscString")),
       m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright")) {
+
+  // Labels
   m_pVersionLabel->set_label(GetVersionString());
+
+  OUString sbuildId = GetBuildString();
+  if (IsStringValidGitHash(sbuildId)) {
+    m_pBuildLabel->set_label(sbuildId);
+    m_pBuildLabel->set_uri(
+        "https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h=" + sbuildId);
+  } else {
+    m_pBuildCaption->hide();
+    m_pBuildLabel->hide();
+  }
+
+  m_pEnvLabel->set_label(GetEnvString());
+  m_pUILabel->set_label(GetUIString());
+  m_pLocaleLabel->set_label(GetLocaleString());
+  m_pMiscLabel->set_label(GetMiscString());
   m_pCopyrightLabel->set_label(GetCopyrightString());
 
-  //Images
-  const Size nWidth(m_pVersionLabel->get_preferred_size());
+  // Images
+  const long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
   BitmapEx aBackgroundBitmap;
 
   if (SfxApplication::loadBrandSvg(Application::GetSettings()
@@ -73,8 +96,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
                                            .IsDark()
                                        ? "shell/logo_inverted"
                                        : "shell/logo",
-                                   aBackgroundBitmap,
-                                   nWidth.getWidth() * 0.8)) {
+                                   aBackgroundBitmap, nWidth * 0.8)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pBrandImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
@@ -82,8 +104,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBrandImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap,
-                                   nWidth.getWidth())) {
+  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pAboutImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
@@ -92,7 +113,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pVirDev.disposeAndClear();
   }
 
-  //Links
+  // Links
   m_pCreditsButton->set_uri(CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL));
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
@@ -104,46 +125,20 @@ AboutDialog::AboutDialog(weld::Window *pParent)
          LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
   m_pReleaseNotesButton->set_uri(sURL);
 
-  //Handler
+  // Handler
   m_pCopyButton->connect_clicked(LINK(this, AboutDialog, HandleClick));
   m_pCloseButton->grab_focus();
 }
 
 AboutDialog::~AboutDialog() {}
 
-OUString AboutDialog::GetBuildId() {
-  OUString sDefault;
-  OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
-  if (!sBuildId.isEmpty())
-    return sBuildId;
-
-  sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
-
-  if (!sBuildId.isEmpty()) {
-    return sBuildId.getToken(0, '-');
+bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
+  for (int i = 0; i < hash.getLength(); i++) {
+    if (!std::isxdigit(hash[i])) {
+      return false;
+    }
   }
-
-  OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
-  return sBuildId;
-}
-
-OUString AboutDialog::GetLocaleString() {
-  OUString aLocaleStr;
-  rtl_Locale *pLocale;
-
-  osl_getProcessLocale(&pLocale);
-
-  if (pLocale && pLocale->Language) {
-    if (pLocale->Country && rtl_uString_getLength(pLocale->Country) > 0)
-      aLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
-                   OUString::unacquired(&pLocale->Country);
-    else
-      aLocaleStr = OUString(pLocale->Language);
-    if (pLocale->Variant && rtl_uString_getLength(pLocale->Variant) > 0)
-      aLocaleStr += OUString(pLocale->Variant);
-  }
-
-  return aLocaleStr;
+  return true;
 }
 
 OUString AboutDialog::GetVersionString() {
@@ -154,48 +149,85 @@ OUString AboutDialog::GetVersionString() {
 #elif defined(_WIN32)
   sVersion += " (x86)";
 #endif
+  return sVersion;
+}
 
-  OUString sBuildId = GetBuildId();
+OUString AboutDialog::GetBuildString() {
 
-  OUString aLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() +
-                        " (" + GetLocaleString() + ")";
-  OUString aUILocaleStr =
-      Application::GetSettings().GetUILanguageTag().getBcp47();
+  OUString sDefault;
+  OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
+  if (sBuildId.isEmpty())
+    sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
+  if (sBuildId.isEmpty()) {
+    sBuildId = sBuildId.getToken(0, '-');
+  }
+  OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
+
+  OUString sBuildStr;
 
   if (!sBuildId.trim().isEmpty()) {
-    sVersion += "\n";
-    OUString sBuildStr = CuiResId(RID_SVXSTR_ABOUT_BUILDID);
+    sBuildStr = CuiResId(RID_SVXSTR_ABOUT_BUILDID);
     if (sBuildStr.indexOf("$BUILDID") == -1) {
       SAL_WARN("cui.dialogs", "translated Build Id string in translations "
                               "doesn't contain $BUILDID placeholder");
       sBuildStr += " $BUILDID";
     }
-    sVersion += sBuildStr.replaceAll("$BUILDID", sBuildId);
+    sBuildStr = sBuildStr.replaceAll("$BUILDID", sBuildId);
+  }
+  return sBuildStr;
+}
+
+OUString AboutDialog::GetEnvString() { return Application::GetHWOSConfInfo(1); }
+OUString AboutDialog::GetUIString() { return Application::GetHWOSConfInfo(2); }
+
+OUString AboutDialog::GetLocaleString() {
+
+  OUString aLocaleStr;
+
+  rtl_Locale *pLocale;
+  osl_getProcessLocale(&pLocale);
+  if (pLocale && pLocale->Language) {
+    if (pLocale->Country && rtl_uString_getLength(pLocale->Country) > 0)
+      aLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
+                   OUString::unacquired(&pLocale->Country);
+    else
+      aLocaleStr = OUString(pLocale->Language);
+    if (pLocale->Variant && rtl_uString_getLength(pLocale->Variant) > 0)
+      aLocaleStr += OUString(pLocale->Variant);
   }
 
-  sVersion += "\n" + Application::GetHWOSConfInfo();
-
-  bool const extra = EXTRA_BUILDID[0] != '\0';
-  // extracted from the 'if' to avoid Clang -Wunreachable-code
-  if (extra) {
-    sVersion += "\n" EXTRA_BUILDID;
-  }
-
+  aLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" +
+               aLocaleStr + ")";
   OUString sLocaleStr(CuiResId(RID_SVXSTR_ABOUT_LOCALE));
   if (sLocaleStr.indexOf("$LOCALE") == -1) {
     SAL_WARN("cui.dialogs", "translated locale string in translations doesn't "
                             "contain $LOCALE placeholder");
     sLocaleStr += " $LOCALE";
   }
-  sVersion += "\n" + sLocaleStr.replaceAll("$LOCALE", aLocaleStr);
+  sLocaleStr = sLocaleStr.replaceAll("$LOCALE", aLocaleStr);
 
+  OUString aUILocaleStr =
+      Application::GetSettings().GetUILanguageTag().getBcp47();
   OUString sUILocaleStr(CuiResId(RID_SVXSTR_ABOUT_UILOCALE));
   if (sUILocaleStr.indexOf("$LOCALE") == -1) {
     SAL_WARN("cui.dialogs", "translated uilocale string in translations "
                             "doesn't contain $LOCALE placeholder");
     sUILocaleStr += " $LOCALE";
   }
-  sVersion += "; " + sUILocaleStr.replaceAll("$LOCALE", aUILocaleStr);
+  sUILocaleStr = sUILocaleStr.replaceAll("$LOCALE", aUILocaleStr);
+
+  return sLocaleStr + "; " + sUILocaleStr;
+}
+
+OUString AboutDialog::GetMiscString() {
+
+  OUString sMisc;
+
+  bool const extra = EXTRA_BUILDID[0] != '\0';
+  // extracted from the 'if' to avoid Clang -Wunreachable-code
+  if (extra) {
+    sMisc = EXTRA_BUILDID "\n";
+  }
 
   OUString aCalcMode = "Calc: "; // Calc calculation mode
 
@@ -218,9 +250,9 @@ OUString AboutDialog::GetVersionString() {
     aCalcMode += "threaded";
   }
 
-  sVersion += "\n" + aCalcMode;
+  sMisc += aCalcMode;
 
-  return sVersion;
+  return sMisc;
 }
 
 OUString AboutDialog::GetCopyrightString() {
@@ -240,6 +272,15 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
       css::datatransfer::clipboard::SystemClipboard::create(
           comphelper::getProcessComponentContext());
-  vcl::unohelper::TextDataObject::CopyStringTo(m_pVersionLabel->get_label(), xClipboard);
+
+  OUString sInfo;
+  sInfo += "Version: " + m_pVersionLabel->get_label() + "\n";
+  sInfo += "Build ID: " + m_pBuildLabel->get_label() + "\n";
+  sInfo += m_pEnvLabel->get_label();
+  sInfo += m_pUILabel->get_label() + "\n";
+  sInfo += "Locale: " + m_pLocaleLabel->get_label() + "\n";
+  sInfo += m_pMiscLabel->get_label();
+
+  vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
