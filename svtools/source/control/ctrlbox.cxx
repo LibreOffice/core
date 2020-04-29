@@ -423,6 +423,8 @@ void FontNameBox::InitFontMRUEntriesFile()
 void FontNameBox::ImplDestroyFontList()
 {
     mpFontList.reset();
+    mnPreviewProgress = 0;
+    maUpdateIdle.Stop();
 }
 
 void FontNameBox::Fill( const FontList* pList )
@@ -453,9 +455,9 @@ void FontNameBox::Fill( const FontList* pList )
 
     m_xComboBox->thaw();
 
-    if (mbWYSIWYG)
+    if (mbWYSIWYG && nFontCount)
     {
-        mnPreviewProgress = 0;
+        assert(mnPreviewProgress == 0 && "ImplDestroyFontList wasn't called");
         maUpdateIdle.Start();
     }
 
