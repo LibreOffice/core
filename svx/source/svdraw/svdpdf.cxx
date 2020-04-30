@@ -798,16 +798,19 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
                                                  aTextRect.getMinY(), aTextRect.getMaxY());
 
-    const int nChars = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
-    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
+    const int nBytes = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
 
-    const int nActualChars = FPDFTextObj_GetText(pPageObject, pTextPage, pText.get(), nChars);
-    if (nActualChars <= 0)
+    const int nActualBytes = FPDFTextObj_GetText(pPageObject, pTextPage, pText.get(), nBytes);
+    if (nActualBytes <= 0)
     {
         return;
     }
 
-    OUString sText(pText.get(), nActualChars);
+    // Let's rely on null-terminaton for the length of the string. We
+    // just know the number of bytes the string takes, but in OUString
+    // needs the number of charaters.
+    OUString sText(pText.get());
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
     double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
