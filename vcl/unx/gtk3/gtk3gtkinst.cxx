@@ -7038,6 +7038,8 @@ private:
     GtkWidget* m_pLabel;
     //popover cannot escape dialog under X so stick up own window instead
     GtkWindow* m_pMenuHack;
+    //when doing so, if its a toolbar menubutton align the menu to the full toolitem
+    GtkWidget* m_pMenuHackAlign;
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
 
@@ -7087,7 +7089,7 @@ private:
             gtk_container_add(GTK_CONTAINER(m_pMenuHack), pChild);
             g_object_unref(pChild);
 
-            GtkPositionType ePosUsed = show_menu(GTK_WIDGET(m_pMenuButton), m_pMenuHack);
+            GtkPositionType ePosUsed = show_menu(m_pMenuHackAlign ? m_pMenuHackAlign : GTK_WIDGET(m_pMenuButton), m_pMenuHack);
             // tdf#132540 keep the placeholder popover on this same side as the replacement menu
             gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
@@ -7175,12 +7177,13 @@ private:
     }
 
 public:
-    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), pBuilder, bTakeOwnership)
         , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
         , m_pMenuButton(pMenuButton)
         , m_pImage(nullptr)
         , m_pMenuHack(nullptr)
+        , m_pMenuHackAlign(pMenuAlign)
         , m_pPopover(nullptr)
         , m_nSignalId(0)
     {
@@ -7729,7 +7732,7 @@ private:
         m_aMap[id] = pToolItem;
         if (pMenuButton)
         {
-            m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, m_pBuilder, false);
+            m_aMenuButtonMap[id] = std::make_unique<GtkInstanceMenuButton>(pMenuButton, GTK_WIDGET(pToolItem), m_pBuilder, false);
             // so that, e.g. with focus initially in writer main document then
             // after clicking the heading menu in the writer navigator focus is
             // left in the main document and not in the toolbar
@@ -15233,7 +15236,7 @@ public:
         if (!pButton)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
-        return std::make_unique<GtkInstanceMenuButton>(pButton, this, bTakeOwnership);
+        return std::make_unique<GtkInstanceMenuButton>(pButton, nullptr, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id, bool bTakeOwnership) override
