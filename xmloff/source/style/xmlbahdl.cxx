@@ -19,6 +19,7 @@
 
 #include "xmlbahdl.hxx"
 
+#include <XMLNumberWithAutoForVoidPropHdl.hxx>
 #include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
@@ -829,11 +830,11 @@ bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& 
 }
 
 
-XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl()
+XMLNumberWithAutoForVoidPropHdl::~XMLNumberWithAutoForVoidPropHdl()
 {
 }
 
-bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
+bool XMLNumberWithAutoForVoidPropHdl::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
@@ -850,14 +851,15 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
     return bRet;
 }
 
-bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNumberWithAutoForVoidPropHdl::exportXML(
+        OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter&) const
 {
 
     sal_Int32 nValue = 0;
     bool bRet = lcl_xmloff_getAny( rValue, nValue, 2 );
-    bRet &= nValue != 0;
 
-    // FIXME: 0 is not a valid value - write "auto" instead
+    // note: 0 is a valid value here, see CTF_PAGENUMBEROFFSET for when it isn't
+
     if (!bRet)
         rStrExpValue = GetXMLToken( XML_AUTO );
     else
