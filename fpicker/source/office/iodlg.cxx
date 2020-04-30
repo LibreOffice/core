@@ -303,19 +303,13 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     m_xImpl->m_xCbPassword = m_xBuilder->weld_check_button("password");
     m_xImpl->m_xCbGPGEncrypt = m_xBuilder->weld_check_button("gpgencrypt");
     m_xImpl->m_xCbAutoExtension = m_xBuilder->weld_check_button("extension");
-    m_xImpl->m_xFtFileVersion = m_xBuilder->weld_label("shared_label");
-    m_xImpl->m_xLbFileVersion = m_xBuilder->weld_combo_box("shared");
-    m_xImpl->m_xFtTemplates = m_xBuilder->weld_label("shared_label");
-    m_xImpl->m_xLbTemplates = m_xBuilder->weld_combo_box("shared");
-    m_xImpl->m_xFtImageTemplates = m_xBuilder->weld_label("shared_label");
-    m_xImpl->m_xLbImageTemplates = m_xBuilder->weld_combo_box("shared");
-    m_xImpl->m_xFtImageAnchor = m_xBuilder->weld_label("shared_label");
-    m_xImpl->m_xLbImageAnchor = m_xBuilder->weld_combo_box("shared");
+    m_xImpl->m_xSharedLabel = m_xBuilder->weld_label("shared_label");
+    m_xImpl->m_xSharedListBox = m_xBuilder->weld_combo_box("shared");
 
     // because the "<All Formats> (*.bmp,*...)" entry is too wide,
     // we need to disable the auto width feature of the filter box
     int nWidth = m_xImpl->m_xLbFilter->get_approximate_digit_width() * 60;
-    m_xImpl->m_xLbImageTemplates->set_size_request(nWidth, -1);
+    m_xImpl->m_xSharedListBox->set_size_request(nWidth, -1);
     m_xImpl->m_xLbFilter->set_size_request(nWidth, -1);
 
     m_xImpl->m_xBtnUp.reset(new SvtUpButton_Impl(m_xBuilder->weld_toolbar("up_bar"),
@@ -445,12 +439,8 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
         // for the extra use cases, and separated _pLbFileVersion
         // I did not find out in which cases the help ID is really needed HID_FILESAVE_TEMPLATE - all
         // tests I made lead to a dialog where _no_ of the three list boxes was present.
-        if ( m_xImpl->m_xLbFileVersion )
-            m_xImpl->m_xLbFileVersion->set_help_id( HID_FILESAVE_TEMPLATE );
-        if ( m_xImpl->m_xLbTemplates )
-            m_xImpl->m_xLbTemplates->set_help_id( HID_FILESAVE_TEMPLATE );
-        if ( m_xImpl->m_xLbImageTemplates )
-            m_xImpl->m_xLbImageTemplates->set_help_id( HID_FILESAVE_TEMPLATE );
+        if (m_xImpl->m_xSharedListBox)
+            m_xImpl->m_xSharedListBox->set_help_id( HID_FILESAVE_TEMPLATE );
 
         if ( m_xImpl->m_xCbPassword ) m_xImpl->m_xCbPassword->set_help_id( HID_FILESAVE_SAVEWITHPASSWORD );
         if ( m_xImpl->m_xCbAutoExtension ) m_xImpl->m_xCbAutoExtension->set_help_id( HID_FILESAVE_AUTOEXTENSION );
@@ -1964,42 +1954,42 @@ weld::Widget* SvtFileDialog::getControl( sal_Int16 nControlId, bool bLabelContro
 
         case LISTBOX_VERSION:
             pReturn =   bLabelControl
-                    ? static_cast<weld::Widget*>(m_xImpl->m_xFtFileVersion.get())
-                    : static_cast<weld::Widget*>(m_xImpl->m_xLbFileVersion.get());
+                    ? static_cast<weld::Widget*>(m_xImpl->m_xSharedLabel.get())
+                    : static_cast<weld::Widget*>(m_xImpl->m_xSharedListBox.get());
             break;
 
         case LISTBOX_TEMPLATE:
             pReturn =   bLabelControl
-                    ? static_cast<weld::Widget*>(m_xImpl->m_xFtTemplates.get())
-                    : static_cast<weld::Widget*>(m_xImpl->m_xLbTemplates.get());
+                    ? static_cast<weld::Widget*>(m_xImpl->m_xSharedLabel.get())
+                    : static_cast<weld::Widget*>(m_xImpl->m_xSharedListBox.get());
             break;
 
         case LISTBOX_IMAGE_TEMPLATE:
             pReturn =   bLabelControl
-                    ? static_cast<weld::Widget*>(m_xImpl->m_xFtImageTemplates.get())
-                    : static_cast<weld::Widget*>(m_xImpl->m_xLbImageTemplates.get());
+                    ? static_cast<weld::Widget*>(m_xImpl->m_xSharedLabel.get())
+                    : static_cast<weld::Widget*>(m_xImpl->m_xSharedListBox.get());
             break;
 
         case LISTBOX_IMAGE_ANCHOR:
             pReturn =   bLabelControl
-                    ? static_cast<weld::Widget*>(m_xImpl->m_xFtImageAnchor.get())
-                    : static_cast<weld::Widget*>(m_xImpl->m_xLbImageAnchor.get());
+                    ? static_cast<weld::Widget*>(m_xImpl->m_xSharedLabel.get())
+                    : static_cast<weld::Widget*>(m_xImpl->m_xSharedListBox.get());
             break;
 
         case LISTBOX_VERSION_LABEL:
-            pReturn = m_xImpl->m_xFtFileVersion.get();
+            pReturn = m_xImpl->m_xSharedLabel.get();
             break;
 
         case LISTBOX_TEMPLATE_LABEL:
-            pReturn = m_xImpl->m_xFtTemplates.get();
+            pReturn = m_xImpl->m_xSharedLabel.get();
             break;
 
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
-            pReturn = m_xImpl->m_xFtImageTemplates.get();
+            pReturn = m_xImpl->m_xSharedLabel.get();
             break;
 
         case LISTBOX_IMAGE_ANCHOR_LABEL:
-            pReturn = m_xImpl->m_xFtImageAnchor.get();
+            pReturn = m_xImpl->m_xSharedLabel.get();
             break;
 
         case PUSHBUTTON_OK:
@@ -2108,38 +2098,38 @@ void SvtFileDialog::AddControls_Impl( )
 
     if ( m_nPickerFlags & PickerFlags::ShowVersions )
     {
-        m_xImpl->m_xFtFileVersion->set_label( FpsResId( STR_SVT_FILEPICKER_VERSION ) );
-        m_xImpl->m_xFtFileVersion->show();
+        m_xImpl->m_xSharedLabel->set_label( FpsResId( STR_SVT_FILEPICKER_VERSION ) );
+        m_xImpl->m_xSharedLabel->show();
 
-        m_xImpl->m_xLbFileVersion->set_help_id( HID_FILEOPEN_VERSION );
-        m_xImpl->m_xLbFileVersion->show();
+        m_xImpl->m_xSharedListBox->set_help_id( HID_FILEOPEN_VERSION );
+        m_xImpl->m_xSharedListBox->show();
     }
     else if ( m_nPickerFlags & PickerFlags::Templates )
     {
-        m_xImpl->m_xFtTemplates->set_label( FpsResId( STR_SVT_FILEPICKER_TEMPLATES ) );
-        m_xImpl->m_xFtTemplates->show();
+        m_xImpl->m_xSharedLabel->set_label( FpsResId( STR_SVT_FILEPICKER_TEMPLATES ) );
+        m_xImpl->m_xSharedLabel->show();
 
-        m_xImpl->m_xLbTemplates->set_help_id( HID_FILEOPEN_VERSION );
-        m_xImpl->m_xLbTemplates->show();
+        m_xImpl->m_xSharedListBox->set_help_id( HID_FILEOPEN_VERSION );
+        m_xImpl->m_xSharedListBox->show();
         // This is strange. During the re-factoring during 96930, I discovered that this help id
         // is set in the "Templates mode". This was hidden in the previous implementation.
         // Shouldn't this be a more meaningful help id.
     }
     else if ( m_nPickerFlags & PickerFlags::ImageTemplate )
     {
-        m_xImpl->m_xFtImageTemplates->set_label( FpsResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
-        m_xImpl->m_xFtImageTemplates->show();
+        m_xImpl->m_xSharedLabel->set_label( FpsResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
+        m_xImpl->m_xSharedLabel->show();
 
-        m_xImpl->m_xLbImageTemplates->set_help_id( HID_FILEOPEN_IMAGE_TEMPLATE );
-        m_xImpl->m_xLbImageTemplates->show();
+        m_xImpl->m_xSharedListBox->set_help_id( HID_FILEOPEN_IMAGE_TEMPLATE );
+        m_xImpl->m_xSharedListBox->show();
     }
     else if ( m_nPickerFlags & PickerFlags::ImageAnchor )
     {
-        m_xImpl->m_xFtImageAnchor->set_label( FpsResId( STR_SVT_FILEPICKER_IMAGE_ANCHOR ) );
-        m_xImpl->m_xFtImageAnchor->show();
+        m_xImpl->m_xSharedLabel->set_label( FpsResId( STR_SVT_FILEPICKER_IMAGE_ANCHOR ) );
+        m_xImpl->m_xSharedLabel->show();
 
-        m_xImpl->m_xLbImageAnchor->set_help_id( HID_FILEOPEN_IMAGE_ANCHOR );
-        m_xImpl->m_xLbImageAnchor->show();
+        m_xImpl->m_xSharedListBox->set_help_id( HID_FILEOPEN_IMAGE_ANCHOR );
+        m_xImpl->m_xSharedListBox->show();
     }
 
     m_xImpl->m_xPlaces.reset(new PlacesListBox(m_xBuilder->weld_tree_view("places"),

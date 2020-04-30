@@ -116,17 +116,8 @@ public:
     std::unique_ptr<weld::Label> m_xFtFileName;
     std::unique_ptr<SvtURLBox> m_xEdFileName;
 
-    std::unique_ptr<weld::Label> m_xFtFileVersion;
-    std::unique_ptr<weld::ComboBox> m_xLbFileVersion;
-
-    std::unique_ptr<weld::Label> m_xFtTemplates;
-    std::unique_ptr<weld::ComboBox> m_xLbTemplates;
-
-    std::unique_ptr<weld::Label> m_xFtImageTemplates;
-    std::unique_ptr<weld::ComboBox> m_xLbImageTemplates;
-
-    std::unique_ptr<weld::Label> m_xFtImageAnchor;
-    std::unique_ptr<weld::ComboBox> m_xLbImageAnchor;
+    std::unique_ptr<weld::Label> m_xSharedLabel;
+    std::unique_ptr<weld::ComboBox> m_xSharedListBox;
 
     std::unique_ptr<weld::Label> m_xFtFileType;
     std::unique_ptr<weld::ComboBox> m_xLbFilter;
