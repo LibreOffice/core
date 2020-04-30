@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ef2b614b_400129b2",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-30T11:28:55Z",
+      "side": 1,
+      "message": "...in which case something like\n\n  The valid range is nStartIndex..length.\n\nmight be a better specification?  (But, again, I just wonder about this newly added code and do note that the existing surrounding code appears to have the same problem anyway.)",
+      "parentUuid": "ad57ce8d_ba80a7c8",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "163f6d2a_871d47a7",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "AFAIK the only reasons for failure are:\n* invalid parameters (throws)\n* unimplemented (currently returns false)\n\nNormally all other cases should return true.",
       "parentUuid": "163f6d2a_871d47a7",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46fa06df_bfb9d87a",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-30T11:28:55Z",
+      "side": 1,
+      "message": "Is \"unimplemented\" a concept this interface is meant to model?  If not, it appears the boolean return type would be redundant.",
+      "parentUuid": "506a41a4_f21d78ea",
       "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

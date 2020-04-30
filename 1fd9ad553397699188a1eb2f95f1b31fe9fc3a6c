@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "705b02c9_e5d30769",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-30T11:28:55Z",
+      "side": 1,
+      "message": "Please don\u0027t add any code that isn\u0027t actually needed today.  LO already has more than enough of that (as you appear to have identified, too  :)",
+      "parentUuid": "6f4034cc_0dcae83b",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 62
+      },
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78dee45d_6b03e39b",
         "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
         "patchSetId": 1
@@ -113,6 +137,24 @@
       "side": 1,
       "message": "\u003e A constants group rather than an enum is only appropriate if the set of values is expected to expand over time.  Is that the case here?\n\nI do not expect changes, but this is modeled after IA2ScrollType (https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/_i_a2_common_types_8idl.html#a2e7519f0a01aa8142ad4242b0a1fe31c) which could possibly be expanded in the future, and I guess only the future can tell us.\n\n\u003e If a constants group is appropriate, please use \u0027long\u0027 values instead of \u0027short\u0027 ones.  There is no good reason to use anything but the canonic UNOIDL \u0027long\u0027 integer type here (despite common historic deviation from that rule).\n\nEither way is fine we me, using long or an enum.  I\u0027m not familiar enough with this to know how much of a breakage expanding an enum would be.  Depending on this, it might make sense to use an enum I guess, we just couldn\u0027t accept possible new value (until we are OK with expanding the enum) which doesn\u0027t sound too much like a big deal as the current option set seem fairly thorough.",
       "parentUuid": "8dcfaac8_873f68ea",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "babb1f0c_140df27b",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-30T11:28:55Z",
+      "side": 1,
+      "message": "At least to me, an UNOIDL enum looks like the more plausible option here (esp. as it is at least initially left unpublished).",
+      "parentUuid": "098bcaeb_a81e53e8",
       "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
