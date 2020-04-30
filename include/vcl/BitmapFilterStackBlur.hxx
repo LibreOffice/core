@@ -18,10 +18,9 @@
 class VCL_DLLPUBLIC BitmapFilterStackBlur : public BitmapFilter
 {
     sal_Int32 mnRadius;
-    bool mbExtend;
 
 public:
-    BitmapFilterStackBlur(sal_Int32 nRadius, bool bExtend = true);
+    BitmapFilterStackBlur(sal_Int32 nRadius);
     virtual ~BitmapFilterStackBlur();
 
     virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
