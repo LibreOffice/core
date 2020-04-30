@@ -1092,7 +1092,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         basegfx::B2DHomMatrix(),
         aPoly,
         0.0,
-        basegfx::B2DVector(1.0, 1.0),
+        1.0,
         nullptr, // MM01
         basegfx::B2DLineJoin::Miter,
         css::drawing::LineCap_BUTT,
@@ -1456,7 +1456,7 @@ bool SvpSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -1488,7 +1488,7 @@ bool SvpSalGraphics::drawPolyLine(
             rObjectToDevice,
             rPolyLine,
             fTransparency,
-            rLineWidth,
+            fLineWidth,
             pStroke, // MM01
             eLineJoin,
             eLineCap,
@@ -1508,7 +1508,7 @@ bool SvpSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -1522,21 +1522,20 @@ bool SvpSalGraphics::drawPolyLine(
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
 
     // tdf#124848 calculate-back logical LineWidth for a hairline
     // since this implementation hands over the transformation to
     // the graphic sub-system
-    if(aLineWidth.equalZero())
+    if(fLineWidth == 0)
     {
-        aLineWidth = basegfx::B2DVector(1.0, 1.0);
+        fLineWidth = 1.0;
 
         if(!bObjectToDeviceIsIdentity)
         {
             basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
             aObjectToDeviceInv.invert();
-            aLineWidth = aObjectToDeviceInv * aLineWidth;
+            fLineWidth = (aObjectToDeviceInv * basegfx::B2DVector(fLineWidth, 0)).getLength();
         }
     }
 
@@ -1617,7 +1616,7 @@ bool SvpSalGraphics::drawPolyLine(
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
-    cairo_set_line_width(cr, aLineWidth.getX());
+    cairo_set_line_width(cr, fLineWidth);
     cairo_set_miter_limit(cr, fMiterLimit);
 
     // try to access buffered data
@@ -1654,7 +1653,7 @@ bool SvpSalGraphics::drawPolyLine(
 
     // check for basegfx::B2DLineJoin::NONE to react accordingly
     const bool bNoJoin((basegfx::B2DLineJoin::NONE == eLineJoin
-        && basegfx::fTools::more(aLineWidth.getX(), 0.0)));
+        && basegfx::fTools::more(fLineWidth, 0.0)));
 
     if(pSystemDependentData_CairoPath)
     {

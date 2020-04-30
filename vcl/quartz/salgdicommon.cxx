@@ -817,7 +817,7 @@ bool AquaSalGraphics::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -836,15 +836,15 @@ bool AquaSalGraphics::drawPolyLine(
 #endif
 
     // tdf#124848 get correct LineWidth in discrete coordinates,
-    // take hairline case into account
-    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero()
-        ? basegfx::B2DVector(1.0, 1.0)
-        : rObjectToDevice * rLineWidth);
+    if(fLineWidth == 0) // hairline
+        fLineWidth = 1.0;
+    else // Adjust line width for object-to-device scale.
+        fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
-    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (aLineWidth.getX() > 1.3) )
+    if( (basegfx::B2DLineJoin::NONE == eLineJoin) && (fLineWidth > 1.3) )
         return false;
 
     // MM01 need to do line dashing as fallback stuff here now
@@ -935,12 +935,7 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
         CGContextSetLineJoin( maContextHolder.get(), aCGLineJoin );
         CGContextSetLineCap( maContextHolder.get(), aCGLineCap );
-
-        // aLineWidth.getX() can be negative here. That causes a warning that shows up in the debugger.
-        if (aLineWidth.getX() > 0)
-        {
-            CGContextSetLineWidth( maContextHolder.get(), aLineWidth.getX() );
-        }
+        CGContextSetLineWidth( maContextHolder.get(), fLineWidth );
         CGContextSetMiterLimit(maContextHolder.get(), fCGMiterLimit);
         CGContextDrawPath( maContextHolder.get(), kCGPathStroke );
         maContextHolder.restoreState();
