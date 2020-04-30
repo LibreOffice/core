@@ -222,7 +222,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
         else if (pObj->GetObjInventor() == SdrInventor::Default &&
                  pObj->GetObjIdentifier() == OBJ_TITLETEXT)
         {
-            // We do net get PresObjKind via GetPresObjKind() since there are
+            // We do not get PresObjKind via GetPresObjKind() since there are
             // only PresObjListe considered. But we want to consider all "Title
             // objects" here (paste from clipboard etc.)
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PresObjKind::Title);

@@ -1934,7 +1934,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
     if( values.width != static_cast<int>(maGeometry.nWidth) || values.height != static_cast<int>(maGeometry.nHeight) )
         bSized = true;
 
-    // do net set WMNormalHints for ..
+    // do not set WMNormalHints for...
     if(
         // child windows
         ! IsChildWindow()

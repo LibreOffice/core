@@ -1398,7 +1398,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     }
 
     // ODF defaults from ctor of SdrLayer are not automatically set on the here
-    // created XLayer. Need to be done explicitely here.
+    // created XLayer. Need to be done explicitly here.
     aPropLayer <<= true;
     xDrawnInSlideshow->setPropertyValue("IsVisible", aPropLayer);
     xDrawnInSlideshow->setPropertyValue("IsPrintable", aPropLayer);
