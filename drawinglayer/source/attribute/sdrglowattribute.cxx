@@ -21,7 +21,7 @@ namespace drawinglayer
 {
 namespace attribute
 {
-SdrGlowAttribute::SdrGlowAttribute(sal_Int32 nRadius, const basegfx::BColor& rColor)
+SdrGlowAttribute::SdrGlowAttribute(sal_Int32 nRadius, const Color& rColor)
     : m_nRadius(nRadius)
     , m_color(rColor)
 {
@@ -42,31 +42,6 @@ SdrGlowAttribute& SdrGlowAttribute::operator=(SdrGlowAttribute&&) = default;
 bool SdrGlowAttribute::operator==(const SdrGlowAttribute& rCandidate) const
 {
     return m_nRadius == rCandidate.m_nRadius && m_color == rCandidate.m_color;
-}
-
-const basegfx::B2DHomMatrix& SdrGlowAttribute::GetTransfMatrix(basegfx::B2DRange nRange) const
-{
-    if (!m_oTransfCache)
-    {
-        double dRadius100mm = static_cast<double>(m_nRadius) / 360.0;
-        // Apply a scaling with the center point of the shape as origin.
-        // 1) translate shape to the origin
-        basegfx::B2DHomMatrix matrix = basegfx::utils::createCoordinateSystemTransform(
-            nRange.getCenter(), basegfx::B2DVector(-1, 0), basegfx::B2DVector(0, -1));
-
-        basegfx::B2DHomMatrix inverse(matrix);
-        inverse.invert();
-
-        // 2) Scale up
-        double scale_x = (nRange.getWidth() + dRadius100mm) / nRange.getWidth();
-        double scale_y = (nRange.getHeight() + dRadius100mm) / nRange.getHeight();
-        matrix *= basegfx::utils::createScaleB2DHomMatrix(scale_x, scale_y);
-
-        // 3) Translate shape back to its place
-        matrix *= inverse;
-        m_oTransfCache = std::move(matrix);
-    }
-    return *m_oTransfCache;
 }
 
 } // end of namespace attribute

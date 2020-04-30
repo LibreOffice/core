@@ -23,7 +23,10 @@
 
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <vcl/BitmapBasicMorphologyFilter.hxx>
+#include <vcl/BitmapColorReplaceFilter.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
+#include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/hatch.hxx>
@@ -912,42 +915,73 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
 {
     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
     aRange.transform(maCurrentTransformation);
-    aRange.grow(10.0);
+    basegfx::B2DVector aGlowRadiusVector(rCandidate.getGlowRadius(), 0);
+    // Calculate the pixel size of glow radius in current transformation
+    aGlowRadiusVector *= maCurrentTransformation;
+    const double fGlowRadius = aGlowRadiusVector.getLength();
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
-        mpOutputDevice = &aBufferDevice.getTransparence();
-        // paint content to virtual device
+        mpOutputDevice = &aBufferDevice.getContent();
+        // Processing will draw whatever geometry on white background, applying *black*
+        // replacement color. The black color replacement is added in 2d decomposition of
+        // glow primitive.
         mpOutputDevice->Erase();
         process(rCandidate);
-
-        // obtain result as a bitmap
-        auto bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()),
+        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
                                                   Size(aRange.getWidth(), aRange.getHeight()));
-        constexpr double nRadius = 5.0;
-        bitmap.Scale(Size(aRange.getWidth() - nRadius, aRange.getHeight() - nRadius));
-        // use bitmap later as mask
-        auto mask = bitmap.GetBitmap();
 
-        mpOutputDevice = &aBufferDevice.getContent();
-        process(rCandidate);
-        bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()),
-                                             Size(aRange.getWidth(), aRange.getHeight()));
-        bitmap.Scale(Size(aRange.getWidth() - nRadius, aRange.getHeight() - nRadius));
+        BitmapEx mask(bitmap); // copy the bitmap to mask
+        // Only completely transparent parts will be completely white; only those must be
+        // considered white on the initial B&W alpha mask. Any other color must be treated
+        // as black.
+        BitmapFilter::Filter(mask, BitmapMonochromeFilter(255));
+
+        // Scaling down increases performance without noticeable quality loss. Additionally,
+        // current blur implementation can only handle blur radius between 2 and 254.
+        Size aSize = mask.GetSizePixel();
+        double fScale = 1.0;
+        // Glow radius is the size of the halo from each side of the object. The halo is the
+        // border of glow color that fades from glow transparency level to fully transparent
+        // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
+        // fades to both sides by the blur radius; thus blur radius is half of glow radius.
+        double fBlurRadius = fGlowRadius / 2;
+        while (fBlurRadius > 254 || aSize.Height() > 1000 || aSize.Width() > 1000)
+        {
+            fScale /= 2;
+            fBlurRadius /= 2;
+            aSize.setHeight(aSize.Height() / 2);
+            aSize.setWidth(aSize.Width() / 2);
+        }
+
+        // BmpScaleFlag::Fast is important for following color replacement
+        mask.Scale(fScale, fScale, BmpScaleFlag::Fast);
+
+        // Dilate the black pixels using blur radius, to make blur start at actual object margins.
+        // This differentiates glow from blurry shadow; so potentially extend this function to also
+        // handle blurry shadow, and conditionally skip this step
+        BitmapFilter::Filter(mask, BitmapDilateFilter(fBlurRadius));
+
+        // We need 8-bit grey mask for blurring
+        mask.Convert(BmpConversion::N8BitGreys);
+        // Consider glow transparency (initial transparency near the object edge)
+        const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
+        const Color aTransparency(nTransparency, nTransparency, nTransparency);
+        BitmapFilter::Filter(mask, BitmapColorReplaceFilter(COL_BLACK, aTransparency));
 
         // calculate blurry effect
-        BitmapFilterStackBlur glowFilter(nRadius);
-        BitmapFilter::Filter(bitmap, glowFilter);
+        BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
+
+        // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
+        bitmap.Erase(rCandidate.getGlowColor());
+        // alpha mask will be scaled up automatically to match bitmap
+        BitmapEx result(bitmap, AlphaMask(mask.GetBitmap()));
+
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(
-            Point(aRange.getMinX() - nRadius / 2, aRange.getMinY() - nRadius / 2),
-            BitmapEx(bitmap.GetBitmap(), mask));
-
-        // paint result
-        //aBufferDevice.paint();
+        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");

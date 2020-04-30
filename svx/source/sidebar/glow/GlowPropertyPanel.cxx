@@ -15,6 +15,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
+#include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xcolit.hxx>
@@ -38,12 +39,16 @@ GlowPropertyPanel::GlowPropertyPanel(vcl::Window* pParent,
     , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
+    , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
     , mpBindings(pBindings)
     , mxShowGlow(m_xBuilder->weld_check_button("SHOW_GLOW"))
     , mxGlowRadius(m_xBuilder->weld_metric_spin_button("LB_GLOW_RADIUS", FieldUnit::POINT))
     , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"), GetFrameWeld()))
+    , mxGlowTransparency(
+          m_xBuilder->weld_metric_spin_button("LB_GLOW_TRANSPARENCY", FieldUnit::PERCENT))
     , mxFTRadius(m_xBuilder->weld_label("radius"))
     , mxFTColor(m_xBuilder->weld_label("color"))
+    , mxFTTransparency(m_xBuilder->weld_label("transparency"))
 {
     Initialize();
 }
@@ -57,10 +62,13 @@ void GlowPropertyPanel::dispose()
     mxGlowRadius.reset();
     mxFTColor.reset();
     mxLBGlowColor.reset();
+    mxFTTransparency.reset();
+    mxGlowTransparency.reset();
 
     maGlowController.dispose();
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
+    maGlowTransparencyController.dispose();
     PanelLayout::dispose();
 }
 
@@ -70,6 +78,8 @@ void GlowPropertyPanel::Initialize()
     mxShowGlow->connect_toggled(LINK(this, GlowPropertyPanel, ClickGlowHdl));
     mxLBGlowColor->SetSelectHdl(LINK(this, GlowPropertyPanel, ModifyGlowColorHdl));
     mxGlowRadius->connect_value_changed(LINK(this, GlowPropertyPanel, ModifyGlowRadiusHdl));
+    mxGlowTransparency->connect_value_changed(
+        LINK(this, GlowPropertyPanel, ModifyGlowTransparencyHdl));
 }
 
 IMPL_LINK_NOARG(GlowPropertyPanel, ClickGlowHdl, weld::ToggleButton&, void)
@@ -90,13 +100,23 @@ IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowRadiusHdl, weld::MetricSpinButton&,
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD, { &aItem });
 }
 
+IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void)
+{
+    SdrPercentItem aItem(SDRATTR_GLOW_TRANSPARENCY,
+                         mxGlowTransparency->get_value(FieldUnit::PERCENT));
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TRANSPARENCY, SfxCallMode::RECORD,
+                                             { &aItem });
+}
+
 void GlowPropertyPanel::UpdateControls()
 {
     const bool bEnabled = mxShowGlow->get_state() != TRISTATE_FALSE;
     mxGlowRadius->set_sensitive(bEnabled);
     mxLBGlowColor->set_sensitive(bEnabled);
+    mxGlowTransparency->set_sensitive(bEnabled);
     mxFTRadius->set_sensitive(bEnabled);
     mxFTColor->set_sensitive(bEnabled);
+    mxFTTransparency->set_sensitive(bEnabled);
 }
 
 void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
@@ -140,6 +160,17 @@ void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
                 if (pRadiusItem)
                 {
                     mxGlowRadius->set_value(EMU2Pt(pRadiusItem->GetValue()), FieldUnit::POINT);
+                }
+            }
+        }
+        break;
+        case SID_ATTR_GLOW_TRANSPARENCY:
+        {
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                if (auto pItem = dynamic_cast<const SdrPercentItem*>(pState))
+                {
+                    mxGlowTransparency->set_value(pItem->GetValue(), FieldUnit::PERCENT);
                 }
             }
         }
