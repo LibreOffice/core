@@ -370,12 +370,7 @@ void SdExportTest::testTdf97630()
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
         uno::Reference<beans::XPropertySet> xShape2(xDP->getByIndex(2), uno::UNO_QUERY);
         xShape2->getPropertyValue("TextFitToSize") >>= tmp;
-#if 1
-// TODO see TODO in sdpropls.cxx
-        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
-#else
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
-#endif
         uno::Reference<beans::XPropertySet> xShape3(xDP->getByIndex(3), uno::UNO_QUERY);
         xShape3->getPropertyValue("TextFitToSize") >>= tmp;
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, tmp);
@@ -386,34 +381,17 @@ void SdExportTest::testTdf97630()
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
         uno::Reference<beans::XPropertySet> xShape5(xDP->getByIndex(5), uno::UNO_QUERY);
         xShape5->getPropertyValue("TextFitToSize") >>= tmp;
-#if 1
-// TODO see TODO in sdpropls.cxx
-        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
-#else
         CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
-#endif
     }
 
     xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     // text shapes
     assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='false']", 1);
-#if 1
-// TODO see TODO in sdpropls.cxx
-    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 1);
-    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='all' and @style:shrink-to-fit='false']", 1);
-    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='shrink-to-fit' and @style:shrink-to-fit='true']", 1);
-#else
     assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 2);
     assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='true']", 1);
-#endif
     // fontworks
     assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='false']", 1);
-#if 1
-// TODO see TODO in sdpropls.cxx
-    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='all' and @style:shrink-to-fit='false']", 1);
-#else
     assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 1);
-#endif
 
     xDocShRef->DoClose();
 }
