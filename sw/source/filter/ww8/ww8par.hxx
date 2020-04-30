@@ -1117,7 +1117,7 @@ private:
     This stack is for fields whose true conversion cannot be determined until
     the end of the document, it is the same stack for headers/footers/main
     text/textboxes/tables etc... They are things that reference other things
-    e.g. NoteRef and Ref, they are processed after pReffedStck
+    e.g. NoteRef and Ref, they are processed after m_xReffedStck
     */
     std::unique_ptr<SwWW8FltRefStack> m_xReffingStck;
 
