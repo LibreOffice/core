@@ -558,39 +558,6 @@ void stackBlur8(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
                  pBlurVerticalFn, bParallel);
 }
 
-void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
-{
-    const Size& rSize = rBitmap.GetSizePixel();
-    const Size aNewSize(rSize.Width() + nExtendSize * 2, rSize.Height() + nExtendSize * 2);
-
-    Bitmap aNewBitmap(aNewSize, rBitmap.GetBitCount());
-
-    {
-        Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-        BitmapScopedWriteAccess pWriteAccess(aNewBitmap);
-
-        long nWidthBorder = nExtendSize + rSize.Width();
-        long nHeightBorder = nExtendSize + rSize.Height();
-
-        for (long y = 0; y < aNewSize.Height(); y++)
-        {
-            for (long x = 0; x < aNewSize.Width(); x++)
-            {
-                if (y < nExtendSize || y >= nHeightBorder || x < nExtendSize || x >= nWidthBorder)
-                {
-                    pWriteAccess->SetPixel(y, x, aColor);
-                }
-                else
-                {
-                    pWriteAccess->SetPixel(y, x,
-                                           pReadAccess->GetPixel(y - nExtendSize, x - nExtendSize));
-                }
-            }
-        }
-    }
-    rBitmap = aNewBitmap;
-}
-
 } // end anonymous namespace
 
 /**
@@ -614,9 +581,8 @@ void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
  *   (https://code.google.com/p/fog/)
  *
  */
-BitmapFilterStackBlur::BitmapFilterStackBlur(sal_Int32 nRadius, bool bExtend)
+BitmapFilterStackBlur::BitmapFilterStackBlur(sal_Int32 nRadius)
     : mnRadius(nRadius)
-    , mbExtend(bExtend)
 {
 }
 
@@ -648,21 +614,11 @@ Bitmap BitmapFilterStackBlur::filter(Bitmap const& rBitmap) const
                                   ? 4
                                   : 3;
 
-        if (mbExtend)
-        {
-            centerExtendBitmap(bitmapCopy, mnRadius, COL_WHITE);
-        }
-
         stackBlur24(bitmapCopy, mnRadius, nComponentWidth);
     }
     else if (nScanlineFormat == ScanlineFormat::N8BitPal)
     {
         int nComponentWidth = 1;
-
-        if (mbExtend)
-        {
-            centerExtendBitmap(bitmapCopy, mnRadius, COL_WHITE);
-        }
 
         stackBlur8(bitmapCopy, mnRadius, nComponentWidth);
     }
