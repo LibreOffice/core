@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25868eaf_ef3e05c9",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-30T17:02:06Z",
+      "side": 1,
+      "message": "you don\u0027t need this anymore :)",
+      "range": {
+        "startLine": 21,
+        "startChar": 9,
+        "endLine": 21,
+        "endChar": 27
+      },
+      "revId": "41c11cc2f9153c5a191484ee5a8b053ba195eb4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
