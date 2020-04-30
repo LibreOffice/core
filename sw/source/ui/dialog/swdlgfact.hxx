@@ -90,7 +90,7 @@ class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
     std::shared_ptr<SwWordCountFloatDlg> m_xDlg;
 public:
-    explicit AbstractSwWordCountFloatDlg_Impl(std::unique_ptr<SwWordCountFloatDlg> p)
+    explicit AbstractSwWordCountFloatDlg_Impl(std::shared_ptr<SwWordCountFloatDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -142,7 +142,7 @@ class AbstractGenericDialog_Impl : public VclAbstractDialog
 {
     std::shared_ptr<weld::GenericDialogController> m_xDlg;
 public:
-    explicit AbstractGenericDialog_Impl(std::unique_ptr<weld::GenericDialogController> p)
+    explicit AbstractGenericDialog_Impl(std::shared_ptr<weld::GenericDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -236,7 +236,7 @@ class AbstractTabController_Impl : virtual public SfxAbstractTabDialog
 protected:
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit AbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit AbstractTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -253,7 +253,7 @@ public:
 class AbstractApplyTabController_Impl : public AbstractTabController_Impl, virtual public SfxAbstractApplyTabDialog
 {
 public:
-    explicit AbstractApplyTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit AbstractApplyTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
         : AbstractTabController_Impl(std::move(p))
     {
     }
@@ -375,7 +375,7 @@ class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
 {
     std::shared_ptr<SwFieldDlg> m_xDlg;
 public:
-    explicit AbstractSwFieldDlg_Impl(std::unique_ptr<SwFieldDlg> p)
+    explicit AbstractSwFieldDlg_Impl(std::shared_ptr<SwFieldDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -552,7 +552,7 @@ class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 protected:
     std::shared_ptr<SwMultiTOXTabDialog> m_xDlg;
 public:
-    explicit AbstractMultiTOXTabDialog_Impl(std::unique_ptr<SwMultiTOXTabDialog> p)
+    explicit AbstractMultiTOXTabDialog_Impl(std::shared_ptr<SwMultiTOXTabDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -569,7 +569,7 @@ class AbstractEditRegionDlg_Impl : public AbstractEditRegionDlg
 {
     std::shared_ptr<SwEditRegionDlg> m_xDlg;
 public:
-    explicit AbstractEditRegionDlg_Impl(std::unique_ptr<SwEditRegionDlg> p)
+    explicit AbstractEditRegionDlg_Impl(std::shared_ptr<SwEditRegionDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -582,7 +582,7 @@ class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialo
 {
     std::shared_ptr<SwInsertSectionTabDialog> m_xDlg;
 public:
-    explicit AbstractInsertSectionTabDialog_Impl(std::unique_ptr<SwInsertSectionTabDialog> p)
+    explicit AbstractInsertSectionTabDialog_Impl(std::shared_ptr<SwInsertSectionTabDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -596,7 +596,7 @@ class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
     std::shared_ptr<SwIndexMarkFloatDlg> m_xDlg;
 public:
-    explicit AbstractIndexMarkFloatDlg_Impl(std::unique_ptr<SwIndexMarkFloatDlg> p)
+    explicit AbstractIndexMarkFloatDlg_Impl(std::shared_ptr<SwIndexMarkFloatDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -610,7 +610,7 @@ class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
     std::shared_ptr<SwAuthMarkFloatDlg> m_xDlg;
 public:
-    explicit AbstractAuthMarkFloatDlg_Impl(std::unique_ptr<SwAuthMarkFloatDlg> p)
+    explicit AbstractAuthMarkFloatDlg_Impl(std::shared_ptr<SwAuthMarkFloatDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -625,7 +625,7 @@ class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
     std::shared_ptr<SwMailMergeWizard> m_xDlg;
 
 public:
-    explicit AbstractMailMergeWizard_Impl(std::unique_ptr<SwMailMergeWizard> p)
+    explicit AbstractMailMergeWizard_Impl(std::shared_ptr<SwMailMergeWizard> p)
         : m_xDlg(std::move(p))
     {
     }

@@ -5063,7 +5063,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_CHRATR_BOX ));
         if( pBox )
         {
-            std::shared_ptr<SvxBoxItem> aBoxItem(pBox->Clone());
+            std::unique_ptr<SvxBoxItem> aBoxItem(pBox->Clone());
             WW8_BRCVer9 aBrc;
             int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
 

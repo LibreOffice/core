@@ -33,8 +33,8 @@ class SwRenameXNamedDlg : public weld::GenericDialogController
 
     TextFilter m_aTextFilter;
 
-    std::shared_ptr<weld::Entry> m_xNewNameED;
-    std::shared_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Entry> m_xNewNameED;
+    std::unique_ptr<weld::Button> m_xOk;
 
     DECL_LINK(TextFilterHdl, OUString&, bool);
     DECL_LINK(OkHdl, weld::Button&, void);

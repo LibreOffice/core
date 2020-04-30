@@ -911,7 +911,7 @@ protected:
     void SetCurPam(sal_uLong nStt, sal_uLong nEnd);
 
     /// Get background color of the document, if there is one.
-    std::shared_ptr<SvxBrushItem> getBackground();
+    std::unique_ptr<SvxBrushItem> getBackground();
     /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
     int CollectGrfsOfBullets();
     /// Write the numbering picture bullets.

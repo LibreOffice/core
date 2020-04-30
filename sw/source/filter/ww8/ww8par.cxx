@@ -4993,7 +4993,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         ReadDocInfo();
     }
 
-    ::ww8::WW8FibData * pFibData = new ::ww8::WW8FibData();
+    auto pFibData = std::make_shared<::ww8::WW8FibData>();
 
     if (m_xWwFib->m_fReadOnlyRecommended)
         pFibData->setReadOnlyRecommended(true);
@@ -5005,9 +5005,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     else
         pFibData->setWriteReservation(false);
 
-    ::sw::tExternalDataPointer pExternalFibData(pFibData);
-
-    m_rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::FIB, pExternalFibData);
+    m_rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::FIB, pFibData);
 
     ::sw::tExternalDataPointer pSttbfAsoc
           = std::make_shared<::ww8::WW8Sttb<ww8::WW8Struct>>(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc, m_xWwFib->m_lcbSttbfAssoc);

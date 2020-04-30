@@ -1101,7 +1101,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     if (pPoolBoxItem == &rBoxItem)
         bDefault = true;
 
-    std::shared_ptr<SvxBoxItem> aBoxItem(rBoxItem.Clone());
+    std::unique_ptr<SvxBoxItem> aBoxItem(rBoxItem.Clone());
 
     SvxBorderLine aBorderLine;
     const SfxPoolItem *pItem = nullptr;
@@ -1114,7 +1114,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
             {
                 if (pArgs->GetItemState(RES_BOX, true, &pItem) == SfxItemState::SET)
                 {
-                    std::shared_ptr<SvxBoxItem> aNewBox(static_cast<SvxBoxItem*>(pItem->Clone()));
+                    std::unique_ptr<SvxBoxItem> aNewBox(static_cast<SvxBoxItem*>(pItem->Clone()));
                     const SvxBorderLine* pBorderLine;
 
                     if ((pBorderLine = aBoxItem->GetTop()) != nullptr)
@@ -1142,7 +1142,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                         aNewBox->SetAllDistances(rBoxItem.GetSmallestDistance());
                     }
 
-                    aBoxItem = aNewBox;
+                    aBoxItem = std::move(aNewBox);
 
                     if( aBoxItem->GetTop() != nullptr )
                         aBoxItem->SetLine(&aBorderLine, SvxBoxItemLine::TOP);

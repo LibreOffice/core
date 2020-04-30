@@ -1067,8 +1067,8 @@ const std::vector< std::pair<OUString, OUString> >& SwFltRDFMark::GetAttributes(
 }
 
 // methods of SwFltTOX follow
-SwFltTOX::SwFltTOX(SwTOXBase* pBase)
-    : SfxPoolItem(RES_FLTR_TOX), m_xTOXBase(pBase),
+SwFltTOX::SwFltTOX(std::shared_ptr<SwTOXBase> xBase)
+    : SfxPoolItem(RES_FLTR_TOX), m_xTOXBase(std::move(xBase)),
       bHadBreakItem( false ), bHadPageDescItem( false )
 {
 }

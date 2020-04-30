@@ -2984,7 +2984,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     const SwTOXType* pType = m_rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
-    SwTOXBase* pBase = new SwTOXBase( pType, aOrigForm, nCreateOf, OUString() );
+    std::shared_ptr<SwTOXBase> pBase = std::make_shared<SwTOXBase>( pType, aOrigForm, nCreateOf, OUString() );
     pBase->SetProtected(m_aSectionManager.CurrentSectionIsProtected());
     switch( eTox ){
     case TOX_INDEX:

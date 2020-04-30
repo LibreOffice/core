@@ -763,7 +763,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if ( i >= rTabStops.Count() )
                 {
                     // No DefTab
-                    std::shared_ptr<SvxTabStopItem> aTabStops(rTabStops.Clone());
+                    std::unique_ptr<SvxTabStopItem> aTabStops(rTabStops.Clone());
 
                     ::lcl_EraseDefTabs(*aTabStops);
 

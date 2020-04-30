@@ -339,7 +339,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     if(bXFillStyleItemUsed)
     {
         XFillStyleItem aXFillStyleItem;
-        std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+        std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
 
         if(pXFillStyleItem)
         {
