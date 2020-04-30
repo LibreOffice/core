@@ -12288,3 +12288,20 @@ SdrMetricItem GlowRadius SID_ATTR_GLOW_RADIUS
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Document;
 ]
+
+SdrPercentItem GlowTransparency SID_ATTR_GLOW_TRANSPARENCY
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Document;
+]
