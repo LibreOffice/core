@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ad57ce8d_ba80a7c8",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-04-30T08:46:09Z",
+      "side": 1,
+      "message": "The implementation wouldn\u0027t work too well in such case, but I\u0027m actually not sure what it should actually do, and none of the docs seem to address this issue.\nI guess as none specifically deny it it could make sense to support it just to be sure, but it also seems like a very corner case that is not specifically allowed either.  And in any case it shouldn\u0027t crash current implementation, at worse results are odd.",
+      "parentUuid": "01b0ea2f_ed56279f",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "163f6d2a_871d47a7",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-09T09:19:32Z",
       "side": 1,
       "message": "what would be a reason for failure?  (depending on the answer, maybe it would be more suitable to throw an exception?)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "506a41a4_f21d78ea",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-04-30T08:46:09Z",
+      "side": 1,
+      "message": "AFAIK the only reasons for failure are:\n* invalid parameters (throws)\n* unimplemented (currently returns false)\n\nNormally all other cases should return true.",
+      "parentUuid": "163f6d2a_871d47a7",
       "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -64,6 +100,24 @@
       "writtenOn": "2020-04-09T09:19:32Z",
       "side": 1,
       "message": "what would be a reason for failure?  (depending on the answer, maybe it would be more suitable to throw an exception?)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b12ec440_b04f08b1",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-04-30T08:46:09Z",
+      "side": 1,
+      "message": "AFAIK the reasons of failures can be\n* invalid parameters (throws)\n* unimplemented (currently returns false)\n* no scrolling performed (return false)\n\nThe last item is kind of bizarre especially as it\u0027s somewhat inconsistent with `scrollSubstringTo()`, but that\u0027s what IAccessible2 on which this API is modeled after has to say (https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible_text.html#a554f3eb0037463a45413a843965728bb).  I\u0027m not convinced this specific part is meaningful, so I would not see a problem in dropping it and always pretend scroll had to happen.",
+      "parentUuid": "bc9bcb1c_f040ce77",
       "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
