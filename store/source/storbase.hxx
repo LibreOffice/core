@@ -34,6 +34,7 @@
 
 #include <store/types.h>
 
+#include <cstdlib>
 #include <memory>
 #include <stddef.h>
 #include <string.h>
