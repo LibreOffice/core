@@ -52,6 +52,7 @@ public:
     void testUnknownAttributes();
     void testTdf80020();
     void testLinkedGraphicRT();
+    void testTdf79082();
     void testImageWithSpecialID();
     void testTdf62176();
     void testTransparentBackground();
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testUnknownAttributes);
     CPPUNIT_TEST(testTdf80020);
     CPPUNIT_TEST(testLinkedGraphicRT);
+    CPPUNIT_TEST(testTdf79082);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTdf62176);
     CPPUNIT_TEST(testTransparentBackground);
@@ -659,6 +661,46 @@ void SdExportTest::testLinkedGraphicRT()
 
         xDocShRef->DoClose();
     }
+}
+
+void SdExportTest::testTdf79082()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf79082.ppt"), PPT);
+    utl::TempFile tempFile;
+    tempFile.EnableKillingFile();
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    // P1 should have 6 tab stops defined
+    assertXPathChildren(
+        pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops", 6);
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[1]",
+                "position", "0cm");
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[2]",
+                "position", "5.08cm");
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[3]",
+                "position", "10.16cm");
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[4]",
+                "position", "15.24cm");
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[5]",
+                "position", "20.32cm");
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
+                "style:tab-stop[6]",
+                "position", "25.4cm");
+
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testImageWithSpecialID()
