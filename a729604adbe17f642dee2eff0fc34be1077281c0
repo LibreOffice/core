@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd27fe7d_09f4bc9d",
+        "filename": "sw/source/filter/ww8/wrtw8esh.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-30T07:35:12Z",
+      "side": 1,
+      "message": "it seems, nullptr checking is missing:\n\nif (nullptr !\u003d dynamic_cast\u003cconst SvxBackgroundColorItem*\u003e(\u0026rDrawItem))\n{\n...",
+      "range": {
+        "startLine": 1273,
+        "startChar": 38,
+        "endLine": 1273,
+        "endChar": 92
+      },
+      "revId": "a729604adbe17f642dee2eff0fc34be1077281c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
