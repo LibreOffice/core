@@ -32,12 +32,24 @@
 namespace toolkit
 {
 
+// Hashtable to optimize
+typedef std::unordered_map
+<
+    OUString,
+    sal_Int32,
+    OUStringHash
+>
+NameContainerNameMap;
+
+
 class ScriptEventContainer : public ::cppu::WeakImplHelper<
                                         css::container::XNameContainer,
                                         css::container::XContainer >
 {
-    std::unordered_map< OUString, css::uno::Any>
-                   mHashMap;
+    NameContainerNameMap mHashMap;
+    css::uno::Sequence< OUString > mNames;
+    std::vector< css::uno::Any > mValues;
+    sal_Int32 mnElementCount;
     css::uno::Type mType;
 
     ContainerListenerMultiplexer maContainerListeners;
