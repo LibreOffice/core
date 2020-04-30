@@ -85,7 +85,7 @@ void FuMorph::DoExecute( SfxRequest& )
     SdrObject*  pCloneObj1(pObj1->CloneSdrObject(pObj1->getSdrModelFromSdrObject()));
     SdrObject*  pCloneObj2(pObj2->CloneSdrObject(pObj2->getSdrModelFromSdrObject()));
 
-    // delete text at clone, otherwise we do net get a correct PathObj
+    // delete text at clone, otherwise we do not get a correct PathObj
     pCloneObj1->SetOutlinerParaObject(nullptr);
     pCloneObj2->SetOutlinerParaObject(nullptr);
 
