@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -323,6 +324,11 @@ public:
         sal_Int16 nTextType) override;
 
     virtual sal_Bool SAL_CALL copyText (sal_Int32 nStartIndex, sal_Int32 nEndIndex) override;
+
+    virtual sal_Bool SAL_CALL scrollSubstringTo(
+        sal_Int32 nStartIndex,
+        sal_Int32 nEndIndex,
+        css::accessibility::AccessibleScrollType aScrollType) override;
 
 protected:
     virtual awt::Point GetRelativeLocation() override;
@@ -1572,6 +1578,14 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
     // Return false because copying to clipboard is not supported.
     // It IS supported in the notes view.  There is no need to duplicate
     // this here.
+    return false;
+}
+
+sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::scrollSubstringTo(
+    sal_Int32,
+    sal_Int32,
+    AccessibleScrollType)
+{
     return false;
 }
 

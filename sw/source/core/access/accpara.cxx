@@ -21,6 +21,7 @@
 #include <numeric>
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
+#include <mdiexp.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <unotextrange.hxx>
@@ -34,6 +35,7 @@
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -2489,6 +2491,71 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     // select and copy (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
     ExecuteAtViewShell( SID_COPY );
+    return true;
+}
+
+sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
+    sal_Int32 nEndIndex, AccessibleScrollType aScrollType )
+{
+    SolarMutexGuard aGuard;
+
+    ThrowIfDisposed();
+
+    // parameter checking
+    sal_Int32 nLength = GetString().getLength();
+    if ( ! IsValidRange( nStartIndex, nEndIndex, nLength ) )
+        throw lang::IndexOutOfBoundsException();
+
+    vcl::Window *pWin = GetWindow();
+    if ( ! pWin )
+        throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
+
+    /* Start and end character bounds, in pixels, relative to the paragraph */
+    awt::Rectangle startR, endR;
+    startR = getCharacterBounds(nStartIndex);
+    endR = getCharacterBounds(nEndIndex);
+
+    /* Adjust points to fit the bounding box of both bounds. */
+    Point sP(std::min(startR.X, endR.X), startR.Y);
+    Point eP(std::max(startR.X + startR.Width, endR.X + endR.Width), endR.Y + endR.Height);
+
+    /* Offset the values relative to the view shell frame */
+    SwRect aFrameLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
+    Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds.SVRect() ).TopLeft() );
+    sP += aFramePixPos;
+    eP += aFramePixPos;
+
+    Point startPoint(GetMap()->PixelToCore(sP));
+    Point endPoint(GetMap()->PixelToCore(eP));
+
+    switch (aScrollType)
+    {
+#ifdef notyet
+        case AccessibleScrollType_SCROLL_TOP_LEFT:
+            break;
+        case AccessibleScrollType_SCROLL_BOTTOM_RIGHT:
+            break;
+        case AccessibleScrollType_SCROLL_TOP_EDGE:
+            break;
+        case AccessibleScrollType_SCROLL_BOTTOM_EDGE:
+            break;
+        case AccessibleScrollType_SCROLL_LEFT_EDGE:
+            break;
+        case AccessibleScrollType_SCROLL_RIGHT_EDGE:
+            break;
+#endif
+        case AccessibleScrollType_SCROLL_ANYWHERE:
+            break;
+        default:
+            return false;
+    }
+
+    const SwRect aRect(startPoint, endPoint);
+    SwViewShell* pViewShell = GetMap()->GetShell();
+    OSL_ENSURE( pViewShell != nullptr, "View shell expected!" );
+
+    ScrollMDI(pViewShell, aRect, USHRT_MAX, USHRT_MAX);
+
     return true;
 }
 

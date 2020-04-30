@@ -25,6 +25,7 @@
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -228,6 +229,8 @@ private:
 
     virtual sal_Bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
                                              ::sal_Int32 nEndIndex) override;
+
+    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
 
     virtual OUString SAL_CALL getText() override;
 

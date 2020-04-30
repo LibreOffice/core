@@ -695,6 +695,11 @@ namespace accessibility
         return true;
     }
 
+    sal_Bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+    {
+        return false;
+    }
+
     // XAccessibleEventBroadcaster
 
     void SAL_CALL AccessibleListBoxEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )

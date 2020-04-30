@@ -23,12 +23,14 @@
 
 #include <osl/diagnose.h>
 
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 
 using namespace ::com::sun::star;
@@ -53,6 +55,34 @@ text_type_from_boundary(AtkTextBoundary boundary_type)
             return -1;
     }
 }
+
+/*****************************************************************************/
+
+#if ATK_CHECK_VERSION(2,32,0)
+static accessibility::AccessibleScrollType
+scroll_type_from_scroll_type(AtkScrollType type)
+{
+    switch(type)
+    {
+        case ATK_SCROLL_TOP_LEFT:
+            return accessibility::AccessibleScrollType_SCROLL_TOP_LEFT;
+        case ATK_SCROLL_BOTTOM_RIGHT:
+            return accessibility::AccessibleScrollType_SCROLL_BOTTOM_RIGHT;
+        case ATK_SCROLL_TOP_EDGE:
+            return accessibility::AccessibleScrollType_SCROLL_TOP_EDGE;
+        case ATK_SCROLL_BOTTOM_EDGE:
+            return accessibility::AccessibleScrollType_SCROLL_BOTTOM_EDGE;
+        case ATK_SCROLL_LEFT_EDGE:
+            return accessibility::AccessibleScrollType_SCROLL_LEFT_EDGE;
+        case ATK_SCROLL_RIGHT_EDGE:
+            return accessibility::AccessibleScrollType_SCROLL_RIGHT_EDGE;
+        case ATK_SCROLL_ANYWHERE:
+            return accessibility::AccessibleScrollType_SCROLL_ANYWHERE;
+        default:
+            throw lang::NoSupportException();
+    }
+}
+#endif
 
 /*****************************************************************************/
 
@@ -812,6 +842,29 @@ text_wrapper_set_selection (AtkText *text,
     return FALSE;
 }
 
+#if ATK_CHECK_VERSION(2,32,0)
+static gboolean
+text_wrapper_scroll_substring_to(AtkText       *text,
+                                 gint           start_offset,
+                                 gint           end_offset,
+                                 AtkScrollType  scroll_type)
+{
+    try {
+        css::uno::Reference<css::accessibility::XAccessibleText> pText
+            = getText( text );
+
+        if( pText.is() )
+            return pText->scrollSubstringTo( start_offset, end_offset,
+                                             scroll_type_from_scroll_type( scroll_type ) );
+    }
+    catch(const uno::Exception&) {
+        g_warning( "Exception in scrollSubstringTo()" );
+    }
+
+    return FALSE;
+}
+#endif
+
 } // extern "C"
 
 void
@@ -836,6 +889,9 @@ textIfaceInit (AtkTextIface *iface)
   iface->get_default_attributes = text_wrapper_get_default_attributes;
   iface->get_character_extents = text_wrapper_get_character_extents;
   iface->get_offset_at_point = text_wrapper_get_offset_at_point;
+#if ATK_CHECK_VERSION(2,32,0)
+  iface->scroll_substring_to = text_wrapper_scroll_substring_to;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
