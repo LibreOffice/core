@@ -1582,7 +1582,7 @@ private:
 
     // all other values the triangulation is based on and
     // need to be compared with to check for data validity
-    basegfx::B2DVector                          maLineWidth;
+    double                                      mfLineWidth;
     basegfx::B2DLineJoin                        meJoin;
     css::drawing::LineCap                       meCap;
     double                                      mfMiterMinimumAngle;
@@ -1592,7 +1592,7 @@ public:
     SystemDependentData_Triangulation(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
-        const basegfx::B2DVector& rLineWidth,
+        double fLineWidth,
         basegfx::B2DLineJoin eJoin,
         css::drawing::LineCap eCap,
         double fMiterMinimumAngle,
@@ -1600,7 +1600,7 @@ public:
 
     // read access
     const basegfx::triangulator::B2DTriangleVector& getTriangles() const { return maTriangles; }
-    const basegfx::B2DVector& getLineWidth() const { return maLineWidth; }
+    double getLineWidth() const { return mfLineWidth; }
     const basegfx::B2DLineJoin& getJoin() const { return meJoin; }
     const css::drawing::LineCap& getCap() const { return meCap; }
     double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
@@ -1614,14 +1614,14 @@ public:
 SystemDependentData_Triangulation::SystemDependentData_Triangulation(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
     const basegfx::triangulator::B2DTriangleVector& rTriangles,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     basegfx::B2DLineJoin eJoin,
     css::drawing::LineCap eCap,
     double fMiterMinimumAngle,
     const std::vector< double >* pStroke)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     maTriangles(rTriangles),
-    maLineWidth(rLineWidth),
+    mfLineWidth(fLineWidth),
     meJoin(eJoin),
     meCap(eCap),
     mfMiterMinimumAngle(fMiterMinimumAngle),
@@ -1649,7 +1649,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -1663,28 +1663,25 @@ bool X11SalGraphicsImpl::drawPolyLine(
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    basegfx::B2DHomMatrix aObjectToDeviceInv;
 
     // tdf#124848 calculate-back logical LineWidth for a hairline.
     // This implementation does not hand over the transformation to
     // the graphic sub-system, but the triangulation data is prepared
     // view-independent based on the logic LineWidth, so we need to
     // know it
-    if(aLineWidth.equalZero())
+    if(fLineWidth == 0)
     {
-        aLineWidth = basegfx::B2DVector(1.0, 1.0);
+        fLineWidth = 1.0;
 
         if(!bObjectToDeviceIsIdentity)
         {
-            if(aObjectToDeviceInv.isIdentity())
-            {
-                aObjectToDeviceInv = rObjectToDevice;
-                aObjectToDeviceInv.invert();
-            }
-
-            aLineWidth = aObjectToDeviceInv * aLineWidth;
+            basegfx::B2DTuple scale;
+            basegfx::B2DTuple translate;
+            double rotate, shear;
+            if( !rObjectToDevice.decompose( scale, translate, rotate, shear ))
+                assert( false );
+            fLineWidth /= scale.getX();
         }
     }
 
@@ -1727,18 +1724,14 @@ bool X11SalGraphicsImpl::drawPolyLine(
     if(pSystemDependentData_Triangulation)
     {
         // check data validity (II)
-        if(pSystemDependentData_Triangulation->getLineWidth() != aLineWidth)
+        if(pSystemDependentData_Triangulation->getLineWidth() != fLineWidth)
         {
             // sometimes small inconsistencies, use a percentage tolerance
-            const double fFactorX(basegfx::fTools::equalZero(aLineWidth.getX())
+            const double fFactor(basegfx::fTools::equalZero(fLineWidth)
                 ? 0.0
-                : fabs(1.0 - (pSystemDependentData_Triangulation->getLineWidth().getX() / aLineWidth.getX())));
-            const double fFactorY(basegfx::fTools::equalZero(aLineWidth.getY())
-                ? 0.0
-                : fabs(1.0 - (pSystemDependentData_Triangulation->getLineWidth().getY() / aLineWidth.getY())));
-
+                : fabs(1.0 - (pSystemDependentData_Triangulation->getLineWidth() / fLineWidth)));
             // compare with 5.0% tolerance
-            if(basegfx::fTools::more(fFactorX, 0.05) || basegfx::fTools::more(fFactorY, 0.05))
+            if(basegfx::fTools::more(fFactor, 0.05))
             {
                 // data invalid, forget
                 pSystemDependentData_Triangulation.reset();
@@ -1781,12 +1774,8 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
             if(!bObjectToDeviceIsIdentity)
             {
-                if(aObjectToDeviceInv.isIdentity())
-                {
-                    aObjectToDeviceInv = rObjectToDevice;
-                    aObjectToDeviceInv.invert();
-                }
-
+                basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
+                aObjectToDeviceInv.invert();
                 aPolyPolygonLine.transform(aObjectToDeviceInv);
             }
         }
@@ -1803,7 +1792,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
             // aTriangles data (!)
             basegfx::utils::createAreaGeometry(
                 aPolyLine,
-                0.5 * aLineWidth.getX(),
+                0.5 * fLineWidth,
                 eLineJoin,
                 eLineCap,
                 basegfx::deg2rad(12.5),
@@ -1820,7 +1809,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
             pSystemDependentData_Triangulation = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_Triangulation>(
                 ImplGetSystemDependentDataManager(),
                 aTriangles,
-                aLineWidth,
+                fLineWidth,
                 eLineJoin,
                 eLineCap,
                 fMiterMinimumAngle,
