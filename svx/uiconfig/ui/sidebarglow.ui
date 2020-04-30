@@ -6,6 +6,11 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="upper">100</property>
+  </object>
   <object class="GtkGrid" id="GlowPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -85,6 +90,32 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="transparency">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="sidebarglow|transparency">Transparency:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">LB_GLOW_TRANSPARENCY</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="LB_GLOW_TRANSPARENCY">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="adjustment">adjustment2</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
