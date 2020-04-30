@@ -46,7 +46,7 @@ namespace XPathHelper
     /**
      * Tries to parse the specified file in the temp file zip container as a binary file.
      */
-    SCQAHELPER_DLLPUBLIC std::shared_ptr<SvStream> parseExportStream(std::shared_ptr<utl::TempFile> const & pTempFile,
+    SCQAHELPER_DLLPUBLIC std::unique_ptr<SvStream> parseExportStream(std::shared_ptr<utl::TempFile> const & pTempFile,
             uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile);
 
     /**

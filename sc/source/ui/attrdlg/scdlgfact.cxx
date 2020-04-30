@@ -940,7 +940,7 @@ VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsc
                                                     const OUString& aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall)
 {
-    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_unique<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall));
+    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_shared<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall));
 }
 
 VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(weld::Window* pParent)
@@ -969,7 +969,7 @@ VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarni
 
 VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
 {
-    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create(std::make_unique<ScCondFormatManagerDlg>(pParent, pDoc, pFormatList));
+    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create(std::make_shared<ScCondFormatManagerDlg>(pParent, pDoc, pFormatList));
 }
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)
@@ -1132,7 +1132,7 @@ VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenar
 
 VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScShowTabDlg_Impl>::Create(new ScShowTabDlg(pParent));
+    return VclPtr<AbstractScShowTabDlg_Impl>::Create(std::make_shared<ScShowTabDlg>(pParent));
 }
 
 VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg(weld::Window* pParent,
@@ -1164,7 +1164,7 @@ VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportO
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScAttrDlg>(pParent, pCellAttrs));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScAttrDlg>(pParent, pCellAttrs));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( weld::Window*         pParent,
@@ -1172,42 +1172,42 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( we
                                                                         const OUString&     rPageStyle,
                                                                         sal_uInt16          nResId )
 {
-    std::unique_ptr<SfxTabDialogController> xDlg;
+    std::shared_ptr<SfxTabDialogController> xDlg;
 
     switch (nResId)
     {
         case RID_SCDLG_HFED_HEADER:
         case RID_SCDLG_HFEDIT_HEADER:
-            xDlg = std::make_unique<ScHFEditHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFED_FOOTER:
         case RID_SCDLG_HFEDIT_FOOTER:
-            xDlg = std::make_unique<ScHFEditFooterDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTHEADER:
-            xDlg = std::make_unique<ScHFEditLeftHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditLeftHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTHEADER:
-            xDlg = std::make_unique<ScHFEditRightHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditRightHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTFOOTER:
-            xDlg = std::make_unique<ScHFEditLeftFooterDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditLeftFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTFOOTER:
-            xDlg = std::make_unique<ScHFEditRightFooterDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditRightFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SHDR:
-            xDlg = std::make_unique<ScHFEditSharedHeaderDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditSharedHeaderDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SFTR:
-            xDlg = std::make_unique<ScHFEditSharedFooterDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditSharedFooterDlg>(pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_ALL:
-            xDlg = std::make_unique<ScHFEditAllDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditAllDlg>(pParent, rCoreSet, rPageStyle);
             break;
         default:
         case RID_SCDLG_HFEDIT:
-            xDlg = std::make_unique<ScHFEditActiveDlg>(pParent, rCoreSet, rPageStyle);
+            xDlg = std::make_shared<ScHFEditActiveDlg>(pParent, rCoreSet, rPageStyle);
             break;
     }
 
@@ -1218,29 +1218,29 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScStyleDlg(weld
                                                                             SfxStyleSheetBase& rStyleBase,
                                                                             bool bPage)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScStyleDlg>(pParent, rStyleBase, bPage));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScStyleDlg>(pParent, rStyleBase, bPage));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScSubTotalDlg>(pParent, pArgSet));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScSubTotalDlg>(pParent, pArgSet));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScCharDlg(
     weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScCharDlg>(pParent, pAttr, pDocShell, bDrawText));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScCharDlg>(pParent, pAttr, pDocShell, bDrawText));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScParagraphDlg(
     weld::Window* pParent, const SfxItemSet* pAttr)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScParagraphDlg>(pParent, pAttr));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScParagraphDlg>(pParent, pAttr));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
 {
-    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_unique<ScSortDlg>(pParent, pArgSet));
+    return VclPtr<ScAbstractTabController_Impl>::Create(std::make_shared<ScSortDlg>(pParent, pArgSet));
 }
 
 //------------------ Factories for TabPages--------------------

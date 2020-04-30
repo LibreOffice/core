@@ -279,7 +279,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
         pContext = new ScXMLNamedExpressionsContext(
             GetScImport(),
-            new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
+            std::make_shared<ScXMLNamedExpressionsContext::SheetLocalInserter>(GetScImport(), nTab));
     }
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):

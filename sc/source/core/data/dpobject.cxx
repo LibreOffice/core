@@ -308,7 +308,6 @@ bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
 
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
-    mpTableData(static_cast<ScDPTableData*>(nullptr)),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
     bAllowMove(false),
@@ -322,7 +321,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     aTableName( r.aTableName ),
     aTableTag( r.aTableTag ),
     aOutRange( r.aOutRange ),
-    mpTableData(static_cast<ScDPTableData*>(nullptr)),
     maInteropGrabBag(r.maInteropGrabBag),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),

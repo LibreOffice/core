@@ -69,7 +69,7 @@ public:
 
     ScXMLNamedExpressionsContext(
         ScXMLImport& rImport,
-        Inserter* pInserter );
+        std::shared_ptr<Inserter> pInserter );
 
     virtual ~ScXMLNamedExpressionsContext() override;
 

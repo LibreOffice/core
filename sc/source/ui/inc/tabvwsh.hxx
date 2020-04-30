@@ -327,7 +327,7 @@ public:
 
     static ScTabViewShell* GetActiveViewShell();
 
-    std::unique_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
+    std::shared_ptr<SfxModelessDialogController> CreateRefDialogController(SfxBindings* pB, SfxChildWindow* pCW,
                                                     const SfxChildWinInfo* pInfo,
                                                     weld::Window* pParent, sal_uInt16 nSlotId);
 

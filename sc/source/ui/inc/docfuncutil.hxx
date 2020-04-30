@@ -34,7 +34,7 @@ public:
         const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
         bool bMulti, bool bDrawUndo );
 
-    static std::unique_ptr<ScSimpleUndo::DataSpansType> getNonEmptyCellSpans(
+    static std::shared_ptr<ScSimpleUndo::DataSpansType> getNonEmptyCellSpans(
         const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange );
 };
 

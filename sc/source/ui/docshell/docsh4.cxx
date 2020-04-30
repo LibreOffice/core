@@ -748,7 +748,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
                     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
-                    std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet( pApp->GetPool() ));
+                    auto pSet = std::make_shared<SfxAllItemSet>( pApp->GetPool() );
                     if (!aOptions.isEmpty())
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
                     if ( nVersion != 0 )

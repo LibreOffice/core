@@ -3136,7 +3136,7 @@ void ScExportTest::testCustomXml()
     assertXPath(pRelsDoc, "/r:Relationships/r:Relationship", 1);
     assertXPath(pRelsDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 
-    std::shared_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
+    std::unique_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
 
     xShell->DoClose();

@@ -1371,7 +1371,11 @@ XclImpChTextRef XclImpChAttachedLabel::CreateDataLabel( const XclImpChText* pPar
     const sal_uInt16 EXC_CHATTLABEL_SHOWANYPERCENT = EXC_CHATTLABEL_SHOWPERCENT | EXC_CHATTLABEL_SHOWCATEGPERC;
     const sal_uInt16 EXC_CHATTLABEL_SHOWANYCATEG = EXC_CHATTLABEL_SHOWCATEG | EXC_CHATTLABEL_SHOWCATEGPERC;
 
-    XclImpChTextRef xLabel( pParent ? new XclImpChText( *pParent ) : new XclImpChText( GetChRoot() ) );
+    XclImpChTextRef xLabel;
+    if ( pParent )
+        xLabel = std::make_shared<XclImpChText>( *pParent );
+    else
+        xLabel = std::make_shared<XclImpChText>( GetChRoot() );
     xLabel->UpdateDataLabel(
         ::get_flag( mnFlags, EXC_CHATTLABEL_SHOWANYCATEG ),
         ::get_flag( mnFlags, EXC_CHATTLABEL_SHOWANYVALUE ),

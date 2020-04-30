@@ -103,7 +103,7 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 {
     std::shared_ptr<ScImportAsciiDlg> m_xDlg;
 public:
-    explicit AbstractScImportAsciiDlg_Impl(std::unique_ptr<ScImportAsciiDlg> p)
+    explicit AbstractScImportAsciiDlg_Impl(std::shared_ptr<ScImportAsciiDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -151,7 +151,7 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
 {
     std::shared_ptr<ScCondFormatManagerDlg> m_xDlg;
 public:
-    explicit AbstractScCondFormatManagerDlg_Impl(std::unique_ptr<ScCondFormatManagerDlg> p)
+    explicit AbstractScCondFormatManagerDlg_Impl(std::shared_ptr<ScCondFormatManagerDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -544,8 +544,8 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
     std::shared_ptr<ScShowTabDlg> m_xDlg;
 public:
-    explicit AbstractScShowTabDlg_Impl(ScShowTabDlg* p)
-        : m_xDlg(p)
+    explicit AbstractScShowTabDlg_Impl(std::shared_ptr<ScShowTabDlg> p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
@@ -633,7 +633,7 @@ class ScAbstractTabController_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit ScAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit ScAbstractTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }

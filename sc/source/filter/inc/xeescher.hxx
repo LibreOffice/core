@@ -420,7 +420,7 @@ private:
 
 private:
     std::shared_ptr< ::utl::TempFile > mxTempFile;
-    std::shared_ptr< SvStream >  mxDffStrm;
+    std::unique_ptr< SvStream >  mxDffStrm;
     std::shared_ptr< XclEscherEx > mxEscherEx;
     rtl::Reference< XclExpObjList > mxObjList;
 };

@@ -1294,7 +1294,7 @@ public:
     SymbolTable() : mCurId(0) { }
     template <class T>
     const DynamicKernelArgument* DeclRefArg(const ScCalcConfig& config, const FormulaTreeNodeRef&,
-                                            SlidingFunctionBase* pCodeGen, int nResultSize);
+                                            std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize);
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions( std::stringstream& ss )
     {
@@ -2358,7 +2358,7 @@ public:
 
     DynamicKernelSoPArguments( const ScCalcConfig& config,
         const std::string& s, const FormulaTreeNodeRef& ft,
-        SlidingFunctionBase* pCodeGen, int nResultSize );
+        std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize );
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) override
@@ -2647,14 +2647,14 @@ private:
 }
 
 static DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
-    const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
+    const std::string& ts, const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase> pCodeGen,
     int nResultSize )
 {
-    return std::make_shared<DynamicKernelSoPArguments>(config, ts, ft, pCodeGen, nResultSize);
+    return std::make_shared<DynamicKernelSoPArguments>(config, ts, ft, std::move(pCodeGen), nResultSize);
 }
 
 template<class Base>
-static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::string& s,
+static std::shared_ptr<DynamicKernelArgument> VectorRefFactory( const ScCalcConfig& config, const std::string& s,
     const FormulaTreeNodeRef& ft,
     std::shared_ptr<SlidingFunctionBase>& pCodeGen,
     int index )
@@ -2665,8 +2665,8 @@ static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, cons
     {
         // coverity[identical_branches] - only identical if Base happens to be VectorRef
         if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
-            return new DynamicKernelSlidingArgument<VectorRef>(config, s, ft, pCodeGen, index);
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+            return std::make_shared<DynamicKernelSlidingArgument<VectorRef>>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
     }
     // AVERAGE is not supported yet
     //Average has been supported by reduction kernel
@@ -2677,17 +2677,17 @@ static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, cons
     // MUL is not supported yet
     else if (dynamic_cast<OpMul*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
     }
     // Sub is not a reduction per se
     else if (dynamic_cast<OpSub*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
     }
     // Only child class of Reduction is supported
     else if (!dynamic_cast<Reduction*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
     }
 
     const formula::DoubleVectorRefToken* pDVR =
@@ -2695,16 +2695,16 @@ static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, cons
         ft->GetFormulaToken());
     // Window being too small to justify a parallel reduction
     if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
     if (pDVR->IsStartFixed() == pDVR->IsEndFixed())
-        return new ParallelReductionVectorRef<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<ParallelReductionVectorRef<Base>>(config, s, ft, pCodeGen, index);
     else // Other cases are not supported as well
-        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
+        return std::make_shared<DynamicKernelSlidingArgument<Base>>(config, s, ft, pCodeGen, index);
 }
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
-    const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen, int nResultSize ) :
-    DynamicKernelArgument(config, s, ft), mpCodeGen(pCodeGen), mpClmem2(nullptr)
+    const std::string& s, const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize ) :
+    DynamicKernelArgument(config, s, ft), mpCodeGen(std::move(pCodeGen)), mpClmem2(nullptr)
 {
     size_t nChildren = ft->Children.size();
 
@@ -2786,8 +2786,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             // they are to be treated as zero
                             SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
                             mvSubArguments.push_back(
-                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j)));
+                                VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j));
                         }
                         else if (pDVR->GetArrays()[j].mpNumericArray == nullptr &&
                             pCodeGen->takeNumeric() &&
@@ -2798,8 +2798,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             // strings, but they are to be treated as zero
                             SAL_INFO("sc.opencl", "Only strings even if want numbers but should be treated as zero");
                             mvSubArguments.push_back(
-                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j)));
+                                VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j));
                         }
                         else if (pDVR->GetArrays()[j].mpStringArray &&
                             pCodeGen->takeString())
@@ -2807,9 +2807,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             // There are strings, and the function takes strings.
                             SAL_INFO("sc.opencl", "Strings only");
                             mvSubArguments.push_back(
-                                DynamicKernelArgumentRef(VectorRefFactory
+                                VectorRefFactory
                                     <DynamicKernelStringArgument>(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j)));
+                                        ts, ft->Children[i], mpCodeGen, j));
                         }
                         else if (AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) &&
                             pDVR->GetArrays()[j].mpNumericArray == nullptr)
@@ -2818,8 +2818,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             // array of NANs
                             SAL_INFO("sc.opencl", "Only empty cells");
                             mvSubArguments.push_back(
-                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
-                                        ts, ft->Children[i], mpCodeGen, j)));
+                                VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j));
                         }
                         else
                         {
@@ -2924,475 +2924,475 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 }
                 break;
             case ocDiv:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDiv(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpDiv>(nResultSize), nResultSize));
                 break;
             case ocMul:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMul(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMul>(nResultSize), nResultSize));
                 break;
             case ocSub:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSub(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSub>(nResultSize), nResultSize));
                 break;
             case ocAdd:
             case ocSum:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSum(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSum>(nResultSize), nResultSize));
                 break;
             case ocAverage:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpAverage(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpAverage>(nResultSize), nResultSize));
                 break;
             case ocMin:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMin(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMin>(nResultSize), nResultSize));
                 break;
             case ocMax:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMax(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMax>(nResultSize), nResultSize));
                 break;
             case ocCount:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCount(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCount>(nResultSize), nResultSize));
                 break;
             case ocSumProduct:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSumProduct, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSumProduct>(), nResultSize));
                 break;
             case ocIRR:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpIRR, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpIRR>(), nResultSize));
                 break;
             case ocMIRR:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMIRR, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpMIRR>(), nResultSize));
                 break;
             case ocPMT:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpPMT>(), nResultSize));
                 break;
             case ocRate:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpIntrate, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpIntrate>(), nResultSize));
                 break;
             case ocRRI:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpRRI, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpRRI>(), nResultSize));
                 break;
             case ocPpmt:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpPPMT>(), nResultSize));
                 break;
             case ocFisher:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFisher, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpFisher>(), nResultSize));
                 break;
             case ocFisherInv:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFisherInv, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpFisherInv>(), nResultSize));
                 break;
             case ocGamma:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGamma, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGamma>(), nResultSize));
                 break;
             case ocSLN:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSLN, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSLN>(), nResultSize));
                 break;
             case ocGammaLn:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGammaLn, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGammaLn>(), nResultSize));
                 break;
             case ocGauss:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGauss, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGauss>(), nResultSize));
                 break;
             /*case ocGeoMean:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGeoMean));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGeoMean));
                 break;*/
             case ocHarMean:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpHarMean, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpHarMean>(), nResultSize));
                 break;
             case ocLessEqual:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpLessEqual, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpLessEqual>(), nResultSize));
                 break;
             case ocLess:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpLess, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpLess>(), nResultSize));
                 break;
             case ocEqual:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpEqual, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpEqual>(), nResultSize));
                 break;
             case ocGreater:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGreater, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpGreater>(), nResultSize));
                 break;
             case ocSYD:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSYD, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpSYD>(), nResultSize));
                 break;
             case ocCorrel:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCorrel, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCorrel>(), nResultSize));
                 break;
             case ocCos:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCos, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCos>(), nResultSize));
                 break;
             case ocNegBinomVert :
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNegbinomdist, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpNegbinomdist>(), nResultSize));
                 break;
             case ocPearson:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPearson, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpPearson>(), nResultSize));
                 break;
             case ocRSQ:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpRsq, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpRsq>(), nResultSize));
                 break;
             case ocCosecant:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCsc, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCsc>(), nResultSize));
                 break;
             case ocISPMT:
-                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpISPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpISPMT>(), nResultSize));
                 break;
             case ocPDuration:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPDuration, nResultSize));
+                        ft->Children[i], std::make_shared<OpPDuration>(), nResultSize));
                 break;
             case ocSinHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSinh, nResultSize));
+                        ft->Children[i], std::make_shared<OpSinh>(), nResultSize));
                 break;
             case ocAbs:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAbs, nResultSize));
+                        ft->Children[i], std::make_shared<OpAbs>(), nResultSize));
                 break;
             case ocPV:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPV, nResultSize));
+                        ft->Children[i], std::make_shared<OpPV>(), nResultSize));
                 break;
             case ocSin:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSin, nResultSize));
+                        ft->Children[i], std::make_shared<OpSin>(), nResultSize));
                 break;
             case ocTan:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpTan, nResultSize));
+                        ft->Children[i], std::make_shared<OpTan>(), nResultSize));
                 break;
             case ocTanHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpTanH, nResultSize));
+                        ft->Children[i], std::make_shared<OpTanH>(), nResultSize));
                 break;
             case ocStandard:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpStandard, nResultSize));
+                        ft->Children[i], std::make_shared<OpStandard>(), nResultSize));
                 break;
             case ocWeibull:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpWeibull, nResultSize));
+                        ft->Children[i], std::make_shared<OpWeibull>(), nResultSize));
                 break;
             /*case ocMedian:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpMedian));
+                         ft->Children[i],std::make_shared<OpMedian));
                 break;*/
             case ocDDB:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDDB, nResultSize));
+                        ft->Children[i], std::make_shared<OpDDB>(), nResultSize));
                 break;
             case ocFV:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpFV, nResultSize));
+                        ft->Children[i], std::make_shared<OpFV>(), nResultSize));
                 break;
             case ocSumIfs:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumIfs, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumIfs>(), nResultSize));
                 break;
                 /*case ocVBD:
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                             ft->Children[i],new OpVDB));
+                             ft->Children[i],std::make_shared<OpVDB));
                      break;*/
             case ocKurt:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpKurt, nResultSize));
+                        ft->Children[i], std::make_shared<OpKurt>(), nResultSize));
                 break;
                 /*case ocNper:
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                            ft->Children[i], new OpNper));
+                            ft->Children[i], std::make_shared<OpNper));
                      break;*/
             case ocNormDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNormdist, nResultSize));
+                        ft->Children[i], std::make_shared<OpNormdist>(), nResultSize));
                 break;
             case ocArcCos:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcCos, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcCos>(), nResultSize));
                 break;
             case ocSqrt:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSqrt, nResultSize));
+                        ft->Children[i], std::make_shared<OpSqrt>(), nResultSize));
                 break;
             case ocArcCosHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcCosHyp, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcCosHyp>(), nResultSize));
                 break;
             case ocNPV:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNPV, nResultSize));
+                        ft->Children[i], std::make_shared<OpNPV>(), nResultSize));
                 break;
             case ocStdNormDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNormsdist, nResultSize));
+                        ft->Children[i], std::make_shared<OpNormsdist>(), nResultSize));
                 break;
             case ocNormInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNorminv, nResultSize));
+                        ft->Children[i], std::make_shared<OpNorminv>(), nResultSize));
                 break;
             case ocSNormInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNormsinv, nResultSize));
+                        ft->Children[i], std::make_shared<OpNormsinv>(), nResultSize));
                 break;
             case ocPermut:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPermut, nResultSize));
+                        ft->Children[i], std::make_shared<OpPermut>(), nResultSize));
                 break;
             case ocPermutationA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPermutationA, nResultSize));
+                        ft->Children[i], std::make_shared<OpPermutationA>(), nResultSize));
                 break;
             case ocPhi:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPhi, nResultSize));
+                        ft->Children[i], std::make_shared<OpPhi>(), nResultSize));
                 break;
             case ocIpmt:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpIPMT, nResultSize));
+                        ft->Children[i], std::make_shared<OpIPMT>(), nResultSize));
                 break;
             case ocConfidence:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpConfidence, nResultSize));
+                        ft->Children[i], std::make_shared<OpConfidence>(), nResultSize));
                 break;
             case ocIntercept:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpIntercept, nResultSize));
+                        ft->Children[i], std::make_shared<OpIntercept>(), nResultSize));
                 break;
             case ocDB:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                        new OpDB, nResultSize));
+                        std::make_shared<OpDB>(), nResultSize));
                 break;
             case ocLogInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpLogInv, nResultSize));
+                        ft->Children[i], std::make_shared<OpLogInv>(), nResultSize));
                 break;
             case ocArcCot:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcCot, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcCot>(), nResultSize));
                 break;
             case ocCosHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCosh, nResultSize));
+                        ft->Children[i], std::make_shared<OpCosh>(), nResultSize));
                 break;
             case ocCritBinom:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCritBinom, nResultSize));
+                        ft->Children[i], std::make_shared<OpCritBinom>(), nResultSize));
                 break;
             case ocArcCotHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcCotHyp, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcCotHyp>(), nResultSize));
                 break;
             case ocArcSin:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcSin, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcSin>(), nResultSize));
                 break;
             case ocArcSinHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcSinHyp, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcSinHyp>(), nResultSize));
                 break;
             case ocArcTan:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcTan, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcTan>(), nResultSize));
                 break;
             case ocArcTanHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcTanH, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcTanH>(), nResultSize));
                 break;
             case ocBitAnd:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBitAnd, nResultSize));
+                        ft->Children[i], std::make_shared<OpBitAnd>(), nResultSize));
                 break;
             case ocForecast:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpForecast, nResultSize));
+                        ft->Children[i], std::make_shared<OpForecast>(), nResultSize));
                 break;
             case ocLogNormDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpLogNormDist, nResultSize));
+                        ft->Children[i], std::make_shared<OpLogNormDist>(), nResultSize));
                 break;
             /*case ocGammaDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i], new OpGammaDist));
+                         ft->Children[i], std::make_shared<OpGammaDist));
                 break;*/
             case ocLn:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpLn, nResultSize));
+                        ft->Children[i], std::make_shared<OpLn>(), nResultSize));
                 break;
             case ocRound:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpRound, nResultSize));
+                        ft->Children[i], std::make_shared<OpRound>(), nResultSize));
                 break;
             case ocCot:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCot, nResultSize));
+                        ft->Children[i], std::make_shared<OpCot>(), nResultSize));
                 break;
             case ocCotHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCoth, nResultSize));
+                        ft->Children[i], std::make_shared<OpCoth>(), nResultSize));
                 break;
             case ocFDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpFdist, nResultSize));
+                        ft->Children[i], std::make_shared<OpFdist>(), nResultSize));
                 break;
             case ocVar:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpVar, nResultSize));
+                        ft->Children[i], std::make_shared<OpVar>(), nResultSize));
                 break;
             /*case ocChiDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpChiDist));
+                         ft->Children[i],std::make_shared<OpChiDist));
                 break;*/
             case ocPow:
             case ocPower:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPower, nResultSize));
+                        ft->Children[i], std::make_shared<OpPower>(), nResultSize));
                 break;
             case ocOdd:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpOdd, nResultSize));
+                        ft->Children[i], std::make_shared<OpOdd>(), nResultSize));
                 break;
             /*case ocChiSqDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpChiSqDist));
+                         ft->Children[i],std::make_shared<OpChiSqDist));
                 break;
             case ocChiSqInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpChiSqInv));
+                         ft->Children[i],std::make_shared<OpChiSqInv));
                 break;
             case ocGammaInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i], new OpGammaInv));
+                         ft->Children[i], std::make_shared<OpGammaInv));
                 break;*/
             case ocFloor:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpFloor, nResultSize));
+                        ft->Children[i], std::make_shared<OpFloor>(), nResultSize));
                 break;
             /*case ocFInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i], new OpFInv));
+                         ft->Children[i], std::make_shared<OpFInv));
                 break;*/
             case ocFTest:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpFTest, nResultSize));
+                        ft->Children[i], std::make_shared<OpFTest>(), nResultSize));
                 break;
             case ocB:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpB, nResultSize));
+                        ft->Children[i], std::make_shared<OpB>(), nResultSize));
                 break;
             case ocBetaDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBetaDist, nResultSize));
+                        ft->Children[i], std::make_shared<OpBetaDist>(), nResultSize));
                 break;
             case ocCosecantHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCscH, nResultSize));
+                        ft->Children[i], std::make_shared<OpCscH>(), nResultSize));
                 break;
             case ocExp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpExp, nResultSize));
+                        ft->Children[i], std::make_shared<OpExp>(), nResultSize));
                 break;
             case ocLog10:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpLog10, nResultSize));
+                        ft->Children[i], std::make_shared<OpLog10>(), nResultSize));
                 break;
             case ocExpDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpExponDist, nResultSize));
+                        ft->Children[i], std::make_shared<OpExponDist>(), nResultSize));
                 break;
             case ocAverageIfs:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAverageIfs, nResultSize));
+                        ft->Children[i], std::make_shared<OpAverageIfs>(), nResultSize));
                 break;
             case ocCountIfs:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCountIfs, nResultSize));
+                        ft->Children[i], std::make_shared<OpCountIfs>(), nResultSize));
                 break;
             case ocCombinA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCombinA, nResultSize));
+                        ft->Children[i], std::make_shared<OpCombinA>(), nResultSize));
                 break;
             case ocEven:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpEven, nResultSize));
+                        ft->Children[i], std::make_shared<OpEven>(), nResultSize));
                 break;
             case ocLog:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpLog, nResultSize));
+                        ft->Children[i], std::make_shared<OpLog>(), nResultSize));
                 break;
             case ocMod:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpMod, nResultSize));
+                        ft->Children[i], std::make_shared<OpMod>(), nResultSize));
                 break;
             case ocTrunc:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpTrunc, nResultSize));
+                        ft->Children[i], std::make_shared<OpTrunc>(), nResultSize));
                 break;
             case ocSkew:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSkew, nResultSize));
+                        ft->Children[i], std::make_shared<OpSkew>(), nResultSize));
                 break;
             case ocArcTan2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpArcTan2, nResultSize));
+                        ft->Children[i], std::make_shared<OpArcTan2>(), nResultSize));
                 break;
             case ocBitOr:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBitOr, nResultSize));
+                        ft->Children[i], std::make_shared<OpBitOr>(), nResultSize));
                 break;
             case ocBitLshift:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBitLshift, nResultSize));
+                        ft->Children[i], std::make_shared<OpBitLshift>(), nResultSize));
                 break;
             case ocBitRshift:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBitRshift, nResultSize));
+                        ft->Children[i], std::make_shared<OpBitRshift>(), nResultSize));
                 break;
             case ocBitXor:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBitXor, nResultSize));
+                        ft->Children[i], std::make_shared<OpBitXor>(), nResultSize));
                 break;
             /*case ocChiInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpChiInv));
+                         ft->Children[i],std::make_shared<OpChiInv));
                 break;*/
             case ocPoissonDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpPoisson, nResultSize));
+                        ft->Children[i], std::make_shared<OpPoisson>(), nResultSize));
                 break;
             case ocSumSQ:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumSQ, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumSQ>(), nResultSize));
                 break;
             case ocSkewp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSkewp, nResultSize));
+                        ft->Children[i], std::make_shared<OpSkewp>(), nResultSize));
                 break;
             case ocBinomDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpBinomdist, nResultSize));
+                        ft->Children[i], std::make_shared<OpBinomdist>(), nResultSize));
                 break;
             case ocVarP:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpVarP, nResultSize));
+                        ft->Children[i], std::make_shared<OpVarP>(), nResultSize));
                 break;
             case ocCeil:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCeil, nResultSize));
+                        ft->Children[i], std::make_shared<OpCeil>(), nResultSize));
                 break;
             case ocCombin:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCombin, nResultSize));
+                        ft->Children[i], std::make_shared<OpCombin>(), nResultSize));
                 break;
             case ocDevSq:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDevSq, nResultSize));
+                        ft->Children[i], std::make_shared<OpDevSq>(), nResultSize));
                 break;
             case ocStDev:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpStDev, nResultSize));
+                        ft->Children[i], std::make_shared<OpStDev>(), nResultSize));
                 break;
             case ocSlope:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSlope, nResultSize));
+                        ft->Children[i], std::make_shared<OpSlope>(), nResultSize));
                 break;
             case ocSTEYX:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSTEYX, nResultSize));
+                        ft->Children[i], std::make_shared<OpSTEYX>(), nResultSize));
                 break;
             case ocZTest:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpZTest, nResultSize));
+                        ft->Children[i], std::make_shared<OpZTest>(), nResultSize));
                 break;
             case ocPi:
                 mvSubArguments.push_back(
@@ -3406,406 +3406,406 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 break;
             case ocProduct:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpProduct, nResultSize));
+                        ft->Children[i], std::make_shared<OpProduct>(), nResultSize));
                 break;
             /*case ocHypGeomDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpHypGeomDist));
+                         ft->Children[i],std::make_shared<OpHypGeomDist));
                 break;*/
             case ocSumX2MY2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumX2MY2, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumX2MY2>(), nResultSize));
                 break;
             case ocSumX2DY2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumX2PY2, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumX2PY2>(), nResultSize));
                 break;
             /*case ocBetaInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i],new OpBetainv));
+                         ft->Children[i],std::make_shared<OpBetainv));
                  break;*/
             case ocTTest:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpTTest, nResultSize));
+                        ft->Children[i], std::make_shared<OpTTest>(), nResultSize));
                 break;
             case ocTDist:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpTDist, nResultSize));
+                        ft->Children[i], std::make_shared<OpTDist>(), nResultSize));
                 break;
             /*case ocTInv:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                         ft->Children[i], new OpTInv));
+                         ft->Children[i], std::make_shared<OpTInv));
                  break;*/
             case ocSumXMY2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumXMY2, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumXMY2>(), nResultSize));
                 break;
             case ocStDevP:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpStDevP, nResultSize));
+                        ft->Children[i], std::make_shared<OpStDevP>(), nResultSize));
                 break;
             case ocCovar:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCovar, nResultSize));
+                        ft->Children[i], std::make_shared<OpCovar>(), nResultSize));
                 break;
             case ocAnd:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAnd, nResultSize));
+                        ft->Children[i], std::make_shared<OpAnd>(), nResultSize));
                 break;
             case ocVLookup:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpVLookup, nResultSize));
+                        ft->Children[i], std::make_shared<OpVLookup>(), nResultSize));
                 break;
             case ocOr:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpOr, nResultSize));
+                        ft->Children[i], std::make_shared<OpOr>(), nResultSize));
                 break;
             case ocNot:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNot, nResultSize));
+                        ft->Children[i], std::make_shared<OpNot>(), nResultSize));
                 break;
             case ocXor:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpXor, nResultSize));
+                        ft->Children[i], std::make_shared<OpXor>(), nResultSize));
                 break;
             case ocDBMax:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDmax, nResultSize));
+                        ft->Children[i], std::make_shared<OpDmax>(), nResultSize));
                 break;
             case ocDBMin:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDmin, nResultSize));
+                        ft->Children[i], std::make_shared<OpDmin>(), nResultSize));
                 break;
             case ocDBProduct:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDproduct, nResultSize));
+                        ft->Children[i], std::make_shared<OpDproduct>(), nResultSize));
                 break;
             case ocDBAverage:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDaverage, nResultSize));
+                        ft->Children[i], std::make_shared<OpDaverage>(), nResultSize));
                 break;
             case ocDBStdDev:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDstdev, nResultSize));
+                        ft->Children[i], std::make_shared<OpDstdev>(), nResultSize));
                 break;
             case ocDBStdDevP:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDstdevp, nResultSize));
+                        ft->Children[i], std::make_shared<OpDstdevp>(), nResultSize));
                 break;
             case ocDBSum:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDsum, nResultSize));
+                        ft->Children[i], std::make_shared<OpDsum>(), nResultSize));
                 break;
             case ocDBVar:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDvar, nResultSize));
+                        ft->Children[i], std::make_shared<OpDvar>(), nResultSize));
                 break;
             case ocDBVarP:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDvarp, nResultSize));
+                        ft->Children[i], std::make_shared<OpDvarp>(), nResultSize));
                 break;
             case ocAverageIf:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAverageIf, nResultSize));
+                        ft->Children[i], std::make_shared<OpAverageIf>(), nResultSize));
                 break;
             case ocDBCount:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDcount, nResultSize));
+                        ft->Children[i], std::make_shared<OpDcount>(), nResultSize));
                 break;
             case ocDBCount2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDcount2, nResultSize));
+                        ft->Children[i], std::make_shared<OpDcount2>(), nResultSize));
                 break;
             case ocDeg:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpDeg, nResultSize));
+                        ft->Children[i], std::make_shared<OpDeg>(), nResultSize));
                 break;
             case ocRoundUp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpRoundUp, nResultSize));
+                        ft->Children[i], std::make_shared<OpRoundUp>(), nResultSize));
                 break;
             case ocRoundDown:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpRoundDown, nResultSize));
+                        ft->Children[i], std::make_shared<OpRoundDown>(), nResultSize));
                 break;
             case ocInt:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpInt, nResultSize));
+                        ft->Children[i], std::make_shared<OpInt>(), nResultSize));
                 break;
             case ocRad:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpRadians, nResultSize));
+                        ft->Children[i], std::make_shared<OpRadians>(), nResultSize));
                 break;
             case ocCountIf:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCountIf, nResultSize));
+                        ft->Children[i], std::make_shared<OpCountIf>(), nResultSize));
                 break;
             case ocIsEven:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpIsEven, nResultSize));
+                        ft->Children[i], std::make_shared<OpIsEven>(), nResultSize));
                 break;
             case ocIsOdd:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpIsOdd, nResultSize));
+                        ft->Children[i], std::make_shared<OpIsOdd>(), nResultSize));
                 break;
             case ocFact:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpFact, nResultSize));
+                        ft->Children[i], std::make_shared<OpFact>(), nResultSize));
                 break;
             case ocMinA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpMinA, nResultSize));
+                        ft->Children[i], std::make_shared<OpMinA>(), nResultSize));
                 break;
             case ocCount2:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpCountA, nResultSize));
+                        ft->Children[i], std::make_shared<OpCountA>(), nResultSize));
                 break;
             case ocMaxA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpMaxA, nResultSize));
+                        ft->Children[i], std::make_shared<OpMaxA>(), nResultSize));
                 break;
             case ocAverageA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAverageA, nResultSize));
+                        ft->Children[i], std::make_shared<OpAverageA>(), nResultSize));
                 break;
             case ocVarA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpVarA, nResultSize));
+                        ft->Children[i], std::make_shared<OpVarA>(), nResultSize));
                 break;
             case ocVarPA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpVarPA, nResultSize));
+                        ft->Children[i], std::make_shared<OpVarPA>(), nResultSize));
                 break;
             case ocStDevA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpStDevA, nResultSize));
+                        ft->Children[i], std::make_shared<OpStDevA>(), nResultSize));
                 break;
             case ocStDevPA:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpStDevPA, nResultSize));
+                        ft->Children[i], std::make_shared<OpStDevPA>(), nResultSize));
                 break;
             case ocSecant:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSec, nResultSize));
+                        ft->Children[i], std::make_shared<OpSec>(), nResultSize));
                 break;
             case ocSecantHyp:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSecH, nResultSize));
+                        ft->Children[i], std::make_shared<OpSecH>(), nResultSize));
                 break;
             case ocSumIf:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpSumIf, nResultSize));
+                        ft->Children[i], std::make_shared<OpSumIf>(), nResultSize));
                 break;
             case ocNegSub:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpNegSub, nResultSize));
+                        ft->Children[i], std::make_shared<OpNegSub>(), nResultSize));
                 break;
             case ocAveDev:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpAveDev, nResultSize));
+                        ft->Children[i], std::make_shared<OpAveDev>(), nResultSize));
                 break;
             case ocIf:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                        ft->Children[i], new OpIf, nResultSize));
+                        ft->Children[i], std::make_shared<OpIf>(), nResultSize));
                 break;
             case ocExternal:
                 if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getEffect")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpEffective, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpEffective>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCumipmt")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumipmt, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCumipmt>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getNominal")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNominal, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpNominal>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCumprinc")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumprinc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCumprinc>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXnpv")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpXNPV, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpXNPV>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPricemat")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPriceMat, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpPriceMat>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getReceived")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpReceived, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpReceived>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbilleq")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbilleq, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpTbilleq>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbillprice")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillprice, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpTbillprice>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbillyield")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillyield, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpTbillyield>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getFvschedule")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFvschedule, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpFvschedule>(), nResultSize));
                 }
                 /*else if ( pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYield")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYield));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpYield));
                 }*/
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYielddisc")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYielddisc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpYielddisc>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYieldmat")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYieldmat, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpYieldmat>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAccrintm")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpAccrintm, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpAccrintm>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdaybs")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaybs, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCoupdaybs>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDollarde")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarde, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpDollarde>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDollarfr")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarfr, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpDollarfr>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdays")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdays, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCoupdays>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdaysnc")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaysnc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpCoupdaysnc>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDisc")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDISC, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpDISC>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIntrate")
                 {
-                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpINTRATE, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpINTRATE>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPrice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                            ft->Children[i], new OpPrice, nResultSize));
+                            ft->Children[i], std::make_shared<OpPrice>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupnum")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpCoupnum, nResultSize));
+                            std::make_shared<OpCoupnum>(), nResultSize));
                 }
                 /*else if pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDuration"))
                 {
                     mvSubArguments.push_back(
-                        SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDuration_ADD));
+                        SoPHelper(mCalcConfig, ts, ft->Children[i], std::make_shared<OpDuration_ADD));
                 }*/
                 /*else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmordegrc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpAmordegrc, nResultSize));
+                            std::make_shared<OpAmordegrc, nResultSize));
                 }*/
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmorlinc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpAmorlinc, nResultSize));
+                            std::make_shared<OpAmorlinc>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getMduration")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpMDuration, nResultSize));
+                            std::make_shared<OpMDuration>(), nResultSize));
                 }
                 /*else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpXirr, nResultSize));
+                            std::make_shared<OpXirr, nResultSize));
                 }*/
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlprice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                            ft->Children[i], new OpOddlprice, nResultSize));
+                            ft->Children[i], std::make_shared<OpOddlprice>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlyield")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpOddlyield, nResultSize));
+                            std::make_shared<OpOddlyield>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPricedisc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
-                            ft->Children[i], new OpPriceDisc, nResultSize));
+                            ft->Children[i], std::make_shared<OpPriceDisc>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCouppcd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpCouppcd, nResultSize));
+                            std::make_shared<OpCouppcd>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupncd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpCoupncd, nResultSize));
+                            std::make_shared<OpCoupncd>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAccrint")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpAccrint, nResultSize));
+                            std::make_shared<OpAccrint>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getSqrtpi")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpSqrtPi, nResultSize));
+                            std::make_shared<OpSqrtPi>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getConvert")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpConvert, nResultSize));
+                            std::make_shared<OpConvert>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIseven")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpIsEven, nResultSize));
+                            std::make_shared<OpIsEven>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIsodd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpIsOdd, nResultSize));
+                            std::make_shared<OpIsOdd>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getMround")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpMROUND, nResultSize));
+                            std::make_shared<OpMROUND>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getQuotient")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpQuotient, nResultSize));
+                            std::make_shared<OpQuotient>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getSeriessum")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpSeriesSum, nResultSize));
+                            std::make_shared<OpSeriesSum>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getBesselj")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpBesselj, nResultSize));
+                            std::make_shared<OpBesselj>(), nResultSize));
                 }
                 else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getGestep")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
-                            new OpGestep, nResultSize));
+                            std::make_shared<OpGestep>(), nResultSize));
                 }
                 else
                     throw UnhandledToken(OUString("unhandled external " + pChild->GetExternal()).toUtf8().getStr(), __FILE__, __LINE__);
@@ -3827,7 +3827,7 @@ public:
     DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
     virtual ~DynamicKernel() override;
 
-    static std::unique_ptr<DynamicKernel> create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
+    static std::shared_ptr<DynamicKernel> create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
 
     /// OpenCL code generation
     void CodeGen();
@@ -3891,7 +3891,7 @@ DynamicKernel::~DynamicKernel()
 void DynamicKernel::CodeGen()
 {
     // Traverse the tree of expression and declare symbols used
-    const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, new OpNop(mnResultSize), mnResultSize);
+    const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, std::make_shared<OpNop>(mnResultSize), mnResultSize);
 
     std::stringstream decl;
     if (openclwrapper::gpuEnv.mnKhrFp64Flag)
@@ -4116,7 +4116,7 @@ void DynamicKernel::Launch( size_t nr )
 template <typename T>
 const DynamicKernelArgument* SymbolTable::DeclRefArg(const ScCalcConfig& config,
                                                      const FormulaTreeNodeRef& t,
-                                                     SlidingFunctionBase* pCodeGen, int nResultSize)
+                                                     std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize)
 {
     FormulaToken* ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -4125,7 +4125,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(const ScCalcConfig& config,
         // Allocate new symbols
         std::stringstream ss;
         ss << "tmp" << mCurId++;
-        DynamicKernelArgumentRef new_arg = std::make_shared<T>(config, ss.str(), t, pCodeGen, nResultSize);
+        DynamicKernelArgumentRef new_arg = std::make_shared<T>(config, ss.str(), t, std::move(pCodeGen), nResultSize);
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         return new_arg.get();
@@ -4146,7 +4146,7 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return nullptr;
 }
 
-std::unique_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfig, const ScTokenArray& rCode, int nResultSize )
+std::shared_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfig, const ScTokenArray& rCode, int nResultSize )
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
@@ -4188,7 +4188,7 @@ std::unique_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfi
     FormulaTreeNodeRef Root = std::make_shared<FormulaTreeNode>(nullptr);
     Root->Children.push_back(aHashMap[aTokenVector.back()]);
 
-    std::unique_ptr<DynamicKernel> pDynamicKernel(new DynamicKernel(rConfig, Root, nResultSize));
+    auto pDynamicKernel = std::make_shared<DynamicKernel>(rConfig, Root, nResultSize);
 
     // OpenCL source code generation and kernel compilation
     try
@@ -4326,7 +4326,7 @@ public:
         return mpKernel != nullptr;
     }
 
-    void setManagedKernel( std::unique_ptr<DynamicKernel> pKernel )
+    void setManagedKernel( std::shared_ptr<DynamicKernel> pKernel )
     {
         mpKernelStore = std::move(pKernel);
         mpKernel = mpKernelStore.get();

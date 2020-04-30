@@ -476,7 +476,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
     auto pOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
-    std::shared_ptr<SvxNumberInfoItem> pNumberInfoItem;
+    std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
 
@@ -505,8 +505,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     //Fix border incorrect for RTL fdo#62399
     if( pDoc->IsLayoutRTL( GetViewData().GetTabNo() ) )
     {
-        std::shared_ptr<SvxBoxItem> aNewFrame(aLineOuter->Clone());
-        std::shared_ptr<SvxBoxInfoItem> aTempInfo(aLineInner->Clone());
+        std::unique_ptr<SvxBoxItem> aNewFrame(aLineOuter->Clone());
+        std::unique_ptr<SvxBoxInfoItem> aTempInfo(aLineInner->Clone());
 
         if ( aLineInner->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
             aNewFrame->SetLine( aLineOuter->GetLeft(), SvxBoxItemLine::RIGHT );

@@ -165,7 +165,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
         pContext = new ScXMLNamedExpressionsContext (
             GetScImport(),
-            new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
+            std::make_shared<ScXMLNamedExpressionsContext::GlobalInserter>(GetScImport()) );
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
         pContext = new ScXMLDatabaseRangesContext ( GetScImport() );

@@ -107,7 +107,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
    }
 }
 
-std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
+std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogController(
                                 SfxBindings* pB, SfxChildWindow* pCW,
                                 const SfxChildWinInfo* pInfo,
                                 weld::Window* pParent, sal_uInt16 nSlotId)
@@ -127,7 +127,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         return nullptr;
     }
 
-    std::unique_ptr<SfxModelessDialogController> xResult;
+    std::shared_ptr<SfxModelessDialogController> xResult;
 
     if(pCW)
         pCW->SetHideNotDelete(true);
@@ -137,43 +137,43 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     switch( nSlotId )
     {
         case SID_CORRELATION_DIALOG:
-            xResult.reset(new ScCorrelationDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScCorrelationDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_SAMPLING_DIALOG:
-            xResult.reset(new ScSamplingDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScSamplingDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
-            xResult.reset(new ScDescriptiveStatisticsDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScDescriptiveStatisticsDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
-            xResult.reset(new ScAnalysisOfVarianceDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScAnalysisOfVarianceDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_COVARIANCE_DIALOG:
-            xResult.reset(new ScCovarianceDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScCovarianceDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
-            xResult.reset(new ScExponentialSmoothingDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScExponentialSmoothingDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_MOVING_AVERAGE_DIALOG:
-            xResult.reset(new ScMovingAverageDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScMovingAverageDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_REGRESSION_DIALOG:
-            xResult.reset(new ScRegressionDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScRegressionDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_FTEST_DIALOG:
-            xResult.reset(new ScFTestDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScFTestDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_TTEST_DIALOG:
-            xResult.reset(new ScTTestDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScTTestDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_ZTEST_DIALOG:
-            xResult.reset(new ScZTestDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScZTestDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_CHI_SQUARE_TEST_DIALOG:
-            xResult.reset(new ScChiSquareTestDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScChiSquareTestDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_FOURIER_ANALYSIS_DIALOG:
-            xResult.reset(new ScFourierAnalysisDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScFourierAnalysisDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case WID_SIMPLE_REF:
         {
@@ -181,24 +181,24 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.GetTabNo() );
-            xResult.reset(new ScSimpleRefDlg(pB, pCW, pParent));
+            xResult = std::make_shared<ScSimpleRefDlg>(pB, pCW, pParent);
             break;
         }
         case FID_DEFINE_NAME:
         {
             if (!mbInSwitch)
             {
-                xResult.reset(new ScNameDlg(pB, pCW, pParent, &GetViewData(),
+                xResult = std::make_shared<ScNameDlg>(pB, pCW, pParent, &GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ) ));
+                                                GetViewData().GetTabNo() ) );
             }
             else
             {
-                xResult.reset(new ScNameDlg( pB, pCW, pParent, &GetViewData(),
+                xResult = std::make_shared<ScNameDlg>( pB, pCW, pParent, &GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ), &m_RangeMap));
+                                                GetViewData().GetTabNo() ), &m_RangeMap);
                 static_cast<ScNameDlg*>(xResult.get())->SetEntry(maName, maScope);
                 mbInSwitch = false;
             }
@@ -210,10 +210,10 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
                 pDoc->GetRangeNameMap(aRangeMap);
-                xResult.reset(new ScNameDefDlg(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, &GetViewData(), aRangeMap,
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
-                                          GetViewData().GetTabNo()), true));
+                                          GetViewData().GetTabNo()), true);
             }
             else
             {
@@ -222,15 +222,15 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 {
                     aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
                 }
-                xResult.reset(new ScNameDefDlg(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, &GetViewData(), aRangeMap,
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
-                                          GetViewData().GetTabNo()), false));
+                                          GetViewData().GetTabNo()), false);
             }
             break;
         }
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
-            xResult.reset(new ScRandomNumberGeneratorDialog(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScRandomNumberGeneratorDialog>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_DEFINE_DBNAME:
         {
@@ -240,14 +240,14 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( false );
 
-            xResult.reset(new ScDbNameDlg(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, &GetViewData());
             break;
         }
         case SID_OPENDLG_EDIT_PRINTAREA:
-            xResult.reset(new ScPrintAreasDlg(pB, pCW, pParent));
+            xResult = std::make_shared<ScPrintAreasDlg>(pB, pCW, pParent);
             break;
         case SID_DEFINE_COLROWNAMERANGES:
-            xResult.reset(new ScColRowNameRangesDlg(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScColRowNameRangesDlg>(pB, pCW, pParent, &GetViewData());
             break;
         case SID_OPENDLG_SOLVE:
         {
@@ -255,7 +255,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScAddress   aCurPos( rViewData.GetCurX(),
                                  rViewData.GetCurY(),
                                  rViewData.GetTabNo());
-            xResult.reset(new ScSolverDlg(pB, pCW, pParent, rViewData.GetDocument(), aCurPos));
+            xResult = std::make_shared<ScSolverDlg>(pB, pCW, pParent, rViewData.GetDocument(), aCurPos);
             break;
         }
         case SID_OPENDLG_TABOP:
@@ -265,7 +265,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                       rViewData.GetCurY(),
                                       rViewData.GetTabNo());
 
-            xResult.reset(new ScTabOpDlg(pB, pCW, pParent, rViewData.GetDocument(), aCurPos));
+            xResult = std::make_shared<ScTabOpDlg>(pB, pCW, pParent, rViewData.GetDocument(), aCurPos);
             break;
         }
         case SID_OPENDLG_CONSOLIDATE:
@@ -302,7 +302,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             {
                 aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA, pDlgData ) );
             }
-            xResult.reset(new ScConsolidateDlg(pB, pCW, pParent, aArgSet));
+            xResult = std::make_shared<ScConsolidateDlg>(pB, pCW, pParent, aArgSet);
             break;
         }
         case SID_FILTER:
@@ -328,7 +328,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            xResult.reset(new ScFilterDlg(pB, pCW, pParent, aArgSet));
+            xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, aArgSet);
             break;
         }
         case SID_SPECIAL_FILTER:
@@ -356,25 +356,25 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            xResult.reset(new ScSpecialFilterDlg(pB, pCW, pParent, aArgSet));
+            xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, aArgSet);
             break;
         }
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
             ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-            xResult.reset(new ScOptSolverDlg(pB, pCW, pParent, rViewData.GetDocShell(), aCurPos));
+            xResult = std::make_shared<ScOptSolverDlg>(pB, pCW, pParent, rViewData.GetDocShell(), aCurPos);
             break;
         }
         case FID_CHG_SHOW:
         {
             // dialog checks, what is in the cell
-            xResult.reset(new ScHighlightChgDlg(pB, pCW, pParent, &GetViewData()));
+            xResult = std::make_shared<ScHighlightChgDlg>(pB, pCW, pParent, &GetViewData());
             break;
         }
         case SID_MANAGE_XML_SOURCE:
         {
-            xResult.reset(new ScXMLSourceDlg(pB, pCW, pParent, pDoc));
+            xResult = std::make_shared<ScXMLSourceDlg>(pB, pCW, pParent, pDoc);
             break;
         }
         case SID_OPENDLG_PIVOTTABLE:
@@ -387,7 +387,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
                 ScDPObject* pObj = pDoc->GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-                xResult.reset(new ScPivotLayoutDialog(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr));
+                xResult = std::make_shared<ScPivotLayoutDialog>(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr);
             }
 
             break;
@@ -395,7 +395,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_OPENDLG_FUNCTION:
         {
             // dialog checks, what is in the cell
-            xResult.reset(new ScFormulaDlg(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr()));
+            xResult = std::make_shared<ScFormulaDlg>(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr());
             break;
         }
         case WID_CONDFRMT_REF:
@@ -414,7 +414,7 @@ std::unique_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-                xResult.reset(new ScCondFormatDlg(pB, pCW, pParent, &rViewData, pDlgItem));
+                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, pDlgItem);
 
                 // Remove the pool item stored by Conditional Format Manager Dialog.
                 GetPool().Remove(*pDlgItem);
