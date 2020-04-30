@@ -3473,6 +3473,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_GLOW:
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
+        case SID_ATTR_GLOW_TRANSPARENCY:
             if (const SfxItemSet* pNewArgs = rReq.GetArgs())
                 mpDrawView->SetAttributes(*pNewArgs);
             rReq.Done();
