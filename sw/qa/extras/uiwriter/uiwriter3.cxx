@@ -223,6 +223,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126340)
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124397)
+{
+    load(DATA_DIRECTORY, "tdf124397.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    // Without the fix in place, it would crash here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
 {
     // This test also covers tdf#117185 tdf#110442
