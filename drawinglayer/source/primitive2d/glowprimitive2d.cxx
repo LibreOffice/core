@@ -30,12 +30,11 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-GlowPrimitive2D::GlowPrimitive2D(const basegfx::B2DHomMatrix& rGlowTransform,
-                                 const basegfx::BColor& rGlowColor,
+GlowPrimitive2D::GlowPrimitive2D(const Color& rGlowColor, double fRadius,
                                  const Primitive2DContainer& rChildren)
     : GroupPrimitive2D(rChildren)
-    , maGlowTransform(rGlowTransform)
     , maGlowColor(rGlowColor)
+    , mfGlowRadius(fRadius)
 {
 }
 
@@ -45,7 +44,7 @@ bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
         const GlowPrimitive2D& rCompare = static_cast<const GlowPrimitive2D&>(rPrimitive);
 
-        return (getGlowTransform() == rCompare.getGlowTransform()
+        return (getGlowRadius() == rCompare.getGlowRadius()
                 && getGlowColor() == rCompare.getGlowColor());
     }
 
@@ -55,8 +54,9 @@ bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
 basegfx::B2DRange
 GlowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
 {
-    basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
-    aRetval.transform(getGlowTransform());
+    basegfx::B2DRange aRetval(GroupPrimitive2D::getB2DRange(rViewInformation));
+    // We need additional space for the glow from all sides
+    aRetval.grow(getGlowRadius());
     return aRetval;
 }
 
@@ -67,15 +67,13 @@ void GlowPrimitive2D::get2DDecomposition(
     if (getChildren().empty())
         return;
 
-    // create a modifiedColorPrimitive containing the Glow color and the content
+    // create a modifiedColorPrimitive containing the *black* color and the content. Using black
+    // on white allows creating useful mask in VclPixelProcessor2D::processGlowPrimitive2D.
     basegfx::BColorModifierSharedPtr aBColorModifier
-        = std::make_shared<basegfx::BColorModifier_replace>(getGlowColor());
+        = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor());
 
-    const Primitive2DReference xRefA(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
-    const Primitive2DContainer aSequenceB{ xRefA };
-
-    // build transformed primitiveVector with Glow offset and add to target
-    rVisitor.append(new TransformPrimitive2D(getGlowTransform(), aSequenceB));
+    const Primitive2DReference xRef(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
+    rVisitor.append(xRef);
 }
 
 // provide unique ID

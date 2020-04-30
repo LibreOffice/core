@@ -92,8 +92,8 @@ void BitmapFilterTest::testBlurCorrectness()
     }
 
     // Check blurred bitmap parameters
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(45), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(35), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(41), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(31), aBitmap24Bit.GetSizePixel().Height());
 
     CPPUNIT_ASSERT_EQUAL(nBPP, aBitmap24Bit.GetBitCount());
 
@@ -132,7 +132,7 @@ void BitmapFilterTest::testPerformance()
     Bitmap aResult;
     for (int i = 0; i < nIterations; i++)
     {
-        BitmapFilterStackBlur aBlurFilter(250, false); // don't extend the image
+        BitmapFilterStackBlur aBlurFilter(250);
         aResult = aBlurFilter.filter(aBigBitmap);
     }
     auto end = std::chrono::high_resolution_clock::now();
