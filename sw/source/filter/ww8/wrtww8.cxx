@@ -1515,20 +1515,19 @@ void WW8Export::AppendBookmarkEndWithCorrection( const OUString& rName )
     m_pBkmks->Append( nEndCP - 1, rName );
 }
 
-std::shared_ptr<SvxBrushItem> MSWordExportBase::getBackground()
+std::unique_ptr<SvxBrushItem> MSWordExportBase::getBackground()
 {
-    std::shared_ptr<SvxBrushItem> oRet;
     const SwFrameFormat &rFormat = m_pDoc->GetPageDesc(0).GetMaster();
-    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrush = std::make_unique<SvxBrushItem>(RES_BACKGROUND);
     SfxItemState eState = rFormat.GetBackgroundState(aBrush);
 
     if (SfxItemState::SET == eState)
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
         if (aBrush->GetColor() != COL_AUTO)
-            oRet = aBrush;
+            return aBrush;
     }
-    return oRet;
+    return nullptr;
 }
 
 // #i120928 collect all the graphics of bullets applied to paragraphs

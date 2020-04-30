@@ -305,13 +305,13 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
                 rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
             if(pRowItem)
             {
-                std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
+                std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
                 aBrush->SetWhich(RES_BACKGROUND);
                 rSh.SetRowBackground(*aBrush);
             }
             if(pTableItem)
             {
-                std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
+                std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
                 aBrush->SetWhich(RES_BACKGROUND);
                 rSh.SetTabBackground( *aBrush );
             }

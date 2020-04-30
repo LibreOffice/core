@@ -96,7 +96,7 @@ public:
     }
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = nullptr ) const;
-    SfxItemState GetBackgroundState(std::shared_ptr<SvxBrushItem>& rItem) const;
+    SfxItemState GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) const;
     virtual bool SetFormatAttr( const SfxPoolItem& rAttr );
     virtual bool SetFormatAttr( const SfxItemSet& rSet );
     virtual bool ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );

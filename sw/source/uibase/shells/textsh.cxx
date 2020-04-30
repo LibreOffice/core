@@ -961,7 +961,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         // #108876# a font attribute has to be set always due to a guessed script type
         if( !aNewFont.GetFamilyName().isEmpty() )
         {
-            std::shared_ptr<SvxFontItem> aNewFontItem(aFont->Clone());
+            std::unique_ptr<SvxFontItem> aNewFontItem(aFont->Clone());
             aNewFontItem->SetFamilyName( aNewFont.GetFamilyName() );
             aNewFontItem->SetFamily(  aNewFont.GetFamilyType());
             aNewFontItem->SetPitch(   aNewFont.GetPitch());

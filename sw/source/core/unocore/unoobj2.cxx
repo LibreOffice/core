@@ -127,7 +127,7 @@ struct FrameClientSortListLess
                 const auto nIdx =
                     rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex();
                 const auto nOrder = rFormat.GetAnchor().GetOrder();
-                FrameClientSortListEntry entry(nIdx, nOrder, new sw::FrameClient(&rFormat));
+                FrameClientSortListEntry entry(nIdx, nOrder, std::make_shared<sw::FrameClient>(&rFormat));
                 rFrames.push_back(entry);
             }
         }
@@ -174,7 +174,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
                 const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
-                FrameClientSortListEntry entry(nIndex, nOrder, new sw::FrameClient(const_cast<SwFrameFormat*>(pFormat)));
+                FrameClientSortListEntry entry(nIndex, nOrder, std::make_shared<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));
                 rFrames.push_back(entry);
             }
         }

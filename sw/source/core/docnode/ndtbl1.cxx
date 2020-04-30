@@ -885,7 +885,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
 
                 const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
                 SwFrameFormat *pFormat = pCell->GetFormat();
-                std::shared_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
+                std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
 
                 if ( !pBorderLine && bSetLine )
                 {

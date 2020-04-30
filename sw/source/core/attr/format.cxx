@@ -380,7 +380,7 @@ const SfxPoolItem& SwFormat::GetFormatAttr( sal_uInt16 nWhich, bool bInParents )
     {
         // FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
-        static std::shared_ptr<SvxBrushItem> aSvxBrushItem; //(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+        static std::unique_ptr<SvxBrushItem> aSvxBrushItem; //(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
 
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
@@ -407,7 +407,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
-            static std::shared_ptr<SvxBrushItem> aSvxBrushItem; //(RES_BACKGROUND);
+            static std::unique_ptr<SvxBrushItem> aSvxBrushItem; //(RES_BACKGROUND);
 
             aSvxBrushItem = getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bSrchInParent);
             if( ppItem )
@@ -427,7 +427,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
     return m_aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
-SfxItemState SwFormat::GetBackgroundState(std::shared_ptr<SvxBrushItem>& rItem) const
+SfxItemState SwFormat::GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {

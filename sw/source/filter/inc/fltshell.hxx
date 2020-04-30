@@ -282,7 +282,7 @@ class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
     bool bHadBreakItem; // there was a break item BEFORE insertion of the TOX
     bool bHadPageDescItem;
 public:
-    SwFltTOX(SwTOXBase* pBase);
+    SwFltTOX(std::shared_ptr<SwTOXBase> xBase);
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SwFltTOX* Clone(SfxItemPool* = nullptr) const override;

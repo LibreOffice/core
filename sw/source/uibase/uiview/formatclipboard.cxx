@@ -158,13 +158,13 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
             rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
         if(pRowItem)
         {
-            std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
+            std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pRowItem->Clone()));
             aBrush->SetWhich(RES_BACKGROUND);
             rSh.SetRowBackground(*aBrush);
         }
         if(pTableItem)
         {
-            std::shared_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
+            std::unique_ptr<SvxBrushItem> aBrush(static_cast<SvxBrushItem*>(pTableItem->Clone()));
             aBrush->SetWhich(RES_BACKGROUND);
             rSh.SetTabBackground(*aBrush);
         }
@@ -416,8 +416,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     rWrtShell.EndAction();
 }
 
-typedef std::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
-typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
+typedef std::vector< std::unique_ptr< SfxPoolItem > > ItemVector;
 // collect all PoolItems from the applied styles
 static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
@@ -429,7 +428,7 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == rStyleAttrSet.GetItemState( nWhich, false, &pItem ) )
             {
-                rItemVector.push_back( SfxPoolItemSharedPtr( pItem->Clone() ) );
+                rItemVector.emplace_back( pItem->Clone() );
             }
         }
         pRanges += 2;

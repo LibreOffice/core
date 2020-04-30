@@ -807,7 +807,7 @@ VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilt
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg(weld::Window *pParent,
                                                                                   SwWrtShell &rSh, SfxRequest& rReq)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwInsertBookmarkDlg>(pParent, rSh, rReq));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwInsertBookmarkDlg>(pParent, rSh, rReq));
 }
 
 VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)
@@ -818,7 +818,7 @@ VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwChangeDBDlg>(rVw));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwChangeDBDlg>(rVw));
 #else
     (void) rVw;
     return nullptr;
@@ -828,7 +828,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwVi
 VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(weld::Window* pParent, SwView& pVw,
     const SfxItemSet& rCoreSet, SwCharDlgMode nDialogMode, const OUString* pFormatStr)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwCharDlg>(pParent, pVw, rCoreSet, nDialogMode, pFormatStr));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwCharDlg>(pParent, pVw, rCoreSet, nDialogMode, pFormatStr));
 }
 
 VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
@@ -838,7 +838,7 @@ VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertT
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog(weld::Window *pParent, SwView &rV)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwCaptionDialog>(pParent, rV));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwCaptionDialog>(pParent, rV));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
@@ -859,7 +859,7 @@ VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwIns
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwFootNoteOptionDlg>(pParent, rSh));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwFootNoteOptionDlg>(pParent, rSh));
 }
 
 VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(weld::Widget *pParent,
@@ -882,7 +882,7 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwEnvDlg(weld::
                                                                  SwWrtShell* pWrtSh, Printer* pPrt,
                                                                  bool bInsert)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwEnvDlg>(pParent, rSet, pWrtSh,pPrt, bInsert));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwEnvDlg>(pParent, rSet, pWrtSh,pPrt, bInsert));
 }
 
 VclPtr<AbstractSwLabDlg> SwAbstractDialogFactory_Impl::CreateSwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
@@ -901,17 +901,17 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwParaDlg(weld:
                                                                            bool bDraw ,
                                                                            const OString& sDefPage)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwParaDlg>(pParent, rVw, rCoreSet, DLG_STD, nullptr, bDraw, sDefPage));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwParaDlg>(pParent, rVw, rCoreSet, DLG_STD, nullptr, bDraw, sDefPage));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAutoMarkDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwAuthMarkModalDlg>(pParent, rSh));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwAuthMarkModalDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwColumnDlg>(pParent, rSh));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwColumnDlg>(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
@@ -960,12 +960,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(we
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(weld::Window* pParent,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwTableTabDlg>(pParent, pItemSet, pSh));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwTableTabDlg>(pParent, pItemSet, pSh));
 }
 
 VclPtr<AbstractSwFieldDlg> SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent)
 {
-    return VclPtr<AbstractSwFieldDlg_Impl>::Create(std::make_unique<SwFieldDlg>(pB, pCW, pParent));
+    return VclPtr<AbstractSwFieldDlg_Impl>::Create(std::make_shared<SwFieldDlg>(pB, pCW, pParent));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg(SwView& rVw)
@@ -996,7 +996,7 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(
                                                 bool        bNewFrame,
                                                 const OString&  sDefPage )
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwFrameDlg>(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwFrameDlg>(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr));
 }
 
 VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDialog(
@@ -1007,7 +1007,7 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
-    return VclPtr<AbstractApplyTabController_Impl>::Create(std::make_unique<SwTemplateDlgController>(pParent, rBase, nRegion,
+    return VclPtr<AbstractApplyTabController_Impl>::Create(std::make_shared<SwTemplateDlgController>(pParent, rBase, nRegion,
                                                                                                      sPage, pActShell, bNew));
 }
 
@@ -1031,12 +1031,12 @@ VclPtr<AbstractInsFootNoteDlg> SwAbstractDialogFactory_Impl::CreateInsFootNoteDl
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg(weld::Window *pParent)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwTitlePageDlg>(pParent));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwTitlePageDlg>(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(SwView& rView)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwLineNumberingDlg>(rView));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwLineNumberingDlg>(rView));
 }
 
 VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
@@ -1079,31 +1079,31 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTab
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwSvxNumBulletTabDialog>(pParent, pSwItemSet, rWrtSh));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwSvxNumBulletTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh )
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_unique<SwOutlineTabDialog>(pParent, pSwItemSet, rWrtSh));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwOutlineTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
 VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
                                                                                         SwWrtShell &rShell, SwTOXBase* pCurTOX, bool bGlobal)
 {
-    return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create(std::make_unique<SwMultiTOXTabDialog>(pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal));
+    return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create(std::make_shared<SwMultiTOXTabDialog>(pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal));
 }
 
 VclPtr<AbstractEditRegionDlg> SwAbstractDialogFactory_Impl::CreateEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 {
-    return VclPtr<AbstractEditRegionDlg_Impl>::Create(std::make_unique<SwEditRegionDlg>(pParent, rWrtSh));
+    return VclPtr<AbstractEditRegionDlg_Impl>::Create(std::make_shared<SwEditRegionDlg>(pParent, rWrtSh));
 }
 
 VclPtr<AbstractInsertSectionTabDialog> SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog(weld::Window* pParent,
         const SfxItemSet& rSet, SwWrtShell& rSh)
 {
-    return VclPtr<AbstractInsertSectionTabDialog_Impl>::Create(std::make_unique<SwInsertSectionTabDialog>(pParent, rSet, rSh));
+    return VclPtr<AbstractInsertSectionTabDialog_Impl>::Create(std::make_shared<SwInsertSectionTabDialog>(pParent, rSet, rSh));
 }
 
 VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(
@@ -1112,7 +1112,7 @@ VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateIndexMarkFloatD
                                                        weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo )
 {
-    return VclPtr<AbstractIndexMarkFloatDlg_Impl>::Create(std::make_unique<SwIndexMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
+    return VclPtr<AbstractIndexMarkFloatDlg_Impl>::Create(std::make_shared<SwIndexMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
 }
 
 VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg(
@@ -1121,7 +1121,7 @@ VclPtr<AbstractMarkFloatDlg> SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDl
                                                        weld::Window *pParent,
                                                        SfxChildWinInfo* pInfo)
 {
-    return VclPtr<AbstractAuthMarkFloatDlg_Impl>::Create(std::make_unique<SwAuthMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
+    return VclPtr<AbstractAuthMarkFloatDlg_Impl>::Create(std::make_shared<SwAuthMarkFloatDlg>(pBindings, pChild, pParent, pInfo, true/*bNew*/));
 }
 
 VclPtr<AbstractSwWordCountFloatDlg> SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(
@@ -1130,19 +1130,19 @@ VclPtr<AbstractSwWordCountFloatDlg> SwAbstractDialogFactory_Impl::CreateSwWordCo
                                                                               weld::Window *pParent,
                                                                               SfxChildWinInfo* pInfo)
 {
-    return VclPtr<AbstractSwWordCountFloatDlg_Impl>::Create(std::make_unique<SwWordCountFloatDlg>(pBindings, pChild, pParent, pInfo));
+    return VclPtr<AbstractSwWordCountFloatDlg_Impl>::Create(std::make_shared<SwWordCountFloatDlg>(pBindings, pChild, pParent, pInfo));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark )
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwIndexMarkModalDlg>(pParent, rSh, pCurTOXMark));
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwIndexMarkModalDlg>(pParent, rSh, pCurTOXMark));
 }
 
 VclPtr<AbstractMailMergeWizard> SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
                                     SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
 #if HAVE_FEATURE_DBCONNECTIVITY
-    return VclPtr<AbstractMailMergeWizard_Impl>::Create(std::make_unique<SwMailMergeWizard>(rView, rConfigItem));
+    return VclPtr<AbstractMailMergeWizard_Impl>::Create(std::make_shared<SwMailMergeWizard>(rView, rConfigItem));
 #else
     (void) rView;
     (void) rConfigItem;

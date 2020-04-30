@@ -44,8 +44,8 @@ struct FrameClientSortListEntry
     std::shared_ptr<sw::FrameClient> pFrameClient;
 
     FrameClientSortListEntry (sal_Int32 const i_nIndex,
-                sal_uInt32 const i_nOrder, sw::FrameClient* const i_pClient)
-        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameClient(i_pClient) { }
+                sal_uInt32 const i_nOrder, std::shared_ptr<sw::FrameClient> i_pClient)
+        : nIndex(i_nIndex), nOrder(i_nOrder), pFrameClient(std::move(i_pClient)) { }
 };
 
 typedef std::deque< FrameClientSortListEntry >
