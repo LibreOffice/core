@@ -54,6 +54,7 @@
 #include <AttributeContainerHandler.hxx>
 #include "durationhdl.hxx"
 #include <XMLRectangleMembersHandler.hxx>
+#include <XMLNumberWithAutoForVoidPropHdl.hxx>
 #include "DrawAspectHdl.hxx"
 
 #include <map>
@@ -457,7 +458,7 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
             pPropHdl.reset(new XMLNumberWithoutZeroPropHdl( 2 ));
             break;
         case XML_TYPE_NUMBER16_AUTO:
-            pPropHdl.reset(new XMLNumberWithAutoInsteadZeroPropHdl);
+            pPropHdl.reset(new XMLNumberWithAutoForVoidPropHdl);
             break;
         case XML_TYPE_TEXT_VERTICAL_POS:
             pPropHdl.reset(new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID ));

@@ -201,6 +201,7 @@
 #define CTF_CHAR_HIGHLIGHT                  (XML_TEXT_CTF_START + 172)
 #define CTF_FILLSTYLE                       (XML_TEXT_CTF_START + 173)
 #define CTF_FILLCOLOR                       (XML_TEXT_CTF_START + 174)
+#define CTF_PAGENUMBEROFFSET                (XML_TEXT_CTF_START + 175)
 
 
 enum class TextPropMap {
