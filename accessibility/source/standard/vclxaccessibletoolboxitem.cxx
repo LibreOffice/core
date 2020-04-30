@@ -555,6 +555,16 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
     return bReturn;
 }
 
+sal_Bool VCLXAccessibleToolBoxItem::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+{
+    return false;
+}
+
+sal_Bool VCLXAccessibleToolBoxItem::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+{
+    return false;
+}
+
 // XAccessibleComponent
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleAtPoint( const awt::Point& )

@@ -2113,6 +2113,16 @@ namespace accessibility
         }
     }
 
+    sal_Bool SAL_CALL AccessibleEditableTextPara::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+    {
+        return false;
+    }
+
+    sal_Bool SAL_CALL AccessibleEditableTextPara::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+    {
+        return false;
+    }
+
     // XAccessibleEditableText
     sal_Bool SAL_CALL AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {

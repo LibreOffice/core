@@ -324,6 +324,10 @@ public:
 
     virtual sal_Bool SAL_CALL copyText (sal_Int32 nStartIndex, sal_Int32 nEndIndex) override;
 
+    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int16 aScrollType) override;
+
+    virtual sal_Bool SAL_CALL scrollSubstringToPoint( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::awt::Point& aPoint ) override;
+
 protected:
     virtual awt::Point GetRelativeLocation() override;
     virtual awt::Size GetSize() override;
@@ -1572,6 +1576,22 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
     // Return false because copying to clipboard is not supported.
     // It IS supported in the notes view.  There is no need to duplicate
     // this here.
+    return false;
+}
+
+sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::scrollSubstringTo(
+    sal_Int32,
+    sal_Int32,
+    sal_Int16)
+{
+    return false;
+}
+
+sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::scrollSubstringToPoint(
+    sal_Int32,
+    sal_Int32,
+    const css::awt::Point&)
+{
     return false;
 }
 

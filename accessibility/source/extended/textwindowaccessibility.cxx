@@ -431,6 +431,18 @@ sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
 }
 
 // virtual
+sal_Bool SAL_CALL Paragraph::scrollSubstringTo( sal_Int32, sal_Int32, sal_Int16 )
+{
+    return false;
+}
+
+// virtual
+sal_Bool SAL_CALL Paragraph::scrollSubstringToPoint( sal_Int32, sal_Int32, const css::awt::Point& )
+{
+    return false;
+}
+
+// virtual
 sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
 {
