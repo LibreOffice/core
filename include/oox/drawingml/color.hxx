@@ -96,6 +96,8 @@ public:
     bool                hasTransparency() const;
     /** Returns the transparency of the color (0 = opaque, 100 = full transparent). */
     sal_Int16           getTransparency() const;
+    /** Returns the transparency of the color (0 = opaque, 255 = full transparent). */
+    sal_uInt8           getAlpha() const;
 
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
     const OUString&     getSchemeName() const { return msSchemeName; }

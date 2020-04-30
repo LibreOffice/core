@@ -660,6 +660,11 @@ sal_Int16 Color::getTransparency() const
     return sal_Int16(std::round( (1.0 * (MAX_PERCENT - mnAlpha)) / PER_PERCENT) );
 }
 
+sal_uInt8 Color::getAlpha() const
+{
+    return sal_uInt8(std::round(double(MAX_PERCENT - mnAlpha) / MAX_PERCENT * 255));
+}
+
 // private --------------------------------------------------------------------
 
 void Color::setResolvedRgb( ::Color nRgb ) const

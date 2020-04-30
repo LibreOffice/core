@@ -343,7 +343,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
             const Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
 
-            attribute::SdrGlowAttribute glowAttr{ nRadius, aColor.getBColor() };
+            attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
             return glowAttr;
         }
 
