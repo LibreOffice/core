@@ -11170,9 +11170,13 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
         fi
     fi
     if test -z "$CLANG_CC" -o -z "$CLANG_CXX"; then
-        # So far do not require this, but release builds with Skia should possibly
-        # do so.
-        AC_MSG_WARN([Clang compiler not found.])
+        # Skia is the default on Windows, so hard-require Clang.
+        # Elsewhere it's used just by the 'gen' VCL backend which is rarely used.
+        if test "$_os" = "WINNT"; then
+            AC_MSG_ERROR([Clang compiler not found. The Skia library needs to be built using Clang.])
+        else
+            AC_MSG_WARN([Clang compiler not found.])
+        fi
     else
 
         save_CXX="$CXX"
