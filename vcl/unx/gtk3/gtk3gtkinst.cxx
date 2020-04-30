@@ -6884,7 +6884,7 @@ void do_ungrab(GtkWidget* pWidget)
         gdk_device_ungrab(pKeyboard, nCurrentTime);
 }
 
-void show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
+GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = gtk_widget_get_toplevel(pMenuButton);
@@ -6921,6 +6921,8 @@ void show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
             x = 0;
     }
 
+    GtkPositionType ePosUsed = GTK_POS_BOTTOM;
+
     gint endy = y + nMenuHeight;
     gint nMissingBelow = endy - aWorkArea.Bottom();
     if (nMissingBelow > 0)
@@ -6935,14 +6937,20 @@ void show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
             {
                 nMenuHeight -= nMissingAbove;
                 y = aWorkArea.Top();
+                ePosUsed = GTK_POS_TOP;
             }
             gtk_widget_set_size_request(GTK_WIDGET(pMenu), nMenuWidth, nMenuHeight);
         }
         else
+        {
             y = nNewY;
+            ePosUsed = GTK_POS_TOP;
+        }
     }
 
     gtk_window_move(pMenu, x, y);
+
+    return ePosUsed;
 }
 
 bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
@@ -6991,8 +6999,12 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
     return true;
 }
 
-void show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
+GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
+    // we only use ePosUsed in the replacement-for-X-popover case of a
+    // MenuButton, so we only need it when show_menu_older_gtk is used
+    GtkPositionType ePosUsed = GTK_POS_BOTTOM;
+
     // tdf#120764 It isn't allowed under wayland to have two visible popups that share
     // the same top level parent. The problem is that since gtk 3.24 tooltips are also
     // implemented as popups, which means that we cannot show any popup if there is a
@@ -7009,10 +7021,12 @@ void show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 
     // try with gdk_window_move_to_rect, but if that's not available, try without
     if (!show_menu_newer_gtk(pMenuButton, pMenu))
-        show_menu_older_gtk(pMenuButton, pMenu);
+        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu);
     gtk_widget_show_all(GTK_WIDGET(pMenu));
     gtk_widget_grab_focus(GTK_WIDGET(pMenu));
     do_grab(GTK_WIDGET(pMenu));
+
+    return ePosUsed;
 }
 
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
@@ -7073,7 +7087,9 @@ private:
             gtk_container_add(GTK_CONTAINER(m_pMenuHack), pChild);
             g_object_unref(pChild);
 
-            show_menu(GTK_WIDGET(m_pMenuButton), m_pMenuHack);
+            GtkPositionType ePosUsed = show_menu(GTK_WIDGET(m_pMenuButton), m_pMenuHack);
+            // tdf#132540 keep the placeholder popover on this same side as the replacement menu
+            gtk_popover_set_position(gtk_menu_button_get_popover(m_pMenuButton), ePosUsed);
         }
     }
 
