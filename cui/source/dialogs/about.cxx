@@ -142,7 +142,7 @@ bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
 }
 
 OUString AboutDialog::GetVersionString() {
-  OUString sVersion = CuiResId(RID_SVXSTR_ABOUT_VERSION);
+  OUString sVersion = CuiResId("%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX");
 
 #ifdef _WIN64
   sVersion += " (x64)";
@@ -163,18 +163,7 @@ OUString AboutDialog::GetBuildString() {
   }
   OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
 
-  OUString sBuildStr;
-
-  if (!sBuildId.trim().isEmpty()) {
-    sBuildStr = CuiResId(RID_SVXSTR_ABOUT_BUILDID);
-    if (sBuildStr.indexOf("$BUILDID") == -1) {
-      SAL_WARN("cui.dialogs", "translated Build Id string in translations "
-                              "doesn't contain $BUILDID placeholder");
-      sBuildStr += " $BUILDID";
-    }
-    sBuildStr = sBuildStr.replaceAll("$BUILDID", sBuildId);
-  }
-  return sBuildStr;
+  return sBuildId;
 }
 
 OUString AboutDialog::GetEnvString() { return Application::GetHWOSConfInfo(1); }
@@ -182,29 +171,22 @@ OUString AboutDialog::GetUIString() { return Application::GetHWOSConfInfo(2); }
 
 OUString AboutDialog::GetLocaleString() {
 
-  OUString aLocaleStr;
+  OUString sLocaleStr;
 
   rtl_Locale *pLocale;
   osl_getProcessLocale(&pLocale);
   if (pLocale && pLocale->Language) {
     if (pLocale->Country && rtl_uString_getLength(pLocale->Country) > 0)
-      aLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
+      sLocaleStr = OUString::unacquired(&pLocale->Language) + "_" +
                    OUString::unacquired(&pLocale->Country);
     else
-      aLocaleStr = OUString(pLocale->Language);
+      sLocaleStr = OUString(pLocale->Language);
     if (pLocale->Variant && rtl_uString_getLength(pLocale->Variant) > 0)
-      aLocaleStr += OUString(pLocale->Variant);
+      sLocaleStr += OUString(pLocale->Variant);
   }
 
-  aLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" +
-               aLocaleStr + ")";
-  OUString sLocaleStr(CuiResId(RID_SVXSTR_ABOUT_LOCALE));
-  if (sLocaleStr.indexOf("$LOCALE") == -1) {
-    SAL_WARN("cui.dialogs", "translated locale string in translations doesn't "
-                            "contain $LOCALE placeholder");
-    sLocaleStr += " $LOCALE";
-  }
-  sLocaleStr = sLocaleStr.replaceAll("$LOCALE", aLocaleStr);
+  sLocaleStr = Application::GetSettings().GetLanguageTag().getBcp47() + " (" +
+               sLocaleStr + ")";
 
   OUString aUILocaleStr =
       Application::GetSettings().GetUILanguageTag().getBcp47();
