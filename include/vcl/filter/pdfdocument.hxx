@@ -19,37 +19,17 @@
 
 #include <vcl/dllapi.h>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace security
+namespace com::sun::star::security
 {
 class XCertificate;
 }
-}
-}
-}
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
+namespace com::sun::star::uno
 {
 template <class interface_type> class Reference;
 }
-}
-}
-}
 
-namespace vcl
-{
-namespace filter
+namespace vcl::filter
 {
 class PDFTrailerElement;
 class PDFReferenceElement;
@@ -429,8 +409,7 @@ public:
     //@}
 };
 
-} // namespace pdfio
-} // namespace xmlsecurity
+} // namespace vcl::filter
 
 #endif // INCLUDED_VCL_FILTER_PDFDOCUMENT_HXX
 
