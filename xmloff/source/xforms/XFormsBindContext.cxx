@@ -44,14 +44,29 @@ using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
 
 
+static const struct SvXMLTokenMapEntry aAttributeMap[] =
+{
+    TOKEN_MAP_ENTRY( NONE, NODESET ),
+    TOKEN_MAP_ENTRY( NONE, ID ),
+    TOKEN_MAP_ENTRY( NONE, READONLY ),
+    TOKEN_MAP_ENTRY( NONE, RELEVANT ),
+    TOKEN_MAP_ENTRY( NONE, REQUIRED ),
+    TOKEN_MAP_ENTRY( NONE, CONSTRAINT ),
+    TOKEN_MAP_ENTRY( NONE, CALCULATE ),
+    TOKEN_MAP_ENTRY( NONE, TYPE ),
+    XML_TOKEN_MAP_END
+};
+
 // helper function; see below
 static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer> const & );
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport ),
+        TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
         mxModel( xModel )
 {
     // attach binding to model
@@ -60,47 +75,46 @@ XFormsBindContext::XFormsBindContext(
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
 }
 
-bool XFormsBindContext::HandleAttribute( sal_Int32 nElement,
+void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                          const OUString& rValue )
 {
-    switch( nElement )
+    switch( nToken )
     {
-    case XML_ELEMENT(NONE, XML_NODESET):
+    case XML_NODESET:
         xforms_setValue( mxBinding, "BindingExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         xforms_setValue( mxBinding, "BindingID", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_READONLY):
+    case XML_READONLY:
         xforms_setValue( mxBinding, "ReadonlyExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_RELEVANT):
+    case XML_RELEVANT:
         xforms_setValue( mxBinding, "RelevantExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_REQUIRED):
+    case XML_REQUIRED:
         xforms_setValue( mxBinding, "RequiredExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_CONSTRAINT):
+    case XML_CONSTRAINT:
         xforms_setValue( mxBinding, "ConstraintExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_CALCULATE):
+    case XML_CALCULATE:
         xforms_setValue( mxBinding, "CalculateExpression", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_TYPE):
+    case XML_TYPE:
         xforms_setValue( mxBinding, "Type",
                       makeAny( xforms_getTypeName( mxModel->getDataTypeRepository(),
                                        GetImport().GetNamespaceMap(),
                                        rValue ) ) );
         break;
     default:
-        return false;
+        OSL_FAIL( "should not happen" );
+        break;
     }
-    return true;
 }
 
-void XFormsBindContext::startFastElement(
-    sal_Int32 nElement,
-    const Reference<css::xml::sax::XFastAttributeList>& xAttributeList )
+void XFormsBindContext::StartElement(
+    const Reference<XAttributeList>& xAttributeList )
 {
     // we need to register the namespaces
     Reference<XNameContainer> xContainer(
@@ -112,13 +126,15 @@ void XFormsBindContext::startFastElement(
         lcl_fillNamespaceContainer( GetImport().GetNamespaceMap(), xContainer);
 
     // call super-class for attribute handling
-    TokenContext::startFastElement( nElement, xAttributeList );
+    TokenContext::StartElement( xAttributeList );
 }
 
 /** will be called for each child element */
 SvXMLImportContext* XFormsBindContext::HandleChild(
-    sal_Int32,
-    const Reference<css::xml::sax::XFastAttributeList>& )
+    sal_uInt16,
+    sal_uInt16,
+    const OUString&,
+    const Reference<XAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
     return nullptr;

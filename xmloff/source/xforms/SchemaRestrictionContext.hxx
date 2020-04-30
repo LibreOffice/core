@@ -42,6 +42,8 @@ class SchemaRestrictionContext : public TokenContext
 
 public:
     SchemaRestrictionContext( SvXMLImport& rImport,
+                              sal_uInt16 nPrfx,
+                              const OUString& rLName,
                               css::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
                               const OUString& sTypeName );
 
@@ -51,13 +53,15 @@ private:
 
     // implement TokenContext methods:
 
-    virtual bool HandleAttribute(
-        sal_Int32 nElement,
+    virtual void HandleAttribute(
+        sal_uInt16 nToken,
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        sal_uInt16 nToken,
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

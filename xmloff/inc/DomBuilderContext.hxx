@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
         class XDocument;
     } }
     namespace xml { namespace sax {
-        class XFastAttributeList;
+        class XAttributeList;
     } }
 } } }
 class SvXMLImport;
@@ -48,11 +48,14 @@ class DomBuilderContext final : public SvXMLImportContext
 public:
 
     /** default constructor: create new DOM tree */
-    DomBuilderContext( SvXMLImport& rImport, sal_Int32 nElement );
+    DomBuilderContext( SvXMLImport& rImport,
+                       sal_uInt16 nPrefix,
+                       const OUString& rLocalName );
 
     /** constructor: create DOM subtree under the given node */
     DomBuilderContext( SvXMLImport& rImport,
-                       sal_Int32 nElement,
+                       sal_uInt16 nPrefix,
+                       const OUString& rLocalName,
                        css::uno::Reference<css::xml::dom::XNode> const & );
 
     virtual ~DomBuilderContext() override;
@@ -67,12 +70,16 @@ public:
 
     // implement SvXMLImportContext methods:
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-                                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
+
+    virtual void StartElement(
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+
+    virtual void EndElement() override;
 
     virtual void Characters( const OUString& rChars ) override;
 };

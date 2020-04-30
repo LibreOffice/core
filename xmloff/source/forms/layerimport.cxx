@@ -458,7 +458,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
     else if ( _nPrefix == XML_NAMESPACE_XFORMS
               && xmloff::token::IsXMLToken( _rLocalName, xmloff::token::XML_MODEL ) )
     {
-        pContext = createXFormsModelContext( m_rImporter );
+        pContext = createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
     }
 
     return pContext;

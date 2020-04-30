@@ -40,18 +40,22 @@ class SchemaSimpleTypeContext : public TokenContext
 
 public:
     SchemaSimpleTypeContext( SvXMLImport& rImport,
+                             sal_uInt16 nPrfx,
+                             const OUString& rLName,
                              const css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
 
     // implement TokenContext methods:
 
 protected:
-    virtual bool HandleAttribute(
-        sal_Int32 nElement,
+    virtual void HandleAttribute(
+        sal_uInt16 nToken,
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        sal_uInt16 nToken,
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

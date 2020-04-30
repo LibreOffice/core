@@ -35,7 +35,10 @@ namespace com { namespace sun { namespace star {
 } } }
 
 /** create import context for xforms:model element. */
-XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext( SvXMLImport& rImport );
+XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName );
 
 /** perform the actual binding of an XForms-binding with the suitable control
  *  @param document which contains the XForms-model(s)

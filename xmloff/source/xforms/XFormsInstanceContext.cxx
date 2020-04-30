@@ -46,18 +46,28 @@ using com::sun::star::xml::sax::XAttributeList;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
 
+static const SvXMLTokenMapEntry aAttributes[] =
+{
+    TOKEN_MAP_ENTRY( NONE, SRC ),
+    TOKEN_MAP_ENTRY( NONE, ID ),
+    XML_TOKEN_MAP_END
+};
+
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
     const Reference<XModel2> & xModel ) :
-        TokenContext( rImport ),
+        TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
         mxModel( xModel )
 {
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >  XFormsInstanceContext::createFastChildContext(
-    sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -66,12 +76,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >  XFormsInstanceContext
     // ignored.
     if( mxInstance.is() )
     {
-        GetImport().SetError( XMLERROR_XFORMS_ONLY_ONE_INSTANCE_ELEMENT, SvXMLImport::getPrefixAndNameFromToken(nElement) );
+        GetImport().SetError( XMLERROR_XFORMS_ONLY_ONE_INSTANCE_ELEMENT, rLocalName );
     }
     else
     {
         // create new DomBuilderContext. Save reference to tree in Model.
-        DomBuilderContext* pInstance = new DomBuilderContext( GetImport(), nElement );
+        DomBuilderContext* pInstance =
+            new DomBuilderContext( GetImport(), nPrefix, rLocalName );
         mxInstance = pInstance->getTree();
         pContext = pInstance;
     }
@@ -81,7 +92,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >  XFormsInstanceContext
 
 }
 
-void XFormsInstanceContext::endFastElement(sal_Int32 )
+void XFormsInstanceContext::EndElement()
 {
     Sequence<PropertyValue> aSequence( 3 );
     PropertyValue* pSequence = aSequence.getArray();
@@ -96,28 +107,29 @@ void XFormsInstanceContext::endFastElement(sal_Int32 )
 }
 
 
-bool XFormsInstanceContext::HandleAttribute(
-    sal_Int32 nElement,
+void XFormsInstanceContext::HandleAttribute(
+    sal_uInt16 nToken,
     const OUString& rValue )
 {
-    switch( nElement )
+    switch( nToken )
     {
-    case XML_ELEMENT(NONE, XML_SRC):
+    case XML_SRC:
         msURL = rValue;
         break;
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         msId = rValue;
         break;
     default:
-        return false;
+        OSL_FAIL( "should not happen" );
         break;
     }
-    return true;
 }
 
 SvXMLImportContext* XFormsInstanceContext::HandleChild(
-    sal_Int32,
-    const Reference<css::xml::sax::XFastAttributeList>& )
+    sal_uInt16,
+    sal_uInt16,
+    const OUString&,
+    const Reference<XAttributeList>& )
 {
     OSL_FAIL( "to be handled by CreateChildContext" );
     return nullptr;
