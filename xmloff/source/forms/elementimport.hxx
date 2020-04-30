@@ -549,42 +549,6 @@ namespace xmloff
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
     };
 
-    //= OContainerImport
-    // BASE must be a derivee of OElementImport
-    template <class BASE>
-    class OContainerImport
-                :public BASE
-                ,public ODefaultEventAttacherManager
-    {
-    protected:
-        css::uno::Reference< css::container::XNameContainer >
-                        m_xMeAsContainer;
-        OUString m_sWrapperElementName;
-
-    protected:
-        OContainerImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
-                const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
-                const char* _pWrapperElementName)
-            :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
-            ,m_sWrapperElementName(OUString::createFromAscii(_pWrapperElementName))
-        {
-        }
-
-        // SvXMLImportContext overridables
-        virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual void EndElement() override;
-
-    protected:
-        // OElementImport overridables
-        virtual css::uno::Reference< css::beans::XPropertySet >
-                        createElement() override;
-
-        // create the child context for the given control type
-        virtual SvXMLImportContext* implCreateControlWrapper(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName) = 0;
-    };
 
     //= OColumnImport
     /** helper class importing a single grid column (without the &lt;form:column&gt; element wrapping
@@ -635,11 +599,9 @@ namespace xmloff
             OControlElement::ElementType _eType);
     };
 
-    //= OGridImport
-    typedef OContainerImport< OControlImport >  OGridImport_Base;
     /** helper class importing a single &lt;form:grid&gt; element
     */
-    class OGridImport : public OGridImport_Base
+    class OGridImport : public OControlImport, public ODefaultEventAttacherManager
     {
     public:
         OGridImport(
@@ -647,17 +609,22 @@ namespace xmloff
             const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType);
 
-    protected:
-        // OContainerImport overridables
-        virtual SvXMLImportContext* implCreateControlWrapper(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName) override;
+        // SvXMLImportContext overridables
+        virtual SvXMLImportContextRef CreateChildContext(
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void EndElement() override;
+
+    private:
+        // OElementImport overridables
+        virtual css::uno::Reference< css::beans::XPropertySet > createElement() override;
+
+        css::uno::Reference< css::container::XNameContainer >  m_xMeAsContainer;
     };
 
-    //= OFormImport
-    typedef OContainerImport< OElementImport >  OFormImport_Base;
     /** helper class importing a single &lt;form:form&gt; element
     */
-    class OFormImport : public OFormImport_Base
+    class OFormImport : public OElementImport, public ODefaultEventAttacherManager
     {
     public:
         OFormImport(
@@ -674,14 +641,14 @@ namespace xmloff
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    EndElement() override;
 
-        // OContainerImport overridables
-        virtual SvXMLImportContext* implCreateControlWrapper(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName) override;
-
         // OPropertyImport overridables
         virtual bool    handleAttribute(sal_uInt16 _nNamespaceKey,
             const OUString& _rLocalName,
             const OUString& _rValue) override;
+
+        // OElementImport overridables
+        virtual css::uno::Reference< css::beans::XPropertySet >
+                        createElement() override;
 
         OControlImport* implCreateChildContext(
                 sal_uInt16 _nPrefix, const OUString& _rLocalName,
@@ -689,6 +656,8 @@ namespace xmloff
 
         virtual OUString determineDefaultServiceName() const override;
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
+
+        css::uno::Reference< css::container::XNameContainer > m_xMeAsContainer;
     };
 
     //= OXMLDataSourceImport
@@ -701,58 +670,6 @@ namespace xmloff
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,const css::uno::Reference< css::beans::XPropertySet >& _xElement);
     };
-
-    //= OContainerImport
-    template <class BASE>
-    inline SvXMLImportContextRef OContainerImport< BASE >::CreateChildContext(
-        sal_uInt16 _nPrefix, const OUString& _rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList)
-    {
-        // maybe it's a sub control
-        if (_rLocalName == m_sWrapperElementName)
-        {
-            if (m_xMeAsContainer.is())
-                return implCreateControlWrapper(_nPrefix, _rLocalName);
-            else
-            {
-                OSL_FAIL("OContainerImport::CreateChildContext: don't have an element!");
-                return nullptr;
-            }
-        }
-
-        return BASE::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
-    }
-
-    template <class BASE>
-    inline css::uno::Reference< css::beans::XPropertySet >
-        OContainerImport< BASE >::createElement()
-    {
-        // let the base class create the object
-        css::uno::Reference< css::beans::XPropertySet > xReturn = BASE::createElement();
-        if (!xReturn.is())
-            return xReturn;
-
-        // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-        m_xMeAsContainer.set(xReturn, css::uno::UNO_QUERY);
-        if (!m_xMeAsContainer.is())
-        {
-            OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
-            xReturn.clear();
-        }
-
-        return xReturn;
-    }
-
-    template <class BASE>
-    inline void OContainerImport< BASE >::EndElement()
-    {
-        BASE::EndElement();
-
-        // now that we have all children, attach the events
-        css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);
-        if (xIndexContainer.is())
-            ODefaultEventAttacherManager::setEvents(xIndexContainer);
-    }
 
     //= OColumnImport
     template <class BASE>
