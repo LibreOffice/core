@@ -43,6 +43,8 @@ class XFormsInstanceContext : public TokenContext
 
 public:
     XFormsInstanceContext( SvXMLImport& rImport,
+                           sal_uInt16 nPrfx,
+                           const OUString& rLName,
                            const css::uno::Reference<css::xforms::XModel2> & xModel );
 
     // implement SvXMLImportContext & TokenContext methods:
@@ -50,20 +52,23 @@ public:
     // arbitrary DOM elements. For the attributes, we use the
     // TokenContext mechanism.
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void EndElement() override;
 
 protected:
-    virtual bool HandleAttribute(
-        sal_Int32 nElement,
+    virtual void HandleAttribute(
+        sal_uInt16 nToken,
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        sal_uInt16 nToken,
+        sal_uInt16 nNamespace,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif

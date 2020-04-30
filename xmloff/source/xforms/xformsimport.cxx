@@ -54,9 +54,12 @@ using com::sun::star::form::binding::XListEntrySink;
 using com::sun::star::form::submission::XSubmission;
 using com::sun::star::form::submission::XSubmissionSupplier;
 
-SvXMLImportContext* createXFormsModelContext( SvXMLImport& rImport )
+SvXMLImportContext* createXFormsModelContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName )
 {
-    return new XFormsModelContext( rImport );
+    return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 
 void bindXFormsValueBinding(Reference<XModel> const& xModel,

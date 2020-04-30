@@ -41,10 +41,32 @@ using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
 
+static const struct SvXMLTokenMapEntry aAttributeMap[] =
+{
+    TOKEN_MAP_ENTRY( NONE, ID ),
+    TOKEN_MAP_ENTRY( NONE, BIND ),
+    TOKEN_MAP_ENTRY( NONE, REF ),
+    TOKEN_MAP_ENTRY( NONE, ACTION ),
+    TOKEN_MAP_ENTRY( NONE, METHOD ),
+    TOKEN_MAP_ENTRY( NONE, VERSION ),
+    TOKEN_MAP_ENTRY( NONE, INDENT ),
+    TOKEN_MAP_ENTRY( NONE, MEDIATYPE ),
+    TOKEN_MAP_ENTRY( NONE, ENCODING ),
+    TOKEN_MAP_ENTRY( NONE, OMIT_XML_DECLARATION ),
+    TOKEN_MAP_ENTRY( NONE, STANDALONE ),
+    TOKEN_MAP_ENTRY( NONE, CDATA_SECTION_ELEMENTS ),
+    TOKEN_MAP_ENTRY( NONE, REPLACE ),
+    TOKEN_MAP_ENTRY( NONE, SEPARATOR ),
+    TOKEN_MAP_ENTRY( NONE, INCLUDENAMESPACEPREFIXES ),
+    XML_TOKEN_MAP_END
+};
+
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
     const Reference<XModel2>& xModel ) :
-        TokenContext( rImport ),
+        TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
         mxSubmission()
 {
     // register submission with model
@@ -69,68 +91,69 @@ Any toBool( const OUString& rValue )
 
 } // namespace
 
-bool XFormsSubmissionContext::HandleAttribute( sal_Int32 nElement,
+void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
                                                const OUString& rValue )
 {
-    switch( nElement )
+    switch( nToken )
     {
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         xforms_setValue( mxSubmission, "ID", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_BIND):
+    case XML_BIND:
         xforms_setValue( mxSubmission, "Bind", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_REF):
+    case XML_REF:
         xforms_setValue( mxSubmission, "Ref", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_ACTION):
+    case XML_ACTION:
         xforms_setValue( mxSubmission, "Action", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_METHOD):
+    case XML_METHOD:
         xforms_setValue( mxSubmission, "Method", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_VERSION):
+    case XML_VERSION:
         xforms_setValue( mxSubmission, "Version", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_INDENT):
+    case XML_INDENT:
         xforms_setValue( mxSubmission, "Indent", toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_MEDIATYPE):
+    case XML_MEDIATYPE:
         xforms_setValue( mxSubmission, "MediaType", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_ENCODING):
+    case XML_ENCODING:
         xforms_setValue( mxSubmission, "Encoding", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_OMIT_XML_DECLARATION):
+    case XML_OMIT_XML_DECLARATION:
         xforms_setValue( mxSubmission, "OmitXmlDeclaration",
                       toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_STANDALONE):
+    case XML_STANDALONE:
         xforms_setValue( mxSubmission, "Standalone", toBool( rValue ) );
         break;
-    case XML_ELEMENT(NONE, XML_CDATA_SECTION_ELEMENTS):
+    case XML_CDATA_SECTION_ELEMENTS:
         xforms_setValue( mxSubmission, "CDataSectionElement", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_REPLACE):
+    case XML_REPLACE:
         xforms_setValue( mxSubmission, "Replace", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_SEPARATOR):
+    case XML_SEPARATOR:
         xforms_setValue( mxSubmission, "Separator", rValue );
         break;
-    case XML_ELEMENT(NONE, XML_INCLUDENAMESPACEPREFIXES):
+    case XML_INCLUDENAMESPACEPREFIXES:
         xforms_setValue( mxSubmission, "IncludeNamespacePrefixes", rValue );
         break;
     default:
-        return false;
+        OSL_FAIL( "unknown attribute" );
         break;
     }
-    return true;
 }
 
 /** will be called for each child element */
 SvXMLImportContext* XFormsSubmissionContext::HandleChild(
-    sal_Int32,
-    const Reference<css::xml::sax::XFastAttributeList>& )
+    sal_uInt16,
+    sal_uInt16,
+    const OUString&,
+    const Reference<XAttributeList>& )
 {
     OSL_FAIL( "no children supported" );
     return nullptr;

@@ -24,33 +24,46 @@
 #include <xmloff/xmltkmap.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XFastAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList; } }
     namespace uno { template<typename T> class Reference; }
 } } }
 
 class SvXMLImport;
 
+#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
+
+extern const SvXMLTokenMapEntry aEmptyMap[1];
+
 /** handle attributes through an SvXMLTokenMap */
 class TokenContext : public SvXMLImportContext
 {
+protected:
+    const SvXMLTokenMapEntry* mpAttributes;    /// static token map
+    const SvXMLTokenMapEntry* mpChildren;      /// static token map
+
 public:
-    TokenContext( SvXMLImport& rImport );
+    TokenContext( SvXMLImport& rImport,
+                  sal_uInt16 nPrefix,
+                  const OUString& rLocalName,
+                  const SvXMLTokenMapEntry* pAttributes,
+                  const SvXMLTokenMapEntry* pChildren );
 
     // implement SvXMLImportContext methods:
 
     /** call HandleAttribute for each attribute in the token map;
      * create a warning for all others. Classes that wish to override
      * StartElement need to call the parent method. */
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-                                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void StartElement(
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
      * CreateChildContext may want to call the parent method for
      * handling of defaults. */
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
@@ -59,15 +72,20 @@ public:
     virtual void Characters( const OUString& rChars ) override;
 
 protected:
-    /** will be called for each attribute. return true for success. */
-    virtual bool HandleAttribute(
-        sal_Int32 nElement,
+    /** will be called for each attribute */
+    virtual void HandleAttribute(
+        sal_uInt16 nToken,
         const OUString& rValue ) = 0;
 
     /** will be called for each child element */
     virtual SvXMLImportContext* HandleChild(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) = 0;
+        sal_uInt16 nToken,
+
+        // the following attributes are mainly to be used for child
+        // context creation
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) = 0;
 };
 
 #endif

@@ -40,21 +40,24 @@ class XFormsBindContext : public TokenContext
 
 public:
     XFormsBindContext( SvXMLImport& rImport,
+                       sal_uInt16 nPrefix,
+                       const OUString& rLocalName,
                        const css::uno::Reference<css::xforms::XModel2>& xModel );
 
     // implement SvXMLImportContext & TokenContext methods:
 
-    virtual void SAL_CALL startFastElement(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+    virtual void StartElement(
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
 protected:
-    virtual bool HandleAttribute( sal_Int32 nElement,
+    virtual void HandleAttribute( sal_uInt16 nToken,
                                   const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        sal_uInt16 nToken,
+        sal_uInt16 nNamespace,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
 };
 

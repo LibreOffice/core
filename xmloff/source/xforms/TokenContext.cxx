@@ -29,51 +29,84 @@
 #include <algorithm>
 
 using com::sun::star::uno::Reference;
+using com::sun::star::xml::sax::XAttributeList;
 
-TokenContext::TokenContext( SvXMLImport& rImport )
-    : SvXMLImportContext( rImport )
+const SvXMLTokenMapEntry aEmptyMap[1] =
+{
+    XML_TOKEN_MAP_END
+};
+
+TokenContext::TokenContext( SvXMLImport& rImport,
+                            sal_uInt16 nPrefix,
+                            const OUString& rLocalName,
+                            const SvXMLTokenMapEntry* pAttributes,
+                            const SvXMLTokenMapEntry* pChildren )
+    : SvXMLImportContext( rImport, nPrefix, rLocalName ),
+      mpAttributes( pAttributes ),
+      mpChildren( pChildren )
 {
 }
 
-void TokenContext::startFastElement(
-    sal_Int32 /*nElement*/,
-    const Reference<css::xml::sax::XFastAttributeList>& xAttributeList )
+void TokenContext::StartElement(
+    const Reference<XAttributeList>& xAttributeList )
 {
     // iterate over attributes
     // - if in map: call HandleAttribute
     // - xmlns:... : ignore
     // - other: warning
+    SAL_WARN_IF( mpAttributes == nullptr, "xmloff", "no token map for attributes" );
+    SvXMLTokenMap aMap( mpAttributes );
 
-    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttributeList ))
+    sal_Int16 nCount = xAttributeList->getLength();
+    for( sal_Int16 i = 0; i < nCount; i++ )
     {
-        // and the value...
-        OUString aValue = aIter.toString();
+        // get key/local-name pair from namespace map
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttributeList->getNameByIndex(i), &sLocalName );
 
-        if (HandleAttribute( aIter.getToken(), aValue ))
-            ; //fine
-        else if ( IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_XMLNS) )
-            ; // ignore
-        else
+        // get token from token map
+        sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
+
+        // and the value...
+        const OUString& rValue = xAttributeList->getValueByIndex(i);
+
+        if( nToken != XML_TOK_UNKNOWN )
+        {
+            HandleAttribute( nToken, rValue );
+        }
+        else if( nPrefix != XML_NAMESPACE_XMLNS )
         {
             // error handling, for all attribute that are not
             // namespace declarations
             GetImport().SetError( XMLERROR_UNKNOWN_ATTRIBUTE,
-                                  SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()), aValue);
+                                  sLocalName, rValue);
         }
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+SvXMLImportContextRef TokenContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& xAttrList )
 {
-    // call handle child, and pass down arguments
-    SvXMLImportContext* pContext = HandleChild( nElement, xAttrList );
+    // call HandleChild for elements in token map. Ignore other content.
+
+    SvXMLImportContext* pContext = nullptr;
+
+    SAL_WARN_IF( mpChildren == nullptr, "xmloff", "no token map for child elements" );
+    SvXMLTokenMap aMap( mpChildren );
+    sal_uInt16 nToken = aMap.Get( nPrefix, rLocalName );
+    if( nToken != XML_TOK_UNKNOWN )
+    {
+        // call handle child, and pass down arguments
+        pContext = HandleChild( nToken, nPrefix, rLocalName, xAttrList );
+    }
 
     // error handling: create default context and generate warning
     if( pContext == nullptr )
     {
-        GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, SvXMLImport::getPrefixAndNameFromToken(nElement) );
+        GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
     }
     return pContext;
 }
