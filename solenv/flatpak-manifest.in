@@ -81,10 +81,10 @@
                     "dest-filename": "external/tarballs/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.2.29.tar.gz",
-                    "sha256": "b1d1deba966019930f608d1f2b95c40ca3450f1393bcd3a3c001a8ba1d2839ab",
+                    "url": "https://dev-www.libreoffice.org/src/xmlsec1-1.2.30.tar.gz",
+                    "sha256": "2d84360b03042178def1d9ff538acacaed2b3a27411db7b2874f1612ed71abc8",
                     "type": "file",
-                    "dest-filename": "external/tarballs/xmlsec1-1.2.29.tar.gz"
+                    "dest-filename": "external/tarballs/xmlsec1-1.2.30.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/368f114c078f94214a308a74c7e991bc-crosextrafonts-20130214.tar.gz",
