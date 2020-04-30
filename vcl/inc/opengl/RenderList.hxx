@@ -163,7 +163,7 @@ public:
                             Color nLineColor, Color nFillColor, bool bUseAA);
 
     void addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
-                         const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
+                         double fLineWidth, basegfx::B2DLineJoin eLineJoin,
                          css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                          Color nLineColor, bool bUseAA);
 };

@@ -1560,7 +1560,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
         basegfx::B2DHomMatrix(),
         aPoly,
         0.0,
-        basegfx::B2DVector(1.0, 1.0),
+        1.0,
         nullptr, // MM01
         basegfx::B2DLineJoin::Miter,
         css::drawing::LineCap_BUTT,
@@ -1638,7 +1638,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -1680,10 +1680,10 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     if(bPixelSnapHairline) { aPolyPolygonLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPolygonLine); }
 
     // tdf#124848 get correct LineWidth in discrete coordinates,
-    // take hairline case into account
-    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero()
-        ? basegfx::B2DVector(1.0, 1.0)
-        : rObjectToDevice * rLineWidth);
+    if(fLineWidth == 0) // hairline
+        fLineWidth = 1.0;
+    else // Adjust line width for object-to-device scale.
+        fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
     for(sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
     {
@@ -1695,7 +1695,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         mpRenderList->addDrawPolyLine(
             aPolyLine,
             fTransparency,
-            aLineWidth,
+            fLineWidth,
             eLineJoin,
             eLineCap,
             fMiterMinimumAngle,

@@ -1004,7 +1004,6 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
     const basegfx::B2DRectangle aWaveLineRectangle(nStartX, nStartY, nEndX, nEndY + nWaveHeight);
     const basegfx::B2DPolygon aWaveLinePolygon = basegfx::createWaveLinePolygon(aWaveLineRectangle);
     const basegfx::B2DHomMatrix aRotationMatrix = basegfx::utils::createRotateAroundPoint(nStartX, nStartY, basegfx::deg2rad(-fOrientation));
-    const basegfx::B2DVector aLineWidth(nLineWidth, nLineWidth);
     const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
     mpGraphics->SetLineColor(GetLineColor());
@@ -1012,7 +1011,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
             aRotationMatrix,
             aWaveLinePolygon,
             0.0,
-            aLineWidth,
+            nLineWidth,
             nullptr, // MM01
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,

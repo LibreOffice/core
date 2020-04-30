@@ -372,7 +372,7 @@ void RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Col
 }
 
 void RenderList::addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
-                                 const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
+                                 double fLineWidth, basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                  Color nLineColor, bool bUseAA)
 {
@@ -383,8 +383,8 @@ void RenderList::addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTr
     if (fTransparency == 1.0)
         return;
 
-    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
-    const float fLineWidth = bIsHairline ? 1.0f : rLineWidth.getX();
+    const bool bIsHairline = fLineWidth <= 1.2;
+    fLineWidth = bIsHairline ? 1.0f : fLineWidth;
 
     basegfx::B2DPolygon aPolygon(rPolygon);
     if (rPolygon.areControlPointsUsed())

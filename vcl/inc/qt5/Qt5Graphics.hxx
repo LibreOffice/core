@@ -118,8 +118,7 @@ public:
                                        const SalPoint* const* pPtAry,
                                        const PolyFlags* const* pFlgAry) override;
     virtual bool drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
-                              const basegfx::B2DPolygon&, double fTransparency,
-                              const basegfx::B2DVector& rLineWidths,
+                              const basegfx::B2DPolygon&, double fTransparency, double fLineWidths,
                               const std::vector<double>* pStroke, // MM01
                               basegfx::B2DLineJoin, css::drawing::LineCap eLineCap,
                               double fMiterMinimumAngle, bool bPixelSnapHairline) override;

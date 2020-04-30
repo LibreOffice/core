@@ -71,8 +71,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         aTransform,
         aB2DPolyLine,
         0.0,
-        // tdf#124848 hairline
-        basegfx::B2DVector::getEmptyVector(),
+        0.0, // tdf#124848 hairline
         nullptr, // MM01
         basegfx::B2DLineJoin::NONE,
         css::drawing::LineCap_BUTT,
@@ -348,8 +347,7 @@ bool OutputDevice::DrawPolyLineDirect(
             aTransform,
             rB2DPolygon,
             fTransparency,
-            // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
-            basegfx::B2DVector(fLineWidth, fLineWidth),
+            fLineWidth, // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
             pStroke, // MM01
             eLineJoin,
             eLineCap,

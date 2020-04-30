@@ -2204,7 +2204,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -2218,29 +2218,28 @@ bool WinSalGraphicsImpl::drawPolyLine(
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    basegfx::B2DVector aLineWidth(rLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
-    const bool bIsHairline(aLineWidth.equalZero());
+    const bool bIsHairline(fLineWidth == 0);
 
     // tdf#124848 calculate-back logical LineWidth for a hairline
     // since this implementation hands over the transformation to
     // the graphic sub-system
     if(bIsHairline)
     {
-        aLineWidth = basegfx::B2DVector(1.0, 1.0);
+        fLineWidth = 1.0;
 
         if(!bObjectToDeviceIsIdentity)
         {
             basegfx::B2DHomMatrix aObjectToDeviceInv(rObjectToDevice);
             aObjectToDeviceInv.invert();
-            aLineWidth = aObjectToDeviceInv * aLineWidth;
+            fLineWidth = (aObjectToDeviceInv * basegfx::B2DVector(fLineWidth, 0)).getLength();
         }
     }
 
     Gdiplus::Graphics aGraphics(mrParent.getHDC());
     const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
     const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
-    Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(aLineWidth.getX()));
+    Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(fLineWidth));
     bool bNoLineJoin(false);
 
     // Set full (Object-to-Device) transformation - if used
@@ -2340,7 +2339,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
         // the back-calculated logical linewidth is already here, just use it.
         // Still be careful - a zero LineWidth *should* not happen, but...
         std::vector<Gdiplus::REAL> aDashArray(pStroke->size());
-        const double fFactor(aLineWidth.equalZero() ? 1.0 : 1.0 / aLineWidth.getX());
+        const double fFactor(fLineWidth == 0 ? 1.0 : 1.0 / fLineWidth);
 
         for(size_t a(0); a < pStroke->size(); a++)
         {

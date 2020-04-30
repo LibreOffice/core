@@ -13,6 +13,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <test/outputdevice.hxx>
 
@@ -41,6 +42,16 @@ class BackendTest : public test::BootstrapFixture
             aBitmap.Scale(Size(128, 128), BmpScaleFlag::Fast);
             SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
+        }
+    }
+
+    void exportDevice(const OUString& filename, const VclPtr<VirtualDevice>& device)
+    {
+        if (mbExportBitmap)
+        {
+            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
+            SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }
     }
 
@@ -444,6 +455,36 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testTdf124848()
+    {
+        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        device->SetOutputSizePixel(Size(100, 100));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->Erase();
+        device->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+        device->SetLineColor(COL_BLACK);
+        basegfx::B2DHomMatrix matrix;
+        // DrawPolyLine() would apply the whole matrix to the line width, making it negative
+        // in case of a larger rotation.
+        matrix.rotate(M_PI); //180 degrees
+        matrix.translate(100, 100);
+        CPPUNIT_ASSERT(device->DrawPolyLineDirect(
+            matrix, basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 100));
+        exportDevice("/tmp/tdf124848-1.png", device);
+        // 100px wide line should fill the entire width of the upper half
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(2, 2)));
+
+        // Also check hairline.
+        device->Erase();
+        CPPUNIT_ASSERT(
+            device->DrawPolyLineDirect(matrix, basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 0));
+        exportDevice("/tmp/tdf124848-2.png", device);
+        // 1px wide
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(50, 20)));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(49, 20)));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(51, 20)));
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -486,6 +527,8 @@ public:
     CPPUNIT_TEST(testDrawMask);
     CPPUNIT_TEST(testDrawBlend);
     CPPUNIT_TEST(testDrawXor);
+
+    CPPUNIT_TEST(testTdf124848);
 
     CPPUNIT_TEST_SUITE_END();
 };

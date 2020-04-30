@@ -259,7 +259,7 @@ public:
                 const basegfx::B2DHomMatrix& rObjectToDevice,
                 const basegfx::B2DPolygon&,
                 double fTransparency,
-                const basegfx::B2DVector& rLineWidths,
+                double fLineWidth,
                 const std::vector< double >* pStroke, // MM01
                 basegfx::B2DLineJoin,
                 css::drawing::LineCap,

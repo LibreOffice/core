@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_backend_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_backend_test, \
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \

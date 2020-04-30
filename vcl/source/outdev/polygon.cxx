@@ -96,8 +96,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                     aTransform,
                     rPolygon,
                     0.0,
-                    // tdf#124848 hairline
-                    basegfx::B2DVector::getEmptyVector(),
+                    0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
@@ -215,8 +214,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
                 aTransform,
                 aB2DPolygon,
                 0.0,
-                // tdf#124848 hairline
-                basegfx::B2DVector::getEmptyVector(),
+                0.0, // tdf#124848 hairline
                 nullptr, // MM01
                 basegfx::B2DLineJoin::NONE,
                 css::drawing::LineCap_BUTT,
@@ -326,8 +324,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     aTransform,
                     rPolygon,
                     0.0,
-                    // tdf#124848 hairline
-                    basegfx::B2DVector::getEmptyVector(),
+                    0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,

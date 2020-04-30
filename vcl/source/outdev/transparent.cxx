@@ -269,8 +269,7 @@ void OutputDevice::DrawTransparent(
                     aFullTransform,
                     rPolygon,
                     fTransparency,
-                    // tdf#124848 hairline
-                    basegfx::B2DVector::getEmptyVector(),
+                    0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
@@ -392,8 +391,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     aTransform,
                     rPolygon,
                     fTransparency,
-                    // tdf#124848 hairline
-                    basegfx::B2DVector::getEmptyVector(),
+                    0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,

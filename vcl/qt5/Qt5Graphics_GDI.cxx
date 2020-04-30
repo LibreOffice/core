@@ -325,7 +325,7 @@ bool Qt5Graphics::drawPolyPolygonBezier(sal_uInt32 /*nPoly*/, const sal_uInt32* 
 
 bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                               const basegfx::B2DVector& rLineWidth,
+                               double fLineWidth,
                                const std::vector<double>* pStroke, // MM01
                                basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap,
                                double fMiterMinimumAngle, bool bPixelSnapHairline)
@@ -371,9 +371,10 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     }
 
     // tdf#124848 get correct LineWidth in discrete coordinates,
-    // take hairline case into account
-    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero() ? basegfx::B2DVector(1.0, 1.0)
-                                                               : rObjectToDevice * rLineWidth);
+    if (fLineWidth == 0) // hairline
+        fLineWidth = 1.0;
+    else // Adjust line width for object-to-device scale.
+        fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
     // setup poly-polygon path
     QPainterPath aPath;
@@ -390,7 +391,7 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
 
     // setup line attributes
     QPen aPen = aPainter.pen();
-    aPen.setWidth(aLineWidth.getX());
+    aPen.setWidth(fLineWidth);
 
     switch (eLineJoin)
     {
