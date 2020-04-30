@@ -28,6 +28,10 @@
 #include <svtools/rtfkeywd.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <svtools/parrtf.hxx>
+#include <rtl/strbuf.hxx>
+#include <svtools/rtftoken.h>
+#include <filter/msfilter/rtfutil.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -881,6 +885,140 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
     // - Actual  : right
     // i.e. the <reqif-xhtml:p align="..."> markup was used, which is invalid.
     assertXPathNoAttribute(pDoc, "//reqif-xhtml:p", "align");
+}
+
+namespace
+{
+/// Test RTF parser that just extracts a single OLE2 object from a file.
+class TestReqIfRtfReader : public SvRTFParser
+{
+public:
+    TestReqIfRtfReader(SvStream& rStream);
+    void NextToken(int nToken) override;
+    bool WriteObjectData(SvStream& rOLE);
+
+private:
+    bool m_bInObjData = false;
+    OStringBuffer m_aHex;
+};
+
+TestReqIfRtfReader::TestReqIfRtfReader(SvStream& rStream)
+    : SvRTFParser(rStream)
+{
+}
+
+void TestReqIfRtfReader::NextToken(int nToken)
+{
+    switch (nToken)
+    {
+        case '}':
+            m_bInObjData = false;
+            break;
+        case RTF_TEXTTOKEN:
+            if (m_bInObjData)
+                m_aHex.append(OUStringToOString(aToken, RTL_TEXTENCODING_ASCII_US));
+            break;
+        case RTF_OBJDATA:
+            m_bInObjData = true;
+            break;
+    }
+}
+
+bool TestReqIfRtfReader::WriteObjectData(SvStream& rOLE)
+{
+    OString aObjdata = m_aHex.makeStringAndClear();
+
+    SvMemoryStream aStream;
+    int b = 0;
+    int count = 2;
+
+    // Feed the destination text to a stream.
+    for (int i = 0; i < aObjdata.getLength(); ++i)
+    {
+        char ch = aObjdata[i];
+        if (ch != 0x0d && ch != 0x0a)
+        {
+            b = b << 4;
+            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+            if (parsed == -1)
+                return false;
+            b += parsed;
+            count--;
+            if (!count)
+            {
+                aStream.WriteChar(b);
+                count = 2;
+                b = 0;
+            }
+        }
+    }
+
+    aStream.Seek(0);
+    rOLE.WriteStream(aStream);
+    return true;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
+{
+    // Save to reqif-xhtml.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-ole.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Get the .ole path.
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    OUString aOlePath = getXPath(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+    OUString aOleSuffix(".ole");
+    CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setBase(aOlePath.copy(0, aOlePath.getLength() - aOleSuffix.getLength()));
+    aUrl.setExtension("ole");
+    OUString aRtfUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+    // Parse the ole1 data out of that.
+    SvFileStream aRtfStream(aRtfUrl, StreamMode::READ);
+    SvMemoryStream aRtf;
+    aRtf.WriteOString("{\\rtf1");
+    aRtf.WriteStream(aRtfStream);
+    aRtf.WriteOString("}");
+    aRtf.Seek(0);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    SvMemoryStream aOle1;
+    CPPUNIT_ASSERT(xReader->WriteObjectData(aOle1));
+    CPPUNIT_ASSERT(aOle1.Tell());
+
+    // Check the content of the ole1 data.
+    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
+    aOle1.Seek(0);
+    sal_uInt32 nData;
+    aOle1.ReadUInt32(nData); // OLEVersion
+    aOle1.ReadUInt32(nData); // FormatID
+    aOle1.ReadUInt32(nData); // ClassName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // TopicName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // ItemName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // NativeDataSize
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 39405
+    // - Actual  : 43008
+    // i.e. we did not work with the Ole10Native stream, rather created an OLE1 wrapper around the
+    // OLE1-in-OLE2 data, resulting in additional size.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x99ed), nData);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
