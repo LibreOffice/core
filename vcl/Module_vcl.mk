@@ -204,6 +204,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_apitests \
     CppunitTest_vcl_png_test \
     CppunitTest_vcl_widget_definition_reader_test \
+    CppunitTest_vcl_backend_bugs_test \
     CppunitTest_vcl_backend_test \
     CppunitTest_vcl_blocklistparser_test \
     CppunitTest_vcl_type_serializer_test \

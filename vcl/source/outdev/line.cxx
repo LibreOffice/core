@@ -128,8 +128,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
-            // tdf#124848 hairline
-            basegfx::B2DVector::getEmptyVector(),
+            0.0, // tdf#124848 hairline
             nullptr, // MM01
             basegfx::B2DLineJoin::NONE,
             css::drawing::LineCap_BUTT,
@@ -241,8 +240,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                     basegfx::B2DHomMatrix(),
                     rB2DPolygon,
                     0.0,
-                    // tdf#124848 hairline
-                    basegfx::B2DVector::getEmptyVector(),
+                    0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
                     css::drawing::LineCap_BUTT,
