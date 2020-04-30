@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c986ac20_d17e450b",
+        "filename": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2412,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-04-30T08:34:52Z",
+      "side": 1,
+      "message": "This pixel asserting is only the very last resort usually; did you try to assert the resulting VCL calls instead? testRedlineNumberInNumbering() in sw/qa/extras/layout/layout.cxx:2211 is an example for that. That way you don\u0027t have to hardcode the pixel position, you can assert much more nicely.",
+      "revId": "315d56582f8a56d8f2d3ea6cda63ea4832249608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
