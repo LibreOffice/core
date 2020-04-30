@@ -1532,6 +1532,10 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
 
     // Create and insert the shape.
     uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance(aShapeServiceName), uno::UNO_QUERY);
+
+    uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
+    xNamed->setName(sWatermark);
+
     basegfx::B2DHomMatrix aTransformation;
     aTransformation.identity();
     aTransformation.scale(nWidth, nHeight);
@@ -1600,8 +1604,6 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
 
-    uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
-    xNamed->setName(sWatermark);
     xLockable->removeActionLock();
 }
 
