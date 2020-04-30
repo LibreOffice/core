@@ -1621,6 +1621,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	AccessibleRelation \
 	AccessibleRelationType \
 	AccessibleRole \
+	AccessibleScrollType \
 	AccessibleStateType \
 	AccessibleTableModelChange \
 	AccessibleTableModelChangeType \

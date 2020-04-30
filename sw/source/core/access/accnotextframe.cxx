@@ -259,6 +259,7 @@ css::accessibility::TextSegment SAL_CALL SwAccessibleNoTextFrame::getTextBehindI
 }
 
 sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ){return true;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType ){return false;}
 
 //  XAccessibleHyperText
 

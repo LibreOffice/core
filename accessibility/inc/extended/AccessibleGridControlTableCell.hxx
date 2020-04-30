@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <extended/AccessibleGridControlBase.hxx>
 #include <vcl/accessibletable.hxx>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 
 namespace accessibility
 {
@@ -138,6 +139,7 @@ namespace accessibility
         virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
     };
 }
 
