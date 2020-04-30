@@ -89,10 +89,10 @@ void DocFuncUtil::addDeleteContentsUndo(
     pUndoMgr->AddUndoAction(std::move(pUndo));
 }
 
-std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
+std::shared_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
     const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange )
 {
-    std::unique_ptr<ScSimpleUndo::DataSpansType> pDataSpans(new ScSimpleUndo::DataSpansType);
+    auto pDataSpans = std::make_shared<ScSimpleUndo::DataSpansType>();
     for (const SCTAB nTab : rMark)
     {
         SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();

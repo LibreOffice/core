@@ -46,7 +46,6 @@ using ::com::sun::star::accessibility::XAccessibleContext;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true), mbSeparator(false),
-    mpAction(static_cast<ScCheckListMenuWindow::Action*>(nullptr)),
     mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(nullptr))
 {
 }

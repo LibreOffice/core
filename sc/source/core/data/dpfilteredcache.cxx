@@ -71,8 +71,7 @@ size_t ScDPFilteredCache::GroupFilter::getMatchItemCount() const
 }
 
 ScDPFilteredCache::Criterion::Criterion() :
-    mnFieldIndex(-1),
-    mpFilter(static_cast<FilterBase*>(nullptr))
+    mnFieldIndex(-1)
 {
 }
 

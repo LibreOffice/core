@@ -1560,7 +1560,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     }
 
     if( !mxDffStrm.get() )
-        mxDffStrm = std::make_shared<SvMemoryStream>();
+        mxDffStrm = std::make_unique<SvMemoryStream>();
 
     mxDffStrm->SetEndian( SvStreamEndian::LITTLE );
 }

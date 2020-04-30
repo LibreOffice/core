@@ -44,9 +44,9 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
     ScXMLImport& rImport,
-    Inserter* pInserter ) :
+    std::shared_ptr<Inserter> pInserter ) :
     ScXMLImportContext( rImport ),
-    mpInserter(pInserter)
+    mpInserter(std::move(pInserter))
 {
     rImport.LockSolarMutex();
 }
