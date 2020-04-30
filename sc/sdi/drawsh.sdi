@@ -228,6 +228,7 @@ interface TableDraw
     SID_ATTR_GLOW                   [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_GLOW_COLOR             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_GLOW_RADIUS            [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_GLOW_TRANSPARENCY      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
 
 }
 

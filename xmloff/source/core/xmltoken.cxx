@@ -932,6 +932,7 @@ namespace xmloff::token {
         TOKEN( "glow",                            XML_GLOW ),
         TOKEN( "glow-radius",                     XML_GLOW_RADIUS ),
         TOKEN( "glow-color",                      XML_GLOW_COLOR ),
+        TOKEN( "glow-transparency",               XML_GLOW_TRANSPARENCY ),
         TOKEN( "gouraud",                         XML_GOURAUD ),
         TOKEN( "gradient",                        XML_GRADIENT ),
         TOKEN( "angle",                           XML_GRADIENT_ANGLE ),
