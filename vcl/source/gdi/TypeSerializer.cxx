@@ -20,6 +20,8 @@
 #include <TypeSerializer.hxx>
 #include <tools/vcompat.hxx>
 #include <sal/log.hxx>
+#include <comphelper/fileformat.h>
+#include <vcl/gdimtf.hxx>
 
 TypeSerializer::TypeSerializer(SvStream& rStream)
     : GenericTypeSerializer(rStream)
@@ -145,6 +147,121 @@ void TypeSerializer::writeGfxLink(const GfxLink& rGfxLink)
     {
         if (rGfxLink.GetData())
             mrStream.WriteBytes(rGfxLink.GetData(), rGfxLink.GetDataSize());
+    }
+}
+
+namespace
+{
+constexpr sal_uInt32 constSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16)
+                                   | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16)
+                                   | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16)
+                                   | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16)
+                                   | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+
+#define NATIVE_FORMAT_50 COMPAT_FORMAT('N', 'A', 'T', '5')
+
+} // end anonymous namespace
+
+void TypeSerializer::readGraphic(Graphic& /*rGraphic*/) {}
+
+void TypeSerializer::writeGraphic(const Graphic& rGraphic)
+{
+    Graphic aGraphic(rGraphic);
+
+    if (!aGraphic.makeAvailable())
+        return;
+
+    auto pGfxLink = aGraphic.GetSharedGfxLink();
+
+    if (mrStream.GetVersion() >= SOFFICE_FILEFORMAT_50
+        && (mrStream.GetCompressMode() & SvStreamCompressFlags::NATIVE) && pGfxLink
+        && pGfxLink->IsNative())
+    {
+        // native format
+        mrStream.WriteUInt32(NATIVE_FORMAT_50);
+
+        // write compat info, destructor writes stuff into the header
+        {
+            VersionCompat aCompat(mrStream, StreamMode::WRITE, 1);
+        }
+        pGfxLink->SetPrefMapMode(aGraphic.GetPrefMapMode());
+        pGfxLink->SetPrefSize(aGraphic.GetPrefSize());
+        writeGfxLink(*pGfxLink);
+    }
+    else
+    {
+        // own format
+        const SvStreamEndian nOldFormat = mrStream.GetEndian();
+        mrStream.SetEndian(SvStreamEndian::LITTLE);
+
+        switch (aGraphic.GetType())
+        {
+            case GraphicType::NONE:
+            case GraphicType::Default:
+                break;
+
+            case GraphicType::Bitmap:
+            {
+                auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+                if (pVectorGraphicData)
+                {
+                    // stream out Vector Graphic defining data (length, byte array and evtl. path)
+                    // this is used e.g. in swapping out graphic data and in transporting it over UNO API
+                    // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
+                    // no problem to extend it; only used at runtime
+                    switch (pVectorGraphicData->getVectorGraphicDataType())
+                    {
+                        case VectorGraphicDataType::Wmf:
+                        {
+                            mrStream.WriteUInt32(constWmfMagic);
+                            break;
+                        }
+                        case VectorGraphicDataType::Emf:
+                        {
+                            mrStream.WriteUInt32(constEmfMagic);
+                            break;
+                        }
+                        case VectorGraphicDataType::Svg:
+                        {
+                            mrStream.WriteUInt32(constSvgMagic);
+                            break;
+                        }
+                        case VectorGraphicDataType::Pdf:
+                        {
+                            mrStream.WriteUInt32(constPdfMagic);
+                            break;
+                        }
+                    }
+
+                    sal_uInt32 nSize = pVectorGraphicData->getVectorGraphicDataArrayLength();
+                    mrStream.WriteUInt32(nSize);
+                    mrStream.WriteBytes(
+                        pVectorGraphicData->getVectorGraphicDataArray().getConstArray(), nSize);
+                    mrStream.WriteUniOrByteString(pVectorGraphicData->getPath(),
+                                                  mrStream.GetStreamCharSet());
+                }
+                else if (aGraphic.IsAnimated())
+                {
+                    WriteAnimation(mrStream, aGraphic.GetAnimation());
+                }
+                else
+                {
+                    WriteDIBBitmapEx(aGraphic.GetBitmapEx(), mrStream);
+                }
+            }
+            break;
+
+            default:
+            {
+                if (aGraphic.IsSupportedGraphic())
+                    WriteGDIMetaFile(mrStream, rGraphic.GetGDIMetaFile());
+            }
+            break;
+        }
+        mrStream.SetEndian(nOldFormat);
     }
 }
 
