@@ -148,9 +148,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Portfolio/content.xml \
 	Portfolio/META-INF/manifest.xml \
 	Portfolio/meta.xml \
-	Portfolio/Pictures/1000020100000CEB000009B00D8BDC51D4D18334.png \
-	Portfolio/Pictures/1000020100000CEB000009B0698EB1ACA470D143.png \
-	Portfolio/Pictures/1000020100000CEB000009B0C3D535B3CBDAE49B.png \
 	Portfolio/styles.xml \
 	Portfolio/Thumbnails/thumbnail.png \
 	Progress/content.xml \
