@@ -609,6 +609,7 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
             case SID_ATTR_GLOW:
             case SID_ATTR_GLOW_COLOR:
             case SID_ATTR_GLOW_RADIUS:
+            case SID_ATTR_GLOW_TRANSPARENCY:
                 if (rReq.GetArgs())
                 {
                     SdrView* pView = GetShell().GetDrawView();
@@ -910,9 +911,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GLOW:
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
+        case SID_ATTR_GLOW_TRANSPARENCY:
         case SDRATTR_GLOW:
         case SDRATTR_GLOW_RAD:
         case SDRATTR_GLOW_COLOR:
+        case SDRATTR_GLOW_TRANSPARENCY:
         {
             const sal_uInt16 whichPairs[] = { nWhich, nWhich, 0, 0 };
             SfxItemSet aSet(rSh.GetAttrPool(), whichPairs);
