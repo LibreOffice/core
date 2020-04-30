@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34204fd2_864fb4d1",
+        "filename": "vcl/source/window/window2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-04-30T09:47:26Z",
+      "side": 1,
+      "message": "I did not communicate clearly last time. How about something like:\n\nnative theming:  suggest not to....\nor\nnative theming - suggest not to...\n\n(I don\u0027t know if \"native-theming\" should be \"native-theming\" or \"native theming\")\n\n(same point for line 98)",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 52
+      },
+      "revId": "db3a7f051f3530ab88dedc89f1f622147bdfd85a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
