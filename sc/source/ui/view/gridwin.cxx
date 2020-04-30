@@ -1073,7 +1073,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    double fListWindowZoom = 1.0;
 
     if (bLOKActive)
     {
@@ -1086,17 +1085,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         double fZoomY(pViewData->GetZoomY());
         aPos.setX(aPos.getX() / fZoomX);
         aPos.setY(aPos.getY() / fZoomY);
-        // Reverse the zooms from sizes too
-        // nSizeX : because we need to rescale with another (trimmed) zoom level below.
         nSizeX = nSizeX / fZoomX;
-        // nSizeY : because this is used by vcl::FloatingWindow later to compute its vertical position
-        // since we pass the flag FloatWinPopupFlags::Down setup the popup.
         nSizeY = nSizeY / fZoomY;
-        // Limit zoom scale for Listwindow in the dropdown.
-        fListWindowZoom = std::max(std::min(fZoomY, 2.0), 0.5);
-        // nSizeX is only used in setting the width of dropdown, so rescale with
-        // the trimmed zoom.
-        nSizeX = nSizeX * fListWindowZoom;
     }
 
     if ( bLayoutRTL )
@@ -1114,8 +1104,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     }
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
-    if (bLOKActive)
-        mpFilterBox->SetZoom(Fraction(fListWindowZoom));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();
@@ -1150,17 +1138,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         //! Check first if the entries fit (width)
 
         // minimum width in pixel
-        const long nMinLOKWinWidth = static_cast<long>(1.3 * STD_COL_WIDTH * pViewData->GetPPTX());
+        const long nMinLOKWinWidth = static_cast<long>(1.3 * STD_COL_WIDTH / TWIPS_PER_PIXEL);
         if (bLOKActive && nSizeX < nMinLOKWinWidth)
             nSizeX = nMinLOKWinWidth;
 
-        if (bLOKActive)
-        {
-            if (aStrings.size() < SC_FILTERLISTBOX_LINES)
-                nHeight = nHeight * (aStrings.size() + 1) / SC_FILTERLISTBOX_LINES;
-
-            nHeight = nHeight * fListWindowZoom;
-        }
+        if (bLOKActive && aStrings.size() < SC_FILTERLISTBOX_LINES)
+            nHeight = nHeight * (aStrings.size() + 1) / SC_FILTERLISTBOX_LINES;
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
         Size aSize( nSizeX, nHeight );
