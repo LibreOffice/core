@@ -883,6 +883,11 @@ namespace accessibility
                                  aEndIndex.nPara, aEndIndex.nIndex );
     }
 
+    sal_Bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+    {
+        return false;
+    }
+
     // XAccessibleTextAttributes
     uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< OUString >& RequestedAttributes )
     {

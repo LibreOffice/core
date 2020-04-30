@@ -383,6 +383,11 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
     return bReturn;
 }
 
+sal_Bool VCLXAccessibleMenuItem::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+{
+    return false;
+}
+
 
 // XAccessibleAction
 

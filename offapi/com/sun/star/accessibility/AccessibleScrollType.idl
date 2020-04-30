@@ -1,0 +1,81 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_accessibility_AccessibleScrollType_idl__
+#define __com_sun_star_accessibility_AccessibleScrollType_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Scroll types
+
+    <p>Describes the type of scrolling that are available for the methods of
+    the XAccessibleScrollableText interface.</p>
+
+    @since LibreOffice 7.0
+*/
+enum AccessibleScrollType
+{
+    /**
+        Scroll the top left corner of the object or string such that the
+        top left corner is within the top level window.
+    */
+    SCROLL_TOP_LEFT,
+
+    /**
+        Scroll the bottom right corner of the object or string such that the
+        bottom right corner is within the top level window.
+    */
+    SCROLL_BOTTOM_RIGHT,
+
+    /**
+        Scroll the top edge of the object or string such that the top edge is
+        within the top level window.
+    */
+    SCROLL_TOP_EDGE,
+
+    /**
+        Scroll the bottom edge of the object or string such that the bottom
+        edge is within the top level window.
+    */
+    SCROLL_BOTTOM_EDGE,
+
+    /**
+        Scroll the left edge of the object or string such that the left edge
+        is within the top level window.
+    */
+    SCROLL_LEFT_EDGE,
+
+    /**
+        Scroll the right edge of the object or string such that the right edge
+        is within the top level window.
+    */
+    SCROLL_RIGHT_EDGE,
+
+    /**
+        Scroll the object or string such that as much as possible of the
+        object or string is within the top level window.
+    */
+    SCROLL_ANYWHERE
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

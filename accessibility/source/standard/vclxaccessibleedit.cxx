@@ -487,6 +487,10 @@ sal_Bool VCLXAccessibleEdit::copyText( sal_Int32 nStartIndex, sal_Int32 nEndInde
     return VCLXAccessibleTextComponent::copyText( nStartIndex, nEndIndex );
 }
 
+sal_Bool VCLXAccessibleEdit::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+{
+    return false;
+}
 
 // XAccessibleEditableText
 
