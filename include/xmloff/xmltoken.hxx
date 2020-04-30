@@ -928,6 +928,7 @@ namespace xmloff::token {
         XML_GLOW,
         XML_GLOW_RADIUS,
         XML_GLOW_COLOR,
+        XML_GLOW_TRANSPARENCY,
         XML_GOURAUD,
         XML_GRADIENT,
         XML_GRADIENT_ANGLE,

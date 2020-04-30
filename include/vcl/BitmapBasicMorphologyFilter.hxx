@@ -8,26 +8,35 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
-#define INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
+#ifndef INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
+#define INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapFilterStackBlur : public BitmapFilter
+enum class BasicMorphologyOp
 {
-    sal_Int32 mnRadius;
+    erode,
+    dilate
+};
 
+/* Black is foreground, white is background */
+class VCL_DLLPUBLIC BitmapBasicMorphologyFilter : public BitmapFilter
+{
 public:
-    BitmapFilterStackBlur(sal_Int32 nRadius);
-    virtual ~BitmapFilterStackBlur();
+    BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius);
+    virtual ~BitmapBasicMorphologyFilter();
 
     virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
 
+private:
     Bitmap filter(Bitmap const& rBitmap) const;
+
+    BasicMorphologyOp m_eOp;
+    sal_Int32 m_nRadius;
 };
 
-#endif // INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
+#endif // INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
