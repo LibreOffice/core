@@ -85,6 +85,7 @@ namespace
 /// Here we effectively render at 96 DPI (to match
 /// the image rendered in vcl::ImportPDF in pdfread.cxx).
 double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
+
 /// Convert from pixels to logic (twips).
 long lcl_ToLogic(double value)
 {
@@ -883,21 +884,22 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     // calc text box size, add 5% to make it fit safely
 
     FontMetric aFontMetric(mpVD->GetFontMetric());
-    vcl::Font aFnt(mpVD->GetFont());
-    FontAlign eAlg(aFnt.GetAlignment());
+    vcl::Font aFont(mpVD->GetFont());
+    FontAlign eAlignment(aFont.GetAlignment());
 
     // sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
     sal_Int32 nTextHeight = static_cast<sal_Int32>(mpVD->GetTextHeight() * mfScaleY);
 
-    Point aPos(FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()));
+    Point aPosition(FRound(rPos.X() * mfScaleX + maOfs.X()),
+                    FRound(rPos.Y() * mfScaleY + maOfs.Y()));
     Size aSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
 
-    if (eAlg == ALIGN_BASELINE)
-        aPos.AdjustY(-FRound(aFontMetric.GetAscent() * mfScaleY));
-    else if (eAlg == ALIGN_BOTTOM)
-        aPos.AdjustY(-nTextHeight);
+    if (eAlignment == ALIGN_BASELINE)
+        aPosition.AdjustY(-FRound(aFontMetric.GetAscent() * mfScaleY));
+    else if (eAlignment == ALIGN_BOTTOM)
+        aPosition.AdjustY(-nTextHeight);
 
-    tools::Rectangle aTextRect(aPos, aSize);
+    tools::Rectangle aTextRect(aPosition, aSize);
     SdrRectObj* pText = new SdrRectObj(*mpModel, OBJ_TEXT, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
@@ -905,7 +907,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     pText->SetMergedItem(makeSdrTextRightDistItem(0));
     pText->SetMergedItem(makeSdrTextLeftDistItem(0));
 
-    if (aFnt.GetAverageFontWidth())
+    if (aFont.GetAverageFontWidth())
     {
         pText->ClearMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH);
         pText->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
@@ -922,21 +924,21 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUS
     SetAttributes(pText, true);
     pText->SetSnapRect(aTextRect);
 
-    if (!aFnt.IsTransparent())
+    if (!aFont.IsTransparent())
     {
         SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
         aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-        aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
+        aAttr.Put(XFillColorItem(OUString(), aFont.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    sal_uInt32 nAngle = aFnt.GetOrientation();
+    sal_uInt32 nAngle = aFont.GetOrientation();
     if (nAngle)
     {
         nAngle *= 10;
         double a = nAngle * F_PI18000;
         double nSin = sin(a);
         double nCos = cos(a);
-        pText->NbcRotate(aPos, nAngle, nSin, nCos);
+        pText->NbcRotate(aPosition, nAngle, nSin, nCos);
     }
     InsertObj(pText, false);
 }
