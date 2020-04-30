@@ -43,33 +43,33 @@ Type ScriptEventContainer::getElementType()
 
 sal_Bool ScriptEventContainer::hasElements()
 {
-    return !mHashMap.empty();
+    bool bRet = (mnElementCount > 0);
+    return bRet;
 }
 
 // Methods XNameAccess
 Any ScriptEventContainer::getByName( const OUString& aName )
 {
-    auto aIt = mHashMap.find( aName );
+    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
         throw NoSuchElementException();
     }
-    return aIt->second;
+    sal_Int32 iHashResult = (*aIt).second;
+    Any aRetAny = mValues[ iHashResult ];
+    return aRetAny;
 }
 
 Sequence< OUString > ScriptEventContainer::getElementNames()
 {
-    Sequence<OUString> aRet(mHashMap.size());
-    int i = 0;
-    for (auto const & pair : mHashMap)
-        aRet[i++] = pair.first;
-    return aRet;
+    return mNames;
 }
 
 sal_Bool ScriptEventContainer::hasByName( const OUString& aName )
 {
-    auto aIt = mHashMap.find( aName );
-    return aIt != mHashMap.end();
+    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
+    bool bRet = ( aIt != mHashMap.end() );
+    return bRet;
 }
 
 
@@ -80,13 +80,14 @@ void ScriptEventContainer::replaceByName( const OUString& aName, const Any& aEle
     if( mType != aAnyType )
         throw IllegalArgumentException();
 
-    auto aIt = mHashMap.find( aName );
+    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
         throw NoSuchElementException();
     }
-    Any aOldElement = aIt->second;
-    aIt->second = aElement;
+    sal_Int32 iHashResult = (*aIt).second;
+    Any aOldElement = mValues[ iHashResult ];
+    mValues[ iHashResult ] = aElement;
 
     // Fire event
     ContainerEvent aEvent;
@@ -105,13 +106,18 @@ void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElem
     if( mType != aAnyType )
         throw IllegalArgumentException();
 
-    auto aIt = mHashMap.find( aName );
+    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt != mHashMap.end() )
     {
         throw ElementExistException();
     }
 
-    mHashMap[ aName ] = aElement;
+    sal_Int32 nCount = mNames.getLength();
+    mNames.realloc( nCount + 1 );
+    mValues.resize( nCount + 1 );
+    mNames.getArray()[ nCount ] = aName;
+    mValues[ nCount ] = aElement;
+    mHashMap[ aName ] = nCount;
 
     // Fire event
     ContainerEvent aEvent;
@@ -123,20 +129,33 @@ void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElem
 
 void ScriptEventContainer::removeByName( const OUString& Name )
 {
-    auto aIt = mHashMap.find( Name );
+    NameContainerNameMap::iterator aIt = mHashMap.find( Name );
     if( aIt == mHashMap.end() )
     {
         throw NoSuchElementException();
     }
 
+    sal_Int32 iHashResult = (*aIt).second;
+    Any aOldElement = mValues[ iHashResult ];
+
     // Fire event
     ContainerEvent aEvent;
     aEvent.Source = *this;
-    aEvent.Element = aIt->second;
+    aEvent.Element = aOldElement;
     aEvent.Accessor <<= Name;
     maContainerListeners.elementRemoved( aEvent );
 
     mHashMap.erase( aIt );
+    sal_Int32 iLast = mNames.getLength() - 1;
+    if( iLast != iHashResult )
+    {
+        OUString* pNames = mNames.getArray();
+        pNames[ iHashResult ] = pNames[ iLast ];
+        mValues[ iHashResult ] = mValues[ iLast ];
+        mHashMap[ pNames[ iHashResult ] ] = iHashResult;
+    }
+    mNames.realloc( iLast );
+    mValues.resize( iLast );
 }
 
 // Methods XContainer
@@ -152,7 +171,8 @@ void ScriptEventContainer::removeContainerListener( const css::uno::Reference< c
 
 
 ScriptEventContainer::ScriptEventContainer()
-    : mType( cppu::UnoType<ScriptEventDescriptor>::get() ),
+    : mnElementCount( 0 ),
+      mType( cppu::UnoType<ScriptEventDescriptor>::get() ),
       maContainerListeners( *this )
 {
 }
