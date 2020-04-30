@@ -1472,6 +1472,7 @@ Reference< XShape > const & Shape::createAndInsert(
             propertySet->setPropertyValue("GlowEffect", makeAny(true));
             propertySet->setPropertyValue("GlowEffectRad", makeAny(static_cast<sal_Int32>(aEffectProperties.maGlow.moGlowRad.get())));
             propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
+            propertySet->setPropertyValue("GlowEffectTransparency", makeAny(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
     }
 
