@@ -1649,7 +1649,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolygon,
     double fTransparency,
-    const basegfx::B2DVector& rLineWidth,
+    double fLineWidth,
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
@@ -1663,7 +1663,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     }
 
     // need to check/handle LineWidth when ObjectToDevice transformation is used
-    basegfx::B2DVector aLineWidth(rLineWidth);
+    basegfx::B2DVector aLineWidth(fLineWidth, fLineWidth);
     const bool bObjectToDeviceIsIdentity(rObjectToDevice.isIdentity());
     basegfx::B2DHomMatrix aObjectToDeviceInv;
 
