@@ -61,6 +61,9 @@
 #include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>
 
+#include <vcl/bitmapaccess.hxx>
+#include <C:\lo\src\core\vcl\inc\bitmapwriteaccess.hxx>
+
 using namespace com::sun::star;
 
 namespace drawinglayer::processor2d
@@ -849,38 +852,64 @@ namespace drawinglayer::processor2d
         {
             basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
             aRange.transform(maCurrentTransformation);
-            aRange.grow(10.0);
+            basegfx::B2DVector aGlowRadiusVector(rCandidate.getGlowRadius(), 0);
+            aGlowRadiusVector *= maCurrentTransformation;
+            const double fGlowRadius = aGlowRadiusVector.getLength();
             impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
             if (aBufferDevice.isVisible())
             {
+//                aBufferDevice.getTransparence();
                 // remember last OutDev and set to content
                 OutputDevice* pLastOutputDevice = mpOutputDevice;
-                mpOutputDevice = &aBufferDevice.getTransparence();
-                // paint content to virtual device
-                mpOutputDevice->Erase();
-                process(rCandidate);
-
-                // obtain result as a bitmap
-                auto bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
-                constexpr double nRadius = 5.0;
-                bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
-                // use bitmap later as mask
-                auto mask = bitmap.GetBitmap();
-
                 mpOutputDevice = &aBufferDevice.getContent();
+                Color aWallpaperColor(rCandidate.getGlowColor());
+                aWallpaperColor.Invert();
+                mpOutputDevice->SetBackground(aWallpaperColor);
                 process(rCandidate);
-                bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
-                bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
+                auto bitmap
+                    = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()),
+                                                Size(aRange.getWidth(), aRange.getHeight())).GetBitmap(aWallpaperColor);
+                const auto aBmpSize = bitmap.GetSizePixel();
+                Bitmap mask(aBmpSize, 8, &Bitmap::GetGreyPalette(256));
+                tools::Rectangle r(Point(0, 0), aBmpSize);
+                mask.CopyPixel(r, r, &bitmap);
+//                {
+//                    Bitmap::ScopedReadAccess bitmapRead(bitmap);
+//                    BitmapScopedWriteAccess maskWrite(mask);
+//                    for (int y = 0; y < aBmpSize.Height(); ++y)
+//                    {
+//                        for (int x = 0; x < aBmpSize.Width(); ++x)
+//                        {
+//                            maskWrite->SetPixel(y, x,
+//                                                bitmapRead->GetPixel(y, x) == aWallpaperColor
+//                                                    ? COL_WHITE
+//                                                    : COL_GRAY);
+//                        }
+//                    }
+//                }
+                bitmap.Erase(Color(rCandidate.getGlowColor()));
+
+                double fScale = 1.0;
+                double fBlurRadius = fGlowRadius / 2;
+                while (fBlurRadius > 254)
+                {
+                    fScale /= 2;
+                    fBlurRadius /= 2;
+                }
+
+                BitmapEx maskEx(mask);
+                maskEx.Scale(fScale, fScale, BmpScaleFlag::Fast);
 
                 // calculate blurry effect
-                BitmapFilterStackBlur glowFilter(nRadius);
-                BitmapFilter::Filter(bitmap, glowFilter);
+                BitmapFilterStackBlur glowFilter(fBlurRadius);
+                BitmapFilter::Filter(maskEx, glowFilter);
+
+                fScale = 1 / fScale;
+                maskEx.Scale(fScale, fScale);
+
                 // back to old OutDev
                 mpOutputDevice = pLastOutputDevice;
-                mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX()-nRadius/2, aRange.getMinY()-nRadius/2), BitmapEx(bitmap.GetBitmap(), mask));
-
-                // paint result
-                //aBufferDevice.paint();
+                mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), BitmapEx(bitmap, AlphaMask(maskEx.GetBitmap())));
             }
             else
                 SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");

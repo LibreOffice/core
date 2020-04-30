@@ -26,7 +26,6 @@ class DRAWINGLAYER_DLLPUBLIC SdrGlowAttribute
 {
 private:
     sal_Int32 m_nRadius = 0;
-    mutable std::optional<basegfx::B2DHomMatrix> m_oTransfCache;
     basegfx::BColor m_color;
 
 public:
@@ -41,10 +40,9 @@ public:
     SdrGlowAttribute& operator=(SdrGlowAttribute&&);
 
     // data access
-    const basegfx::B2DHomMatrix& GetTransfMatrix(basegfx::B2DRange nCenter) const;
-    const basegfx::BColor& getColor() const { return m_color; };
-    sal_Int32 getRadius() const { return m_nRadius; };
-    bool isDefault() const { return m_nRadius == 0; };
+    const basegfx::BColor& getColor() const { return m_color; }
+    sal_Int32 getRadius() const { return m_nRadius; }
+    bool isDefault() const { return m_nRadius == 0; }
 };
 } // end of namespace attribute
 } // end of namespace drawinglayer
