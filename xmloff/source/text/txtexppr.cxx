@@ -34,8 +34,10 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/nmspmap.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 #include <xmlsdtypes.hxx>
+#include <XMLNumberWithAutoForVoidPropHdl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -147,6 +149,22 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
 
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
+    case CTF_PAGENUMBEROFFSET:
+        {
+            OUString value;
+            XMLNumberWithAutoForVoidPropHdl const handler;
+            handler.exportXML(value, rProperty.maValue, rUnitConverter);
+            if (GetExport().getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_013
+                && value == "0") // tdf#91306 ODF 1.3 OFFICE-3923
+            {
+                value = "auto";
+            }
+            OUString const name = rNamespaceMap.GetQNameByKey(
+                getPropertySetMapper()->GetEntryNameSpace(rProperty.mnIndex),
+                getPropertySetMapper()->GetEntryXMLName(rProperty.mnIndex));
+            rAttrList.AddAttribute(name, value);
+        }
+        break;
     case CTF_DROPCAPWHOLEWORD:
         SAL_WARN_IF( !!bDropWholeWord, "xmloff", "drop whole word is set already!" );
         pThis->bDropWholeWord = *o3tl::doAccess<bool>(rProperty.maValue);

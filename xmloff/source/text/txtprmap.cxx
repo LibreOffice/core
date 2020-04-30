@@ -363,7 +363,7 @@ XMLPropertyMapEntry const aXMLParaPropMap[] =
     MP_E( "ParaIsAutoFirstLineIndent",  STYLE, AUTO_TEXT_INDENT,    XML_TYPE_BOOL, 0 ),
     // RES_PAGEDESC
     MP_E( "PageDescName",           STYLE,  MASTER_PAGE_NAME,           MID_FLAG_SPECIAL_ITEM|XML_TYPE_STYLENAME, CTF_PAGEDESCNAME ),
-    MP_E( "PageNumberOffset",       STYLE,  PAGE_NUMBER,            XML_TYPE_NUMBER16_AUTO, 0 ),
+    MP_E( "PageNumberOffset",       STYLE,  PAGE_NUMBER,            XML_TYPE_NUMBER16_AUTO|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_PAGENUMBEROFFSET ),
     // RES_BREAK : TODO: does this work?
     MP_E( "BreakType",      FO, BREAK_BEFORE,       XML_TYPE_TEXT_BREAKBEFORE|MID_FLAG_MULTI_PROPERTY, 0 ),
     MP_E( "BreakType",      FO, BREAK_AFTER,        XML_TYPE_TEXT_BREAKAFTER, 0 ),
