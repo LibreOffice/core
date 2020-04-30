@@ -30,6 +30,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
+#include <cstdlib>
 #include <memory>
 #include <string.h>
 
