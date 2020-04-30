@@ -130,6 +130,43 @@ void TypeSerializerTest::testGraphic()
         CPPUNIT_ASSERT_EQUAL(std::string("c2bed2099ce617f1cc035701de5186f0d43e3064"),
                              toHexString(aHash));
     }
+
+    // Test TypeSerializer - Native Format 5
+    {
+        SvMemoryStream aMemoryStream;
+        aMemoryStream.SetVersion(SOFFICE_FILEFORMAT_50);
+        aMemoryStream.SetCompressMode(SvStreamCompressFlags::NATIVE);
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(290), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("ee55ab6faa73b61b68bc3d5628d95f0d3c528e2a"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt32 nType;
+        aMemoryStream.ReadUInt32(nType);
+        CPPUNIT_ASSERT_EQUAL(COMPAT_FORMAT('N', 'A', 'T', '5'), nType);
+    }
+
+    // Test TypeSerializer - Normal
+    {
+        SvMemoryStream aMemoryStream;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(233), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("c2bed2099ce617f1cc035701de5186f0d43e3064"),
+                             toHexString(aHash));
+    }
 }
 
 void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
@@ -143,6 +180,26 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
     {
         SvMemoryStream aMemoryStream;
         WriteGraphic(aMemoryStream, aGraphic);
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(383), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("da831418499146d51bf245fadf60b9111faa76c2"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt16 nType;
+        aMemoryStream.ReadUInt16(nType);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0x4D42), nType); // Magic written with WriteDIBBitmapEx
+    }
+
+    // Test TypeSerializer
+    {
+        SvMemoryStream aMemoryStream;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt64(383), aMemoryStream.remainingSize());

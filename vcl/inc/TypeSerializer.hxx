@@ -24,6 +24,7 @@
 #include <tools/GenericTypeSerializer.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 
 class VCL_DLLPUBLIC TypeSerializer : public tools::GenericTypeSerializer
 {
@@ -35,6 +36,9 @@ public:
 
     void readGfxLink(GfxLink& rGfxLink);
     void writeGfxLink(const GfxLink& rGfxLink);
+
+    void readGraphic(Graphic& rGraphic);
+    void writeGraphic(const Graphic& rGraphic);
 };
 
 #endif
