@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -146,6 +147,8 @@ public:
     void testLargePage();
     void testVersion15();
     void testDefaultVersion();
+    void testMultiPagePDF();
+
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -189,6 +192,7 @@ public:
     CPPUNIT_TEST(testLargePage);
     CPPUNIT_TEST(testVersion15);
     CPPUNIT_TEST(testDefaultVersion);
+    CPPUNIT_TEST(testMultiPagePDF);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2152,6 +2156,136 @@ void PdfExportTest::testVersion15()
     int nFileVersion = 0;
     FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
+}
+
+// Check round-trip of importing and exporting the PDF with PDFium filter,
+// which imports the PDF document as multiple PDFs as graphic object.
+// Each page in the document has one PDF graphic object which content is
+// the correcponding page in the PDF. When such a document is exported,
+// the PDF graphic gets embedded into the exported PDF document (as a
+// Form XObject).
+void PdfExportTest::testMultiPagePDF()
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    // Load the PDF and save as PDF
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPages.size());
+
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+
+    auto pXObjects = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pXObjects->GetItems().size()); // 3 PDFs as Form XObjects
+
+    std::vector<OString> rIDs;
+    for (auto const & rPair : pXObjects->GetItems()) {
+        rIDs.push_back(rPair.first);
+    }
+
+    // Let's check the embedded PDF pages - just make sure the size differs,
+    // which should indicate we don't have 3 times the same page.
+
+    {   // embedded PDF page 1
+        vcl::filter::PDFObjectElement* pXObject1 = pXObjects->LookupObject(rIDs[0]);
+        CPPUNIT_ASSERT(pXObject1);
+        CPPUNIT_ASSERT_EQUAL(OString("Im19"), rIDs[0]);
+
+        auto pSubtype1 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject1->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype1);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype1->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject1->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected.
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(230), rObjectStream.remainingSize());
+    }
+
+    {   // embedded PDF page 2
+        vcl::filter::PDFObjectElement* pXObject2 = pXObjects->LookupObject(rIDs[1]);
+        CPPUNIT_ASSERT(pXObject2);
+        CPPUNIT_ASSERT_EQUAL(OString("Im34"), rIDs[1]);
+
+        auto pSubtype2 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject2->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype2);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype2->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject2->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(309), rObjectStream.remainingSize());
+    }
+
+    {   // embedded PDF page 3
+        vcl::filter::PDFObjectElement* pXObject3 = pXObjects->LookupObject(rIDs[2]);
+        CPPUNIT_ASSERT(pXObject3);
+        CPPUNIT_ASSERT_EQUAL(OString("Im4"), rIDs[2]);
+
+        auto pSubtype3 = dynamic_cast<vcl::filter::PDFNameElement*>(pXObject3->Lookup("Subtype"));
+        CPPUNIT_ASSERT(pSubtype3);
+        CPPUNIT_ASSERT_EQUAL(OString("Form"), pSubtype3->GetValue());
+
+        auto pXObjectResources = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObject3->Lookup("Resources"));
+        CPPUNIT_ASSERT(pXObjectResources);
+        auto pXObjectForms = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pXObjectResources->LookupElement("XObject"));
+        CPPUNIT_ASSERT(pXObjectForms);
+        vcl::filter::PDFObjectElement* pForm = pXObjectForms->LookupObject(pXObjectForms->GetItems().begin()->first);
+        CPPUNIT_ASSERT(pForm);
+
+        vcl::filter::PDFStreamElement* pStream = pForm->GetStream();
+        CPPUNIT_ASSERT(pStream);
+        SvMemoryStream& rObjectStream = pStream->GetMemory();
+        rObjectStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        // Just check that the size of the page stream is what is expected
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(193), rObjectStream.remainingSize());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
