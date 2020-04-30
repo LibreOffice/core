@@ -158,8 +158,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Sunset/content.xml \
 	Sunset/META-INF/manifest.xml \
 	Sunset/meta.xml \
-	Sunset/Pictures/10000201000003AF000002126EB1F3F571D17DD0.png \
-	Sunset/Pictures/1000416600008D2E00004F6045D45030E4D3EC44.svg \
 	Sunset/styles.xml \
 	Sunset/Thumbnails/thumbnail.png \
 	Vintage/content.xml \
