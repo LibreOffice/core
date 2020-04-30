@@ -466,6 +466,8 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
 
     m_xDialog->connect_size_allocate(LINK(this, SvtFileDialog, SizeAllocHdl));
     SizeAllocHdl(Size());
+
+    m_xImpl->m_xEdFileName->grab_focus();
 }
 
 SvtFileDialog::~SvtFileDialog()
