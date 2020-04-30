@@ -303,21 +303,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
-/**
-    PropertyHandler for the XML-data-type: XML_TYPE_NUMBER16_AUTO
-    Reads/writes numeric properties with special handling for "void" value
-    (i.e., void property will be written as "auto")
-*/
-class XMLNumberWithAutoInsteadZeroPropHdl : public XMLNumberWithoutZeroPropHdl
-{
-public:
-    explicit XMLNumberWithAutoInsteadZeroPropHdl() : XMLNumberWithoutZeroPropHdl(4) {}
-    virtual ~XMLNumberWithAutoInsteadZeroPropHdl() override;
-
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-    virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
-};
-
 #endif // INCLUDED_XMLOFF_SOURCE_STYLE_XMLBAHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
