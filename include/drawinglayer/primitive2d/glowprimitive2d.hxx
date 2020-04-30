@@ -33,20 +33,20 @@ namespace primitive2d
 class DRAWINGLAYER_DLLPUBLIC GlowPrimitive2D final : public GroupPrimitive2D
 {
 private:
-    /// the Glow transformation, normally just an offset
-    basegfx::B2DHomMatrix maGlowTransform;
-
     /// the Glow color to which all geometry is to be forced
     basegfx::BColor maGlowColor;
 
+    /// the Glow size, in logical units (100ths of mm)
+    double mfGlowRadius;
+
 public:
     /// constructor
-    GlowPrimitive2D(const basegfx::B2DHomMatrix& rGlowTransform, const basegfx::BColor& rGlowColor,
+    GlowPrimitive2D(const basegfx::BColor& rGlowColor, double fRadius,
                     const Primitive2DContainer& rChildren);
 
     /// data read access
-    const basegfx::B2DHomMatrix& getGlowTransform() const { return maGlowTransform; }
     const basegfx::BColor& getGlowColor() const { return maGlowColor; }
+    double getGlowRadius() const { return mfGlowRadius; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
