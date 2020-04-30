@@ -1174,12 +1174,8 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_FITTOSIZE:
                 {
                     if (mpExport
-#if 1
-// TODO: remove in a couple releases, when users have the import of style:shrink-to-fit
-                            && (mpExport->getSaneDefaultVersion()
-                                        <= SvtSaveOptions::ODFSVER_012)
-#endif
-                        )
+                        && (mpExport->getSaneDefaultVersion() // tdf#97630
+                                != SvtSaveOptions::ODFSVER_012_EXT_COMPAT))
                     {
                         pHdl = new XMLFitToSizeEnumPropertyHdl(pXML_FitToSize_Enum_Odf12);
                     }
