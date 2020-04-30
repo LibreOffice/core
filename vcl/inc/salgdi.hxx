@@ -246,7 +246,7 @@ public:
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon& i_rPolygon,
                                     double i_fTransparency,
-                                    const basegfx::B2DVector& i_rLineWidth,
+                                    double i_fLineWidth,
                                     const std::vector< double >* i_pStroke, // MM01
                                     basegfx::B2DLineJoin i_eLineJoin,
                                     css::drawing::LineCap i_eLineCap,
@@ -466,7 +466,7 @@ protected:
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon&,
                                     double fTransparency,
-                                    const basegfx::B2DVector& rLineWidths,
+                                    double fLineWidth,
                                     const std::vector< double >* pStroke, // MM01
                                     basegfx::B2DLineJoin,
                                     css::drawing::LineCap,

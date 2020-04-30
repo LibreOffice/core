@@ -665,7 +665,7 @@ void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAr
         aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPolygon.setClosed(false);
 
-    drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, basegfx::B2DVector(1.0, 1.0),
+    drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, 1.0,
                  nullptr, // MM01
                  basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
                  basegfx::deg2rad(15.0) /*default*/, false);
@@ -757,7 +757,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                        const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                                       const basegfx::B2DVector& rLineWidth,
+                                       double fLineWidth,
                                        const std::vector<double>* pStroke, // MM01
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
@@ -774,9 +774,21 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     SAL_INFO("vcl.skia.trace", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
     // tdf#124848 get correct LineWidth in discrete coordinates,
-    // take hairline case into account
-    const basegfx::B2DVector aLineWidth(rLineWidth.equalZero() ? basegfx::B2DVector(1.0, 1.0)
-                                                               : rObjectToDevice * rLineWidth);
+    if (fLineWidth == 0) // hairline
+        fLineWidth = 1.0;
+    else
+    {
+        if (!rObjectToDevice.isIdentity())
+        {
+            // Adjust line width for object-to-device scale.
+            basegfx::B2DTuple scale;
+            basegfx::B2DTuple translate;
+            double rotate, shear;
+            if (!rObjectToDevice.decompose(scale, translate, rotate, shear))
+                assert(false);
+            fLineWidth *= scale.getX();
+        }
+    }
 
     // MM01 need to do line dashing as fallback stuff here now
     const double fDotDashLength(
@@ -848,7 +860,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeJoin(eSkLineJoin);
     aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
     aPaint.setStrokeMiter(fMiterLimit);
-    aPaint.setStrokeWidth(aLineWidth.getX());
+    aPaint.setStrokeWidth(fLineWidth);
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
     if (eLineJoin != basegfx::B2DLineJoin::NONE)
