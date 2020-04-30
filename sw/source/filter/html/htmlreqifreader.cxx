@@ -143,13 +143,105 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
     return true;
 }
 
+/**
+ * Inserts an OLE1 header before an OLE2 storage, assuming that the storage has an Ole10Native
+ * stream.
+ */
+OString InsertOLE1HeaderFromOle10NativeStream(tools::SvRef<SotStorage>& xStorage,
+                                              SwOLENode& rOLENode, SvStream& rOle1)
+{
+    tools::SvRef<SotStorageStream> xOle1Stream
+        = xStorage->OpenSotStream("\1Ole10Native", StreamMode::STD_READ);
+    sal_uInt32 nOle1Size = 0;
+    xOle1Stream->ReadUInt32(nOle1Size);
+
+    OString aClassName("Package");
+
+    // Write ObjectHeader, see [MS-OLEDS] 2.2.4.
+    rOle1.Seek(0);
+    // OLEVersion.
+    rOle1.WriteUInt32(0x00000501);
+
+    // FormatID is EmbeddedObject.
+    rOle1.WriteUInt32(0x00000002);
+
+    // ClassName
+    rOle1.WriteUInt32(aClassName.isEmpty() ? 0 : aClassName.getLength() + 1);
+    if (!aClassName.isEmpty())
+    {
+        rOle1.WriteOString(aClassName);
+        // Null terminated pascal string.
+        rOle1.WriteChar(0);
+    }
+
+    // TopicName.
+    rOle1.WriteUInt32(0);
+
+    // ItemName.
+    rOle1.WriteUInt32(0);
+
+    // NativeDataSize
+    rOle1.WriteUInt32(nOle1Size);
+
+    // Write the actual native data.
+    rOle1.WriteStream(*xOle1Stream, nOle1Size);
+
+    // Write Presentation.
+    if (!rOLENode.GetGraphic())
+    {
+        return aClassName;
+    }
+
+    const Graphic& rGraphic = *rOLENode.GetGraphic();
+    Size aSize = rOLENode.GetTwipSize();
+    SvMemoryStream aGraphicStream;
+    if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)
+    {
+        return aClassName;
+    }
+
+    auto pGraphicAry = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
+    sal_uInt64 nPresentationData = aGraphicStream.TellEnd();
+    msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nPresentationData);
+
+    // OLEVersion.
+    rOle1.WriteUInt32(0x00000501);
+    // FormatID: constant means the ClassName field is present.
+    rOle1.WriteUInt32(0x00000005);
+    // ClassName: null terminated pascal string.
+    OString aPresentationClassName("METAFILEPICT");
+    rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
+    rOle1.WriteOString(aPresentationClassName);
+    rOle1.WriteChar(0);
+    // Width.
+    rOle1.WriteUInt32(aSize.getWidth());
+    // Height.
+    rOle1.WriteUInt32(aSize.getHeight() * -1);
+    // PresentationDataSize
+    rOle1.WriteUInt32(8 + nPresentationData);
+    // Reserved1-4.
+    rOle1.WriteUInt16(0x0008);
+    rOle1.WriteUInt16(0x31b1);
+    rOle1.WriteUInt16(0x1dd9);
+    rOle1.WriteUInt16(0x0000);
+    rOle1.WriteBytes(pGraphicAry, nPresentationData);
+
+    return aClassName;
+}
+
 /// Inserts an OLE1 header before an OLE2 storage.
-OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, sal_uInt32& nHeight)
+OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, sal_uInt32& nHeight,
+                         SwOLENode& rOLENode)
 {
     rOle2.Seek(0);
     tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
     if (xStorage->GetError() != ERRCODE_NONE)
         return OString();
+
+    if (xStorage->IsStream("\1Ole10Native"))
+    {
+        return InsertOLE1HeaderFromOle10NativeStream(xStorage, rOLENode, rOle1);
+    }
 
     OString aClassName = ExtractOLEClassName(xStorage);
 
@@ -304,7 +396,7 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
     SvMemoryStream aOLE1;
     sal_uInt32 nWidth = 0;
     sal_uInt32 nHeight = 0;
-    OString aClassName = InsertOLE1Header(rOle2, aOLE1, nWidth, nHeight);
+    OString aClassName = InsertOLE1Header(rOle2, aOLE1, nWidth, nHeight, rOLENode);
 
     // Start object.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
