@@ -26,6 +26,12 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 
+constexpr sal_uInt32 createMagic(char char1, char char2, char char3, char char4)
+{
+    return (static_cast<sal_uInt32>(char1) << 24) | (static_cast<sal_uInt32>(char2) << 16)
+           | (static_cast<sal_uInt32>(char3) << 8) | (static_cast<sal_uInt32>(char4) << 0);
+}
+
 class VCL_DLLPUBLIC TypeSerializer : public tools::GenericTypeSerializer
 {
 public:
@@ -37,7 +43,7 @@ public:
     void readGfxLink(GfxLink& rGfxLink);
     void writeGfxLink(const GfxLink& rGfxLink);
 
-    static void readGraphic(Graphic& rGraphic);
+    void readGraphic(Graphic& rGraphic);
     void writeGraphic(const Graphic& rGraphic);
 };
 

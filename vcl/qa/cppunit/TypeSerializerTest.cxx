@@ -51,12 +51,12 @@ std::string toHexString(const std::vector<unsigned char>& a)
 class TypeSerializerTest : public CppUnit::TestFixture
 {
     void testGradient();
-    void testGraphic();
+    void testGraphic_Vector();
     void testGraphic_Bitmap_NoGfxLink();
 
     CPPUNIT_TEST_SUITE(TypeSerializerTest);
     CPPUNIT_TEST(testGradient);
-    CPPUNIT_TEST(testGraphic);
+    CPPUNIT_TEST(testGraphic_Vector);
     CPPUNIT_TEST(testGraphic_Bitmap_NoGfxLink);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -91,7 +91,7 @@ void TypeSerializerTest::testGradient()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), aReadGradient.GetSteps());
 }
 
-void TypeSerializerTest::testGraphic()
+void TypeSerializerTest::testGraphic_Vector()
 {
     test::Directories aDirectories;
     OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "SimpleExample.svg";
@@ -99,6 +99,7 @@ void TypeSerializerTest::testGraphic()
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
     aGraphic.makeAvailable();
+    BitmapChecksum aChecksum = aGraphic.getVectorGraphicData()->GetChecksum();
 
     // Test WriteGraphic - Native Format 5
     {
@@ -117,6 +118,13 @@ void TypeSerializerTest::testGraphic()
         sal_uInt32 nType;
         aMemoryStream.ReadUInt32(nType);
         CPPUNIT_ASSERT_EQUAL(COMPAT_FORMAT('N', 'A', 'T', '5'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aChecksum, aNewGraphic.getVectorGraphicData()->GetChecksum());
     }
 
     // Test WriteGraphic - Normal
@@ -129,6 +137,18 @@ void TypeSerializerTest::testGraphic()
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
         CPPUNIT_ASSERT_EQUAL(std::string("c2bed2099ce617f1cc035701de5186f0d43e3064"),
                              toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt32 nType;
+        aMemoryStream.ReadUInt32(nType);
+        CPPUNIT_ASSERT_EQUAL(createMagic('s', 'v', 'g', '0'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aChecksum, aNewGraphic.getVectorGraphicData()->GetChecksum());
     }
 
     // Test TypeSerializer - Native Format 5
@@ -151,6 +171,16 @@ void TypeSerializerTest::testGraphic()
         sal_uInt32 nType;
         aMemoryStream.ReadUInt32(nType);
         CPPUNIT_ASSERT_EQUAL(COMPAT_FORMAT('N', 'A', 'T', '5'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aChecksum, aNewGraphic.getVectorGraphicData()->GetChecksum());
     }
 
     // Test TypeSerializer - Normal
@@ -166,6 +196,21 @@ void TypeSerializerTest::testGraphic()
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
         CPPUNIT_ASSERT_EQUAL(std::string("c2bed2099ce617f1cc035701de5186f0d43e3064"),
                              toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt32 nType;
+        aMemoryStream.ReadUInt32(nType);
+        CPPUNIT_ASSERT_EQUAL(createMagic('s', 'v', 'g', '0'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aChecksum, aNewGraphic.getVectorGraphicData()->GetChecksum());
     }
 }
 
@@ -191,6 +236,13 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
         sal_uInt16 nType;
         aMemoryStream.ReadUInt16(nType);
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(0x4D42), nType); // Magic written with WriteDIBBitmapEx
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aBitmapEx.GetChecksum(), aNewGraphic.GetBitmapExRef().GetChecksum());
     }
 
     // Test TypeSerializer
@@ -211,6 +263,16 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
         sal_uInt16 nType;
         aMemoryStream.ReadUInt16(nType);
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(0x4D42), nType); // Magic written with WriteDIBBitmapEx
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(aBitmapEx.GetChecksum(), aNewGraphic.GetBitmapExRef().GetChecksum());
     }
 }
 
