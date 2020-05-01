@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e9db283_4e2e0efb",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-01T09:43:39Z",
+      "side": 1,
+      "message": "it should though, investigation seems to show its working under wayland but not X though gtk_drag_cancel was called. I\u0027m going to try and work on on that.",
+      "revId": "8b4f7cfb4008ad71f92b43569c9b3efd9dd78292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
