@@ -1785,8 +1785,14 @@ namespace
                     nullptr);
         }
 
-        gtk_widget_set_hexpand(pReplacement, gtk_widget_get_hexpand(pWidget));
-        gtk_widget_set_vexpand(pReplacement, gtk_widget_get_vexpand(pWidget));
+        if (gtk_widget_get_hexpand_set(pWidget))
+            gtk_widget_set_hexpand(pReplacement, gtk_widget_get_hexpand(pWidget));
+
+        if (gtk_widget_get_vexpand_set(pWidget))
+            gtk_widget_set_vexpand(pReplacement, gtk_widget_get_vexpand(pWidget));
+
+        gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
+        gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
         gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
 
