@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b7cddb0_1d709189",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T20:51:02Z",
+      "side": 1,
+      "message": "These all lack the leading \"is \", as is it would read \"Cell value top elements\" ... for that it might even be better to have \"is in top elements\" and \"is in bottom elements\".",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 90
+      },
+      "revId": "f1dbf2c9c6678205014f20d41439fe33b60d9b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c718204_027dead9",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T20:51:02Z",
+      "side": 1,
+      "message": "Same, leading \"is \" is missing.",
+      "range": {
+        "startLine": 448,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 109
+      },
+      "revId": "f1dbf2c9c6678205014f20d41439fe33b60d9b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956912a8_e85e356d",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T20:51:02Z",
+      "side": 1,
+      "message": "Omitting the N here (and in the 3 other entries) and changing to \"is bottom percent\" is confusing. There is an input field following where the user is expected to enter a value for N. I think a correct form would be\n\n  is in bottom N percent",
+      "revId": "f1dbf2c9c6678205014f20d41439fe33b60d9b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3a7434e_c0808db8",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T20:51:02Z",
+      "side": 1,
+      "message": "\"Cell value\" \"error\" probably should be \"Cell value\" \"is error\". (and \"is not error\").",
+      "revId": "f1dbf2c9c6678205014f20d41439fe33b60d9b2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
