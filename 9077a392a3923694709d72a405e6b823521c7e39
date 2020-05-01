@@ -34,6 +34,24 @@
       "revId": "9077a392a3923694709d72a405e6b823521c7e39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c89be73_0f155d20",
+        "filename": "connectivity/source/drivers/odbc/OConnection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-01T07:34:53Z",
+      "side": 1,
+      "message": "I meant\n    N3SQLDisconnect(m_aConnectionHandle);\n    m_aConnectionHandle \u003d SQL_NULL_HANDLE\nwhich will make the block in the destructor work properly",
+      "parentUuid": "e8e9c5d3_15fb64b2",
+      "revId": "9077a392a3923694709d72a405e6b823521c7e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
