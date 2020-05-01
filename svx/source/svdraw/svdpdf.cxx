@@ -879,10 +879,10 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         mbFntDirty = true;
     }
 
-    ImportText(aRect.TopLeft(), aRect.GetSize(), sText);
+    InsertTextObject(aRect.TopLeft(), aRect.GetSize(), sText);
 }
 
-void ImpSdrPdfImport::ImportText(const Point& rPos, const Size& rSize, const OUString& rStr)
+void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr)
 {
     // calc text box size, add 5% to make it fit safely
 
