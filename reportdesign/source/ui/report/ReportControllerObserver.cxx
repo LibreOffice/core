@@ -27,13 +27,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <com/sun/star/awt/FontSlant.hpp>
 #include <FormattedFieldBeautifier.hxx>
 
-#include <svx/unopage.hxx>
-
-// DBG_*
-#include <tools/debug.hxx>
 // DBG_UNHANDLED_EXCEPTION
 #include <tools/diagnose_ex.h>
 

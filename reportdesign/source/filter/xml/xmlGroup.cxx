@@ -22,12 +22,10 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
-#include <ucbhelper/content.hxx>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
 #include <sal/log.hxx>

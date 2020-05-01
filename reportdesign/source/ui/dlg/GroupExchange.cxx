@@ -18,7 +18,6 @@
  */
 #include "GroupExchange.hxx"
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <osl/diagnose.h>
 
 namespace rptui

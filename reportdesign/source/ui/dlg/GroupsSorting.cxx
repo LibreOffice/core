@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <GroupsSorting.hxx>
-#include <connectivity/dbtools.hxx>
-#include <sot/exchange.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,14 +36,10 @@
 #include <ColumnInfo.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/property.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
-
-#include <cppuhelper/bootstrap.hxx>
 
 #define HANDLE_ID           0
 #define FIELD_EXPRESSION    1

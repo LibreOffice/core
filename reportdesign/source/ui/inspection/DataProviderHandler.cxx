@@ -17,25 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <DataProviderHandler.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <strings.hxx>
-#include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -43,10 +36,7 @@
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <tools/fldunit.hxx>
 #include <metadata.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <core_resource.hxx>
 #include <helpids.h>

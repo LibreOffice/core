@@ -23,15 +23,10 @@
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
-#include <UITools.hxx>
-#include <RptDef.hxx>
 #include <strings.hxx>
 #include <ReportController.hxx>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <algorithm>
 
 namespace rptui

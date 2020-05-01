@@ -18,12 +18,7 @@
  */
 #include <Shape.hxx>
 
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
 
@@ -31,7 +26,6 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <Tools.hxx>
-#include <RptObject.hxx>
 #include <FormatCondition.hxx>
 #include <ReportHelperImpl.hxx>
 

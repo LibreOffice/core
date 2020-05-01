@@ -23,7 +23,6 @@
 #include <core_resource.hxx>
 #include <helpids.h>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <metadata.hxx>
 #include <tools/urlobj.hxx>

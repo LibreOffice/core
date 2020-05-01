@@ -22,13 +22,10 @@
 #include <RptDef.hxx>
 #include <strings.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <editeng/outlobj.hxx>
 
 #include <svx/svdmodel.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/diagnose_ex.h>

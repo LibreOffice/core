@@ -20,14 +20,13 @@
 #include <memory>
 #include "xmlImportDocumentHandler.hxx"
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <xmloff/attrlist.hxx>
@@ -40,8 +39,6 @@
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
 #include "xmlExportDocumentHandler.hxx"
-
-#include <connectivity/dbtools.hxx>
 
 namespace rptxml
 {

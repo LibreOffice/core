@@ -23,22 +23,16 @@
 #include <cppuhelper/component_context.hxx>
 #include <strings.hrc>
 #include <rptui_slotid.hrc>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/report/inspection/DefaultComponentInspectorModel.hpp>
-#include <svx/svxids.hrc>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

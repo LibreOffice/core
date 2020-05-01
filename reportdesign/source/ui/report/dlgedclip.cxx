@@ -19,8 +19,6 @@
 #include <dlgedclip.hxx>
 #include <osl/diagnose.h>
 #include <sot/exchange.hxx>
-#include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 
 namespace rptui
 {

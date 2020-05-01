@@ -18,7 +18,6 @@
  */
 #include <ReportComponent.hxx>
 
-#include <strings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -27,12 +26,8 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <ReportControlModel.hxx>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/uno3.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>

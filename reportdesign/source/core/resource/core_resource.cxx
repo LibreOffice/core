@@ -19,15 +19,6 @@
 #include <core_resource.hxx>
 #include <unotools/resmgr.hxx>
 
-// ---- needed as long as we have no contexts for components ---
-#include <osl/thread.h>
-#include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <rtl/uri.hxx>
-
-#include <svl/solar.hrc>
-
 OUString RptResId(const char* pId)
 {
     return Translate::get(pId, Translate::Create("rpt"));

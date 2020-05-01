@@ -22,7 +22,6 @@
 #include <ReportWindow.hxx>
 #include <UITools.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <toolkit/helper/convert.hxx>
 
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>

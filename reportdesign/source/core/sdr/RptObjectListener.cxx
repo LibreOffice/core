@@ -18,7 +18,6 @@
  */
 #include <RptObjectListener.hxx>
 #include <RptObject.hxx>
-#include <RptDef.hxx>
 
 namespace rptui
 {

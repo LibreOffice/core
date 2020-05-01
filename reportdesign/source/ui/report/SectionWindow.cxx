@@ -19,10 +19,7 @@
 #include <SectionWindow.hxx>
 #include <ReportWindow.hxx>
 #include <UITools.hxx>
-#include <rptui_slotid.hrc>
 #include <ReportController.hxx>
-#include <SectionView.hxx>
-#include <RptDef.hxx>
 #include <ReportSection.hxx>
 #include <DesignView.hxx>
 #include <strings.hxx>
@@ -32,13 +29,10 @@
 #include <EndMarker.hxx>
 #include <ViewsWindow.hxx>
 
-#include <svtools/colorcfg.hxx>
 #include <functional>
 #include <algorithm>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
-#include <connectivity/dbtools.hxx>
 
 namespace rptui
 {

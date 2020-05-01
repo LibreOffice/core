@@ -20,12 +20,7 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlEnums.hxx"
-#include "xmlComponent.hxx"
-#include "xmlReportElement.hxx"
-#include "xmlControlProperty.hxx"
 #include "xmlHelper.hxx"
 #include <unotools/pathoptions.hxx>
 #include <sal/log.hxx>

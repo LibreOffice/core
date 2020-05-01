@@ -20,15 +20,6 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
-#include "xmlEnums.hxx"
-#include "xmlHelper.hxx"
-#include <strings.hxx>
-#include "xmlStyleImport.hxx"
-#include <ucbhelper/content.hxx>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

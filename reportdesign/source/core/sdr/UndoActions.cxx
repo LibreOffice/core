@@ -19,27 +19,15 @@
 
 #include <UndoActions.hxx>
 #include <UndoEnv.hxx>
-#include "formatnormalizer.hxx"
-#include <conditionupdater.hxx>
-#include <strings.hxx>
-#include <rptui_slotid.hrc>
-#include <RptDef.hxx>
 #include <core_resource.hxx>
-#include <RptObject.hxx>
-#include <RptPage.hxx>
 #include <strings.hrc>
 #include <RptModel.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <comphelper/types.hxx>
-#include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <utility>
-#include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 

@@ -23,18 +23,13 @@
 
 #include <ReportDefinition.hxx>
 
-#include <FixedLine.hxx>
-#include <FixedText.hxx>
-#include <FormattedField.hxx>
 #include <Functions.hxx>
 #include <Groups.hxx>
-#include <ImageControl.hxx>
 #include <ReportComponent.hxx>
 #include <ReportHelperImpl.hxx>
 #include <RptDef.hxx>
 #include <RptModel.hxx>
 #include <Section.hxx>
-#include <Shape.hxx>
 #include <Tools.hxx>
 #include <UndoEnv.hxx>
 #include <strings.hrc>
@@ -55,20 +50,16 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
-#include <com/sun/star/embed/EntryInitModes.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/report/GroupKeepTogether.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
@@ -77,9 +68,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
@@ -101,7 +90,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -118,13 +106,9 @@
 #include <svx/unofill.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
-#include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
 
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"

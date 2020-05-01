@@ -33,7 +33,6 @@
 #include <svx/unoshape.hxx>
 #include <utility>
 #include <tools/diagnose_ex.h>
-#include <vcl/settings.hxx>
 
 #include <functional>
 

@@ -18,31 +18,23 @@
  */
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <ReportEngineJFree.hxx>
-#include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/sdb/XCompletedExecution.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
 #include <unotools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-#include <Tools.hxx>
 #include <strings.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>

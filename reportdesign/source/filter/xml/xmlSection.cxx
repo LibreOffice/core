@@ -20,16 +20,9 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
-#include "xmlEnums.hxx"
-#include "xmlColumn.hxx"
-#include "xmlCondPrtExpr.hxx"
-#include "xmlStyleImport.hxx"
-#include <connectivity/dbtools.hxx>
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#include <strings.hxx>
 #include "xmlTable.hxx"
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

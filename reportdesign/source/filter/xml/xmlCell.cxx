@@ -18,15 +18,13 @@
  */
 #include "xmlCell.hxx"
 #include "xmlHelper.hxx"
-#include <xmloff/xmluconv.hxx>
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/prstylei.hxx>
+#include <xmloff/xmlstyle.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
-#include "xmlStyleImport.hxx"
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
