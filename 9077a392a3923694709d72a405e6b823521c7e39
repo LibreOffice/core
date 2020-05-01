@@ -16,6 +16,24 @@
       "revId": "9077a392a3923694709d72a405e6b823521c7e39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8e9c5d3_15fb64b2",
+        "filename": "connectivity/source/drivers/odbc/OConnection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-01T07:13:07Z",
+      "side": 1,
+      "message": "You mean first calling:\nN3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );\nthen putting SQL_NULL_HANDLE\n?\nAlso, I wonder if we shouldn\u0027t test return each time, perhaps by using OTools::ThrowException at each ODBC function?",
+      "parentUuid": "29b27967_d0675290",
+      "revId": "9077a392a3923694709d72a405e6b823521c7e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
