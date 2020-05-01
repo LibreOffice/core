@@ -280,11 +280,11 @@ public:
         for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
             if (aIter.getToken() == (XML_NAMESPACE_STYLE | XML_FAMILY))
             {
-                if (IsXMLToken(aIter.toString(), XML_TEXT))
+                if (IsXMLToken(aIter, XML_TEXT))
                     nFamily = XmlStyleFamily::TEXT_TEXT;
-                else if (IsXMLToken(aIter.toString(), XML_NAME))
+                else if (IsXMLToken(aIter, XML_NAME))
                     name = aIter.toString();
-                else if (IsXMLToken(aIter.toString(), XML_DISPLAY_NAME))
+                else if (IsXMLToken(aIter, XML_DISPLAY_NAME))
                     displayName = aIter.toString();
                 else
                     SAL_WARN("xmloff", "unknown value for style:family=" << aIter.toString());
