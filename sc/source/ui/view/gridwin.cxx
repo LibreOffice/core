@@ -641,10 +641,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     mpAutoFilterPopup.disposeAndClear();
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bLOKActive)
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
     mpAutoFilterPopup->setPopupEndAction(
@@ -656,6 +657,18 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     long nSizeX  = 0;
     long nSizeY  = 0;
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    if (bLOKActive)
+    {
+        // Reverse the zoom factor from aPos and nSize[X|Y]
+        // before letting the autofilter window convert the to twips
+        // with no zoom information.
+        double fZoomX(pViewData->GetZoomX());
+        double fZoomY(pViewData->GetZoomY());
+        aPos.setX(aPos.getX() / fZoomX);
+        aPos.setY(aPos.getY() / fZoomY);
+        nSizeX = nSizeX / fZoomX;
+        nSizeY = nSizeY / fZoomY;
+    }
     tools::Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
     ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
