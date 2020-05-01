@@ -86,6 +86,8 @@
 #include <AnnotationWin.hxx>
 #include <memory>
 
+#include <frmtool.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -1116,6 +1118,29 @@ namespace
         return true;
     }
 
+    // maybe make this a SwEditShell::IsOutlineNodeFolded(nOutlineNodePos) for SwWrtShell use
+    bool IsFolded(SwContentTree* pThis, const size_t nPos)
+    {
+        const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
+        const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+        assert(nPos < rOutlineNodes.size());
+
+        SwNode* pSttNd = rOutlineNodes[nPos];
+        SwNode* pEndNd = &rNodes.GetEndOfContent();
+        if (rOutlineNodes.size() > nPos + 1)
+            pEndNd = rOutlineNodes[nPos + 1];
+
+        for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+        {
+            SwNode* pNd = &aIdx.GetNode();
+            if (pNd->IsContentNode() && pNd->GetContentNode()->getLayoutFrame(pThis->GetWrtShell()->GetLayout()) != nullptr)
+                return false;
+        }
+
+        return true;
+    }
+
     void ExpandOrCollapseAll(weld::TreeView& rContentTree, weld::TreeIter& rEntry)
     {
         bool bExpand = !IsAllExpanded(rContentTree, rEntry);
@@ -1138,6 +1163,29 @@ static bool lcl_InsertExpandCollapseAllItem(weld::TreeView& rContentTree, weld::
         return false;
     }
     return true;
+}
+
+static bool lcl_RemoveFoldEntry(SwContentTree* pThis, weld::TreeView& rContentTree, weld::TreeIter& rEntry, weld::Menu& rPop)
+{
+    const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    const size_t nPos = weld::GetAbsPos(rContentTree, rEntry) - 1;
+
+    if (nPos >= rOutlineNodes.size())
+        return true;
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    // outline node has content?
+    SwNodeIndex aIdx(*pSttNd);
+    if (rNodes.GoNext(&aIdx) == pEndNd)
+        return true;
+
+    rPop.set_label(OString::number(1512), IsFolded(pThis, nPos) ? OUString("Unfold in Document") : OUString("Fold in Document"));
+    return false;
 }
 
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
@@ -1217,6 +1265,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
+    bool bRemoveToggleFoldEntry = true;
 
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
@@ -1272,6 +1321,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             else if(ContentTypeId::OUTLINE == nContentType)
             {
                 bOutline = true;
+                bRemoveToggleFoldEntry = lcl_RemoveFoldEntry(this, *m_xTreeView, *xEntry, *xPop);
                 bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
                 bRemoveSelectEntry = false;
                 bRemoveChapterEntries = false;
@@ -1337,6 +1387,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(804));
     }
 
+    if (bRemoveToggleFoldEntry)
+    {
+        xPop->remove("separator1511");
+        xPop->remove(OString::number(1512));
+    }
+
     if (bRemoveSendOutlineEntry)
         xPop->remove(OString::number(700));
 
@@ -1366,7 +1422,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveEditEntry)
         xPop->remove(OString::number(403));
 
-    if (bRemoveToggleExpandEntry &&
+    if (bRemoveToggleFoldEntry &&
+        bRemoveToggleExpandEntry &&
         bRemoveSelectEntry &&
         bRemoveChapterEntries &&
         bRemoveSendOutlineEntry &&
@@ -3319,6 +3376,54 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
     {
+        // fold outline node in document
+        case 1512:
+        {
+            const SwNodes& rNodes = m_pActiveShell->GetNodes();
+            const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+            const size_t nPos = GetAbsPos(*xFirst) - 1;
+            if (nPos < rOutlineNodes.size())
+            {
+                SwNode* pSttNd = rOutlineNodes[nPos];
+                SwNode* pEndNd = &rNodes.GetEndOfContent();
+                if (rOutlineNodes.size() > nPos + 1)
+                    pEndNd = rOutlineNodes[nPos + 1];
+
+                bool bIsFolded = true;
+                for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+                {
+                    SwNode* pNd = &aIdx.GetNode();
+                    if (pNd->IsContentNode() && pNd->GetContentNode()->getLayoutFrame(m_pActiveShell->GetLayout()) != nullptr)
+                    {
+                        bIsFolded = false;
+                        break;
+                    }
+                }
+
+                if (!bIsFolded)
+                {
+                    // fold
+                    for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+                    {
+                        SwNode* pNd = &aIdx.GetNode();
+                        if (pNd->IsContentNode())
+                            pNd->GetContentNode()->DelFrames(nullptr);
+                        else if (pNd->IsTableNode())
+                            pNd->GetTableNode()->DelFrames(nullptr);
+                        else if (pNd->IsSectionNode())
+                            pNd->GetSectionNode()->DelFrames(nullptr);
+                    }
+                }
+                else
+                {
+                    // unfold
+                    const SwNodeIndex aIdx(*pSttNd, 1);
+                    MakeFrames(m_pActiveShell->GetDoc(), aIdx, *pEndNd);
+                    m_pActiveShell->Reformat();
+                }
+            }
+        }
+        break;
         case 11:
         case 12:
         case 13:
