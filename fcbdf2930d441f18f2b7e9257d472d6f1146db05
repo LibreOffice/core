@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63427288_853c2f18",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4369,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:58:03Z",
+      "side": 1,
+      "message": "Is this really a locale dependent number? Not just a \u0027.\u0027 dot decimal separator used (VBA source code)? The original code did only a simple conversion. And do we actually want to ignore (scan away) group separators? Note this will make fail documents that so far were not locale dependent here. If this is going to be locale dependent now then we\u0027ll need to have some magic to check for dot decimal separator numbers first to not fail on those.",
+      "revId": "fcbdf2930d441f18f2b7e9257d472d6f1146db05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
