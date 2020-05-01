@@ -462,6 +462,11 @@ DECLARE_OOXMLEXPORT_TEST(testRHBZ1180114, "rhbz1180114.docx")
     // This document simply crashed the importer.
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf66496, "tdf66496.docx")
+{
+    // This document simply crashed the importer.
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
 {
     /*
