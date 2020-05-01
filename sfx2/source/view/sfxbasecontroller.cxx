@@ -76,7 +76,7 @@
 #include <unordered_map>
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
-#include <sfx2/sidebar/UnoSidebar.hxx>
+#include <sidebar/UnoSidebar.hxx>
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
