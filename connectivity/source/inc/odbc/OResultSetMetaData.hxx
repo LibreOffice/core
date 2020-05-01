@@ -23,9 +23,11 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <odbc/OFunctions.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <vector>
 #include <odbc/OConnection.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -36,7 +38,7 @@ namespace connectivity
 
         typedef ::cppu::WeakImplHelper<        css::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData final :
+        class SAL_DLLPUBLIC_EXPORT OResultSetMetaData final :
             public  OResultSetMetaData_BASE
         {
             std::vector<sal_Int32> m_vMapping; // when not every column is needed

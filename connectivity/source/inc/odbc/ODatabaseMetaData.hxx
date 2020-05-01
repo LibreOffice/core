@@ -21,8 +21,9 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
 
 #include <odbc/OConnection.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <TDatabaseMetaDataBase.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
 
 namespace connectivity
 {
@@ -32,7 +33,7 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
 
 
-        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData final :
+        class SAL_DLLPUBLIC_EXPORT ODatabaseMetaData final :
             public ODatabaseMetaDataBase
         {
             SQLHANDLE       m_aConnectionHandle;

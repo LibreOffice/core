@@ -37,8 +37,10 @@
 #include <comphelper/proparrhlp.hxx>
 #include <odbc/OStatement.hxx>
 #include <odbc/ODatabaseMetaData.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <memory>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -55,7 +57,7 @@ namespace connectivity
                                                    css::sdbc::XCloseable,
                                                    css::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaDataResultSet :
+        class SAL_DLLPUBLIC_EXPORT ODatabaseMetaDataResultSet :
                                     public cppu::BaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,

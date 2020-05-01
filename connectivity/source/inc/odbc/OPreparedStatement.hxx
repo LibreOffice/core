@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OPREPAREDSTATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OPREPAREDSTATEMENT_HXX
 
-#include <odbc/odbcbasedllapi.hxx>
 #include <odbc/OStatement.hxx>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -28,6 +27,9 @@
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -41,7 +43,7 @@ namespace connectivity
                                         css::sdbc::XResultSetMetaDataSupplier,
                                         css::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE OPreparedStatement final :
+        class SAL_DLLPUBLIC_EXPORT OPreparedStatement final :
                                     public  OStatement_BASE2,
                                     public  OPreparedStatement_BASE
         {

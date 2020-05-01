@@ -34,9 +34,11 @@
 #include <connectivity/CommonTools.hxx>
 #include <odbc/OFunctions.hxx>
 #include <odbc/OConnection.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -54,7 +56,7 @@ namespace connectivity
 
         //************ Class: java.sql.Statement
 
-        class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
+        class SAL_DLLPUBLIC_EXPORT OStatement_Base :
                                         public cppu::BaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
@@ -210,7 +212,7 @@ namespace connectivity
             using OPropertySetHelper::getFastPropertyValue;
         };
 
-        class OOO_DLLPUBLIC_ODBCBASE OStatement_BASE2 : public OStatement_Base
+        class SAL_DLLPUBLIC_EXPORT OStatement_BASE2 : public OStatement_Base
         {
         public:
             OStatement_BASE2(OConnection* _pConnection ) :
@@ -220,7 +222,7 @@ namespace connectivity
             virtual void SAL_CALL disposing() override;
         };
 
-        class OOO_DLLPUBLIC_ODBCBASE OStatement :
+        class SAL_DLLPUBLIC_EXPORT OStatement :
                             public OStatement_BASE2,
                             public css::sdbc::XBatchExecution,
                             public css::lang::XServiceInfo

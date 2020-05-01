@@ -20,7 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OTOOLS_HXX
 
 #include <connectivity/odbc.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -29,6 +28,9 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/textenc.h>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 enum class ODBC3SQLFunctionId
 {
@@ -96,7 +98,7 @@ namespace connectivity
 
         const sal_Int32 MAX_PUT_DATA_LENGTH = 2000;
 
-        class OOO_DLLPUBLIC_ODBCBASE OTools
+        class SAL_DLLPUBLIC_EXPORT OTools
         {
         public:
             /// @throws css::sdbc::SQLException

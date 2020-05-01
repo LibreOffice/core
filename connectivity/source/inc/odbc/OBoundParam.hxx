@@ -21,13 +21,14 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <odbc/odbcbasedllapi.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
 
 namespace connectivity
 {
     namespace odbc
     {
-        class OOO_DLLPUBLIC_ODBCBASE OBoundParam
+        class SAL_DLLPUBLIC_EXPORT OBoundParam
         {
 
         public:

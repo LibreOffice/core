@@ -36,11 +36,13 @@
 #include <comphelper/proparrhlp.hxx>
 #include <odbc/OFunctions.hxx>
 #include <odbc/OStatement.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 #include <TSkipDeletedSet.hxx>
 #include <memory>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -68,7 +70,7 @@ namespace connectivity
         typedef std::allocator< TVoidPtr > TVoidAlloc;
         typedef std::vector<TVoidPtr> TVoidVector;
         /// Functor object for class ZZ returntype is void
-        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare
+        struct SAL_DLLPUBLIC_EXPORT TBookmarkPosMapCompare
         {
             bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
                                     const css::uno::Sequence<sal_Int8>& _rRH) const
@@ -105,7 +107,7 @@ namespace connectivity
 
         typedef std::map< css::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
-        class OOO_DLLPUBLIC_ODBCBASE OResultSet :
+        class SAL_DLLPUBLIC_EXPORT OResultSet :
                             public  cppu::BaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,

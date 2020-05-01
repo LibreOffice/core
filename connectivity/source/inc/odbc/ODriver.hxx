@@ -25,10 +25,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/odbc.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
 #include <odbc/OTools.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+
 
 namespace connectivity
 {
@@ -36,7 +38,7 @@ namespace connectivity
     {
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver, css::lang::XServiceInfo > ODriver_BASE;
 
-        class OOO_DLLPUBLIC_ODBCBASE SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
+        class SAL_DLLPUBLIC_EXPORT SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                            m_aMutex;

@@ -22,7 +22,6 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <connectivity/odbc.hxx>
-#include <odbc/odbcbasedllapi.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <TConnection.hxx>
 #include <OTypeInfo.hxx>
@@ -30,7 +29,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <AutoRetrievingBase.hxx>
 #include <osl/module.h>
-
+#include <sal/config.h>
+#include <sal/types.h>
 
 #include <map>
 
@@ -43,7 +43,7 @@ namespace connectivity
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
-        class OOO_DLLPUBLIC_ODBCBASE OConnection final :
+        class SAL_DLLPUBLIC_EXPORT OConnection final :
                             public OConnection_BASE,
                             public OAutoRetrievingBase
         {
