@@ -1,0 +1,11 @@
+--- serf.org/buckets/ssl_buckets.c	2020-05-01 20:45:32.463464917 +0200
++++ serf/buckets/ssl_buckets.c	2020-05-01 20:46:00.643301728 +0200
+@@ -1205,7 +1205,7 @@
+     ssl_ctx->server_cert_callback = NULL;
+     ssl_ctx->server_cert_chain_callback = NULL;
+
+-    SSL_CTX_set_verify(ssl_ctx->ctx, SSL_VERIFY_PEER,
++    SSL_CTX_set_verify(ssl_ctx->ctx, SSL_VERIFY_NONE,
+                        validate_server_certificate);
+     SSL_CTX_set_options(ssl_ctx->ctx, SSL_OP_ALL);
+     /* Disable SSL compression by default. */
