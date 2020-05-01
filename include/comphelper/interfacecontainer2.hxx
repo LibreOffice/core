@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class XInterface; }
 namespace osl { class Mutex; }
 
 /** */ //for docpp

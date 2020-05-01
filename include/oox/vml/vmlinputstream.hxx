@@ -28,10 +28,10 @@
 #include <rtl/string.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XTextInputStream2; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
 namespace vml {

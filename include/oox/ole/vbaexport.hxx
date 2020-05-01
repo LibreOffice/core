@@ -21,11 +21,11 @@ class SotStorage;
 class SvStream;
 class SvMemoryStream;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
     namespace script { class XLibraryContainer; }
-} } }
+}
 
 class OOX_DLLPUBLIC VbaExport
 {

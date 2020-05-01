@@ -28,9 +28,9 @@
 namespace com::sun::star::beans { struct StringPair; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace com { namespace sun { namespace star { namespace rdf {
+namespace com::sun::star::rdf {
     class XMetadatable;
-} } } }
+}
 
 namespace sfx2 {
 

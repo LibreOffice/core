@@ -26,9 +26,9 @@
 #include <osl/process.h>
 #include <unotest/detail/unotestdllapi.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 namespace test {
 

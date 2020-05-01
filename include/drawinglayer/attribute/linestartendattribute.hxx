@@ -30,9 +30,9 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpLineStartEndAttribute;
-}}
+}
 
 
 namespace drawinglayer

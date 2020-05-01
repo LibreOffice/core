@@ -26,13 +26,13 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace animations { class XTransitionFilter; }
-} } }
+}
 
 namespace oox { class PropertyMap; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     class SlideTransition
     {
@@ -74,7 +74,7 @@ namespace oox { namespace ppt {
         ::sal_Int32 mnAdvanceTime;
     };
 
-} }
+}
 
 #endif
 

@@ -23,7 +23,7 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/outdev.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
 namespace utl { class AccessibleStateSetHelper; }
 
 namespace vcl

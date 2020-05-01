@@ -28,8 +28,8 @@
 
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com::sun::star::util { class XNumberFormats; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 class SvXMLExport;
 

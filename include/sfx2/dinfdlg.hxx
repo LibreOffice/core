@@ -40,11 +40,11 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
-} } }
+}
 
 struct CustomProperty;
 class SvtCalendarBox;

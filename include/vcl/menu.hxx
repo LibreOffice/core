@@ -49,11 +49,8 @@ class MenuBarWindow;
 struct SystemMenuData;
 enum class FloatWinPopupFlags;
 
-namespace com { namespace sun { namespace star { namespace accessibility {
-    class XAccessible;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::accessibility { class XAccessible;  }
+namespace com::sun::star::frame { class XFrame; }
 
 namespace vcl
 {

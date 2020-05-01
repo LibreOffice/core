@@ -31,12 +31,12 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     class XPropertySetRegistry;
     class XPersistentPropertySet;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace ucbhelper_impl { struct ContentProviderImplHelper_Impl; }
 

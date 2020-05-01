@@ -27,9 +27,9 @@
 #include <sal/types.h>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class LayoutFragmentHandler final : public SlideFragmentHandler
 {
@@ -41,7 +41,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_LAYOUTFRAGMENTHANDLER_HXX
 

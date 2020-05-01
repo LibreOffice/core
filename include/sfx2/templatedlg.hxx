@@ -25,10 +25,10 @@ class TemplateSearchView;
 class ThumbnailViewItem;
 
 namespace com {
-    namespace sun { namespace star { namespace frame {
+    namespace sun::star::frame {
         class XDesktop2;
         class XModel;
-    }   }   }
+    }
 }
 
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public weld::GenericDialogController

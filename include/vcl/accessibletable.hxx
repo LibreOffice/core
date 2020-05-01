@@ -24,11 +24,11 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
 namespace utl { class AccessibleStateSetHelper; }
 namespace vcl { class Window; }
 
-namespace vcl { namespace table
+namespace vcl::table
 {
 
 typedef sal_Int32   RowPos;
@@ -167,8 +167,7 @@ protected:
     ~IAccessibleTableControl() {}
 };
 
-} // namespace table
-} // namespace vcl
+} // namespace vcl::table
 
 #endif // INCLUDED_VCL_ACCESSIBLETABLE_HXX
 

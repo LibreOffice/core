@@ -26,13 +26,13 @@
 #include <oox/ppt/timenode.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XFastAttributeList; } }
-} } }
+namespace com::sun::star {
+    namespace xml::sax { class XFastAttributeList; }
+}
 
 namespace oox { class AttributeList; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 
     class TimeNodeContext : public ::oox::core::FragmentHandler2
@@ -64,7 +64,7 @@ private:
     TimeNodePtrList & maList;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_TIMENODELISTCONTEXT_HXX
 

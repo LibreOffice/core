@@ -27,10 +27,10 @@
 #include <vector>
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::frame { class XModel; }
 
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {

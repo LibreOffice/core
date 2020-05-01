@@ -27,7 +27,7 @@
 #include <sal/types.h>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
 namespace oox {
 namespace ole {

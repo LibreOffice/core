@@ -47,7 +47,7 @@ class VclExpander;
 class VclMultiLineEdit;
 struct NotebookBarAddonsItem;
 namespace xmlreader { class XmlReader; }
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::frame { class XFrame; }
 
 struct ComboBoxTextItem
 {

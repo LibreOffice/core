@@ -26,7 +26,7 @@
 
 namespace basegfx { class B2DPolygon; }
 namespace basegfx { class B2DPolyPolygon; }
-namespace drawinglayer { namespace primitive2d { class ScenePrimitive2D; }}
+namespace drawinglayer::primitive2d { class ScenePrimitive2D; }
 
 namespace drawinglayer
 {

@@ -26,7 +26,7 @@ class SdrObject;
 class SdrLayerIDSet;
 class OutputDevice;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class SVXCORE_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
 {
@@ -58,7 +58,7 @@ public:
     const OutputDevice* getPageViewOutputDevice() const;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 

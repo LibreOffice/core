@@ -25,10 +25,10 @@
 #include <cppcanvas/bitmapcanvas.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XBitmap;
-} } } }
+}
 
 
 /* Definition of Bitmap interface */

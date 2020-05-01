@@ -30,7 +30,7 @@ namespace oox {
     class PropertyMap;
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     class SlideTransitionContext final : public ::oox::core::FragmentHandler2
     {
@@ -51,7 +51,7 @@ namespace oox { namespace ppt {
         SlideTransition                 maTransition;
     };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
 

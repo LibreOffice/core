@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     enum {
         NP_TO = 0,
@@ -115,7 +115,7 @@ namespace oox { namespace ppt {
 
     typedef ::std::vector< TimeAnimationValue > TimeAnimationValueList;
 
-} }
+}
 
 
 #endif

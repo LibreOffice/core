@@ -40,7 +40,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper
 {

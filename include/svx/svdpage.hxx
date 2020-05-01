@@ -37,7 +37,7 @@
 
 // predefines
 namespace reportdesign { class OSection; }
-namespace sdr { namespace contact { class ViewContact; }}
+namespace sdr::contact { class ViewContact; }
 class SdrPage;
 class SdrModel;
 class SfxItemPool;

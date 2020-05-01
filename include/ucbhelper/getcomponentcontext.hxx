@@ -25,10 +25,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace ucbhelper {
 

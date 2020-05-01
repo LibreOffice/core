@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document { class XDocumentProperties; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
@@ -40,17 +40,17 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
     namespace text { class XTextField; }
     namespace uno { class XComponentContext; }
-    namespace xml { namespace dom { class XDocument; } }
-    namespace xml { namespace sax { class XFastSAXSerializable; } }
-} } }
+    namespace xml::dom { class XDocument; }
+    namespace xml::sax { class XFastSAXSerializable; }
+}
 
 namespace oox {
     namespace drawingml { class Theme; }
-    namespace drawingml { namespace chart { class ChartConverter; } }
-    namespace drawingml { namespace table {
+    namespace drawingml::chart { class ChartConverter; }
+    namespace drawingml::table {
         class TableStyleList;
         typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
-    } }
+    }
     namespace vml { class Drawing; }
 }
 

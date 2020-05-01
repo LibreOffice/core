@@ -17,7 +17,7 @@
 #include <set>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace ui { class XContextChangeEventListener; } } } }
+namespace com::sun::star::ui { class XContextChangeEventListener; }
 
 class NotebookbarContextControl;
 class SystemWindow;

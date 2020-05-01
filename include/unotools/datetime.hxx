@@ -25,9 +25,9 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
-namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
-namespace com { namespace sun { namespace star { namespace util { struct Time; } } } }
+namespace com::sun::star::util { struct Date; }
+namespace com::sun::star::util { struct DateTime; }
+namespace com::sun::star::util { struct Time; }
 
 class Date;
 class DateTime;

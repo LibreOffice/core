@@ -45,7 +45,7 @@ class XFillColorItem;
 class XFillHatchItem;
 class XFillBitmapItem;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class SVX_DLLPUBLIC AreaPropertyPanelBase
 :   public PanelLayout,
@@ -171,7 +171,7 @@ protected:
     void SelectFillAttrHdl_Impl();
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif // INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 

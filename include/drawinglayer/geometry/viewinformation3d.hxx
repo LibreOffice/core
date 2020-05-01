@@ -28,9 +28,9 @@
 
 // predefines
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ImpViewInformation3D;
-}}
+}
 
 namespace basegfx {
     class B3DHomMatrix;

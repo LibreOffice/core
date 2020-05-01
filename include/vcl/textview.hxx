@@ -37,10 +37,9 @@ class MouseEvent;
 class CommandEvent;
 namespace vcl { class Window; }
 
-namespace com { namespace sun { namespace star {
-    namespace datatransfer { namespace clipboard {
-        class XClipboard;
-}}}}}
+namespace com::sun::star::datatransfer::clipboard {
+    class XClipboard;
+}
 namespace i18nutil {
     struct SearchOptions;
 }

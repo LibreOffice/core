@@ -23,14 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/dllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace style { class XStyle; }
     namespace container { class XIndexReplace; }
     namespace beans { struct PropertyValue; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvXMLExport;
 class XMLTextListAutoStylePool;

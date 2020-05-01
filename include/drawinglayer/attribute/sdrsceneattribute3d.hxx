@@ -29,9 +29,9 @@
 
 // predefines
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrSceneAttribute;
-}}
+}
 
 
 namespace drawinglayer

@@ -27,11 +27,11 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility { class XAccessible; }
     namespace accessibility { class XAccessibleEventListener; }
     namespace awt { struct Point; }
-} } }
+}
 
 class Point;
 class SvxEditSource;

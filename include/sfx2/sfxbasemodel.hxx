@@ -72,9 +72,9 @@ class   SfxObjectShell                      ;
 class   SfxViewFrame;
 struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member of class SfxBaseModel
 
-namespace sfx { namespace intern {
+namespace sfx::intern {
     class ViewCreationGuard;
-} }
+}
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::container { class XNameContainer; }

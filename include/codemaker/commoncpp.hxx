@@ -29,7 +29,7 @@ namespace rtl {
     class OUString;
 }
 
-namespace codemaker { namespace cpp {
+namespace codemaker::cpp {
 
 /** Stick a namespace scope to c++ type
 
@@ -55,7 +55,7 @@ rtl::OString translateUnoToCppIdentifier(
     IdentifierTranslationMode transmode = IdentifierTranslationMode::Global,
     rtl::OString const * forbidden = nullptr);
 
-} }
+}
 
 #endif // INCLUDED_CODEMAKER_COMMONCPP_HXX
 

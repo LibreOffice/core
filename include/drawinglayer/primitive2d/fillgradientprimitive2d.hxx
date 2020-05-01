@@ -28,7 +28,7 @@
 // predefines
 
 namespace basegfx { class B2DPolygon; }
-namespace drawinglayer { namespace texture { struct B2DHomMatrixAndBColor; } }
+namespace drawinglayer::texture { struct B2DHomMatrixAndBColor; }
 
 
 // FillGradientPrimitive2D class

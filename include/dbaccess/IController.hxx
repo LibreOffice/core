@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         struct PropertyValue;
     }
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace frame {
         class XController;
     }
-} } }
+}
 
 class NotifyEvent;
 

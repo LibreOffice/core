@@ -26,7 +26,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 
 namespace sdb {
     class XSingleSelectQueryComposer;
@@ -66,7 +66,7 @@ namespace task {
     class XInteractionHandler;
 }
 
-} } }
+}
 
 class SvStream;
 

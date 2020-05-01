@@ -26,13 +26,13 @@
 class SvXMLImport;
 class SvXMLImportContext;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
     namespace uno { template <typename > class Sequence; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace frame { class XModel; }
     namespace container { class XNameAccess; }
-} } }
+}
 
 /** create import context for xforms:model element. */
 XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(

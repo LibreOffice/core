@@ -33,14 +33,8 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans {
-    class XPropertySet;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace frame {
-    class XDesktop2;
-}}}}
-
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::frame { class XDesktop2; }
 namespace com::sun::star::linguistic2 { class XDictionary; }
 namespace com::sun::star::linguistic2 { class XDictionaryEntry; }
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }

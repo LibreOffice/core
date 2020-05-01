@@ -39,22 +39,22 @@
 
 namespace basegfx { class B2DHomMatrix; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
     namespace uno { class Any; }
-} } }
+}
 
-namespace oox { namespace core {
+namespace oox::core {
     class XmlFilterBase;
-} }
+}
 
-namespace oox { namespace vml {
+namespace oox::vml {
     struct OleObjectInfo;
-} }
+}
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class Theme;
 struct EffectProperties;
@@ -379,7 +379,7 @@ private:
     bool mbUseBgFill = false;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 

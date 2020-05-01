@@ -24,8 +24,8 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::lang { class XComponent; }
 
 namespace utl
 {

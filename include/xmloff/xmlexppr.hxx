@@ -29,8 +29,8 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::beans { class XPropertySet; }
 namespace rtl { template <class reference_type> class Reference; }
 
 class XMLPropertySetMapper;

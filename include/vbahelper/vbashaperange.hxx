@@ -33,21 +33,21 @@
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XEnumeration; }
     namespace container { class XIndexAccess; }
     namespace drawing { class XDrawPage; }
     namespace drawing { class XShapes; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
     namespace msforms { class XFillFormat; }
     namespace msforms { class XLineFormat; }
     namespace msforms { class XShape; }
-} }
+}
 
 typedef CollTestImplHelper< ov::msforms::XShapeRange > ScVbaShapeRange_BASE;
 

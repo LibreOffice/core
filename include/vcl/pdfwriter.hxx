@@ -37,9 +37,9 @@
 #include <vector>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace beans { class XMaterialHolder; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
+namespace com::sun::star::beans { class XMaterialHolder; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::security { class XCertificate; }
 
 class GDIMetaFile;
 class MapMode;

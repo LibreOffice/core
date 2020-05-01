@@ -27,11 +27,11 @@
 #include <cppuhelper/compbase_ex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
-namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+}
+namespace com::sun::star::uno { class XAggregation; }
+namespace com::sun::star::lang { class XComponent; }
 
 /* class hierarchy herein:
 

@@ -29,9 +29,9 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::xml::sax { class XAttributeList; }
 
 #define XML_NUMBERSTYLES "NumberStyles"
 

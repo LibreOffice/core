@@ -35,7 +35,7 @@
 
 namespace vcl { class Window; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
@@ -95,7 +95,7 @@ private:
     const css::ui::LayoutSize maLayoutSize;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

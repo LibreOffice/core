@@ -26,9 +26,9 @@
 class SdrObject;
 class E3dScene;
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ViewInformation3D;
-}}
+}
 
 /** Helper for 3d object changes affecting 2d geometry
 

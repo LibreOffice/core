@@ -20,7 +20,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::datatransfer { namespace clipboard { class XClipboard; } }
+namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace vcl { class Window; }

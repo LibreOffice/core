@@ -25,7 +25,7 @@
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com::sun::star::graphic { class XGraphic; }
 
 // Adjustment defines
 enum class GraphicAdjustmentFlags

@@ -25,8 +25,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::beans { struct PropertyValue; }
 
 namespace comphelper{
 

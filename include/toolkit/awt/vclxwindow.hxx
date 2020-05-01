@@ -44,7 +44,7 @@
 #include <functional>
 
 namespace comphelper { class OInterfaceContainerHelper2; }
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
+namespace com::sun::star::accessibility { class XAccessibleContext; }
 
 class VclWindowEvent;
 

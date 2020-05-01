@@ -28,7 +28,7 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace frame { struct FeatureStateEvent; } } } }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
 template <class T> class VclPtr;
 
 class Color;

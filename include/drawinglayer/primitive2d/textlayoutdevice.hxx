@@ -32,9 +32,9 @@ namespace vcl { class Font; }
 class GDIMetaFile;
 namespace tools { class Rectangle; }
 enum class DrawTextFlags;
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class FontAttribute;
-}}
+}
 
 namespace com::sun::star::lang { struct Locale; }
 

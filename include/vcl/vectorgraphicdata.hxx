@@ -27,7 +27,7 @@
 #include <deque>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace graphic { class XPrimitive2D; } } } }
+namespace com::sun::star::graphic { class XPrimitive2D; }
 struct WmfExternal;
 
 typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;

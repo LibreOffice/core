@@ -26,9 +26,9 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::xml::sax { class XAttributeList; }
 
 class SvXMLImport;
 class SvXMLImportContext;

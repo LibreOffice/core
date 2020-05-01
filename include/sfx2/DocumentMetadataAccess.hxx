@@ -39,12 +39,12 @@
     protected externally.
  */
 
-namespace com { namespace sun { namespace star { namespace embed {
+namespace com::sun::star::embed {
     class XStorage;
-} } } }
-namespace com { namespace sun { namespace star { namespace frame {
+}
+namespace com::sun::star::frame {
     class XModel;
-} } } }
+}
 
 namespace com::sun::star::uno { class XComponentContext; }
 

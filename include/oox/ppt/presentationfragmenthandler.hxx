@@ -34,9 +34,9 @@
 #include <sal/types.h>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class PresentationFragmentHandler final : public ::oox::core::FragmentHandler2
 {
@@ -66,7 +66,7 @@ private:
     bool                        mbCommentAuthorsRead; // read commentAuthors.xml only once
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 

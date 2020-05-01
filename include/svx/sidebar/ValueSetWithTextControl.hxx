@@ -25,7 +25,7 @@
 
 #include <vector>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 /** Specialization of class <ValueSet>.
     This specialization allows is a one-columned ValueSet which allow
@@ -56,7 +56,7 @@ private:
     ::std::vector< ValueSetWithTextItem > maItems;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

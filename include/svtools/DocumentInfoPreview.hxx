@@ -30,10 +30,10 @@ namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
 class ExtMultiLineEdit;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document { class XDocumentProperties; }
     namespace util { struct DateTime; }
-} } }
+}
 
 namespace svtools {
 

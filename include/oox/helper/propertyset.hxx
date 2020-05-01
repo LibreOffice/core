@@ -28,11 +28,11 @@
 #include <sal/types.h>
 #include <tools/color.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XMultiPropertySet; }
     namespace beans { class XPropertySet; }
     namespace beans { class XPropertySetInfo; }
-} } }
+}
 
 namespace oox {
 

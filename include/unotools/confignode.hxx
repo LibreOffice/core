@@ -22,13 +22,13 @@
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/eventlisteneradapter.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XHierarchicalNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XNameReplace; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XChangesBatch; } } } }
+namespace com::sun::star::container { class XHierarchicalNameAccess; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::container { class XNameReplace; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XChangesBatch; }
 
 namespace utl
 {

@@ -28,10 +28,10 @@
 #include <tools/link.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno
+namespace com::sun::star::uno
 {
     class Any;
-}}}}
+}
 
 namespace com::sun::star::io { class XInputStream; }
 

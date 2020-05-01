@@ -24,12 +24,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
         class XComponentContext;
-}}}}
+}
 
-namespace com { namespace sun { namespace star { namespace i18n { class XCollator; } } } }
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::i18n { class XCollator; }
+namespace com::sun::star::lang { struct Locale; }
 
 class UNOTOOLS_DLLPUBLIC CollatorWrapper
 {

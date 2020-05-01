@@ -28,10 +28,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { class XInterface; }
 
 class VCL_DLLPUBLIC FilterConfigItem
 {

@@ -28,8 +28,8 @@
 #include <memory>
 
 namespace osl { class Mutex; }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::beans { struct PropertyValue; }
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

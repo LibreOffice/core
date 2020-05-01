@@ -67,30 +67,30 @@ enum class ImplPaintFlags;
 enum class VclEventId;
 enum class PointerStyle;
 
-namespace com { namespace sun { namespace star {
-namespace accessibility {
-    struct AccessibleRelation;
-    class XAccessible;
+namespace com::sun::star {
+    namespace accessibility {
+        struct AccessibleRelation;
+        class XAccessible;
+    }
+    namespace rendering {
+        class XCanvas;
+        class XSpriteCanvas;
+    }
+    namespace awt {
+        class XWindowPeer;
+    }
+    namespace uno {
+        class Any;
+    }
+    namespace datatransfer::clipboard {
+        class XClipboard;
+    }
+    namespace datatransfer::dnd {
+        class XDragGestureRecognizer;
+        class XDragSource;
+        class XDropTarget;
+    }
 }
-
-namespace rendering {
-    class XCanvas;
-    class XSpriteCanvas;
-}
-namespace awt {
-    class XWindowPeer;
-}
-namespace uno {
-    class Any;
-}
-namespace datatransfer { namespace clipboard {
-    class XClipboard;
-}
-namespace dnd {
-    class XDragGestureRecognizer;
-    class XDragSource;
-    class XDropTarget;
-}}}}}
 
 namespace vcl {
     struct ControlLayoutData;

@@ -35,7 +35,7 @@ class SfxItemSet;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class TableModel;
 
@@ -191,7 +191,7 @@ rtl::Reference< sdr::SelectionController > CreateTableController(
      const SdrTableObj& rObj,
      const rtl::Reference< sdr::SelectionController >& xRefController );
 
-} }
+}
 
 #endif // INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX
 

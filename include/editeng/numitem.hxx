@@ -37,11 +37,7 @@ class SvxBrushItem;
 namespace vcl { class Font; }
 class Graphic;
 class SvxNodeNum;
-namespace com{namespace sun{ namespace star{
-    namespace text{
-        class XNumberingFormatter;
-    }
-}}}
+namespace com::sun::star::text { class XNumberingFormatter; }
 
 namespace com::sun::star::lang { struct Locale; }
 

@@ -14,8 +14,8 @@
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
-namespace com { namespace sun { namespace star { namespace task { class XInteractionRequest; } } } }
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::task { class XInteractionRequest; }
 
 namespace comphelper {
 /** An interaction handler wrapper for simple file access.

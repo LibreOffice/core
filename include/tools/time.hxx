@@ -22,7 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/util/Time.hpp>
 
-namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
+namespace com::sun::star::util { struct DateTime; }
 
 /**
  @WARNING: This class can serve both as wall clock time and time duration, and

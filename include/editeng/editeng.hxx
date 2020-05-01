@@ -46,7 +46,7 @@
 
 template <typename Arg, typename Ret> class Link;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
   namespace linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
@@ -57,7 +57,7 @@ namespace com { namespace sun { namespace star {
   namespace lang {
     struct Locale;
   }
-}}}
+}
 
 namespace svx {
 struct SpellPortion;

@@ -25,9 +25,9 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/hash.hxx>
 
-namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com::sun::star::task { class XInteractionHandler; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::beans { struct NamedValue; }
 
 namespace comphelper {
 

@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Gradient;
                     class XBitmap; }
     namespace graphic { class XGraphic; }
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace drawing { struct Hatch; }
     namespace drawing { struct PolyPolygonBezierCoords; }
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
 namespace oox {
 

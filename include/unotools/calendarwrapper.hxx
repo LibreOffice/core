@@ -26,19 +26,9 @@
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <unotools/unotoolsdllapi.h>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-}}}
-
-namespace com { namespace sun { namespace star {
-    namespace i18n {
-        class XCalendar4;
-    }
-}}}
-
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::i18n { class XCalendar4; }
+namespace com::sun::star::lang { struct Locale; }
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {

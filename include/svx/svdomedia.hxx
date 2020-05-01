@@ -27,7 +27,7 @@
 
 class Graphic;
 
-namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
+namespace sdr::contact { class ViewContactOfSdrMediaObj; }
 namespace com::sun::star::graphic { class XGraphic; }
 
 

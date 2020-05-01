@@ -29,9 +29,9 @@
 class SdrDragMethod;
 class SdrPageView;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class ConnectorProperties;
-}}
+}
 
 
 /// Utility class SdrObjConnection

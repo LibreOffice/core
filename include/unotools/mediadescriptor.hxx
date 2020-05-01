@@ -29,9 +29,9 @@
 #include <rtl/ustring.hxx>
 #include <unotools/unotoolsdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace io {
+namespace com::sun::star::io {
     class XInputStream;
-} } } }
+}
 namespace comphelper { class IDocPasswordVerifier; }
 
 namespace utl {

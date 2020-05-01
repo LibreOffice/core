@@ -27,10 +27,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
-  namespace datatransfer {
-    class XTransferable;
-} } } }
+namespace com::sun::star {
+  namespace datatransfer { class XTransferable; }
+}
 namespace rtl {
     class OUString;
 };

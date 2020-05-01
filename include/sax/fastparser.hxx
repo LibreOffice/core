@@ -28,12 +28,10 @@
 #include <sax/fastsaxdllapi.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax {
-
-class XFastDocumentHandler;
-class XFastTokenHandler;
-
-}}}}}
+namespace com::sun::star::xml::sax {
+    class XFastDocumentHandler;
+    class XFastTokenHandler;
+}
 
 namespace sax_fastparser {
 

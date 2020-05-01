@@ -25,10 +25,10 @@
 #include <cppcanvas/color.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XPolyPolygon2D;
-} } } }
+}
 
 
 /* Definition of tools::PolyPolygon interface */

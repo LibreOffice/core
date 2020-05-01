@@ -14,9 +14,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.

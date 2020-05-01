@@ -36,8 +36,8 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 namespace ucbhelper {
 

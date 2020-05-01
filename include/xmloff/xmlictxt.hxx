@@ -29,7 +29,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com::sun::star::xml::sax { class XAttributeList; }
 
 class SvXMLImport;
 

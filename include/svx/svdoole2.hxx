@@ -27,7 +27,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 
 namespace awt { class XWindow; }
 
@@ -37,7 +37,7 @@ namespace embed { class XEmbeddedObject; }
 
 namespace frame { class XModel; }
 
-}}}
+}
 
 namespace svt { class EmbeddedObjectRef; }
 

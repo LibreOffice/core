@@ -39,10 +39,10 @@
 // Pre defines
 class SdrPageWindow;
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     class XControlContainer;
-}}}}
-namespace sdr { namespace overlay { class OverlayManager; } }
+}
+namespace sdr::overlay { class OverlayManager; }
 
 class SdrPage;
 class SdrView;
@@ -53,9 +53,9 @@ class SdrModel;
 class SdrObject;
 enum class GraphicManagerDrawFlags;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
     class ViewObjectContactRedirector;
-}}
+}
 
 
 // Defines for AnimationMode

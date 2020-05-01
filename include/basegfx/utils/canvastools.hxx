@@ -25,7 +25,7 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com::sun::star::geometry
 {
     struct AffineMatrix2D;
     struct AffineMatrix3D;
@@ -36,18 +36,18 @@ namespace com { namespace sun { namespace star { namespace geometry
     struct IntegerSize2D;
     struct IntegerRectangle2D;
     struct RealBezierSegment2D;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XGraphicDevice;
     class  XPolyPolygon2D;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace awt
+namespace com::sun::star::awt
 {
     struct Rectangle;
-} } } }
+}
 
 namespace basegfx
 {

@@ -24,11 +24,11 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { class Any; }
     namespace ucb { class XCommandEnvironment; }
     namespace ucb { class XCommandProcessor; }
-} } }
+}
 
 namespace ucbhelper
 {

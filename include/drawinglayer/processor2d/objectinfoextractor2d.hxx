@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
-namespace drawinglayer { namespace primitive2d { class ObjectInfoPrimitive2D; }}
+namespace drawinglayer::primitive2d { class ObjectInfoPrimitive2D; }
 
 namespace drawinglayer
 {

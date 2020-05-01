@@ -29,14 +29,8 @@
 #include <rtl/ref.hxx>
 #include <config_options.h>
 
-namespace com { namespace sun { namespace star { namespace beans {
-    class   XPropertySet;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace linguistic2 {
-    struct  LinguServiceEvent;
-}}}}
-
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::linguistic2 { struct LinguServiceEvent; }
 namespace com::sun::star::linguistic2 { class XLinguProperties; }
 
 

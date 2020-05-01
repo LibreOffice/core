@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox { namespace ole { struct AxFontData; } }
+namespace oox::ole { struct AxFontData; }
 
 namespace oox {
 namespace ole {

@@ -28,9 +28,9 @@
 #include <svx/svx3ditems.hxx>
 #include <memory>
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class BaseProperties;
-}}
+}
 
 /*************************************************************************
 |*

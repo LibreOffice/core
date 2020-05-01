@@ -31,7 +31,7 @@ namespace oox {
     class PropertyMap;
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class SoundActionContext final : public ::oox::core::FragmentHandler2
 {
@@ -50,7 +50,7 @@ private:
     OUString                   msSndName;
 };
 
-} }
+}
 
 
 #endif

@@ -37,9 +37,9 @@ class SdrPageView;
 class MouseEvent;
 class HelpEvent;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
     class ObjectContact;
-}}
+}
 
 // Every object must be able to create its handles. They will be fetched on
 // selection, registered at the View and made visible.

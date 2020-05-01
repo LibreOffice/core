@@ -31,10 +31,10 @@
 
 namespace basegfx { class B2DHomMatrix; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShapes; }
-} } }
+}
 
 namespace oox {
     namespace core { class XmlFilterBase; }
@@ -42,7 +42,7 @@ namespace oox {
     template <typename Type> class OptValue;
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class PPTShape final : public oox::drawingml::Shape
 {
@@ -82,7 +82,7 @@ public:
     static oox::drawingml::TextListStylePtr getSubTypeTextListStyle( const SlidePersist& rSlidePersist, sal_Int32 nSubType );
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PPTSHAPE_HXX
 

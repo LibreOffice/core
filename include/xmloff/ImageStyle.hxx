@@ -25,9 +25,9 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::xml::sax { class XAttributeList; }
 
 class SvXMLExport;
 class SvXMLImport;

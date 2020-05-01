@@ -154,7 +154,7 @@ private:
 // Class used to indicate that the Call() parameter is not in use:
 class LinkParamNone { LinkParamNone() = delete; };
 
-namespace tools { namespace detail {
+namespace tools::detail {
 
 // Avoids loplugin:redundantcast in LINK macro, in the common case that Instance
 // is already of type Class * (instead of a derived type):
@@ -173,7 +173,7 @@ Link<Arg, Ret> makeLink(void * instance, Ret (* function)(void *, Arg)) {
 }
 #endif
 
-} }
+}
 
 #endif
 

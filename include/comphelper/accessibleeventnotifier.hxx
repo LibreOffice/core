@@ -22,10 +22,10 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleEventListener; } } } }
-namespace com { namespace sun { namespace star { namespace accessibility { struct AccessibleEventObject; } } } }
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::accessibility { class XAccessibleEventListener; }
+namespace com::sun::star::accessibility { struct AccessibleEventObject; }
 
 namespace comphelper {
 

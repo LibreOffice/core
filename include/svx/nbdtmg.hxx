@@ -24,7 +24,7 @@
 #include <editeng/numitem.hxx>
 #include <vcl/font.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 #define DEFAULT_BULLET_TYPES                            8
 #define DEFAULT_NUM_VALUSET_COUNT                       8
@@ -204,7 +204,7 @@ class OutlineTypeMgr: public NBOTypeMgrBase
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         static OutlineTypeMgr& GetInstance();
 };
-}}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

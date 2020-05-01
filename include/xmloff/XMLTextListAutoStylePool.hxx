@@ -28,9 +28,8 @@
 #include <memory>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace container {
-    class XIndexReplace; } } } }
-namespace com { namespace sun { namespace star { namespace ucb { class XAnyCompare; } } } }
+namespace com::sun::star::container { class XIndexReplace; }
+namespace com::sun::star::ucb { class XAnyCompare; }
 
 
 class XMLTextListAutoStylePool_Impl;

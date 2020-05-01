@@ -23,14 +23,14 @@
 #include <svx/view3d.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertySet;
     }
     namespace util {
         class XNumberFormats;
     }
-}}}
+}
 
 class OutputDevice;
 class FmFormObj;
@@ -44,12 +44,12 @@ namespace svx {
 }
 
 class SdrUnoObj;
-namespace com { namespace sun { namespace star { namespace form {
+namespace com::sun::star::form {
     class XForm;
     namespace runtime {
         class XFormController;
     }
-} } } }
+}
 
 class SVXCORE_DLLPUBLIC FmFormView : public E3dView
 {

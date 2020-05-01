@@ -23,12 +23,12 @@
 #include <rtl/ustring.hxx>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
     namespace uno { template<typename T> class Sequence; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace container { class XNameAccess; }
-} } }
+}
 
 
 /** export an XForms model. */

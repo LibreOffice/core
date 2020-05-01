@@ -29,7 +29,7 @@ class SdrObject;
 class GeoStat;
 class Bitmap;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class SVXCORE_DLLPUBLIC ViewContactOfSdrObj : public ViewContact
 {
@@ -80,7 +80,7 @@ public:
     virtual drawinglayer::primitive2d::Primitive2DContainer embedToObjectSpecificInformation(drawinglayer::primitive2d::Primitive2DContainer aSource) const override;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDROBJ_HXX
 

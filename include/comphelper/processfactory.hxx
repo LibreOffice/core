@@ -23,11 +23,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     class XMultiServiceFactory;
-} } } }
-
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+}
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper
 {

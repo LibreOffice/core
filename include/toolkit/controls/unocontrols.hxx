@@ -57,8 +57,8 @@
 
 #include <optional>
 
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphicObject; } } } }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::graphic { class XGraphicObject; }
 
 class ImageHelper
 {

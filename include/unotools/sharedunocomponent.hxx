@@ -25,11 +25,11 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XComponent;
     }
-} } }
+}
 
 namespace utl
 {

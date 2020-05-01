@@ -34,14 +34,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { class XControlModel; }
     namespace container { class XIndexContainer; }
     namespace drawing { class XDrawPage; }
     namespace frame { class XModel; }
     namespace form { class XFormsSupplier; }
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
 namespace oox {
     class BinaryInputStream;

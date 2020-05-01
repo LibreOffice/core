@@ -27,9 +27,9 @@
 #include <sal/types.h>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class ContextHandler2Helper; } }
+namespace oox::core { class ContextHandler2Helper; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class PPTShapeContext final : public ::oox::drawingml::ShapeContext
 {
@@ -40,7 +40,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PPTSHAPECONTEXT_HXX
 

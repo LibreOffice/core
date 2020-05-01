@@ -32,7 +32,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/errcode.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { class XControl; }
     namespace awt { class XDevice; }
     namespace awt { class XUnitConversion; }
@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }
     namespace uno { class Exception; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 class SfxObjectShell;
 class SfxViewFrame;

@@ -25,8 +25,8 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
+namespace com::sun::star::xml::sax { class XWriter; }
 
 namespace xmlscript
 {

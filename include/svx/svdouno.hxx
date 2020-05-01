@@ -34,9 +34,9 @@ class SdrView;
 class SdrPageWindow;
 class SdrControlEventListenerImpl;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
     class ViewContactOfUnoControl;
-}}
+}
 
 
 // SdrUnoObj

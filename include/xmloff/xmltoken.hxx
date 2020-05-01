@@ -38,7 +38,7 @@
  * methods and the SvXMLElementExport constructor.
  */
 
-namespace xmloff { namespace token {
+namespace xmloff::token {
 
 
     /**
@@ -3370,7 +3370,7 @@ namespace xmloff { namespace token {
     XMLOFF_DLLPUBLIC bool IsXMLToken(
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );
-} }
+}
 
 #endif
 

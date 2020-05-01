@@ -29,12 +29,12 @@
 #include <oox/helper/refmap.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace embed { class XStorage; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-} } }
+}
 
 namespace oox {
 

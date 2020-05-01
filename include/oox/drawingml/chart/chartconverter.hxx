@@ -24,16 +24,16 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
     namespace drawing { class XShapes; }
     namespace chart2 { class XChartDocument; }
-    namespace chart2 { namespace data { class XDataProvider; } }
-    namespace chart2 { namespace data { class XDataSequence; } }
-} } }
+    namespace chart2::data { class XDataProvider; }
+    namespace chart2::data { class XDataSequence; }
+}
 
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
 namespace oox {
 namespace drawingml {

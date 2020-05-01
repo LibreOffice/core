@@ -25,9 +25,9 @@
 #include <sal/types.h>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace drawingml { struct FillProperties; } }
+namespace oox::drawingml { struct FillProperties; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 
 class BackgroundPropertiesContext final : public ::oox::core::FragmentHandler2
@@ -40,7 +40,7 @@ private:
     ::oox::drawingml::FillProperties& mrFillProperties;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
 

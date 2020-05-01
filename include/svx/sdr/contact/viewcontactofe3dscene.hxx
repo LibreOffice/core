@@ -32,7 +32,7 @@ namespace basegfx {
     class B3DRange;
 }
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class SVXCORE_DLLPUBLIC ViewContactOfE3dScene final : public ViewContactOfSdrObj
 {
@@ -96,7 +96,7 @@ private:
     drawinglayer::attribute::SdrLightingAttribute       maSdrLightingAttribute;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 

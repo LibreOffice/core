@@ -23,10 +23,9 @@
 
 class SvStream;
 namespace basegfx { class B2DHomMatrix; }
-namespace com { namespace sun { namespace star { namespace geometry { struct IntegerRectangle2D; } } } }
+namespace com::sun::star::geometry { struct IntegerRectangle2D; }
 
-namespace vcl {
-namespace bitmap {
+namespace vcl::bitmap {
 
 typedef sal_uInt8 (*lookup_table)[256];
 
@@ -130,7 +129,7 @@ bool VCL_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, Color& o_rBack, Co
 
 VCL_DLLPUBLIC bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult);
 
-}} // end vcl::bitmap
+} // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
 

@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class Context
 {
@@ -54,7 +54,7 @@ public:
     bool operator!= (const Context& rOther) const;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

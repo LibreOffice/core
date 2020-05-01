@@ -27,8 +27,8 @@
 
 #include <xmloff/xmlstyle.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XIndexReplace; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::container { class XIndexReplace; }
 
 class SvxXMLListLevelStyleContext_Impl;
 typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;

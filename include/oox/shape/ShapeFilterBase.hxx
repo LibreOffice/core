@@ -26,12 +26,12 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableStyleList;
 typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
 
-}}}
+}
 
 namespace oox {
 namespace shape {

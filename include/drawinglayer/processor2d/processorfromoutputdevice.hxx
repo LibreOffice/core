@@ -25,11 +25,11 @@
 
 class OutputDevice;
 
-namespace drawinglayer { namespace processor2d {
+namespace drawinglayer::processor2d {
     class BaseProcessor2D;
-}}
+}
 
-namespace drawinglayer { namespace geometry { class ViewInformation2D; } }
+namespace drawinglayer::geometry { class ViewInformation2D; }
 
 namespace drawinglayer
 {

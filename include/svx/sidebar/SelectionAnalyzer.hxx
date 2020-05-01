@@ -26,7 +26,7 @@ class SdrMarkList;
 class SdrObject;
 enum class SdrInventor : sal_uInt32;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 /** Analyze the current selection of Calc or Draw/Impress documents
     and return the associated sidebar context.
@@ -68,7 +68,7 @@ private:
         const sal_uInt16 nType);
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

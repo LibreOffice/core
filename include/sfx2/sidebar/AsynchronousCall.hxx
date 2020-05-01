@@ -25,7 +25,7 @@
 
 struct ImplSVEvent;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** A simple asynchronous call via Application::PostUserCall.
 */
@@ -48,7 +48,7 @@ private:
     DECL_LINK(HandleUserCall, void*, void);
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

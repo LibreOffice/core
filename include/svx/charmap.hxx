@@ -35,9 +35,9 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility { class XAccessible; }
-} } }
+}
 
 namespace com::sun::star::uno { class XComponentContext; }
 

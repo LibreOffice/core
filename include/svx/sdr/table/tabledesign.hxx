@@ -24,7 +24,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 const sal_Int32 first_row_style = 0;
 const sal_Int32 last_row_style = 1;
@@ -40,7 +40,7 @@ const sal_Int32 style_count = 10;
 
 extern SVX_DLLPUBLIC css::uno::Reference< css::container::XNameAccess > CreateTableDesignFamily();
 
-} }
+}
 
 
 #endif

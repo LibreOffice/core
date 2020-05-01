@@ -28,11 +28,11 @@
 class GDIMetaFile;
 class SotStorage;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
-} } }
+}
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }

@@ -29,9 +29,9 @@
 
 // predefines
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ViewInformation3D;
-}}
+}
 
 
 namespace drawinglayer

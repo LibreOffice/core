@@ -25,10 +25,10 @@
 #include <cppcanvas/customsprite.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XSpriteCanvas;
-} } } }
+}
 
 
 /* Definition of SpriteCanvas */
