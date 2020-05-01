@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/sidebar/TabBar.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sidebar/ControlFactory.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 #include <sidebar/Paint.hxx>
 #include <sfx2/sidebar/Theme.hxx>

@@ -30,7 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/fltcall.hxx>
+#include <fltcall.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>

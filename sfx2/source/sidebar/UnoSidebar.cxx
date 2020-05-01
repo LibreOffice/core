@@ -8,7 +8,7 @@
  *
  */
 
-#include <sfx2/sidebar/UnoSidebar.hxx>
+#include <sidebar/UnoSidebar.hxx>
 #include <sidebar/Tools.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>

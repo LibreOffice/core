@@ -41,7 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/fltcall.hxx>
+#include <fltcall.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
