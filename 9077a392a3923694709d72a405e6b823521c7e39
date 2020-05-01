@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29b27967_d0675290",
+        "filename": "connectivity/source/drivers/odbc/OConnection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-01T06:28:35Z",
+      "side": 1,
+      "message": "a better fix would be to set m_aConnectionHandle to SQL_NULL_HANDLE here",
+      "revId": "9077a392a3923694709d72a405e6b823521c7e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
