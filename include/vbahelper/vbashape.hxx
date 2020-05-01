@@ -37,21 +37,21 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class ShapeHelper;
     class XHelperInterface;
     namespace msforms { class XFillFormat; }
     namespace msforms { class XLineFormat; }
     namespace msforms { class XPictureFormat; }
-} }
+}
 
 typedef  ::cppu::WeakImplHelper< ov::msforms::XShape, css::lang::XEventListener > ListeningShape;
 

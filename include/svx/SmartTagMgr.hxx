@@ -31,37 +31,37 @@
 #include <map>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace smarttags {
+namespace com::sun::star::smarttags {
     class XSmartTagRecognizer;
     class XSmartTagAction;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace text {
+namespace com::sun::star::text {
     class XTextMarkup;
     class XTextRange;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace com::sun::star::i18n {
     class XBreakIterator;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     struct Locale;
     struct EventObject;
     struct ChangesEvent;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     class XPropertySet;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XController;
-} } } }
+}
 
 /** A reference to a smart tag action
 

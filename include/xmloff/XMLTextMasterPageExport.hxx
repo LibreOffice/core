@@ -24,9 +24,9 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/XMLPageExport.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XText; }
-} } }
+}
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageExport : public XMLPageExport
 {

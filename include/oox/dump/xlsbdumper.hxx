@@ -27,17 +27,17 @@
 
 #ifdef DBG_UTIL
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
     class BinaryInputStream;
     class SequenceInputStream;
 }
 
-namespace oox { namespace core { class FilterBase; } }
+namespace oox::core { class FilterBase; }
 
 namespace oox {
 namespace dump {

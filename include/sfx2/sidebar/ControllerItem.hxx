@@ -24,7 +24,7 @@
 namespace com::sun::star::lang { class XComponent; }
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** The sfx2::sidebar::ControllerItem is a wrapper around the
     SfxControllerItem that becomes necessary to allow objects (think
@@ -75,7 +75,7 @@ private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

@@ -22,8 +22,8 @@
 
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 
 /**
@@ -32,10 +32,10 @@ namespace com { namespace sun { namespace star { namespace uno { template <typen
  * Several definition used in im- and export of events
  */
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
     namespace beans { struct PropertyValue; }
-} } }
+}
 
 class SvXMLExport;
 class SvXMLImportContext;

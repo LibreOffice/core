@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class DisplayInfo;
 class ViewObjectContact;
@@ -48,7 +48,7 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 

@@ -27,9 +27,9 @@
 //   Forward Declarations
 class ImpCaptParams;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class CaptionProperties;
-}}
+}
 
 //   Helper Class SdrCaptObjGeoData
 class SdrCaptObjGeoData final : public SdrTextObjGeoData

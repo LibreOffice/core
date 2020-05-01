@@ -24,8 +24,8 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class BitmapEx;
 class SvStream;

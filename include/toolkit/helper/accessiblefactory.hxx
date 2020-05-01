@@ -23,10 +23,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility {
+namespace com::sun::star::accessibility {
     class XAccessible;
     class XAccessibleContext;
-} } } }
+}
 class VCLXButton;
 class VCLXCheckBox;
 class VCLXRadioButton;

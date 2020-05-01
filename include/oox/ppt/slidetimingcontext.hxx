@@ -27,7 +27,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class SlideTimingContext final : public ::oox::core::FragmentHandler2
 {
@@ -41,7 +41,7 @@ private:
     TimeNodePtrList & maTimeNodeList;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 

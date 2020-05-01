@@ -27,9 +27,9 @@
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 enum class SotClipboardFormatId : sal_uInt32;
 

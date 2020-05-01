@@ -45,7 +45,7 @@ class MultiPropertySetHelper;
 enum class XMLShapeExportFlags;
 class SvXMLExportPropertyMapper;
 
-namespace com { namespace sun { namespace star
+namespace com::sun::star
 {
     namespace beans { class XPropertySet; class XPropertyState;
                       class XPropertySetInfo; }
@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
                      class XTextField; }
-} } }
+}
 
 namespace xmloff
 {

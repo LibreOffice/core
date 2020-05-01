@@ -57,8 +57,8 @@ class NotifyEvent;
 class SfxInPlaceClient;
 namespace vcl { class PrinterController; }
 
-namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardListener; } }
-namespace com::sun::star::datatransfer { namespace clipboard { class XClipboardNotifier; } }
+namespace com::sun::star::datatransfer::clipboard { class XClipboardListener; }
+namespace com::sun::star::datatransfer::clipboard { class XClipboardNotifier; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }

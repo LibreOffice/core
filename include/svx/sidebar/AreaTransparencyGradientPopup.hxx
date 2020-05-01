@@ -23,7 +23,7 @@
 
 class XFillFloatTransparenceItem;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class AreaTransparencyGradientControl;
 class AreaPropertyPanelBase;
@@ -61,7 +61,7 @@ public:
     void Rearrange(XFillFloatTransparenceItem const * pItem);
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

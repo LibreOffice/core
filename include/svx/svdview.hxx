@@ -50,7 +50,7 @@
 //         SdrView         View
 
 class SvxURLField;
-namespace sdr { namespace contact { class ObjectContact; }}
+namespace sdr::contact { class ObjectContact; }
 
 enum class SdrViewContext {
     Standard,

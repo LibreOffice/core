@@ -25,10 +25,10 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace rtl { template <class reference_type> class Reference; }
 
-namespace com { namespace sun { namespace star
+namespace com::sun::star
 {
     namespace style
     {
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star
         class XNameAccess;
     }
 
-} } }
+}
 
 class SvXMLExportPropertyMapper;
 class SvXMLAutoStylePoolP;

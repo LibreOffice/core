@@ -23,8 +23,8 @@
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::security { class XCertificate; }
 
 
 namespace ucbhelper {

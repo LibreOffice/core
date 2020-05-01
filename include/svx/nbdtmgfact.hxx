@@ -21,9 +21,10 @@
 
 #include <svx/nbdtmg.hxx>
 
-namespace svx { namespace sidebar { namespace NBOutlineTypeMgrFact {
+namespace svx::sidebar::NBOutlineTypeMgrFact {
     SVX_DLLPUBLIC NBOTypeMgrBase* CreateInstance(const NBOType aType);
-}}}
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

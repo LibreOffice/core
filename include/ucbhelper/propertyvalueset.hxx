@@ -30,15 +30,15 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace script {
+namespace com::sun::star::script {
     class XTypeConverter;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     class XPropertySet;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 enum class PropsSet;
 namespace ucbhelper_impl { struct PropertyValue; }

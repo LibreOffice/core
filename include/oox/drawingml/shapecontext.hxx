@@ -28,7 +28,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ShapeContext : public ::oox::core::ContextHandler2
 {
@@ -46,7 +46,7 @@ protected:
     ShapePtr mpShapePtr;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_SHAPECONTEXT_HXX
 

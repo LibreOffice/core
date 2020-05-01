@@ -30,14 +30,14 @@
 #include <tools/ref.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { class XControlModel; }
     namespace awt { struct Size; }
     namespace form { class XFormComponent; }
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 class SotStorage;
 class SotStorageStream;

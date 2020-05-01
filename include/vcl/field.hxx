@@ -29,7 +29,7 @@
 #include <vcl/spinfld.hxx>
 #include <tools/fldunit.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::lang { struct Locale; }
 
 class CalendarWrapper;
 class LocaleDataWrapper;

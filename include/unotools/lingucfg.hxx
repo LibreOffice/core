@@ -28,8 +28,8 @@
 #include <i18nlangtag/lang.h>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XChangesBatch; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::util { class XChangesBatch; }
 
 class SvtLinguConfigItem;
 

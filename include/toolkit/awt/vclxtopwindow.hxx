@@ -28,7 +28,7 @@
 
 #include <toolkit/awt/vclxcontainer.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { class XMenuBar; } } } }
+namespace com::sun::star::awt { class XMenuBar; }
 
 typedef ::cppu::ImplHelper2 <   css::awt::XTopWindow2, css::awt::XSystemDependentWindowPeer
                             >   VCLXTopWindow_XBase;

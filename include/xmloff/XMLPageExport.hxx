@@ -29,11 +29,11 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace style { class XStyle; }
     namespace container { class XNameAccess;}
     namespace beans { class XPropertySet; }
-} } }
+}
 
 class SvXMLExport;
 class XMLPropertyHandlerFactory;

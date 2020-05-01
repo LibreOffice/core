@@ -31,9 +31,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace dom { class XDocument; } }
-} } }
+namespace com::sun::star {
+    namespace xml::dom { class XDocument; }
+}
 
 namespace oox {
 namespace drawingml {

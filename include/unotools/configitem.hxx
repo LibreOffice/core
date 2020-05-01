@@ -28,7 +28,7 @@
 #include <unotools/options.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star {
     namespace uno{
         class Any;
     }
@@ -41,7 +41,7 @@ namespace com{ namespace sun{ namespace star{
     namespace util{
         class XChangesListener;
     }
-}}}
+}
 
 enum class ConfigItemMode
 {

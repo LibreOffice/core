@@ -31,12 +31,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
     namespace graphic { class XGraphic; }
-} } }
+}
 
 namespace oox {
 namespace vml {

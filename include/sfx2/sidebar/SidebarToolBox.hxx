@@ -26,7 +26,7 @@
 
 namespace com::sun::star::frame { class XToolbarController; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** The sidebar tool box has two responsibilities:
     1. Coordinated location, size, and other states with its parent
@@ -78,7 +78,7 @@ protected:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

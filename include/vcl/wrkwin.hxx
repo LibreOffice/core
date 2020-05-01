@@ -24,7 +24,7 @@
 #include <vcl/syswin.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
+namespace com::sun::star::uno { class Any; }
 struct SystemParentData;
 
 

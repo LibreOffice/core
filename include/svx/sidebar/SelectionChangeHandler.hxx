@@ -32,7 +32,7 @@
 class SdrMarkView;
 
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 typedef cppu::WeakComponentImplHelper<
     css::view::XSelectionChangeListener
@@ -69,7 +69,7 @@ private:
 };
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 
 #endif

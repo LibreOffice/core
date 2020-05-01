@@ -32,7 +32,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class Any;
     }
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
         struct DateTime;
         struct Duration;
     }
-} } }
+}
 
 namespace sax {
 

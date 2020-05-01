@@ -44,12 +44,12 @@
 
 class Color;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace beans { class XPropertySet; }
     namespace drawing { struct EnhancedCustomShapeParameter; }
     namespace drawing { struct Hatch; }
-} } }
+}
 
 namespace tools {
     class Polygon;
@@ -441,7 +441,7 @@ enum MSOPATHTYPE
 
 const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cluster in DGG atom.
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt {
         struct Gradient;
     }
@@ -450,7 +450,7 @@ namespace com { namespace sun { namespace star {
         class XShape;
         class XShapes;
     }
-}}}
+}
 
 struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 {

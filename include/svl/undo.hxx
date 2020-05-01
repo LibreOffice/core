@@ -171,11 +171,11 @@ protected:
 };
 
 
-namespace svl { namespace undo { namespace impl
+namespace svl::undo::impl
 {
     class UndoManagerGuard;
     class LockGuard;
-} } }
+}
 
 struct SfxUndoManager_Data;
 class SVL_DLLPUBLIC SfxUndoManager

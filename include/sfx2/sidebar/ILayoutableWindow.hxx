@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <com/sun/star/ui/LayoutSize.hpp>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 
 class SFX2_DLLPUBLIC ILayoutableWindow
@@ -38,7 +38,7 @@ public:
 };
 
 
-} } // end of namespace ::sd::sidebar
+} // end of namespace ::sd::sidebar
 
 #endif
 

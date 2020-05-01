@@ -27,7 +27,7 @@ class SfxViewShell;
 
 namespace svt { class AcceleratorExecute; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class SidebarChildWindow;
 
@@ -71,7 +71,7 @@ private:
     std::unique_ptr<SidebarNotifyIdle> mpIdleNotify;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 
 #endif

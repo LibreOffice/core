@@ -17,11 +17,11 @@
 #include <oox/crypto/Standard2007Engine.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XStream; }
-} } }
+}
 
-namespace oox { namespace ole { class OleStorage; } }
+namespace oox::ole { class OleStorage; }
 
 namespace oox {
 namespace core {

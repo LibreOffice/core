@@ -32,9 +32,9 @@
 
 namespace com :: sun :: star :: frame { class XFrame; }
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */

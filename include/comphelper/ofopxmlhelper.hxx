@@ -24,11 +24,11 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace beans { struct StringPair; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::beans { struct StringPair; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
 {

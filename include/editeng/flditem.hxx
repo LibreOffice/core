@@ -27,11 +27,9 @@
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
-namespace com { namespace sun { namespace star { namespace text {
-
-class XTextContent;
-
-}}}}
+namespace com::sun::star::text {
+    class XTextContent;
+}
 
 class SvNumberFormatter;
 class MetaAction;

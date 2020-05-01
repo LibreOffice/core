@@ -33,16 +33,16 @@
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace container { class XEnumeration; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XDocumentsBase;
     class XHelperInterface;
-} }
+}
 
 typedef CollTestImplHelper< ooo::vba::XDocumentsBase > VbaDocumentsBase_BASE;
 

@@ -26,11 +26,11 @@
 
 class SvStream;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
-} } }
+}
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }

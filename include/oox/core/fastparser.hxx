@@ -26,14 +26,14 @@
 #include <sal/types.h>
 #include <oox/dllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace uno { class XComponentContext; }
-    namespace xml { namespace sax { class XFastDocumentHandler; } }
-    namespace xml { namespace sax { class XFastParser; } }
-    namespace xml { namespace sax { class XFastTokenHandler; } }
-    namespace xml { namespace sax { struct InputSource; } }
-} } }
+    namespace xml::sax { class XFastDocumentHandler; }
+    namespace xml::sax { class XFastParser; }
+    namespace xml::sax { class XFastTokenHandler; }
+    namespace xml::sax { struct InputSource; }
+}
 
 namespace oox {
     struct NamespaceMap;

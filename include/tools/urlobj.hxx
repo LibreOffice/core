@@ -30,11 +30,11 @@
 
 class SvMemoryStream;
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XStringWidth;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 // Common URL prefixes for various schemes:
 #define INET_FTP_SCHEME "ftp://"

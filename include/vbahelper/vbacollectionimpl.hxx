@@ -46,14 +46,14 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XEnumerationAccess; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
-} }
+}
 
 typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper_BASE;
 

@@ -36,7 +36,7 @@
 #include <tools/fract.hxx>
 #include <vcl/mapmod.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 namespace beans {
     class XPropertySet;
 }
@@ -54,7 +54,7 @@ namespace uno {
     class XComponentContext;
     class XInterface;
 }
-}}}
+}
 
 namespace oox {
 namespace core {
@@ -76,7 +76,7 @@ OOX_DLLPUBLIC css::uno::Reference<css::io::XInputStream> GetOLEObjectStream(
 
 }
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
@@ -203,7 +203,7 @@ public:
     static sal_Int32 GetShapeID( const css::uno::Reference< css::drawing::XShape >& rShape, ShapeHashMap* pShapeMap );
 };
 
-}}
+}
 
 #endif // INCLUDED_OOX_EXPORT_SHAPES_HXX
 

@@ -27,7 +27,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class SlideMasterTextStylesContext final : public oox::core::FragmentHandler2
 {
@@ -40,7 +40,7 @@ private:
     SlidePersistPtr     mpSlidePersistPtr;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_SLIDEMASTERTEXTSTYLESCONTEXT_HXX
 

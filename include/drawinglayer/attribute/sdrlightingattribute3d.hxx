@@ -33,10 +33,10 @@ namespace basegfx {
     class B3DVector;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrLightingAttribute;
     class Sdr3DLightAttribute;
-}}
+}
 
 
 namespace drawinglayer

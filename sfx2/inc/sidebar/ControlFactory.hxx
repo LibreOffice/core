@@ -26,7 +26,7 @@ class CheckBox;
 class RadioButton;
 namespace vcl { class Window; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Factory for controls used in sidebar panels.
     The reason to use this factory instead of creating the controls
@@ -44,7 +44,7 @@ public:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

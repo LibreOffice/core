@@ -32,7 +32,7 @@ namespace com :: sun :: star :: frame { class XModel; }
 namespace com :: sun :: star :: lang { class XComponent; }
 namespace com :: sun :: star :: view { class XRenderable; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XShapes;
         class XShape;
@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace frame {
         class XController;
     }
-}}}
+}
 
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {

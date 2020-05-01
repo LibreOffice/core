@@ -54,32 +54,32 @@ class TextChainFlow;
 enum class EEAnchorMode;
 enum class EETextFormat;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class TextProperties;
-}}
+}
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     class SdrContourTextPrimitive2D;
     class SdrPathTextPrimitive2D;
     class SdrBlockTextPrimitive2D;
     class SdrAutoFitTextPrimitive2D;
     class SdrStretchTextPrimitive2D;
     class SdrChainedTextPrimitive2D;
-}}
+}
 
-namespace drawinglayer { namespace animation {
+namespace drawinglayer::animation {
     class AnimationEntryList;
-}}
+}
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ViewInformation2D;
-}}
+}
 
-namespace sdr { namespace table {
+namespace sdr::table {
     class Cell;
     class SdrTableRtfExporter;
     class SdrTableRTFParser;
-}}
+}
 
 
 //   Defines

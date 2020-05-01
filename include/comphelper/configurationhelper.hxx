@@ -26,8 +26,8 @@
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { class XInterface; }
 
 namespace comphelper
 {

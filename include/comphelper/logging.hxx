@@ -38,7 +38,7 @@ namespace comphelper
     //= EventLogger
 
 
-    namespace log { namespace convert
+    namespace log::convert
     {
         inline const OUString& convertLogArgToString( const OUString& _rValue )
         {
@@ -59,7 +59,7 @@ namespace comphelper
         inline OUString convertLogArgToString( bool    _bValue ) { return OUString::boolean( _bValue ); }
         void convertLogArgToString(sal_Bool) = delete;
 
-    } } // namespace log::convert
+    } // namespace log::convert
 
 
     //= EventLogger

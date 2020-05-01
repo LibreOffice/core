@@ -66,9 +66,9 @@ OString write1000thOfAPercent(T number)
     return OString::number( lround(number * 1000.0) );
 }
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
     enum DocumentType { DOCUMENT_DOCX, DOCUMENT_PPTX, DOCUMENT_XLSX };
-} }
+}
 
 #endif
 

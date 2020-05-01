@@ -35,9 +35,9 @@ class OutputDevice;
 class SdrModel;
 namespace vcl { class Region; }
 
-namespace sdr { namespace overlay {
+namespace sdr::overlay {
     class OverlayObject;
-}}
+}
 
 namespace basegfx {
     class B2DRange;

@@ -254,13 +254,13 @@ inline void operator <<=( css::uno::Any & rAny, Color value )
 {
     rAny <<= sal_Int32(value);
 }
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     template<>
     inline Any makeAny( Color const & value )
     {
         return Any(sal_Int32(value));
     }
-} } } }
+}
 
 // Test compile time conversion of Color to sal_uInt32
 

@@ -30,7 +30,7 @@ namespace oox {
     namespace drawingml { class Shape; }
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class PPTShapePropertiesContext final : public ::oox::drawingml::ShapePropertiesContext
 {
@@ -40,7 +40,7 @@ public:
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
 

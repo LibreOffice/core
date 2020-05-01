@@ -66,11 +66,11 @@ class SfxItemSet;
 struct DffObjData;
 class SvGlobalName;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace embed { class XEmbeddedObject; }
     namespace embed { class XStorage; }
-} } }
+}
 
 class MSFILTER_DLLPUBLIC SvxMSDffClientData
 {

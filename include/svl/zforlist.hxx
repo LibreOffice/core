@@ -35,9 +35,9 @@
 #include <memory>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace i18n { class XNumberFormatCode; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct Currency; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct NumberFormatCode; } } } }
+namespace com::sun::star::i18n { class XNumberFormatCode; }
+namespace com::sun::star::i18n { struct Currency; }
+namespace com::sun::star::i18n { struct NumberFormatCode; }
 
 class Date;
 class Color;
@@ -47,12 +47,7 @@ class CalendarWrapper;
 class ImpSvNumberformatScan;
 class ImpSvNumberInputScan;
 class SvNumberformat;
-
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-}}}
+namespace com::sun::star::uno { class XComponentContext; }
 
 #define SV_COUNTRY_LANGUAGE_OFFSET     10000  // Max count of formats per country/language
 #define SV_MAX_COUNT_STANDARD_FORMATS  100    // Max count of builtin default formats per CL

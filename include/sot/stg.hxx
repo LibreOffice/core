@@ -27,9 +27,9 @@
 #include <sot/sotdllapi.h>
 #include <config_options.h>
 
-namespace com { namespace sun { namespace star { namespace ucb { class XProgressHandler; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::ucb { class XProgressHandler; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class StgIo;
 class StgDirEntry;

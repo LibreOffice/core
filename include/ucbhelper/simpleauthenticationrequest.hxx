@@ -24,9 +24,9 @@
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
   class URLAuthenticationRequest;
-} } } }
+}
 
 namespace ucbhelper {
 

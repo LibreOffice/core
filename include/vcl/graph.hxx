@@ -40,7 +40,7 @@ enum class GraphicType
     Default
 };
 
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
+namespace com::sun::star::graphic { class XGraphic; }
 namespace vcl { class Font; }
 
 class Bitmap;

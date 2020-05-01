@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace io { class XDataInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XDataOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XMarkableStream; } } } }
+namespace com::sun::star::io { class XDataInputStream; }
+namespace com::sun::star::io { class XDataOutputStream; }
+namespace com::sun::star::io { class XMarkableStream; }
 
 namespace comphelper
 {

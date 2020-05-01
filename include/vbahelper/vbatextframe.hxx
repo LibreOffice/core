@@ -32,15 +32,15 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace drawing { class XShape; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
-} }
+}
 
 typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XTextFrame > VbaTextFrame_BASE;
 

@@ -17,7 +17,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 struct CommentAuthor
 {
@@ -110,7 +110,7 @@ class CommentList
         const Comment& getCommentAtIndex (int index);
 };
 
-} }
+}
 
 #endif
 

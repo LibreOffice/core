@@ -25,7 +25,7 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace basegfx
 {

@@ -25,7 +25,7 @@
 
 #include <com/sun/star/util/Date.hpp>
 
-namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
+namespace com::sun::star::util { struct DateTime; }
 
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };

@@ -30,12 +30,12 @@ namespace basegfx {
     class BColor;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrFillAttribute;
     class FillGradientAttribute;
     class FillHatchAttribute;
     class SdrFillGraphicAttribute;
-}}
+}
 
 
 namespace drawinglayer

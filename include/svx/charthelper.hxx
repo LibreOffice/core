@@ -24,11 +24,11 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace embed { class XEmbeddedObject; }
     namespace frame { class XModel; }
     namespace uno { template <typename > class Reference; }
-} } }
+}
 
 namespace basegfx { class B2DRange; }
 

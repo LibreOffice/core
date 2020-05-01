@@ -24,11 +24,11 @@
 #include <svx/svxdllapi.h>
 #include <vcl/window.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility { class XAccessibleComponent; }
     namespace document { class XShapeEventBroadcaster; }
     namespace frame { class XController; }
-} } }
+}
 
 class SdrView;
 

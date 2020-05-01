@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-namespace drawinglayer { namespace primitive2d { class TextSimplePortionPrimitive2D; } }
+namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
 
 
 namespace drawinglayer

@@ -46,7 +46,7 @@
 #include <svx/svxdllapi.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility { class XAccessible; }
     namespace accessibility { class XAccessibleEventListener; }
     namespace accessibility { class XAccessibleHyperlink; }
@@ -56,7 +56,7 @@ namespace com { namespace sun { namespace star {
     namespace document { struct EventObject; }
     namespace drawing { class XShape; }
     namespace uno { class XInterface; }
-} } }
+}
 
 class SdrObject;
 

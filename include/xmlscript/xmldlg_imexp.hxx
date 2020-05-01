@@ -23,13 +23,13 @@
 
 #include <xmlscript/xmlscriptdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XInputStreamProvider; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XExtendedDocumentHandler; } } } } }
+namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XInputStreamProvider; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
+namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 
 namespace xmlscript
 {

@@ -29,10 +29,10 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XFrame; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace svt {
     class AcceleratorExecute;

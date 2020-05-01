@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 enum class ImageLoadFlags : sal_uInt16
 {
@@ -39,9 +39,9 @@ namespace o3tl {
 template<> struct typed_flags<ImageLoadFlags>: is_typed_flags<ImageLoadFlags, 0x3> {};
 }
 
-namespace com { namespace sun { namespace star { namespace container {
+namespace com::sun::star::container {
     class XNameAccess;
-}}}}
+}
 
 class ImplImageTree;
 class BitmapEx;

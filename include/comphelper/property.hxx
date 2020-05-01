@@ -26,7 +26,7 @@
 #include <type_traits>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
 
 namespace comphelper
 {

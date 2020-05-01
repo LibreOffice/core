@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace osl { class Mutex; }
 
 /*-************************************************************************************************************

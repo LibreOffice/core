@@ -42,21 +42,21 @@ namespace basegfx
     class B2IRange;
 }
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com::sun::star::geometry
 {
     struct RealSize2D;
     struct IntegerPoint2D;
     struct IntegerSize2D;
     struct IntegerRectangle2D;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XBitmap;
     class  XIntegerReadOnlyBitmap;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace rendering { class XColorSpace; } } } }
+namespace com::sun::star::rendering { class XColorSpace; }
 
 namespace vcl
 {

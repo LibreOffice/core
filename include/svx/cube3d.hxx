@@ -27,7 +27,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
 
-namespace sdr { namespace contact { class ViewContact; } }
+namespace sdr::contact { class ViewContact; }
 
 class E3dDefaultAttributes;
 

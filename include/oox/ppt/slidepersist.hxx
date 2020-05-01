@@ -35,15 +35,15 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace animations { class XAnimationNode; }
     namespace drawing { class XDrawPage; }
-} } }
+}
 
-namespace oox { namespace core { class XmlFilterBase; } }
-namespace oox { namespace vml { class Drawing; } }
+namespace oox::core { class XmlFilterBase; }
+namespace oox::vml { class Drawing; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 enum ShapeLocation
 {
@@ -157,7 +157,7 @@ private:
     CommentAuthorList                                                       maCommentAuthors;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 

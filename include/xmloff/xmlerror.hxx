@@ -87,11 +87,11 @@ namespace o3tl
     template<> struct typed_flags<SvXMLErrorFlags> : is_typed_flags<SvXMLErrorFlags, 0x7> {};
 }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Sequence; }
     namespace uno { template<class X> class Reference; }
-    namespace xml { namespace sax { class XLocator; } }
-} } }
+    namespace xml::sax { class XLocator; }
+}
 
 class ErrorRecord;
 

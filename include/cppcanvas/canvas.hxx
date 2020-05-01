@@ -29,11 +29,11 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XCanvas;
     struct ViewState;
-} } } }
+}
 
 
 /* Definition of BitmapCanvas */

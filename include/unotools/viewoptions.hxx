@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
 namespace osl { class Mutex; }
 
 class SvtViewOptionsBase_Impl;

@@ -22,8 +22,8 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <memory>
 
-namespace drawinglayer { namespace geometry { class ViewInformation2D; } }
-namespace drawinglayer { namespace processor2d { class BaseProcessor2D; } }
+namespace drawinglayer::geometry { class ViewInformation2D; }
+namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
 class OutputDevice;
 

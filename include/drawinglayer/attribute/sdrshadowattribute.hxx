@@ -31,9 +31,9 @@ namespace basegfx {
     class B2DVector;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrShadowAttribute;
-}}
+}
 
 
 namespace drawinglayer

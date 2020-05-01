@@ -26,10 +26,10 @@
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }
-namespace sfx2 { namespace sidebar { class DeckDescriptor; } }
-namespace sfx2 { namespace sidebar { class PanelDescriptor; } }
+namespace sfx2::sidebar { class DeckDescriptor; }
+namespace sfx2::sidebar { class PanelDescriptor; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class Context;
 class ContextList;
@@ -128,7 +128,7 @@ private:
     std::shared_ptr<PanelDescriptor> ImplGetPanelDescriptor(const OUString& rsPanelId) const;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

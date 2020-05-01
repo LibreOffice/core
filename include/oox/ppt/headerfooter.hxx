@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_HEADERFOOTER_HXX
 #define INCLUDED_OOX_PPT_HEADERFOOTER_HXX
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     struct HeaderFooter
     {
@@ -36,7 +36,7 @@ namespace oox { namespace ppt {
         , mbDateTime( true ) {};
     };
 
-} }
+}
 
 #endif
 

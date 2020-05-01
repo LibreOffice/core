@@ -47,23 +47,23 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
-namespace com { namespace sun { namespace star { namespace document { class XEmbeddedObjectResolver; } } } }
-namespace com { namespace sun { namespace star { namespace document { class XGraphicStorageHandler; } } } }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastAttributeList; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastContextHandler; } } } } }
-namespace com { namespace sun { namespace star {
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::document { class XEmbeddedObjectResolver; }
+namespace com::sun::star::document { class XGraphicStorageHandler; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::xml::sax { class XAttributeList; }
+namespace com::sun::star::xml::sax { class XFastAttributeList; }
+namespace com::sun::star::xml::sax { class XFastContextHandler; }
+namespace com::sun::star {
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
     namespace rdf { class XMetadatable; }
-} } }
+}
 
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 namespace comphelper { class AttributeList; }

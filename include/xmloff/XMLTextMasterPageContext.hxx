@@ -25,9 +25,9 @@
 
 #include <xmloff/xmlstyle.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace style { class XStyle; }
-} } }
+}
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {

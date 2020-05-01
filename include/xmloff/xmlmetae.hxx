@@ -32,8 +32,8 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-namespace com { namespace sun { namespace star { namespace document { class XDocumentProperties; } } } }
-namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
+namespace com::sun::star::document { class XDocumentProperties; }
+namespace com::sun::star::util { struct DateTime; }
 
 
 class SvXMLExport;

@@ -48,12 +48,12 @@
 #include <vcl/graph.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Size; }
     namespace drawing { class XShape; }
     namespace form { class XFormComponent; }
     namespace frame { class XModel; }
-} } }
+}
 
 class SdrPage;
 class SdrObject;

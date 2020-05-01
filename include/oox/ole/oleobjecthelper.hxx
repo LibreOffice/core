@@ -26,12 +26,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Size; }
     namespace document { class XEmbeddedObjectResolver; }
     namespace frame { class XModel; }
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
 namespace oox { class PropertyMap; }
 

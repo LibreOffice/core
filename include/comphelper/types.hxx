@@ -25,12 +25,12 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     struct FontDescriptor;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { class XInterface; }
 
 
 namespace comphelper

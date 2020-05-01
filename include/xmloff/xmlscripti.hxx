@@ -24,9 +24,9 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XModel;
-}}}}
+}
 
 class XMLOFF_DLLPUBLIC XMLScriptContext final : public SvXMLImportContext
 {

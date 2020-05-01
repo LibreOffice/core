@@ -24,7 +24,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <config_options.h>
 
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::lang { struct Locale; }
 
 enum class TransliterationFlags;
 

@@ -30,7 +30,7 @@ namespace com::sun::star::ui { class XSidebarPanel; }
 namespace com::sun::star::ui { class XUIElement; }
 namespace com::sun::star::awt { class XWindow; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class PanelDescriptor;
 class PanelTitleBar;
@@ -87,7 +87,7 @@ private:
 };
 typedef std::vector<VclPtr<Panel> > SharedPanelContainer;
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

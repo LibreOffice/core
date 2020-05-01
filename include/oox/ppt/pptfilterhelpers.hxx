@@ -26,11 +26,11 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace animations { class XAnimationNode; }
-} } }
+}
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     // conversion of MS to OOo attributes.
     enum class AnimationAttributeEnum
@@ -92,7 +92,7 @@ namespace oox { namespace ppt {
      * i.e. convert occurrence of #{0,1}ppt_[xywh] to x,y, width, height.
      */
     OOX_DLLPUBLIC bool convertMeasure(OUString& rString);
-} }
+}
 
 #endif
 

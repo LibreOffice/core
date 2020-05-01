@@ -38,7 +38,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace drawing { class XShape; }
     namespace frame { class XFrame; }
@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace task { class XStatusIndicator; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace comphelper {
     class SequenceAsHashMap;
@@ -64,10 +64,10 @@ namespace oox {
     class ModelObjectHelper;
 }
 
-namespace oox { namespace ole {
+namespace oox::ole {
     class OleObjectHelper;
     class VbaProject;
-} }
+}
 
 namespace oox {
 namespace core {

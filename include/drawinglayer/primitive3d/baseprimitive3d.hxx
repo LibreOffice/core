@@ -44,11 +44,11 @@
 
 // predefines
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ViewInformation3D;
-}}
+}
 
-namespace drawinglayer { namespace primitive3d {
+namespace drawinglayer::primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DContainer and Primitive3DReference
     typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
@@ -72,7 +72,7 @@ namespace drawinglayer { namespace primitive3d {
         bool operator!=(const Primitive3DContainer& rB) const { return !operator==(rB); }
         basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& aViewInformation) const;
     };
-}}
+}
 
 
 // basePrimitive3D class

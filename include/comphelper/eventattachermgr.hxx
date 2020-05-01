@@ -23,14 +23,14 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 namespace uno {
     class XComponentContext;
 }
 namespace script {
     class XEventAttacherManager;
 }
-} } }
+}
 
 
 namespace comphelper

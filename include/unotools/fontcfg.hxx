@@ -30,8 +30,8 @@
 #include <unordered_set>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class LanguageTag;
 

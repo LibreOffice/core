@@ -34,19 +34,19 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
     class GraphicHelper;
-    namespace drawingml { namespace chart { class ChartConverter; } }
+    namespace drawingml::chart { class ChartConverter; }
     namespace ole { class VbaProject; }
     namespace vml { class Drawing; }
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 
 class PowerPointImport final : public oox::core::XmlFilterBase
@@ -99,7 +99,7 @@ private:
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PPTIMPORT_HXX
 

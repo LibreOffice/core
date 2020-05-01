@@ -20,14 +20,14 @@
 #include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct NamedValue; }
     namespace io { class XInputStream; }
     namespace io { class XStream; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace oox { namespace ole { class OleStorage; } }
+namespace oox::ole { class OleStorage; }
 
 namespace oox {
 namespace core {

@@ -27,14 +27,14 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
     namespace beans { struct PropertyValue; }
     namespace container { class XNameReplace; }
     namespace document { class XEventsSupplier; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 typedef ::std::pair<
             OUString,

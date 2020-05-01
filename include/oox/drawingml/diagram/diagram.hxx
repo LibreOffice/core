@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class DiagramData;
 typedef std::shared_ptr<DiagramData> DiagramDataPtr;
@@ -56,7 +56,7 @@ void loadDiagram(ShapePtr const& pShape,
 
 OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
 
-} }
+}
 
 #endif
 

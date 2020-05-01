@@ -34,17 +34,17 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { class XWindow2; }
     namespace awt { class XWindow; }
     namespace frame { class XController; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
-} }
+}
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XWindowBase > WindowBaseImpl_BASE;
 

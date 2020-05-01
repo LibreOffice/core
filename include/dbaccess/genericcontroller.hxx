@@ -62,7 +62,7 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { class XKeyHandler; }
     namespace awt { class XMouseClickHandler; }
     namespace awt { class XWindow; }
@@ -83,7 +83,7 @@ namespace com { namespace sun { namespace star {
     namespace ui { class XSidebarProvider; }
     namespace uno { class XComponentContext; }
     namespace util { class XURLTransformer; }
-} } }
+}
 
 namespace vcl { class Window; }
 namespace weld { class Window; }

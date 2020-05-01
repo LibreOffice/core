@@ -97,7 +97,7 @@ namespace com::sun::star::security { class XDocumentDigitalSignatures; }
 namespace com::sun::star::security { struct DocumentSignatureInformation; }
 namespace com::sun::star::task { class XInteractionHandler; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
@@ -107,7 +107,7 @@ namespace com { namespace sun { namespace star {
     namespace text {
         class XTextRange;
     }
-} } }
+}
 
 namespace sfx2 { class IXmlIdRegistry; }
 

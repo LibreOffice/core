@@ -27,11 +27,11 @@
 
 class SvXMLImport;
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml::sax { class XAttributeList; }
     namespace uno { class Any; }
-} } }
+}
 
 
 class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLGradientStyleImport

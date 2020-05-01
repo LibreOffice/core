@@ -25,12 +25,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
     class BinaryInputStream;

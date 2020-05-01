@@ -32,22 +32,22 @@
 
 #include <tools/fldunit.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XNumberingTypeInfo; }
-}}}
+}
 
 namespace basegfx
 {
     class B3DVector;
 }
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
-namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::drawing { struct Position3D; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::util { struct Date; }
 template <typename EnumT> struct SvXMLEnumMapEntry;
 template <typename EnumT> struct SvXMLEnumStringMapEntry;
 

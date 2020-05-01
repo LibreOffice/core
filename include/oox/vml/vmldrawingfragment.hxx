@@ -27,12 +27,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
-} } }
+}
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
 namespace oox {
 namespace vml {

@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
 
 struct VCL_DLLPUBLIC WmfExternal
 {

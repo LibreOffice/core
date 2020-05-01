@@ -34,7 +34,7 @@
 #define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 "PackageSHA1MS1252EncryptionKey"
 #define PACKAGE_ENCRYPTIONDATA_SHA1CORRECT "PackageSHA1CorrectEncryptionKey"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct NamedValue; }
     namespace embed { class XStorage; }
     namespace io {
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
     }
     namespace lang { class XSingleServiceFactory; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace comphelper {
 

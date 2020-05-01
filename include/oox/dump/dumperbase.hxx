@@ -42,20 +42,20 @@
 
 #ifdef DBG_UTIL
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XTextOutputStream2; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
     class TextInputStream;
 }
 
-namespace oox { namespace core {
+namespace oox::core {
     class FilterBase;
-} }
+}
 
 namespace oox {
 namespace dump {

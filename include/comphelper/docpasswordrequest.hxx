@@ -26,7 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace task { class XInteractionAbort; } } } }
+namespace com::sun::star::task { class XInteractionAbort; }
 
 namespace comphelper {
 

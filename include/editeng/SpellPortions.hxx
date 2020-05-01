@@ -26,9 +26,9 @@
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <vector>
 
-namespace com{ namespace sun{ namespace star{ namespace linguistic2{
+namespace com::sun::star::linguistic2 {
     class XSpellAlternatives;
-}}}}
+}
 
 namespace com::sun::star::linguistic2 { class XProofreader; }
 
