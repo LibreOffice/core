@@ -1165,6 +1165,28 @@ bool SwCursorShell::GotoPrevOutline()
     return bRet;
 }
 
+bool SwCursorShell::IsOutlineContentFolded(const size_t nPos)
+{
+    const SwNodes& rNodes = GetDoc()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    assert(nPos < rOutlineNodes.size());
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+    {
+        SwNode* pNd = &aIdx.GetNode();
+        if (pNd->IsContentNode() && pNd->GetContentNode()->getLayoutFrame(GetLayout()) != nullptr)
+            return false;
+    }
+
+    return true;
+}
+
 /// search "outline position" before previous outline node at given level
 SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
 {
