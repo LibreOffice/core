@@ -20,6 +20,20 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="1512">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_FOLD_OR_UNFOLD_OUTLINE_IN_DOCUMENT_ENTRY">Fold or Unfold Outline in Document Entry</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator1511">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="700">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

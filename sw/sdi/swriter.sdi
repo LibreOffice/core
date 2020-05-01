@@ -4819,6 +4819,24 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem FoldOrUnfoldOutline FN_FOLD_OR_UNFOLD_OUTLINE
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem RefreshView FN_REFRESH_VIEW
 ()
 [

@@ -136,6 +136,9 @@
 
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <frmtool.hxx>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -1079,6 +1082,44 @@ void SwView::Execute(SfxRequest &rReq)
         {
             m_pWrtShell->SetDefault( *pItem );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
+        }
+        break;
+
+    case FN_FOLD_OR_UNFOLD_OUTLINE:
+        {
+            const SwNodes& rNodes = m_pWrtShell->GetNodes();
+            const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+            SwOutlineNodes::size_type nPos(m_pWrtShell->GetOutlinePos());
+            if (nPos < rOutlineNodes.size())
+            {
+                SwNode* pSttNd = rOutlineNodes[nPos];
+                SwNode* pEndNd = &rNodes.GetEndOfContent();
+                if (rOutlineNodes.size() > nPos + 1)
+                    pEndNd = rOutlineNodes[nPos + 1];
+
+                if (m_pWrtShell->IsOutlineFolded(nPos))
+                {
+                    // unfold
+                    const SwNodeIndex aIdx(*pSttNd, 1);
+                    MakeFrames(m_pWrtShell->GetDoc(), aIdx, *pEndNd);
+                    m_pWrtShell->Reformat();
+                }
+                else
+                {
+                    // fold
+                    for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+                    {
+                        SwNode* pNd = &aIdx.GetNode();
+                        if (pNd->IsContentNode())
+                            pNd->GetContentNode()->DelFrames(nullptr);
+                        else if (pNd->IsTableNode())
+                            pNd->GetTableNode()->DelFrames(nullptr);
+                        else if (pNd->IsSectionNode())
+                            pNd->GetSectionNode()->DelFrames(nullptr);
+                    }
+                }
+                m_pWrtShell->GotoOutline(nPos);
+            }
         }
         break;
         case FN_NAV_ELEMENT:

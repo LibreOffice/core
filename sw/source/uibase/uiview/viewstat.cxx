@@ -55,6 +55,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <doc.hxx>
+#include <svl/stritem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -70,6 +71,15 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case FN_FOLD_OR_UNFOLD_OUTLINE:
+                {
+                    SwOutlineNodes::size_type nPos(m_pWrtShell->GetOutlinePos());
+                    if (nPos == SwOutlineNodes::npos)
+                        rSet.DisableItem(nWhich);
+                    else
+                        rSet.Put(SfxStringItem(nWhich, m_pWrtShell->IsOutlineFolded(nPos) ? OUString("Unfold Content") : OUString("Fold Content")));
+                }
+                break;
             case FN_NAV_ELEMENT:
                 // used to update all instances of this control
                 rSet.InvalidateItem( nWhich );

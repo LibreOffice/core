@@ -623,6 +623,8 @@ public:
     bool GotoNextOutline();
     bool GotoPrevOutline();
 
+    bool IsOutlineFolded(const size_t nPos);
+
     /** Delivers the current shell cursor
 
         Some operations have to run on the current cursor ring,

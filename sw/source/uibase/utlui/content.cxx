@@ -89,6 +89,8 @@
 #include <fmtcntnt.hxx>
 #include <docstat.hxx>
 
+#include <frmtool.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -1147,6 +1149,32 @@ static bool lcl_InsertExpandCollapseAllItem(weld::TreeView& rContentTree, weld::
     return true;
 }
 
+static bool lcl_RemoveFoldEntry(SwContentTree* pThis, weld::TreeView& rContentTree, weld::TreeIter& rEntry, weld::Menu& rPop)
+{
+    if (rContentTree.count_selected_rows() > 1)
+        return true;
+
+    const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    const size_t nPos = weld::GetAbsPos(rContentTree, rEntry) - 1;
+
+    if (nPos >= rOutlineNodes.size())
+        return true;
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    // outline node has content?
+    SwNodeIndex aIdx(*pSttNd);
+    if (rNodes.GoNext(&aIdx) == pEndNd)
+        return true;
+
+    rPop.set_label(OString::number(1512), pThis->GetWrtShell()->IsOutlineFolded(nPos) ? OUString("Unfold Content") : OUString("Fold Content"));
+    return false;
+}
+
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
@@ -1224,6 +1252,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
+    bool bRemoveFoldEntry = true;
 
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
@@ -1279,6 +1308,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             else if(ContentTypeId::OUTLINE == nContentType)
             {
                 bOutline = true;
+                bRemoveFoldEntry = lcl_RemoveFoldEntry(this, *m_xTreeView, *xEntry, *xPop);
                 bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
                 bRemoveSelectEntry = false;
                 bRemoveChapterEntries = false;
@@ -1344,6 +1374,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(804));
     }
 
+    if (bRemoveFoldEntry)
+    {
+        xPop->remove("separator1511");
+        xPop->remove(OString::number(1512));
+    }
+
     if (bRemoveSendOutlineEntry)
         xPop->remove(OString::number(700));
 
@@ -1373,7 +1409,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveEditEntry)
         xPop->remove(OString::number(403));
 
-    if (bRemoveToggleExpandEntry &&
+    if (bRemoveFoldEntry &&
+        bRemoveToggleExpandEntry &&
         bRemoveSelectEntry &&
         bRemoveChapterEntries &&
         bRemoveSendOutlineEntry &&
@@ -3352,6 +3389,13 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
     {
+        case 1512:
+        {
+            SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            GotoContent(pCnt);
+            m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FOLD_OR_UNFOLD_OUTLINE);
+        }
+        break;
         case 11:
         case 12:
         case 13:
