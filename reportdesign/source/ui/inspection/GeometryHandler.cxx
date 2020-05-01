@@ -35,7 +35,6 @@
 
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -43,7 +42,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/resary.hxx>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/StringRepresentation.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -67,8 +65,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <tools/fldunit.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <core_resource.hxx>
 #include <stringarray.hrc>
@@ -77,32 +75,11 @@
 #include <UITools.hxx>
 
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <metadata.hxx>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
-#include <svx/xdef.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xtable.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstcit.hxx>
-#include <svx/xlnedcit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/svxids.hrc>
-#include <svx/drawitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <sfx2/docfilt.hxx>
 
-#include <dlgpage.hxx>
 #include <helpids.h>
 #include <toolkit/helper/convert.hxx>
 #include <o3tl/functional.hxx>

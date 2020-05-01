@@ -23,21 +23,14 @@
 #include <DesignView.hxx>
 #include <UITools.hxx>
 
-#include <svtools/colorcfg.hxx>
-#include <svl/itempool.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <vcl/settings.hxx>
 
 #include <RptDef.hxx>
-#include <dlgedfunc.hxx>
-#include <RptModel.hxx>
 #include <strings.hxx>
-#include <RptPage.hxx>
 #include <ReportController.hxx>
-#include <EndMarker.hxx>
-#include <ColorChanger.hxx>
 #include <ScrollHelper.hxx>
 
 #include <helpids.h>

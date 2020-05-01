@@ -20,10 +20,6 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
-#include "xmlEnums.hxx"
-#include "xmlControlProperty.hxx"
-#include "xmlComponent.hxx"
 #include <strings.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

@@ -20,17 +20,12 @@
 #include <RptModel.hxx>
 #include <RptPage.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 
-#include <UndoActions.hxx>
 #include <UndoEnv.hxx>
 #include <ReportUndoFactory.hxx>
 #include <ReportDefinition.hxx>
 
-#include <svx/tbcontrl.hxx>
-#include <rptui_slotid.hrc>
 #include <RptDef.hxx>
 #include <strings.hxx>
 #include <FixedLine.hxx>

@@ -25,19 +25,12 @@
 #include <RptObject.hxx>
 #include <RptModel.hxx>
 #include <RptPage.hxx>
-#include <ViewsWindow.hxx>
 #include <ReportSection.hxx>
 #include <ReportController.hxx>
 #include <strings.hxx>
-#include <reportformula.hxx>
-#include <toolkit/helper/property.hxx>
 
 #include <tools/color.hxx>
-#include <svtools/extcolorcfg.hxx>
-#include <unotools/confignode.hxx>
 
-// DBG_*
-#include <tools/debug.hxx>
 // DBG_UNHANDLED_EXCEPTION
 #include <tools/diagnose_ex.h>
 

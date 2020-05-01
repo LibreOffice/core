@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <Function.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
-#include <connectivity/dbtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <Tools.hxx>
 
 namespace reportdesign
 {

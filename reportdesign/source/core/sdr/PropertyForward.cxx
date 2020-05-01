@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <PropertyForward.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <strings.hxx>
 

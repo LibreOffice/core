@@ -32,11 +32,9 @@
 #include <strings.hxx>
 #include <rptui_slotid.hrc>
 #include <dlgedclip.hxx>
-#include <ColorChanger.hxx>
 #include <RptObject.hxx>
 #include <EndMarker.hxx>
 #include <sal/log.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

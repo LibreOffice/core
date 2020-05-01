@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <vcl/scrbar.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -26,11 +25,7 @@
 
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/unolingu.hxx>
 #include <svx/svdetc.hxx>
-#include <editeng/editstat.hxx>
-#include <svx/svdoutl.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxids.hrc>

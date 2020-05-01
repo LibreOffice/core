@@ -18,24 +18,19 @@
  */
 #include <Section.hxx>
 #include <comphelper/enumhelper.hxx>
-#include <connectivity/dbtools.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <strings.hxx>
 #include <Tools.hxx>
 #include <RptModel.hxx>
 #include <RptPage.hxx>
+#include <ReportControlModel.hxx>
 #include <ReportDefinition.hxx>
-#include <Shape.hxx>
-#include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
-#include <RptObject.hxx>
-#include <ReportDrawPage.hxx>
 
 namespace reportdesign
 {

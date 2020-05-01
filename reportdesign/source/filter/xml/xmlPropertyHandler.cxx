@@ -18,10 +18,7 @@
  */
 
 #include "xmlPropertyHandler.hxx"
-#include "xmlfilter.hxx"
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
-#include <xmloff/nmspmap.hxx>
 
 
 namespace rptxml
@@ -29,7 +26,6 @@ namespace rptxml
 
     using namespace ::com::sun::star;
     using namespace xmloff;
-    using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
 
 OXMLRptPropHdlFactory::OXMLRptPropHdlFactory()

@@ -4,3 +4,32 @@ blacklist:
     reportdesign/inc/RptDef.hxx:
     # Needed for macro define
     - svx/fmglob.hxx
+    reportdesign/source/core/api/FormatCondition.cxx:
+    # Needed for COL_TRANSPARENT in REPORTCONTROLFORMAT_IMPL
+    - tools/color.hxx
+    reportdesign/source/core/api/FixedText.cxx:
+    # Needed for COL_TRANSPARENT in REPORTCONTROLFORMAT_IMPL
+    - tools/color.hxx
+    reportdesign/source/core/api/FormattedField.cxx:
+    # Needed for COL_TRANSPARENT in REPORTCONTROLFORMAT_IMPL
+    - tools/color.hxx
+    # Needed for template parameter
+    - com/sun/star/sdbc/XDataSource.hpp
+    reportdesign/source/filter/xml/dbloader2.cxx:
+    # Needed for template parameter
+    - com/sun/star/embed/XStorage.hpp
+    reportdesign/source/filter/xml/xmlControlProperty.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    reportdesign/source/ui/inspection/metadata.cxx:
+    # Actually used
+    - com/sun/star/inspection/XPropertyHandler.hpp
+    reportdesign/source/ui/misc/statusbarcontroller.cxx:
+    # Needed for template parameter
+    - com/sun/star/awt/XWindow.hpp
+    reportdesign/source/ui/misc/RptUndo.cxx:
+    # Actually used
+    - com/sun/star/report/XSection.hpp
+    reportdesign/source/ui/report/ReportController.cxx:
+    # Needed for template parameter
+    - com/sun/star/ui/dialogs/XFilePicker3.hpp

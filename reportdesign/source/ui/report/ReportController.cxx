@@ -32,55 +32,43 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/types.hxx>
 
 #include <connectivity/dbtools.hxx>
-#include <com/sun/star/view/PaperFormat.hpp>
-#include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/report/ReportEngine.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
 
+#include <i18nutil/paper.hxx>
 #include <svx/fmview.hxx>
-#include <editeng/paperinf.hxx>
 #include <editeng/memberids.h>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
@@ -114,8 +102,6 @@
 #include <svx/flagsdef.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/zoom_def.hxx>
-#include <svx/dialogs.hrc>
 
 #include <core_resource.hxx>
 #include <DesignView.hxx>
@@ -131,7 +117,6 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/aeitem.hxx>
 #include <svtools/cliplistener.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>

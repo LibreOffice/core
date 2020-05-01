@@ -19,7 +19,6 @@
 #include "xmlStyleImport.hxx"
 #include <xmloff/maptype.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/txtimppr.hxx>
 #include <xmloff/families.hxx>
@@ -27,7 +26,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include "xmlfilter.hxx"

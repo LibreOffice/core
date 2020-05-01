@@ -19,15 +19,9 @@
 
 
 #include <svx/dialogs.hrc>
-#include <svx/svxids.hrc>
-#include <svx/flagsdef.hxx>
-#include <svx/svxdlg.hxx>
-#include <editeng/svxenum.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <dlgpage.hxx>
-#include <strings.hrc>
-#include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
-#include <svl/aeitem.hxx>
 #include <osl/diagnose.h>
 
 namespace rptui

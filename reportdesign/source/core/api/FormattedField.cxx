@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <FormattedField.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <strings.hxx>
 #include <strings.hrc>
@@ -29,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <ReportHelperImpl.hxx>
 
 namespace reportdesign

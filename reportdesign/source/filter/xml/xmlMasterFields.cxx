@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "xmlMasterFields.hxx"
+#include "xmlReportElementBase.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
-#include "xmlReport.hxx"
 #include <sal/log.hxx>
 
 

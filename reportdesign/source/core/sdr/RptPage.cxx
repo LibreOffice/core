@@ -20,7 +20,6 @@
 #include <RptModel.hxx>
 #include <Section.hxx>
 #include <RptObject.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <ReportDrawPage.hxx>
 

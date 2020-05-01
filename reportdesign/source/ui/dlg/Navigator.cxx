@@ -23,9 +23,7 @@
 #include <bitmaps.hlst>
 #include <ReportController.hxx>
 #include <UITools.hxx>
-#include <RptUndo.hxx>
 #include <reportformula.hxx>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
@@ -42,14 +40,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
-#include <svl/solar.hrc>
 #include <ReportVisitor.hxx>
 #include <core_resource.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxids.hrc>
 
 #include <memory>
-#include <algorithm>
 
 namespace rptui
 {

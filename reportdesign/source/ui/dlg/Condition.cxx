@@ -23,30 +23,15 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <ReportController.hxx>
-#include <ColorChanger.hxx>
 #include <reportformula.hxx>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
 
 #include <svx/PaletteManager.hxx>
-#include <svx/tbcontrl.hxx>
 #include <svx/svxids.hrc>
-#include <svx/xtable.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <rtl/ustrbuf.hxx>
-#include <svtools/valueset.hxx>
 
 namespace rptui
 {

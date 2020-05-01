@@ -21,20 +21,14 @@
 
 #include <strings.hxx>
 #include <strings.hrc>
-#include <rptui_slotid.hrc>
 #include <core_resource.hxx>
-#include <UITools.hxx>
 #include <ReportController.hxx>
 #include "Condition.hxx"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <vcl/settings.hxx>
-
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/property.hxx>

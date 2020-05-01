@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <PageNumber.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rptui_slotid.hrc>
 #include <RptDef.hxx>
-#include <vcl/settings.hxx>
 
-#include <UITools.hxx>
 #include <strings.hxx>
 #include <ReportController.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <algorithm>
 
 namespace rptui
 {

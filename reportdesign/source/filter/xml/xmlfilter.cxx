@@ -24,14 +24,12 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/document/GraphicStorageHandler.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include "xmlfilter.hxx"
-#include "xmlGroup.hxx"
 #include "xmlReport.hxx"
 #include <vcl/errinf.hxx>
 #include "xmlHelper.hxx"
@@ -54,18 +52,15 @@
 #include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <tools/diagnose_ex.h>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
 #include <strings.hxx>
 #include "xmlPropertyHandler.hxx"
-#include <xmloff/txtprmap.hxx>
 #include <ReportDefinition.hxx>
 
 namespace rptxml

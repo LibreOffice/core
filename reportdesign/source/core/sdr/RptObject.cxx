@@ -17,56 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <RptObject.hxx>
-#include <vector>
 #include <algorithm>
 
 #include <RptDef.hxx>
 #include <svx/unoshape.hxx>
 #include <RptModel.hxx>
 #include <RptObjectListener.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <RptPage.hxx>
-#include <dbaccess/dbsubcomponentcontroller.hxx>
 
-#include <strings.hrc>
 #include <strings.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/sderitm.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlntrit.hxx>
 #include <svtools/embedhlp.hxx>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <com/sun/star/awt/XUnoControlContainer.hpp>
-#include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
+#include <svx/svdundo.hxx>
 #include <tools/diagnose_ex.h>
 #include <PropertyForward.hxx>
-#include <connectivity/dbtools.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <UndoActions.hxx>
 #include <UndoEnv.hxx>
-#include <functional>
 
 namespace rptui
 {
@@ -76,7 +56,6 @@ using namespace uno;
 using namespace beans;
 using namespace reportdesign;
 using namespace container;
-using namespace script;
 using namespace report;
 
 sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)

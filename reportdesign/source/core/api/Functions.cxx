@@ -22,7 +22,6 @@
 #include <strings.hrc>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <algorithm>
 
 namespace reportdesign
 {

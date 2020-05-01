@@ -21,13 +21,10 @@
 #include <RptPage.hxx>
 #include <RptObject.hxx>
 #include <RptDef.hxx>
-#include <svx/svxids.hrc>
 #include <svx/svddrgmt.hxx>
-#include <vcl/scrbar.hxx>
 #include <ReportSection.hxx>
 #include <ReportWindow.hxx>
 #include <strings.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace rptui

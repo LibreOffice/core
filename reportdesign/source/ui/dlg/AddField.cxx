@@ -18,19 +18,12 @@
  */
 #include <AddField.hxx>
 #include <UITools.hxx>
-#include <svx/svdpagv.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <rptui_slotid.hrc>
 
 #include <connectivity/dbtools.hxx>
 #include <core_resource.hxx>
@@ -38,8 +31,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace rptui

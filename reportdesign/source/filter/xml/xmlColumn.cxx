@@ -22,12 +22,12 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlstyle.hxx>
+#include <xmloff/prstylei.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sal/log.hxx>
 #include "xmlEnums.hxx"
 #include "xmlCell.hxx"
-#include "xmlStyleImport.hxx"
 #include "xmlTable.hxx"
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>

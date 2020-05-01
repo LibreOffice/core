@@ -20,29 +20,22 @@
 #include <UndoEnv.hxx>
 #include "formatnormalizer.hxx"
 #include <conditionupdater.hxx>
-#include <strings.hxx>
-#include <rptui_slotid.hrc>
-#include <RptDef.hxx>
-#include <RptObject.hxx>
 #include <RptPage.hxx>
 #include <strings.hrc>
 #include <RptModel.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 
-#include <connectivity/dbtools.hxx>
 #include <svl/hint.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
-#include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
 
 #include <unordered_map>

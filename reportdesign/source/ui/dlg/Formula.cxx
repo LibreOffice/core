@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <unotools/charclass.hxx>
 #include <unotools/viewoptions.hxx>
 #include <formula/formdata.hxx>
 #include <formula/funcutl.hxx>

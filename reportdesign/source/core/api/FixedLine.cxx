@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <FixedLine.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <ReportHelperImpl.hxx>
 
 #define MIN_WIDTH   80

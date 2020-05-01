@@ -20,12 +20,8 @@
 #include <strings.hxx>
 #include <RptObject.hxx>
 #include <RptDef.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#include <svx/svdoole2.hxx>
+
 namespace rptui
 {
 using namespace ::com::sun::star;

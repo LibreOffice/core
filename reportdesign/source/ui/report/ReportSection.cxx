@@ -39,10 +39,6 @@
 #include <svx/dbaexchange.hxx>
 #include <svx/sdtagitm.hxx>
 
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -51,18 +47,12 @@
 #include <SectionWindow.hxx>
 #include <helpids.h>
 #include <dlgedclip.hxx>
-#include <UndoActions.hxx>
 #include <rptui_slotid.hrc>
 
-#include <connectivity/dbtools.hxx>
-
 #include <vcl/commandevent.hxx>
-#include <vcl/lineinfo.hxx>
-#include <ColorChanger.hxx>
 
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
-#include <unotools/confignode.hxx>
 
 
 namespace rptui

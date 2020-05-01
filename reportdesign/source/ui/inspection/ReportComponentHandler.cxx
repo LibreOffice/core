@@ -19,15 +19,10 @@
 #include <ReportComponentHandler.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <tools/fldunit.hxx>
 #include <metadata.hxx>
 
 
