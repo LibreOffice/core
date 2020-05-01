@@ -459,7 +459,7 @@ public:
     //          3.Level Position (x+y)
     void     Sort();
     size_t   GetHdlCount() const { return maList.size(); }
-    SdrHdl*  GetHdl(size_t nNum) const { return maList[nNum].get(); }
+    SdrHdl*  GetHdl(size_t nNum) const { return nNum < maList.size() ? maList[nNum].get() : nullptr; }
     size_t   GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
