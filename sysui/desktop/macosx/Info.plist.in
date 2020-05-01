@@ -1833,6 +1833,26 @@
             <key>LSHandlerRank</key>
             <string>Alternate</string>
         </dict>
+        <dict>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>cwk</string>
+                <string>*</string>
+            </array>
+            <key>CFBundleTypeName</key>
+            <string>AppleWorks Document</string>
+            <key>CFBundleTypeOSTypes</key>
+            <array>
+                <string>CWWP</string>
+                <string>CWSS</string>
+                <string>CWDB</string>
+                <string>CWGR</string>
+                <string>CWPT</string>
+                <string>CWPR</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+        </dict>
     </array>
     <key>CFBundleExecutable</key>
     <string>soffice</string>
