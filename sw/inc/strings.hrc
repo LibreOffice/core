@@ -648,6 +648,8 @@
 #define STR_OUTLINE_TRACKING_FOCUS              NC_("STR_OUTLINE_TRACKING_FOCUS", "Focus")
 #define STR_OUTLINE_TRACKING_OFF                NC_("STR_OUTLINE_TRACKING_OFF", "Off")
 
+#define STR_FOLD_OUTLINE_CONTENT                NC_("STR_FOLD_OUTLINE_CONTENT", "Fold Content")
+#define STR_UNFOLD_OUTLINE_CONTENT              NC_("STR_UNFOLD_OUTLINE_CONTENT", "Unfold Content")
 #define STR_EXPANDALL                           NC_("STR_EXPANDALL", "Expand All")
 #define STR_COLLAPSEALL                         NC_("STR_COLLAPSEALL", "Collapse All")
 #define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Insert as Hyperlink")
