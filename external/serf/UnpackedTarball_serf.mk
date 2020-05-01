@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,serf,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,serf,\
 	external/serf/windows.build.patch.1 \
+	external/serf/ssl.verify.none.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
