@@ -18,9 +18,9 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XFastAttributeList; } }
-} } }
+namespace com::sun::star {
+    namespace xml::sax { class XFastAttributeList; }
+}
 
 namespace oox
 {

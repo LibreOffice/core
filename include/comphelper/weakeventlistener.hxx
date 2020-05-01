@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno { class XWeak; } } } }
+namespace com::sun::star::uno { class XWeak; }
 
 namespace comphelper
 {

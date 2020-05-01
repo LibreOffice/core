@@ -27,11 +27,9 @@
 
 class Menu;
 
-namespace com { namespace sun { namespace star {
-    namespace accessibility {
-        class XAccessible;
-    }
-}}}
+namespace com::sun::star::accessibility {
+    class XAccessible;
+}
 
 namespace vcl
 {

@@ -28,9 +28,9 @@ class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class MeasureProperties;
-}}
+}
 
 class SdrMeasureObjGeoData final : public SdrTextObjGeoData
 {

@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com{ namespace sun{ namespace star{ namespace uno{ class Any; } } } }
+namespace com::sun::star::uno { class Any; }
 
 class SvXMLUnitConverter;
 

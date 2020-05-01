@@ -27,7 +27,7 @@
 
 class ValueSet;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class LinePropertyPanelBase;
 class LineWidthValueSet;
@@ -64,7 +64,7 @@ private:
     DECL_LINK(FocusHdl, weld::Widget&, void);
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

@@ -34,13 +34,13 @@
 #include <tools/poly.hxx>
 
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XInterface;
-}}}}
+}
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     class XBitmap;
     class XWindow;
     class XWindow2;
@@ -57,7 +57,7 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct FontDescriptor;
     struct Rectangle;
     struct KeyEvent;
-}}}}
+}
 
 
 class FontMetric;

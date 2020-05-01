@@ -29,11 +29,11 @@
 
 struct XMLPropertyState;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace style { class XStyle; } } } }
+namespace com::sun::star::style { class XStyle; }
 
 typedef std::unordered_set<OUString> OldFillStyleDefinitionSet;
 

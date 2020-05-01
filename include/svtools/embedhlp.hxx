@@ -33,9 +33,9 @@ namespace comphelper
     class EmbeddedObjectContainer;
 }
 
-namespace com { namespace sun { namespace star { namespace embed {
+namespace com::sun::star::embed {
     class XEmbeddedObject;
-}}}}
+}
 
 class OutputDevice;
 

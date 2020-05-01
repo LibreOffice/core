@@ -31,9 +31,9 @@
 #include <memory>
 #include <array>
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     struct Point;
-} } } }
+}
 
 /*************************************************************************
 |* Derived from SfxTabPage for being able to get notified through the

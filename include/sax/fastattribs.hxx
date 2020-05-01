@@ -28,9 +28,9 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastTokenHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { struct Attribute; } } } }
-namespace com { namespace sun { namespace star { namespace xml { struct FastAttribute; } } } }
+namespace com::sun::star::xml::sax { class XFastTokenHandler; }
+namespace com::sun::star::xml { struct Attribute; }
+namespace com::sun::star::xml { struct FastAttribute; }
 
 namespace sax_fastparser
 {

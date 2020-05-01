@@ -25,13 +25,8 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-}}}
-
-namespace com { namespace sun { namespace star { namespace i18n { class XNativeNumberSupplier2; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::i18n { class XNativeNumberSupplier2; }
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) NativeNumberWrapper
 {

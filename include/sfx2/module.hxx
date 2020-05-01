@@ -39,9 +39,9 @@ class SfxTbxCtrlFactArr_Impl;
 class SfxStbCtrlFactArr_Impl;
 class SfxChildWinFactArr_Impl;
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XFrame;
-} } } }
+}
 
 namespace weld {
     class Container;

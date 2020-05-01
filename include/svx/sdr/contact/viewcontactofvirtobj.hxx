@@ -24,7 +24,7 @@
 
 class SdrVirtObj;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class SVXCORE_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
 {
@@ -47,7 +47,7 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 

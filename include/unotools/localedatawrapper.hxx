@@ -35,17 +35,12 @@
 #include <memory>
 #include <map>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-}}}
-
-namespace com { namespace sun { namespace star { namespace i18n { class XLocaleData5; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct Calendar2; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct Currency2; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct FormatElement; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct CalendarItem2; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::i18n { class XLocaleData5; }
+namespace com::sun::star::i18n { struct Calendar2; }
+namespace com::sun::star::i18n { struct Currency2; }
+namespace com::sun::star::i18n { struct FormatElement; }
+namespace com::sun::star::i18n { struct CalendarItem2; }
 
 class Date;
 namespace tools { class Time; }

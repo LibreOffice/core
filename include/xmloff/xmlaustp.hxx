@@ -36,13 +36,13 @@ class SvXMLUnitConverter;
 struct XMLPropertyState;
 enum class XmlStyleFamily;
 
-namespace com { namespace sun { namespace star { namespace uno
-    { template<typename A> class Sequence; }
-} } }
+namespace com::sun::star::uno {
+    template<typename A> class Sequence;
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
 namespace xmloff { struct AutoStyleEntry; }
 namespace rtl { template <class reference_type> class Reference; }
 

@@ -35,7 +35,7 @@ class RadioButton;
 
 namespace svt { class AcceleratorExecute; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class FocusManager;
 class SidebarController;
@@ -122,7 +122,7 @@ private:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

@@ -27,7 +27,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility {
         class XAccessible;
         class XAccessibleContext;
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace awt {
         class XWindow;
     }
-} } }
+}
 
 namespace vcl { class IAccessibleBrowseBox; }
 namespace vcl { class IAccessibleTabListBox; }

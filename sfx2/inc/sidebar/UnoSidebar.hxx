@@ -18,7 +18,7 @@
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::ui { class XDecks; }
 namespace com::sun::star::ui { class XSidebar; }
-namespace sfx2 { namespace sidebar { class SidebarController; } }
+namespace sfx2::sidebar { class SidebarController; }
 
 /** get the sidebar for a given frame
 */

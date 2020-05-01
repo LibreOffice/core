@@ -30,11 +30,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document { class XUndoAction; }
     namespace document { class XUndoManagerListener; }
     namespace uno { class XInterface; }
-} } }
+}
 
 namespace cppu {
     class OWeakObject;

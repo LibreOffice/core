@@ -26,9 +26,9 @@
 
 // predefines
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpMaterialAttribute3D;
-}}
+}
 
 namespace basegfx {
     class BColor;

@@ -54,7 +54,7 @@ typedef cppu::WeakComponentImplHelper <
 
 class SfxSplitWindow;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class DeckDescriptor;
 class SidebarDockingWindow;
@@ -288,7 +288,7 @@ private:
 
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

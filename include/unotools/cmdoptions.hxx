@@ -25,9 +25,9 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::frame { class XFrame; }
 namespace osl { class Mutex; }
 
 /*-************************************************************************************************************

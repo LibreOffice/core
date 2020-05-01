@@ -35,7 +35,7 @@ namespace basegfx {
     class B2DHomMatrix;
 }
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class DisplayInfo;
 class ViewContact;
@@ -167,7 +167,7 @@ public:
     void resetAllGridOffsets();
 };
 
-}}
+}
 
 
 #endif // INCLUDED_SVX_SDR_CONTACT_OBJECTCONTACT_HXX

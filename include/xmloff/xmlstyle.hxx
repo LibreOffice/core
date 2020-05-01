@@ -32,10 +32,10 @@ class SvXMLStylesContext_Impl;
 class SvXMLImportPropertyMapper;
 class SvXMLTokenMap;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 namespace container { class XNameContainer; }
 namespace style { class XAutoStyleFamily; }
-} } }
+}
 
 enum XMLStyleStylesElemTokens
 {

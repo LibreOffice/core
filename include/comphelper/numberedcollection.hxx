@@ -32,7 +32,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class XInterface; }
 
 namespace comphelper{
 

@@ -23,9 +23,9 @@
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class CircleProperties;
-}}
+}
 
 // Helper class SdrCircObjGeoData
 

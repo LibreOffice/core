@@ -29,7 +29,7 @@
 
 namespace oox { class AttributeList; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 
     struct CustomShow
@@ -52,7 +52,7 @@ namespace oox { namespace ppt {
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
     };
 
-} }
+}
 
 #endif
 

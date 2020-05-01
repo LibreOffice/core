@@ -25,9 +25,9 @@
 #include <oox/dllapi.h>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct NamedValue; }
-} } }
+}
 
 namespace oox { class AttributeList; }
 

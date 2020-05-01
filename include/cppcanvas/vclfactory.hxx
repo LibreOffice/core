@@ -33,12 +33,12 @@ class BitmapEx;
 
 class GDIMetaFile;
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XCanvas;
     class  XBitmapCanvas;
     class  XSpriteCanvas;
-} } } }
+}
 
 /* Definition of VCLFactory class */
 

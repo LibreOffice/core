@@ -27,9 +27,9 @@
 #include <sal/types.h>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct NamedValue; }
-} } }
+}
 
 namespace msfilter {
 

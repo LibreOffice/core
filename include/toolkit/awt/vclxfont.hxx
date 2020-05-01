@@ -30,7 +30,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/font.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { class XDevice; } } } }
+namespace com::sun::star::awt { class XDevice; }
 
 class FontMetric;
 

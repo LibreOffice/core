@@ -37,9 +37,9 @@ struct PasteOrDropInfos;
 class SdrUndoManager;
 class TextChainCursorManager;
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class Any;
-} } } }
+}
 
 namespace sdr {
     class SelectionController;

@@ -24,23 +24,23 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     class XPropertySetInfo;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace io {
+namespace com::sun::star::io {
     class XActiveDataSink;
     class XOutputStream;
     class XInputStream;
     class XStream;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace sdbc {
+namespace com::sun::star::sdbc {
     class XResultSet;
     class XRow;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     class XCommandEnvironment;
     class XCommandInfo;
     class XContent;
@@ -48,13 +48,13 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XAnyCompareFactory;
     struct ContentInfo;
     struct NumberedSortingInfo;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com::sun::star::uno { class Any; }
 
 namespace ucbhelper
 {

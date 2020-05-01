@@ -29,15 +29,15 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
-} }
+}
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XPageSetupBase > VbaPageSetupBase_BASE;
 

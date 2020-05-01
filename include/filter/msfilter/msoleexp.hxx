@@ -23,9 +23,9 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace embed { class XEmbeddedObject; }
-} } }
+}
 
 namespace svt {
     class EmbeddedObjectRef;

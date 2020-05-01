@@ -25,10 +25,10 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmltkmap.hxx>
 
-namespace com { namespace sun { namespace star { namespace chart { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::chart { class XChartDocument; }
+namespace com::sun::star::beans { class XPropertySet; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame {
         class XModel;
     }
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
         class XChartDocument;
         class XDataSeries;
     }
-}}}
+}
 
 class SvXMLStylesContext;
 class SvXMLImportContext;

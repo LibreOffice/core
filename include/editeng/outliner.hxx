@@ -77,16 +77,16 @@ enum class PointerStyle;
 class SvxNumRule;
 enum class TextRotation;
 
-namespace com { namespace sun { namespace star { namespace linguistic2 {
+namespace com::sun::star::linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
-}}}}
+}
 namespace svx{
     struct SpellPortion;
     typedef std::vector<SpellPortion> SpellPortions;
 }
 namespace basegfx { class B2DPolyPolygon; }
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::lang { struct Locale; }
 
 
 

@@ -28,11 +28,11 @@
 
 namespace com :: sun :: star :: uno { template <class interface_type> class Reference; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
-} } }
+}
 
 class Color;
 enum class HtmlOptionId;

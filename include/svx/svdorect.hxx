@@ -28,9 +28,9 @@
 // Forward declaration
 class XPolygon;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class RectangleProperties;
-}}
+}
 
 
 //   SdrRectObj

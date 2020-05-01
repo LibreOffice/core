@@ -24,16 +24,16 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace formula { struct SymbolDescriptor; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XStringSubstitution; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::formula { struct SymbolDescriptor; }
+namespace com::sun::star::util { class XStringSubstitution; }
 
 namespace com
 {
-    namespace sun { namespace star {
+    namespace sun::star {
         namespace container { class XNameAccess; class XIndexAccess; }
         namespace util { struct DateTime; }
-    } }
+    }
 }
 
 namespace xmloff

@@ -35,7 +35,7 @@
 
 class VclReferenceBase;
 
-namespace vcl { namespace detail {
+namespace vcl::detail {
 
 template<typename>
 constexpr bool isIncompleteOrDerivedFromVclReferenceBase(...) { return true; }
@@ -44,7 +44,7 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
     int (*)[sizeof(T)])
 { return std::is_base_of<VclReferenceBase, T>::value; }
 
-}; }; // namespace detail, namespace vcl
+} // namespace vcl::detail
 
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.

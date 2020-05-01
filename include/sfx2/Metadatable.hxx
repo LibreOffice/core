@@ -29,9 +29,9 @@
 #include <memory>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XModel; }
-} } }
+}
 
 namespace sfx2 {
     class IXmlIdRegistry;

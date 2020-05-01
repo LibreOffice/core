@@ -29,7 +29,7 @@
 #include <set>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com::sun::star::graphic { class XGraphic; }
 
 /*
  * type of reference

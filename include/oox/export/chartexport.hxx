@@ -33,7 +33,7 @@
 #include <sal/types.h>
 #include <sax/fshelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertySet;
     }
@@ -60,14 +60,14 @@ namespace com { namespace sun { namespace star {
     namespace frame {
         class XModel;
     }
-}}}
+}
 
 namespace oox {
 namespace core {
     class XmlFilterBase;
 }}
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 enum AxesType
 {
@@ -231,7 +231,7 @@ public:
             css::chart2::XChartDocument > & xChartDoc );
 };
 
-}}
+}
 
 #endif // INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 

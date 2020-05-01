@@ -107,9 +107,9 @@ namespace basegfx {
     typedef B2IVector B2ISize;
 }
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     class XGraphics;
-} } } }
+}
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128

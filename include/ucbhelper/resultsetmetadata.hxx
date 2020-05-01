@@ -29,10 +29,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct Property; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace ucbhelper_impl {
     struct ResultSetMetaData_Impl;

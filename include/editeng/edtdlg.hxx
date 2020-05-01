@@ -25,11 +25,11 @@
 #include <vcl/abstdlg.hxx>
 #include <editeng/hangulhanja.hxx>
 
-namespace com { namespace sun { namespace star { namespace linguistic2
+namespace com::sun::star::linguistic2
 {
     class XThesaurus;
     class XHyphenator;
-} } } }
+}
 
 template <typename Arg, typename Ret> class Link;
 

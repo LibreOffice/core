@@ -33,9 +33,9 @@ class SdrModel;
 class SfxItemSet;
 enum class OutlinerMode;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class TextProperties;
-}}
+}
 
 /** This class stores information about one text inside a shape.
 */

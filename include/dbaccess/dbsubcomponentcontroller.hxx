@@ -35,7 +35,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace beans { struct PropertyValue; }
     namespace document { class XEmbeddedScripts; }
@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
     namespace util { class XModifyListener; }
     namespace util { class XNumberFormatter; }
-} } }
+}
 
 namespace dbtools {
     class DatabaseMetaData;

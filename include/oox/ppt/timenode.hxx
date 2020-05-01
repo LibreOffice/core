@@ -33,13 +33,13 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace animations { class XAnimationNode; }
-} } }
+}
 
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     class TimeNode;
 
@@ -120,7 +120,7 @@ namespace oox { namespace ppt {
         AnimationConditionList     maPrevCondList, maNextCondList;
     };
 
-} }
+}
 
 
 #endif

@@ -28,9 +28,9 @@
 #include <sal/types.h>
 #include <unotools/unotoolsdllapi.h>
 
-namespace com { namespace sun { namespace star {
-    namespace container{ class XHierarchicalNameAccess; }
-} } }
+namespace com::sun::star::container {
+    class XHierarchicalNameAccess;
+}
 namespace utl { class ConfigItem; }
 
 namespace utl {

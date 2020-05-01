@@ -32,7 +32,7 @@ namespace oox {
     namespace drawingml { class Color; }
 }
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class PPTShapeGroupContext final : public ::oox::drawingml::ShapeGroupContext
 {
@@ -59,7 +59,7 @@ protected:
 
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_PPT_PPTSHAPEGROUPCONTEXT_HXX
 

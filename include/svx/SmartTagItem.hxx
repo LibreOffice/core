@@ -25,18 +25,17 @@
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace container {
+namespace com::sun::star::container {
     class XStringKeyMap;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace text {
+namespace com::sun::star::text {
     class XTextRange;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XController;
-} } } }
-
+}
 class SVX_DLLPUBLIC SvxSmartTagItem final : public SfxPoolItem
 {
     const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > maActionComponentsSequence;

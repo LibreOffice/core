@@ -30,13 +30,13 @@
 // Forward declarations
 class E3dScene;
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class BaseProperties;
     class E3dCompoundProperties;
     class E3dExtrudeProperties;
     class E3dLatheProperties;
     class E3dSphereProperties;
-}}
+}
 
 /*************************************************************************
 |*

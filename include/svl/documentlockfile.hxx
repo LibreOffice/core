@@ -24,8 +24,8 @@
 
 #include <svl/lockfilecommon.hxx>
 
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
 
 namespace svt {
 

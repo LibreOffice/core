@@ -30,11 +30,11 @@
 class SfxObjectShell;
 class Graphic;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XComponent;
     }
-}}}
+}
 
 namespace weld { class Window; }
 

@@ -23,8 +23,8 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper {

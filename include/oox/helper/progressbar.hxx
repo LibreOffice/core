@@ -26,9 +26,9 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace task { class XStatusIndicator; }
-} } }
+}
 
 namespace oox {
 

@@ -24,14 +24,14 @@
 #include <editeng/unoedsrc.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XInterface;
     }
     namespace accessibility {
         struct TextSegment;
     }
-} } }
+}
 
 class SvxTextForwarder;
 class SdrObject;

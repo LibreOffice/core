@@ -28,7 +28,7 @@
 #include <basegfx/basegfxdllapi.h>
 
 
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonBezierCoords; } } } }
+namespace com::sun::star::drawing { struct PolyPolygonBezierCoords; }
 
 namespace basegfx
 {

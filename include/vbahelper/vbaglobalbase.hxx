@@ -33,15 +33,15 @@
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace uno { class XComponentContext; }
     namespace uno { class XInterface; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
-} }
+}
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XGlobalsBase > Globals_BASE;
 class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE

@@ -26,7 +26,7 @@
 
 namespace rtl { class OString; }
 
-namespace codemaker { namespace java {
+namespace codemaker::java {
 
 rtl::OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, rtl::OString const & nucleus,
@@ -35,7 +35,7 @@ rtl::OString translateUnoToJavaType(
 rtl::OString translateUnoToJavaIdentifier(
     rtl::OString const & identifier, rtl::OString const & prefix);
 
-} }
+}
 
 #endif // INCLUDED_CODEMAKER_COMMONJAVA_HXX
 

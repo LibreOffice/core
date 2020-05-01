@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star {
         namespace drawing{
                 class XDrawPage;
                 class XShape;
@@ -43,8 +43,7 @@ namespace com{namespace sun{namespace star{
         namespace frame{
                 class XModel;
         }
-
-}}}
+}
 
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {

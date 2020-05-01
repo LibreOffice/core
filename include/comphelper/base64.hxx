@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 namespace comphelper {
 

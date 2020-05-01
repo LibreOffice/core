@@ -33,7 +33,7 @@
 #include <sal/types.h>
 #include <svx/AccessibleShape.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace accessibility { class XAccessible; }
     namespace accessibility { class XAccessibleContext; }
     namespace accessibility { struct AccessibleEventObject; }
@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XTypeProvider; }
     namespace uno { class XAggregation; }
     namespace util { struct ModeChangeEvent; }
-} } }
+}
 
 namespace comphelper
 {

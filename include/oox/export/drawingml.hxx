@@ -46,7 +46,7 @@
 class Graphic;
 class SdrObjCustomShape;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 namespace awt {
     struct FontDescriptor;
     struct Gradient;
@@ -80,7 +80,7 @@ namespace uno {
 namespace frame {
     class XModel;
 }
-}}}
+}
 
 struct EscherConnectorListEntry;
 class OutlinerParaObject;

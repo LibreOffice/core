@@ -24,7 +24,7 @@
 #include <i18nutil/i18nutildllapi.h>
 #include <config_options.h>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace i18nutil { class oneToOneMapping; }
 
 namespace i18nutil {

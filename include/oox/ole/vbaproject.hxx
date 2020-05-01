@@ -30,15 +30,15 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
     namespace script { class XLibraryContainer; }
-    namespace script { namespace vba { class XVBAMacroResolver; } }
+    namespace script::vba { class XVBAMacroResolver; }
     namespace uno { class XComponentContext; }
     namespace uno { class XInterface; }
     namespace io { class XInputStream; }
-} } }
+}
 
 namespace oox {
     class GraphicHelper;

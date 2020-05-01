@@ -23,13 +23,10 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::beans { struct PropertyValue; }
 
-namespace com { namespace sun { namespace star {
-    namespace beans { struct PropertyValue; }
-} } }
-
-namespace vcl { namespace CommandInfoProvider {
+namespace vcl::CommandInfoProvider {
 
     /** Return a label for the given command.
         @param rsCommandName
@@ -103,7 +100,7 @@ namespace vcl { namespace CommandInfoProvider {
         const OUString& rModuleName);
 
     VCL_DLLPUBLIC OUString GetModuleIdentifier(const css::uno::Reference<css::frame::XFrame>& rxFrame);
-} }
+}
 
 #endif // INCLUDED_VCL_COMMANDINFOPROVIDER_HXX
 

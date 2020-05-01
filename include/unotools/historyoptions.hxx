@@ -29,7 +29,7 @@
 
 #include <optional>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
 
 // The method GetList() returns a list of property values.
 // Use follow defines to separate values by names.

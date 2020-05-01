@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com::sun::star::container { class XNameContainer; }
 
 namespace comphelper
 {

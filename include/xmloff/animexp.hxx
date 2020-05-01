@@ -23,8 +23,8 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class AnimExpImpl;
 class SvXMLExport;

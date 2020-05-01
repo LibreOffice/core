@@ -24,7 +24,7 @@
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace awt { struct FontDescriptor; } } } }
+namespace com::sun::star::awt { struct FontDescriptor; }
 
 namespace comphelper
 {

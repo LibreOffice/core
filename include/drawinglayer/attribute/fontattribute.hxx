@@ -30,9 +30,9 @@ namespace rtl {
    class OUString;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpFontAttribute;
-}}
+}
 
 
 namespace drawinglayer

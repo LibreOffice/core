@@ -30,7 +30,7 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
 
 namespace vcl { class Window; }
 class VCLXWindow;

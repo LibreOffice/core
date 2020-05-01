@@ -26,11 +26,11 @@
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
      namespace accessibility { class XAccessible; }
      namespace drawing { class XShape; }
      namespace drawing { class XShapes; }
-} } }
+}
 
 namespace accessibility {
 

@@ -20,7 +20,7 @@
 #include <sal/types.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace configuration { class XReadWriteAccess; }
     namespace container {
         class XHierarchicalNameAccess;
@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
         class XNameContainer;
     }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace comphelper {
 

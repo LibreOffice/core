@@ -20,10 +20,10 @@
 
 class Color;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Size; }
     namespace lang { struct Locale; }
-} } }
+}
 
 namespace msfilter {
 namespace util {

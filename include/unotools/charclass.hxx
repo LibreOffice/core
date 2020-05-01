@@ -29,13 +29,8 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-    }
-}}}
-
-namespace com { namespace sun { namespace star { namespace i18n { class XCharacterClassification; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::i18n { class XCharacterClassification; }
 
 const sal_Int32 nCharClassAlphaType =
     css::i18n::KCharacterType::UPPER |

@@ -26,9 +26,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/comphelperdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { class XCharacterClassification; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { struct Boundary; } } } }
+namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace com::sun::star::i18n { struct Boundary; }
 
 namespace comphelper
 {

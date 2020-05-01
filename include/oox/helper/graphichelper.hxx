@@ -34,7 +34,7 @@
 
 struct WmfExternal;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
     namespace awt { class XUnitConversion; }
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
     namespace graphic { class XGraphicObject; }
     namespace graphic { class XGraphicProvider; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace oox {
 

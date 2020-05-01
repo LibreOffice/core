@@ -30,9 +30,9 @@ namespace basegfx {
     class B2DPoint;
 }
 
-namespace drawinglayer { namespace geometry {
+namespace drawinglayer::geometry {
     class ViewInformation3D;
-}}
+}
 
 class E3dCompoundObject;
 class E3dScene;

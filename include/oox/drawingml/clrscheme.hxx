@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 enum PredefinedClrSchemeId {
     //dk1,
@@ -90,7 +90,7 @@ public:
             ::Color& rColor) const;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX
 

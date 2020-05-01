@@ -32,13 +32,13 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 
-namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { class XCollator; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::i18n { class XCollator; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 // OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:
-namespace comphelper { namespace string {
+namespace comphelper::string {
 
 /** Compare an OUString to a single char
 
@@ -375,7 +375,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
 
-} }
+}
 
 #endif
 

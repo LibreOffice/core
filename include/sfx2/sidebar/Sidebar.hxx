@@ -27,7 +27,7 @@ namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Accept requests for switching to certain panels or decks.
 */
@@ -59,7 +59,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

@@ -27,7 +27,7 @@
 #include <memory>
 #include <utility>
 
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com::sun::star::io { class XOutputStream; }
 namespace sax_fastparser { class FastAttributeList; }
 
 constexpr sal_Int32 FSNS(sal_Int32 namespc, sal_Int32 element) { return (namespc << 16) | element; }

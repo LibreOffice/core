@@ -31,11 +31,11 @@
 #include <sax/fshelper.hxx>
 #include <vcl/checksum.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XShape;
     }
-}}}
+}
 
 namespace oox {
     namespace drawingml {

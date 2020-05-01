@@ -25,11 +25,11 @@
 #include <svl/lockfilecommon.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XSeekable; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XTruncate; } } } }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::io { class XSeekable; }
+namespace com::sun::star::io { class XStream; }
+namespace com::sun::star::io { class XTruncate; }
 
 namespace svt {
 

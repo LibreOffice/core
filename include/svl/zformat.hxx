@@ -28,7 +28,7 @@ namespace utl {
     class DigitGroupingIterator;
 }
 
-namespace com { namespace sun { namespace star { namespace i18n { struct NativeNumberXmlAttributes2; } } } }
+namespace com::sun::star::i18n { struct NativeNumberXmlAttributes2; }
 
 class Color;
 

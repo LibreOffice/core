@@ -29,11 +29,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
     namespace uno { class Any; }
-} } }
+}
 
 namespace oox {
 

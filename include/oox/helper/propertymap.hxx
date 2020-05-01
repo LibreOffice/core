@@ -30,10 +30,10 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct PropertyValue;
     class XPropertySet;
-} } } }
+}
 
 namespace oox {
 

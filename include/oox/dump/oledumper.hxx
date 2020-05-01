@@ -34,9 +34,9 @@
 
 #ifdef DBG_UTIL
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
-} } }
+}
 
 namespace oox {
 namespace dump {

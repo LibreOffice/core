@@ -27,11 +27,11 @@
 class FmFormModel;
 class FmFormPageImpl;   // contains a list of all forms
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace form {
         class XForms;
     }
-}}}
+}
 
 class SdrView;
 class HelpEvent;

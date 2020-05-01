@@ -29,11 +29,11 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { struct FormulaToken; }
     namespace sheet { class XFormulaOpCodeMapper; }
     namespace sheet { class XFormulaParser; }
-} } }
+}
 
 namespace com::sun::star::uno { template <class E> class Sequence; }
 

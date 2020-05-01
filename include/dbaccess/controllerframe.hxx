@@ -25,9 +25,9 @@
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XFrame; }
-} } }
+}
 
 namespace dbaui
 {

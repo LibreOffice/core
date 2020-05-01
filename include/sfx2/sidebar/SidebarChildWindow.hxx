@@ -22,7 +22,7 @@
 #include <sfx2/childwin.hxx>
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Outer container of the sidebar window.
 
@@ -42,7 +42,7 @@ public:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

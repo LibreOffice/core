@@ -26,11 +26,11 @@
 
 namespace vcl { class Region; }
 
-namespace sdr { namespace animation {
+namespace sdr::animation {
     class PrimitiveAnimation;
-}}
+}
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class DisplayInfo;
 class ObjectContact;
@@ -130,7 +130,7 @@ public:
     void resetGridOffset();
 };
 
-}}
+}
 
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX

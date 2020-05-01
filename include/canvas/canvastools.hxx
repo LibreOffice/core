@@ -43,15 +43,15 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com::sun::star::geometry
 {
     struct RealSize2D;
     struct IntegerSize2D;
     struct AffineMatrix2D;
     struct Matrix2D;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     struct RenderState;
     struct ViewState;
@@ -59,17 +59,17 @@ namespace com { namespace sun { namespace star { namespace rendering
     class  XCanvas;
     struct Texture;
     class  XIntegerBitmapColorSpace;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace awt
+namespace com::sun::star::awt
 {
     struct Rectangle;
     class  XWindow2;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct PropertyValue;
-} } } }
+}
 
 class Color;
 class OutputDevice;

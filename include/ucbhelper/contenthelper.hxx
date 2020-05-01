@@ -36,19 +36,19 @@
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     struct CommandInfo;
     class XCommandEnvironment;
     class XCommandInfo;
     class XPersistentPropertySet;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct Property;
     class XPropertySetInfo;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace ucbhelper_impl { struct ContentImplHelper_Impl; }
 

@@ -17,9 +17,9 @@
 namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
 namespace weld { class Window; }
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 namespace svtools {
 

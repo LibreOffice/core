@@ -25,7 +25,7 @@
 
 class Button;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class DeckTitleBar;
 
@@ -142,7 +142,7 @@ private:
 
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

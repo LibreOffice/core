@@ -28,7 +28,7 @@ class SdrLayerIDSet;
 class SdrPage;
 class SdrObject;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ObjectContact;
 class ViewObjectContact;
@@ -140,7 +140,7 @@ public:
     void flushViewObjectContacts(bool bWithHierarchy = true);
 };
 
-}}
+}
 
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACT_HXX

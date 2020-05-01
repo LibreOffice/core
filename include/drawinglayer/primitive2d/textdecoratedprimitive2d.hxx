@@ -24,9 +24,9 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
-namespace basegfx { namespace utils {
+namespace basegfx::utils {
     class B2DHomMatrixBufferedOnDemandDecompose;
-}}
+}
 
 namespace drawinglayer
 {

@@ -34,7 +34,7 @@
 #include <unordered_map>
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 typedef cppu::WeakComponentImplHelper <
     css::beans::XPropertySet,
@@ -238,7 +238,7 @@ private:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 #endif
 

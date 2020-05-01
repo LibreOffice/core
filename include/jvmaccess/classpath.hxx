@@ -27,11 +27,11 @@
 #include <jvmaccess/jvmaccessdllapi.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace jvmaccess {
 

@@ -20,13 +20,13 @@
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace container { class XIndexAccess; }
     namespace graphic { class XGraphic; }
     namespace ui { class XUIConfigurationManager; }
     namespace ui { class XUIConfigurationManagerSupplier; }
-} } }
+}
 
 class TBCHeader;
 

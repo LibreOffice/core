@@ -32,11 +32,11 @@ class SvStream;
 class SfxStyleSheet;
 class SdrUndoAction;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
     class ViewContactOfTableObj;
-}}
+}
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class TableLayouter;
 struct ImplTableShadowPaintInfo;
@@ -285,7 +285,7 @@ private:
 SVX_DLLPUBLIC void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 SVX_DLLPUBLIC void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
-} }
+}
 
 #endif
 

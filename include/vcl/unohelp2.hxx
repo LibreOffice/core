@@ -26,11 +26,11 @@
 #include <osl/mutex.hxx>
 #include <vcl/dllapi.h>
 
-namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
+namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
-} } } } }
+}
 
-namespace vcl { namespace unohelper {
+namespace vcl::unohelper {
 
     class VCL_DLLPUBLIC TextDataObject final :
                             public css::datatransfer::XTransferable,
@@ -68,7 +68,7 @@ namespace vcl { namespace unohelper {
             ::osl::Mutex& GetMutex() { return maMutex; }
     };
 
-}}  // namespace vcl::unohelper
+}  // namespace vcl::unohelper
 
 #endif // INCLUDED_VCL_UNOHELP2_HXX
 

@@ -26,9 +26,9 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::animations { class XAnimationNode; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SvXMLExport;
 

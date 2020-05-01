@@ -56,7 +56,7 @@ protected:
     long                nB;
 };
 
-namespace tools { namespace detail {
+namespace tools::detail {
 
 // Used to implement operator == for subclasses of Pair:
 inline bool equal(Pair const & p1, Pair const & p2)
@@ -64,7 +64,7 @@ inline bool equal(Pair const & p1, Pair const & p2)
     return p1.A() == p2.A() && p1.B() == p2.B();
 }
 
-} }
+}
 
 // Point
 

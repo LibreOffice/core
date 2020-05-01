@@ -29,8 +29,8 @@
 
 class CharClass;
 
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XTextSearch2; } } } }
+namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::util { class XTextSearch2; }
 
 namespace com {
     namespace sun {

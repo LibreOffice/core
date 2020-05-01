@@ -34,7 +34,7 @@
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XEnumeration; }
     namespace container { class XIndexAccess; }
     namespace drawing { class XDrawPage; }
@@ -42,12 +42,12 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XShapes; }
     namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
-namespace ooo { namespace vba {
+namespace ooo::vba {
     class XHelperInterface;
     namespace msforms { class XShapeRange; }
-} }
+}
 
 typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
 

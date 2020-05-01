@@ -54,19 +54,19 @@
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace document { class XEmbeddedObjectResolver; } } } }
-namespace com { namespace sun { namespace star { namespace document { class XGraphicStorageHandler; } } } }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
-namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XExtendedDocumentHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XLocator; } } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::document { class XEmbeddedObjectResolver; }
+namespace com::sun::star::document { class XGraphicStorageHandler; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::lang { class XEventListener; }
+namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::xml::sax { class XAttributeList; }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
+namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
+namespace com::sun::star::xml::sax { class XLocator; }
 
 class SvXMLNamespaceMap;
 class SvXMLExport_Impl;
@@ -80,10 +80,10 @@ enum class SvXMLErrorFlags;
 // Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XModel; }
     namespace lang { struct Locale; }
-} } }
+}
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
 enum class SvXMLExportFlags {

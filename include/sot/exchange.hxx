@@ -27,11 +27,11 @@
 #include <sot/formats.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com { namespace sun { namespace star { namespace datatransfer {
+namespace com::sun::star::datatransfer {
     class XTransferable;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 struct DataFlavorEx : public css::datatransfer::DataFlavor
 {

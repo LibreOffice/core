@@ -30,15 +30,15 @@
 #include <memory>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document { class XEventsSupplier; }
     namespace container { class XNameReplace; }
     namespace container { class XNameAccess; }
     namespace beans { struct PropertyValue; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 typedef ::std::map< OUString, std::unique_ptr<XMLEventExportHandler> > HandlerMap;
 typedef ::std::map< OUString, XMLEventName > NameMap;

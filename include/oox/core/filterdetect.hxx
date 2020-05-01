@@ -33,14 +33,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace io { class XInputStream; }
     namespace uno { class XComponentContext; }
-    namespace xml { namespace sax { class XFastAttributeList; } }
-    namespace xml { namespace sax { class XFastContextHandler; } }
-    namespace xml { namespace sax { class XLocator; } }
-} } }
+    namespace xml::sax { class XFastAttributeList; }
+    namespace xml::sax { class XFastContextHandler; }
+    namespace xml::sax { class XLocator; }
+}
 
 namespace utl { class MediaDescriptor; }
 

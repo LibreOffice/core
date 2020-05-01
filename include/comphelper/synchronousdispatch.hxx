@@ -25,15 +25,15 @@
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XInterface; }
     namespace lang {
         class XComponent; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 
 namespace comphelper

@@ -31,9 +31,9 @@ class SdrObject;
 class SdrPageView;
 class SdrLayerIDSet;
 class SdrObjList;
-namespace sdr { namespace contact { class ViewObjectContact; }}
+namespace sdr::contact { class ViewObjectContact; }
 namespace basegfx { class B2DPoint; }
-namespace drawinglayer { namespace primitive2d { class Primitive2DContainer; }}
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 
 // Wrappers for classic Sdr* Mode/View classes

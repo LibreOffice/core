@@ -31,9 +31,9 @@ namespace basegfx {
     class B2DRange;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpFillGraphicAttribute;
-}}
+}
 
 
 namespace drawinglayer

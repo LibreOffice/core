@@ -26,8 +26,8 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace awt { class XControl; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::awt { class XControl; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace vcl
 {

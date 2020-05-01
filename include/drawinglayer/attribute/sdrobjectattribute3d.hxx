@@ -31,10 +31,10 @@
 
 // predefines
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdr3DObjectAttribute;
     class MaterialAttribute3D;
-}}
+}
 
 
 namespace drawinglayer

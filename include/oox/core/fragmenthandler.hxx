@@ -32,12 +32,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace xml { namespace sax { class XFastAttributeList; } }
-    namespace xml { namespace sax { class XFastContextHandler; } }
-    namespace xml { namespace sax { class XLocator; } }
-} } }
+    namespace xml::sax { class XFastAttributeList; }
+    namespace xml::sax { class XFastContextHandler; }
+    namespace xml::sax { class XLocator; }
+}
 
 namespace oox {
 namespace core {

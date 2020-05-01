@@ -22,7 +22,7 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class XMLOFF_DLLPUBLIC XMLCharContext : public SvXMLImportContext
 {
