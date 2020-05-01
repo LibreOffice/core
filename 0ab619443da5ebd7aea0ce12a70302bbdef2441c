@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5903771_0e3ef810",
+        "filename": "sc/uiconfig/scalc/ui/notebookbar.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 17389,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T20:09:33Z",
+      "side": 1,
+      "message": "ToolsLabel looks odd here, the GtkLabel is DevLabel. Why ToolsLabel?",
+      "range": {
+        "startLine": 17389,
+        "startChar": 83,
+        "endLine": 17389,
+        "endChar": 93
+      },
+      "revId": "0ab619443da5ebd7aea0ce12a70302bbdef2441c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
