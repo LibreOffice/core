@@ -17,6 +17,8 @@
 #include <unotest/directories.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/gdimtf.hxx>
 #include <comphelper/hash.hxx>
 #include <tools/vcompat.hxx>
 #include <comphelper/fileformat.h>
@@ -53,11 +55,15 @@ class TypeSerializerTest : public CppUnit::TestFixture
     void testGradient();
     void testGraphic_Vector();
     void testGraphic_Bitmap_NoGfxLink();
+    void testGraphic_Animation();
+    void testGraphic_GDIMetaFile();
 
     CPPUNIT_TEST_SUITE(TypeSerializerTest);
     CPPUNIT_TEST(testGradient);
     CPPUNIT_TEST(testGraphic_Vector);
     CPPUNIT_TEST(testGraphic_Bitmap_NoGfxLink);
+    CPPUNIT_TEST(testGraphic_Animation);
+    CPPUNIT_TEST(testGraphic_GDIMetaFile);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -273,6 +279,200 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
         }
         CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
         CPPUNIT_ASSERT_EQUAL(aBitmapEx.GetChecksum(), aNewGraphic.GetBitmapExRef().GetChecksum());
+    }
+}
+
+void TypeSerializerTest::testGraphic_Animation()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "123_Numbers.gif";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsAnimated());
+
+    // Test WriteGraphic
+    {
+        SvMemoryStream aMemoryStream;
+        WriteGraphic(aMemoryStream, aGraphic);
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15167), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("69d0f80832a0aebcbda7ad43ecadf85e99fc1057"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt16 nType;
+        aMemoryStream.ReadUInt16(nType);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0x4D42), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(true, aNewGraphic.IsAnimated());
+    }
+
+    // Test WriteGraphic - Native Format 5
+    {
+        SvMemoryStream aMemoryStream;
+        aMemoryStream.SetVersion(SOFFICE_FILEFORMAT_50);
+        aMemoryStream.SetCompressMode(SvStreamCompressFlags::NATIVE);
+        WriteGraphic(aMemoryStream, aGraphic);
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(1582), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("da3b9600340fa80a895f2107357e4ab65a9292eb"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt32 nType;
+        aMemoryStream.ReadUInt32(nType);
+        CPPUNIT_ASSERT_EQUAL(COMPAT_FORMAT('N', 'A', 'T', '5'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(true, aNewGraphic.IsAnimated());
+    }
+
+    // Test TypeSerializer
+    {
+        SvMemoryStream aMemoryStream;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15167), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("69d0f80832a0aebcbda7ad43ecadf85e99fc1057"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt16 nType;
+        aMemoryStream.ReadUInt16(nType);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0x4D42), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(true, aNewGraphic.IsAnimated());
+    }
+
+    // Test TypeSerializer - Native Format 5
+    {
+        SvMemoryStream aMemoryStream;
+        aMemoryStream.SetVersion(SOFFICE_FILEFORMAT_50);
+        aMemoryStream.SetCompressMode(SvStreamCompressFlags::NATIVE);
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(1582), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("da3b9600340fa80a895f2107357e4ab65a9292eb"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        sal_uInt32 nType;
+        aMemoryStream.ReadUInt32(nType);
+        CPPUNIT_ASSERT_EQUAL(COMPAT_FORMAT('N', 'A', 'T', '5'), nType);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
+        CPPUNIT_ASSERT_EQUAL(true, aNewGraphic.IsAnimated());
+    }
+}
+
+void TypeSerializerTest::testGraphic_GDIMetaFile()
+{
+    GDIMetaFile aGDIMetaFile;
+    {
+        ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+        pVirtualDev->SetConnectMetaFile(&aGDIMetaFile);
+        Size aVDSize(10, 10);
+        pVirtualDev->SetOutputSizePixel(aVDSize);
+        pVirtualDev->SetBackground(Wallpaper(COL_LIGHTRED));
+        pVirtualDev->Erase();
+        pVirtualDev->DrawPixel(Point(4, 4));
+    }
+    Graphic aGraphic(aGDIMetaFile);
+    CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aGraphic.GetType());
+
+    // Test WriteGraphic
+    {
+        SvMemoryStream aMemoryStream;
+        WriteGraphic(aMemoryStream, aGraphic);
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(229), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("144c518e5149d61ab4bc34643df820372405d61d"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        char aIdCharArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
+        aMemoryStream.ReadBytes(aIdCharArray, 6);
+        OString sID(aIdCharArray);
+        CPPUNIT_ASSERT_EQUAL(OString("VCLMTF"), sID);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        ReadGraphic(aMemoryStream, aNewGraphic);
+        CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aNewGraphic.GetType());
+    }
+
+    // Test TypeSerializer
+    {
+        SvMemoryStream aMemoryStream;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.writeGraphic(aGraphic);
+        }
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(229), aMemoryStream.remainingSize());
+        std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("144c518e5149d61ab4bc34643df820372405d61d"),
+                             toHexString(aHash));
+
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        char aIdCharArray[7] = { 0, 0, 0, 0, 0, 0, 0 };
+        aMemoryStream.ReadBytes(aIdCharArray, 6);
+        OString sID(aIdCharArray);
+        CPPUNIT_ASSERT_EQUAL(OString("VCLMTF"), sID);
+
+        // Read it back
+        aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+        Graphic aNewGraphic;
+        {
+            TypeSerializer aSerializer(aMemoryStream);
+            aSerializer.readGraphic(aNewGraphic);
+        }
+        CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aNewGraphic.GetType());
     }
 }
 
