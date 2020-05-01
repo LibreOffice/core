@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138d7572_10f3c624",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "Converting to SAL_WARN() here is not a good idea, because the fprintf() are user (caller) information and not SAL_WARN() developer information that may be suppressed when not run in debug environment.",
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e616839_b9433fbe",
+        "filename": "desktop/source/migration/services/jvmfwk.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "Converting to SAL_WARN() here is not a good idea, because the fprintf() are user (caller) information and not SAL_WARN() developer information that may be suppressed when not run in debug environment.",
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96dfc292_df27d64e",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "If so, this should be SAL_WARN_IF() instead.",
+      "range": {
+        "startLine": 168,
+        "startChar": 4,
+        "endLine": 168,
+        "endChar": 12
+      },
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb102705_296baed2",
+        "filename": "i18nlangtag/source/isolang/inunx.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "This #ifdef DEBUG (and its #endif of course) can be removed if the statements are converted to one SAL_WARN_IF().",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 12
+      },
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72f9a011_05069041",
+        "filename": "i18npool/source/localedata/filewriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "This is not equivalent. OFileWriter is a build utility run during the build process, the printf is just information output to the console (if not suppressed by the module\u0027s standard make -s invocation).",
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9319a6f_6b6a2cf2",
+        "filename": "idl/source/prj/command.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "This is a build utility. Replacing printf() with SAL_WARN() doesn\u0027t make sense and replacing them with SAL_INFO() makes even less sense because then there is no output unless the INFO class is defined to display.",
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "219756ed_dc69fff6",
+        "filename": "idl/source/prj/database.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-01T21:22:43Z",
+      "side": 1,
+      "message": "IDL compiler, do not replace with SAL_INFO().",
+      "revId": "bf2a10e7b536ab881ed93f458931d8aafb10ba91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
