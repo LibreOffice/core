@@ -7044,7 +7044,7 @@ private:
     GtkWidget* m_pLabel;
     //popover cannot escape dialog under X so stick up own window instead
     GtkWindow* m_pMenuHack;
-    //when doing so, if its a toolbar menubutton align the menu to the full toolitem
+    //when doing so, if it's a toolbar menubutton align the menu to the full toolitem
     GtkWidget* m_pMenuHackAlign;
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
