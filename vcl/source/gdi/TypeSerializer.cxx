@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <vcl/gdimtf.hxx>
+#include <vcl/dibtools.hxx>
 
 TypeSerializer::TypeSerializer(SvStream& rStream)
     : GenericTypeSerializer(rStream)
@@ -152,20 +153,171 @@ void TypeSerializer::writeGfxLink(const GfxLink& rGfxLink)
 
 namespace
 {
-constexpr sal_uInt32 constSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16)
-                                   | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-constexpr sal_uInt32 constWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16)
-                                   | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-constexpr sal_uInt32 constEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16)
-                                   | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-constexpr sal_uInt32 constPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16)
-                                   | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-
 #define NATIVE_FORMAT_50 COMPAT_FORMAT('N', 'A', 'T', '5')
+
+constexpr sal_uInt32 constSvgMagic = createMagic('s', 'v', 'g', '0');
+constexpr sal_uInt32 constWmfMagic = createMagic('w', 'm', 'f', '0');
+constexpr sal_uInt32 constEmfMagic = createMagic('e', 'm', 'f', '0');
+constexpr sal_uInt32 constPdfMagic = createMagic('p', 'd', 'f', '0');
 
 } // end anonymous namespace
 
-void TypeSerializer::readGraphic(Graphic& /*rGraphic*/) {}
+void TypeSerializer::readGraphic(Graphic& rGraphic)
+{
+    if (mrStream.GetError())
+        return;
+
+    const sal_uLong nInitialStreamPosition = mrStream.Tell();
+    sal_uInt32 nType;
+
+    // read Id
+    mrStream.ReadUInt32(nType);
+
+    // if there is no more data, avoid further expensive
+    // reading which will create VDevs and other stuff, just to
+    // read nothing. CAUTION: Eof is only true AFTER reading another
+    // byte, a speciality of SvMemoryStream (!)
+    if (!mrStream.good())
+        return;
+
+    if (NATIVE_FORMAT_50 == nType)
+    {
+        Graphic aGraphic;
+        GfxLink aLink;
+
+        // read compat info, destructor writes stuff into the header
+        {
+            VersionCompat aCompat(mrStream, StreamMode::READ);
+        }
+
+        readGfxLink(aLink);
+
+        if (!mrStream.GetError() && aLink.LoadNative(aGraphic))
+        {
+            if (aLink.IsPrefMapModeValid())
+                aGraphic.SetPrefMapMode(aLink.GetPrefMapMode());
+
+            if (aLink.IsPrefSizeValid())
+                aGraphic.SetPrefSize(aLink.GetPrefSize());
+        }
+        else
+        {
+            mrStream.Seek(nInitialStreamPosition);
+            mrStream.SetError(ERRCODE_IO_WRONGFORMAT);
+        }
+        rGraphic = aGraphic;
+    }
+    else
+    {
+        BitmapEx aBitmapEx;
+        const SvStreamEndian nOldFormat = mrStream.GetEndian();
+
+        mrStream.SeekRel(-4);
+        mrStream.SetEndian(SvStreamEndian::LITTLE);
+        ReadDIBBitmapEx(aBitmapEx, mrStream);
+
+        if (!mrStream.GetError())
+        {
+            sal_uInt32 nMagic1 = 0;
+            sal_uInt32 nMagic2 = 0;
+            sal_uInt64 nBeginPoisition = mrStream.Tell();
+
+            mrStream.ReadUInt32(nMagic1);
+            mrStream.ReadUInt32(nMagic2);
+            mrStream.Seek(nBeginPoisition);
+
+            if (!mrStream.GetError())
+            {
+                if (nMagic1 == 0x5344414e && nMagic2 == 0x494d4931)
+                {
+                    Animation aAnimation;
+                    ReadAnimation(mrStream, aAnimation);
+
+                    // #108077# manually set loaded BmpEx to Animation
+                    // (which skips loading its BmpEx if already done)
+                    aAnimation.SetBitmapEx(aBitmapEx);
+                    rGraphic = Graphic(aAnimation);
+                }
+                else
+                {
+                    rGraphic = Graphic(aBitmapEx);
+                }
+            }
+            else
+            {
+                mrStream.ResetError();
+            }
+        }
+        else
+        {
+            Graphic aGraphic;
+            GDIMetaFile aMetaFile;
+
+            mrStream.Seek(nInitialStreamPosition);
+            mrStream.ResetError();
+            ReadGDIMetaFile(mrStream, aMetaFile);
+
+            if (!mrStream.GetError())
+            {
+                rGraphic = Graphic(aMetaFile);
+            }
+            else
+            {
+                ErrCode nOriginalError = mrStream.GetErrorCode();
+                // try to stream in Svg defining data (length, byte array and evtl. path)
+                // See below (operator<<) for more information
+                sal_uInt32 nMagic;
+                mrStream.Seek(nInitialStreamPosition);
+                mrStream.ResetError();
+                mrStream.ReadUInt32(nMagic);
+
+                if (constSvgMagic == nMagic || constWmfMagic == nMagic || constEmfMagic == nMagic
+                    || constPdfMagic == nMagic)
+                {
+                    sal_uInt32 nLength = 0;
+                    mrStream.ReadUInt32(nLength);
+
+                    if (nLength)
+                    {
+                        VectorGraphicDataArray aData(nLength);
+
+                        mrStream.ReadBytes(aData.getArray(), nLength);
+                        OUString aPath = mrStream.ReadUniOrByteString(mrStream.GetStreamCharSet());
+
+                        if (!mrStream.GetError())
+                        {
+                            VectorGraphicDataType aDataType(VectorGraphicDataType::Svg);
+
+                            switch (nMagic)
+                            {
+                                case constWmfMagic:
+                                    aDataType = VectorGraphicDataType::Wmf;
+                                    break;
+                                case constEmfMagic:
+                                    aDataType = VectorGraphicDataType::Emf;
+                                    break;
+                                case constPdfMagic:
+                                    aDataType = VectorGraphicDataType::Pdf;
+                                    break;
+                            }
+
+                            auto aVectorGraphicDataPtr
+                                = std::make_shared<VectorGraphicData>(aData, aPath, aDataType);
+                            rGraphic = Graphic(aVectorGraphicDataPtr);
+                        }
+                    }
+                }
+                else
+                {
+                    mrStream.SetError(nOriginalError);
+                }
+
+                mrStream.Seek(nInitialStreamPosition);
+            }
+        }
+        mrStream.SetEndian(nOldFormat);
+    }
+}
 
 void TypeSerializer::writeGraphic(const Graphic& rGraphic)
 {
