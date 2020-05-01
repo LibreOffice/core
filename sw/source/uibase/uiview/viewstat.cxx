@@ -70,6 +70,29 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY:
+            {
+                bool bDisable(true);
+                SwOutlineNodes::size_type nPos = m_pWrtShell->GetOutlinePos();
+                if (nPos != SwOutlineNodes::npos)
+                {
+                    // check for content
+                    const SwNodes& rNodes = m_pWrtShell->GetNodes();
+                    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+                    SwNode* pSttNd = m_pWrtShell->GetNodes().GetOutLineNds()[nPos];
+                    SwNode* pEndNd = &rNodes.GetEndOfContent();
+                    if (rOutlineNodes.size() > nPos + 1)
+                        pEndNd = rOutlineNodes[nPos + 1];
+
+                    SwNodeIndex aIdx(*pSttNd);
+                    if (rNodes.GoNext(&aIdx) != pEndNd)
+                        bDisable = false;
+                }
+                if (bDisable)
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             case FN_NAV_ELEMENT:
                 // used to update all instances of this control
                 rSet.InvalidateItem( nWhich );
