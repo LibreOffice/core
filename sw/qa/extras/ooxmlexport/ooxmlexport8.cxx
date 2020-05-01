@@ -92,6 +92,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf48569, "tdf48569.odt")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eValue);
 }
 
+
 DECLARE_OOXMLEXPORT_TEST(testN750935, "n750935.docx")
 {
     // Some page break types were ignores, resulting in less pages.
@@ -458,6 +459,11 @@ DECLARE_OOXMLEXPORT_TEST(testN779834, "n779834.docx")
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRHBZ1180114, "rhbz1180114.docx")
+{
+    // This document simply crashed the importer.
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf66496, "tdf66496.docx")
 {
     // This document simply crashed the importer.
 }
