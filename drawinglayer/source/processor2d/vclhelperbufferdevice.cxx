@@ -219,7 +219,8 @@ void VDevBuffer::free(VirtualDevice& rDevice)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     const auto aUsedFound = std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice);
-    OSL_ENSURE(aUsedFound != maUsedBuffers.end(), "OOps, non-registered buffer freed (!)");
+    SAL_WARN_IF(aUsedFound == maUsedBuffers.end(), "drawinglayer",
+                "OOps, non-registered buffer freed (!)");
 
     maUsedBuffers.erase(aUsedFound);
     maFreeBuffers.emplace_back(&rDevice);
@@ -286,8 +287,8 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
 #endif
 
     // #i93485# assert when copying from window to VDev is used
-    OSL_ENSURE(
-        mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
+    SAL_WARN_IF(
+        mrOutDev.GetOutDevType() == OUTDEV_WINDOW, "drawinglayer",
         "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
     const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
@@ -424,13 +425,15 @@ void impBufferDevice::paint(double fTrans)
 
 VirtualDevice& impBufferDevice::getContent()
 {
-    assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
+    SAL_WARN_IF(!mpContent, "drawinglayer",
+                "impBufferDevice: No content, check isVisible() before accessing (!)");
     return *mpContent;
 }
 
 VirtualDevice& impBufferDevice::getMask()
 {
-    assert(mpContent && "impBufferDevice: No content, check isVisible() before accessing (!)");
+    SAL_WARN_IF(!mpContent, "drawinglayer",
+                "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpMask)
     {
         mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true);
@@ -444,7 +447,8 @@ VirtualDevice& impBufferDevice::getMask()
 
 VirtualDevice& impBufferDevice::getTransparence()
 {
-    OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
+    SAL_WARN_IF(!mpContent, "drawinglayer",
+                "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpAlpha)
     {
         mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
