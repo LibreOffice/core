@@ -3744,8 +3744,6 @@ drawinglayer/source/processor2d/baseprocessor2d.cxx
 drawinglayer/source/processor2d/contourextractor2d.cxx
 drawinglayer/source/processor2d/getdigitlanguage.cxx
 drawinglayer/source/processor2d/getdigitlanguage.hxx
-drawinglayer/source/processor2d/helperwrongspellrenderer.cxx
-drawinglayer/source/processor2d/helperwrongspellrenderer.hxx
 drawinglayer/source/processor2d/hittestprocessor2d.cxx
 drawinglayer/source/processor2d/linegeometryextractor2d.cxx
 drawinglayer/source/processor2d/objectinfoextractor2d.cxx
