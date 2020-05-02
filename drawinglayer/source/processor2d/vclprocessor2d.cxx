@@ -17,16 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "vclprocessor2d.hxx"
+
+#include "getdigitlanguage.hxx"
+#include "vclhelperbufferdevice.hxx"
 #include <cmath>
 #include <comphelper/string.hxx>
-#include "vclprocessor2d.hxx"
+#include <tools/debug.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#include <tools/debug.hxx>
-#include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
@@ -37,36 +48,21 @@
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "vclhelperbufferdevice.hxx"
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
-#include <primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
-#include <primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <basegfx/color/bcolor.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/graph.hxx>
-
-#include "getdigitlanguage.hxx"
-
-// control support
-
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-
 // for support of Title/Description in all apps when embedding pictures
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+// control support
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
-#include <toolkit/helper/vclunohelper.hxx>
+#include <primitive2d/pointarrayprimitive2d.hxx>
+#include <primitive2d/epsprimitive2d.hxx>
 
 using namespace com::sun::star;
 
