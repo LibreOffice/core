@@ -82,7 +82,7 @@ published service SheetCellRanges
     service com::sun::star::sheet::SheetRangesQuery;
 
 
-    /** provides "Find & Replace" functionality.
+    /** provides "Find and Replace" functionality.
 
         <p>The property
         com::sun::star::util::SearchDescriptor::SearchWords

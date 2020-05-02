@@ -18,7 +18,7 @@ import pathlib
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
-#Bug 35020 - Find & Replace changes case of sheet name in formulas
+#Bug 35020 - Find and Replace changes case of sheet name in formulas
 
 class tdf35020(UITestCase):
    def test_tdf39959_find_replace_all_sheets(self):
