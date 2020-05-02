@@ -3070,6 +3070,18 @@ IMPL_LINK(GtkInstanceWidget, async_drag_cancel, void*, arg, void)
 {
     m_pDragCancelEvent = nullptr;
     GdkDragContext* context = static_cast<GdkDragContext*>(arg);
+
+    // tdf#132477 simply calling gtk_drag_cancel on the treeview dnd under X
+    // doesn't seem to work as hoped for (though under wayland all is well).
+    // Under X the next (allowed) drag effort doesn't work to drop anything,
+    // but a then repeated attempt does.
+    // Sending ESC to get gtk to cancel the drag for us does work as hoped for.
+    GdkEvent *event = GtkSalFrame::makeFakeKeyPress(m_pWidget);
+    event->key.keyval = GDK_KEY_Escape;
+    gtk_main_do_event(event);
+    gdk_event_free(event);
+
+    // Retain this gtk_drag_cancel belt-and-braces call anyway
     gtk_drag_cancel(context);
     g_object_unref(context);
 }
