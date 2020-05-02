@@ -47,7 +47,7 @@ class ScFormulaDlg final : public formula::FormulaDlg,
 public:
     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr);
-    virtual ~ScFormulaDlg() override;
+    virtual ~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE override;
 
     // IFormulaEditorHelper
     virtual void notifyChange() override;
