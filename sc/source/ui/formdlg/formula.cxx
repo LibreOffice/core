@@ -231,7 +231,7 @@ void ScFormulaDlg::fill()
     }
 }
 
-ScFormulaDlg::~ScFormulaDlg()
+ScFormulaDlg::~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE
 {
     ScFormEditData* pData = m_pViewShell->GetFormEditData();
 
