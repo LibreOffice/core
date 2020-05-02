@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <graphic/GraphicFormatDetector.hxx>
+#include <graphic/DetectorTools.hxx>
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
 
@@ -65,23 +66,6 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
             return true;
     }
     return false;
-}
-
-sal_uInt8* searchEntry(sal_uInt8* pSource, const char* pDest, sal_uLong nComp, sal_uLong nSize)
-{
-    while (nComp-- >= nSize)
-    {
-        sal_uLong i;
-        for (i = 0; i < nSize; i++)
-        {
-            if ((pSource[i] & ~0x20) != (pDest[i] & ~0x20))
-                break;
-        }
-        if (i == nSize)
-            return pSource;
-        pSource++;
-    }
-    return nullptr;
 }
 
 } // end anonymous namespace
@@ -320,13 +304,15 @@ bool GraphicFormatDetector::checkPSD()
 
 bool GraphicFormatDetector::checkEPS()
 {
+    const char* pFirstBytesAsCharArray = reinterpret_cast<char*>(maFirstBytes.data());
+
     if (mnFirstLong == 0xC5D0D3C6)
     {
         msDetectedFormat = "EPS";
         return true;
     }
-    else if (searchEntry(maFirstBytes.data(), "%!PS-Adobe", 10, 10)
-             && searchEntry(&maFirstBytes[15], "EPS", 3, 3))
+    else if (matchArrayWithString(pFirstBytesAsCharArray, 10, "%!PS-Adobe")
+             && matchArrayWithString(pFirstBytesAsCharArray + 15, 3, "EPS"))
     {
         msDetectedFormat = "EPS";
         return true;
@@ -419,7 +405,8 @@ bool GraphicFormatDetector::checkRAS()
 
 bool GraphicFormatDetector::checkXPM()
 {
-    if (searchEntry(maFirstBytes.data(), "/* XPM */", 256, 9))
+    const char* pFirstBytesAsCharArray = reinterpret_cast<char*>(maFirstBytes.data());
+    if (matchArrayWithString(pFirstBytesAsCharArray, 256, "/* XPM */"))
     {
         msDetectedFormat = "XPM";
         return true;
@@ -434,15 +421,13 @@ bool GraphicFormatDetector::checkXBM()
 
     mrStream.Seek(mnStreamPosition);
     mrStream.ReadBytes(pBuffer.get(), nSize);
-    sal_uInt8* pPtr = searchEntry(pBuffer.get(), "#define", nSize, 7);
 
-    if (pPtr)
+    const char* pBufferAsCharArray = reinterpret_cast<char*>(pBuffer.get());
+
+    if (checkArrayForMatchingStrings(pBufferAsCharArray, nSize, { "#define", "_width" }))
     {
-        if (searchEntry(pPtr, "_width", pBuffer.get() + nSize - pPtr, 6))
-        {
-            msDetectedFormat = "XBM";
-            return true;
-        }
+        msDetectedFormat = "XBM";
+        return true;
     }
     return false;
 }
@@ -473,20 +458,20 @@ bool GraphicFormatDetector::checkSVG()
 
     bool bIsSvg(false);
 
+    const char* pCheckArrayAsCharArray = reinterpret_cast<char*>(pCheckArray);
+
     // check for XML
     // #119176# SVG files which have no xml header at all have shown up this is optional
     // check for "xml" then "version" then "DOCTYPE" and "svg" tags
-    if (searchEntry(pCheckArray, "<?xml", nCheckSize, 5)
-        && searchEntry(pCheckArray, "version", nCheckSize, 7)
-        && searchEntry(pCheckArray, "DOCTYPE", nCheckSize, 7)
-        && searchEntry(pCheckArray, "svg", nCheckSize, 3))
+    if (checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize,
+                                     { "<?xml", "version", "DOCTYPE", "svg" }))
     {
         bIsSvg = true;
     }
 
     // check for svg element in 1st 256 bytes
     // search for '<svg'
-    if (!bIsSvg && searchEntry(pCheckArray, "<svg", nCheckSize, 4))
+    if (!bIsSvg && checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg" }))
     {
         bIsSvg = true;
     }
@@ -499,7 +484,7 @@ bool GraphicFormatDetector::checkSVG()
         // with Svg files containing big comment headers or Svg as the host
         // language
 
-        pCheckArray = sExtendedOrDecompressedFirstBytes;
+        pCheckArrayAsCharArray = reinterpret_cast<char*>(sExtendedOrDecompressedFirstBytes);
 
         if (bIsGZip)
         {
@@ -513,7 +498,7 @@ bool GraphicFormatDetector::checkSVG()
         }
 
         // search for '<svg'
-        if (searchEntry(pCheckArray, "<svg", nCheckSize, 4))
+        if (checkArrayForMatchingStrings(pCheckArrayAsCharArray, nCheckSize, { "<svg" }))
         {
             bIsSvg = true;
         }
