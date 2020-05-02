@@ -89,6 +89,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     checkCurrentCell(2, 6);
 }
 
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124829)
+{
+    ScModelObj* pModelObj = createDoc("tdf124829.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    for (sal_uInt16 i = 0; i < 40; i++)
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    checkCurrentCell(0, 0);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Name"), pDoc->GetString(ScAddress(0, 0, 5)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
 {
     ScModelObj* pModelObj = createDoc("tdf126904.ods");
