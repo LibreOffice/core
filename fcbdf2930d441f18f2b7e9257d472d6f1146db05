@@ -16,6 +16,24 @@
       "revId": "fcbdf2930d441f18f2b7e9257d472d6f1146db05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ae9343_70a107f0",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4369,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-05-02T08:33:46Z",
+      "side": 1,
+      "message": "I was not sure about a locale dependent number, but now I think that it should be the VBA format using the dot decimal separator. Otherwise, marcos do not work for different locales and a specific macro has to be changed for every document using a different locale.\n\nFor the group separators, could you give me an example? As far as I understand, Autofilters may have different criterias, for instance, Worksheets(\"Sheet1\").Range(\"A1\").AutoFilter Field:\u003d1, Criteria1:\u003d\"\u003e10\", _Operator:\u003dxlAnd, Criteria2:\u003d\"\u003c20\"",
+      "parentUuid": "63427288_853c2f18",
+      "revId": "fcbdf2930d441f18f2b7e9257d472d6f1146db05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
