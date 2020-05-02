@@ -311,8 +311,7 @@ bool GraphicFormatDetector::checkEPS()
         msDetectedFormat = "EPS";
         return true;
     }
-    else if (matchArrayWithString(pFirstBytesAsCharArray, 10, "%!PS-Adobe")
-             && matchArrayWithString(pFirstBytesAsCharArray + 15, 3, "EPS"))
+    else if (checkArrayForMatchingStrings(pFirstBytesAsCharArray, 30, { "%!PS-Adobe", " EPS" }))
     {
         msDetectedFormat = "EPS";
         return true;
