@@ -508,7 +508,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id=".uno:ObjectAlignLeft">
+                  <object class="GtkToggleToolButton" id=".uno:ObjectAlignLeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -519,7 +519,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:AlignCenter">
+                  <object class="GtkToggleToolButton" id=".uno:AlignCenter">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -530,7 +530,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:ObjectAlignRight">
+                  <object class="GtkToggleToolButton" id=".uno:ObjectAlignRight">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
