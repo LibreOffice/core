@@ -12,6 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/styles))
 extras_TEMPLATES_STYLES := \
 	Default \
 	Modern \
+	Simple \
 
 
 extras_STYLES_XMLFILES := \
@@ -23,6 +24,10 @@ extras_STYLES_XMLFILES := \
 	Modern/meta.xml \
 	Modern/styles.xml \
 	Modern/Thumbnails/thumbnail.png \
+	Simple/META-INF/manifest.xml \
+	Simple/meta.xml \
+	Simple/styles.xml \
+	Simple	/Thumbnails/thumbnail.png \
 
 
 extras_STYLES_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_STYLES),$(atexts)/mimetype)
