@@ -287,9 +287,12 @@ protected:
         {
             verify();
         }
+        int nImportPages = getPages();
         postLoad(filename);
         reload(mpFilter, filename, pPassword);
         verify();
+        int nExportPages = getPages();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages at import and export time are different", nImportPages, nExportPages);
         finish();
         maTempFile.EnableKillingFile();
     }
@@ -305,9 +308,12 @@ protected:
         header();
         std::unique_ptr<Resetter> const pChanges(preTest(filename));
         load(mpTestDocumentPath, filename, pPassword);
+        int nImportPages = getPages();
         postLoad(filename);
         reload(mpFilter, filename, pPassword);
         verify();
+        int nExportPages = getPages();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages at import and export time are different", nImportPages, nExportPages);
         finish();
         maTempFile.EnableKillingFile();
     }
