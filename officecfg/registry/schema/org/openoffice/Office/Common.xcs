@@ -5952,7 +5952,7 @@
       <prop oor:name="IsWholeWordsOnly" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search for whole words only.</desc>
         </info>
@@ -5961,7 +5961,7 @@
       <prop oor:name="IsBackwards" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search backwards.</desc>
         </info>
@@ -5970,7 +5970,7 @@
       <prop oor:name="IsUseWildcard" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of wildcards.</desc>
         </info>
@@ -5979,7 +5979,7 @@
       <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of regular expressions.</desc>
         </info>
@@ -5988,7 +5988,7 @@
       <prop oor:name="IsSearchForStyles" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search for styles only.</desc>
         </info>
@@ -5997,7 +5997,7 @@
       <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with similarity.</desc>
         </info>
@@ -6006,7 +6006,7 @@
       <prop oor:name="IsMatchCase" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search as case sensitive.</desc>
         </info>
@@ -6015,7 +6015,7 @@
       <prop oor:name="IsIgnoreDiacritics_CTL" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search ignores diacritics, not only CTL though.</desc>
         </info>
@@ -6024,7 +6024,7 @@
       <prop oor:name="IsIgnoreKashida_CTL" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of CTL option.</desc>
         </info>
@@ -6033,28 +6033,28 @@
       <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies search with the use of Asian options.</desc>
         </info>
         <value>false</value>
       </prop>
       <prop oor:name="ComponentSearchGroupLabel" oor:type="xs:string" oor:localized="true">
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies the divider label in case of a component-based search
           extension.</desc>
         </info>
       </prop>
       <prop oor:name="ComponentSearchCommandLabel1" oor:type="xs:string" oor:localized="true">
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies the label of the first component-based search
           command.</desc>
         </info>
       </prop>
       <prop oor:name="ComponentSearchCommandLabel2" oor:type="xs:string" oor:localized="true">
-        <!-- UIHints: Edit/Find & Replace -->
+        <!-- UIHints: Edit/Find and Replace -->
         <info>
           <desc>Specifies the label of the second component-based search
           command.</desc>
@@ -6068,7 +6068,7 @@
         <value>false</value>
       </prop>
       <prop oor:name="IsSearchFormatted" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Edit / Find & Replace  -->
+        <!-- UIHints: Edit / Find and Replace  -->
         <info>
           <desc>Specifies if formatted display strings are searched instead of cell content (Calc).</desc>
         </info>

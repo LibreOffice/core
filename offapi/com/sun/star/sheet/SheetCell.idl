@@ -111,7 +111,7 @@ published service SheetCell
     interface com::sun::star::document::XActionLockable;
 
 
-    /** provides "Find & Replace" functionality.
+    /** provides "Find and Replace" functionality.
 
         <p>The property
         com::sun::star::util::SearchDescriptor::SearchWords
