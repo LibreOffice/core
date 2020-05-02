@@ -28,43 +28,46 @@ using namespace css;
 
 namespace drawinglayer
 {
-    bool renderWrongSpellPrimitive2D(
-        const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate,
-        OutputDevice& rOutputDevice,
-        const basegfx::B2DHomMatrix& rObjectToViewTransformation,
-        const basegfx::BColorModifierStack& rBColorModifierStack)
+bool renderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate,
+                                 OutputDevice& rOutputDevice,
+                                 const basegfx::B2DHomMatrix& rObjectToViewTransformation,
+                                 const basegfx::BColorModifierStack& rBColorModifierStack)
+{
+    const basegfx::B2DHomMatrix aLocalTransform(rObjectToViewTransformation
+                                                * rWrongSpellCandidate.getTransformation());
+    const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
+    const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
+
+    static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN 5
+
+    if (nFontPixelHeight > nMinimumFontHeight)
     {
-        const basegfx::B2DHomMatrix aLocalTransform(rObjectToViewTransformation * rWrongSpellCandidate.getTransformation());
-        const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
-        const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
+        const basegfx::B2DPoint aStart(aLocalTransform
+                                       * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
+        const basegfx::B2DPoint aStop(aLocalTransform
+                                      * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
+        const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
+        const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
 
-        static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
+        // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
+        // e.g. when used with mask/transparence buffer device
+        const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
 
-        if(nFontPixelHeight > nMinimumFontHeight)
-        {
-            const basegfx::B2DPoint aStart(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
-            const basegfx::B2DPoint aStop(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
-            const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
-            const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
+        const basegfx::BColor aProcessedColor(
+            rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
+        const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
 
-            // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
-            // e.g. when used with mask/transparence buffer device
-            const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
-
-            const basegfx::BColor aProcessedColor(rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
-            const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
-
-            vcl::ScopedAntialiasing a(rOutputDevice, true);
-            rOutputDevice.EnableMapMode(false);
-            rOutputDevice.SetLineColor(Color(aProcessedColor));
-            rOutputDevice.SetFillColor();
-            rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop);
-            rOutputDevice.EnableMapMode(bMapModeEnabledState);
-        }
-
-        // cannot really go wrong
-        return true;
+        vcl::ScopedAntialiasing a(rOutputDevice, true);
+        rOutputDevice.EnableMapMode(false);
+        rOutputDevice.SetLineColor(Color(aProcessedColor));
+        rOutputDevice.SetFillColor();
+        rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop);
+        rOutputDevice.EnableMapMode(bMapModeEnabledState);
     }
+
+    // cannot really go wrong
+    return true;
+}
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
