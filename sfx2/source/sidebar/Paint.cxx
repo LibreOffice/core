@@ -63,7 +63,7 @@ const Color& Paint::GetColor() const
         return aErrorColor;
     }
     else
-        return ::boost::get<Color>(maValue);
+        return std::get<Color>(maValue);
 }
 
 const Gradient& Paint::GetGradient() const
@@ -75,7 +75,7 @@ const Gradient& Paint::GetGradient() const
         return aErrorGradient;
     }
     else
-        return ::boost::get<Gradient>(maValue);
+        return std::get<Gradient>(maValue);
 }
 
 Wallpaper Paint::GetWallpaper() const

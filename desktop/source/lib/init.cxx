@@ -545,7 +545,7 @@ RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const 
     setRectangleAndPart(RectangleAndPart::Create(payload));
 
     // Return reference to the cached object.
-    return boost::get<RectangleAndPart>(PayloadObject);
+    return std::get<RectangleAndPart>(PayloadObject);
 }
 
 void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndPart& rRectAndPart)
@@ -556,8 +556,8 @@ void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndP
 
 const RectangleAndPart& CallbackFlushHandler::CallbackData::getRectangleAndPart() const
 {
-    assert(PayloadObject.which() == 1);
-    return boost::get<RectangleAndPart>(PayloadObject);
+    assert(PayloadObject.index() == 1);
+    return std::get<RectangleAndPart>(PayloadObject);
 }
 
 boost::property_tree::ptree& CallbackFlushHandler::CallbackData::setJson(const std::string& payload)
@@ -570,7 +570,7 @@ boost::property_tree::ptree& CallbackFlushHandler::CallbackData::setJson(const s
     setJson(aTree);
 
     // Return reference to the cached object.
-    return boost::get<boost::property_tree::ptree>(PayloadObject);
+    return std::get<boost::property_tree::ptree>(PayloadObject);
 }
 
 void CallbackFlushHandler::CallbackData::setJson(const boost::property_tree::ptree& rTree)
@@ -585,13 +585,13 @@ void CallbackFlushHandler::CallbackData::setJson(const boost::property_tree::ptr
 
 const boost::property_tree::ptree& CallbackFlushHandler::CallbackData::getJson() const
 {
-    assert(PayloadObject.which() == 2);
-    return boost::get<boost::property_tree::ptree>(PayloadObject);
+    assert(PayloadObject.index() == 2);
+    return std::get<boost::property_tree::ptree>(PayloadObject);
 }
 
 bool CallbackFlushHandler::CallbackData::validate() const
 {
-    switch (PayloadObject.which())
+    switch (PayloadObject.index())
     {
         // Not cached.
         case 0:

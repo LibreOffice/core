@@ -16,7 +16,7 @@
 #include <mutex>
 
 #include <boost/property_tree/ptree.hpp>
-#include <boost/variant.hpp>
+#include <variant>
 
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
@@ -117,14 +117,14 @@ namespace desktop {
             bool validate() const;
 
             /// Returns true iff there is cached data.
-            bool isCached() const { return PayloadObject.which() != 0; }
+            bool isCached() const { return PayloadObject.index() != 0; }
 
             int Type;
             std::string PayloadString;
 
         private:
             /// The parsed payload cache. Update validate() when changing this.
-            boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
+            std::variant<std::monostate, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
         };
 
         typedef std::vector<CallbackData> queue_type;

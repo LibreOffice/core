@@ -21,7 +21,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
 
-#include <boost/variant.hpp>
+#include <variant>
 
 namespace sfx2 { namespace sidebar {
 
@@ -62,7 +62,7 @@ public:
 
 private:
     Type meType;
-    ::boost::variant<
+    std::variant<
         Color,
         Gradient
     > maValue;
