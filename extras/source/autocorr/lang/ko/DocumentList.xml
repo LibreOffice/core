@@ -3,6 +3,13 @@
   <block-list:block block-list:abbreviated-name=".5" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name=".*(C)" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=".*(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(주)" block-list:name="㈜"/>
+  <block-list:block block-list:abbreviated-name=".*(KS)" block-list:name="㉿"/>
+  <block-list:block block-list:abbreviated-name="가까와" block-list:name="가까워"/>
+  <block-list:block block-list:abbreviated-name="가까왔" block-list:name="가까웠"/>
+  <block-list:block block-list:abbreviated-name="가까히" block-list:name="가까이"/>
+  <block-list:block block-list:abbreviated-name="가랭이" block-list:name="가랑이"/>
+  <block-list:block block-list:abbreviated-name="가운대" block-list:name="가운데"/>
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
