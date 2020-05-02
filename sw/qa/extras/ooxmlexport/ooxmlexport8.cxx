@@ -452,6 +452,11 @@ DECLARE_OOXMLEXPORT_TEST(testN778828, "n778828.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106724, "tdf106724.docx")
+{
+    // This document simply crashed the importer.
+}
+
 DECLARE_OOXMLEXPORT_TEST(testN779834, "n779834.docx")
 {
     // This document simply crashed the importer.
