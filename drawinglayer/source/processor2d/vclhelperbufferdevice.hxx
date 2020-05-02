@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
+#pragma once
 
 #include <vcl/virdev.hxx>
 
-
-// predefines
-
 namespace basegfx { class B2DRange; }
-
 
 // support methods for vcl direct gradient rendering
 
@@ -53,8 +48,5 @@ namespace drawinglayer
         VirtualDevice& getTransparence();
     };
 } // end of namespace drawinglayer
-
-
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
