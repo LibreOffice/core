@@ -42,6 +42,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectSVG();
     void testDetectSVGZ();
     void testDetectPDF();
+    void testDetectEPS();
     void testMatchArray();
     void testCheckArrayForMatchingStrings();
 
@@ -61,6 +62,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectSVG);
     CPPUNIT_TEST(testDetectSVGZ);
     CPPUNIT_TEST(testDetectPDF);
+    CPPUNIT_TEST(testDetectEPS);
     CPPUNIT_TEST(testMatchArray);
     CPPUNIT_TEST(testCheckArrayForMatchingStrings);
     CPPUNIT_TEST_SUITE_END();
@@ -289,6 +291,21 @@ void GraphicFormatDetectorTest::testDetectPDF()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("PDF"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectEPS()
+{
+    SvFileStream aFileStream(getFullUrl("TypeDetectionExample.eps"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "EPS");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkEPS());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(ImpPeekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("EPS"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()
