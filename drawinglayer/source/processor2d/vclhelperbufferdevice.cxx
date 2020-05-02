@@ -39,16 +39,14 @@
 
 namespace
 {
-typedef std::vector<VclPtr<VirtualDevice>> aBuffers;
-
 class VDevBuffer : public Timer, protected cppu::BaseMutex
 {
 private:
     // available buffers
-    aBuffers maFreeBuffers;
+    std::vector<VclPtr<VirtualDevice>> maFreeBuffers;
 
     // allocated/used buffers (remembered to allow deleting them in destructor)
-    aBuffers maUsedBuffers;
+    std::vector<VclPtr<VirtualDevice>> maUsedBuffers;
 
     // remember what outputdevice was the template passed to VirtualDevice::Create
     // so we can test if that OutputDevice was disposed before reusing a
@@ -83,13 +81,13 @@ VDevBuffer::~VDevBuffer()
 
     while (!maFreeBuffers.empty())
     {
-        (*(maFreeBuffers.end() - 1)).disposeAndClear();
+        maFreeBuffers.back().disposeAndClear();
         maFreeBuffers.pop_back();
     }
 
     while (!maUsedBuffers.empty())
     {
-        (*(maUsedBuffers.end() - 1)).disposeAndClear();
+        maUsedBuffers.back().disposeAndClear();
         maUsedBuffers.pop_back();
     }
 }
@@ -105,9 +103,9 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     bool bOkay(false);
     if (!maFreeBuffers.empty())
     {
-        aBuffers::iterator aFound(maFreeBuffers.end());
+        auto aFound(maFreeBuffers.end());
 
-        for (aBuffers::iterator a(maFreeBuffers.begin()); a != maFreeBuffers.end(); ++a)
+        for (auto a = maFreeBuffers.begin(); a != maFreeBuffers.end(); ++a)
         {
             assert(*a && "Empty pointer in VDevBuffer (!)");
 
@@ -220,8 +218,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
 void VDevBuffer::free(VirtualDevice& rDevice)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    const aBuffers::iterator aUsedFound(
-        std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice));
+    const auto aUsedFound = std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice);
     OSL_ENSURE(aUsedFound != maUsedBuffers.end(), "OOps, non-registered buffer freed (!)");
 
     maUsedBuffers.erase(aUsedFound);
@@ -237,9 +234,9 @@ void VDevBuffer::Invoke()
 
     while (!maFreeBuffers.empty())
     {
-        aBuffers::iterator aLastOne(maFreeBuffers.end() - 1);
-        maDeviceTemplates.erase(*aLastOne);
-        aLastOne->disposeAndClear();
+        auto aLastOne = maFreeBuffers.back();
+        maDeviceTemplates.erase(aLastOne);
+        aLastOne.disposeAndClear();
         maFreeBuffers.pop_back();
     }
 }
