@@ -3752,8 +3752,6 @@ drawinglayer/source/processor2d/objectinfoextractor2d.cxx
 drawinglayer/source/processor2d/processor2dtools.cxx
 drawinglayer/source/processor2d/processorfromoutputdevice.cxx
 drawinglayer/source/processor2d/textaspolygonextractor2d.cxx
-drawinglayer/source/processor2d/vclhelperbufferdevice.cxx
-drawinglayer/source/processor2d/vclhelperbufferdevice.hxx
 drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx
 drawinglayer/source/processor2d/vclmetafileprocessor2d.hxx
 drawinglayer/source/processor3d/baseprocessor3d.cxx

@@ -21,32 +21,33 @@
 
 #include <vcl/virdev.hxx>
 
-namespace basegfx { class B2DRange; }
+namespace basegfx
+{
+class B2DRange;
+}
 
 // support methods for vcl direct gradient rendering
 
 namespace drawinglayer
 {
-    class impBufferDevice
-    {
-        OutputDevice&                       mrOutDev;
-        VclPtr<VirtualDevice>               mpContent;
-        VclPtr<VirtualDevice>               mpMask;
-        VclPtr<VirtualDevice>               mpAlpha;
-        ::tools::Rectangle                  maDestPixel;
+class impBufferDevice
+{
+    OutputDevice& mrOutDev;
+    VclPtr<VirtualDevice> mpContent;
+    VclPtr<VirtualDevice> mpMask;
+    VclPtr<VirtualDevice> mpAlpha;
+    tools::Rectangle maDestPixel;
 
-    public:
-        impBufferDevice(
-            OutputDevice& rOutDev,
-            const basegfx::B2DRange& rRange);
-        ~impBufferDevice();
+public:
+    impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange);
+    ~impBufferDevice();
 
-        void paint(double fTrans = 0.0);
-        bool isVisible() const { return !maDestPixel.IsEmpty(); }
-        VirtualDevice& getContent();
-        VirtualDevice& getMask();
-        VirtualDevice& getTransparence();
-    };
+    void paint(double fTrans = 0.0);
+    bool isVisible() const { return !maDestPixel.IsEmpty(); }
+    VirtualDevice& getContent();
+    VirtualDevice& getMask();
+    VirtualDevice& getTransparence();
+};
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
