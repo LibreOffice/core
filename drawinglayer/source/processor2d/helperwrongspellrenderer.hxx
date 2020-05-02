@@ -17,23 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
-
-
-// predefines
+#pragma once
 
 class OutputDevice;
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     class WrongSpellPrimitive2D;
-}}
+}
 
 namespace basegfx {
     class B2DHomMatrix;
     class BColorModifierStack;
 }
-
 
 // support WrongSpell rendering using VCL from primitives due to VCLs nice
 // and fast solution with wavelines
@@ -47,8 +42,5 @@ namespace drawinglayer
         const basegfx::BColorModifierStack& rBColorModifierStack);
 
 } // end of namespace drawinglayer
-
-
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_HELPERWRONGSPELLRENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
