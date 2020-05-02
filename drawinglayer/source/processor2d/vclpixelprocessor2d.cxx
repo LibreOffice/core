@@ -19,8 +19,16 @@
 
 #include "vclpixelprocessor2d.hxx"
 #include "vclhelperbufferdevice.hxx"
+#include "helperwrongspellrenderer.hxx"
+
+#include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/hatch.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -41,25 +49,19 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
-#include <primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include "helperwrongspellrenderer.hxx"
-#include <primitive2d/fillhatchprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vcl/hatch.hxx>
-#include <sal/log.hxx>
-#include <com/sun/star/awt/XControl.hpp>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
-#include <primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <primitive2d/pointarrayprimitive2d.hxx>
+#include <primitive2d/fillhatchprimitive2d.hxx>
+#include <primitive2d/epsprimitive2d.hxx>
 
-#include <vcl/dibtools.hxx>
-#include <tools/stream.hxx>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 
 using namespace com::sun::star;
 
