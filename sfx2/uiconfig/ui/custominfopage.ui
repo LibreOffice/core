@@ -5,6 +5,8 @@
   <object class="GtkGrid" id="CustomInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">6</property>
     <child>
@@ -85,6 +87,8 @@
           <object class="GtkViewport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkBox" id="box">
                 <property name="visible">True</property>
