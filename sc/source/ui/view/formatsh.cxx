@@ -433,7 +433,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         weld::Window* pDialogParent = rReq.GetFrameWeld();
                         if (!pDialogParent)
                             pDialogParent = pTabViewShell->GetFrameWeld();
-                        SfxNewStyleDlg aDlg(pDialogParent, *pStylePool);
+                        SfxNewStyleDlg aDlg(pDialogParent, *pStylePool, eFamily, SfxStyleSearchBits::All);
                         if (aDlg.run() != RET_OK)
                             return;
                         aStyleName = aDlg.GetName();
