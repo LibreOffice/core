@@ -113,7 +113,7 @@ OUString SfxStyleDialogController::GenerateUnusedName(SfxStyleSheetBasePool &rPo
     OUString aNo(SfxResId(STR_NONAME));
     sal_uInt16 i = 1;
     OUString aNoName = aNo + OUString::number(i);
-    while (rPool.Find(aNoName, eFam, rPool.GetSearchMask()))
+    while (rPool.Find(aNoName, eFam))
     {
         ++i;
         aNoName = aNo + OUString::number(i);
