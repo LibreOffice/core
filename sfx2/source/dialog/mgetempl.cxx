@@ -110,7 +110,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
-        OUString aNoName(SfxStyleDialogController::GenerateUnusedName(*pPool));
+        OUString aNoName(SfxStyleDialogController::GenerateUnusedName(*pPool, pStyle->GetFamily()));
         pStyle->SetName( aNoName );
         aName = aNoName;
         aFollow = pStyle->GetFollow();

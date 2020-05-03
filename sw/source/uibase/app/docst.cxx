@@ -310,7 +310,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 sParent = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             if (sName.isEmpty() && m_xBasePool.get())
-                sName = SfxStyleDialogController::GenerateUnusedName(*m_xBasePool);
+                sName = SfxStyleDialogController::GenerateUnusedName(*m_xBasePool, nFamily);
 
             Edit(sName, sParent, nFamily, nMask, true, OString(), nullptr, &rReq, nSlot);
         }

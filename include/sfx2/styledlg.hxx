@@ -25,6 +25,7 @@
 
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
+enum class SfxStyleFamily;
 
 class SFX2_DLLPUBLIC SfxStyleDialogController : public SfxTabDialogController
 {
@@ -43,7 +44,7 @@ public:
 
     virtual short               Ok() override;
 
-    static OUString GenerateUnusedName(SfxStyleSheetBasePool &rPool);
+    static OUString GenerateUnusedName(SfxStyleSheetBasePool &rPool, SfxStyleFamily eFam);
 };
 
 #endif
