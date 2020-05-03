@@ -358,7 +358,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
         if ( pBuf && !bAnyIsReady )
         {
-            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.(); nInd++ )
                  if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
                   && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
                   && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
@@ -376,7 +376,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     // Actually all the required graphical formats must be supported
-    for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+    for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.(); nInd++ )
          if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
           && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType )
             return true;
@@ -572,7 +572,7 @@ uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsFor
             sal_Int32 nLength = aResult.getLength();
             aResult.realloc( nLength + m_aSupportedGraphFormats.getLength() );
 
-            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
+            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.(); nInd++ )
             {
                 aResult[nLength + nInd].MimeType = m_aSupportedGraphFormats[nInd].MimeType + aAspectSuffix;
                 aResult[nLength + nInd].HumanPresentableName = m_aSupportedGraphFormats[nInd].HumanPresentableName;
@@ -1628,7 +1628,7 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
         RetrieveObjectDataFlavors_Impl();
     }
 
-    for ( sal_Int32 nInd = 0; nInd < m_aDataFlavors.getLength(); nInd++ )
+    for ( sal_Int32 nInd = 0; nInd < m_aDataFlavors.(); nInd++ )
         if ( m_aDataFlavors[nInd].MimeType.equals( aFlavor.MimeType ) && m_aDataFlavors[nInd].DataType == aFlavor.DataType )
             return true;
 

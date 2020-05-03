@@ -256,9 +256,8 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     comphelper::SequenceAsHashMap lProps;
 
     lProps[OUString("ooSetupFactoryModuleIdentifier")] <<= sName;
-    for (sal_Int32 i = 0; i < lPropNames.getLength(); ++i)
+    for (const OUString& sPropName : lPropNames)
     {
-        const OUString& sPropName = lPropNames[i];
         lProps[sPropName] = xModule->getByName(sPropName);
     }
 
@@ -296,11 +295,11 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
     const css::uno::Sequence< OUString > lModules = getElementNames();
     ::std::vector< css::uno::Any > lResult;
 
-    for (sal_Int32 i = 0; i < lModules.getLength(); ++i)
+    for (const OUString& rModuleName : lModules)
     {
         try
         {
-            ::comphelper::SequenceAsHashMap lModuleProps = getByName(lModules[i]);
+            ::comphelper::SequenceAsHashMap lModuleProps = getByName(rModuleName);
             if (lModuleProps.match(lSearchProps))
                 lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
         }
@@ -331,10 +330,10 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
         return OUString();
 
     const css::uno::Sequence< OUString > lKnownModules = getElementNames();
-    for (sal_Int32 i = 0; i < lKnownModules.getLength(); ++i)
+    for (const OUString& rName : lKnownModules)
     {
-        if (xInfo->supportsService(lKnownModules[i]))
-            return lKnownModules[i];
+        if (xInfo->supportsService(rName))
+            return rName;
     }
 
     return OUString();

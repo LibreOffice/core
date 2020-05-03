@@ -3258,18 +3258,18 @@ void VBAConstantHelper::init()
                 sLeafName = sFullName.copy( indexLastDot + 1);
             }
             aConstCache.push_back( sLeafName ); // assume constant group names are unique
-            Sequence< Reference< XConstantTypeDescription > > aConsts = xConstants->getConstants();
-            for (sal_Int32 i = 0; i != aConsts.getLength(); ++i)
+            const Sequence< Reference< XConstantTypeDescription > > aConsts = xConstants->getConstants();
+            for (const auto& ctd : aConsts)
             {
                 // store constant member name
-                sFullName = aConsts[i]->getName();
+                sFullName = ctd->getName();
                 indexLastDot = sFullName.lastIndexOf('.');
                 sLeafName = sFullName;
                 if ( indexLastDot > -1 )
                 {
                     sLeafName = sFullName.copy( indexLastDot + 1);
                 }
-                aConstHash[ sLeafName.toAsciiLowerCase() ] = aConsts[i]->getConstantValue();
+                aConstHash[ sLeafName.toAsciiLowerCase() ] = ctd->getConstantValue();
             }
         }
     }

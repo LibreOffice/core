@@ -145,10 +145,10 @@ void Entry_Impl::checkDependencies()
         if ( e.Cause >>= depExc )
         {
             OUStringBuffer aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
-            for ( sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i )
+            for ( const auto& i : std::as_const(depExc.UnsatisfiedDependencies) )
             {
                 aMissingDep.append("\n");
-                aMissingDep.append(dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]));
+                aMissingDep.append(dp_misc::Dependencies::getErrorText(i));
             }
             aMissingDep.append("\n");
             m_sErrorText = aMissingDep.makeStringAndClear();

@@ -377,7 +377,7 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
 
 #if DEBUG_TAB_PROTECTION
         fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
-        for (sal_Int32 i = 0; i < aHash.getLength(); ++i)
+        for (sal_Int32 i = 0; i < aHash.(); ++i)
             printf("%2.2X ", static_cast<sal_uInt8>(aHash[i]));
         printf("\n");
 #endif

@@ -509,8 +509,8 @@ namespace svt
 
                 if ( aTemplateList.hasElements() )
                 {
-                    for ( long i=0; i < aTemplateList.getLength(); i++ )
-                        pListbox->append_text( aTemplateList[i] );
+                    for ( const OUString& s : std::as_const(aTemplateList) )
+                        pListbox->append_text( s );
                 }
             }
             break;

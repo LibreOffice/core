@@ -662,7 +662,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                             }
                             else
                                 aBuf.append(cChar);
-                        } // for (j = 0; j < aStr.getLength(); ++j)
+                        } // for (j = 0; j < aStr.(); ++j)
                         aStrConverted = aBuf.makeStringAndClear();
                     } // if ( DataType::INTEGER != nType )
                     else

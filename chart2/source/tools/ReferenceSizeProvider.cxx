@@ -71,12 +71,12 @@ void ReferenceSizeProvider::setValuesAtTitle(
         // set from auto-resize on to off -> adapt font sizes at XFormattedStrings
         if( bHasOldRefSize && ! useAutoScale())
         {
-            uno::Sequence< uno::Reference< XFormattedString > > aStrSeq(
+            const uno::Sequence< uno::Reference< XFormattedString > > aStrSeq(
                 xTitle->getText());
-            for( sal_Int32 i=0; i<aStrSeq.getLength(); ++i )
+            for( uno::Reference< XFormattedString > const & formattedStr : aStrSeq )
             {
                 RelativeSizeHelper::adaptFontSizes(
-                    Reference< beans::XPropertySet >( aStrSeq[i], uno::UNO_QUERY ),
+                    Reference< beans::XPropertySet >( formattedStr, uno::UNO_QUERY ),
                     aOldRefSize, getPageSize());
             }
         }
@@ -108,9 +108,9 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
             {
                 if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
                 {
-                    for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
+                    for( sal_Int32 idx : aPointIndexes )
                         setValuesAtPropertySet(
-                            elem->getDataPointByIndex( aPointIndexes[i] ) );
+                            elem->getDataPointByIndex( idx ) );
                 }
             }
             catch (const uno::Exception&)
@@ -248,13 +248,13 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // Axes (incl. Axis Titles)
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
+    const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+    for( Reference< XAxis > const & axis : aAxes )
     {
-        Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xProp( axis, uno::UNO_QUERY );
         if( xProp.is())
             getAutoResizeFromPropSet( xProp, eResult );
-        Reference< XTitled > xTitled( aAxes[i], uno::UNO_QUERY );
+        Reference< XTitled > xTitled( axis, uno::UNO_QUERY );
         if( xTitled.is())
         {
             impl_getAutoResizeFromTitled( xTitled, eResult );
@@ -282,10 +282,10 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
             {
                 if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
                 {
-                    for( sal_Int32 i=0; i< aPointIndexes.getLength(); ++i )
+                    for( sal_Int32 idx : aPointIndexes )
                     {
                         getAutoResizeFromPropSet(
-                            elem->getDataPointByIndex( aPointIndexes[i] ), eResult );
+                            elem->getDataPointByIndex( idx ), eResult );
                         if( eResult == AUTO_RESIZE_AMBIGUOUS )
                             return eResult;
                     }
@@ -330,13 +330,13 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
         setValuesAtPropertySet( xLegendProp );
 
     // Axes (incl. Axis Titles)
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
+    const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+    for( Reference< XAxis > const & axis : aAxes )
     {
-        Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xProp( axis, uno::UNO_QUERY );
         if( xProp.is())
             setValuesAtPropertySet( xProp );
-        impl_setValuesAtTitled( Reference< XTitled >( aAxes[i], uno::UNO_QUERY ));
+        impl_setValuesAtTitled( Reference< XTitled >( axis, uno::UNO_QUERY ));
     }
 
     // DataSeries/Points

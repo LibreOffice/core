@@ -187,12 +187,12 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLinePropertie
         return;
 
     VLineProperties aLineProperties;
-    for( sal_Int32 nN=0; nN < rGridPropertiesList.getLength(); nN++ )
+    for( const auto & rxPropSet : rGridPropertiesList )
     {
-        if(!AxisHelper::isGridVisible( rGridPropertiesList[nN] ))
+        if(!AxisHelper::isGridVisible( rxPropSet ))
             aLineProperties.LineStyle <<= drawing::LineStyle_NONE;
         else
-            aLineProperties.initFromPropertySet( rGridPropertiesList[nN] );
+            aLineProperties.initFromPropertySet( rxPropSet );
         rLinePropertiesList.push_back(aLineProperties);
     }
 };

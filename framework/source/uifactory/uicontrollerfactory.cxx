@@ -126,9 +126,9 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     // Retrieve the optional module name from the Arguments sequence. It is used as a part of
     // the hash map key to support different controller implementation for the same URL but different
     // module!!
-    for ( int i = 0; i < Arguments.getLength(); i++ )
+    for ( Any const & arg : Arguments )
     {
-        if (( Arguments[i] >>= aPropValue ) && ( aPropValue.Name == aPropModuleName ))
+        if (( arg >>= aPropValue ) && ( aPropValue.Name == aPropModuleName ))
         {
             aPropValue.Value >>= aPropName;
             break;

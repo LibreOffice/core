@@ -585,21 +585,19 @@ UICommandDescription::~UICommandDescription()
 void UICommandDescription::impl_fillElements(const char* _pName)
 {
     m_xModuleManager.set( ModuleManager::create( m_xContext ) );
-    Sequence< OUString > aElementNames = m_xModuleManager->getElementNames();
-    Sequence< PropertyValue > aSeq;
-    OUString                  aModuleIdentifier;
+    const Sequence< OUString > aElementNames = m_xModuleManager->getElementNames();
 
-    for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
+    for ( OUString const & aModuleIdentifier : aElementNames )
     {
-        aModuleIdentifier = aElementNames[i];
+        Sequence< PropertyValue > aSeq;
         if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             OUString aCommandStr;
-            for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
+            for ( PropertyValue const & prop : std::as_const(aSeq) )
             {
-                if ( aSeq[y].Name.equalsAscii(_pName) )
+                if ( prop.Name.equalsAscii(_pName) )
                 {
-                    aSeq[y].Value >>= aCommandStr;
+                    prop.Value >>= aCommandStr;
                     break;
                 }
             }
@@ -612,7 +610,7 @@ void UICommandDescription::impl_fillElements(const char* _pName)
             if ( pIter == m_aUICommandsHashMap.end() )
                 m_aUICommandsHashMap.emplace( aCommandStr, Reference< XNameAccess >() );
         }
-    } // for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
+    } // for ( sal_Int32 i = 0; i < aElementNames.(); i++ )
 }
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )

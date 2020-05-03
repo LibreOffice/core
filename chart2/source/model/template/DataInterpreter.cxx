@@ -66,7 +66,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     lcl_ShowDataSource( xSource );
 #endif
 
-    Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+    const Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
 
     Reference< data::XLabeledDataSequence > xCategories;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
@@ -77,22 +77,22 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    for( sal_Int32 i=0; i < aData.getLength(); ++i )
+    for( Reference< data::XLabeledDataSequence > const & labeledData : aData )
     {
         try
         {
             if( bHasCategories && ! bCategoriesUsed )
             {
-                xCategories.set( aData[i] );
+                xCategories.set( labeledData );
                 if( xCategories.is())
                     SetRole( xCategories->getValues(), "categories");
                 bCategoriesUsed = true;
             }
             else
             {
-                aSequencesVec.push_back( aData[i] );
-                if( aData[i].is())
-                    SetRole( aData[i]->getValues(), "values-y");
+                aSequencesVec.push_back( labeledData );
+                if( labeledData.is())
+                    SetRole( labeledData->getValues(), "values-y");
             }
         }
         catch( const uno::Exception & )
@@ -165,7 +165,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             {
 #ifdef DEBUG_CHART2_TEMPLATE
                 sal_Int32 j=0;
-                for( ; j<aSeqs.getLength(); ++j )
+                for( ; j<aSeqs.(); ++j )
                 {
                     assert( aSeqs[j] == xValuesY && "All sequences should be used" );
                 }
@@ -187,12 +187,12 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
 sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
-    Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
+    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
+    for( Reference< XDataSeries > const & i : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
+            Reference< data::XDataSource > xSrc( i, uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
             if( aSeq.getLength() != 1 )
                 return false;
@@ -270,19 +270,17 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     if( aInterpretedData.Categories.is())
         aResultVec.push_back( aInterpretedData.Categories );
 
-    Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
+    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
+    for( Reference< XDataSeries > const & dataSeries : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( aSeries[nSeriesIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
+            Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
+            const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
 
             // add all sequences of data series
-            for( sal_Int32 nSeqIdx=0; nSeqIdx<aSeq.getLength(); ++nSeqIdx )
+            for( Reference< data::XLabeledDataSequence > const & xAdd : aSeq )
             {
-                Reference< data::XLabeledDataSequence > xAdd( aSeq[nSeqIdx] );
-
                 // only add if sequence is not yet in the result
                 if( none_of( aResultVec.begin(), aResultVec.end(),
                              lcl_LabeledSequenceEquals( xAdd )) )

@@ -1308,9 +1308,8 @@ void SdImportTestSmartArt::testMissingBulletAndIndent()
     uno::Sequence<beans::PropertyValue> aBulletProps;
     xNumRule->getByIndex(1) >>= aBulletProps;
 
-    for (int i = 0; i < aBulletProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aBulletProps))
     {
-        const beans::PropertyValue& rProp = aBulletProps[i];
         if(rProp.Name == "LeftMargin")
             CPPUNIT_ASSERT_EQUAL(sal_Int32(309), rProp.Value.get<sal_Int32>());
     }

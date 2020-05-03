@@ -409,26 +409,26 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
 
         Reference< XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
         {
-            Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
-            Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            for( sal_Int32 j=0; j<aChartTypeSeq.getLength(); ++j )
+            Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
+            const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+            for( Reference< XChartType >  const & chartType : aChartTypeSeq )
             {
-                if( aChartTypeSeq[j].is())
+                if( chartType.is())
                 {
                     ++nNumberOfChartTypes;
                     if( nNumberOfChartTypes > 3 )
                         break;
-                    OUString aCTService = aChartTypeSeq[j]->getChartType();
+                    OUString aCTService = chartType->getChartType();
                     if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
-                        xVolumeChartType.set( aChartTypeSeq[j] );
+                        xVolumeChartType.set( chartType );
                     else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
-                        xCandleStickChartType.set( aChartTypeSeq[j] );
+                        xCandleStickChartType.set( chartType );
                     else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
-                        xLineChartType.set( aChartTypeSeq[j] );
+                        xLineChartType.set( chartType );
                 }
             }
             if( nNumberOfChartTypes > 3 )

@@ -1263,7 +1263,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
                         for (unsigned int i = 1; i < cNames; ++i)
                         {
                             bool bFound = false;
-                            for (int j = 0; j < aParamInfos.getLength(); ++j)
+                            for (int j = 0; j < aParamInfos.(); ++j)
                             {
                                 if (aParamInfos[j].aName.equalsIgnoreAsciiCase(OUString(o3tl::toU(rgszNames[i]))))
                                 {
@@ -2073,7 +2073,7 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
             const sal_Int16* pOutIndex = outIndex.getConstArray();
             const Any* pOutParams = outParams.getConstArray();
 
-            for (sal_Int32 i = 0; i < outIndex.getLength(); i++)
+            for (sal_Int32 i = 0; i < outIndex.(); i++)
             {
                 CComVariant variant;
                 // Currently a Sequence is converted to an SafeArray of VARIANTs.
@@ -2403,7 +2403,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
 
     int nMemId = 1;
     // Skip the three XInterface methods
-    for (int i = 3; i < aMethods.getLength(); i++)
+    for (int i = 3; i < aMethods.(); i++)
     {
         if (aMethods[i]->getName() == Method)
         {

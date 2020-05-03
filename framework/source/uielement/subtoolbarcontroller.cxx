@@ -94,10 +94,10 @@ public:
 
 SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs )
 {
-    css::beans::PropertyValue aPropValue;
-    for ( sal_Int32 i = 0; i < rxArgs.getLength(); ++i )
+    for ( css::uno::Any const & arg : rxArgs )
     {
-        rxArgs[i] >>= aPropValue;
+        css::beans::PropertyValue aPropValue;
+        arg >>= aPropValue;
         if ( aPropValue.Name == "Value" )
         {
             sal_Int32 nIdx{ 0 };

@@ -472,7 +472,7 @@ static void dumpPermissions(
     SAL_INFO("stoc", buf.makeStringAndClear() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
-    for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
+    for ( sal_Int32 nPos = 0; nPos < permissions.(); ++nPos )
     {
         SAL_INFO("stoc", p[ nPos ] );
     }

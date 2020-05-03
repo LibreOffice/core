@@ -164,15 +164,15 @@ Reference<deployment::XPackage> findPackage(
     Reference<ucb::XCommandEnvironment > const & environment,
     OUString const & idOrFileName )
 {
-    Sequence< Reference<deployment::XPackage> > ps(
+    const Sequence< Reference<deployment::XPackage> > ps(
         manager->getDeployedExtensions(repository,
             Reference<task::XAbortChannel>(), environment ) );
-    for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
-        if ( dp_misc::getIdentifier( ps[i] ) == idOrFileName )
-            return ps[i];
-    for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
-        if ( ps[i]->getName() == idOrFileName )
-            return ps[i];
+    for ( auto const & package : ps )
+        if ( dp_misc::getIdentifier( package ) == idOrFileName )
+            return package;
+    for ( auto const & package : ps )
+        if ( package->getName() == idOrFileName )
+            return package;
     return Reference<deployment::XPackage>();
 }
 

@@ -31,11 +31,10 @@ namespace comphelper
 OUString GetkeyBindingStrByXkeyBinding(const Sequence<KeyStroke>& keySet)
 {
     OUStringBuffer buf;
-    for (int iIndex = 0; iIndex < keySet.getLength(); iIndex++)
+    for (const auto& k : keySet)
     {
-        KeyStroke stroke = keySet[iIndex];
         buf.append('\n');
-        buf.append(stroke.KeyChar);
+        buf.append(k.KeyChar);
     }
     return buf.makeStringAndClear();
 }

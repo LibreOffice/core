@@ -441,7 +441,7 @@ sal_Bool SAL_CALL SpellChecker_writeInfo(
                 pRegistryKey->createKey( aImpl );
         Sequence< OUString > aServices =
                 SpellChecker::getSupportedServiceNames_Static();
-        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
+        for( sal_Int32 i = 0; i < aServices.(); i++ )
             xNewKey->createKey( aServices.getConstArray()[i] );
 
         return sal_True;

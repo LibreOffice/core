@@ -92,13 +92,13 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
     Reference<XInteractionAbort> abort;
     Reference<XInteractionRetry> retry;
 
-    for (sal_Int32 i= 0; i < seqCont.getLength(); i++)
+    for (sal_Int32 i= 0; i < seqCont.(); i++)
     {
         abort.set( seqCont[i], UNO_QUERY );
         if(abort.is())
             break;
     }
-    for (sal_Int32 i= 0; i < seqCont.getLength(); i++)
+    for (sal_Int32 i= 0; i < seqCont.(); i++)
     {
         retry.set( seqCont[i], UNO_QUERY );
         if(retry.is())

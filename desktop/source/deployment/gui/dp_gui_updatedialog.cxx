@@ -775,11 +775,10 @@ void UpdateDialog::getIgnoredUpdates()
     args[0] <<= aValue;
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args), uno::UNO_QUERY_THROW );
-    uno::Sequence< OUString > aElementNames = xNameAccess->getElementNames();
+    const uno::Sequence< OUString > aElementNames = xNameAccess->getElementNames();
 
-    for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
+    for ( OUString const & aIdentifier : aElementNames )
     {
-        OUString aIdentifier = aElementNames[i];
         OUString aVersion;
 
         uno::Any aPropValue( uno::Reference< beans::XPropertySet >( xNameAccess->getByName( aIdentifier ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );

@@ -251,7 +251,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         {
             // Retrieve the text argument from the sequence property value
             rtl::OUString aText;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < lArgs.(); i++ )
             {
                 if ( lArgs[i].Name == "Text" )
                 {
@@ -276,7 +276,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         {
             // Retrieve the text argument from the sequence property value
             rtl::OUString aText;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < lArgs.(); i++ )
             {
                 if ( lArgs[i].Name == "Text" )
                 {
@@ -318,7 +318,7 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         {
             // Retrieve the text argument from the sequence property value
             rtl::OUString aText;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
+            for ( sal_Int32 i = 0; i < lArgs.(); i++ )
             {
                 if ( lArgs[i].Name == "Text" )
                 {
@@ -466,7 +466,7 @@ void SAL_CALL BaseDispatch::controlEvent( const ControlEvent& Event ) throw (Run
             {
                 rtl::OUString aNewText;
                 sal_Bool      bHasText( sal_False );
-                for ( sal_Int32 i = 0; i < Event.aInformation.getLength(); i++ )
+                for ( sal_Int32 i = 0; i < Event.aInformation.(); i++ )
                 {
                     if ( Event.aInformation[i].Name == "Text" )
                     {

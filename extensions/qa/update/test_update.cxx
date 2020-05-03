@@ -71,7 +71,7 @@ protected:
             uno::Reference< dom::XNodeList> xChildNodes = aEntry.UpdateDocument->getChildNodes();
             CPPUNIT_ASSERT( xChildNodes.is() );
 #if 0
-            for ( int i = 0; i < xChildNodes->getLength(); ++i )
+            for ( int i = 0; i < xChildNodes->(); ++i )
             {
                 fprintf( stderr, "node == %d\n", i );
                 uno::Reference< dom::XElement > xChildId( xChildNodes->item( i ), uno::UNO_QUERY );

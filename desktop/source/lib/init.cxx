@@ -4345,9 +4345,9 @@ static char* getLanguages(const char* pCommand)
     boost::property_tree::ptree aValues;
     boost::property_tree::ptree aChild;
     OUString sLanguage;
-    for ( sal_Int32 itLocale = 0; itLocale < aLocales.getLength(); itLocale++ )
+    for ( css::lang::Locale const & locale : std::as_const(aLocales) )
     {
-        const LanguageTag aLanguageTag( aLocales[itLocale]);
+        const LanguageTag aLanguageTag( locale );
         sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
         if (sLanguage.startsWith("{") && sLanguage.endsWith("}"))
             continue;
@@ -4465,8 +4465,8 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
     uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-    uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
+    const uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    const uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
     static const std::vector<OUString> aWriterStyles =
     {
@@ -4485,10 +4485,9 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     std::set<OUString> aDefaultStyleNames;
 
     boost::property_tree::ptree aValues;
-    for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
+    for (OUString const & sStyleFam : aStyleFamilies)
     {
         boost::property_tree::ptree aChildren;
-        OUString sStyleFam = aStyleFamilies[nStyleFam];
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(sStyleFam), uno::UNO_QUERY);
 
         // Writer provides a huge number of styles, we have a list of 7 "default" styles which
@@ -4525,7 +4524,6 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
     // Header & Footer Styles
     {
-        OUString sName;
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
         const OUString sPageStyles("PageStyles");
@@ -4534,16 +4532,16 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
         if (xStyleFamilies->hasByName(sPageStyles) && (xStyleFamilies->getByName(sPageStyles) >>= xContainer))
         {
-            uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
-            for (sal_Int32 itName = 0; itName < aSeqNames.getLength(); itName++)
+            const uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
+            for (OUString const & sName : aSeqNames)
             {
                 bool bIsPhysical;
-                sName = aSeqNames[itName];
                 xProperty.set(xContainer->getByName(sName), uno::UNO_QUERY);
                 if (xProperty.is() && (xProperty->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
                 {
-                    xProperty->getPropertyValue("DisplayName") >>= sName;
-                    aChild.put("", sName.toUtf8());
+                    OUString displayName;
+                    xProperty->getPropertyValue("DisplayName") >>= displayName;
+                    aChild.put("", displayName.toUtf8());
                     aChildren.push_back(std::make_pair("", aChild));
                 }
             }

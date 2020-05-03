@@ -456,7 +456,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     {
         uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xServerCertificate->getExtensions();
         uno::Sequence< security::CertAltNameEntry > altNames;
-        for (sal_Int32 i = 0 ; i < extensions.getLength(); ++i)
+        for (sal_Int32 i = 0 ; i < extensions.(); ++i)
         {
             uno::Reference< security::XCertificateExtension >element = extensions[i];
 
@@ -471,7 +471,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
         uno::Sequence< OUString > certHostNames(altNames.getLength() + 1);
         certHostNames[0] = sServerCertificateSubject;
-        for( int n = 0; n < altNames.getLength(); ++n )
+        for( int n = 0; n < altNames.(); ++n )
         {
             if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
             {
@@ -479,7 +479,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
             }
         }
 
-        for ( int i = 0; i < certHostNames.getLength() && !bHostnameMatchesCertHostnames; ++i )
+        for ( int i = 0; i < certHostNames.() && !bHostnameMatchesCertHostnames; ++i )
         {
             bHostnameMatchesCertHostnames = isDomainMatch( certHostNames[i] );
         }
@@ -1143,11 +1143,11 @@ namespace {
 bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
                         const char * token )
 {
-    for ( sal_Int32 n = 0; n < rLocks.getLength(); ++n )
+    for ( sal_Int32 n = 0; n < rLocks.(); ++n )
     {
         const uno::Sequence< OUString > & rTokens
             = rLocks[ n ].LockTokens;
-        for ( sal_Int32 m = 0; m < rTokens.getLength(); ++m )
+        for ( sal_Int32 m = 0; m < rTokens.(); ++m )
         {
             if ( rTokens[ m ].equalsAscii( token ) )
                 return true;

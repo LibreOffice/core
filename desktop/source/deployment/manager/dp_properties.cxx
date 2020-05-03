@@ -72,9 +72,8 @@ ExtensionProperties::ExtensionProperties(
 {
     m_propFileUrl = urlExtension + "properties";
 
-    for (sal_Int32 i = 0; i < properties.getLength(); i++)
+    for (css::beans::NamedValue const & v : properties)
     {
-        css::beans::NamedValue const & v = properties[i];
         if (v.Name == PROP_SUPPRESS_LICENSE)
         {
             m_prop_suppress_license = getPropertyValue(v);

@@ -329,11 +329,11 @@ Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference< chart2::data::XDataSource > xDataSource( xDataSeries, uno::UNO_QUERY_THROW );
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
-    for(sal_Int32 i = 0; i < xDataSequences.getLength(); ++i)
+    for(auto const & lds : xDataSequences)
     {
-        Reference< chart2::data::XDataSequence> xLabelSeq = xDataSequences[i]->getLabel();
+        Reference< chart2::data::XDataSequence> xLabelSeq = lds->getLabel();
         if(!xLabelSeq.is())
             continue;
 
@@ -351,11 +351,11 @@ Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
     Reference< chart2::data::XDataSource > xDataSource( xDataSeries, uno::UNO_QUERY_THROW );
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
-    for(sal_Int32 i = 0; i < xDataSequences.getLength(); ++i)
+    for(auto const & lds : xDataSequences)
     {
-        Reference< chart2::data::XDataSequence> xLabelSeq = xDataSequences[i]->getValues();
+        Reference< chart2::data::XDataSequence> xLabelSeq = lds->getValues();
         uno::Reference< beans::XPropertySet > xProps(xLabelSeq, uno::UNO_QUERY);
         if(!xProps.is())
             continue;
@@ -389,20 +389,20 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
 {
     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     double fNan;
     rtl::math::setNan(&fNan);
 
     std::vector<std::vector<double> > aRet;
-    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+    for (uno::Reference<chart2::XDataSeries> const & ds : aDataSeriesSeq)
     {
-        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataSource> xDSrc(ds, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
-        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+        const uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        for (auto const & lds : aDataSeqs)
         {
-            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+            Reference<chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
             Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
             if (!xPropSet.is())
@@ -412,13 +412,13 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
             xPropSet->getPropertyValue("Role") >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                uno::Sequence<uno::Any> aData = xValues->getData();
+                const uno::Sequence<uno::Any> aData = xValues->getData();
                 std::vector<double> aValues;
                 aValues.reserve(aData.getLength());
-                for (sal_Int32 nVal = 0; nVal < aData.getLength(); ++nVal)
+                for (uno::Any const & any : aData)
                 {
                     double fVal;
-                    if (aData[nVal] >>= fVal)
+                    if (any >>= fVal)
                         aValues.push_back(fVal);
                     else
                         aValues.push_back(fNan);
@@ -437,17 +437,17 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
 
     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     std::vector<uno::Sequence<uno::Any> > aRet;
-    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+    for (auto const & ds : aDataSeriesSeq)
     {
-        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataSource> xDSrc(ds, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
-        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+        const uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        for (auto const & lds : aDataSeqs)
         {
-            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+            Reference<chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
             Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
             if (!xPropSet.is())
@@ -457,7 +457,7 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
             xPropSet->getPropertyValue("Role") >>= aRoleName;
             if (aRoleName == aLabelRole)
             {
-                Reference<chart2::data::XLabeledDataSequence> xLabel = aDataSeqs[j];
+                Reference<chart2::data::XLabeledDataSequence> xLabel = lds;
                 CPPUNIT_ASSERT(xLabel.is());
                 Reference<chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
                 CPPUNIT_ASSERT(xDS2.is());
@@ -544,10 +544,10 @@ OUString getTitleString( const Reference<chart2::XTitled>& xTitled )
 {
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
-    uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
+    const uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
     OUString aText;
-    for (sal_Int32 i = 0; i < aFSSeq.getLength(); ++i)
-        aText += aFSSeq[i]->getString();
+    for (auto const & fs : aFSSeq)
+        aText += fs->getString();
 
     return aText;
 }

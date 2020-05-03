@@ -66,20 +66,20 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
     uno::Sequence< beans::PropertyValue > aResult;
     sal_Int32 nResLen = 0;
 
-    for ( sal_Int32 nInd = 0; nInd < aMedDescr.getLength(); nInd++ )
+    for ( beans::PropertyValue const & prop : aMedDescr )
     {
-        if ( aMedDescr[nInd].Name == "ComponentData" || aMedDescr[nInd].Name == "DocumentTitle"
-          || aMedDescr[nInd].Name == "InteractionHandler" || aMedDescr[nInd].Name == "JumpMark"
-          // || aMedDescr[nInd].Name == "Password" // makes no sense for embedded objects
-          || aMedDescr[nInd].Name == "Preview" || aMedDescr[nInd].Name == "ReadOnly"
-          || aMedDescr[nInd].Name == "StartPresentation" || aMedDescr[nInd].Name == "RepairPackage"
-          || aMedDescr[nInd].Name == "StatusIndicator" || aMedDescr[nInd].Name == "ViewData"
-          || aMedDescr[nInd].Name == "ViewId" || aMedDescr[nInd].Name == "MacroExecutionMode"
-          || aMedDescr[nInd].Name == "UpdateDocMode"
-          || (aMedDescr[nInd].Name == "DocumentBaseURL" && bCanUseDocumentBaseURL) )
+        if ( prop.Name == "ComponentData" || prop.Name == "DocumentTitle"
+          || prop.Name == "InteractionHandler" || prop.Name == "JumpMark"
+          // || prop.Name == "Password" // makes no sense for embedded objects
+          || prop.Name == "Preview" || prop.Name == "ReadOnly"
+          || prop.Name == "StartPresentation" || prop.Name == "RepairPackage"
+          || prop.Name == "StatusIndicator" || prop.Name == "ViewData"
+          || prop.Name == "ViewId" || prop.Name == "MacroExecutionMode"
+          || prop.Name == "UpdateDocMode"
+          || (prop.Name == "DocumentBaseURL" && bCanUseDocumentBaseURL) )
         {
             aResult.realloc( ++nResLen );
-            aResult[nResLen-1] = aMedDescr[nInd];
+            aResult[nResLen-1] = prop;
         }
     }
 
@@ -399,9 +399,9 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         {
             // check if there is a password to cache
             uno::Reference< frame::XModel > xModel( xLoadable, uno::UNO_QUERY_THROW );
-            uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
-            for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
-                if ( aProps[nInd].Name == "Password" && ( aProps[nInd].Value >>= m_aLinkPassword ) )
+            const uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
+            for ( beans::PropertyValue const & prop : aProps )
+                if ( prop.Name == "Password" && ( prop.Value >>= m_aLinkPassword ) )
                 {
                     m_bLinkHasPassword = true;
                     break;
@@ -639,22 +639,19 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
 {
     OUString aBaseURL;
-    sal_Int32 nInd = 0;
 
     if ( m_xClientSite.is() )
     {
         try
         {
             uno::Reference< frame::XModel > xParentModel( m_xClientSite->getComponent(), uno::UNO_QUERY_THROW );
-            uno::Sequence< beans::PropertyValue > aModelProps = xParentModel->getArgs();
-            for ( nInd = 0; nInd < aModelProps.getLength(); nInd++ )
-                if ( aModelProps[nInd].Name == "DocumentBaseURL" )
+            const uno::Sequence< beans::PropertyValue > aModelProps = xParentModel->getArgs();
+            for ( beans::PropertyValue const & prop : aModelProps )
+                if ( prop.Name == "DocumentBaseURL" )
                 {
-                    aModelProps[nInd].Value >>= aBaseURL;
+                    prop.Value >>= aBaseURL;
                     break;
                 }
-
-
         }
         catch( const uno::Exception& )
         {}
@@ -662,10 +659,10 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
 
     if ( aBaseURL.isEmpty() )
     {
-        for ( nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
-            if ( m_aDocMediaDescriptor[nInd].Name == "DocumentBaseURL" )
+        for ( beans::PropertyValue const & prop : m_aDocMediaDescriptor )
+            if ( prop.Name == "DocumentBaseURL" )
             {
-                m_aDocMediaDescriptor[nInd].Value >>= aBaseURL;
+                prop.Value >>= aBaseURL;
                 break;
             }
     }
@@ -682,21 +679,20 @@ OUString OCommonEmbeddedObject::GetBaseURLFrom_Impl(
                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     OUString aBaseURL;
-    sal_Int32 nInd = 0;
 
-    for ( nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name == "DocumentBaseURL" )
+    for ( beans::PropertyValue const & prop : lArguments )
+        if ( prop.Name == "DocumentBaseURL" )
         {
-            lArguments[nInd].Value >>= aBaseURL;
+            prop.Value >>= aBaseURL;
             break;
         }
 
     if ( aBaseURL.isEmpty() )
     {
-        for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-            if ( lObjArgs[nInd].Name == "DefaultParentBaseURL" )
+        for ( beans::PropertyValue const & prop : lObjArgs )
+            if ( prop.Name == "DefaultParentBaseURL" )
             {
-                lObjArgs[nInd].Value >>= aBaseURL;
+                prop.Value >>= aBaseURL;
                 break;
             }
     }
@@ -723,11 +719,11 @@ OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rPro
 {
     OUString aStr;
 
-    for (sal_Int32 i = 0; i < rProps.getLength(); ++i)
+    for (beans::PropertyValue const & prop : rProps)
     {
-        if (rProps[i].Name == rName)
+        if (prop.Name == rName)
         {
-            rProps[i].Value >>= aStr;
+            prop.Value >>= aStr;
             break;
         }
     }
@@ -988,36 +984,36 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                                                   nEntryConnectionMode != embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT );
 
     m_bReadOnly = false;
-    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name == "ReadOnly" )
-            lArguments[nInd].Value >>= m_bReadOnly;
+    for ( beans::PropertyValue const & prop : lArguments )
+        if ( prop.Name == "ReadOnly" )
+            prop.Value >>= m_bReadOnly;
 
     // TODO: use lObjArgs for StoreVisualReplacement
-    for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
-        if ( lObjArgs[nObjInd].Name == "OutplaceDispatchInterceptor" )
+    for ( beans::PropertyValue const & prop : lObjArgs )
+        if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
-            if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
+            if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
         }
-        else if ( lObjArgs[nObjInd].Name == "DefaultParentBaseURL" )
+        else if ( prop.Name == "DefaultParentBaseURL" )
         {
-            lObjArgs[nObjInd].Value >>= m_aDefaultParentBaseURL;
+            prop.Value >>= m_aDefaultParentBaseURL;
         }
-        else if ( lObjArgs[nObjInd].Name == "Parent" )
+        else if ( prop.Name == "Parent" )
         {
-            lObjArgs[nObjInd].Value >>= m_xParent;
+            prop.Value >>= m_xParent;
         }
-        else if ( lObjArgs[nObjInd].Name == "IndividualMiscStatus" )
+        else if ( prop.Name == "IndividualMiscStatus" )
         {
             sal_Int64 nMiscStatus=0;
-            lObjArgs[nObjInd].Value >>= nMiscStatus;
+            prop.Value >>= nMiscStatus;
             m_nMiscStatus |= nMiscStatus;
         }
-        else if ( lObjArgs[nObjInd].Name == "CloneFrom" )
+        else if ( prop.Name == "CloneFrom" )
         {
             uno::Reference < embed::XEmbeddedObject > xObj;
-            lObjArgs[nObjInd].Value >>= xObj;
+            prop.Value >>= xObj;
             if ( xObj.is() )
             {
                 m_bHasClonedSize = true;
@@ -1025,15 +1021,15 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 m_nClonedMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
             }
         }
-        else if ( lObjArgs[nObjInd].Name == "OutplaceFrameProperties" )
+        else if ( prop.Name == "OutplaceFrameProperties" )
         {
             uno::Sequence< uno::Any > aOutFrameProps;
             uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
-            if ( lObjArgs[nObjInd].Value >>= aOutFrameProps )
+            if ( prop.Value >>= aOutFrameProps )
             {
                 m_xDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
             }
-            else if ( lObjArgs[nObjInd].Value >>= aOutFramePropsTyped )
+            else if ( prop.Value >>= aOutFramePropsTyped )
             {
                 aOutFrameProps.realloc( aOutFramePropsTyped.getLength() );
                 uno::Any* pProp = aOutFrameProps.getArray();
@@ -1049,21 +1045,21 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             else
                 SAL_WARN( "embeddedobj.common", "OCommonEmbeddedObject::setPersistentEntry: illegal type for argument 'OutplaceFrameProperties'!" );
         }
-        else if ( lObjArgs[nObjInd].Name == "ModuleName" )
+        else if ( prop.Name == "ModuleName" )
         {
-            lObjArgs[nObjInd].Value >>= m_aModuleName;
+            prop.Value >>= m_aModuleName;
         }
-        else if ( lObjArgs[nObjInd].Name == "EmbeddedScriptSupport" )
+        else if ( prop.Name == "EmbeddedScriptSupport" )
         {
-            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bEmbeddedScriptSupport );
+            OSL_VERIFY( prop.Value >>= m_bEmbeddedScriptSupport );
         }
-        else if ( lObjArgs[nObjInd].Name == "DocumentRecoverySupport" )
+        else if ( prop.Name == "DocumentRecoverySupport" )
         {
-            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
+            OSL_VERIFY( prop.Value >>= m_bDocumentRecoverySupport );
         }
-        else if ( lObjArgs[nObjInd].Name == "RecoveryStorage" )
+        else if ( prop.Name == "RecoveryStorage" )
         {
-            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xRecoveryStorage );
+            OSL_VERIFY( prop.Value >>= m_xRecoveryStorage );
         }
 
 
@@ -1191,11 +1187,11 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     }
 
     bool bTryOptimization = false;
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    for ( beans::PropertyValue const & prop : lObjArgs )
     {
         // StoreVisualReplacement and VisualReplacement args have no sense here
-        if ( lObjArgs[nInd].Name == "CanTryOptimization" )
-            lObjArgs[nInd].Value >>= bTryOptimization;
+        if ( prop.Name == "CanTryOptimization" )
+            prop.Value >>= bTryOptimization;
     }
 
     bool bSwitchBackToLoaded = false;
@@ -1324,11 +1320,11 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     PostEvent_Impl( "OnSaveAs" );
 
     bool bTryOptimization = false;
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    for ( beans::PropertyValue const & prop : lObjArgs )
     {
         // StoreVisualReplacement and VisualReplacement args have no sense here
-        if ( lObjArgs[nInd].Name == "CanTryOptimization" )
-            lObjArgs[nInd].Value >>= bTryOptimization;
+        if ( prop.Name == "CanTryOptimization" )
+            prop.Value >>= bTryOptimization;
     }
 
     bool bSwitchBackToLoaded = false;
@@ -1660,17 +1656,17 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         OUString aOldLinkFilter = m_aLinkFilterName;
 
         OUString aNewLinkFilter;
-        for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
+        for ( beans::PropertyValue const & prop : lArguments )
         {
-            if ( lArguments[nInd].Name == "URL" )
+            if ( prop.Name == "URL" )
             {
                 // the new URL
-                lArguments[nInd].Value >>= m_aLinkURL;
+                prop.Value >>= m_aLinkURL;
                 m_aLinkFilterName.clear();
             }
-            else if ( lArguments[nInd].Name == "FilterName" )
+            else if ( prop.Name == "FilterName" )
             {
-                lArguments[nInd].Value >>= aNewLinkFilter;
+                prop.Value >>= aNewLinkFilter;
                 m_aLinkFilterName.clear();
             }
         }
@@ -1703,11 +1699,11 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments, true );
 
     // TODO: use lObjArgs for StoreVisualReplacement
-    for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
-        if ( lObjArgs[nObjInd].Name == "OutplaceDispatchInterceptor" )
+    for ( beans::PropertyValue const & prop : lObjArgs )
+        if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
             uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
-            if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
+            if ( prop.Value >>= xDispatchInterceptor )
                 m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 
             break;
@@ -1719,9 +1715,9 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     bool bOldReadOnlyValue = m_bReadOnly;
 
     m_bReadOnly = false;
-    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name == "ReadOnly" )
-            lArguments[nInd].Value >>= m_bReadOnly;
+    for ( beans::PropertyValue const & prop : lArguments )
+        if ( prop.Name == "ReadOnly" )
+            prop.Value >>= m_bReadOnly;
 
     if ( bOldReadOnlyValue == m_bReadOnly || m_bIsLink )
         return;

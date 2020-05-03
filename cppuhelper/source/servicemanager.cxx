@@ -1001,29 +1001,29 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
     if (aElement >>= args) {
         std::vector< OUString > uris;
         css::uno::Reference< css::uno::XComponentContext > alienContext;
-        for (sal_Int32 i = 0; i < args.getLength(); ++i) {
-            if (args[i].Name == "uri") {
+        for (const auto & arg : std::as_const(args)) {
+            if (arg.Name == "uri") {
                 OUString uri;
-                if (!(args[i].Value >>= uri)) {
+                if (!(arg.Value >>= uri)) {
                     throw css::lang::IllegalArgumentException(
                         "Bad uri argument",
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
                 uris.push_back(uri);
-            } else if (args[i].Name == "component-context") {
+            } else if (arg.Name == "component-context") {
                 if (alienContext.is()) {
                     throw css::lang::IllegalArgumentException(
                         "Multiple component-context arguments",
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
-                if (!(args[i].Value >>= alienContext) || !alienContext.is()) {
+                if (!(arg.Value >>= alienContext) || !alienContext.is()) {
                     throw css::lang::IllegalArgumentException(
                         "Bad component-context argument",
                         static_cast< cppu::OWeakObject * >(this), 0);
                 }
             } else {
                 throw css::lang::IllegalArgumentException(
-                    "Bad argument " + args[i].Name,
+                    "Bad argument " + arg.Name,
                     static_cast< cppu::OWeakObject * >(this), 0);
             }
         }
@@ -1063,14 +1063,14 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
     css::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
         std::vector< OUString > uris;
-        for (sal_Int32 i = 0; i < args.getLength(); ++i) {
-            if (args[i].Name != "uri") {
+        for (const auto & i : std::as_const(args)) {
+            if (i.Name != "uri") {
                 throw css::lang::IllegalArgumentException(
-                    "Bad argument " + args[i].Name,
+                    "Bad argument " + i.Name,
                     static_cast< cppu::OWeakObject * >(this), 0);
             }
             OUString uri;
-            if (!(args[i].Value >>= uri)) {
+            if (!(i.Value >>= uri)) {
                 throw css::lang::IllegalArgumentException(
                     "Bad uri argument",
                     static_cast< cppu::OWeakObject * >(this), 0);
@@ -1528,11 +1528,11 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         extra.namedImplementations.emplace(name, impl);
     }
     extra.dynamicImplementations.emplace(factoryInfo, impl);
-    css::uno::Sequence< OUString > services(
+    const css::uno::Sequence< OUString > services(
         factoryInfo->getSupportedServiceNames());
-    for (sal_Int32 i = 0; i != services.getLength(); ++i) {
-        impl->services.push_back(services[i]);
-        extra.services[services[i]].push_back(impl);
+    for (const auto & i : services) {
+        impl->services.push_back(i);
+        extra.services[i].push_back(impl);
     }
     if (insertExtraData(extra) && comp.is()) {
         comp->addEventListener(this);

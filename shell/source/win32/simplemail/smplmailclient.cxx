@@ -276,14 +276,14 @@ void CSmplMailClient::assembleCommandLine(
     }
 
     Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
-    for (int i = 0; i < ccRecipients.getLength(); i++)
+    for (int i = 0; i < ccRecipients.(); i++)
     {
         rCommandArgs.push_back(CC);
         rCommandArgs.push_back(ccRecipients[i]);
     }
 
     Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
-    for (int i = 0; i < bccRecipients.getLength(); i++)
+    for (int i = 0; i < bccRecipients.(); i++)
     {
         rCommandArgs.push_back(BCC);
         rCommandArgs.push_back(bccRecipients[i]);

@@ -2438,8 +2438,8 @@ uno::Reference< drawing::XShape >
             if( xFormattedString.hasElements() )
             {
                 OUString aLabel;
-                for( sal_Int32 nN=0; nN<xFormattedString.getLength();nN++ )
-                    aLabel += xFormattedString[nN]->getString();
+                for( const auto & i : std::as_const(xFormattedString) )
+                    aLabel += i->getString();
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
 
                 xTextCursor->gotoEnd(false);
@@ -2461,11 +2461,10 @@ uno::Reference< drawing::XShape >
         }
         else
         {
-            sal_Int32 nN = 0;
-            for( nN=0; nN<xFormattedString.getLength();nN++ )
+            for( const uno::Reference< chart2::XFormattedString >& rxFS : std::as_const(xFormattedString) )
             {
                 xTextCursor->gotoEnd(false);
-                xText->insertString( xTextCursor, xFormattedString[nN]->getString(), false );
+                xText->insertString( xTextCursor, rxFS->getString(), false );
                 xTextCursor->gotoEnd(true);
             }
             awt::Size aOldRefSize;
@@ -2641,8 +2640,8 @@ OUString ShapeFactory::getStackedString( const OUString& rString, bool bStacked 
 bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
 {
     // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
-    for( sal_Int32 nIdx = 0, nCount = rPoly.SequenceX.getLength(); nIdx < nCount; ++nIdx )
-        if( rPoly.SequenceX[ nIdx ].getLength() > 1 )
+    for( auto const & i : std::as_const(rPoly.SequenceX) )
+        if( i.getLength() > 1 )
             return true;
     return false;
 }

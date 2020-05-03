@@ -152,9 +152,9 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
     OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
 
     const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
-    for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
+    for ( const Sequence< PropertyValue >& rEntry : rAddonMenuEntries )
     {
-        AddonMenuManager::GetMenuEntry( rAddonMenuEntries[i],
+        AddonMenuManager::GetMenuEntry( rEntry,
                                         aTitle,
                                         aURL,
                                         aTarget,
@@ -270,21 +270,21 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
     // Reset submenu parameter
     rAddonSubMenu   = Sequence< Sequence< PropertyValue > >();
 
-    for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
+    for ( const PropertyValue& rEntry : rAddonMenuEntry )
     {
-        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        OUString aMenuEntryPropName = rEntry.Name;
         if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_URL )
-            rAddonMenuEntry[i].Value >>= rURL;
+            rEntry.Value >>= rURL;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TITLE )
-            rAddonMenuEntry[i].Value >>= rTitle;
+            rEntry.Value >>= rTitle;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TARGET )
-            rAddonMenuEntry[i].Value >>= rTarget;
+            rEntry.Value >>= rTarget;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
-            rAddonMenuEntry[i].Value >>= rImageId;
+            rEntry.Value >>= rImageId;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
-            rAddonMenuEntry[i].Value >>= rAddonSubMenu;
+            rEntry.Value >>= rAddonSubMenu;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )
-            rAddonMenuEntry[i].Value >>= rContext;
+            rEntry.Value >>= rContext;
     }
 }
 

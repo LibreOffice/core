@@ -225,7 +225,7 @@ Property ImplPropertySetInfo::getPropertyByName(const OUString& Name)
     Sequence<Property> aSeq = getProperties();
     const Property * pAry = aSeq.getConstArray();
 
-    for( sal_Int32 i = aSeq.getLength(); i--; )
+    for( sal_Int32 i = aSeq.(); i--; )
     {
         if( pAry[i].Name == Name )
             return pAry[i];
@@ -240,7 +240,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
     Sequence<Property> aSeq = getProperties();
     const Property * pAry = aSeq.getConstArray();
 
-    for( sal_Int32 i = aSeq.getLength(); i--; )
+    for( sal_Int32 i = aSeq.(); i--; )
     {
         if( pAry[i].Name == Name )
             return sal_True;

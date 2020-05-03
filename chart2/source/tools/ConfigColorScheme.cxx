@@ -73,10 +73,10 @@ ChartConfigItem::ChartConfigItem( ConfigColorScheme & rListener ) :
 
 void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
 {
-    for( sal_Int32 nIdx=0; nIdx<aPropertyNames.getLength(); ++nIdx )
+    for( OUString const & s : aPropertyNames )
     {
-        if( m_aPropertiesToNotify.find( aPropertyNames[nIdx] ) != m_aPropertiesToNotify.end())
-            m_rListener.notify( aPropertyNames[nIdx] );
+        if( m_aPropertiesToNotify.find( s ) != m_aPropertiesToNotify.end())
+            m_rListener.notify( s );
     }
 }
 

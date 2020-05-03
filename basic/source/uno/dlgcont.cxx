@@ -213,12 +213,12 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
     // we need to export out any embedded image object(s)
     // associated with any Dialogs. First, we need to actually gather any such urls
     // for each dialog in this container
-    Sequence< OUString > sLibraries = getElementNames();
-    for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
+    const Sequence< OUString > sLibraries = getElementNames();
+    for ( const OUString& rName : sLibraries )
     {
-        loadLibrary( sLibraries[ i ] );
+        loadLibrary( rName );
         Reference< XNameContainer > xLib;
-        getByName( sLibraries[ i ] ) >>= xLib;
+        getByName( rName ) >>= xLib;
         if ( xLib.is() )
         {
             Sequence< OUString > sDialogs = xLib->getElementNames();

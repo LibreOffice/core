@@ -316,15 +316,15 @@ void Test::testReadCommands()
             "/org.openoffice.Office.UI.GenericCommands/UserInterface/"
                      "Commands"),
         css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence< OUString > names(access->getElementNames());
+    const css::uno::Sequence< OUString > names(access->getElementNames());
 
     /*CPPUNIT_ASSERT_EQUAL(749, names.getLength());*/
     // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
-        for (sal_Int32 j = 0; j < names.getLength(); ++j) {
+        for (OUString const & childName : names) {
             css::uno::Reference< css::container::XNameAccess > child;
-            if (access->getByName(names[j]) >>= child) {
+            if (access->getByName(childName) >>= child) {
                 CPPUNIT_ASSERT(child.is());
                 child->getByName("Label");
                 child->getByName("ContextLabel");

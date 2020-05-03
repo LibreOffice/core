@@ -600,13 +600,13 @@ void ChartModel::impl_loadGraphics(
             const uno::Sequence< OUString > aElementNames(
                 xGraphicsStorage->getElementNames() );
 
-            for( int i = 0; i < aElementNames.getLength(); ++i )
+            for( OUString const & streamName : aElementNames )
             {
-                if( xGraphicsStorage->isStreamElement( aElementNames[ i ] ) )
+                if( xGraphicsStorage->isStreamElement( streamName ) )
                 {
                     uno::Reference< io::XStream > xElementStream(
                         xGraphicsStorage->openStreamElement(
-                            aElementNames[ i ],
+                            streamName,
                             embed::ElementModes::READ ) );
 
                     if( xElementStream.is() )

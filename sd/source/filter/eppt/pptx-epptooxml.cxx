@@ -2036,7 +2036,7 @@ void dump_pset(Reference< XPropertySet > const& rXPropSet)
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo();
     Sequence< beans::Property > props = info->getProperties();
 
-    for (int i=0; i < props.getLength(); i++)
+    for (int i=0; i < props.(); i++)
     {
         OString name = OUStringToOString(props [i].Name, RTL_TEXTENCODING_UTF8);
 

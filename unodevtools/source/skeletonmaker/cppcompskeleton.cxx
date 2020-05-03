@@ -841,7 +841,7 @@ static void generateXServiceInfoBodies(std::ostream& o,
          "serviceName) throw (css::uno::RuntimeException)\n{\n    "
          "css::uno::Sequence< OUString > serviceNames = "
       << comphelpernamespace << "::_getSupportedServiceNames();\n    "
-         "for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {\n    "
+         "for (::sal_Int32 i = 0; i < serviceNames.(); ++i) {\n    "
          "    if (serviceNames[i] == serviceName)\n            return sal_True;\n"
          "    }\n    return sal_False;\n}\n\n";
 

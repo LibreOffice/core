@@ -2078,9 +2078,8 @@ void SdImportTest::testTdf104445()
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for (int i = 0; i < aBulletProps.getLength(); ++i)
+        for (beans::PropertyValue const & rProp : std::as_const(aBulletProps))
         {
-            const beans::PropertyValue& rProp = aBulletProps[i];
             if(rProp.Name == "NumberingType")
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::NUMBER_NONE), rProp.Value.get<sal_Int16>());
             if(rProp.Name == "LeftMargin")
@@ -2099,9 +2098,8 @@ void SdImportTest::testTdf104445()
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for(int i = 0; i < aBulletProps.getLength(); ++i)
+        for(beans::PropertyValue const & rProp : std::as_const(aBulletProps))
         {
-            const beans::PropertyValue& rProp = aBulletProps[i];
             if(rProp.Name == "NumberingType")
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(style::NumberingType::CHAR_SPECIAL), rProp.Value.get<sal_Int16>());
             if(rProp.Name == "LeftMargin")
@@ -2965,13 +2963,13 @@ void SdImportTest::testOOXTheme()
     xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
 
     bool bTheme = false;
-    for (int i = 0; i < aGrabBag.getLength(); i++)
+    for (beans::PropertyValue const & prop : std::as_const(aGrabBag))
     {
-        if (aGrabBag[i].Name == "OOXTheme")
+        if (prop.Name == "OOXTheme")
         {
             bTheme = true;
             uno::Reference<xml::dom::XDocument> aThemeDom;
-            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+            CPPUNIT_ASSERT(prop.Value >>= aThemeDom); // PropertyValue of proper type
             CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
         }
     }

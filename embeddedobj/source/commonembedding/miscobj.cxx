@@ -98,18 +98,18 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
 
     // parse configuration entries
     // TODO/LATER: in future UI names can be also provided here
-    for ( sal_Int32 nInd = 0; nInd < aObjectProps.getLength(); nInd++ )
+    for ( beans::NamedValue const & prop : aObjectProps )
     {
-        if ( aObjectProps[nInd].Name == "ClassID" )
-            aObjectProps[nInd].Value >>= m_aClassID;
-        else if ( aObjectProps[nInd].Name == "ObjectDocumentServiceName" )
-            aObjectProps[nInd].Value >>= m_aDocServiceName;
-        else if ( aObjectProps[nInd].Name == "ObjectDocumentFilterName" )
-            aObjectProps[nInd].Value >>= m_aPresetFilterName;
-        else if ( aObjectProps[nInd].Name == "ObjectMiscStatus" )
-            aObjectProps[nInd].Value >>= m_nMiscStatus;
-        else if ( aObjectProps[nInd].Name == "ObjectVerbs" )
-            aObjectProps[nInd].Value >>= m_aObjectVerbs;
+        if ( prop.Name == "ClassID" )
+            prop.Value >>= m_aClassID;
+        else if ( prop.Name == "ObjectDocumentServiceName" )
+            prop.Value >>= m_aDocServiceName;
+        else if ( prop.Name == "ObjectDocumentFilterName" )
+            prop.Value >>= m_aPresetFilterName;
+        else if ( prop.Name == "ObjectMiscStatus" )
+            prop.Value >>= m_nMiscStatus;
+        else if ( prop.Name == "ObjectVerbs" )
+            prop.Value >>= m_aObjectVerbs;
     }
 
     if ( m_aClassID.getLength() != 16 /*|| !m_aDocServiceName.getLength()*/ )
@@ -161,31 +161,31 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     m_pIntermediateStatesSeqs[4][0][0] = embed::EmbedStates::RUNNING;
 
     // verbs table
-    for ( sal_Int32 nVerbInd = 0; nVerbInd < m_aObjectVerbs.getLength(); nVerbInd++ )
+    for ( auto const & verb : std::as_const(m_aObjectVerbs) )
     {
-        if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_PRIMARY )
+        if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_PRIMARY )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
-        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_SHOW )
+        else if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_SHOW )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
-        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
+        else if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::ACTIVE } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::ACTIVE } );
         }
-        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )
+        else if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::INPLACE_ACTIVE } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::INPLACE_ACTIVE } );
         }
-        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE )
+        else if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
-        else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_HIDE )
+        else if ( verb.VerbID == embed::EmbedVerbs::MS_OLEVERB_HIDE )
         {
-            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::RUNNING } );
+            m_aVerbTable.insert( { verb.VerbID, embed::EmbedStates::RUNNING } );
         }
     }
 }
@@ -198,11 +198,11 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 {
     // setPersistance has no effect on own links, so the complete initialization must be done here
 
-    for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
-        if ( aMediaDescr[nInd].Name == "URL" )
-            aMediaDescr[nInd].Value >>= m_aLinkURL;
-        else if ( aMediaDescr[nInd].Name == "FilterName" )
-            aMediaDescr[nInd].Value >>= m_aLinkFilterName;
+    for ( beans::PropertyValue const & prop : aMediaDescr )
+        if ( prop.Name == "URL" )
+            prop.Value >>= m_aLinkURL;
+        else if ( prop.Name == "FilterName" )
+            prop.Value >>= m_aLinkFilterName;
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!" );
 
@@ -217,15 +217,15 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
-    for ( sal_Int32 nObjInd = 0; nObjInd < aObjectDescr.getLength(); nObjInd++ )
-        if ( aObjectDescr[nObjInd].Name == "OutplaceDispatchInterceptor" )
+    for ( beans::PropertyValue const & prop : aObjectDescr )
+        if ( prop.Name == "OutplaceDispatchInterceptor" )
         {
-            aObjectDescr[nObjInd].Value >>= xDispatchInterceptor;
+            prop.Value >>= xDispatchInterceptor;
             break;
         }
-        else if ( aObjectDescr[nObjInd].Name == "Parent" )
+        else if ( prop.Name == "Parent" )
         {
-            aObjectDescr[nObjInd].Value >>= m_xParent;
+            prop.Value >>= m_xParent;
         }
 
     CommonInit_Impl( aObjectProps );

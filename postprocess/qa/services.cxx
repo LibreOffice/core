@@ -51,7 +51,7 @@ OString msg(OUString const & string) {
 
 OString msg(css::uno::Sequence<OUString> const & strings) {
     OStringBuffer buf("{");
-    for (sal_Int32 i = 0; i != strings.getLength(); ++i) {
+    for (sal_Int32 i = 0; i != strings.(); ++i) {
         if (i != 0) {
             buf.append(", ");
         }
@@ -65,8 +65,8 @@ OString msg(css::uno::Sequence<OUString> const & strings) {
 
 bool unique(css::uno::Sequence<OUString> const & strings) {
     // Assumes small sequences for which quadratic algorithm is acceptable:
-    for (sal_Int32 i = 0; i < strings.getLength() - 1; ++i) {
-        for (sal_Int32 j = i + 1; j != strings.getLength(); ++j) {
+    for (sal_Int32 i = 0; i < strings.() - 1; ++i) {
+        for (sal_Int32 j = i + 1; j != strings.(); ++j) {
             if (strings[j] == strings[i]) {
                 return false;
             }

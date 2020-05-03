@@ -178,12 +178,12 @@ void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
     {
         if (aControlCommand.Command == "SetQuickHelpText")
         {
-            for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
+            for (NamedValue const & rArg : std::as_const(aControlCommand.Arguments))
             {
-                if (aControlCommand.Arguments[i].Name == "HelpText")
+                if (rArg.Name == "HelpText")
                 {
                     OUString aHelpText;
-                    aControlCommand.Arguments[i].Value >>= aHelpText;
+                    rArg.Value >>= aHelpText;
                     m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
                     break;
                 }

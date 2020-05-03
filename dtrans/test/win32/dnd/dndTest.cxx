@@ -149,7 +149,7 @@ DWORD WINAPI MTAFunc( void* threadData)
             StartDragData* pData= (StartDragData*)msg.wParam;
             Sequence<DataFlavor> seq= pData->transferable->getTransferDataFlavors();
             // have a look what flavours are supported
-            for( int i=0; i<seq.getLength(); i++)
+            for( int i=0; i<seq.(); i++)
             {
                 DataFlavor d= seq[i];
             }

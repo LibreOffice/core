@@ -212,8 +212,7 @@ using namespace ::com::sun::star::uno;
     sal_Int32 underlineColor = 0;
     bool underlineHasColor = false;
     // add attributes to string
-    for ( int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++ ) {
-        PropertyValue property = attributes [ attrIndex ];
+    for ( const PropertyValue& property : attributes ) {
         // TODO: NSAccessibilityMisspelledTextAttribute, NSAccessibilityAttachmentTextAttribute, NSAccessibilityLinkTextAttribute
         // NSAccessibilityStrikethroughColorTextAttribute is unsupported by UNP-API
         if ( property.Value.hasValue() ) {
