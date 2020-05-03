@@ -807,9 +807,9 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         return;
     }
 
-    // Let's rely on null-terminaton for the length of the string. We
+    // Let's rely on null-termination for the length of the string. We
     // just know the number of bytes the string takes, but in OUString
-    // needs the number of charaters.
+    // needs the number of characters.
     OUString sText(pText.get());
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
