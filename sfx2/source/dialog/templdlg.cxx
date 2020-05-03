@@ -1621,7 +1621,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
             pStyleSheetPool->SetSearchMask( eFam, SfxStyleSearchBits::UserDefined );
 
             // why? : FloatingWindow must not be parent of a modal dialog
-            SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool);
+            SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool, eFam, SfxStyleSearchBits::UserDefined);
             if (aDlg.run() ==  RET_OK)
             {
                 pStyleSheetPool->SetSearchMask(eFam, nFilter);

@@ -30,7 +30,7 @@
 IMPL_LINK_NOARG(SfxNewStyleDlg, OKClickHdl, weld::Button&, void)
 {
     const OUString aName(m_xColBox->get_active_text());
-    SfxStyleSheetBase* pStyle = m_rPool.Find(aName, m_rPool.GetSearchFamily());
+    SfxStyleSheetBase* pStyle = m_rPool.Find(aName, m_eSearchFamily);
     if ( pStyle )
     {
         if ( !pStyle->IsUserDefined() )
@@ -60,9 +60,10 @@ IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBox&, rBox, void)
     m_xOKBtn->set_sensitive(!rBox.get_active_text().replaceAll(" ", "").isEmpty());
 }
 
-SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool)
+SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool, SfxStyleFamily eFam, SfxStyleSearchBits nMask)
     : GenericDialogController(pParent, "sfx/ui/newstyle.ui", "CreateStyleDialog")
     , m_rPool(rInPool)
+    , m_eSearchFamily(eFam)
     , m_xColBox(m_xBuilder->weld_entry_tree_view("stylegrid", "stylename", "styles"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xQueryOverwriteBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
@@ -75,11 +76,12 @@ SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rIn
     m_xColBox->connect_changed(LINK(this, SfxNewStyleDlg, ModifyHdl));
     m_xColBox->connect_row_activated(LINK(this, SfxNewStyleDlg, OKHdl));
 
-    SfxStyleSheetBase *pStyle = m_rPool.First();
+    auto xIter = m_rPool.CreateIterator(eFam, nMask);
+    SfxStyleSheetBase *pStyle = xIter->First();
     while (pStyle)
     {
         m_xColBox->append_text(pStyle->GetName());
-        pStyle = m_rPool.Next();
+        pStyle = xIter->Next();
     }
 }
 

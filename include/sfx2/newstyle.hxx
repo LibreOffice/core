@@ -22,14 +22,14 @@
 #include <comphelper/string.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <svl/style.hxx>
 #include <vcl/weld.hxx>
-
-class SfxStyleSheetBasePool;
 
 class SFX2_DLLPUBLIC SfxNewStyleDlg final : public weld::GenericDialogController
 {
 private:
     SfxStyleSheetBasePool&  m_rPool;
+    SfxStyleFamily m_eSearchFamily;
 
     std::unique_ptr<weld::EntryTreeView> m_xColBox;
     std::unique_ptr<weld::Button> m_xOKBtn;
@@ -41,7 +41,7 @@ private:
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBox&, void);
 
 public:
-    SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool&);
+    SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam, SfxStyleSearchBits nMask);
     virtual ~SfxNewStyleDlg() override;
 
     OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_active_text(), ' '); }

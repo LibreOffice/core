@@ -372,7 +372,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        SfxNewStyleDlg aDlg(GetView()->GetFrameWeld(), *GetStyleSheetPool());
+                        SfxStyleSheetBasePool& rPool = *GetStyleSheetPool();
+                        SfxNewStyleDlg aDlg(GetView()->GetFrameWeld(), rPool, rPool.GetSearchFamily(), rPool.GetSearchMask());
                         if (aDlg.run() == RET_OK)
                         {
                             aParam = aDlg.GetName();
