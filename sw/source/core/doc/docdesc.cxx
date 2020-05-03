@@ -603,7 +603,7 @@ void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamil
         if (pPool)
         {
             pPool->SetSearchMask(eFamily);
-            SfxStyleSheetBase* pBase = pPool->Find(rName, pPool->GetSearchFamily(), pPool->GetSearchMask());
+            SfxStyleSheetBase* pBase = pPool->Find(rName, eFamily);
 
             if (pBase != nullptr)
                 pPool->Broadcast(SfxStyleSheetHint( nOp, *pBase ));
