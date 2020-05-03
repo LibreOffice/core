@@ -28,6 +28,11 @@ using namespace css;
 
 namespace drawinglayer
 {
+namespace
+{
+constexpr sal_uInt32 constMinimumFontHeight = 5; // #define WRONG_SHOW_MIN 5
+}
+
 bool renderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate,
                                  OutputDevice& rOutputDevice,
                                  const basegfx::B2DHomMatrix& rObjectToViewTransformation,
@@ -38,9 +43,7 @@ bool renderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWron
     const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
     const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
 
-    static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN 5
-
-    if (nFontPixelHeight <= nMinimumFontHeight)
+    if (nFontPixelHeight <= constMinimumFontHeight)
         return true;
 
     const basegfx::B2DPoint aStart(aLocalTransform
