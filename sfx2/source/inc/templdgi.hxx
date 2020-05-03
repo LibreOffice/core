@@ -49,9 +49,9 @@ class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XModuleManager2;
-}}}}
+}
 
 enum class StyleFlags {
     NONE=0, UpdateFamilyList=1, UpdateFamily=2

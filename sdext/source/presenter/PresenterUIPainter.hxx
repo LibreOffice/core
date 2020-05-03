@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Functions for painting UI elements.
 */
@@ -52,7 +52,7 @@ public:
         const css::uno::Reference<css::rendering::XBitmap>& rxBottomBitmap);
 };
 
-} }
+}
 
 #endif
 

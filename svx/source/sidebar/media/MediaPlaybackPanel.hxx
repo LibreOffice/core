@@ -32,7 +32,7 @@ using namespace css;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 /** This panel provides media playback control in document
 */
@@ -79,7 +79,7 @@ private:
 };
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

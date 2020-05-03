@@ -40,13 +40,13 @@
 #include "DAVTypes.hxx"
 #include "DAVRequestEnvironment.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct NamedValue;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     struct Lock;
-} } } }
+}
 
 namespace webdav_ucp
 {

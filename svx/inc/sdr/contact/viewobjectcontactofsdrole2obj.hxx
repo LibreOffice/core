@@ -24,7 +24,7 @@
 
 class SdrOle2Obj;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewObjectContactOfSdrOle2Obj final : public ViewObjectContactOfSdrObj
 {
@@ -36,7 +36,7 @@ public:
     virtual ~ViewObjectContactOfSdrOle2Obj() override;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX
 

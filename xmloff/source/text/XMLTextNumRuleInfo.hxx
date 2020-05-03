@@ -24,9 +24,9 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextContent; }
-} } }
+}
 
 class XMLTextListAutoStylePool;
 

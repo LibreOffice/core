@@ -47,7 +47,7 @@
 #include "FormControlHelper.hxx"
 #include <map>
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
         namespace awt{
             struct Size;
         }
@@ -61,7 +61,7 @@ namespace com{ namespace sun{ namespace star{
                 class XFormField;
         }
         namespace beans{ class XPropertySet;}
-}}}
+}
 
 namespace writerfilter {
 namespace dmapper {

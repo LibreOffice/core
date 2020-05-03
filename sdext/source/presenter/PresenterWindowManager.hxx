@@ -36,7 +36,7 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterController;
 class PresenterPaneBorderPainter;
@@ -199,7 +199,7 @@ private:
     void ThrowIfDisposed() const;
 };
 
-} }
+}
 
 #endif
 

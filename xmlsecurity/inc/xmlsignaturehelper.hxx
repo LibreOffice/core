@@ -41,11 +41,11 @@ namespace embed {
     class XStorage; }
 }}}
 
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace crypto { class XXMLSecurityContext; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
+namespace com::sun::star::xml::sax { class XWriter; }
 
 /**********************************************************
  XMLSignatureHelper

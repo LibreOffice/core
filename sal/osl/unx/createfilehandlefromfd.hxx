@@ -14,11 +14,11 @@
 
 #include <osl/file.h>
 
-namespace osl { namespace detail {
+namespace osl::detail {
 
 oslFileHandle createFileHandleFromFD(int fd); // defined in file.cxx
 
-} }
+}
 
 #endif
 

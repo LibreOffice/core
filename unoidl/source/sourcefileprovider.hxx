@@ -17,7 +17,7 @@
 #include <rtl/ref.hxx>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 class SourceFileProvider: public Provider {
 public:
@@ -37,7 +37,7 @@ private:
     std::map< OUString, rtl::Reference<Entity> > rootMap_;
 };
 
-} }
+}
 
 #endif
 

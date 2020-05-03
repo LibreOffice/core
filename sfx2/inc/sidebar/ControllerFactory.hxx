@@ -33,7 +33,7 @@ namespace weld {
     class Toolbar;
 }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Convenience class for the easy creation of toolbox controllers.
 */
@@ -65,6 +65,6 @@ private:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

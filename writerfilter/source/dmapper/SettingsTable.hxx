@@ -24,12 +24,10 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <memory>
 
-namespace com{ namespace sun{ namespace star{
-namespace lang{
-class XMultiServiceFactory;
-struct Locale;
+namespace com::sun::star::lang {
+    class XMultiServiceFactory;
+    struct Locale;
 }
-}}}
 
 namespace writerfilter {
 namespace dmapper

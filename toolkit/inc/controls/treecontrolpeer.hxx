@@ -32,11 +32,7 @@
 
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace awt { namespace tree {
-
-class XTreeNode;
-
-}}}}}
+namespace com::sun::star::awt::tree { class XTreeNode; }
 
 class UnoTreeListEntry;
 class TreeControlPeer;

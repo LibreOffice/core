@@ -26,11 +26,11 @@
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { class XComponentContext; }
     namespace rdf { class XMetadatable; }
     namespace rdf { class XRepositorySupplier; }
-} } }
+}
 
 class SvXMLImport;
 

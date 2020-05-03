@@ -54,36 +54,38 @@ enum class GetFocusFlags;
 enum class ParentClipMode;
 enum class SalEvent;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 
-namespace accessibility {
-    class XAccessible;
-    class XAccessibleContext;
-    class XAccessibleEditableText;
-}
+    namespace accessibility {
+        class XAccessible;
+        class XAccessibleContext;
+        class XAccessibleEditableText;
+    }
 
-namespace rendering {
-    class XCanvas;
-}
+    namespace rendering {
+        class XCanvas;
+    }
 
-namespace awt {
-    class XWindowPeer;
-    class XWindow;
+    namespace awt {
+        class XWindowPeer;
+        class XWindow;
+    }
+    namespace uno {
+        class Any;
+        class XInterface;
+    }
+    namespace datatransfer {
+        namespace clipboard {
+            class XClipboard;
+        }
+        namespace dnd {
+            class XDropTargetListener;
+            class XDragGestureRecognizer;
+            class XDragSource;
+            class XDropTarget;
+        }
+    }
 }
-namespace uno {
-    class Any;
-    class XInterface;
-}
-namespace datatransfer { namespace clipboard {
-    class XClipboard;
-}
-
-namespace dnd {
-    class XDropTargetListener;
-    class XDragGestureRecognizer;
-    class XDragSource;
-    class XDropTarget;
-}}}}}
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 

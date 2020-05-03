@@ -24,7 +24,7 @@ class ScrollBar;
 namespace vcl { class Window; }
 namespace tools { class Rectangle; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Helper for layouting the direct and indirect children of a
     deck like title bars, panels, and scroll bars.
@@ -43,6 +43,6 @@ namespace DeckLayouter
         ScrollBar& pVerticalScrollBar);
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

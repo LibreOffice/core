@@ -23,9 +23,7 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <ucbhelper/interactionrequest.hxx>
 
-namespace com { namespace sun { namespace star { namespace ucb {
-    class XCommandProcessor;
-} } } }
+namespace com::sun::star::ucb { class XCommandProcessor; }
 
 namespace ucbhelper {
 

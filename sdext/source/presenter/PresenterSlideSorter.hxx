@@ -37,7 +37,7 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterButton;
 class PresenterScrollBar;
@@ -182,7 +182,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

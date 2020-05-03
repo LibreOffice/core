@@ -31,7 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterController;
 
@@ -131,7 +131,7 @@ private:
     void ThrowIfDisposed() const;
 };
 
-} }
+}
 
 #endif
 

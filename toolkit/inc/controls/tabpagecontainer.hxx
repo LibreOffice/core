@@ -28,9 +28,9 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
-namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPage; } } } } }
-namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageContainerListener; } } } } }
-namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageModel; } } } } }
+namespace com::sun::star::awt::tab { class XTabPage; }
+namespace com::sun::star::awt::tab { class XTabPageContainerListener; }
+namespace com::sun::star::awt::tab { class XTabPageModel; }
 
 
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel

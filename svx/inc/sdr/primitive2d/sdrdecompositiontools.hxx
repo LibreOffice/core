@@ -31,14 +31,14 @@ namespace basegfx {
     class B2DHomMatrix;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrFillAttribute;
     class SdrLineAttribute;
     class FillGradientAttribute;
     class SdrShadowAttribute;
     class SdrLineStartEndAttribute;
     class SdrTextAttribute;
-}}
+}
 
 
 namespace drawinglayer

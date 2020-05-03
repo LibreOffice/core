@@ -16,7 +16,7 @@
 #include <rtl/ref.hxx>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 class LegacyProvider: public Provider {
 public:
@@ -37,7 +37,7 @@ private:
     mutable RegistryKey ucr_;
 };
 
-} }
+}
 
 #endif
 

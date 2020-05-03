@@ -29,10 +29,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class XBitmap;
-} } } }
+namespace com::sun::star::rendering { class XBitmap; }
 
 
 /* Definition of SlideBitmap class */

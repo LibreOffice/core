@@ -29,7 +29,7 @@ typedef cppu::WeakComponentImplHelper <
     css::accessibility::XAccessible
     > AccessibleInterfaceBase;
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 
 /** Simple implementation of the XAccessible interface.
@@ -55,6 +55,6 @@ private:
     css::uno::Reference<css::accessibility::XAccessibleContext> mxContext;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
