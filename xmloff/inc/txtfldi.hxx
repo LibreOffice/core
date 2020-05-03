@@ -36,11 +36,11 @@
 #include <rtl/ustrbuf.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
     namespace text { class XTextField; }
     namespace beans { class XPropertySet; struct PropertyValue; }
-} } }
+}
 
 class SvXMLImport;
 class XMLTextImportHelper;

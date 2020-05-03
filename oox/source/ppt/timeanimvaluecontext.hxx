@@ -23,7 +23,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/animationspersist.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** CT_TLTimeAnimateValueList */
     class TimeAnimValueListContext
@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
         bool                     mbInValue;
     };
 
-} }
+}
 
 #endif
 

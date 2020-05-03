@@ -23,8 +23,8 @@
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 namespace chart
 {

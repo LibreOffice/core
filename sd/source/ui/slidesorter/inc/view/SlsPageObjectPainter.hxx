@@ -24,13 +24,10 @@
 #include <view/SlsTheme.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace cache {
-class PageCache;
-} } }
+namespace sd::slidesorter::cache { class PageCache; }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { class SlideSorter; } }
-
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class Layouter;
 class PageObjectLayouter;
@@ -118,7 +115,7 @@ private:
     bool UpdatePageObjectLayouter();
 };
 
-} } } // end of namespace sd::slidesorter::view
+} // end of namespace sd::slidesorter::view
 
 #endif
 

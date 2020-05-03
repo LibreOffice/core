@@ -22,7 +22,7 @@
 
 #include <model/SlsPageEnumeration.hxx>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 class SlideSorterModel;
 
@@ -47,7 +47,7 @@ public:
     static PageEnumeration CreateVisiblePagesEnumeration (const SlideSorterModel& rModel);
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

@@ -23,7 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/media/XManager.hpp>
 
-namespace avmedia { namespace gstreamer {
+namespace avmedia::gstreamer {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
                                                css::lang::XServiceInfo >
@@ -42,7 +42,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+} // namespace avmedia::gstreamer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

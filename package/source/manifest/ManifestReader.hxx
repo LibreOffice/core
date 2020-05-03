@@ -25,10 +25,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XSingleServiceFactory; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 class ManifestReader: public ::cppu::WeakImplHelper
 <

@@ -14,12 +14,12 @@
 
 #include <i18nlangtag/lang.h>
 
-namespace drawinglayer { namespace detail {
+namespace drawinglayer::detail {
 
 /// Get digit language derived from SvtCTLOptions
 LanguageType getDigitLanguage();
 
-} }
+}
 
 #endif
 

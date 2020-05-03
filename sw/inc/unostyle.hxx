@@ -38,7 +38,7 @@
 #include <memory>
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace document { class XEventsSupplier; } } } }
+namespace com::sun::star::document { class XEventsSupplier; }
 
 class SwDocShell;
 class SwAutoStylesEnumImpl;

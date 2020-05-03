@@ -31,11 +31,11 @@ class SvXMLImport;
 class RedlineInfo;
 class SwRedlineData;
 class SwDoc;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextCursor; }
     namespace text { class XTextRange; }
     namespace frame { class XModel; }
-} } }
+}
 
 typedef std::map< OUString, RedlineInfo* > RedlineMapType;
 

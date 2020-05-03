@@ -24,11 +24,7 @@
 #include <optional>
 #include <dp_backenddb.hxx>
 
-namespace com { namespace sun { namespace star {
-        namespace uno {
-        class XComponentContext;
-        }
-}}}
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace dp_registry {
 namespace backend {

@@ -29,14 +29,14 @@
 
 #include <celltypes.hxx>
 
-namespace sdr { namespace properties {
+namespace sdr::properties {
     class TextProperties;
-} }
+}
 
 class OutlinerParaObject;
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class CellUndo : public SdrUndoAction, public sdr::ObjectUser
 {
@@ -252,7 +252,7 @@ private:
     bool mbHasRedoData;
 };
 
-} }
+}
 
 #endif
 

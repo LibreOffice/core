@@ -50,9 +50,9 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField2; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField3; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct TableFilterField; } } } }
+namespace com::sun::star::sheet { struct TableFilterField2; }
+namespace com::sun::star::sheet { struct TableFilterField3; }
+namespace com::sun::star::sheet { struct TableFilterField; }
 
 class ScDBData;
 class ScDocShell;

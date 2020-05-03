@@ -22,7 +22,7 @@
 
 #include <tools/color.hxx>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** An extensible set of properties used throughout the slide sorter.
 */
@@ -119,7 +119,7 @@ private:
     bool mbIsUIReadOnly;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

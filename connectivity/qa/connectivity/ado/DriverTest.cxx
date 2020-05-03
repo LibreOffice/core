@@ -30,7 +30,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-namespace connectivity { namespace ado {
+namespace connectivity::ado {
 
 
 class AdoDriverTest: public test::BootstrapFixture

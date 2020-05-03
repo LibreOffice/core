@@ -31,7 +31,7 @@ class GalleryBrowser2;
 class FmFormModel;
 class Splitter;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryControl final : public PanelLayout
@@ -50,7 +50,7 @@ private:
     virtual void dispose() override;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

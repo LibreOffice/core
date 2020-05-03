@@ -24,9 +24,9 @@
 // predefines
 class SfxItemSet;
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class Sdr3DObjectAttribute;
-}}
+}
 
 namespace basegfx {
     class B2DRange;

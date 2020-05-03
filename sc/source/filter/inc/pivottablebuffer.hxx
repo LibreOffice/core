@@ -23,10 +23,10 @@
 #include "pivotcachebuffer.hxx"
 #include "stylesbuffer.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { class XDataPilotDescriptor; }
     namespace sheet { class XDataPilotField; }
-} } }
+}
 
 class ScDPObject;
 

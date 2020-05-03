@@ -26,13 +26,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XMultiServiceFactory;
         class XSingleServiceFactory;
     }
     namespace uno { class XInterface; }
-} } }
+}
 
 css::uno::Sequence<OUString> vcl_session_getSupportedServiceNames();
 

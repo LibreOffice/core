@@ -24,7 +24,7 @@
 #include "workbookhelper.hxx"
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+namespace com::sun::star::table { struct CellRangeAddress; }
 namespace oox { class SequenceInputStream; }
 
 namespace oox {

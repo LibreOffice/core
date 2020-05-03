@@ -25,7 +25,7 @@
 
 namespace osl { class Module; }
 
-namespace cppu { namespace detail {
+namespace cppu::detail {
 
 #ifndef DISABLE_DYNLOADING
 
@@ -41,7 +41,7 @@ bool loadModule(osl::Module & rModule, OUString const & name);
 
 #endif
 
-} }
+}
 
 #endif
 

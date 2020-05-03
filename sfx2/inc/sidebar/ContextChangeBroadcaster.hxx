@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 
 /** This class is a helper for broadcasting context changes that are
@@ -60,7 +60,7 @@ private:
 };
 
 
-} } // end of namespace ::sd::sidebar
+} // end of namespace ::sd::sidebar
 
 #endif
 

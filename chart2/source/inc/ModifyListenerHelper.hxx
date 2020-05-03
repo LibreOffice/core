@@ -29,8 +29,8 @@
 #include <algorithm>
 #include <utility>
 
-namespace com { namespace sun { namespace star { namespace uno { class XWeak; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class WeakReference; } } } }
+namespace com::sun::star::uno { class XWeak; }
+namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
 
 namespace chart
 {

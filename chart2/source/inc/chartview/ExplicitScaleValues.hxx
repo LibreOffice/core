@@ -26,7 +26,7 @@
 #include <tools/date.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XScaling; } } } }
+namespace com::sun::star::chart2 { class XScaling; }
 
 namespace chart
 {

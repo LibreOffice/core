@@ -31,9 +31,9 @@
 #include "drawingbase.hxx"
 #include "excelhandlers.hxx"
 
-namespace oox { namespace ole {
+namespace oox::ole {
     struct AxFontData;
-} }
+}
 
 namespace oox {
 namespace xls {

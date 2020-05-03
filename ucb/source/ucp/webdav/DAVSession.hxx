@@ -30,7 +30,7 @@
 #include "DAVTypes.hxx"
 #include "DAVRequestEnvironment.hxx"
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     struct Lock;
 } } } }
 

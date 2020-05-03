@@ -22,14 +22,14 @@
 
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace comphelper { template <class Tp, class Arg> class mem_fun1_t; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 {
         class XChartDocument;
     }
-}}}
+}
 
 namespace chart
 {

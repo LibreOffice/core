@@ -44,9 +44,9 @@ class SvtCTLOptions;
 class SvtUserOptions;
 
 namespace svtools { class ColorConfig; }
-namespace ooo { namespace vba { class XSinkCaller; } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace ooo::vba { class XSinkCaller; }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class ScRange;
 class ScDocument;

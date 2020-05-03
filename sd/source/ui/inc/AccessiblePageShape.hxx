@@ -22,8 +22,8 @@
 
 #include <svx/AccessibleShape.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::drawing { class XDrawPage; }
 namespace accessibility { class AccessibleShapeTreeInfo; }
 
 namespace accessibility {

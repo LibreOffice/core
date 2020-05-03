@@ -23,17 +23,17 @@
 #include <vector>
 #include <global.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace com { namespace sun { namespace star { namespace sheet { class XDatabaseRange; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XUnnamedDatabaseRanges; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSheetCellRangeContainer; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
-namespace ooo { namespace vba { class XHelperInterface; } }
+namespace com::sun::star::sheet { class XDatabaseRange; }
+namespace com::sun::star::sheet { class XUnnamedDatabaseRanges; }
+namespace com::sun::star::table { class XCell; }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
+namespace com::sun::star::sheet { class XSpreadsheet; }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
+namespace ooo::vba { class XHelperInterface; }
 
 class ScCellRangesBase;
 class ScTabViewShell;

@@ -23,7 +23,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class spDefContext final : public oox::core::ContextHandler2
 {
@@ -35,7 +35,7 @@ private:
     Shape& mrDefaultObject;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_SPDEFCONTEXT_HXX
 

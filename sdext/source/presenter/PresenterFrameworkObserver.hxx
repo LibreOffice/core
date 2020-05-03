@@ -27,7 +27,7 @@
 
 #include <functional>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -74,7 +74,7 @@ private:
     void Shutdown();
 };
 
-} }  // end of namespace ::sdext::presenter
+}  // end of namespace ::sdext::presenter
 
 #endif
 

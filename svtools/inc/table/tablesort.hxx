@@ -22,7 +22,7 @@
 #include <table/tabletypes.hxx>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -74,7 +74,7 @@ namespace svt { namespace table
     };
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

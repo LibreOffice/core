@@ -29,9 +29,9 @@
 
 #include "annotationtag.hxx"
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
-namespace com { namespace sun { namespace star { namespace office { class XAnnotationAccess; } } } }
-namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
+namespace com::sun::star::drawing { class XDrawView; }
+namespace com::sun::star::office { class XAnnotationAccess; }
+namespace com::sun::star::office { class XAnnotation; }
 
 class SfxRequest;
 class SdPage;

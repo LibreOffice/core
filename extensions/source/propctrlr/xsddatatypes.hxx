@@ -24,14 +24,14 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace xsd {
         class XDataType;
     }
     namespace beans {
         class XPropertySetInfo;
     }
-} } }
+}
 
 
 namespace pcr

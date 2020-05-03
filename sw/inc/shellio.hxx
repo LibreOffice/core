@@ -55,7 +55,7 @@ namespace mark
 class IMark;
 }
 }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com::sun::star::embed { class XStorage; }
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
 // is forced to wrap. It has to be always greater than 200!!!

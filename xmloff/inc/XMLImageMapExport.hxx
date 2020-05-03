@@ -22,11 +22,11 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
     namespace beans { class XPropertySet; }
     namespace container { class XIndexContainer; }
-} } }
+}
 class SvXMLExport;
 
 

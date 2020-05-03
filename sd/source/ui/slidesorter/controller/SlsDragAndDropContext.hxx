@@ -24,11 +24,9 @@
 
 class Point;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter {  class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** A DragAndDropContext object handles an active drag and drop operation.
     When the mouse is moved from one slide sorter window to another the
@@ -65,7 +63,7 @@ private:
     sal_Int32 mnInsertionIndex;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

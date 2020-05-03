@@ -35,11 +35,11 @@
 #include <vector>
 #include <list>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSheetCellRangeContainer; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatTypes; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
+namespace com::sun::star::table { struct CellRangeAddress; }
+namespace com::sun::star::util { class XNumberFormatTypes; }
+namespace com::sun::star::util { class XNumberFormats; }
 namespace sax_fastparser { class FastAttributeList; }
 
 class ScCompiler;

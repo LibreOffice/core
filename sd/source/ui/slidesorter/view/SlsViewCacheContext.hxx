@@ -23,15 +23,10 @@
 #include <cache/SlsCacheContext.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
 
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
+namespace sd::slidesorter::model { class SlideSorterModel; }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
-
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 /** The cache context for the SlideSorter as used by Draw and Impress.  See
     the base class for documentation of the individual methods.
@@ -56,7 +51,7 @@ private:
     model::SharedPageDescriptor GetDescriptor (cache::CacheKey aKey);
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

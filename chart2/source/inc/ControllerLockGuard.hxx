@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

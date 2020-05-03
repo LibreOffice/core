@@ -21,9 +21,9 @@
 
 #include "PanelBase.hxx"
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com::sun::star::frame { class XFrame; }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class SlideTransitionPanel
     : public PanelBase
@@ -47,7 +47,7 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

@@ -83,12 +83,12 @@ class SwPrintData;
 class SwRenderData;
 class SwViewShell;
 class SfxItemPropertySet;
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
+namespace com::sun::star::container { class XNameContainer; }
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::uno { class XAggregation; }
 
-namespace com { namespace sun { namespace star { namespace util { class XReplaceDescriptor; } } } }
+namespace com::sun::star::util { class XReplaceDescriptor; }
 
 typedef cppu::WeakImplHelper
 <

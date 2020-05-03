@@ -23,10 +23,10 @@
 #include <sal/types.h>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
     namespace beans { class XPropertySet; }
-} } }
+}
 
 void exportXFormsModel( SvXMLExport&,
                         const css::uno::Reference<css::beans::XPropertySet>& );

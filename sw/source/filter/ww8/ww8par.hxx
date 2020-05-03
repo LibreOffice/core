@@ -108,12 +108,12 @@ struct ESelection;
 class SfxItemSet;
 class OutlinerParaObject;
 
-namespace com{namespace sun {namespace star{
+namespace com::sun::star{
     namespace beans{ class XPropertySet;}
     namespace form { class XFormComponent;}
     namespace drawing{class XShape;}
     namespace lang{class XMultiServiceFactory;}
-}}}
+}
 
 // defines only for the WW8-variable of the INI file
 #define WW8FL_NO_STYLES      2

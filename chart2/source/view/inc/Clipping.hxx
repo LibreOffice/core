@@ -22,7 +22,7 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace chart
 {

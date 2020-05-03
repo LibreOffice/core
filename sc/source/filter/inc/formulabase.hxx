@@ -27,15 +27,15 @@
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XFormulaParser; }
-} } }
+}
 
 namespace oox { template< typename Type > class Matrix; }
-namespace com { namespace sun { namespace star { namespace sheet { struct FormulaOpCodeMapEntry; } } } }
+namespace com::sun::star::sheet { struct FormulaOpCodeMapEntry; }
 namespace oox { class SequenceInputStream; }
-namespace oox { namespace xls { struct BinAddress; } }
+namespace oox::xls { struct BinAddress; }
 class ScRangeList;
 
 namespace oox {

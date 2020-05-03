@@ -23,7 +23,7 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 /**
  * Determines whether a type is a "simple" type (VOID, BOOLEAN, BYTE, SHORT,
@@ -64,7 +64,7 @@ bool isSimpleType(typelib_TypeDescription const * type);
  */
 bool relatesToInterfaceType(typelib_TypeDescription const * type);
 
-} } }
+}
 
 #endif
 

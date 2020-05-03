@@ -26,8 +26,8 @@
 
 class SwDoc;
 
-namespace com { namespace sun { namespace star { namespace text { class XTextContent; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
+namespace com::sun::star::text { class XTextContent; }
+namespace com::sun::star::text { class XTextField; }
 
 /// Undo/Redo Paragraph Signature.
 class SwUndoParagraphSigning final : public SwUndo

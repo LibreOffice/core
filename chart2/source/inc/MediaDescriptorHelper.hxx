@@ -24,11 +24,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XStream; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::io { class XStream; }
 
 /*
 * This class helps to read and write the properties mentioned in the service description

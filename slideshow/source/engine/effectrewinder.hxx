@@ -29,7 +29,7 @@
 #include <functional>
 #include <memory>
 
-namespace slideshow { namespace internal {
+namespace slideshow::internal {
 
 class EventMultiplexer;
 class EventQueue;
@@ -164,7 +164,7 @@ private:
         const ::std::function<void ()>& rPreviousSlideFunctor);
 };
 
-} } // end of namespace ::slideshow::internal
+} // end of namespace ::slideshow::internal
 
 #endif
 

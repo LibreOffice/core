@@ -27,11 +27,11 @@
 
 #include "ldapaccess.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
-namespace extensions { namespace config { namespace ldap {
+namespace extensions::config::ldap {
 
 namespace uno = css::uno ;
 namespace lang = css::lang ;
@@ -121,7 +121,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
     LdapData data_;
 } ;
 
-}}}
+}
 
 #endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILE_HXX_
 

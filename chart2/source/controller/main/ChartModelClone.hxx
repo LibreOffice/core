@@ -23,8 +23,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XInternalDataProvider; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::chart2 { class XInternalDataProvider; }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

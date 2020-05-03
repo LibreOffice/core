@@ -30,7 +30,7 @@
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class SdrTableObj;
 
@@ -202,7 +202,7 @@ private:
     css::uno::Reference< css::util::XBroadcaster > mxBroadcaster;
 };
 
-} }
+}
 
 #endif
 

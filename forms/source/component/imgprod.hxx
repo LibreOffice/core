@@ -31,10 +31,7 @@
 
 class SvStream;
 class Graphic;
-
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream;
-}}}}
+namespace com::sun::star::io { class XInputStream; }
 
 
 class ImageProducer :   public css::awt::XImageProducer,

@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <drawingml/table/tablecell.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableCellContext : public ::oox::core::ContextHandler2
 {
@@ -39,7 +39,7 @@ private:
     TableCell& mrTableCell;
 };
 
-} } }
+}
 
 #endif
 

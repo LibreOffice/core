@@ -28,12 +28,12 @@
 
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XShapes;
         class XShape;
     }
-}}}
+}
 
 class GraphicExportFilter :
     public cppu::WeakImplHelper < css::document::XFilter, css::document::XExporter, css::lang::XInitialization >

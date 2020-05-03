@@ -22,14 +22,14 @@
 
 #include <drawingml/chart/converterbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 { class XDiagram; }
     namespace chart2 { class XFormattedString; }
     namespace chart2 { class XTitled; }
-    namespace chart2 { namespace data { class XDataSequence; } }
-} } }
+    namespace chart2::data { class XDataSequence; }
+}
 
-namespace oox { namespace drawingml { struct TextCharacterProperties; } }
+namespace oox::drawingml { struct TextCharacterProperties; }
 
 namespace oox {
 namespace drawingml {

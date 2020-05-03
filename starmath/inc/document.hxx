@@ -42,7 +42,7 @@ class SfxPrinter;
 class Printer;
 class SmCursor;
 
-namespace oox { namespace formulaimport { class XmlStream; } }
+namespace oox::formulaimport { class XmlStream; }
 
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"

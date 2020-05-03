@@ -29,7 +29,7 @@ class SdPage;
 namespace sd { class PreviewRenderer; }
 namespace sd { class DrawDocShell; }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Interface for a provider of page objects.  It is used by the
     MasterPageDescriptor to create master page objects on demand.
@@ -161,7 +161,7 @@ private:
     SdPage* mpPage;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

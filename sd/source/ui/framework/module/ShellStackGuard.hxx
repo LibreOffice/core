@@ -30,8 +30,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::frame { class XController; }
 
 namespace sd {
 
@@ -39,7 +39,7 @@ class ViewShellBase;
 
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -90,7 +90,7 @@ private:
     bool IsPrinting() const;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 
