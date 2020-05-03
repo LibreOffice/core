@@ -27,7 +27,7 @@ extras_STYLES_XMLFILES := \
 	Simple/META-INF/manifest.xml \
 	Simple/meta.xml \
 	Simple/styles.xml \
-	Simple	/Thumbnails/thumbnail.png \
+	Simple/Thumbnails/thumbnail.png \
 
 
 extras_STYLES_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_STYLES),$(atexts)/mimetype)
