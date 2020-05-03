@@ -79,27 +79,8 @@
 
 namespace
 {
-/// Convert from DPI to pixels.
-/// PDFs don't have resolution, rather,
-/// dimensions are in inches, with 72 points / inch.
-/// Here we effectively render at 96 DPI (to match
-/// the image rendered in vcl::ImportPDF in pdfread.cxx).
-double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
-
-/// Convert from pixels to logic (twips).
-long lcl_ToLogic(double value)
-{
-    // Convert to integral preserving two dp.
-    const long in = static_cast<long>(value * 100.);
-    const long out = OutputDevice::LogicToLogic(in, MapUnit::MapPixel, MapUnit::Map100thMM);
-    return out / 100;
-}
-
 double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
-}
 
-namespace
-{
 struct FPDFBitmapDeleter
 {
     void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
@@ -248,8 +229,7 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     mdPageWidthPts = dPageWidth;
     mdPageHeightPts = dPageHeight;
 
-    Size aPageSize(lcl_ToLogic(lcl_PointToPixel(dPageWidth)),
-                   lcl_ToLogic(lcl_PointToPixel(dPageHeight)));
+    Size aPageSize(convertPointToMm100(dPageWidth), convertPointToMm100(dPageHeight));
 
     if (aPageSize.Width() && aPageSize.Height() && (!maScaleRect.IsEmpty()))
     {
@@ -815,10 +795,9 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
     double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
     double dFontSizeV = fabs(sqrt2(matrix.b, matrix.d) * dFontSize);
-    dFontSizeH = lcl_PointToPixel(dFontSizeH);
-    dFontSizeV = lcl_PointToPixel(dFontSizeV);
-    dFontSizeH = lcl_ToLogic(dFontSizeH);
-    dFontSizeV = lcl_ToLogic(dFontSizeV);
+
+    dFontSizeH = convertPointToMm100(dFontSizeH);
+    dFontSizeV = convertPointToMm100(dFontSizeV);
 
     const Size aFontSize(dFontSizeH, dFontSizeV);
     vcl::Font aFnt = mpVD->GetFont();
@@ -1120,7 +1099,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     float fWidth = 1;
     FPDFPageObj_GetStrokeWidth(pPageObject, &fWidth);
     const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
-    mnLineWidth = lcl_ToLogic(lcl_PointToPixel(dWidth));
+    mnLineWidth = convertPointToMm100(dWidth);
 
     int nFillMode = FPDF_FILLMODE_ALTERNATE;
     FPDF_BOOL bStroke = 1; // Assume we have to draw, unless told otherwise.
@@ -1160,10 +1139,8 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
 Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
 {
     y = correctVertOrigin(y);
-    x = lcl_PointToPixel(x);
-    y = lcl_PointToPixel(y);
 
-    Point aPos(lcl_ToLogic(x), lcl_ToLogic(y));
+    Point aPos(convertPointToMm100(x), convertPointToMm100(y));
     return aPos;
 }
 
@@ -1173,15 +1150,10 @@ tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, doubl
     top = correctVertOrigin(top);
     bottom = correctVertOrigin(bottom);
 
-    left = lcl_PointToPixel(left);
-    right = lcl_PointToPixel(right);
-    top = lcl_PointToPixel(top);
-    bottom = lcl_PointToPixel(bottom);
+    Point aPos(convertPointToMm100(left), convertPointToMm100(top));
+    Size aSize(convertPointToMm100(right - left), convertPointToMm100(bottom - top));
 
-    Point aPos(lcl_ToLogic(left), lcl_ToLogic(top));
-    Size aSize(lcl_ToLogic(right - left), lcl_ToLogic(bottom - top));
-    tools::Rectangle aRect(aPos, aSize);
-    return aRect;
+    return tools::Rectangle(aPos, aSize);
 }
 
 #endif // HAVE_FEATURE_PDFIUM
