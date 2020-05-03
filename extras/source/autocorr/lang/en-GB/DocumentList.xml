@@ -82,6 +82,7 @@
   <block-list:block block-list:abbreviated-name="appointiment" block-list:name="appointment"/>
   <block-list:block block-list:abbreviated-name="approrpiate" block-list:name="appropriate"/>
   <block-list:block block-list:abbreviated-name="approrpriate" block-list:name="appropriate"/>
+  <block-list:block block-list:abbreviated-name="aproach" block-list:name="approach"/>
   <block-list:block block-list:abbreviated-name="aquisition" block-list:name="acquisition"/>
   <block-list:block block-list:abbreviated-name="aquisitions" block-list:name="acquisitions"/>
   <block-list:block block-list:abbreviated-name="arguement" block-list:name="argument"/>
@@ -274,6 +275,7 @@
   <block-list:block block-list:abbreviated-name="directer" block-list:name="director"/>
   <block-list:block block-list:abbreviated-name="directers" block-list:name="directors"/>
   <block-list:block block-list:abbreviated-name="directiosn" block-list:name="direction"/>
+  <block-list:block block-list:abbreviated-name="directy" block-list:name="directly"/>
   <block-list:block block-list:abbreviated-name="disatisfied" block-list:name="dissatisfied"/>
   <block-list:block block-list:abbreviated-name="discoverd" block-list:name="discovered"/>
   <block-list:block block-list:abbreviated-name="disign" block-list:name="design"/>
@@ -317,6 +319,8 @@
   <block-list:block block-list:abbreviated-name="exchagne" block-list:name="exchange"/>
   <block-list:block block-list:abbreviated-name="exchagnes" block-list:name="exchanges"/>
   <block-list:block block-list:abbreviated-name="excitment" block-list:name="excitement"/>
+  <block-list:block block-list:abbreviated-name="executeable" block-list:name="executable"/>
+  <block-list:block block-list:abbreviated-name="executeables" block-list:name="executables"/>
   <block-list:block block-list:abbreviated-name="exhcange" block-list:name="exchange"/>
   <block-list:block block-list:abbreviated-name="exhcanges" block-list:name="exchanges"/>
   <block-list:block block-list:abbreviated-name="experiance" block-list:name="experience"/>
@@ -567,6 +571,7 @@
   <block-list:block block-list:abbreviated-name="paymetn" block-list:name="payment"/>
   <block-list:block block-list:abbreviated-name="paymetns" block-list:name="payments"/>
   <block-list:block block-list:abbreviated-name="pciture" block-list:name="picture"/>
+  <block-list:block block-list:abbreviated-name="peaple" block-list:name="people"/>
   <block-list:block block-list:abbreviated-name="peice" block-list:name="piece"/>
   <block-list:block block-list:abbreviated-name="peices" block-list:name="pieces"/>
   <block-list:block block-list:abbreviated-name="peolpe" block-list:name="people"/>
@@ -607,6 +612,7 @@
   <block-list:block block-list:abbreviated-name="questoin" block-list:name="question"/>
   <block-list:block block-list:abbreviated-name="quetion" block-list:name="question"/>
   <block-list:block block-list:abbreviated-name="quetions" block-list:name="questions"/>
+  <block-list:block block-list:abbreviated-name="qurantine" block-list:name="quarantine"/>
   <block-list:block block-list:abbreviated-name="realyl" block-list:name="really"/>
   <block-list:block block-list:abbreviated-name="reccomend" block-list:name="recommend"/>
   <block-list:block block-list:abbreviated-name="reccommend" block-list:name="recommend"/>
@@ -620,6 +626,7 @@
   <block-list:block block-list:abbreviated-name="recomended" block-list:name="recommended"/>
   <block-list:block block-list:abbreviated-name="reconize" block-list:name="recognise"/>
   <block-list:block block-list:abbreviated-name="recrod" block-list:name="record"/>
+  <block-list:block block-list:abbreviated-name="releaesd" block-list:name="released"/>
   <block-list:block block-list:abbreviated-name="religous" block-list:name="religious"/>
   <block-list:block block-list:abbreviated-name="reluctent" block-list:name="reluctant"/>
   <block-list:block block-list:abbreviated-name="remainig" block-list:name="remaining"/>
@@ -682,9 +689,11 @@
   <block-list:block block-list:abbreviated-name="soem" block-list:name="some"/>
   <block-list:block block-list:abbreviated-name="sohw" block-list:name="show"/>
   <block-list:block block-list:abbreviated-name="soical" block-list:name="social"/>
+  <block-list:block block-list:abbreviated-name="someoen" block-list:name="someone"/>
   <block-list:block block-list:abbreviated-name="somethign" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="someting" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="somewaht" block-list:name="somewhat"/>
+  <block-list:block block-list:abbreviated-name="somtheing" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="somthing" block-list:name="something"/>
   <block-list:block block-list:abbreviated-name="somtimes" block-list:name="sometimes"/>
   <block-list:block block-list:abbreviated-name="sot hat" block-list:name="so that"/>
@@ -711,6 +720,8 @@
   <block-list:block block-list:abbreviated-name="sucess" block-list:name="success"/>
   <block-list:block block-list:abbreviated-name="sucessfull" block-list:name="successful"/>
   <block-list:block block-list:abbreviated-name="sufficiant" block-list:name="sufficient"/>
+  <block-list:block block-list:abbreviated-name="sugestion" block-list:name="suggestion"/>
+  <block-list:block block-list:abbreviated-name="sugestions" block-list:name="suggestions"/>
   <block-list:block block-list:abbreviated-name="suposed" block-list:name="supposed"/>
   <block-list:block block-list:abbreviated-name="suppossed" block-list:name="supposed"/>
   <block-list:block block-list:abbreviated-name="suprised" block-list:name="surprised"/>
@@ -743,6 +754,7 @@
   <block-list:block block-list:abbreviated-name="theri" block-list:name="their"/>
   <block-list:block block-list:abbreviated-name="thesame" block-list:name="the same"/>
   <block-list:block block-list:abbreviated-name="thetwo" block-list:name="the two"/>
+  <block-list:block block-list:abbreviated-name="theyr" block-list:name="their"/>
   <block-list:block block-list:abbreviated-name="thgat" block-list:name="that"/>
   <block-list:block block-list:abbreviated-name="thge" block-list:name="the"/>
   <block-list:block block-list:abbreviated-name="thier" block-list:name="their"/>
