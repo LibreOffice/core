@@ -12,9 +12,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
 
-namespace com { namespace sun { namespace star { namespace ui {
-    class XUIConfigurationListener;
-} } } }
+namespace com::sun::star::ui { class XUIConfigurationListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 class NotebookbarTabControl final : public NotebookbarTabControlBase

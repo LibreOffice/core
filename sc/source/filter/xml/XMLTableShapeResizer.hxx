@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com::sun::star::drawing { class XShape; }
 
 class ScXMLImport;
 class ScChartListenerCollection;

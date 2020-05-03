@@ -25,7 +25,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 class NumberFormatPropertyPanel
 :   public PanelLayout,
@@ -94,7 +94,7 @@ private:
     void DisableControls();
 };
 
-} } // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 #endif
 

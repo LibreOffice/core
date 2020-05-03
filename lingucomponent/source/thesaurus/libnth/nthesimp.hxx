@@ -49,9 +49,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-namespace com { namespace sun { namespace star { namespace beans {
-        class XPropertySet;
-}}}}
+namespace com::sun::star::beans { class XPropertySet; }
 
 class Thesaurus :
     public cppu::WeakImplHelper

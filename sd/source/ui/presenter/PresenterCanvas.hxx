@@ -29,11 +29,11 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace sd { namespace presenter { class CanvasUpdateRequester; } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace geometry { struct AffineMatrix2D; } } } }
+namespace sd::presenter { class CanvasUpdateRequester; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::geometry { struct AffineMatrix2D; }
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::rendering::XSpriteCanvas,
@@ -318,7 +318,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

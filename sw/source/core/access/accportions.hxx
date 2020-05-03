@@ -29,9 +29,9 @@
 class SwTextFrame;
 struct SwSpecialPos;
 class SwViewOption;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace i18n { struct Boundary; }
-} } }
+}
 
 /**
  * collect text portion data from the layout through SwPortionHandler interface

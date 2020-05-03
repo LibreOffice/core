@@ -24,7 +24,7 @@
 
 #include "importcontext.hxx"
 
-namespace com { namespace sun { namespace star { namespace util { struct SortField; } } } }
+namespace com::sun::star::util { struct SortField; }
 namespace sax_fastparser { class FastAttributeList; }
 
 class ScXMLImport;

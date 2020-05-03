@@ -28,7 +28,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterPane;
 class PresenterTheme;
@@ -131,7 +131,7 @@ private:
     void ThrowIfDisposed() const;
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

@@ -24,14 +24,12 @@
 #include <memory>
 #include <vector>
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
 class SdrPage;
 class SdPage;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** Observe insertions and deletions of pages between calls to
     StartObservation() and EndObservation().  When the later is called
@@ -71,7 +69,7 @@ private:
     ::std::vector<const SdPage*> maInsertedPages;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

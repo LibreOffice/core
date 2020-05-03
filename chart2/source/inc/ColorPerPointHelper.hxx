@@ -22,8 +22,8 @@
 
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {

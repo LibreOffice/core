@@ -281,7 +281,7 @@ void call(
 
 }
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberDescr,

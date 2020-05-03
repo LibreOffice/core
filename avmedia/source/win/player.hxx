@@ -43,7 +43,7 @@ struct IDDrawExclModeVideo;
 struct IDirectDraw;
 struct IDirectDrawSurface;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
                                          css::lang::XServiceInfo > Player_BASE;

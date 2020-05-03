@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class OpSumX2MY2: public CheckVariables
 {
@@ -37,7 +37,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "SumXMY2"; }
 };
-}}
+}
 
 #endif
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/media/XManager.hpp>
 
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
                                                css::lang::XServiceInfo >

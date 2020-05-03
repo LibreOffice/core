@@ -24,10 +24,10 @@
 
 #include <utility>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 
 /** This class serves for conversion between properties of an XPropertySet and
@@ -190,7 +190,7 @@ private:
     SfxItemPool&                                    m_rItemPool;
 };
 
-}}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ITEMCONVERTER_HXX
 #endif

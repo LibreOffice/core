@@ -55,9 +55,9 @@
 #include <vector>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 #define RELINFO_NO_INIT             1
 #define RELINFO_READ                2

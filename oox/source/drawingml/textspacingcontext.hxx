@@ -22,7 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextSpacing;
 
@@ -37,7 +37,7 @@ private:
     TextSpacing&        maSpacing;
 };
 
-} }
+}
 
 #endif
 

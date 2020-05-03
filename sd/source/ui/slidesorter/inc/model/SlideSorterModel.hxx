@@ -34,14 +34,12 @@ class SdDrawDocument;
 class SdrPage;
 class SdPage;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::drawing { class XDrawPage; }
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
 
@@ -223,7 +221,7 @@ private:
     void UpdateIndices (const sal_Int32 nFirstIndex);
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

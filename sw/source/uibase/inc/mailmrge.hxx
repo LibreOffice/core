@@ -31,7 +31,7 @@ class SwWrtShell;
 class SwModuleOptions;
 class SwXSelChgLstnr_Impl;
 struct SwMailMergeDlg_Impl;
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace frame{
         class XFrame2;
     }
@@ -39,7 +39,7 @@ namespace com{namespace sun{namespace star{
         class XResultSet;
         class XConnection;
     }
-}}}
+}
 
 class SwMailMergeDlg : public SfxDialogController
 {

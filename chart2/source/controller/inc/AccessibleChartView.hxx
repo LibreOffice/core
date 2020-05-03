@@ -27,10 +27,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace accessibility
 {

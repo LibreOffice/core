@@ -23,7 +23,7 @@
 
 #include <algorithm>
 
-namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
+namespace com::sun::star::lang { class XEventListener; }
 
 namespace chart
 {

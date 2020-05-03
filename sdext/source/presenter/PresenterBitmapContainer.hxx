@@ -31,7 +31,7 @@
 #include <map>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Manage a set of bitmap groups as they are used for buttons: three
     bitmaps, one for the normal state, one for a mouse over effect and one
@@ -139,7 +139,7 @@ private:
 typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;
 typedef std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> SharedBitmapDescriptor;
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

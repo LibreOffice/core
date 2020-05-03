@@ -25,14 +25,14 @@
 #include <memory>
 
 // some forwards
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdb {
         class SQLContext;
     }
     namespace sdbc {
         class SQLException;
     }
-} } }
+}
 
 namespace dbaui
 {

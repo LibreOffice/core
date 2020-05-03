@@ -40,13 +40,13 @@ namespace basegfx
     class B2DPolyPolygon;
 };
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com::sun::star::geometry
 {
     struct IntegerRectangle2D;
     struct RealPoint2D;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XBitmap;
     class  XPolyPolygon2D;

@@ -22,7 +22,7 @@
 #include <ObjectIdentifier.hxx>
 #include <sfx2/tabdlg.hxx>
 
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
 class Graphic;
 
 namespace chart

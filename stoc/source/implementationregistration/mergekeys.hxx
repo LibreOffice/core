@@ -23,9 +23,9 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace registry {
+namespace com::sun::star::registry {
     class XRegistryKey;
-} } } }
+}
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace stoc_impreg {

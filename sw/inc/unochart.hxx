@@ -57,7 +57,7 @@ class SwTable;
 class SwTableBox;
 struct SwRangeDescriptor;
 class SwSelBoxes;
-namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
+namespace com::sun::star::table { class XCell; }
 
 bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
 

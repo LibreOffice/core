@@ -29,8 +29,8 @@
 #include <stdio.h>
 #endif
 
-namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com::sun::star::animations { class XAnimationNode; }
+namespace com::sun::star::drawing { class XDrawPage; }
 namespace ppt { struct AnimationNode; }
 
 class DffRecordHeader;

@@ -30,10 +30,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "layerimport.hxx"
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     struct Time;
     struct Date;
-} } } }
+}
 
 namespace xmloff
 {

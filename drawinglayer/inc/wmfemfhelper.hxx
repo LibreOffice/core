@@ -28,7 +28,7 @@
 #include <memory>
 
 // predefines
-namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
+namespace drawinglayer::geometry { class ViewInformation2D; }
 class GDIMetaFile;
 namespace wmfemfhelper { class PropertyHolder; }
 

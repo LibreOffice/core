@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Reference.h>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
- } } }
+}
 
 
 /**

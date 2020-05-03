@@ -53,7 +53,7 @@
 #include "modifications.hxx"
 #include "type.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XHierarchicalPropertySetInfo;
         class XPropertiesChangeListener;
@@ -69,7 +69,7 @@ namespace com { namespace sun { namespace star {
         class XInterface;
     }
     namespace util { struct ElementChange; }
-} } }
+}
 
 namespace configmgr {
 

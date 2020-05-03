@@ -31,7 +31,7 @@
 
 class SvXMLImport;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart {
         class XDiagram;
         class X3DDisplay;
@@ -40,9 +40,10 @@ namespace com { namespace sun { namespace star {
     namespace chart2 {
         class XChartDocument;
     }
-    namespace xml { namespace sax {
+    namespace xml::sax {
         class XAttributeList;
-}}}}}
+    }
+}
 
 class SchXML3DSceneAttributesHelper : public SdXML3DSceneAttributesHelper
 {

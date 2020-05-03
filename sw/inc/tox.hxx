@@ -33,10 +33,9 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XDocumentIndexMark; }
-} } }
-
+}
 class SwTOXType;
 class SwTOXMark;
 class SwTextTOXMark;

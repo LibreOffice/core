@@ -25,7 +25,7 @@
 
 class SwFormatField;
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     class AnnotationMark : public MarkBase
     {
@@ -40,7 +40,9 @@ namespace sw { namespace mark
 
         const SwFormatField* GetAnnotationFormatField() const;
     };
-}}
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

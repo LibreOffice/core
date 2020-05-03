@@ -33,9 +33,7 @@
 
 #include <memory>
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
 namespace accessibility {
 

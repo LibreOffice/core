@@ -22,7 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
     class GuidContext final : public ::oox::core::ContextHandler2
     {
@@ -34,7 +34,7 @@ namespace oox { namespace drawingml {
     private:
         OUString& mrGuidId;
     };
-} }
+}
 
 #endif
 

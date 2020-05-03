@@ -25,7 +25,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Pane used by the presenter screen.  Pane objects are stored in the
     PresenterPaneContainer.  Sizes and positions are controlled
@@ -75,7 +75,7 @@ private:
     void UpdateBoundingBox();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

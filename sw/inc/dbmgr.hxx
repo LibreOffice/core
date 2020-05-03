@@ -33,7 +33,7 @@
 #include <memory>
 #include <vector>
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace sdbc{
         class XConnection;
         class XStatement;
@@ -55,7 +55,7 @@ namespace com{namespace sun{namespace star{
     }
     namespace embed { class XStorage; }
     namespace frame { class XStorable; }
-}}}
+}
 namespace svx {
     class ODataAccessDescriptor;
 }

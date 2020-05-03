@@ -32,11 +32,9 @@
 #include <uno/environment.h>
 #include "vtablefactory.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
+namespace com::sun::star::uno { class XInterface; }
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 class Bridge;
 
@@ -96,7 +94,7 @@ private:
         uno_ExtEnvironment * pEnv, void * pInterface);
 };
 
-} } }
+}
 
 #endif
 

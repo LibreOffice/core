@@ -29,7 +29,7 @@
 
 #include "embservconst.h"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XMultiServiceFactory;
     }

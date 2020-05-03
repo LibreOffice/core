@@ -28,7 +28,7 @@
 
 #include <memory>
 
-namespace svt { namespace table
+namespace svt::table
 {
     class TableControl_Impl;
 
@@ -167,7 +167,7 @@ namespace svt { namespace table
     };
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 

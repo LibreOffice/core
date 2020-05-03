@@ -25,7 +25,7 @@
 
 class BitmapEx;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class BitmapReplacement;
 
@@ -135,7 +135,7 @@ public:
     virtual bool IsLossless() const override;
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

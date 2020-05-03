@@ -58,15 +58,9 @@ class ScSheetSaveData;
 class ScFlatBoolRowSegments;
 struct ScColWidthParam;
 class ScFormulaOptions;
-
-namespace com { namespace sun { namespace star { namespace script { namespace vba {
-    class XVBAScriptListener;
-} } } } }
-
-namespace ooo { namespace vba { namespace excel { class XWorkbook; } } }
-
-namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable2; } } } }
-
+namespace com::sun::star::script::vba { class XVBAScriptListener; }
+namespace ooo::vba::excel { class XWorkbook; }
+namespace com::sun::star::datatransfer { class XTransferable2; }
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 

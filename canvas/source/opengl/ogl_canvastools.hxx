@@ -15,9 +15,9 @@
 
 #include <epoxy/gl.h>
 
-namespace com { namespace sun { namespace star { namespace rendering {
+namespace com::sun::star::rendering {
     struct ARGBColor;
-}}}}
+}
 namespace basegfx {
     class B2DPolyPolygon;
     class B2DHomMatrix;

@@ -17,7 +17,7 @@
 
 // Internal, non-stable ABI
 
-namespace sal { namespace detail { namespace textenc {
+namespace sal::detail::textenc {
 
 // True means "continue," false means "break:"
 bool SAL_DLLPUBLIC handleUndefinedUnicodeToTextChar(
@@ -25,6 +25,6 @@ bool SAL_DLLPUBLIC handleUndefinedUnicodeToTextChar(
     char ** ppDestBuf, char const * pEndDestBuf, sal_uInt32 nFlags,
     sal_uInt32 * pInfo);
 
-} } }
+}
 
 #endif

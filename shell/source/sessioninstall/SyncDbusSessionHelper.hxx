@@ -15,7 +15,7 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace shell { namespace sessioninstall
+namespace shell::sessioninstall
 {
     class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper >
     {
@@ -54,7 +54,7 @@ namespace shell { namespace sessioninstall
             SyncDbusSessionHelper( const SyncDbusSessionHelper& ) = delete;
             SyncDbusSessionHelper& operator=( const SyncDbusSessionHelper& ) = delete;
     };
-}}
+}
 
 #endif // INCLUDED_SHELL_SOURCE_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

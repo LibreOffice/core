@@ -31,10 +31,10 @@
 #include <memory>
 
 namespace sd { class ViewShell; }
-namespace sd { namespace slidesorter { class SlideSorterViewShell; } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace sd::slidesorter { class SlideSorterViewShell; }
+namespace com::sun::star::awt { class XWindow; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper    <   css::lang::XUnoTunnel
                                             ,   css::awt::XWindowListener
@@ -129,7 +129,7 @@ private:
     css::uno::Reference<css::awt::XWindow >                             mxWindow;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

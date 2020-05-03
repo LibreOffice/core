@@ -22,7 +22,7 @@
 
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class TitleBar : public vcl::Window
 {
@@ -71,6 +71,6 @@ private:
     DECL_LINK(SelectionHandler, ToolBox*, void);
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

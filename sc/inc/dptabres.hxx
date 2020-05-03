@@ -35,9 +35,9 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet { struct DataResult; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct MemberResult; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::sheet { struct DataResult; }
+namespace com::sun::star::sheet { struct MemberResult; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class ScDPSource;
 class ScDPDimension;

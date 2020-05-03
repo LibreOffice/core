@@ -22,7 +22,7 @@
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdorect.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewContactOfSdrRectObj : public ViewContactOfTextObj
 {
@@ -44,6 +44,6 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 };
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

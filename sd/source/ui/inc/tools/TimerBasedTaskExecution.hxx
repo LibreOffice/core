@@ -24,7 +24,7 @@
 
 #include <memory>
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 class AsynchronousTask;
 
@@ -85,7 +85,7 @@ private:
     DECL_LINK(TimerCallback, Timer *, void);
 };
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 #endif
 

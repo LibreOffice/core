@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-namespace oox { namespace shape {
+namespace oox::shape {
 
 class ShapeFragmentHandler : public core::FragmentHandler2
 {
@@ -157,7 +157,7 @@ private:
     css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
 };
 
-}}
+}
 
 #endif // INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 

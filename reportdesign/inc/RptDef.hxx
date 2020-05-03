@@ -31,12 +31,12 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdtypes.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace report {
         class XReportComponent;
         class XReportDefinition;
     }
-}}}
+}
 
 namespace rptui
 {

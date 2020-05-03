@@ -24,10 +24,10 @@
 #include <tabprotection.hxx>
 #include <rangelst.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::sheet { class XSpreadsheet; }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::drawing { class XShapes; }
 
 class ScXMLImport;
 

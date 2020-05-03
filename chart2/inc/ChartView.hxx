@@ -40,11 +40,11 @@
 
 #include <vcl/timer.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XUpdatable2; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::io { class XOutputStream; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XUpdatable2; }
 
 class SdrPage;
 

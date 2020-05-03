@@ -24,14 +24,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
     }
     namespace io {
         class XInputStream;
     }
-} } }
+}
 
 namespace pdfi
 {

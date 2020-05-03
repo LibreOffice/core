@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 @end
 
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 MacAVObserverObject* MacAVObserverHandler::mpMacAVObserverObject = nullptr;
 

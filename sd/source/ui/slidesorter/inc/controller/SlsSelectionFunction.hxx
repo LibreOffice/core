@@ -24,13 +24,11 @@
 #include <fupoor.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
 struct AcceptDropEvent;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class SlideSorterController;
 
@@ -147,7 +145,7 @@ private:
     void SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

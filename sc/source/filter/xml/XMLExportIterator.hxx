@@ -29,10 +29,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::sheet { class XSpreadsheet; }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::table { struct CellRangeAddress; }
 
 class   ScPostIt;
 class   ScHorizontalCellIterator;
