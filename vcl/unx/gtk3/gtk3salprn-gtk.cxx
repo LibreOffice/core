@@ -556,7 +556,7 @@ GtkPrintDialog::impl_initCustomTab()
                 if (pVal && pVal->Value.hasValue())
                     pVal->Value >>= nSelectVal;
 
-                for (sal_Int32 m = 0; m != aChoices.getLength(); m++)
+                for (sal_Int32 m = 0; m != aChoices.(); m++)
                 {
                     pWidget = gtk_radio_button_new_with_mnemonic_from_widget(
                         GTK_RADIO_BUTTON(m == 0 ? nullptr : pWidget),

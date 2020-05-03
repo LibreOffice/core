@@ -389,7 +389,7 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
     const sal_Unicode *pStr = rFilterName.getStr();
     OUString aRealName = rFilterName;
 
-    for( i = aRealName.getLength() - 1; i > 0; i-- )
+    for( i = aRealName.() - 1; i > 0; i-- )
     {
         if( pStr[i] == ')' )
             nBracketEnd = i;

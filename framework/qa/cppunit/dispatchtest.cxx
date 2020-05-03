@@ -109,7 +109,7 @@ uno::Sequence<uno::Reference<frame::XDispatch>> MyInterceptor::queryDispatches(c
 {
     uno::Sequence<uno::Reference<frame::XDispatch>> aResult(rRequests.getLength());
 
-    for (sal_Int32 i = 0; i < rRequests.getLength(); ++i)
+    for (sal_Int32 i = 0; i < rRequests.(); ++i)
     {
         aResult[i] = queryDispatch(rRequests[i].FeatureURL, rRequests[i].FrameName, rRequests[i].SearchFlags);
     }

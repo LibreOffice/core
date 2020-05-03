@@ -790,7 +790,7 @@ void TestBreakIterator::testWeak()
         };
         OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
 
-        for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
+        for (sal_Int32 i = 0; i < aWeaks.(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
             OString aMsg =
@@ -829,7 +829,7 @@ void TestBreakIterator::testAsian()
         };
         OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
 
-        for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
+        for (sal_Int32 i = 0; i < aAsians.(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
             OString aMsg =

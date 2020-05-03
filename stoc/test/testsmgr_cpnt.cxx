@@ -261,7 +261,7 @@ sal_Bool SAL_CALL component_writeInfo(
             const Sequence< OUString > & rSNL =
                 Test_Manager_Impl::getSupportedServiceNames_Static();
             const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+            for ( sal_Int32 nPos = rSNL.(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
 
             return sal_True;

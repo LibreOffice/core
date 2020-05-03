@@ -447,8 +447,8 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
         StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
 
         try {
-            for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
-                SwitchStateTo_Impl( aIntermediateStates[nInd] );
+            for ( sal_Int32 state : aIntermediateStates )
+                SwitchStateTo_Impl( state );
 
             SwitchStateTo_Impl( nNewState );
         }

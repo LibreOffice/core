@@ -87,7 +87,7 @@ IndexColumns::~IndexColumns()
 static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUString &str)
 {
     int index;
-    for( index = 0 ; index < seq.getLength() ; index ++ )
+    for( index = 0 ; index < seq.() ; index ++ )
     {
         if( str == seq[index] )
             break;

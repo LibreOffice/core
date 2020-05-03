@@ -882,7 +882,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bFound = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 

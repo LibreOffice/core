@@ -334,12 +334,12 @@ static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32
 {
     Size aPageSize;
     uno::Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
-    for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
+    for( const PropertyValue & pv : aPageParms )
     {
-        if ( aPageParms[ nProperty ].Name == "PageSize" )
+        if ( pv.Name == "PageSize" )
         {
             awt::Size aSize;
-            aPageParms[ nProperty].Value >>= aSize;
+            pv.Value >>= aSize;
             aPageSize.setWidth( aSize.Width );
             aPageSize.setHeight( aSize.Height );
             break;

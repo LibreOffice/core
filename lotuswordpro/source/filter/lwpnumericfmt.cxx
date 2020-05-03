@@ -375,7 +375,7 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
     sal_Int32 i;
     std::unique_ptr<sal_Unicode[]> pBuff( new sal_Unicode[sCode.getLength()] );
 
-    for (i=0; i< sCode.getLength() - 1; i++)
+    for (i=0; i< sCode.() - 1; i++)
     {
         if ( (pString[i] == 0x00a1) && (pString[i+1] == 0x00ea))
         {
@@ -387,7 +387,7 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
     if (bFound)
     {
         pBuff[i] = 0xffe1;
-        for (sal_Int32 j=i+1; j < sCode.getLength() - 1; ++j)
+        for (sal_Int32 j=i+1; j < sCode.() - 1; ++j)
         {
             pBuff[j] = pString[j+1];
         }

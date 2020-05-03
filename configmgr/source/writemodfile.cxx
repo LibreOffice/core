@@ -178,13 +178,13 @@ void writeValueContent_(TempFile &handle, const OUString& value) {
 void writeValueContent_(
     TempFile &handle, css::uno::Sequence< sal_Int8 > const & value)
 {
-    for (sal_Int32 i = 0; i < value.getLength(); ++i) {
+    for (const auto & v : value) {
         static char const hexDigit[16] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
             'D', 'E', 'F' };
         handle.writeString(
-            std::string_view(hexDigit + ((value[i] >> 4) & 0xF), 1));
-        handle.writeString(std::string_view(hexDigit + (value[i] & 0xF), 1));
+            std::string_view(hexDigit + ((v >> 4) & 0xF), 1));
+        handle.writeString(std::string_view(hexDigit + (v & 0xF), 1));
     }
 }
 
@@ -219,9 +219,9 @@ template< typename T > void writeItemListValue(
     handle.writeString(">");
     css::uno::Sequence< T > val;
     value >>= val;
-    for (sal_Int32 i = 0; i < val.getLength(); ++i) {
+    for (const auto & i : val) {
         handle.writeString("<it>");
-        writeValueContent_(handle, val[i]);
+        writeValueContent_(handle, i);
         handle.writeString("</it>");
     }
     handle.writeString("</value>");

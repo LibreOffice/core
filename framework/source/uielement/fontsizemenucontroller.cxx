@@ -79,11 +79,11 @@ OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::
             if ( xPrintable.is() )
             {
                 Sequence< PropertyValue > aPrinterSeq = xPrintable->getPrinter();
-                for ( int i = 0; i < aPrinterSeq.getLength(); i++ )
+                for ( PropertyValue const & prop : aPrinterSeq )
                 {
-                    if ( aPrinterSeq[i].Name == "Name" )
+                    if ( prop.Name == "Name" )
                     {
-                        aPrinterSeq[i].Value >>= aPrinterName;
+                        prop.Value >>= aPrinterName;
                         break;
                     }
                 }

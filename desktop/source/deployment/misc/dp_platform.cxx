@@ -189,9 +189,9 @@ bool platform_fits( OUString const & platform_string )
 bool hasValidPlatform( css::uno::Sequence<OUString> const & platformStrings)
 {
     bool ret = false;
-    for (sal_Int32 i  = 0; i < platformStrings.getLength(); i++)
+    for (const OUString& s : platformStrings)
     {
-        if ( isPlatformSupported( platformStrings[i] ))
+        if ( isPlatformSupported( s ) )
         {
             ret = true;
             break;

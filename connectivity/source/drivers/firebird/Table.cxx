@@ -242,7 +242,7 @@ uno::Sequence< Type > SAL_CALL Table::getTypes()
 {
     uno::Sequence< Type > aTypes = OTableHelper::getTypes();
 
-    for (int i = 0; i < aTypes.getLength(); i++)
+    for (int i = 0; i < aTypes.(); i++)
     {
         if (aTypes[i].getTypeName() == "com.sun.star.sdbcx.XRename")
         {

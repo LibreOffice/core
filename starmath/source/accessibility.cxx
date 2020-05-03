@@ -458,7 +458,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
     if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   // aTxt.getLength() is valid
         throw IndexOutOfBoundsException();
 
-    // find a reasonable rectangle for position aTxt.getLength().
+    // find a reasonable rectangle forx position aTxt.().
     bool bWasBehindText = (nIndex == aTxt.getLength());
     if (bWasBehindText && nIndex)
         --nIndex;

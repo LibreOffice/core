@@ -133,11 +133,11 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         bool bFound = false;
 
-        for (int i = 0; i < aFilterData.getLength(); ++i)
+        for (PropertyValue& rProp : aFilterData)
         {
-            if (aFilterData[i].Name == "IsRedactMode")
+            if (rProp.Name == "IsRedactMode")
             {
-                aFilterData[i].Value <<= bIsRedactMode;
+                rProp.Value <<= bIsRedactMode;
                 bFound = true;
                 break;
             }

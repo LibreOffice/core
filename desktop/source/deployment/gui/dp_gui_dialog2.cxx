@@ -639,9 +639,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes(
         m_pManager->getExtensionManager()->getSupportedPackageTypes() );
 
-    for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
+    for ( uno::Reference< deployment::XPackageTypeInfo > const & xPackageType : packageTypes )
     {
-        uno::Reference< deployment::XPackageTypeInfo > const & xPackageType = packageTypes[ pos ];
         const OUString filter( xPackageType->getFileFilter() );
         if (!filter.isEmpty())
         {

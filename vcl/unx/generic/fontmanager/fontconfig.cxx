@@ -900,7 +900,7 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
     if ( !rMissingCodes.isEmpty() )
     {
         FcCharSet *codePoints = FcCharSetCreate();
-        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.(); )
         {
             // also handle unicode surrogates
             const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
@@ -1024,7 +1024,7 @@ void PrintFontManager::Substitute(FontSelectPattern &rPattern, OUString& rMissin
                 FcCharSet* codePoints;
                 if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &codePoints))
                 {
-                    for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+                    for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.(); )
                     {
                         // also handle surrogates
                         const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );

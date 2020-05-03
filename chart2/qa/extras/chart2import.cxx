@@ -805,7 +805,7 @@ void Chart2ImportTest::testBnc864396()
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     uno::Reference< chart::XChartDataArray > xChartDataArray(xDataProvider, uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
-    for(sal_Int32 i = 0; i < aRowLabels.getLength(); ++i)
+    for(sal_Int32 i = 0; i < aRowLabels.(); ++i)
     {
         OUString aExpected = "cat" + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);

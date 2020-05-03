@@ -109,14 +109,12 @@ class InstanceCollection : public Collection<css::uno::Sequence<css::beans::Prop
 public:
     virtual bool isValid( const T& t ) const override
     {
-        const css::beans::PropertyValue* pValues = t.getConstArray();
-        OUString sInstance( "Instance" );
-        bool bFound = false;
-        for( sal_Int32 i = 0; ( ! bFound ) && ( i < t.getLength() ); i++ )
+        for( const css::beans::PropertyValue& rProp : t )
         {
-            bFound |= ( pValues[i].Name == sInstance );
+            if (rProp.Name == "Instance" )
+                return true;
         }
-        return bFound;
+        return false;
     }
 };
 

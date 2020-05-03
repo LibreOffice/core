@@ -213,17 +213,16 @@ Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const 
 static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >& rSeqToolBars,
                          ToolbarHashMap& rHashMap )
 {
-    for ( sal_Int32 i = 0; i < rSeqToolBars.getLength(); i++ )
+    for ( Sequence< css::beans::PropertyValue > const & props : rSeqToolBars )
     {
         OUString aResourceURL;
         OUString aUIName;
-        const PropertyValue* pProperties = rSeqToolBars[i].getConstArray();
-        for ( sal_Int32 j = 0; j < rSeqToolBars[i].getLength(); j++ )
+        for ( css::beans::PropertyValue const & prop : props )
         {
-            if ( pProperties[j].Name == "ResourceURL" )
-                pProperties[j].Value >>= aResourceURL;
-            else if ( pProperties[j].Name == "UIName" )
-                pProperties[j].Value >>= aUIName;
+            if ( prop.Name == "ResourceURL" )
+                prop.Value >>= aResourceURL;
+            else if ( prop.Name == "UIName" )
+                prop.Value >>= aUIName;
         }
 
         if ( !aResourceURL.isEmpty() &&
@@ -237,10 +236,9 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
 {
     std::vector< ToolBarInfo > aToolBarArray;
     Sequence< Reference< XUIElement > > aUIElements = rLayoutManager->getElements();
-    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+    for ( Reference< XUIElement > const & xUIElement : aUIElements )
     {
-        Reference< XUIElement > xUIElement( aUIElements[i] );
-        Reference< XPropertySet > xPropSet( aUIElements[i], UNO_QUERY );
+        Reference< XPropertySet > xPropSet( xUIElement, UNO_QUERY );
         if ( xPropSet.is() && xUIElement.is() )
         {
             try
@@ -345,16 +343,16 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
 
                 if ( a >>= aWindowState )
                 {
-                    for ( sal_Int32 i = 0; i < aWindowState.getLength(); i++ )
+                    for ( PropertyValue const & prop : aWindowState )
                     {
-                        if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_UINAME )
-                            aWindowState[i].Value >>= aUIName;
-                        else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_HIDEFROMENU )
-                            aWindowState[i].Value >>= bHideFromMenu;
-                        else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_CONTEXT )
-                            aWindowState[i].Value >>= bContextSensitive;
-                        else if ( aWindowState[i].Name == WINDOWSTATE_PROPERTY_VISIBLE )
-                            aWindowState[i].Value >>= bVisible;
+                        if ( prop.Name == WINDOWSTATE_PROPERTY_UINAME )
+                            prop.Value >>= aUIName;
+                        else if ( prop.Name == WINDOWSTATE_PROPERTY_HIDEFROMENU )
+                            prop.Value >>= bHideFromMenu;
+                        else if ( prop.Name == WINDOWSTATE_PROPERTY_CONTEXT )
+                            prop.Value >>= bContextSensitive;
+                        else if ( prop.Name == WINDOWSTATE_PROPERTY_VISIBLE )
+                            prop.Value >>= bVisible;
                     }
                 }
             }

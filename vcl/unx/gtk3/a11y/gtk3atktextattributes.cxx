@@ -1032,7 +1032,7 @@ static void
 find_exported_attributes( sal_Int32 *pArray,
     const css::uno::Sequence< css::beans::PropertyValue >& rAttributeList )
 {
-    for( sal_Int32 i = 0; i < rAttributeList.getLength(); i++ )
+    for( sal_Int32 i = 0; i < rAttributeList.(); i++ )
     {
         const char ** pAttr = static_cast<const char **>(bsearch(rAttributeList[i].Name.pData,
             ExportedTextAttributes, TEXT_ATTRIBUTE_LAST, sizeof(const char *),

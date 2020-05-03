@@ -109,7 +109,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
     Reference< i18n::XCharacterClassification > xCC( GetCharacterClassification() );
     if( xCC.is() )
     {
-        for(int i=1; i< elem.Text.getLength(); i++)
+        for(int i=1; i< elem.Text.(); i++)
         {
             css::i18n::DirectionProperty nType = static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( str, i ));
             if ( nType == css::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
@@ -126,7 +126,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
-    for(int i=0; i< elem.Text.getLength(); i++)
+    for(int i=0; i< elem.Text.(); i++)
     {
         OUString strToken=  str.copy(i,1) ;
         if( strSpace == strToken || strNbSpace == strToken )
@@ -638,7 +638,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
 
 static bool isSpaces(TextElement* pTextElem)
 {
-    for (sal_Int32 i = 0; i != pTextElem->Text.getLength(); ++i) {
+    for (sal_Int32 i = 0; i != pTextElem->Text.(); ++i) {
         if (pTextElem->Text[i] != ' ') {
             return false;
         }
@@ -677,7 +677,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
             TextElement* pNext = dynamic_cast<TextElement*>(next->get());
             bool isComplex = false;
             OUString str(pCur->Text.getStr());
-            for(int i=0; i< str.getLength(); i++)
+            for(int i=0; i< str.(); i++)
             {
                 sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
                 if (nType == css::i18n::ScriptType::COMPLEX)
@@ -709,7 +709,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     pCur->Text.append( pNext->Text );
 
                     str = pCur->Text.getStr();
-                    for(int i=0; i< str.getLength(); i++)
+                    for(int i=0; i< str.(); i++)
                     {
                         sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
                         if (nType == css::i18n::ScriptType::COMPLEX)

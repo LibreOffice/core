@@ -298,17 +298,14 @@ bool EffectRewinder::hasBlockedAnimation( const css::uno::Reference<css::animati
     OUString preset_sub_type;
     OUString preset_property;
 
-    if (xNode->getUserData().getLength())
+    for(const auto & i : xNode->getUserData())
     {
-        for(int i = 0; i < xNode->getUserData().getLength(); i++)
-        {
-            if(xNode->getUserData()[i].Name == "preset-id")
-                xNode->getUserData()[i].Value >>= preset_id;
-            if(xNode->getUserData()[i].Name == "preset-sub-type")
-                xNode->getUserData()[i].Value >>= preset_sub_type;
-            if(xNode->getUserData()[i].Name == "preset-property")
-                xNode->getUserData()[i].Value >>= preset_property;
-        }
+        if(i.Name == "preset-id")
+            i.Value >>= preset_id;
+        if(i.Name == "preset-sub-type")
+            i.Value >>= preset_sub_type;
+        if(i.Name == "preset-property")
+            i.Value >>= preset_property;
     }
 
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess (xNode, uno::UNO_QUERY);

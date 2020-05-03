@@ -176,7 +176,7 @@ PreparedStatement::PreparedStatement(
             // token,
             // the ? cannot be the first part of the token , so we start
             // at one
-            for( int index = 1 ; index < str.getLength() ; index ++ )
+            for( int index = 1 ; index < str.() ; index ++ )
             {
                 if( str[index] == '?' ||
                     isNamedParameterStart( str , index )
@@ -311,7 +311,7 @@ sal_Bool PreparedStatement::execute( )
         else
         {
             int start = 0,index;
-            for( index = 1 ; index < str.getLength() ; index ++ )
+            for( index = 1 ; index < str.() ; index ++ )
             {
                 if( str[index] == '?' )
                 {

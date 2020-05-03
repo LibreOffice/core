@@ -91,7 +91,7 @@ Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
 {
     QList<int> aList;
-    for (sal_Int32 i = 0; i < aSequence.getLength(); i++)
+    for (sal_Int32 i = 0; i < aSequence.(); i++)
     {
         aList.append(aSequence[i]);
     }

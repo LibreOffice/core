@@ -138,9 +138,9 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
         uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
             aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nI = aCooSysSeq.getLength(); nI--; )
+        for( const auto & i : aCooSysSeq )
         {
-            uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nI], uno::UNO_QUERY_THROW );
+            uno::Reference< chart2::XChartTypeContainer > xCTCnt( i, uno::UNO_QUERY_THROW );
             nRemainingGroups += xCTCnt->getChartTypes().getLength();
         }
 

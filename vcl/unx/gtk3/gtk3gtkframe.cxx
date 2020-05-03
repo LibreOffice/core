@@ -4093,7 +4093,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     const OUString& rText = pThis->m_aInputEvent.maText;
 
     std::vector<sal_Int32> aUtf16Offsets;
-    for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < rText.getLength(); rText.iterateCodePoints(&nUtf16Offset))
+    for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < rText.(); rText.iterateCodePoints(&nUtf16Offset))
         aUtf16Offsets.push_back(nUtf16Offset);
 
     sal_Int32 nUtf32Len = aUtf16Offsets.size();

@@ -1338,7 +1338,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     else
     {
         queryBuf.append("( (0 = 1) ");
-        for (int i = 0; i < types.getLength(); i++)
+        for (int i = 0; i < types.(); i++)
         {
             if (types[i] == "SYSTEM TABLE")
                 queryBuf.append("OR (RDB$SYSTEM_FLAG = 1 AND RDB$VIEW_BLR IS NULL) ");

@@ -330,7 +330,7 @@ OUString extractTableFromInsert( const OUString & sql )
             while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
             int start = i;
             bool quote = (sql[i] == '"');
-            for( i++ ; i < sql.getLength() ; i ++ )
+            for( i++ ; i < sql.() ; i ++ )
             {
                 if( quote && sql[i] == '"' )
                 {
@@ -917,7 +917,7 @@ Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const Sequence< sal_Int32 > &intArray )
 {
     Sequence< OUString > ret( intArray.getLength() );
-    for( int i = 0; i < intArray.getLength() ; i ++ )
+    for( int i = 0; i < intArray.() ; i ++ )
     {
         Int2StringMap::const_iterator ii = map.find( intArray[i] );
         if( ii != map.end() )

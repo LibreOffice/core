@@ -118,32 +118,32 @@ static void ExtractMenuParameters( const Sequence< PropertyValue >& rProp,
                                    sal_Int16&                      rType,
                                    sal_Int16&                      rStyle )
 {
-    for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
+    for ( const PropertyValue& p : rProp )
     {
-        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+        if ( p.Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
-            rProp[i].Value >>= rCommandURL;
+            p.Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
+        else if ( p.Name == ITEM_DESCRIPTOR_HELPURL )
         {
-            rProp[i].Value >>= rHelpURL;
+            p.Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
+        else if ( p.Name == ITEM_DESCRIPTOR_CONTAINER )
         {
-            rProp[i].Value >>= rSubMenu;
+            p.Value >>= rSubMenu;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+        else if ( p.Name == ITEM_DESCRIPTOR_LABEL )
         {
-            rProp[i].Value >>= rLabel;
+            p.Value >>= rLabel;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+        else if ( p.Name == ITEM_DESCRIPTOR_TYPE )
         {
-            rProp[i].Value >>= rType;
+            p.Value >>= rType;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+        else if ( p.Name == ITEM_DESCRIPTOR_STYLE )
         {
-            rProp[i].Value >>= rStyle;
+            p.Value >>= rStyle;
         }
     }
 }

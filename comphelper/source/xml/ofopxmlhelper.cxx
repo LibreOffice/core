@@ -156,21 +156,21 @@ void WriteRelationsInfoSequence(
     xWriter->startDocument();
     xWriter->startElement( aRelListElement, xRootAttrList );
 
-    for ( sal_Int32 nInd = 0; nInd < aSequence.getLength(); nInd++ )
+    for ( const auto & i : aSequence )
     {
         AttributeList *pAttrList = new AttributeList;
         uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
-        for( sal_Int32 nSecInd = 0; nSecInd < aSequence[nInd].getLength(); nSecInd++ )
+        for( const beans::StringPair & pair : i )
         {
-            if ( !(aSequence[nInd][nSecInd].First == "Id"
-                  || aSequence[nInd][nSecInd].First == "Type"
-                  || aSequence[nInd][nSecInd].First == "TargetMode"
-                  || aSequence[nInd][nSecInd].First == "Target") )
+            if ( !(pair.First == "Id"
+                  || pair.First == "Type"
+                  || pair.First == "TargetMode"
+                  || pair.First == "Target") )
             {
                 // TODO/LATER: should the extensions be allowed?
                 throw lang::IllegalArgumentException();
             }
-            pAttrList->AddAttribute( aSequence[nInd][nSecInd].First, aCDATAString, aSequence[nInd][nSecInd].Second );
+            pAttrList->AddAttribute( pair.First, aCDATAString, pair.Second );
         }
 
         xWriter->startElement( aRelElement, xAttrList );
@@ -215,24 +215,24 @@ void WriteContentSequence(
     xWriter->startDocument();
     xWriter->startElement( aTypesElement, xRootAttrList );
 
-    for ( sal_Int32 nInd = 0; nInd < aDefaultsSequence.getLength(); nInd++ )
+    for ( const beans::StringPair & pair : aDefaultsSequence )
     {
         AttributeList *pAttrList = new AttributeList;
         uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( "Extension", aCDATAString, aDefaultsSequence[nInd].First );
-        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aDefaultsSequence[nInd].Second );
+        pAttrList->AddAttribute( "Extension", aCDATAString, pair.First );
+        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
 
         xWriter->startElement( aDefaultElement, xAttrList );
         xWriter->ignorableWhitespace( aWhiteSpace );
         xWriter->endElement( aDefaultElement );
     }
 
-    for ( sal_Int32 nInd = 0; nInd < aOverridesSequence.getLength(); nInd++ )
+    for ( const beans::StringPair & pair : aOverridesSequence )
     {
         AttributeList *pAttrList = new AttributeList;
         uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
-        pAttrList->AddAttribute( "PartName", aCDATAString, aOverridesSequence[nInd].First );
-        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aOverridesSequence[nInd].Second );
+        pAttrList->AddAttribute( "PartName", aCDATAString, pair.First );
+        pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, pair.Second );
 
         xWriter->startElement( aOverrideElement, xAttrList );
         xWriter->ignorableWhitespace( aWhiteSpace );

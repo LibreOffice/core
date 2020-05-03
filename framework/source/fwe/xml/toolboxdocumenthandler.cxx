@@ -63,21 +63,21 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       bool&                            rVisible,
                                       sal_Int16&                       rType )
 {
-    for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
+    for ( const PropertyValue& rEntry : rProp )
     {
-        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+        if ( rEntry.Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
-            rProp[i].Value >>= rCommandURL;
+            rEntry.Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
-            rProp[i].Value >>= rLabel;
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
-            rProp[i].Value >>= rType;
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
-            rProp[i].Value >>= rVisible;
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
-            rProp[i].Value >>= rStyle;
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_LABEL )
+            rEntry.Value >>= rLabel;
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_TYPE )
+            rEntry.Value >>= rType;
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_VISIBLE )
+            rEntry.Value >>= rVisible;
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_STYLE )
+            rEntry.Value >>= rStyle;
     }
 }
 

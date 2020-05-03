@@ -190,7 +190,7 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
     uno::Sequence<beans::PropertyValue> aLatentStyles;
-    for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
+    for (sal_Int32 i = 0; i < aGrabBag.(); ++i)
         if (aGrabBag[i].Name == "latentStyles")
             aGrabBag[i].Value >>= aLatentStyles;
     CPPUNIT_ASSERT(aLatentStyles.getLength()); // document should have latent styles
@@ -198,7 +198,7 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     // Check latent style default attributes
     OUString aCount;
     uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
-    for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
+    for (sal_Int32 i = 0; i < aLatentStyles.(); ++i)
     {
         if (aLatentStyles[i].Name == "count")
             aCount = aLatentStyles[i].Value.get<OUString>();
@@ -211,7 +211,7 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     uno::Sequence<beans::PropertyValue> aLatentStyleException;
     aLatentStyleExceptions[0].Value >>= aLatentStyleException;
     OUString aName;
-    for (sal_Int32 i = 0; i < aLatentStyleException.getLength(); ++i)
+    for (sal_Int32 i = 0; i < aLatentStyleException.(); ++i)
         if (aLatentStyleException[i].Name == "name")
             aName = aLatentStyleException[i].Value.get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
@@ -419,7 +419,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bTheme = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(int i = 0; i < aGrabBag.(); ++i)
     {
       if (aGrabBag[i].Name == "OOXTheme")
       {
@@ -443,7 +443,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bData = false, bLayout = false, bQStyle = false, bColor = false, bDrawing = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(int i = 0; i < aGrabBag.(); ++i)
     {
       if (aGrabBag[i].Name == "OOXData")
       {
@@ -531,7 +531,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool CustomXml = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(int i = 0; i < aGrabBag.(); ++i)
     {
         if (aGrabBag[i].Name == "OOXCustomXml" || aGrabBag[i].Name == "OOXCustomXmlProps")
         {

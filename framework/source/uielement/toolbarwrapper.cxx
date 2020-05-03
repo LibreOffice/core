@@ -115,10 +115,10 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 
     bool bPopupMode( false );
     Reference< XWindow > xParentWindow;
-    for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
+    for ( Any const & arg : aArguments )
     {
         PropertyValue aPropValue;
-        if ( aArguments[i] >>= aPropValue )
+        if ( arg >>= aPropValue )
         {
             if ( aPropValue.Name == "PopupMode" )
                 aPropValue.Value >>= bPopupMode;

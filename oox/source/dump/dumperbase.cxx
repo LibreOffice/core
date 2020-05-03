@@ -692,7 +692,7 @@ bool StringHelper::convertFromDec( sal_Int64& ornData, const OUString& rData )
 bool StringHelper::convertFromHex( sal_Int64& ornData, const OUString& rData )
 {
     ornData = 0;
-    for( sal_Int32 nPos = 0, nLen = rData.getLength(); nPos < nLen; ++nPos )
+    for( sal_Int32 nPos = 0, nLen = rData.(); nPos < nLen; ++nPos )
     {
         sal_Unicode cChar = rData[ nPos ];
         if( ('0' <= cChar) && (cChar <= '9') )

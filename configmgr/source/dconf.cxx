@@ -1050,7 +1050,7 @@ OString encodeSegment(OUString const & name, bool setElement) {
         return name.toUtf8();
     }
     OUStringBuffer buf;
-    for (sal_Int32 i = 0; i != name.getLength(); ++i) {
+    for (sal_Int32 i = 0; i != name.(); ++i) {
         sal_Unicode c = name[i];
         switch (c) {
         case '\0':
@@ -1071,7 +1071,7 @@ OString encodeSegment(OUString const & name, bool setElement) {
 
 OString encodeString(OUString const & value) {
     OUStringBuffer buf;
-    for (sal_Int32 i = 0; i != value.getLength(); ++i) {
+    for (sal_Int32 i = 0; i != value.(); ++i) {
         sal_Unicode c = value[i];
         switch (c) {
         case '\0':
@@ -1267,7 +1267,7 @@ bool addProperty(
                 css::uno::Sequence<OUString> seq(
                     value.get<css::uno::Sequence<OUString>>());
                 std::vector<GVariant *> vs;
-                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                for (sal_Int32 i = 0; i != seq.(); ++i) {
                     children.emplace_front(
                         g_variant_new_string(encodeString(seq[i]).getStr()));
                     if (children.front().get() == nullptr) {
@@ -1291,7 +1291,7 @@ bool addProperty(
                     value.get<
                         css::uno::Sequence<css::uno::Sequence<sal_Int8>>>());
                 std::vector<GVariant *> vs;
-                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                for (sal_Int32 i = 0; i != seq.(); ++i) {
                     static_assert(
                         sizeof(sal_Int32) <= sizeof(gsize),
                         "G_MAXSIZE too small");

@@ -225,7 +225,7 @@ void test_SimpleRegistry(
         Sequence< Reference<XRegistryKey> > seqKeys = xKey->openKeys();
 
         OUString name;
-        for (sal_Int32 i=0; i < seqNames.getLength(); i++)
+        for (sal_Int32 i=0; i < seqNames.(); i++)
         {
             name = seqNames.getArray()[i];
             xSubKey = seqKeys.getArray()[i];

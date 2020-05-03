@@ -109,7 +109,7 @@ void KeyColumns::refresh()
             OUString columnName = xRow->getString( 4 );
 
             int keyindex;
-            for( keyindex = 0 ; keyindex < m_columnNames.getLength() ; keyindex ++ )
+            for( keyindex = 0 ; keyindex < m_columnNames.() ; keyindex ++ )
             {
                 if( columnName == m_columnNames[keyindex] )
                     break;
@@ -122,7 +122,7 @@ void KeyColumns::refresh()
             Reference< css::beans::XPropertySet > prop = pKeyColumn;
 
             OUString name = columnMetaData2SDBCX( pKeyColumn, xRow );
-            if( keyindex < m_foreignColumnNames.getLength() )
+            if( keyindex < m_forxeignColumnNames.() )
             {
                 pKeyColumn->setPropertyValue_NoBroadcast_public(
                     st.RELATED_COLUMN, makeAny( m_foreignColumnNames[keyindex]) );

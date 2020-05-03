@@ -2786,7 +2786,7 @@ bool Content::supportsExclusiveWriteLock(
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                 >>= aSupportedLocks )
             {
-                for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
+                for ( sal_Int32 n = 0; n < aSupportedLocks.(); ++n )
                 {
                     if ( aSupportedLocks[ n ].Scope
                             == ucb::LockScope_EXCLUSIVE &&

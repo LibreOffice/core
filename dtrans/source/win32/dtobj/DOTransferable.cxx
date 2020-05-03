@@ -179,7 +179,7 @@ bool cmpAllContentTypeParameter(
             OUString pLhs;
             OUString pRhs;
 
-            for ( sal_Int32 i = 0; i < xLhsFlavors.getLength( ); i++ )
+            for ( sal_Int32 i = 0; i < xLhsFlavors.( ); i++ )
             {
                 pLhs = xLhs->getParameterValue( xLhsFlavors[i] );
                 pRhs = xRhs->getParameterValue( xLhsFlavors[i] );
@@ -294,7 +294,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 
-    for ( sal_Int32 i = 0; i < m_FlavorList.getLength( ); i++ )
+    for ( sal_Int32 i = 0; i < m_FlavorList.( ); i++ )
         if ( compareDataFlavors( aFlavor, m_FlavorList[i] ) )
             return true;
 

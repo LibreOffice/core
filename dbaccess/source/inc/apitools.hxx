@@ -78,9 +78,8 @@ public:
     sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) \
     {   \
         css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());  \
-        const OUString* pSupported = aSupported.getConstArray(); \
-        for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)    \
-            if (*pSupported == _rServiceName)  \
+        for (const OUString& s : aSupported)    \
+            if (s == _rServiceName)  \
                 return true;    \
     \
         return false;   \

@@ -503,9 +503,8 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
                 = i18n::OrdinalSuffix::create(comphelper::getProcessComponentContext());
 
             uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
-            for (sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++)
+            for (OUString const & sSuffix : aSuffixes)
             {
-                OUString sSuffix(aSuffixes[nSuff]);
                 OUString sEnd = rTxt.copy(nNumEnd + 1, nEndPos - nNumEnd - 1);
 
                 if (sSuffix == sEnd)

@@ -219,8 +219,8 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                             if(!bGroupBarsPerAxis)
                             {
                                 //set the same value for all axes
-                                for( sal_Int32 nN = 0; nN < aBarPositionSequence.getLength(); nN++ )
-                                    aBarPositionSequence[nN] = rBarPosition;
+                                for( auto & pos : aBarPositionSequence )
+                                    pos = rBarPosition;
                             }
                             else if( nAxisIndex >= 0 && nAxisIndex < aBarPositionSequence.getLength() )
                                 aBarPositionSequence[nAxisIndex] = rBarPosition;

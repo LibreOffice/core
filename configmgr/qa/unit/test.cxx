@@ -322,7 +322,7 @@ void Test::testReadCommands()
     // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
-        for (sal_Int32 j = 0; j < names.getLength(); ++j) {
+        for (sal_Int32 j = 0; j < names.(); ++j) {
             css::uno::Reference< css::container::XNameAccess > child;
             if (access->getByName(names[j]) >>= child) {
                 CPPUNIT_ASSERT(child.is());

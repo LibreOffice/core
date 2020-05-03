@@ -122,7 +122,7 @@ public class ConverterInfoReader {
         Node     converterNode;
         NodeList converterNodes = document.getElementsByTagName(TAG_CONVERTER);
 
-        for (int i=0; i < converterNodes.getLength(); i++) {
+        for (int i=0; i < converterNodes.(); i++) {
             converterNode = converterNodes.item(i);
             if (converterNode.getNodeType() == Node.ELEMENT_NODE) {
                 parseConverterNode((Element)converterNode);
@@ -167,7 +167,7 @@ public class ConverterInfoReader {
         }
 
         NodeList detailNodes = e.getChildNodes();
-        for (int i=0; i < detailNodes.getLength(); i++) {
+        for (int i=0; i < detailNodes.(); i++) {
 
             detailNode = detailNodes.item(i);
             if (detailNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -223,7 +223,7 @@ public class ConverterInfoReader {
         String   text      = null;
         Node     tempNode;
 
-        for (int j=0; j < tempNodes.getLength(); j++) {
+        for (int j=0; j < tempNodes.(); j++) {
             tempNode = tempNodes.item(j);
             if (tempNode.getNodeType() == Node.TEXT_NODE) {
                text = tempNode.getNodeValue().trim();

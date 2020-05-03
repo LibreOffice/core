@@ -270,10 +270,8 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::PropertyValue >& rProperties, sal_Int32 nIndex)
 {
     SvxNumberFormat aFmt(maRule.GetLevel( static_cast<sal_uInt16>(nIndex) ));
-    const beans::PropertyValue* pPropArray = rProperties.getConstArray();
-    for(int i = 0; i < rProperties.getLength(); i++)
+    for(const beans::PropertyValue& rProp : rProperties)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
         const OUString& rPropName = rProp.Name;
         const Any& aVal = rProp.Value;
 

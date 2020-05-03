@@ -559,10 +559,9 @@ void Package::fireModified()
     Sequence< Reference<XInterface> > elements(
         container->getElements() );
     lang::EventObject evt( static_cast<OWeakObject *>(this) );
-    for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
+    for ( const Reference<XInterface>& x : elements )
     {
-        Reference<util::XModifyListener> xListener(
-            elements[ pos ], UNO_QUERY );
+        Reference<util::XModifyListener> xListener( x, UNO_QUERY );
         if (xListener.is())
             xListener->modified( evt );
     }

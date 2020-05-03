@@ -184,10 +184,8 @@ void PackageRegistryImpl::insertBackend(
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
         xBackend->getSupportedPackageTypes() );
-    for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
+    for ( Reference<deployment::XPackageTypeInfo> const & xPackageType : packageTypes )
     {
-        Reference<deployment::XPackageTypeInfo> const & xPackageType =
-            packageTypes[ pos ];
         m_typesInfos.push_back( xPackageType );
 
         const OUString mediaType( normalizeMediaType(

@@ -408,14 +408,14 @@ DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
     uno::Sequence<beans::PropertyValue> aProps
         = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             rProp.Value >>= aPathProps;
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")
@@ -529,7 +529,7 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -658,7 +658,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     OUString aListFormat;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -1262,7 +1262,7 @@ DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         if (aProps[i].Name == "BulletChar")
             return;
@@ -1290,7 +1290,7 @@ DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         if (aProps[i].Name == "Adjust")
         {

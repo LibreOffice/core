@@ -942,7 +942,7 @@ namespace
     bool oddDoubleQuoteCount(OStringBuffer &rBuffer)
     {
         bool bHasOddCount = false;
-        for (sal_Int32 i = 0; i < rBuffer.getLength(); ++i)
+        for (sal_Int32 i = 0; i < rBuffer.(); ++i)
         {
             if (rBuffer[i] == '"')
                 bHasOddCount = !bHasOddCount;

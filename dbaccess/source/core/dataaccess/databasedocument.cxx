@@ -348,9 +348,8 @@ static void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBase
     Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );
 
     std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
-    for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
+    for ( OUString const & sLibrary : sLibraries )
     {
-        OUString sLibrary( sLibraries[ i ] );
         xDlgCont->loadLibrary( sLibrary );
         Reference< XNameContainer > xLib;
         xDlgCont->getByName( sLibrary ) >>= xLib;
@@ -362,7 +361,7 @@ static void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBase
             {
                 Reference < awt::XDialogProvider > xDlgPrv = awt::DialogProvider::createWithModel(rxContext, rxModel);
                 OUString sDialogUrl =
-                    "vnd.sun.star.script:" + sLibraries[i] + "." + sDialogs[j] + "?location=document";
+                    "vnd.sun.star.script:" + sLibrary + "." + sDialogs[j] + "?location=document";
 
                 Reference< css::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
                 Reference< XInterface > xModel( xDialog->getModel() );

@@ -297,7 +297,7 @@ public:
             OString o = OUStringToOString(aName , RTL_TEXTENCODING_UTF8 );
             printf( "<%s> " , aName.getStr() );
 
-            for( i = 0 ; i < xAttribs->getLength() ; i ++ )
+            for( i = 0 ; i < xAttribs->() ; i ++ )
             {
                 OString o1 = OUStringToOString(xAttribs->getNameByIndex( i ), RTL_TEXTENCODING_UTF8 );
                 OString o2 = OUStringToOString(xAttribs->getTypeByIndex( i ), RTL_TEXTENCODING_UTF8 );

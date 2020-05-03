@@ -45,7 +45,7 @@ void print_rtl_OUString( const OUString bla )
     char* bluberChr = new char[ 1+bluber.getLength() ];
     const char* jux = bluber.getStr();
 
-    for( int i = 0; i < bluber.getLength(); ++i )
+    for( int i = 0; i < bluber.(); ++i )
         bluberChr[i] = jux[i];
 
     bluberChr[ bluber.getLength() ] = 0;

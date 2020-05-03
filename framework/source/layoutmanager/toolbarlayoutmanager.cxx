@@ -1230,16 +1230,13 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
         {
             OUString aElementType;
             OUString aElementName;
-            OUString aName;
 
             aMakeVisibleToolbars.reserve(aToolbarNames.getLength());
 
             SolarMutexGuard g;
 
-            const OUString* pTbNames = aToolbarNames.getConstArray();
-            for ( sal_Int32 i = 0; i < aToolbarNames.getLength(); i++ )
+            for ( const OUString& aName : aToolbarNames )
             {
-                aName = pTbNames[i];
                 parseResourceURL( aName, aElementType, aElementName );
 
                 // Check that we only create:
@@ -1279,18 +1276,16 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
 
 void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno::Sequence< beans::PropertyValue > >& aTbxSeqSeq )
 {
-    const uno::Sequence< beans::PropertyValue >* pTbxSeq = aTbxSeqSeq.getConstArray();
-    for ( sal_Int32 i = 0; i < aTbxSeqSeq.getLength(); i++ )
+    for ( const uno::Sequence< beans::PropertyValue >& rTbxSeq : aTbxSeqSeq )
     {
-        const uno::Sequence< beans::PropertyValue >& rTbxSeq = pTbxSeq[i];
         OUString aTbxResName;
         OUString aTbxTitle;
-        for ( sal_Int32 j = 0; j < rTbxSeq.getLength(); j++ )
+        for ( const beans::PropertyValue& rProp : rTbxSeq )
         {
-            if ( rTbxSeq[j].Name == "ResourceURL" )
-                rTbxSeq[j].Value >>= aTbxResName;
-            else if ( rTbxSeq[j].Name == "UIName" )
-                rTbxSeq[j].Value >>= aTbxTitle;
+            if ( rProp.Name == "ResourceURL" )
+                rProp.Value >>= aTbxResName;
+            else if ( rProp.Name == "UIName" )
+                rProp.Value >>= aTbxTitle;
         }
 
         // Only create custom toolbars. Their name have to start with "custom_"!
@@ -3139,9 +3134,9 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
     try
     {
         uno::Sequence< OUString > aWindowElements = xPersistentWindowState->getElementNames();
-        for ( sal_Int32 i = 0; i < aWindowElements.getLength(); i++ )
+        for ( const OUString& rWindowElementName : aWindowElements )
         {
-            if ( rUIElement.m_aName != aWindowElements[i] )
+            if ( rUIElement.m_aName != rWindowElementName )
             {
                 try
                 {
@@ -3149,13 +3144,13 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                     awt::Point                            aDockedPos;
                     ui::DockingArea                       nDockedArea( ui::DockingArea_DOCKINGAREA_DEFAULT );
 
-                    xPersistentWindowState->getByName( aWindowElements[i] ) >>= aPropValueSeq;
-                    for ( sal_Int32 j = 0; j < aPropValueSeq.getLength(); j++ )
+                    xPersistentWindowState->getByName( rWindowElementName ) >>= aPropValueSeq;
+                    for ( const beans::PropertyValue& rProp : aPropValueSeq )
                     {
-                        if ( aPropValueSeq[j].Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
-                            aPropValueSeq[j].Value >>= nDockedArea;
-                        else if ( aPropValueSeq[j].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
-                            aPropValueSeq[j].Value >>= aDockedPos;
+                        if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
+                            rProp.Value >>= nDockedArea;
+                        else if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKPOS )
+                            rProp.Value >>= aDockedPos;
                     }
 
                     // Don't change toolbars without a valid docking position!
@@ -3171,7 +3166,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                             aDockedPos.X += 1;
 
                         uno::Reference< container::XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-                        xReplace->replaceByName( aWindowElements[i], makeAny( aPropValueSeq ));
+                        xReplace->replaceByName( rWindowElementName, makeAny( aPropValueSeq ));
                     }
                 }
                 catch (const uno::Exception&)

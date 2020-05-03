@@ -81,7 +81,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     OUString sURL;
     // stream of the document to be detected
     Reference< XInputStream > xInStream;
-    for ( sal_Int32 i = 0 ; i < aArguments.getLength(); i++)
+    for ( sal_Int32 i = 0 ; i < aArguments.(); i++)
     {
         OUString aName = aArguments[i].Name;
         if ( aName == "TypeName" )

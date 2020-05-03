@@ -73,7 +73,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     Reference< XFrame >                  xFrame;
     OUString                        aResourceURL( ResourceURL );
 
-    for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
+    for ( sal_Int32 n = 0; n < Args.(); n++ )
     {
         if ( Args[n].Name == "ConfigurationSource" )
         {
@@ -134,7 +134,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         nURLPropertyIndex++;
 
     Sequence< Any > aPropSeq( nSeqLength );
-    for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+    for ( sal_Int32 n = 0; n < aPropSeq.(); n++ )
     {
         PropertyValue aPropValue;
         if ( n == nURLPropertyIndex )

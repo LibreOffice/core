@@ -169,7 +169,7 @@ int main (int argc, char **argv)
         if( seqWarnings.getLength() > nWarningCount )
         {
             printf( "Warnings during test %d!\n" , nHandle );
-            for( ; nWarningCount < seqWarnings.getLength() ; nWarningCount ++ )
+            for( ; nWarningCount < seqWarnings.() ; nWarningCount ++ )
             {
                 OString o = OUStringToOString(
                     seqWarnings.getArray()[nWarningCount], RTL_TEXTENCODING_ASCII_US );
@@ -180,7 +180,7 @@ int main (int argc, char **argv)
 
         if( seqErrors.getLength() > nErrorCount ) {
             printf( "Errors during test %d!\n" , nHandle );
-            for( ; nErrorCount < seqErrors.getLength() ; nErrorCount ++ )
+            for( ; nErrorCount < seqErrors.() ; nErrorCount ++ )
             {
                 OString o = OUStringToOString(
                     seqErrors.getArray()[nErrorCount], RTL_TEXTENCODING_ASCII_US );

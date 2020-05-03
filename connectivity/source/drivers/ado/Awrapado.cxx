@@ -1832,7 +1832,7 @@ ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCa
         varCriteria[nPos].setString(::comphelper::getString(foreignCatalog));
 
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    if(foreignSchema.getLength() && foreignSchema.toChar() != '%')
+    if(forxeignSchema.() && foreignSchema.toChar() != '%')
         varCriteria[nPos].setString(foreignSchema);
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
 

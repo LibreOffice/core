@@ -66,13 +66,13 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     // parse data
     bool bCategoriesUsed = false;
     bool bSetXValues = aData.getLength()>1;
-    for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
+    for( Reference< data::XLabeledDataSequence > const & labelData : aData )
     {
         try
         {
             if( bHasCategories && ! bCategoriesUsed )
             {
-                xCategories.set( aData[nDataIdx] );
+                xCategories.set( labelData );
                 if( xCategories.is())
                 {
                     SetRole( xCategories->getValues(), "categories");
@@ -83,15 +83,15 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
             }
             else if( !xValuesX.is() && bSetXValues )
             {
-                xValuesX.set( aData[nDataIdx] );
+                xValuesX.set( labelData );
                 if( xValuesX.is())
                     SetRole( xValuesX->getValues(), "values-x");
             }
             else
             {
-                aSequencesVec.push_back( aData[nDataIdx] );
-                if( aData[nDataIdx].is())
-                    SetRole( aData[nDataIdx]->getValues(), "values-y");
+                aSequencesVec.push_back( labelData );
+                if( labelData.is())
+                    SetRole( labelData->getValues(), "values-y");
             }
         }
         catch( const uno::Exception & )
@@ -207,7 +207,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
             {
 #ifdef DBG_UTIL
                 sal_Int32 j=0;
-                for( ; j<aSeqs.getLength(); ++j )
+                for( ; j<aSeqs.(); ++j )
                 {
                     SAL_WARN_IF((aSeqs[j] == xValuesY || aSeqs[j] == xValuesX), "chart2.template", "All sequences should be used" );
                 }
@@ -230,11 +230,11 @@ sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
+    for( Reference< XDataSeries > const & dataSeries : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
+            Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
             if( aSeq.getLength() != 2 )
                 return false;

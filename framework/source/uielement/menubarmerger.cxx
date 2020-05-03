@@ -388,21 +388,21 @@ void MenuBarMerger::GetMenuEntry(
     // Reset submenu member
     rAddonMenuItem.aSubMenu.clear();
 
-    for ( sal_Int32 i = 0; i < rAddonMenuEntry.getLength(); i++ )
+    for ( const beans::PropertyValue& rProp : rAddonMenuEntry )
     {
-        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        OUString aMenuEntryPropName = rProp.Name;
         if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_URL )
-            rAddonMenuEntry[i].Value >>= rAddonMenuItem.aURL;
+            rProp.Value >>= rAddonMenuItem.aURL;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TITLE )
-            rAddonMenuEntry[i].Value >>= rAddonMenuItem.aTitle;
+            rProp.Value >>= rAddonMenuItem.aTitle;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
         {
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aSubMenu;
-            rAddonMenuEntry[i].Value >>= aSubMenu;
+            rProp.Value >>= aSubMenu;
             GetSubMenu( aSubMenu, rAddonMenuItem.aSubMenu );
         }
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )
-            rAddonMenuEntry[i].Value >>= rAddonMenuItem.aContext;
+            rProp.Value >>= rAddonMenuItem.aContext;
     }
 }
 

@@ -219,7 +219,7 @@ public abstract class NodeIterator implements Iterator {
             // compare all the children
             equal = true;
 
-            for (int i = 0; i < node1Children.getLength(); i++) {
+            for (int i = 0; i < node1Children.(); i++) {
                 if (!compareNode(node1Children.item(i),
                                  node2Children.item(i))) {
                     equal = false;

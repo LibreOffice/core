@@ -651,7 +651,7 @@ QAccessible::State Qt5AccessibleWidget::state() const
 
     Sequence<sal_Int16> aStates = xStateSet->getStates();
 
-    for (sal_Int32 n = 0; n < aStates.getLength(); n++)
+    for (sal_Int32 n = 0; n < aStates.(); n++)
     {
         lcl_addState(&state, n);
     }
@@ -851,7 +851,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     Sequence<PropertyValue> attribs = xText->getCharacterAttributes(offset, Sequence<OUString>());
     const PropertyValue* pValues = attribs.getConstArray();
     OUString aRet;
-    for (sal_Int32 i = 0; i < attribs.getLength(); i++)
+    for (sal_Int32 i = 0; i < attribs.(); i++)
     {
         if (pValues[i].Name == "CharFontName")
         {

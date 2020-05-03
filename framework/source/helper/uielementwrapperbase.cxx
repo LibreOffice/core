@@ -86,10 +86,10 @@ void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArgument
     if ( m_bInitialized )
         return;
 
-    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    for ( const Any& rArg : aArguments )
     {
         PropertyValue aPropValue;
-        if ( aArguments[n] >>= aPropValue )
+        if ( rArg >>= aPropValue )
         {
             if ( aPropValue.Name == "ResourceURL" )
                 aPropValue.Value >>= m_aResourceURL;

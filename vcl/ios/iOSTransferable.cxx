@@ -62,7 +62,7 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType>& xLhs,
         OUString pLhs;
         OUString pRhs;
 
-        for (sal_Int32 i = 0; i < xLhsFlavors.getLength(); i++)
+        for (sal_Int32 i = 0; i < xLhsFlavors.(); i++)
         {
             pLhs = xLhs->getParameterValue(xLhsFlavors[i]);
             pRhs = xRhs->getParameterValue(xLhsFlavors[i]);
@@ -127,7 +127,7 @@ Sequence<DataFlavor> SAL_CALL iOSTransferable::getTransferDataFlavors() { return
 
 sal_Bool SAL_CALL iOSTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
 {
-    for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
+    for (sal_Int32 i = 0; i < mFlavorList.(); i++)
         if (compareDataFlavors(aFlavor, mFlavorList[i]))
             return true;
 

@@ -1260,7 +1260,6 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
     if ( func )
     {
-        int i;
         // invoke function
         sal_Int16 nStyles;
         sal_Int16 nAttributes;
@@ -1268,12 +1267,12 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
 
         // allocate memory for nAttributes attributes for each of the nStyles styles.
         Sequence< Sequence<beans::PropertyValue> > pv( nStyles );
-        for( i=0; i<pv.getLength(); i++ ) {
-            pv[i] = Sequence<beans::PropertyValue>( nAttributes );
+        for( auto& i : pv ) {
+            i = Sequence<beans::PropertyValue>( nAttributes );
         }
 
         sal_Unicode const *** pStyle = p0;
-        for( i=0;  i<nStyles;  i++ ) {
+        for( int i=0;  i<nStyles;  i++ ) {
             sal_Unicode const ** pAttribute = pStyle[i];
             for( int j=0;  j<nAttributes;  j++ ) { // prefix, numberingtype, ...
                 sal_Unicode const * pString = pAttribute[j];

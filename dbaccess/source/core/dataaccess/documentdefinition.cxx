@@ -366,17 +366,17 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
             Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
             if ( xObjConfig.is() )
             {
-                Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
-                for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
+                const Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
+                for ( OUString const & classId : aClassIDs )
                 {
                     Reference< XNameAccess > xObjectProps;
                     OUString aEntryDocName;
 
-                    if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
+                    if (    ( xObjConfig->getByName( classId ) >>= xObjectProps ) && xObjectProps.is()
                          && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
                          && aEntryDocName == sResult )
                     {
-                        _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(aClassIDs[nInd]);
+                        _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(classId);
                         break;
                     }
                 }

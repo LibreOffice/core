@@ -438,7 +438,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
                 aPTerm = aRTerm.copy(pos + 1);
                 aRTerm = aRTerm.copy(0, pos + 1) + seq[0];
 #if  0
-                for (int i = 0; i < seq.getLength(); i++)
+                for (int i = 0; i < seq.(); i++)
                 {
                     OString o = OUStringToOString(seq[i], RTL_TEXTENCODING_UTF8);
                     fprintf(stderr, "%d: %s\n", i + 1, o.pData->buffer);

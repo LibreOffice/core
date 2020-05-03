@@ -409,7 +409,7 @@ namespace dxcanvas
             std::vector< Gdiplus::PointF > aPoints;
 
             sal_Int32 nCurrPoly;
-            for( nCurrPoly=0; nCurrPoly<points.getLength(); ++nCurrPoly )
+            for( nCurrPoly=0; nCurrPoly<points.(); ++nCurrPoly )
             {
                 const sal_Int32 nCurrSize( points[nCurrPoly].getLength() );
                 if( nCurrSize )

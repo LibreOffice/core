@@ -66,7 +66,7 @@ void ScCondFormatMergeTest::testCondFormatMerge()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xCondFormatSeq.getLength());
 
     int nRanges = 0;
-    for (sal_Int32 i = 0, n = xCondFormatSeq.getLength(); i < n; ++i)
+    for (sal_Int32 i = 0, n = xCondFormatSeq.(); i < n; ++i)
     {
         CPPUNIT_ASSERT(xCondFormatSeq[i].is());
 

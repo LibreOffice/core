@@ -562,10 +562,10 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
     if ( m_bInitialized )
         return;
 
-    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    for ( const Any& rArg : aArguments )
     {
         PropertyValue aPropValue;
-        if ( aArguments[n] >>= aPropValue )
+        if ( rArg >>= aPropValue )
         {
             if ( aPropValue.Name == "UserConfigStorage" )
             {
@@ -716,8 +716,6 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
 
     Sequence< uno::Reference< XGraphic > > aGraphSeq( aCommandURLSequence.getLength() );
 
-    const OUString* aStrArray = aCommandURLSequence.getConstArray();
-
     vcl::ImageType                    nIndex            = implts_convertImageTypeToIndex( nImageType );
     rtl::Reference< GlobalImageList > rGlobalImageList;
     CmdImageList*                     pDefaultImageList = nullptr;
@@ -732,17 +730,18 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     // 1. user image list (read/write)
     // 2. module image list (read)
     // 3. global image list (read)
-    for ( sal_Int32 n = 0; n < aCommandURLSequence.getLength(); n++ )
+    sal_Int32 n = 0;
+    for ( const OUString& rURL : aCommandURLSequence )
     {
-        Image aImage = pUserImageList->GetImage( aStrArray[n] );
+        Image aImage = pUserImageList->GetImage( rURL );
         if ( !aImage && m_bUseGlobal )
         {
-            aImage = pDefaultImageList->getImageFromCommandURL( nIndex, aStrArray[n] );
+            aImage = pDefaultImageList->getImageFromCommandURL( nIndex, rURL );
             if ( !aImage )
-                aImage = rGlobalImageList->getImageFromCommandURL( nIndex, aStrArray[n] );
+                aImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
         }
 
-        aGraphSeq[n] = GetXGraphic(aImage);
+        aGraphSeq[n++] = GetXGraphic(aImage);
     }
 
     return aGraphSeq;
@@ -860,9 +859,9 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         ImageList*                        pImageList        = implts_getUserImageList(nIndex);
         uno::Reference<XGraphic> xEmptyGraphic;
 
-        for ( sal_Int32 i = 0; i < aCommandURLSequence.getLength(); i++ )
+        for ( const OUString& rURL : aCommandURLSequence )
         {
-            sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
+            sal_uInt16 nPos = pImageList->GetImagePos( rURL );
             if ( nPos != IMAGELIST_IMAGE_NOTFOUND )
             {
                 sal_uInt16 nId   = pImageList->GetImageId( nPos );
@@ -872,27 +871,27 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
                 {
                     // Check, if we have an image in our module/global image list. If we find one =>
                     // this is a replace instead of a remove operation!
-                    Image aNewImage = pDefaultImageList->getImageFromCommandURL( nIndex, aCommandURLSequence[i] );
+                    Image aNewImage = pDefaultImageList->getImageFromCommandURL( nIndex, rURL );
                     if ( !aNewImage )
-                        aNewImage = rGlobalImageList->getImageFromCommandURL( nIndex, aCommandURLSequence[i] );
+                        aNewImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
                     if ( !aNewImage )
                     {
                         if ( !pRemovedImages )
                             pRemovedImages = new GraphicNameAccess();
-                        pRemovedImages->addElement( aCommandURLSequence[i], xEmptyGraphic );
+                        pRemovedImages->addElement( rURL, xEmptyGraphic );
                     }
                     else
                     {
                         if ( !pReplacedImages )
                             pReplacedImages = new GraphicNameAccess();
-                        pReplacedImages->addElement(aCommandURLSequence[i], GetXGraphic(aNewImage));
+                        pReplacedImages->addElement(rURL, GetXGraphic(aNewImage));
                     }
                 } // if ( m_bUseGlobal )
                 else
                 {
                     if ( !pRemovedImages )
                         pRemovedImages = new GraphicNameAccess();
-                    pRemovedImages->addElement( aCommandURLSequence[i], xEmptyGraphic );
+                    pRemovedImages->addElement( rURL, xEmptyGraphic );
                 }
             }
         }

@@ -708,7 +708,7 @@ Assembly ^ TypeEmitter::type_resolve(
             xType->getBaseTypes();
         if (seqBaseTypes.getLength() > 0)
         {
-            for (int i = 0; i < seqBaseTypes.getLength(); i++)
+            for (int i = 0; i < seqBaseTypes.(); i++)
             {
                 Reference<reflection::XInterfaceTypeDescription2> xIfaceTd =
                     resolveInterfaceTypedef(seqBaseTypes[i]);
@@ -824,7 +824,7 @@ Assembly ^ TypeEmitter::type_resolve(
     Sequence<Reference< reflection::XTypeDescription > > seqBaseTypes( xType->getBaseTypes() );
     if (seqBaseTypes.getLength() > 0)
     {
-        for (int i = 0; i < seqBaseTypes.getLength(); i++)
+        for (int i = 0; i < seqBaseTypes.(); i++)
         {
             //make sure we get the interface rather than a typedef
             Reference<reflection::XInterfaceTypeDescription2> aBaseType =
@@ -1505,7 +1505,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
     ::System::Type ^ type_uno_exception = get_type("unoidl.com.sun.star.uno.Exception", true);
 
-    for (int i = seqCtors.getLength() - 1; i >= 0; i--)
+    for (int i = seqCtors.() - 1; i >= 0; i--)
     {
         bool bParameterArray = false;
         ::System::Type ^ typeAny = ::uno::Any::typeid;
@@ -2226,7 +2226,7 @@ TypeEmitter::TypeEmitter(
         return gcnew ::System::Collections::ArrayList();
 
     ::System::Collections::ArrayList ^ arTypes = gcnew ::System::Collections::ArrayList();
-    for (int i = 0; i < seqExceptionsTd.getLength(); i++)
+    for (int i = 0; i < seqExceptionsTd.(); i++)
         arTypes->Add(get_type(to_cts_name(seqExceptionsTd[i]->getName()), true));
 
     int start = 0;

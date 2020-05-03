@@ -860,7 +860,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileNam
 
             uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
 
-            if ( aTransformer->parseSmart( aURL, OUString() ) && aURL.Complete.getLength() )
+            if ( aTransforxmer->parseSmart( aURL, OUString() ) && aURL.Complete.() )
             {
                 if ( fRemember )
                 {

@@ -119,7 +119,7 @@ struct TheTagLogger:
 
         startElement( "unoPropertySet" );
 
-        for (int i = 0; i < aProps.getLength(); ++i)
+        for (int i = 0; i < aProps.(); ++i)
         {
             startElement( "property" );
             OUString sName(aProps[i].Name);

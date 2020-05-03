@@ -156,10 +156,10 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
     }
 
     bool bMenuOnly( false );
-    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    for ( const Any& rArg : aArguments )
     {
         PropertyValue aPropValue;
-        if ( aArguments[n] >>= aPropValue )
+        if ( rArg >>= aPropValue )
         {
             if ( aPropValue.Name == "MenuOnly" )
                 aPropValue.Value >>= bMenuOnly;

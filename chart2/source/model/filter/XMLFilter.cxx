@@ -336,16 +336,16 @@ ErrCode XMLFilter::impl_Import(
         if( xModel.is() )
         {
             uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
-            for( sal_Int32 nInd = 0; nInd < aModProps.getLength(); nInd++ )
+            for( beans::PropertyValue const & prop : aModProps )
             {
-                if( aModProps[nInd].Name == "HierarchicalDocumentName" )
+                if( prop.Name == "HierarchicalDocumentName" )
                 {
                     // Actually this argument only has meaning for embedded documents
-                    aModProps[nInd].Value >>= aHierarchName;
+                    prop.Value >>= aHierarchName;
                 }
-                else if( aModProps[nInd].Name == "DocumentBaseURL" )
+                else if( prop.Name == "DocumentBaseURL" )
                 {
-                    aModProps[nInd].Value >>= aBaseUri;
+                    prop.Value >>= aBaseUri;
                 }
             }
         }

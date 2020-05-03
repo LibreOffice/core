@@ -289,11 +289,11 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
 
     std::vector< OUString > aNames;
 
-    Sequence< OUString > aElementNames( xRootStor->getElementNames() );
-    for ( sal_Int32 i=0; i<aElementNames.getLength(); ++i )
+    const Sequence< OUString > aElementNames( xRootStor->getElementNames() );
+    for ( OUString const & name : aElementNames )
     {
-        if ( xRootStor->isStorageElement( aElementNames[i] ) )
-            aNames.push_back( aElementNames[i] );
+        if ( xRootStor->isStorageElement( name ) )
+            aNames.push_back( name );
     }
     return aNames.empty()
         ?  Sequence< OUString >()

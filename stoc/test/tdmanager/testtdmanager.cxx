@@ -133,7 +133,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
     OSL_ASSERT( arguments.getLength() > 0 );
     css::uno::Reference<css::container::XSet> xSet(
         manager, css::uno::UNO_QUERY_THROW );
-    for ( sal_Int32 argPos = 0; argPos < arguments.getLength(); ++argPos ) {
+    for ( sal_Int32 argPos = 0; argPos < arguments.(); ++argPos ) {
         OUString url;
         OSL_VERIFY( osl_File_E_None == osl_getFileURLFromSystemPath(
                         arguments[argPos].pData, &url.pData ) );
@@ -310,7 +310,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
         return false;
     }
     bool success = true;
-    for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
+    for (sal_Int32 i = 0; i < serviceNames.(); ++i) {
         try {
             key->createKey(serviceNames[i]);
         } catch (css::registry::InvalidRegistryException &) {

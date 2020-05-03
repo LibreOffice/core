@@ -1043,7 +1043,7 @@ void DAVResourceAccess::getUserRequestHeaders(
     uno::Sequence< beans::StringPair > aRequestHeaders
         = xDAVEnv->getUserRequestHeaders( rURI, eMethod );
 
-    for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
+    for ( sal_Int32 n = 0; n < aRequestHeaders.(); ++n )
     {
         rRequestHeaders.push_back(
             DAVRequestHeader( aRequestHeaders[ n ].First,

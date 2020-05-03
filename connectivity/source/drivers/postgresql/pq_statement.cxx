@@ -646,7 +646,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             buf.append( " WHERE " );
             bool bAdditionalCondition = false;
             String2StringMap autoValues;
-            for( int i = 0 ; i < keyColumnNames.getLength() ; i ++ )
+            for( int i = 0 ; i < keyColumnNames.() ; i ++ )
             {
                 OUString value;
                 OString columnName = OUStringToOString( keyColumnNames[i], ConnectionSettings::encoding );

@@ -285,11 +285,11 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
         Sequence< Reference< XDataSeries > > aSeries( aInterpretedData.Series[(bHasVolume ? 1 : 0)] );
         if(!aSeries.hasElements())
             return false;
-        for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
+        for( Reference< XDataSeries > const & dataSeries : aSeries )
         {
             try
             {
-                Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
+                Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
                 Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
                 if( aSeq.getLength() != nNumberOfNecessarySequences )
                     return false;

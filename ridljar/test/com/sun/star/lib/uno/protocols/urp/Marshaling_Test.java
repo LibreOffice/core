@@ -232,7 +232,7 @@ public final class Marshaling_Test {
         if((op1.getClass().getComponentType() == op2.getClass().getComponentType())
            && (Array.getLength(op1) == Array.getLength(op2)))
         {
-            for(int i = 0; i < Array.getLength(op1); ++ i)
+            for(int i = 0; i < Array.(op1); ++ i)
                 result = result & compareObjects(Array.get(op1, i), Array.get(op2, i));
         }
 

@@ -67,9 +67,9 @@ FormattedStringsConverter::FormattedStringsConverter(
         MultipleItemConverter( rItemPool )
 {
     bool bHasRefSize = (pRefSize && xParentProp.is());
-    for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
+    for( uno::Reference< chart2::XFormattedString > const & formattedStr : aStrings )
     {
-        uno::Reference< beans::XPropertySet > xProp( aStrings[ i ], uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProp( formattedStr, uno::UNO_QUERY );
         if( xProp.is())
         {
             if( bHasRefSize )

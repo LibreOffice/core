@@ -137,7 +137,7 @@ namespace {
         uno::Reference< security::XCertificate > xCert = xSecurityEnv->createCertificateFromAscii(
             OStringToOUString( b64Cert, RTL_TEXTENCODING_ASCII_US ) );
         uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xCert->getExtensions();
-        for (sal_Int32 i = 0 ; i < extensions.getLength(); i++)
+        for (sal_Int32 i = 0 ; i < extensions.(); i++)
         {
             uno::Reference< security::XCertificateExtension >element = extensions[i];
             OString aId ( (const char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
@@ -161,7 +161,7 @@ namespace {
 
     void Test::test_Others() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_OTHER_NAME)
             {
@@ -179,7 +179,7 @@ namespace {
 
     void Test::test_RFC822() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_RFC822_NAME)
             {
@@ -192,7 +192,7 @@ namespace {
 
     void Test::test_DNS() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
             {
@@ -209,7 +209,7 @@ namespace {
 
     void Test::test_URI() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_URL)
             {
@@ -222,7 +222,7 @@ namespace {
 
     void Test::test_IP() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_IP_ADDRESS)
             {
@@ -236,7 +236,7 @@ namespace {
 
     void Test::test_RID() {
         CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( altNames.getLength() > 0 ) );
-        for(int n = 1; n < altNames.getLength(); n++)
+        for(int n = 1; n < altNames.(); n++)
         {
             if (altNames[n].Type ==  security::ExtAltNameType_REGISTERED_ID)
             {

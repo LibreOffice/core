@@ -137,18 +137,17 @@ Reference<XChartType> lcl_getFirstStockChartType( const Reference< frame::XModel
     if( !xCooSysContainer.is())
         return nullptr;
 
-    uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    const uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    for( Reference< XCoordinateSystem > const & coords : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
-        Reference< XChartTypeContainer > xChartTypeContainer( aCooSysList[nCS], uno::UNO_QUERY );
+        Reference< XChartTypeContainer > xChartTypeContainer( coords, uno::UNO_QUERY );
         if( !xChartTypeContainer.is() )
             continue;
 
-        uno::Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        const uno::Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        for( Reference< XChartType > const & xChartType : aChartTypeList )
         {
-            Reference< XChartType > xChartType( aChartTypeList[nT] );
             if(!xChartType.is())
                 continue;
             OUString aChartType = xChartType->getChartType();

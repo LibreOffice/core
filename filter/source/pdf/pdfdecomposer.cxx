@@ -57,13 +57,12 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
 {
     sal_Int32 nPageIndex = -1;
 
-    for (sal_Int32 index = 0; index < xParameters.getLength(); index++)
+    for (const beans::PropertyValue& rProperty : xParameters)
     {
-        const beans::PropertyValue& rProperty = xParameters[index];
-
         if (rProperty.Name == "PageIndex")
         {
             rProperty.Value >>= nPageIndex;
+            break;
         }
     }
 

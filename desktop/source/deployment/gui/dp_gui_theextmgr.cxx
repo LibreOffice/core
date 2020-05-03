@@ -220,9 +220,9 @@ void TheExtensionManager::checkUpdates()
                         e.Context, anyEx );
     }
 
-    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
+    for ( auto const & i : xAllPackages )
     {
-        uno::Reference< deployment::XPackage > xPackage = dp_misc::getExtensionWithHighestVersion(xAllPackages[i]);
+        uno::Reference< deployment::XPackage > xPackage = dp_misc::getExtensionWithHighestVersion(i);
         OSL_ASSERT(xPackage.is());
         if ( xPackage.is() )
         {
@@ -303,13 +303,10 @@ void TheExtensionManager::createPackageList()
                         e.Context, anyEx );
     }
 
-    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
+    for ( uno::Sequence< uno::Reference< deployment::XPackage > > const & xPackageList : xAllPackages )
     {
-        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
-        for ( sal_Int32 j = 0; j < xPackageList.getLength(); ++j )
+        for ( uno::Reference< deployment::XPackage > const & xPackage : xPackageList )
         {
-            uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
             if ( xPackage.is() )
             {
                 PackageState eState = getPackageState( xPackage );
@@ -324,9 +321,8 @@ void TheExtensionManager::createPackageList()
 
     uno::Sequence< uno::Reference< deployment::XPackage > > xNoLicPackages = m_xExtensionManager->getExtensionsWithUnacceptedLicenses( SHARED_PACKAGE_MANAGER,
                                                                                uno::Reference< ucb::XCommandEnvironment >() );
-    for ( sal_Int32 i = 0; i < xNoLicPackages.getLength(); ++i )
+    for ( uno::Reference< deployment::XPackage > const & xPackage : xNoLicPackages )
     {
-        uno::Reference< deployment::XPackage > xPackage = xNoLicPackages[i];
         if ( xPackage.is() )
         {
             getDialogHelper()->addPackageToList( xPackage, true );
@@ -389,9 +385,9 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
     //iterate over all available nodes
     uno::Sequence< OUString > seqNames = m_xNameAccessNodes->getElementNames();
 
-    for ( int i = 0; i < seqNames.getLength(); i++ )
+    for ( OUString const & nodeName : seqNames )
     {
-        uno::Any anyNode = m_xNameAccessNodes->getByName( seqNames[i] );
+        uno::Any anyNode = m_xNameAccessNodes->getByName( nodeName );
         //If we have a node then it must contain the set of leaves. This is part of OptionsDialog.xcs
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
@@ -402,9 +398,9 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
 
         //iterate over all available leaves
         uno::Sequence< OUString > seqLeafNames = xLeaves->getElementNames();
-        for ( int j = 0; j < seqLeafNames.getLength(); j++ )
+        for ( OUString const & leafName : seqLeafNames )
         {
-            uno::Any anyLeaf = xLeaves->getByName( seqLeafNames[j] );
+            uno::Any anyLeaf = xLeaves->getByName( leafName );
             uno::Reference< XInterface > xIntLeaf = anyLeaf.get< uno::Reference< XInterface > >();
             uno::Reference< beans::XPropertySet > xLeaf( xIntLeaf, uno::UNO_QUERY_THROW );
             //investigate the Id property if it matches the extension identifier which

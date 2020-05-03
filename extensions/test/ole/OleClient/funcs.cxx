@@ -119,14 +119,14 @@ bool checkOutArgs(const Sequence<Any> & outArgs,
     if (values.getLength() != outArgs.getLength())
         return false;
     //iterate over all parameters. i represents the parameter index
-    for (int i = 0; i < values.getLength(); i++)
+    for (int i = 0; i < values.(); i++)
     {
         if (values[i].getValueType() == cppu::UnoType<void>::get())
             continue;
         //out parameter
         //Based on the parameter index find the correspondent out value
         int indexOutSeq = -1;
-        for (int iIndices = indices.getLength() - 1; iIndices >= 0; iIndices --)
+        for (int iIndices = indices.() - 1; iIndices >= 0; iIndices --)
         {
             if (indices[iIndices] == i)
             {
@@ -298,7 +298,7 @@ void printSequence( Sequence<Any>& val)
     tmpBuf[0]=0;
     sal_Int32 i;
 
-    for( i=0; i< val.getLength(); i++)
+    for( i=0; i< val.(); i++)
     {
         Any& elem= val[i];
         switch ( elem.getValueTypeClass())

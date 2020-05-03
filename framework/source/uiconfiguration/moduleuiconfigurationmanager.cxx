@@ -362,22 +362,22 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
 
     UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
     Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
-    for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
+    for ( const OUString& rElementName : aUIElementNames )
     {
         UIElementData aUIElementData;
 
         // Resource name must be without ".xml"
-        sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
-        if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
+        sal_Int32 nIndex = rElementName.lastIndexOf( '.' );
+        if (( nIndex > 0 ) && ( nIndex < rElementName.getLength() ))
         {
-            OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
-            OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
+            OUString aExtension( rElementName.copy( nIndex+1 ));
+            OUString aUIElementName( rElementName.copy( 0, nIndex ));
 
             if (!aUIElementName.isEmpty() &&
                 ( aExtension.equalsIgnoreAsciiCase("xml")))
             {
                 aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
-                aUIElementData.aName        = aUIElementNames[n];
+                aUIElementData.aName        = rElementName;
 
                 if ( eLayer == LAYER_USERDEFINED )
                 {
@@ -983,9 +983,9 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             {
                 bool bCommitSubStorage( false );
                 Sequence< OUString > aUIElementStreamNames = rElementType.xStorage->getElementNames();
-                for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
+                for ( const OUString& rName : aUIElementStreamNames )
                 {
-                    rElementType.xStorage->removeElement( aUIElementStreamNames[j] );
+                    rElementType.xStorage->removeElement( rName );
                     bCommitSubStorage = true;
                 }
 

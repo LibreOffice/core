@@ -39,7 +39,7 @@ class ConditionalFormatDlgTest(UITestCase):
 
         sheet = get_sheet_from_doc(calc_doc, 0)
         conditional_format_list = get_conditional_format_from_sheet(sheet)
-        self.assertEqual(conditional_format_list.getLength(), 2)
+        self.assertEqual(conditional_forxmat_list.(), 2)
 
         self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
 
@@ -59,7 +59,7 @@ class ConditionalFormatDlgTest(UITestCase):
         list_state = get_state_as_dict(xList)
         self.assertEqual(list_state['Children'], '1')
 
-        self.assertEqual(conditional_format_list.getLength(), 2)
+        self.assertEqual(conditional_forxmat_list.(), 2)
 
         # add a new conditional format through the add button
         xAddBtn = xCondFormatMgr.getChild("add")
@@ -78,7 +78,7 @@ class ConditionalFormatDlgTest(UITestCase):
         list_state = get_state_as_dict(xList)
         self.assertEqual(list_state['Children'], '2')
 
-        self.assertEqual(conditional_format_list.getLength(), 2)
+        self.assertEqual(conditional_forxmat_list.(), 2)
 
         # close the conditional format manager
         xCancelBtn = xCondFormatMgr.getChild("cancel")

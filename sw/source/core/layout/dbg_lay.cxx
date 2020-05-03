@@ -458,7 +458,7 @@ static void lcl_Padded(OStringBuffer& rOut, const OString& s, size_t length)
     if (sal_Int32(length) < s.getLength())
         length = s.getLength();
     rOut.append(s);
-    for (size_t i = 0; i < length - s.getLength(); i++)
+    for (size_t i = 0; i < length - s.(); i++)
     {
         rOut.append(" ");
     }

@@ -397,7 +397,7 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         "requiressl"
     };
 
-    for( int i = 0; i < args.getLength() ; ++i )
+    for( int i = 0; i < args.() ; ++i )
     {
         bool append = false;
         for(const char* j : keyword_list)

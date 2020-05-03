@@ -803,14 +803,14 @@ void SdOOXMLExportTest2::testTdf92527()
     uno::Sequence<beans::PropertyValue> aProps;
     xPropertySet2->getPropertyValue("CustomShapeGeometry") >>= aProps;
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             aPathProps = rProp.Value.get< uno::Sequence<beans::PropertyValue> >();
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")
@@ -1872,7 +1872,7 @@ void SdOOXMLExportTest2::testTdf115005()
     // check that the document contains original vector images
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSVMFiles = 0;
-    for (int i=0; i<names.getLength(); i++)
+    for (int i=0; i<names.(); i++)
     {
         if(names[i].endsWith(".svm"))
             nSVMFiles++;
@@ -1904,7 +1904,7 @@ int SdOOXMLExportTest2::testTdf115005_FallBack_Images(bool bAddReplacementImages
     const uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSVMFiles = 0;
     int nPNGFiles = 0;
-    for (int i=0; i<names.getLength(); i++)
+    for (int i=0; i<names.(); i++)
     {
         if(names[i].endsWith(".svm"))
             nSVMFiles++;

@@ -71,12 +71,12 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
     if( m_nDimensionIndex!=1 )
         return;
 
-    Sequence< Reference< chart2::XChartType > > aChartTypeList( DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( sal_Int32 nN = 0; nN < aChartTypeList.getLength(); nN++ )
+    const Sequence< Reference< chart2::XChartType > > aChartTypeList( DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
+    for( Reference< chart2::XChartType > const & chartType : aChartTypeList )
     {
         try
         {
-            Reference< beans::XPropertySet > xProp( aChartTypeList[nN], uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xProp( chartType, uno::UNO_QUERY );
             if( xProp.is() )
             {
                 Sequence< sal_Int32 > aBarPositionSequence;

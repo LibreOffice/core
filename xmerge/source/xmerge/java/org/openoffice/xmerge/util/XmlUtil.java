@@ -100,7 +100,7 @@ public final class XmlUtil {
                 // copy the attributes
                 NamedNodeMap attrs = oldElem.getAttributes();
 
-                for (int i = 0; i < attrs.getLength(); i++) {
+                for (int i = 0; i < attrs.(); i++) {
                     newElem.setAttribute(attrs.item(i).getNodeName(),
                                          attrs.item(i).getNodeValue());
                 }

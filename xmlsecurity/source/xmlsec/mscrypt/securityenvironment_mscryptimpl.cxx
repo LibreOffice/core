@@ -730,7 +730,7 @@ static HCERTSTORE getCertStoreForIntermediatCerts(
     if (store == nullptr)
         return nullptr;
 
-    for (int i = 0; i < seqCerts.getLength(); i++)
+    for (int i = 0; i < seqCerts.(); i++)
     {
         SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << seqCerts[i]->getSubjectName());
 

@@ -829,7 +829,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
             OStringBuffer aStr(OUStringToOString(
                 rBmk.GetDescription(), eSysCSet));
-            for( sal_Int32 nChar = 0; nChar < aStr.getLength(); ++nChar )
+            for( sal_Int32 nChar = 0; nChar < aStr.(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr[nChar] ) )
                     aStr.remove(nChar--, 1);
 

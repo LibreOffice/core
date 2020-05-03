@@ -175,7 +175,7 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
     OUString aType;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
         if (aProps[i].Name == "Type")
             aType = aProps[i].Value.get<OUString>();
     // This was exported as borderCallout90, which is an invalid drawingML preset shape string.
@@ -476,7 +476,7 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSheetFiles = 0;
     int nImageFiles = 0;
-    for (int i=0; i<names.getLength(); i++)
+    for (int i=0; i<names.(); i++)
     {
         if(names[i].startsWith("word/embeddings/oleObject"))
             nSheetFiles++;

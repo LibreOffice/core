@@ -644,7 +644,7 @@ void SdOOXMLExportTest1::testBulletCharAndFont()
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
     OUString    sBulletChar(u'\xf06c');
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "BulletChar")

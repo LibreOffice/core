@@ -210,11 +210,11 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // <- SAFE ----------------------------------
 
     bool bIsSynchron = false;
-    for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
+    for (const css::beans::PropertyValue& rArg : lArguments )
     {
-        if ( lArguments[nArgs].Name == "SynchronMode" )
+        if ( rArg.Name == "SynchronMode" )
         {
-            lArguments[nArgs].Value >>= bIsSynchron;
+            rArg.Value >>= bIsSynchron;
             break;
         }
     }

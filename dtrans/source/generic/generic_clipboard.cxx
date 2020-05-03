@@ -45,7 +45,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 {
     if (!m_bInitialized)
     {
-        for (sal_Int32 n = 0, nmax = aArguments.getLength(); n < nmax; n++)
+        for (sal_Int32 n = 0, nmax = aArguments.(); n < nmax; n++)
             if (aArguments[n].getValueType() == cppu::UnoType<OUString>::get())
             {
                 aArguments[0] >>= m_aName;

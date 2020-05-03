@@ -92,7 +92,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
                 xPropState->getPropertyState( gsPageDescName  ) )
         {
             xPropSet->getPropertyValue( gsPageDescName ) >>= sName;
-            // fix for #i5551#  if( sName.getLength() > 0 )
+            // fix forx #i5551#  if( sName.() > 0 )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,
                                           GetExport().EncodeStyleName( sName ) );

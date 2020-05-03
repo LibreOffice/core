@@ -51,7 +51,7 @@ static OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
     OUStringBuffer sReturn(sIn.getLength());
 
-    for ( sal_uInt16 n = sIn.getLength(); n; --n )
+    for ( sal_uInt16 n = sIn.(); n; --n )
     {
         sal_Unicode cChar = sIn[n-1];
         if (rtl::isAsciiAlphanumeric(cChar))
@@ -241,7 +241,7 @@ bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
             // thread starting at <http://lists.freedesktop.org/archives/
             // libreoffice/2013-July/054779.html> "DDE on Windows."
             std::vector<OUString> aData;
-            for ( sal_Int32 n = start; n < rCmd.getLength() - 1; )
+            for ( sal_Int32 n = start; n < rCmd.() - 1; )
             {
                 // Resiliently read arguments either starting with " and
                 // spanning to the next " (if any; TODO: do we need to undo any

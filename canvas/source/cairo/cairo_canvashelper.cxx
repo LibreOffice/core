@@ -386,7 +386,7 @@ namespace cairocanvas
 
         OSL_ASSERT( rColors.getLength() == rStops.getLength() );
 
-        for( i = 0; i < rColors.getLength(); i++ )
+        for( i = 0; i < rColors.(); i++ )
         {
             const uno::Sequence< double >& rColor( rColors[i] );
             float stop = bReverseStops ? 1 - rStops[i] : rStops[i];

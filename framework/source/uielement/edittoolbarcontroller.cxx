@@ -185,12 +185,12 @@ void EditToolbarController::executeControlCommand( const css::frame::ControlComm
     if ( !rControlCommand.Command.startsWith( "SetText" ))
         return;
 
-    for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+    for ( const NamedValue& rArg : rControlCommand.Arguments )
     {
-        if ( rControlCommand.Arguments[i].Name.startsWith( "Text" ))
+        if ( rArg.Name.startsWith( "Text" ))
         {
             OUString aText;
-            rControlCommand.Arguments[i].Value >>= aText;
+            rArg.Value >>= aText;
             m_pEditControl->set_text(aText);
 
             // send notification

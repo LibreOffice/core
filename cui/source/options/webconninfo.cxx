@@ -86,14 +86,14 @@ void WebConnectionInfoDialog::FillPasswordList()
             uno::Reference< task::XInteractionHandler > xInteractionHandler =
                 task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr);
 
-            uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
+            const uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
-            for ( sal_Int32 nURLInd = 0; nURLInd < aURLEntries.getLength(); nURLInd++ )
+            for ( task::UrlRecord const & urlEntry : aURLEntries )
             {
-                for ( sal_Int32 nUserInd = 0; nUserInd < aURLEntries[nURLInd].UserList.getLength(); nUserInd++ )
+                for ( auto const & user : urlEntry.UserList )
                 {
-                    m_xPasswordsLB->append(OUString::number(nCount), aURLEntries[nURLInd].Url);
-                    m_xPasswordsLB->set_text(nCount, aURLEntries[nURLInd].UserList[nUserInd].UserName, 1);
+                    m_xPasswordsLB->append(OUString::number(nCount), urlEntry.Url);
+                    m_xPasswordsLB->set_text(nCount, user.UserName, 1);
                     ++nCount;
                 }
             }
@@ -101,12 +101,12 @@ void WebConnectionInfoDialog::FillPasswordList()
             // remember pos of first url container entry.
             m_nPos = nCount;
 
-            uno::Sequence< OUString > aUrls
+            const uno::Sequence< OUString > aUrls
                 = xMasterPasswd->getUrls( true /* OnlyPersistent */ );
 
-            for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
+            for ( OUString const & url : aUrls )
             {
-                m_xPasswordsLB->append(OUString::number(nCount), aUrls[nURLIdx]);
+                m_xPasswordsLB->append(OUString::number(nCount), url);
                 m_xPasswordsLB->set_text(nCount, "*");
                 ++nCount;
             }
@@ -157,10 +157,10 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl, weld::Button&, v
         // should the master password be requested before?
         xPasswdContainer->removeAllPersistent();
 
-        uno::Sequence< OUString > aUrls
+        const uno::Sequence< OUString > aUrls
             = xPasswdContainer->getUrls( true /* OnlyPersistent */ );
-        for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
-            xPasswdContainer->removeUrl( aUrls[ nURLIdx ] );
+        for ( OUString const & url : aUrls )
+            xPasswdContainer->removeUrl( url );
 
         m_xPasswordsLB->clear();
     }

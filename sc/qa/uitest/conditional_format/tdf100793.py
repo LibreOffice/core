@@ -28,7 +28,7 @@ class tdf100793(UITestCase):
 
         sheet = get_sheet_from_doc(calc_doc, 2)
         conditional_format_list = get_conditional_format_from_sheet(sheet)
-        self.assertEqual(conditional_format_list.getLength(), 1)
+        self.assertEqual(conditional_forxmat_list.(), 1)
         #2) Go to sheet "plan"
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
         #3) Open the conditional formatting management dialog-> The indicated range should be G18:K29,F18,F20:F29
@@ -78,7 +78,7 @@ class tdf100793(UITestCase):
         list_state = get_state_as_dict(xList)
         self.assertEqual(list_state['Children'], '1')
 
-        self.assertEqual(conditional_format_list.getLength(), 1)
+        self.assertEqual(conditional_forxmat_list.(), 1)
 
         # close the conditional format manager
         xOKBtn = xCondFormatMgr.getChild("ok")

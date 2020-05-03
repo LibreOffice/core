@@ -304,7 +304,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 //                      new ucbhelper::PropertyValueSet(m_xSMgr);
 //                  Sequence<Property> Properties;
 //                  aCommand.Argument >>= Properties;
-//                  for(int i = 0; i < Properties.getLength(); ++i)
+//                  for(int i = 0; i < Properties.(); ++i)
 //                      xRow->appendVoid(Properties[i]);
 //                  aRet <<= Reference<XRow>(xRow.get());
 //                  return aRet;

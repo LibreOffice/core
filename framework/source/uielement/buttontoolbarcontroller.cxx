@@ -107,9 +107,9 @@ void SAL_CALL ButtonToolbarController::initialize(
     m_bInitialized = true;
 
     PropertyValue aPropValue;
-    for ( int i = 0; i < aArguments.getLength(); i++ )
+    for ( const css::uno::Any& rArg : aArguments )
     {
-        if ( aArguments[i] >>= aPropValue )
+        if ( rArg >>= aPropValue )
         {
             if ( aPropValue.Name == "Frame" )
                 m_xFrame.set(aPropValue.Value,UNO_QUERY);

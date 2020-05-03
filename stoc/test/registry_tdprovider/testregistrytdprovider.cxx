@@ -776,7 +776,7 @@ bool writeInfo(void * registryKey, OUString const & implementationName,
         return false;
     }
     bool success = true;
-    for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
+    for (sal_Int32 i = 0; i < serviceNames.(); ++i) {
         try {
             key->createKey(serviceNames[i]);
         } catch (css::registry::InvalidRegistryException &) {

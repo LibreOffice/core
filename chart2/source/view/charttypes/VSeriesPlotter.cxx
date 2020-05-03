@@ -581,9 +581,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             }
         }
 
-        for( sal_Int32 nN = 0; nN < aTextList.getLength(); ++nN )
+        for( auto const & line : aTextList )
         {
-            if( !aTextList[nN].isEmpty() )
+            if( !line.isEmpty() )
             {
                 ++nLineCountForSymbolsize;
             }
@@ -864,11 +864,10 @@ double lcl_getErrorBarLogicLength(
                 {
                     double fMaxValue;
                     ::rtl::math::setInf(&fMaxValue, true);
-                    const double* pValues = rData.getConstArray();
-                    for(sal_Int32 i=0; i<rData.getLength(); ++i, ++pValues)
+                    for(double d : rData)
                     {
-                        if(fMaxValue<*pValues)
-                            fMaxValue=*pValues;
+                        if(fMaxValue < d)
+                            fMaxValue = d;
                     }
                     if( std::isfinite( fMaxValue ) &&
                         std::isfinite( fPercent ))
@@ -1416,10 +1415,10 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
         sal_Int32 nRealPointCount = 0;
 
-        for(sal_Int32 nP = 0; nP < aCalculatedPoints.getLength(); ++nP)
+        for(const geometry::RealPoint2D& p : aCalculatedPoints)
         {
-            double fLogicX = aCalculatedPoints[nP].X;
-            double fLogicY = aCalculatedPoints[nP].Y;
+            double fLogicX = p.X;
+            double fLogicY = p.Y;
             double fLogicZ = 0.0; //dummy
 
             // fdo#51656: don't scale mean value lines

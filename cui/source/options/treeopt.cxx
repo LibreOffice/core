@@ -1738,20 +1738,19 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Nodes::get());
     VectorOfNodes aNodeList;
-    Sequence< OUString > seqNames = xSet->getElementNames();
+    const Sequence< OUString > seqNames = xSet->getElementNames();
 
-    for ( int i = 0; i < seqNames.getLength(); ++i )
+    for ( OUString const & sGroupName : seqNames )
     {
-        OUString sGroupName( seqNames[i] );
         Reference< XNameAccess > xNodeAccess;
-        xSet->getByName( seqNames[i] ) >>= xNodeAccess;
+        xSet->getByName( sGroupName ) >>= xNodeAccess;
 
         if ( xNodeAccess.is() )
         {
             OUString sNodeId, sLabel, sPageURL;
             bool bAllModules = false;
 
-            sNodeId = seqNames[i];
+            sNodeId = sGroupName;
             xNodeAccess->getByName( "Label" ) >>= sLabel;
             xNodeAccess->getByName( "OptionsPage" ) >>= sPageURL;
             xNodeAccess->getByName( "AllModules" ) >>= bAllModules;
@@ -1772,11 +1771,11 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             xNodeAccess->getByName( "Leaves" ) >>= xLeavesSet;
             if ( xLeavesSet.is() )
             {
-                Sequence< OUString > seqLeaves = xLeavesSet->getElementNames();
-                for ( int j = 0; j < seqLeaves.getLength(); ++j )
+                const Sequence< OUString > seqLeaves = xLeavesSet->getElementNames();
+                for ( OUString const & leafName : seqLeaves )
                 {
                     Reference< XNameAccess > xLeaveAccess;
-                    xLeavesSet->getByName( seqLeaves[j] ) >>= xLeaveAccess;
+                    xLeavesSet->getByName( leafName ) >>= xLeaveAccess;
 
                     if ( xLeaveAccess.is() )
                     {
