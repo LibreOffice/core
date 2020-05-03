@@ -282,9 +282,6 @@ public:
                                           const OUString &rStyle,
                                           const OUString &rParent);
 
-    SfxStyleSheetBase*          Find(const OUString& rStr)
-                                { return Find(rStr, nSearchFamily, nMask); }
-
     void                        SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
     SfxStyleSearchBits          GetSearchMask() const { return nMask;}
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
