@@ -1584,8 +1584,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             {
                 for ( const auto& rRData : aReplList )
                 {
-                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(rRData.aName, mxStyleSheetPool->GetSearchFamily(), mxStyleSheetPool->GetSearchMask());
-                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(rRData.aNewName, mxStyleSheetPool->GetSearchFamily(), mxStyleSheetPool->GetSearchMask());
+                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(rRData.aName, SfxStyleFamily::Page);
+                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(rRData.aNewName, SfxStyleFamily::Page);
 
                     if (pSOld && pSNew)
                     {
