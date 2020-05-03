@@ -2074,10 +2074,7 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
     if(m_pBasePool)
     {
-        const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_rEntry.m_eFamily);
-        m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask);
         SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
         if(!pBase)
             throw uno::RuntimeException();
@@ -2127,10 +2124,7 @@ SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
 {
     if(!m_pBasePool)
         return nullptr;
-    const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
-    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_rEntry.m_eFamily);
-    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
     return pBase;
 }
 void SwXStyle::PrepareStyleBase(SwStyleBase_Impl& rBase)
