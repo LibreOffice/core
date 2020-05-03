@@ -162,7 +162,12 @@ public:
     bool get_iter_first(weld::TreeIter& rIter) const { return mxTreeView->get_iter_first(rIter); }
     bool get_selected(weld::TreeIter* pIter) const { return mxTreeView->get_selected(pIter); }
 
-    OUString get_selected_text() const { return mxTreeView->get_selected_text(); }
+    OUString get_selected_text() const
+    {
+        // tdf#131898 only care about column 0
+        int nIndex = mxTreeView->get_selected_index();
+        return nIndex != -1 ? mxTreeView->get_text(nIndex, 0) : OUString();
+    }
 
     void unselect_all() { mxTreeView->unselect_all(); }
 
