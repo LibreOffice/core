@@ -23,9 +23,10 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace io { class XOutputStream; } } } }
+    namespace io { class XOutputStream; }
+}
 
 class XMLReplacementImageContext final : public SvXMLImportContext
 {

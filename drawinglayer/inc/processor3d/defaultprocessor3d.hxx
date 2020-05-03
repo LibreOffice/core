@@ -31,13 +31,13 @@ namespace basegfx {
     class B3DPolyPolygon;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrSceneAttribute;
     class SdrLightingAttribute;
     class MaterialAttribute3D;
-}}
+}
 
-namespace drawinglayer { namespace primitive3d {
+namespace drawinglayer::primitive3d {
     class PolygonHairlinePrimitive3D;
     class PolyPolygonMaterialPrimitive3D;
     class GradientTexturePrimitive3D;
@@ -45,11 +45,11 @@ namespace drawinglayer { namespace primitive3d {
     class BitmapTexturePrimitive3D;
     class TransformPrimitive3D;
     class ModifiedColorPrimitive3D;
-}}
+}
 
-namespace drawinglayer { namespace texture {
+namespace drawinglayer::texture {
     class GeoTexSvx;
-}}
+}
 
 
 namespace drawinglayer

@@ -29,7 +29,7 @@
 
 /// @HTML
 
-namespace rtl { namespace textenc {
+namespace rtl::textenc {
 
 /**
    Maps a range of BMP Unicode code points to individual bytes.
@@ -93,7 +93,7 @@ struct BmpUnicodeToSingleByteConverterData {
     BmpUnicodeToSingleByteRange const * unicodeToByte;
 };
 
-} }
+}
 
 /**
    Function to convert from a single-byte character set to BMP Unicode.

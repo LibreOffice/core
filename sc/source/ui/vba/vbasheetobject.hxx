@@ -27,10 +27,10 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbapalette.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XIndexContainer; }
     namespace drawing { class XControlShape; }
-} } }
+}
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XCharacters > ScVbaButtonCharacters_BASE;
 

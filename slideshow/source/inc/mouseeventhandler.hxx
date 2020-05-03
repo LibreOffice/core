@@ -24,10 +24,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace awt
-{
-    struct MouseEvent;
-} } } }
+namespace com::sun::star::awt { struct MouseEvent; }
 
 
 /* Definition of MouseEventHandler interface */

@@ -30,9 +30,9 @@ class SvXMLImport;
 class SvXMLUnitConverter;
 class SvxBrushItem;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XOutputStream; }
-} } }
+}
 
 class SwXMLBrushItemImportContext : public SvXMLImportContext
 {

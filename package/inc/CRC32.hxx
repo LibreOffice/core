@@ -22,9 +22,9 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
-} } }
+}
 class CRC32 final
 {
     sal_uInt32 nCRC;

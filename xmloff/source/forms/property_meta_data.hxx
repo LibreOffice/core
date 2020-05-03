@@ -22,7 +22,7 @@
 
 #include "property_description.hxx"
 
-namespace xmloff { namespace metadata
+namespace xmloff::metadata
 {
 
     const PropertyDescription* getPropertyDescription( const OUString& i_propertyName );
@@ -39,7 +39,7 @@ namespace xmloff { namespace metadata
     AttributeDescription
         getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName );
 
-} } // namespace xmloff::metadata
+} // namespace xmloff::metadata
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
 

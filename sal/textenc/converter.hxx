@@ -26,7 +26,7 @@
 
 // Internal, non-stable ABI
 
-namespace sal { namespace detail { namespace textenc {
+namespace sal::detail::textenc {
 
 enum BadInputConversionAction
 {
@@ -46,7 +46,7 @@ handleBadInputUnicodeToTextConversion(
     const char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
     sal_Size nPrefixLen, bool * pPrefixWritten);
 
-} } }
+}
 
 #endif
 

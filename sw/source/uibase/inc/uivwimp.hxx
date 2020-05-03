@@ -33,14 +33,14 @@ class SwTransferable;
 class SfxRequest;
 
 namespace sfx2 { class DocumentInserter; }
-namespace com{ namespace sun{ namespace star {
+namespace com::sun::star {
     namespace frame {
         class XDispatchProviderInterceptor;
     }
     namespace lang {
         class XUnoTunnel;
     }
-}}}
+}
 
 class SwScannerEventListener : public ::cppu::WeakImplHelper<
     css::lang::XEventListener >

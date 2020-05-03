@@ -30,7 +30,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 typedef std::vector< css::beans::Property > PropertyVector;
 typedef std::unordered_map< OUString, ::sal_uInt32 > PropertyMap;
@@ -89,7 +89,7 @@ private:
     rtl::Reference< FastPropertySetInfo > mxInfo;
 };
 
-}}
+}
 
 #endif
 

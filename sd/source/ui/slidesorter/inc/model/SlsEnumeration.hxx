@@ -22,7 +22,7 @@
 
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 /** Interface to generic enumerations.  Designed to operate on shared
     pointers.  Therefore GetNextElement() returns T and not T&.
@@ -41,7 +41,7 @@ public:
     virtual ::std::unique_ptr<Enumeration<T> > Clone() = 0;
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

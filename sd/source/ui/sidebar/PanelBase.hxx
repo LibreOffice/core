@@ -30,7 +30,7 @@ namespace sd {
     class ViewShellBase;
 }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class PanelBase
     : public Control,
@@ -62,7 +62,7 @@ private:
     bool ProvideWrappedControl();
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

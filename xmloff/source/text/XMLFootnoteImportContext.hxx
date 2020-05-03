@@ -24,15 +24,15 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text {
         class XTextCursor;
         class XFootnote;
     }
-    namespace xml { namespace sax {
+    namespace xml::sax {
         class XAttributeList;
-    } }
-} } }
+    }
+}
 class XMLTextImportHelper;
 
 /// import footnote elements (<text:footnote>)

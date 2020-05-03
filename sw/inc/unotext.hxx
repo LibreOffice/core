@@ -30,12 +30,12 @@
 
 #include "unobaseclass.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text {
         class XTextContent;
         class XText;
     }
-} } }
+}
 
 class SwDoc;
 class SwStartNode;

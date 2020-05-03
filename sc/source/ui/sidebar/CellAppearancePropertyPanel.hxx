@@ -28,7 +28,7 @@
 class ToolbarUnoDispatcher;
 class ToolbarPopupContainer;
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 class CellAppearancePropertyPanel
 :   public PanelLayout,
@@ -146,7 +146,7 @@ private:
     void UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, bool bVer, bool bHor);
 };
 
-} } // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 #endif
 

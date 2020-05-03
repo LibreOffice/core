@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-namespace comphelper { namespace service_decl { class ServiceDecl; } }
+namespace comphelper::service_decl { class ServiceDecl; }
 
 extern comphelper::service_decl::ServiceDecl const OTempFileServiceDecl;
 extern comphelper::service_decl::ServiceDecl const ServiceDocumenterDecl;

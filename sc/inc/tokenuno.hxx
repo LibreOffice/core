@@ -29,8 +29,8 @@
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include "compiler.hxx"
 
-namespace com { namespace sun { namespace star { namespace sheet { struct FormulaOpCodeMapEntry; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct FormulaToken; } } } }
+namespace com::sun::star::sheet { struct FormulaOpCodeMapEntry; }
+namespace com::sun::star::sheet { struct FormulaToken; }
 
 class ScTokenArray;
 class ScDocShell;

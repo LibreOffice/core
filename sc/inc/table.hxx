@@ -45,11 +45,11 @@ namespace utl {
     class TextSearch;
 }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet {
         struct TablePageBreakData;
     }
-} } }
+}
 
 namespace formula { struct VectorRefArray; }
 namespace sc {

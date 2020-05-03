@@ -23,11 +23,11 @@
 #include <memory>
 #include <xmloff/xmlstyle.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml::sax { class XAttributeList; }
     namespace beans { class XPropertySet; }
-} } }
+}
 class SvXMLImport;
 
 /// import footnote and endnote configuration elements

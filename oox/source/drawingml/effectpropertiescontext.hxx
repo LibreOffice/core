@@ -12,7 +12,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 struct EffectProperties;
 struct Effect;
@@ -33,7 +33,7 @@ private:
     EffectProperties& mrEffectProperties;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 

@@ -24,9 +24,9 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace ooo { namespace vba { namespace excel { class XRange; } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
+namespace ooo::vba::excel { class XRange; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::table { class XCell; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XHyperlink > HyperlinkImpl_BASE;
 

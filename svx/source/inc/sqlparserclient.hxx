@@ -27,14 +27,14 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star {
-namespace util {
-    class XNumberFormatter;
+namespace com::sun::star {
+    namespace util {
+        class XNumberFormatter;
+    }
+    namespace beans {
+        class XPropertySet;
+    }
 }
-namespace beans {
-    class XPropertySet;
-} } } }
-
 namespace connectivity {
     class OSQLParser;
     class OSQLParseNode;

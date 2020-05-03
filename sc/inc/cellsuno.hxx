@@ -92,10 +92,10 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace table { struct BorderLine2; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct BorderLine; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct TableBorder2; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct TableBorder; } } } }
+namespace com::sun::star::table { struct BorderLine2; }
+namespace com::sun::star::table { struct BorderLine; }
+namespace com::sun::star::table { struct TableBorder2; }
+namespace com::sun::star::table { struct TableBorder; }
 
 class ScDocShell;
 class ScMarkData;

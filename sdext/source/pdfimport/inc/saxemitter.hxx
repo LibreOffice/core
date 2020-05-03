@@ -23,11 +23,7 @@
 #include "xmlemitter.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace xml {
-namespace sax
-{
-    class XDocumentHandler;
-} } } } }
+namespace com::sun::star::xml::sax { class XDocumentHandler; }
 
 namespace pdfi
 {

@@ -24,13 +24,13 @@
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include "tdoc_provider.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc  { class XRow; }
     namespace io    { class XInputStream; class XOutputStream; }
     namespace beans { struct PropertyValue; }
     namespace ucb   { struct OpenCommandArgument2; struct TransferInfo;
                       struct ContentInfo; }
-} } }
+}
 
 namespace tdoc_ucp
 {

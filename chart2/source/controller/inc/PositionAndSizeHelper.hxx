@@ -22,8 +22,8 @@
 
 #include <ObjectIdentifier.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::awt { struct Rectangle; }
 
 namespace chart
 {

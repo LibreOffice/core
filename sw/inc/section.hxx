@@ -30,10 +30,9 @@
 #include "frmfmt.hxx"
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextSection; }
-} } }
-
+}
 class SwSectionFormat;
 class SwDoc;
 class SwSection;

@@ -22,10 +22,10 @@
 
 #include <drawingml/chart/converterbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 { class XAxis; }
     namespace chart2 { class XCoordinateSystem; }
-} } }
+}
 
 namespace oox {
 namespace drawingml {

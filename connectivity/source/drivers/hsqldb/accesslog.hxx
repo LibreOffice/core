@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
     class LogFile
     {

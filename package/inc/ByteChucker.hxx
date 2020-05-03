@@ -27,9 +27,9 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XSeekable; class XOutputStream; }
-} } }
+}
 class ByteChucker final
 {
     css::uno::Reference < css::io::XOutputStream > xStream;

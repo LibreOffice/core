@@ -23,16 +23,13 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-namespace drawinglayer { namespace attribute {
-    class SdrLineAttribute;
-}}
-
+namespace drawinglayer::attribute { class SdrLineAttribute; }
 namespace basegfx {
     class BColor;
     class B3DHomMatrix;
 }
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewContactOfE3dScene;
 
@@ -89,7 +86,7 @@ public:
     drawinglayer::primitive3d::Primitive3DContainer getViewIndependentPrimitive3DContainer() const;
 };
 
-}}
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

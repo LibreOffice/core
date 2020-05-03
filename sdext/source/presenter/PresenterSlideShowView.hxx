@@ -38,7 +38,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef cppu::WeakComponentImplHelper<
     css::presentation::XSlideShowView,
@@ -234,7 +234,7 @@ private:
     void impl_addAndConfigureView();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

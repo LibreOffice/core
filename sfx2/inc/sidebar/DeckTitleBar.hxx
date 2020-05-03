@@ -20,7 +20,7 @@
 
 #include <sidebar/TitleBar.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class DeckTitleBar final : public TitleBar
 {
@@ -47,6 +47,6 @@ private:
     bool mbIsCloserVisible;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

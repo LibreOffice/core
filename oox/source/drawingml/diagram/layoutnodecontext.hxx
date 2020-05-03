@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include "diagramlayoutatoms.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class LayoutNodeContext : public ::oox::core::ContextHandler2
 {
@@ -36,7 +36,7 @@ private:
     LayoutAtomPtr mpNode;
 };
 
-} }
+}
 
 #endif
 

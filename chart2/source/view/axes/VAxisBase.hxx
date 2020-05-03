@@ -23,7 +23,7 @@
 #include "VAxisProperties.hxx"
 #include "Tickmarks.hxx"
 
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {

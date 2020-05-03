@@ -23,7 +23,7 @@
 #include <controller/SlsAnimator.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class InsertPosition;
 
@@ -55,7 +55,7 @@ private:
     std::shared_ptr<Implementation> mpImplementation;
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

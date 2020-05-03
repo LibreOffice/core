@@ -17,7 +17,7 @@
 
 // Internal, non-stable ABI
 
-namespace sal { namespace detail { namespace textenc {
+namespace sal::detail::textenc {
 
 sal_Size SAL_DLLPUBLIC convertCharToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
@@ -29,6 +29,6 @@ sal_Size SAL_DLLPUBLIC convertUnicodeToChar(
     sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
 
-} } }
+}
 
 #endif

@@ -22,10 +22,10 @@
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
     namespace beans{  struct PropertyValue; }
     namespace frame{ class XFrame2;     }
-    }}}
+}
 
 class SwDBTablePreviewDialog : public SfxDialogController
 {

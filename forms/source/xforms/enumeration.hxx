@@ -25,13 +25,13 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XIndexAccess; }
     namespace uno { class Any; }
     namespace container { class NoSuchElementException; }
     namespace lang { class WrappedTargetException; }
     namespace uno { class RuntimeException; }
-} } }
+}
 
 /** implement XEnumeration based on container::XIndexAccess */
 class Enumeration

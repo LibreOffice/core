@@ -24,7 +24,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
@@ -66,7 +66,6 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     return { AVMEDIA_MACAVF_MANAGER_SERVICENAME };
 }
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

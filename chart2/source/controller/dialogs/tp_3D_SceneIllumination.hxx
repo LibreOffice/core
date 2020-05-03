@@ -23,7 +23,7 @@
 #include <vcl/weld.hxx>
 #include <svx/dlgctl3d.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
 
 class ColorListBox;
 class LightButton;

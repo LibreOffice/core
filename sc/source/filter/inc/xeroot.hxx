@@ -27,7 +27,7 @@
 
 // Forward declarations of objects in public use ==============================
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
 
 class XclExpRecordBase;
 class XclExpString;

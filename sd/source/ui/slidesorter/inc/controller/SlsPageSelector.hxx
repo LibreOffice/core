@@ -29,15 +29,10 @@
 
 class SdPage;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter::model { class SlideSorterModel; }
 
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
-
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class SlideSorterController;
 
@@ -214,7 +209,7 @@ private:
     void CheckConsistency() const;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

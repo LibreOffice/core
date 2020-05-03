@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace xmloff { namespace EnhancedCustomShapeToken {
+namespace xmloff::EnhancedCustomShapeToken {
 
     enum EnhancedCustomShapeTokenEnum
     {
@@ -156,7 +156,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
     EnhancedCustomShapeTokenEnum EASGet( const OUString& );
     OUString EASGet( const EnhancedCustomShapeTokenEnum );
 }
-}
+
 
 #endif
 

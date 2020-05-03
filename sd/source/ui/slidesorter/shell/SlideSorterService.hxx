@@ -27,9 +27,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com::sun::star::awt { class XWindow; }
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::XSlideSorterBase,
@@ -151,7 +151,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 #endif
 

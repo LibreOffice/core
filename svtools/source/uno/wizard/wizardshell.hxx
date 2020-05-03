@@ -28,7 +28,7 @@
 using vcl::WizardTypes::WizardState;
 using vcl::WizardTypes::CommitPageReason;
 
-namespace svt { namespace uno
+namespace svt::uno
 {
 
 
@@ -123,7 +123,7 @@ namespace svt { namespace uno
     };
 
 
-} } // namespace svt::uno
+} // namespace svt::uno
 
 
 

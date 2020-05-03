@@ -23,7 +23,7 @@
 
 #include <boost/variant.hpp>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Abstraction of different ways to fill outlines.
     Can be
@@ -68,6 +68,6 @@ private:
     > maValue;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

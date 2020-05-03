@@ -24,11 +24,11 @@
 
 #include <unotools/sharedunocomponent.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc {
         class XConnection;
     }
-} } }
+}
 
 namespace dbaui
 {

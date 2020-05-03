@@ -36,7 +36,7 @@ namespace vcl {
 };
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -243,7 +243,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableRenderer > PTableRenderer;
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

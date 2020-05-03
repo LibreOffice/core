@@ -26,11 +26,11 @@
 #include "xlstyle.hxx"
 #include "xistream.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing { class XShape; }
     namespace awt { class XControlModel; }
     namespace script { struct ScriptEventDescriptor; }
-} } }
+}
 
 // Constants and Enumerations =================================================
 

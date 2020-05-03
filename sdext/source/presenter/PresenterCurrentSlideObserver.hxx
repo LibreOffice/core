@@ -26,7 +26,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::presentation::XSlideShowListener
@@ -74,7 +74,7 @@ private:
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

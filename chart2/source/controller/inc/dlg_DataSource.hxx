@@ -23,8 +23,8 @@
 
 #include "TabPageNotifiable.hxx"
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 #include <memory>
 

@@ -28,10 +28,7 @@
 
 class SdrView;
 namespace sd { class ViewShell; }
-
-namespace sd { namespace tools {
-class EventMultiplexer;
-} }
+namespace sd::tools { class EventMultiplexer; }
 
 namespace sd {
 

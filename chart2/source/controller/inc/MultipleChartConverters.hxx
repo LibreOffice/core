@@ -21,13 +21,13 @@
 
 #include "MultipleItemConverter.hxx"
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 class AllAxisItemConverter : public MultipleItemConverter
 {
@@ -98,8 +98,7 @@ protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+} // namespace chart::wrapper
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_MULTIPLECHARTCONVERTERS_HXX
 #endif

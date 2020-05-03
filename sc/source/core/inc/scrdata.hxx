@@ -22,9 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
-    class XBreakIterator;
-} } } }
+namespace com::sun::star::i18n { class XBreakIterator; }
 
 class ScScriptTypeData
 {

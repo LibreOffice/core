@@ -24,8 +24,8 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <formula/grammar.hxx>
 
-namespace com { namespace sun { namespace star { namespace sheet { class XNamedRange; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XNamedRanges; } } } }
+namespace com::sun::star::sheet { class XNamedRange; }
+namespace com::sun::star::sheet { class XNamedRanges; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XName > NameImpl_BASE;
 
