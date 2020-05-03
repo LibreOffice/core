@@ -891,7 +891,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     if(!pBase)
         throw container::NoSuchElementException();
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
@@ -924,7 +924,7 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName)
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     return nullptr != pBase;
 }
 
@@ -937,8 +937,8 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
-    SfxStyleSheetBase* pUINameBase = m_pBasePool->Find( sStyleName );
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
+    SfxStyleSheetBase* pUINameBase = m_pBasePool->Find(sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     if(pBase || pUINameBase)
         throw container::ElementExistException();
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
@@ -990,7 +990,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         if (!sParentStyleName.isEmpty())
         {
             m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-            SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName);
+            SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
             if(pParentBase && pParentBase->GetFamily() == m_rEntry.m_eFamily &&
                 pParentBase->GetPool() == m_pBasePool)
                 m_pBasePool->SetParent(m_rEntry.m_eFamily, sStyleName, sParentStyleName);
@@ -1008,7 +1008,7 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId);
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     // replacements only for userdefined styles
     if(!pBase)
         throw container::NoSuchElementException();
@@ -1070,7 +1070,7 @@ void XStyleFamily::removeByName(const OUString& rName)
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
     OUString sName;
     SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.m_aPoolId);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find( sName );
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     if(!pBase)
         throw container::NoSuchElementException();
     if (SwGetPoolIdFromName::CellStyle == m_rEntry.m_aPoolId)
@@ -1306,7 +1306,7 @@ static bool lcl_InitConditional(SfxStyleSheetBasePool* pBasePool, const SfxStyle
     if(!pBasePool || eFamily != SfxStyleFamily::Para)
         return false;
     pBasePool->SetSearchMask(eFamily);
-    SfxStyleSheetBase* pBase = pBasePool->Find(rStyleName);
+    SfxStyleSheetBase* pBase = pBasePool->Find(rStyleName, pBasePool->GetSearchFamily(), pBasePool->GetSearchMask());
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?" );
     if(!pBase)
         return false;
@@ -1375,7 +1375,7 @@ OUString SwXStyle::getName()
     if(!m_pBasePool)
         return m_sStyleName;
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase)
         throw uno::RuntimeException();
@@ -1393,7 +1393,7 @@ void SwXStyle::setName(const OUString& rName)
         return;
     }
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase || !pBase->IsUserDefined())
         throw uno::RuntimeException();
@@ -1409,7 +1409,7 @@ sal_Bool SwXStyle::isUserDefined()
     if(!m_pBasePool)
         throw uno::RuntimeException();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     //if it is not found it must be non user defined
     return pBase && pBase->IsUserDefined();
 }
@@ -1420,7 +1420,7 @@ sal_Bool SwXStyle::isInUse()
     if(!m_pBasePool)
         throw uno::RuntimeException();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, SfxStyleSearchBits::Used);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     return pBase && pBase->IsUsed();
 }
 
@@ -1434,7 +1434,7 @@ OUString SwXStyle::getParentStyle()
         return m_sParentStyleName;
     }
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     OUString aString;
     if(pBase)
         aString = pBase->GetParent();
@@ -1462,7 +1462,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         return;
     }
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     if(!pBase)
         throw uno::RuntimeException();
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
@@ -2076,7 +2076,7 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
     {
         const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+        SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
         m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask);
         SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
         if(!pBase)
@@ -2129,7 +2129,7 @@ SfxStyleSheetBase* SwXStyle::GetStyleSheetBase()
         return nullptr;
     const SfxStyleSearchBits nSaveMask = m_pBasePool->GetSearchMask();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily, nSaveMask );
     return pBase;
 }
@@ -2521,7 +2521,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
     if(!m_pBasePool)
         throw uno::RuntimeException();
     m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_pBasePool->GetSearchFamily(), m_pBasePool->GetSearchMask());
 
     SAL_WARN_IF(!pBase, "sw.uno", "where is the style?");
     if(!pBase)
@@ -2817,8 +2817,9 @@ void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
     else if(rHint.GetId() == SfxHintId::StyleSheetChanged)
     {
-        static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
-        SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
+        SfxStyleSheetBasePool& rBP = static_cast<SfxStyleSheetBasePool&>(rBC);
+        rBP.SetSearchMask(m_rEntry.m_eFamily);
+        SfxStyleSheetBase* pOwnBase = rBP.Find(m_sStyleName, rBP.GetSearchFamily(), rBP.GetSearchMask());
         if(!pOwnBase)
         {
             SfxListener::EndListening(rBC);
