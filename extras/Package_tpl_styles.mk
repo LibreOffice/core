@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,extras_tpl_styles,$(call gb_CustomTarget_get_wo
 $(eval $(call gb_Package_add_files,extras_tpl_styles,$(LIBO_SHARE_FOLDER)/template/common/styles,\
 	Default.ott \
 	Modern.ott \
+	Simple.ott \
 ))
 
 # vim: set noet sw=4 ts=4:
