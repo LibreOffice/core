@@ -1622,9 +1622,9 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
 
             // why? : FloatingWindow must not be parent of a modal dialog
             SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool, eFam, SfxStyleSearchBits::UserDefined);
+            pStyleSheetPool->SetSearchMask(eFam, nFilter);
             if (aDlg.run() ==  RET_OK)
             {
-                pStyleSheetPool->SetSearchMask(eFam, nFilter);
                 const OUString aTemplName(aDlg.GetName());
                 Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE,
                              aTemplName, "",
@@ -1632,7 +1632,6 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
                              nFilter);
                 UpdateFamily_Impl();
             }
-            pStyleSheetPool->SetSearchMask( eFam, nFilter );
         }
     }
     else if (rEntry == "update")
