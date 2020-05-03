@@ -54,7 +54,7 @@
 #define MIMETYPE_VCLGRAPHIC "image/x-vclgraphic"
 
 namespace comphelper { class PropertySetInfo; }
-namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com::sun::star::io { class XInputStream; }
 
 class Graphic;
 

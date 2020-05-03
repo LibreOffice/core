@@ -23,10 +23,7 @@
 #include "xmlemitter.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace io
-{
-    class XOutputStream;
-} } } }
+namespace com::sun::star::io { class XOutputStream; }
 
 namespace pdfi
 {

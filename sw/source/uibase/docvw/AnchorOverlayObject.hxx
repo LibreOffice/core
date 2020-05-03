@@ -28,7 +28,7 @@ class SwView;
 class SwRect;
 class Point;
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 enum class AnchorState
 {
@@ -116,7 +116,7 @@ class AnchorOverlayObject final : public sdr::overlay::OverlayObjectWithBasePosi
         virtual ~AnchorOverlayObject() override;
 };
 
-} } // end of namespace sw::annotation
+} // end of namespace sw::annotation
 
 #endif
 

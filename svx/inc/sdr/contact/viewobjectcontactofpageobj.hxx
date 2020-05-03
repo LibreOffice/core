@@ -24,7 +24,7 @@
 
 class SdrPage;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class PagePrimitiveExtractor;
 
@@ -44,7 +44,7 @@ public:
     virtual ~ViewObjectContactOfPageObj() override;
 };
 
-}}
+}
 
 
 

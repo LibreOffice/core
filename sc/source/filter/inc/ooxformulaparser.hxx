@@ -26,7 +26,7 @@
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+namespace com::sun::star::lang { class XComponent; }
 
 namespace oox {
 namespace xls {

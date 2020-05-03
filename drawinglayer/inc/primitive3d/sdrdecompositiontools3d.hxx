@@ -34,13 +34,13 @@ namespace basegfx {
     class B2DVector;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrLineAttribute;
     class SdrFillAttribute;
     class Sdr3DObjectAttribute;
     class FillGradientAttribute;
     class SdrShadowAttribute;
-}}
+}
 
 
 namespace drawinglayer

@@ -23,7 +23,7 @@
 #include <vcl/image.hxx>
 #include <array>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class LineWidthValueSet final : public ValueSet
 {
@@ -48,7 +48,7 @@ private:
     bool            bCusEnable;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif // INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHVALUESET_HXX
 

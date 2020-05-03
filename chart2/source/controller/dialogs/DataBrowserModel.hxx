@@ -24,13 +24,13 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace com { namespace sun { namespace star { namespace chart2 {
+namespace com::sun::star::chart2 {
     class XDataSeries;
     class XChartType;
-}}}}
+}
 
 namespace chart
 {

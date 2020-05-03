@@ -23,9 +23,9 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
     class ViewObjectContactOfE3dScene;
-}}
+}
 
 namespace sdr
 {

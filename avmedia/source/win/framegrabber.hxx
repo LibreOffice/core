@@ -25,7 +25,7 @@
 
 struct IMediaDet;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                                     css::lang::XServiceInfo >
@@ -51,7 +51,7 @@ private:
     OUString                                                  maURL;
 };
 
-} // namespace win
-} // namespace avmedia
+} // namespace avmedia::win
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

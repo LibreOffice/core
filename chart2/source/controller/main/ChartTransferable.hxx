@@ -21,11 +21,11 @@
 
 #include <vcl/transfer.hxx>
 
-namespace com { namespace sun { namespace star {
-namespace graphic {
-    class XGraphic;
+namespace com::sun::star {
+    namespace graphic {
+        class XGraphic;
+    }
 }
-}}}
 
 class SdrModel;
 class SdrObject;

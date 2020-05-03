@@ -24,10 +24,10 @@
 #include <cppuhelper/interfacecontainer.h>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
-namespace com { namespace sun { namespace star { namespace util { class CloseVetoException; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XCloseListener; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XCloseable; } } } }
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::util { class CloseVetoException; }
+namespace com::sun::star::util { class XCloseListener; }
+namespace com::sun::star::util { class XCloseable; }
 
 namespace apphelper
 {

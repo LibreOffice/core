@@ -24,14 +24,13 @@
 
 #include "urlparameter.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct Property;
     struct PropertyValue;
-} } } }
-
-namespace com { namespace sun { namespace star { namespace sdbc {
+}
+namespace com::sun::star::sdbc {
     class XRow;
-} } } }
+}
 
 namespace chelp
 {

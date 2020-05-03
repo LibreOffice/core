@@ -106,8 +106,8 @@ struct LastPageSaver
 
 // class OfaTreeOptionsDialog --------------------------------------------
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowProvider; } } } }
+namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::awt { class XContainerWindowProvider; }
 
 struct OptionsPageInfo;
 struct Module;
@@ -195,8 +195,8 @@ public:
 
 // class ExtensionsTabPage -----------------------------------------------
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowEventHandler; } } } }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::awt { class XContainerWindowEventHandler; }
 
 class ExtensionsTabPage
 {

@@ -53,7 +53,7 @@
 
 #include "markdata.hxx"
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
 
 class Timer;
 
@@ -206,7 +206,7 @@ typedef std::map<OUString, BitmapEx> IconSetBitmapMap;
 
 }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         struct EventObject;
     }
@@ -219,13 +219,13 @@ namespace com { namespace sun { namespace star {
     namespace embed {
         class XEmbeddedObject;
     }
-    namespace script { namespace vba {
+    namespace script::vba {
         class XVBAEventProcessor;
-    } }
+    }
     namespace sheet {
         struct TablePageBreakData;
     }
-} } }
+}
 
 namespace weld {
 

@@ -89,7 +89,7 @@ public:
 // fractions of the Draw PPTWriter
 
 class EscherEx;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XDrawPage;
         class XShape;
@@ -97,7 +97,7 @@ namespace com { namespace sun { namespace star {
     namespace task {
         class XStatusIndicator;
     }
-}}}
+}
 class EscherExHostAppData;
 
 class ImplEESdrWriter

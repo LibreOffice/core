@@ -25,11 +25,11 @@
 #include <vcl/weld.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc {
         class XConnection;
     }
-}}}
+}
 
 enum class SADFlags {
     NONE                  = 0x0000,

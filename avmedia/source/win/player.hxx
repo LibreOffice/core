@@ -43,7 +43,7 @@ struct IDDrawExclModeVideo;
 struct IDirectDraw;
 struct IDirectDrawSurface;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
                                          css::lang::XServiceInfo > Player_BASE;
@@ -113,7 +113,7 @@ private:
     void                    ImplLayoutVideoWindow();
 };
 
-} // namespace win
-} // namespace avmedia
+} // namespace avmedia::win
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel2.hpp>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
     namespace beans { class XPropertySet; }
-} } }
+}
 
 class SvXMLImport;
 class SvXMLImportContext;

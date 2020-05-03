@@ -25,7 +25,7 @@
 #include <memory>
 #include <functional>
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 /** Store a function object and execute it asynchronous.
 
@@ -74,7 +74,7 @@ private:
     DECL_LINK(TimerCallback,Timer*,void);
 };
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 #endif
 

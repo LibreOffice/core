@@ -49,7 +49,7 @@ class ScTableProtection;
 enum class CreateNameFlags;
 
 namespace editeng { class SvxBorderLine; }
-namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
 
 namespace sc {
 
@@ -57,7 +57,7 @@ struct ColRowSpan;
 
 }
 
-namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
+namespace com::sun::star::datatransfer { class XTransferable; }
 
 struct ScDataFormFragment
 {

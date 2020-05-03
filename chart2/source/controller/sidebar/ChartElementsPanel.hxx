@@ -26,7 +26,7 @@
 #include "ChartSidebarModifyListener.hxx"
 #include <TitleHelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
+namespace com::sun::star::util { class XModifyListener; }
 
 namespace chart {
 

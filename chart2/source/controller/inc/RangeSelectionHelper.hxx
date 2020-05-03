@@ -23,15 +23,15 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::chart2 { class XChartDocument; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet{
         class XRangeSelection;
         class XRangeSelectionListener;
     }
-}}}
+}
 
 namespace chart
 {

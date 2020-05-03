@@ -65,7 +65,7 @@ class Menu;
 class SgaObject;
 struct DispatchInfo;
 
-namespace svx { namespace sidebar { class GalleryControl; } }
+namespace svx::sidebar { class GalleryControl; }
 
 class GalleryBrowser2 : public SfxListener
 {

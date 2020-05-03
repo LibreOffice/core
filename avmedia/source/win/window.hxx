@@ -31,7 +31,7 @@
 
 struct IVideoWindow;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 class Player;
 
@@ -109,7 +109,6 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace win
-} // namespace avmedia
+} // namespace avmedia::win
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

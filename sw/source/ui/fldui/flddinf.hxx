@@ -23,9 +23,7 @@
 #include <numfmtlb.hxx>
 #include "fldpage.hxx"
 
-namespace com{namespace sun{ namespace star{ namespace beans{
-    class XPropertySet;
-}}}}
+namespace com::sun::star::beans { class XPropertySet; }
 
 class SwFieldDokInfPage : public SwFieldPage
 {

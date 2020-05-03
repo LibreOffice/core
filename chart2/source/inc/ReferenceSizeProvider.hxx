@@ -23,16 +23,16 @@
 #include <com/sun/star/awt/Size.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star {
-namespace chart2 {
-    class XTitle;
-    class XTitled;
-    class XChartDocument;
+namespace com::sun::star {
+    namespace chart2 {
+        class XTitle;
+        class XTitled;
+        class XChartDocument;
+    }
+    namespace beans {
+        class XPropertySet;
+    }
 }
-namespace beans {
-    class XPropertySet;
-}
-}}}
 
 namespace chart
 {

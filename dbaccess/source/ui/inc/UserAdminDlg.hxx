@@ -24,14 +24,14 @@
 #include "IItemSetHelper.hxx"
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc {
         class XConnection;
     }
     namespace lang {
         class XMultiServiceFactory;
     }
-}}}
+}
 
 namespace dbaui
 {

@@ -23,7 +23,7 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 

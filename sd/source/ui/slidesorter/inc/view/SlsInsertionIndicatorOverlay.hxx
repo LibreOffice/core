@@ -31,11 +31,9 @@
 class OutputDevice;
 class SdTransferable;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class FramePainter;
 
@@ -99,7 +97,7 @@ private:
         const sal_Int32 nSelectionCount);
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

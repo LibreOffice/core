@@ -35,10 +35,10 @@
 #include <comphelper/propertycontainer.hxx>
 #include <svx/ParseContext.hxx>
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XNumberFormatsSupplier;
     class XNumberFormatter;
-}}}}
+}
 
 namespace dbaccess
 {

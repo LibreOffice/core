@@ -27,9 +27,9 @@
 #include <osl/mutex.hxx>
 
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XControl; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XControlContainer; } } } }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::awt { class XControl; }
+namespace com::sun::star::awt { class XControlContainer; }
 
 class StdTabController final : public css::awt::XTabController,
                             public css::lang::XServiceInfo,

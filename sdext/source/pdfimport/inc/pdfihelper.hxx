@@ -37,8 +37,7 @@
 // virtual resolution of the PDF OutputDev in dpi
 #define PDFI_OUTDEV_RESOLUTION 7200
 
-namespace com { namespace sun { namespace star { namespace task
-{ class XInteractionHandler; }}}}
+namespace com::sun::star::task { class XInteractionHandler; }
 
 namespace pdfi
 {

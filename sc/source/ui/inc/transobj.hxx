@@ -30,11 +30,11 @@ class ScDocShell;
 class ScMarkData;
 enum class ScDragSrc;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet {
         class XSheetCellRanges;
     }
-}}}
+}
 
 class SAL_DLLPUBLIC_RTTI ScTransferObj : public TransferDataContainer
 {

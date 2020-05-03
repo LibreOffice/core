@@ -25,13 +25,14 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
     namespace lang{
         struct Locale;
     }
     namespace table{
         struct BorderLine2;
-}}}}
+    }
+}
 
 namespace writerfilter {
 namespace dmapper{

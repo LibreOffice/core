@@ -25,9 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+namespace com::sun::star::uno { class Any; }
 
 bool ConvertBufferToFormat(
     void * pBuf, sal_uInt32 nBufSize, OUString const & aFormatShortName,

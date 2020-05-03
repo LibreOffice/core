@@ -18,11 +18,8 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
-
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
+namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace com::sun::star::sheet { struct DataPilotFieldFilter; }
 
 struct ScDPResultFilter
 {

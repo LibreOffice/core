@@ -36,11 +36,11 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc{
         class XRowUpdate;
     }
-}}}
+}
 
 class SvStream;
 

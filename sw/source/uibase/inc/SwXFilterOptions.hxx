@@ -28,9 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream;
-} } } }
+namespace com::sun::star::io { class XInputStream; }
 
 class SwXFilterOptions : public ::cppu::WeakImplHelper<
                             css::beans::XPropertyAccess,

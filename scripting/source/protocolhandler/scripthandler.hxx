@@ -29,7 +29,7 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 
     namespace document {
         class XScriptInvocationContext;
@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star {
     namespace util {
         struct URL;
     }
-} } }
+}
 
 namespace scripting_protocolhandler
 {

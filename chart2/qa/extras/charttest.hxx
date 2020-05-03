@@ -61,10 +61,10 @@
 using namespace css;
 using namespace css::uno;
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XTableCharts; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XTablePivotCharts; } } } }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::table { class XTableCharts; }
+namespace com::sun::star::table { class XTablePivotCharts; }
 
 class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {

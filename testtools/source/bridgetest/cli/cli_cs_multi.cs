@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-namespace testtools { namespace bridgetest { namespace cli_cs {
+namespace testtools::bridgetest::cli_cs {
 
 public class Multi: unoidl.test.testtools.bridgetest.XMulti
 {

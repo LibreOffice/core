@@ -28,10 +28,10 @@
 
 class SmNode;
 class SfxMedium;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertySet; }
-} } }
+}
 
 
 typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;

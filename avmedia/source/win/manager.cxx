@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
@@ -71,7 +71,7 @@ uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     return { AVMEDIA_WIN_MANAGER_SERVICENAME };
 }
 
-} // namespace win
-} // namespace avmedia
+} // namespace avmedia::win
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

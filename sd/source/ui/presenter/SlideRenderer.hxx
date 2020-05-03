@@ -28,9 +28,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::XSlideRenderer,
@@ -93,7 +93,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

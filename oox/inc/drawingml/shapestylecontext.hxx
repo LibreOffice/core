@@ -23,7 +23,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class ShapeStyleContext final : public ::oox::core::ContextHandler2
 {
@@ -37,7 +37,7 @@ private:
     Shape&              mrShape;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_SHAPESTYLECONTEXT_HXX
 

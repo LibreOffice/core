@@ -28,10 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream;
-} } } }
-
+namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::awt { class XWindow; }
 
 class ScFilterOptionsObj final : public ::cppu::WeakImplHelper<

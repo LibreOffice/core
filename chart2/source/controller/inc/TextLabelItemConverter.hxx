@@ -25,11 +25,11 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::frame { class XModel; }
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 class TextLabelItemConverter : public ItemConverter
 {
@@ -66,7 +66,7 @@ private:
     bool mbForbidPercentValue:1;
 };
 
-}}
+}
 
 #endif
 

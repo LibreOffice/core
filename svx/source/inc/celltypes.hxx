@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <vector>
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class Cell;
 class TableModel;
@@ -90,7 +90,7 @@ private:
     T maIter;
 };
 
-} }
+}
 
 #endif
 

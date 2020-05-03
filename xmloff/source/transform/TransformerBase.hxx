@@ -37,9 +37,9 @@
 #include "TransformerActions.hxx"
 #include "TransformerTokenMap.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace i18n { class XCharacterClassification; }
-}}}
+}
 
 class SvXMLNamespaceMap;
 class XMLTransformerContext;

@@ -22,7 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableRow;
 
@@ -40,7 +40,7 @@ private:
     TableRow& mrTableRow;
 };
 
-} } }
+}
 
 #endif
 

@@ -28,9 +28,9 @@
 
 #include <jpeglib.h>
 
-namespace com { namespace sun { namespace star { namespace task {
+namespace com::sun::star::task {
     class XStatusIndicator;
-} } } }
+}
 class JPEGReader;
 class JPEGWriter;
 class Size;

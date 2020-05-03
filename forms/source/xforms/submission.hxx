@@ -33,14 +33,14 @@
 #include "computedexpression.hxx"
 
 // forward declaractions
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace xforms { class XModel; }
     namespace uno { class Any; }
     namespace beans { class UnknownPropertyException;
                       class PropertyVetoException; }
     namespace lang { class IllegalArgumentException;
                      class WrappedTargetException; }
-} } }
+}
 namespace xforms { class Model; }
 
 

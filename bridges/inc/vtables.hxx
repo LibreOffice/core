@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <typelib/typedescription.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 /**
  * Calculate the number of local functions of an interface type.
@@ -95,7 +95,7 @@ VtableSlot getVtableSlot(
 VtableSlot getVtableSlot(
     typelib_InterfaceMethodTypeDescription const * ifcMember);
 
-} } }
+}
 
 #endif
 

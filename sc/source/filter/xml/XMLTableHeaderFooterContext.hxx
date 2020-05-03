@@ -21,12 +21,12 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextCursor; }
     namespace beans { class XPropertySet; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace sheet { class XHeaderFooterContent; } } } }
+namespace com::sun::star::sheet { class XHeaderFooterContent; }
 
 class XMLTableHeaderFooterContext: public SvXMLImportContext
 {

@@ -14,24 +14,24 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace linguistic2 { class XProofreadingIterator; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 // A simple wrapper around the css.linguistic2.ProofreadingIterator
 // single-instance service.  The first time that service implementation gets
 // instantiated it immediately starts a GrammarCheckingIterator thread that
 // eventually needs to be joined (via dispose):
 
-namespace sw { namespace proofreadingiterator {
+namespace sw::proofreadingiterator {
 
 css::uno::Reference<css::linguistic2::XProofreadingIterator> get(
     css::uno::Reference<css::uno::XComponentContext> const & context);
 
 void dispose();
 
-} }
+}
 
 #endif
 

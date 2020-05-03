@@ -24,7 +24,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 
     /** carries a CT_TextSpacing */
@@ -65,7 +65,7 @@ namespace oox { namespace drawingml {
         bool      bExactValue;
     };
 
-} }
+}
 
 #endif
 

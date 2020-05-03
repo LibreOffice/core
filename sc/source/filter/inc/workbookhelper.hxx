@@ -24,10 +24,10 @@
 #include <oox/helper/storagebase.hxx>
 #include <address.hxx>
 
-namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
+namespace oox::drawingml::chart { class ChartConverter; }
 namespace rtl { template <class reference_type> class Reference; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSpreadsheet; }
@@ -35,18 +35,18 @@ namespace com { namespace sun { namespace star {
     namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
     namespace table { class XCellRange; }
-} } }
+}
 
 namespace oox {
     class SegmentProgressBar;
 }
 
-namespace oox { namespace core {
+namespace oox::core {
     class FilterBase;
     class FragmentHandler;
     class XmlFilterBase;
     class FastParser;
-} }
+}
 
 class ScDocument;
 class ScDocumentImport;

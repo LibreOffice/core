@@ -27,7 +27,7 @@
 #include <ucbhelper/contenthelper.hxx>
 #include "pkguri.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans
     {
         struct Property;
@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star {
         struct OpenCommandArgument2;
         struct TransferInfo;
     }
-} } }
+}
 
 namespace package_ucp
 {
