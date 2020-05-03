@@ -3044,7 +3044,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                     if (maStyleNameToDxfId.emplace(aStyleName, nIndex).second)
                     {
-                        SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName);
+                        SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
                             continue;
 
