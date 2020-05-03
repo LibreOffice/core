@@ -23,8 +23,8 @@
 #include <ObjectIdentifier.hxx>
 #include <TitleHelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

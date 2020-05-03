@@ -65,12 +65,10 @@ enum class SvViewOpt {
     DestViewOnly   //ViewOptions are set only at View, not at the appl.
 };
 
-namespace com{ namespace sun{ namespace star{ namespace scanner{
-    class XScannerManager2;
-}}}}
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XLanguageGuessing; } } } }
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XLinguServiceEventListener; } } } }
-namespace ooo { namespace vba { class XSinkCaller; } }
+namespace com::sun::star::scanner { class XScannerManager2; }
+namespace com::sun::star::linguistic2 { class XLanguageGuessing; }
+namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
+namespace ooo::vba { class XSinkCaller; }
 
 class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {

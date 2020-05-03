@@ -24,11 +24,11 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/chart/modelbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 { class XChartDocument; }
-} } }
+}
 
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
 namespace oox {
 namespace drawingml {

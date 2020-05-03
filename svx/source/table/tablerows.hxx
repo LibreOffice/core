@@ -26,7 +26,7 @@
 #include <celltypes.hxx>
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class TableRows : public ::cppu::WeakAggImplHelper1< css::table::XTableRows >
 {
@@ -54,7 +54,7 @@ private:
     TableModelRef   mxTableModel;
 };
 
-} }
+}
 
 #endif
 

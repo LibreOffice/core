@@ -23,13 +23,7 @@
 #include <vcl/weld.hxx>
 #include <unotools/securityoptions.hxx>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace xml { namespace crypto {
-    class XSecurityEnvironment; }}
-}}}
-
+namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
 class MacroSecurityTP;
 
 class MacroSecurity final : public weld::GenericDialogController

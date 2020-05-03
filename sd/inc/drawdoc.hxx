@@ -32,8 +32,8 @@
 #include "sddllapi.h"
 #include "pres.hxx"
 
-namespace com { namespace sun { namespace star { namespace xml { namespace dom { class XNode; } } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::xml::dom { class XNode; }
+namespace com::sun::star::uno { class XInterface; }
 namespace vcl { class Font; }
 
 namespace com

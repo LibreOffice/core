@@ -24,7 +24,7 @@
 #include <ooo/vba/excel/XFont.hpp>
 #include <vbahelper/vbafontbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
 
 class ScCellRangeObj;
 class SfxItemSet;

@@ -26,12 +26,12 @@
 #include <vector>
 
 /// @HTML
-namespace com { namespace sun { namespace star { namespace deployment {
+namespace com::sun::star::deployment {
     class XExtensionManager;
-}}}}
-namespace com { namespace sun { namespace star { namespace uno {
+}
+namespace com::sun::star::uno {
     class XComponentContext;
-}}}}
+}
 
 namespace vcl { class Window; }
 

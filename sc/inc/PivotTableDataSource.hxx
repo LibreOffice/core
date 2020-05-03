@@ -17,7 +17,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 
 namespace sc
 {

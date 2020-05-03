@@ -33,7 +33,7 @@
 - (void) play;
 @end
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Player;
 

@@ -29,10 +29,10 @@
 class SvXMLImport;
 struct XMLPropertyState;
 class XMLPropertySetMapper;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 
 /**

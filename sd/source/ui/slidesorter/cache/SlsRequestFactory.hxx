@@ -22,7 +22,7 @@
 
 #include <cache/SlsCacheContext.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class RequestQueue;
 
@@ -34,7 +34,7 @@ public:
         const SharedCacheContext& rpCacheContext);
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

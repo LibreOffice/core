@@ -26,7 +26,7 @@
 #include "sourceprovider-parser-requires.hxx"
 #include <sourceprovider-parser.hxx>
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 struct SourceProviderScannerData;
 
@@ -313,7 +313,7 @@ struct SourceProviderScannerData {
 
 bool parse(OUString const & uri, SourceProviderScannerData * data);
 
-} }
+}
 
 int yylex_init_extra(
     unoidl::detail::SourceProviderScannerData * user_defined,

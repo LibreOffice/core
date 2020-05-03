@@ -38,7 +38,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XNamed; } } } }
+namespace com::sun::star::container { class XNamed; }
 
 class ScDocShell;
 class ScNamedRangesObj;

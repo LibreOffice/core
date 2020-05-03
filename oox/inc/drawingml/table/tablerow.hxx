@@ -23,7 +23,7 @@
 #include <drawingml/table/tablecell.hxx>
 #include <vector>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableRow
 {
@@ -41,7 +41,7 @@ private:
     std::vector< TableCell > mvTableCells;
 };
 
-} } }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
 

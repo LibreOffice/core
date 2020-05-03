@@ -25,7 +25,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 class AlignmentPropertyPanel
 :   public PanelLayout,
@@ -115,7 +115,7 @@ private:
     void Initialize();
 };
 
-} } // end of namespace ::sc::sidebar
+} // end of namespace ::sc::sidebar
 
 #endif
 

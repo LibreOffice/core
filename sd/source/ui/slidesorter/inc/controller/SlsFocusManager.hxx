@@ -26,11 +26,9 @@
 #include <tools/link.hxx>
 #include <vector>
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** This class manages the focus of the slide sorter.  There is the focus
     page which is or is not focused.  Initialized to point to the first page
@@ -206,7 +204,7 @@ private:
     void NotifyFocusChangeListeners() const;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

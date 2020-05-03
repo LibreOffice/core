@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno
     {
         class XComponentContext;
@@ -48,7 +48,7 @@ namespace com { namespace sun { namespace star {
     {
         struct PropertyValue;
     }
-}}}
+}
 
 namespace writerfilter
 {

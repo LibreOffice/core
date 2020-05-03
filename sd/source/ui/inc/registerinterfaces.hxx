@@ -23,11 +23,11 @@
 #include <sal/config.h>
 #include <sfx2/module.hxx>
 
-namespace sd { namespace ui { namespace table {
+namespace sd::ui::table {
 
 void RegisterInterfaces( SfxModule* pMod );
 
-} } }
+}
 
 #endif
 

@@ -30,10 +30,7 @@
 #define APP_MATH                6
 #define APP_COUNT               7
 
-namespace com { namespace sun { namespace star {
-  namespace beans {
-    struct PropertyValue;
-}}}}
+namespace com::sun::star::beans { struct PropertyValue; }
 
 // class SvxSaveTabPage --------------------------------------------------
 

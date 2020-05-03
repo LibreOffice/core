@@ -23,9 +23,9 @@
 #include <sal/config.h>
 #include <sfx2/sfxmodelfactory.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
 css::uno::Reference< css::uno::XInterface > SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 /// @throws css::uno::RuntimeException

@@ -27,7 +27,7 @@
 #include "swregion.hxx"
 #include "swdllapi.h"
 
-namespace sdr { namespace overlay { class OverlayObject; } }
+namespace sdr::overlay { class OverlayObject; }
 
 class SwCursorShell;
 class SfxViewShell;
@@ -63,7 +63,7 @@ public:
 
 // From here classes/methods for selections.
 
-namespace sw { namespace overlay { class OverlayRangesOutline; }}
+namespace sw::overlay { class OverlayRangesOutline; }
 class MapMode;
 
 class SwSelPaintRects : public SwRects

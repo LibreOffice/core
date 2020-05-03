@@ -25,9 +25,9 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/misspellrange.hxx>
 
-namespace com { namespace sun { namespace star { namespace linguistic2 {
+namespace com::sun::star::linguistic2 {
     class XSpellChecker1;
-}}}}
+}
 
 
 class EditView;

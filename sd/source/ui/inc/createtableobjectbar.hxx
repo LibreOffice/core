@@ -28,10 +28,10 @@ namespace sd {
     class ViewShell;
 }
 
-namespace sd { namespace ui { namespace table {
+namespace sd::ui::table {
 
 SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView );
 
-} } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,10 +35,10 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawSubController; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XModuleController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XLayer; } } } }
+namespace com::sun::star::drawing { class XDrawSubController; }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XModuleController; }
+namespace com::sun::star::drawing { class XLayer; }
 namespace osl { class Mutex; }
 
 class SdPage;

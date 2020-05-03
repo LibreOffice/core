@@ -24,18 +24,18 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
-} } }
+}
 
-namespace connectivity { namespace odbc {
+namespace connectivity::odbc {
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 ODBCDriver_CreateInstance( css::uno::Reference< css::lang::XMultiServiceFactory > const & factory);
 
-} }
+}
 
 #endif
 

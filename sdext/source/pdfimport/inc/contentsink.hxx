@@ -25,23 +25,24 @@
 #include <com/sun/star/rendering/ARGBColor.hpp>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
-namespace rendering
-{
-    class  XPolyPolygon2D;
+namespace com::sun::star {
+    namespace rendering
+    {
+        class  XPolyPolygon2D;
+    }
+    namespace geometry
+    {
+        struct Matrix2D;
+        struct AffineMatrix2D;
+        struct RealRectangle2D;
+        struct RealPoint2D;
+        struct RealSize2D;
+    }
+    namespace beans
+    {
+        struct PropertyValue;
+    }
 }
-namespace geometry
-{
-    struct Matrix2D;
-    struct AffineMatrix2D;
-    struct RealRectangle2D;
-    struct RealPoint2D;
-    struct RealSize2D;
-}
-namespace beans
-{
-    struct PropertyValue;
-} } } }
 
 namespace pdfi
 {

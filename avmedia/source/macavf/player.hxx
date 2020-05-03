@@ -25,7 +25,7 @@
 
 #include <com/sun/star/media/XPlayer.hpp>
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Player
 :   public MacAVObserverHandler

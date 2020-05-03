@@ -26,7 +26,7 @@
 
 // predefines
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     enum MeasureTextPosition
     {
         MEASURETEXTPOSITION_AUTOMATIC,
@@ -34,11 +34,11 @@ namespace drawinglayer { namespace primitive2d {
         MEASURETEXTPOSITION_CENTERED,
         MEASURETEXTPOSITION_POSITIVE
     };
-}}
+}
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrLineAttribute;
-}}
+}
 
 
 namespace drawinglayer

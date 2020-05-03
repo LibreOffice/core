@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 typedef ::cppu::ImplInheritanceHelper <
     tools::PropertySet,
@@ -67,7 +67,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

@@ -42,7 +42,7 @@ namespace com
     }
 }
 
-namespace com { namespace sun { namespace star { namespace frame { struct DispatchDescriptor; } } } }
+namespace com::sun::star::frame { struct DispatchDescriptor; }
 
 class SdUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >
 {

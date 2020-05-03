@@ -30,9 +30,9 @@
 #include <unotools/options.hxx>
 #include <sddllapi.h>
 
-namespace svx { namespace sidebar { class SelectionChangeHandler; } }
-namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
-namespace com { namespace sun { namespace star { namespace scanner { class XScannerManager2; } } } }
+namespace svx::sidebar { class SelectionChangeHandler; }
+namespace com::sun::star::lang { class XEventListener; }
+namespace com::sun::star::scanner { class XScannerManager2; }
 
 class Outliner;
 class SdPage;

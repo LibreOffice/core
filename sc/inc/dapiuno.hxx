@@ -47,11 +47,11 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldAutoShowInfo; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XMembersAccess; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldLayoutInfo; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldReference; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldSortInfo; } } } }
+namespace com::sun::star::sheet { struct DataPilotFieldAutoShowInfo; }
+namespace com::sun::star::sheet { class XMembersAccess; }
+namespace com::sun::star::sheet { struct DataPilotFieldLayoutInfo; }
+namespace com::sun::star::sheet { struct DataPilotFieldReference; }
+namespace com::sun::star::sheet { struct DataPilotFieldSortInfo; }
 
 
 class ScDocShell;

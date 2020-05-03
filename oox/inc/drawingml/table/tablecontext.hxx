@@ -22,7 +22,7 @@
 
 #include <oox/drawingml/shapecontext.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableProperties;
 
@@ -39,7 +39,7 @@ private:
     TableProperties& mrTableProperties;
 };
 
-} } }
+}
 
 #endif
 

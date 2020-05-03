@@ -24,7 +24,7 @@
 
 class PageColumnPopup;
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageColumnControl final : public WeldToolbarPopup
 {
@@ -49,7 +49,7 @@ private:
     DECL_LINK( MoreButtonClickHdl_Impl, weld::Button&, void );
 };
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif
 

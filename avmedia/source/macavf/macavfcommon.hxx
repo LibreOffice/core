@@ -60,7 +60,7 @@
 
 // MacAVObserver handles the notifications used in the AVFoundation framework
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 class MacAVObserverHandler;
 } }
 
@@ -74,7 +74,7 @@ typedef std::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> Han
 - (void)onNotification:(NSNotification*)pNotification;
 @end
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class MacAVObserverHandler
 {

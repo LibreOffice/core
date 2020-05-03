@@ -25,11 +25,11 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XControllerManager; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace com::sun::star::drawing::framework { class XControllerManager; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 class ConfigurationClassifier;
 class ConfigurationUpdaterLock;
@@ -196,7 +196,7 @@ private:
     DECL_LINK(TimeoutHandler, Timer *, void);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

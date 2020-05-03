@@ -43,18 +43,15 @@ class Edit;
 class MenuButton;
 class SwFrame;
 class SvxLanguageItem;
-
-namespace sw { namespace overlay {
-    class OverlayRanges;
-}}
-
-namespace sw { namespace sidebarwindows {
+namespace sw::overlay { class OverlayRanges; }
+namespace sw::sidebarwindows {
     class SidebarTextControl;
     class AnchorOverlayObject;
     class ShadowOverlayObject;
-}}
+}
 
-namespace sw { namespace annotation {
+
+namespace sw::annotation {
 
 class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 {
@@ -268,7 +265,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         VclPtr<PopupMenu>    mpButtonPopup;
 };
 
-} } // end of namespace sw::annotation
+} // end of namespace sw::annotation
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

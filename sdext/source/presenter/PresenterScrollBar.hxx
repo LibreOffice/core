@@ -31,7 +31,7 @@
 #include <functional>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterCanvasHelper;
 class PresenterPaintManager;
@@ -250,7 +250,7 @@ private:
     sal_Int32 mnScrollBarWidth;
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

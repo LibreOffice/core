@@ -25,7 +25,7 @@
 
 #include <vcl/errcode.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
@@ -33,8 +33,9 @@ namespace com { namespace sun { namespace star {
     namespace uno { template <class E> class Sequence; }
     namespace embed { class XStorage; }
     namespace xml {
-        namespace sax { struct InputSource; class XParser; class XWriter; } }
-} } }
+        namespace sax { struct InputSource; class XParser; class XWriter; }
+    }
+}
 
 class ScDocument;
 class SfxMedium;

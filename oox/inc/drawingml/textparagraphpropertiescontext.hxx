@@ -26,7 +26,7 @@
 #include <drawingml/textparagraphproperties.hxx>
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextParagraphPropertiesContext final : public ::oox::core::ContextHandler2
 {
@@ -45,7 +45,7 @@ private:
     std::shared_ptr< BlipFillProperties > mxBlipProps;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 

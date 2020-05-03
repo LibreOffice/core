@@ -28,17 +28,17 @@
 #include <map>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XView; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework { class XView; }
+namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
 
 namespace sd {
 class ViewShellBase;
 }
 
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** The FrameworkHelper is a convenience class that simplifies the
     access to the drawing framework.
@@ -348,7 +348,7 @@ private:
     void disposing (const css::lang::EventObject& rEventObject);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

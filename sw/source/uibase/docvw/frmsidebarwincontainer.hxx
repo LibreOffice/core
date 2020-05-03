@@ -26,11 +26,9 @@
 class SwFrame;
 class SwFormatField;
 namespace vcl { class Window; }
-namespace sw { namespace annotation {
-    class SwAnnotationWin;
-} }
+namespace sw::annotation { class SwAnnotationWin; }
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 class FrameSidebarWinContainer;
 
@@ -59,7 +57,7 @@ class SwFrameSidebarWinContainer
         std::unique_ptr<FrameSidebarWinContainer> mpFrameSidebarWinContainer;
 };
 
-} } // eof of namespace sw::sidebarwindows::
+} // namespace sw::sidebarwindows
 
 #endif
 

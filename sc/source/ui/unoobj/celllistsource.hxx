@@ -32,8 +32,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
+namespace com::sun::star::table { class XCellRange; }
 
 namespace calc
 {

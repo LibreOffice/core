@@ -26,7 +26,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {

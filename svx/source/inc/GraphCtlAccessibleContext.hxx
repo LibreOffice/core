@@ -39,13 +39,12 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/AccessibleShape.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     struct Point;
     struct Rectangle;
     struct Size;
     class XFocusListener;
-} } } }
-
+}
 namespace tools { class Rectangle; }
 class GraphCtrl;
 class SdrObject;

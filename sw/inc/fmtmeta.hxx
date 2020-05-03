@@ -30,14 +30,14 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace document {
         class XDocumentProperties;
     }
     namespace text {
         class XTextField;
     }
-}}}
+}
 
 /**
  * The classes that make up a meta entity are:

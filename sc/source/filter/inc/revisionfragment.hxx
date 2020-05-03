@@ -15,7 +15,7 @@
 
 class ScChangeTrack;
 
-namespace oox { namespace xls {
+namespace oox::xls {
 
 class RevisionHeadersFragment : public WorkbookFragmentBase
 {
@@ -71,7 +71,7 @@ private:
     void pushRevision();
 };
 
-}}
+}
 
 #endif
 

@@ -23,10 +23,10 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star { namespace inspection { namespace PropertyLineElement
+namespace com::sun::star::inspection::PropertyLineElement
 {
     const sal_Int16 CompleteLine = 0x4000;
-} } } } }
+}
 
 
 namespace pcr

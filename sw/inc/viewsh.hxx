@@ -30,9 +30,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/window.hxx>
 
-namespace com { namespace sun { namespace star { namespace accessibility {
-           class XAccessible; } } } }
-
+namespace com::sun::star::accessibility { class XAccessible; }
 class SwDoc;
 class IDocumentSettingAccess;
 class IDocumentDeviceAccess;

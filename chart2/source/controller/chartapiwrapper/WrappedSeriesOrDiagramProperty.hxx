@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com::sun::star::chart2 { class XDataSeries; }
 
 namespace chart
 {

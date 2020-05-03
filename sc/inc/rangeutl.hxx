@@ -25,9 +25,9 @@
 #include "dbdata.hxx"
 #include "scdllapi.h"
 
-namespace com { namespace sun { namespace star { namespace table { struct CellAddress; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::table { struct CellAddress; }
+namespace com::sun::star::table { struct CellRangeAddress; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class ScArea;
 class ScDocument;

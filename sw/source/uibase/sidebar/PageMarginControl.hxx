@@ -32,7 +32,7 @@ static const long MINBODY = 56;  // 1mm in twips rounded
 
 class PageMarginPopup;
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageMarginControl final : public WeldToolbarPopup
 {
@@ -102,7 +102,7 @@ private:
     void FillHelpText( const bool bUserCustomValuesAvailable );
 };
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif
 

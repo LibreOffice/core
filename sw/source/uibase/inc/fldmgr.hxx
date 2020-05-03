@@ -27,14 +27,14 @@
 #include <memory>
 #include <vector>
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace container{
         class XNameAccess;
     }
     namespace text{
         class XNumberingTypeInfo;
     }
-}}}
+}
 
 class SwWrtShell;
 class SwField;

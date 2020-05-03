@@ -28,7 +28,7 @@ class SdrObject;
 namespace vcl { class Window; }
 class SwRect;
 
-namespace sw { namespace access {
+namespace sw::access {
 
 class SwAccessibleChild
 {
@@ -82,7 +82,7 @@ class SwAccessibleChild
         void Init( vcl::Window* pWindow );
 };
 
-} } // eof of namespace sw::access
+} // eof of namespace sw::access
 
 #endif
 

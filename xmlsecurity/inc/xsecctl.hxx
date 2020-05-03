@@ -64,7 +64,7 @@ namespace com::sun::star::xml::sax { class XDocumentHandler; }
 class XMLDocumentWrapper_XmlSecImpl;
 class SAXEventKeeperImpl;
 class XMLSignatureHelper;
-namespace svl { namespace crypto { enum class SignatureMethodAlgorithm; } }
+namespace svl::crypto { enum class SignatureMethodAlgorithm; }
 
 class InternalSignatureInformation
 {

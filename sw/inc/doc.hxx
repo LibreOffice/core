@@ -136,9 +136,7 @@ enum class SvMacroItemId : sal_uInt16;
 enum class SvxFrameDirection;
 enum class RndStdIds;
 
-namespace sw { namespace mark {
-    class MarkManager;
-}}
+namespace sw::mark { class MarkManager; }
 namespace sw {
     enum class RedlineMode;
     class MetaFieldManager;
@@ -163,16 +161,16 @@ namespace sw {
     class DocumentExternalDataManager;
 }
 
-namespace com { namespace sun { namespace star {
-namespace container {
-    class XNameContainer; //< for getXForms()/isXForms()/initXForms() methods
+namespace com::sun::star {
+    namespace container {
+        class XNameContainer; //< for getXForms()/isXForms()/initXForms() methods
+    }
+    namespace embed { class XStorage; }
+    namespace linguistic2 { class XHyphenatedWord; }
+    namespace linguistic2 { class XProofreadingIterator; }
+    namespace linguistic2 { class XSpellChecker1; }
+    namespace script::vba { class XVBAEventProcessor; }
 }
-namespace embed { class XStorage; }
-namespace linguistic2 { class XHyphenatedWord; }
-namespace linguistic2 { class XProofreadingIterator; }
-namespace linguistic2 { class XSpellChecker1; }
-namespace script { namespace vba { class XVBAEventProcessor; } }
-}}}
 
 namespace sfx2 {
     class IXmlIdRegistry;

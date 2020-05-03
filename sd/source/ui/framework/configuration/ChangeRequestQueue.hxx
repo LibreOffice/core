@@ -24,9 +24,9 @@
 
 #include <queue>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationChangeRequest; } } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** The ChangeRequestQueue stores the pending requests for changes to the
     requested configuration.  It is the task of the
@@ -41,7 +41,7 @@ public:
     ChangeRequestQueue();
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

@@ -22,8 +22,8 @@
 #include <ooo/vba/excel/XOutline.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSheetOutline; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::sheet { class XSheetOutline; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOutline > ScVbaOutline_BASE;
 

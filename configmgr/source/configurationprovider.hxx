@@ -26,15 +26,15 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/factory.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XSingleComponentFactory; }
     namespace uno {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
-namespace configmgr { namespace configuration_provider {
+namespace configmgr::configuration_provider {
 
 css::uno::Reference< css::uno::XInterface > createDefault(
     css::uno::Reference< css::uno::XComponentContext >
@@ -50,7 +50,7 @@ createFactory(
     cppu::ComponentFactoryFunc, OUString const &,
     css::uno::Sequence< OUString > const &, rtl_ModuleCount *);
 
-} }
+}
 
 #endif
 

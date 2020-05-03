@@ -25,9 +25,9 @@
 
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
+namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
-namespace sw { namespace mark { class IMark; } }
+namespace sw::mark { class IMark; }
 class SwCharRange;
 class SwTextNode;
 class SwTextAttrEnd;
