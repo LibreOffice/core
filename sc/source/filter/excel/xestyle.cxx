@@ -3035,7 +3035,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     {
                         maStyleNameToDxfId.insert(std::pair<OUString, sal_Int32>(aStyleName, nIndex));
 
-                        SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName);
+                        SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
                             continue;
 
