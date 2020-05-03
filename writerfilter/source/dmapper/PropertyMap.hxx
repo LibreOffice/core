@@ -34,7 +34,7 @@
 #include <map>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         struct PropertyValue;
     }
@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star {
         struct BorderLine2;
         struct ShadowFormat;
     }
-}}}
+}
 
 namespace writerfilter {
 namespace dmapper {
