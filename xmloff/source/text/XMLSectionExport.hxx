@@ -28,7 +28,7 @@
 
 class SvXMLExport;
 class XMLTextParagraphExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text
     {
         class XTextSection;
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
     {
         class XIndexReplace;
     }
-} } }
+}
 
 
 enum SectionTypeEnum

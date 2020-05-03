@@ -35,7 +35,7 @@ int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal
 
 int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
-namespace osl { namespace detail {
+namespace osl::detail {
 
 oslFileError convertUrlToPathname(rtl::OUString const & url, rtl::OString * pathname);
 
@@ -43,7 +43,7 @@ oslFileError convertPathnameToUrl(rtl::OString const & pathname, rtl::OUString *
 
 bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result);
 
-} }
+}
 
 #endif
 

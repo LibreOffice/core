@@ -25,10 +25,10 @@
 #include <xmloff/xmlictxt.hxx>
 
 class XMLHints_Impl;
-namespace com { namespace sun { namespace star {
-namespace text {  class XTextRange; }
-namespace xml { namespace sax { class XAttributeList; } }
-} } }
+namespace com::sun::star {
+    namespace text {  class XTextRange; }
+    namespace xml::sax { class XAttributeList; }
+}
 
 #define CONV_FROM_STAR_BATS 1
 #define CONV_FROM_STAR_MATH 2

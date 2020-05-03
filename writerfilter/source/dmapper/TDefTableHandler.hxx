@@ -21,14 +21,14 @@
 
 #include "LoggedResources.hxx"
 #include <vector>
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
     namespace table {
         struct BorderLine2;
     }
     namespace beans {
         struct PropertyValue;
     }
-}}}
+}
 
 namespace writerfilter {
 namespace dmapper

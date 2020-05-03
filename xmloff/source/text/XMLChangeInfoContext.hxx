@@ -26,9 +26,9 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
+}
 class XMLChangedRegionImportContext;
 
 

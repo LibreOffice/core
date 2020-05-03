@@ -22,7 +22,7 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatter; } } } }
+namespace com::sun::star::util { class XNumberFormatter; }
 
 
 namespace toolkit

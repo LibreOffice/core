@@ -40,9 +40,9 @@
 #define CACHED_CONTENT_RESULTSET_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetFactory"
 
 
-namespace com { namespace sun { namespace star { namespace script {
+namespace com::sun::star::script {
     class XTypeConverter;
-} } } }
+}
 
 class CCRS_PropertySetInfo;
 class CachedContentResultSet

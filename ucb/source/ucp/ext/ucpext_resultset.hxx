@@ -25,7 +25,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 
-namespace ucb { namespace ucp { namespace ext
+namespace ucb::ucp::ext
 {
 
 
@@ -54,7 +54,7 @@ namespace ucb { namespace ucp { namespace ext
     };
 
 
-} } }   // namespace ucp::ext
+} // namespace ucp::ext
 
 
 #endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_RESULTSET_HXX
