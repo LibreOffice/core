@@ -917,7 +917,7 @@ static void benchmark(
 static OUString extractParam( const Sequence< OUString > & rArgs, const OUString & rParam )
 {
     const OUString * pArgs = rArgs.getConstArray();
-    for ( sal_Int32 nPos = rArgs.getLength(); nPos--; )
+    for ( sal_Int32 nPos = rArgs.(); nPos--; )
     {
         if (pArgs[nPos].startsWith( rParam ) &&
             pArgs[nPos].getLength() > (rParam.getLength()+1))

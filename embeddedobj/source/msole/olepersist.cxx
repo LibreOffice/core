@@ -1058,14 +1058,14 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     bool bTryOptimization = false;
     bool bStoreVis = m_bStoreVisRepl;
     uno::Reference< io::XStream > xCachedVisualRepresentation;
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    for ( beans::PropertyValue const & prop : lObjArgs )
     {
-        if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
-            lObjArgs[nInd].Value >>= bStoreVis;
-        else if ( lObjArgs[nInd].Name == "VisualReplacement" )
-            lObjArgs[nInd].Value >>= xCachedVisualRepresentation;
-        else if ( lObjArgs[nInd].Name == "CanTryOptimization" )
-            lObjArgs[nInd].Value >>= bTryOptimization;
+        if ( prop.Name == "StoreVisualReplacement" )
+            prop.Value >>= bStoreVis;
+        else if ( prop.Name == "VisualReplacement" )
+            prop.Value >>= xCachedVisualRepresentation;
+        else if ( prop.Name == "CanTryOptimization" )
+            prop.Value >>= bTryOptimization;
     }
 
     // ignore visual representation provided from outside if it should not be stored
@@ -1310,9 +1310,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     bool bElExists = xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = false;
-    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
-        if ( lArguments[nInd].Name == "ReadOnly" )
-            lArguments[nInd].Value >>= m_bReadOnly;
+    for ( beans::PropertyValue const & prop : lArguments )
+        if ( prop.Name == "ReadOnly" )
+            prop.Value >>= m_bReadOnly;
 
 #ifdef _WIN32
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
@@ -1320,9 +1320,9 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
     SwitchOwnPersistence( xStorage, sEntName );
 
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-        if ( lObjArgs[nInd].Name == "StoreVisualReplacement" )
-            lObjArgs[nInd].Value >>= m_bStoreVisRepl;
+    for ( beans::PropertyValue const & prop : lObjArgs )
+        if ( prop.Name == "StoreVisualReplacement" )
+            prop.Value >>= m_bStoreVisRepl;
 
 #ifdef _WIN32
     if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT )
@@ -1388,7 +1388,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         {
             // use URL ( may be content or stream later ) from MediaDescriptor to initialize object
             OUString aURL;
-            for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
+            for ( sal_Int32 nInd = 0; nInd < lArguments.(); nInd++ )
                 if ( lArguments[nInd].Name == "URL" )
                     lArguments[nInd].Value >>= aURL;
 

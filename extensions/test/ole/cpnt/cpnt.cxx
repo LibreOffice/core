@@ -390,7 +390,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 Sequence<sal_Int8> SAL_CALL OComponent::methodByte(const Sequence< sal_Int8 >& aSeq) throw( RuntimeException )
 {
     sal_Int8 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -398,7 +398,7 @@ Sequence<sal_Int8> SAL_CALL OComponent::methodByte(const Sequence< sal_Int8 >& a
 Sequence<float> SAL_CALL OComponent::methodFloat(const Sequence< float>& aSeq) throw( RuntimeException )
 {
     float _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -406,7 +406,7 @@ Sequence<float> SAL_CALL OComponent::methodFloat(const Sequence< float>& aSeq) t
 Sequence<double> SAL_CALL OComponent::methodDouble(const Sequence< double >& aSeq) throw( RuntimeException)
 {
     double _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -414,7 +414,7 @@ Sequence<double> SAL_CALL OComponent::methodDouble(const Sequence< double >& aSe
 Sequence< sal_Bool > SAL_CALL OComponent::methodBool(const Sequence< sal_Bool >& aSeq) throw( RuntimeException)
 {
     sal_Bool _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -422,7 +422,7 @@ Sequence< sal_Bool > SAL_CALL OComponent::methodBool(const Sequence< sal_Bool >&
 Sequence< sal_Int16 > SAL_CALL OComponent::methodShort(const Sequence< sal_Int16 >& aSeq) throw( RuntimeException )
 {
     sal_Int16 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -430,7 +430,7 @@ Sequence< sal_Int16 > SAL_CALL OComponent::methodShort(const Sequence< sal_Int16
 Sequence< sal_uInt16 > SAL_CALL OComponent::methodUShort(const Sequence< sal_uInt16 >& aSeq) throw( RuntimeException )
 {
     sal_uInt16 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -438,7 +438,7 @@ Sequence< sal_uInt16 > SAL_CALL OComponent::methodUShort(const Sequence< sal_uIn
 Sequence< sal_Int32 > SAL_CALL OComponent::methodLong(const Sequence< sal_Int32 >& aSeq) throw( RuntimeException)
 {
     sal_Int32 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++)  {
+    for( sal_Int16 i= 0; i < aSeq.(); i++)  {
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -446,7 +446,7 @@ Sequence< sal_Int32 > SAL_CALL OComponent::methodLong(const Sequence< sal_Int32 
 Sequence< sal_uInt32 > SAL_CALL OComponent::methodULong(const Sequence< sal_uInt32 >& aSeq) throw( RuntimeException)
 {
     sal_uInt32 _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -454,7 +454,7 @@ Sequence< sal_uInt32 > SAL_CALL OComponent::methodULong(const Sequence< sal_uInt
 Sequence< OUString > SAL_CALL OComponent::methodString(const Sequence< OUString >& aSeq) throw( RuntimeException)
 {
     OUString _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++) {
+    for( sal_Int16 i= 0; i < aSeq.(); i++) {
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -462,7 +462,7 @@ Sequence< OUString > SAL_CALL OComponent::methodString(const Sequence< OUString 
 Sequence< sal_Unicode > SAL_CALL OComponent::methodChar(const Sequence< sal_Unicode >& aSeq) throw( RuntimeException)
 {
     sal_Unicode _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -470,7 +470,7 @@ Sequence< sal_Unicode > SAL_CALL OComponent::methodChar(const Sequence< sal_Unic
 Sequence< Any > SAL_CALL OComponent::methodAny(const Sequence< Any >& aSeq) throw( RuntimeException)
 {
     Any _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
         TypeClass _t= _x.getValueTypeClass();
         if( _t== TypeClass_STRING)
@@ -483,7 +483,7 @@ Sequence< Any > SAL_CALL OComponent::methodAny(const Sequence< Any >& aSeq) thro
 Sequence< Type > SAL_CALL OComponent::methodType(const Sequence< Type >& aSeq) throw( RuntimeException )
 {
     Type _x;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         _x= aSeq.getConstArray()[i];
     }
     return aSeq;
@@ -491,7 +491,7 @@ Sequence< Type > SAL_CALL OComponent::methodType(const Sequence< Type >& aSeq) t
 
 Sequence< Reference< XInterface > > SAL_CALL OComponent::methodXInterface( const Sequence< Reference< XInterface > >& aSeq ) throw(RuntimeException)
 {
-    for( sal_Int32 i= 0; i < aSeq.getLength(); i++)
+    for( sal_Int32 i= 0; i < aSeq.(); i++)
     {
         Reference<XInterface> xInt= aSeq[i];
         Reference<XEventListener> xList( xInt, UNO_QUERY);
@@ -504,9 +504,9 @@ Sequence< Reference< XInterface > > SAL_CALL OComponent::methodXInterface( const
 Sequence< Sequence< sal_Int32 > > SAL_CALL OComponent::methodSequence(const Sequence< Sequence< sal_Int32 > >& aSeq) throw( RuntimeException)
 {
     sal_Int32 value;
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         const Sequence<sal_Int32>& rseq2= aSeq.getConstArray()[i];
-        for (sal_Int16 j= 0; j < rseq2.getLength(); j++){
+        for (sal_Int16 j= 0; j < rseq2.(); j++){
             value= rseq2.getConstArray()[j];
         }
     }
@@ -517,15 +517,15 @@ Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL OComponent::methodSequenc
 {
     sal_Int32 value;
     sal_Int32 len= aSeq.getLength();
-    for( sal_Int16 i= 0; i < aSeq.getLength(); i++){
+    for( sal_Int16 i= 0; i < aSeq.(); i++){
         const Sequence< Sequence<sal_Int32> >& rseq2= aSeq.getConstArray()[i];
         len= rseq2.getLength();
 
-        for (sal_Int16 j= 0; j < rseq2.getLength(); j++){
+        for (sal_Int16 j= 0; j < rseq2.(); j++){
             const Sequence<sal_Int32> & rseq3= rseq2.getConstArray()[j];
             len= rseq3.getLength();
 
-            for (sal_Int16 k= 0; k < rseq3.getLength(); k++)
+            for (sal_Int16 k= 0; k < rseq3.(); k++)
                 value= rseq3.getConstArray()[k];
         }
     }
@@ -535,7 +535,7 @@ Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL OComponent::methodSequenc
 Sequence< Reference< XEventListener> > SAL_CALL OComponent::methodXEventListeners( const Sequence< Reference <XEventListener> >& aSeq) throw( RuntimeException)
 {
     Reference<XEventListener> listener;
-    for( int i= 0; i < aSeq.getLength(); i++)
+    for( int i= 0; i < aSeq.(); i++)
     {
         listener= aSeq[i];
 
@@ -548,10 +548,10 @@ Sequence< Reference< XEventListener> > SAL_CALL OComponent::methodXEventListener
 Sequence< Sequence<Reference<XEventListener > > > SAL_CALL OComponent::methodXEventListenersMul( const Sequence<Sequence<Reference<XEventListener > > >& aSeq ) throw (RuntimeException)
 {
     Reference<XEventListener> listener;
-    for( int i= 0; i < aSeq.getLength(); i++)
+    for( int i= 0; i < aSeq.(); i++)
     {
         Sequence<Reference<XEventListener> > seqInner= aSeq[i];
-        for( int j= 0; j < seqInner.getLength(); j++)
+        for( int j= 0; j < seqInner.(); j++)
         {
             listener= seqInner[j];
             listener->disposing( EventObject() );
@@ -678,11 +678,11 @@ Sequence< Sequence< sal_Int32 > > SAL_CALL OComponent::getAttrSequence()  throw(
 void SAL_CALL OComponent::setAttrSequence(const Sequence< Sequence< sal_Int32 > >& AttrSequence) throw(RuntimeException )
 {
     sal_Int32 x= 0;
-    for( sal_Int32 i=0; i < AttrSequence.getLength(); i++)
+    for( sal_Int32 i=0; i < AttrSequence.(); i++)
     {
          Sequence< sal_Int32 > seq= AttrSequence[i];
 
-        for ( sal_Int32 j=0; j < seq.getLength(); j++)
+        for ( sal_Int32 j=0; j < seq.(); j++)
         {
             x= seq[j];
         }
@@ -915,15 +915,15 @@ void SAL_CALL OComponent::testout_methodType(Type& rOut) throw( RuntimeException
 void SAL_CALL OComponent::testout_methodSequence(Sequence< sal_Int32 >& rOut) throw( RuntimeException)
 {
     rOut.realloc(10);
-    for( sal_Int16 i= 0; i < rOut.getLength(); i++) rOut.getArray()[i]= i;
+    for( sal_Int16 i= 0; i < rOut.(); i++) rOut.getArray()[i]= i;
 }
 void SAL_CALL OComponent::testout_methodSequence2(Sequence< Sequence< sal_Int32 > >& rOut) throw( RuntimeException )
 {
     rOut.realloc( 10);
-    for( sal_Int16 i= 0; i < rOut.getLength(); i++){
+    for( sal_Int16 i= 0; i < rOut.(); i++){
         Sequence<sal_Int32>& rseq2= rOut.getArray()[i];
         rseq2.realloc( 10);
-        for (sal_Int16 j= 0; j < rseq2.getLength(); j++){
+        for (sal_Int16 j= 0; j < rseq2.(); j++){
             rseq2.getArray()[j]= j;
         }
     }
@@ -1167,18 +1167,18 @@ void SAL_CALL OComponent::testinout_methodSequence(Sequence< sal_Int32 >& rOut) 
 {
 
     sal_Int32* arr= rOut.getArray();
-    for ( sal_Int32 i=0; i < rOut.getLength(); i++)
+    for ( sal_Int32 i=0; i < rOut.(); i++)
     {
         rOut.getArray()[i] += 1;
     }
 }
 void SAL_CALL OComponent::testinout_methodSequence2(Sequence< Sequence< sal_Int32 > >& rOut) throw( RuntimeException )
 {
-    for( sal_Int32 i=0; i < rOut.getLength(); i++)
+    for( sal_Int32 i=0; i < rOut.(); i++)
     {
         Sequence< sal_Int32 >& seq= rOut.getArray()[i];
 
-        for ( sal_Int32 j=0; j < seq.getLength(); j++)
+        for ( sal_Int32 j=0; j < seq.(); j++)
         {
             seq.getArray()[j] += seq.getArray()[j];
         }
@@ -1356,7 +1356,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         xCallback->outSeqAny( seqAny);
         sprintf( buff,"XCallback::outSeqAny, length: %d )", seqAny.getLength());
         MessageBox( NULL, A2T(buff), _T("OleTest out parameter"), MB_OK);
-        for( i=0; i < seqAny.getLength(); i++)
+        for( i=0; i < seqAny.(); i++)
         {
             Any any= seqAny[i];
             if( any.getValueTypeClass() == TypeClass_STRING)
@@ -1457,7 +1457,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             xCallback->outSeqByte( seqByte);
             sprintf( buff,"XCallback::outSeqAny, length: %d )", seqAny.getLength());
             MessageBox( NULL, A2T(buff), _T("OleTest out parameter"), MB_OK);
-            for( i=0; i < seqAny.getLength(); i++)
+            for( i=0; i < seqAny.(); i++)
             {
                 Any any= seqAny[i];
                 if( any.getValueTypeClass() == TypeClass_STRING)
@@ -1522,7 +1522,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             sprintf( buff, "Sequence length: %d", seqAny.getLength());
             MessageBox( NULL,A2T(buff) , _T("OleTest in out parameter"), MB_OK);
 
-            for( int i=0; i < seqAny.getLength(); i++)
+            for( int i=0; i < seqAny.(); i++)
             {
                 Any any;
                 any <<= seqAny[i];
@@ -1671,7 +1671,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         aXSimple->func(L"XSimple called from OleTest");
         MessageBox( NULL, W2T(aStruct.message), _T("OleTest"), MB_OK);
 
-        for( int i=0; i < aSeq.getLength(); i++)
+        for( int i=0; i < aSeq.(); i++)
         {
             Any any;
             any <<= aSeq[i];
@@ -1743,7 +1743,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
                 Sequence<Any> seqAny;
                 seqOutParams[3] >>= seqAny;
-                for( int i=0; i<seqAny.getLength(); i++)
+                for( int i=0; i<seqAny.(); i++)
                 {
                     OUString _s;
                     seqAny[i] >>= _s;
@@ -1838,7 +1838,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
                 Sequence<Any> seqAny;
                 seqOutParams[3] >>= seqAny;
-                for( int i=0; i<seqAny.getLength(); i++)
+                for( int i=0; i<seqAny.(); i++)
                 {
                     OUString _s;
                     seqAny[i] >>= _s;

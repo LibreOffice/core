@@ -69,7 +69,7 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
     CPPUNIT_ASSERT_EQUAL(expectedRows, xSequences.getLength());
 
     sal_Int32 nStartRow = hasCategories ? 1 : 0;
-    for (sal_Int32 nIdx = nStartRow; nIdx < xSequences.getLength(); ++nIdx)
+    for (sal_Int32 nIdx = nStartRow; nIdx < xSequences.(); ++nIdx)
     {
         Reference<chart2::data::XDataSequence> xValues(xSequences[nIdx]->getValues());
         if (xValues.is())

@@ -838,13 +838,13 @@ void BaseOffset::calculateBases(
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > const &
         description)
 {
-    css::uno::Sequence<
+    const css::uno::Sequence<
         css::uno::Reference < css::reflection::XTypeDescription > > bases(
             description->getBaseTypes());
-    for (sal_Int32 i = 0; i != bases.getLength(); ++i) {
+    for (const auto & i : bases) {
         calculate(
             css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >(
-                resolveTypedefs(css::uno::makeAny(bases[i])),
+                resolveTypedefs(css::uno::makeAny(i)),
                 css::uno::UNO_QUERY_THROW));
     }
 }
@@ -1693,8 +1693,8 @@ bool Enumeration::matches(css::uno::TypeClass tc) const {
     if (!types_.hasElements()) {
         return true;
     }
-    for (sal_Int32 i = 0; i != types_.getLength(); ++i) {
-        if (types_[i] == tc) {
+    for (const auto & i : types_) {
+        if (i == tc) {
             return true;
         }
     }
@@ -2133,15 +2133,14 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
         return css::uno::Any();
     }
     OUString member(name.copy(separator + std::strlen("::")));
-    css::uno::Sequence<
+    const css::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > mems(
                 ifc->getMembers());
-    for (sal_Int32 i = 0; i != mems.getLength(); ++i) {
-        if (mems[i]->getMemberName() == member) {
+    for (const auto & m : mems) {
+        if (m->getMemberName() == member) {
             return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    mems[i]);
+                css::uno::Reference< css::reflection::XTypeDescription > >(m);
         }
     }
     return css::uno::Any();

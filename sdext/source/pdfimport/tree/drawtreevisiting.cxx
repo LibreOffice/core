@@ -128,7 +128,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
 
     for(int i=0; i< elem.Text.getLength(); i++)
     {
-        OUString strToken=  str.copy(i,1) ;
+        OUString strToken = str.copy(i,1) ;
         if( strSpace == strToken || strNbSpace == strToken )
         {
             aProps[ "text:c" ] = "1";

@@ -163,16 +163,16 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; i++ )
     {
-        uno::Sequence< beans::PropertyValue >& rDynamicMenuEntry = aDynamicMenuEntries[ i ];
+        const uno::Sequence< beans::PropertyValue >& rDynamicMenuEntry = aDynamicMenuEntries[ i ];
 
         OUString aDocumentUrl, aTitle;
 
-        for ( int e = 0; e < rDynamicMenuEntry.getLength(); e++ )
+        for ( const beans::PropertyValue& e : rDynamicMenuEntry )
         {
-            if ( rDynamicMenuEntry[ e ].Name == DYNAMICMENU_PROPERTYNAME_URL )
-                rDynamicMenuEntry[ e ].Value >>= aDocumentUrl;
-            else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
-                rDynamicMenuEntry[e].Value >>= aTitle;
+            if ( e.Name == DYNAMICMENU_PROPERTYNAME_URL )
+                e.Value >>= aDocumentUrl;
+            else if ( e.Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+                e.Value >>= aTitle;
         }
         //#i96822# business cards, labels and database should not be inserted here
         if( aDocumentUrl == "private:factory/swriter?slot=21051" ||

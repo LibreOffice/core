@@ -231,7 +231,7 @@ void Test::testConstruction()
 
 bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
 {
-    for (sal_Int32 i = 0, n = rSeq.getLength(); i < n; ++i)
+    for (sal_Int32 i = 0, n = rSeq.(); i < n; ++i)
         if (rSeq[i] == rVal)
             return true;
 
@@ -845,7 +845,7 @@ void Test::testHyperlinkSearch()
     // Check expansion and positioning re-work
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", static_cast<sal_uLong>(aContent.getLength()),
                            pNode->GetExpandedLen());
-    for (sal_Int32 n = 0; n < aContent.getLength(); n++)
+    for (sal_Int32 n = 0; n < aContent.(); n++)
     {
         sal_Int32 nStart = n, nEnd = n;
         pNode->UnExpandPositions(nStart,nEnd);

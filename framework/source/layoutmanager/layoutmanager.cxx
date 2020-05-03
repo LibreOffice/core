@@ -534,28 +534,28 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
             if ( rPersistentWindowState->hasByName( aName ) && (rPersistentWindowState->getByName( aName ) >>= aWindowState) )
             {
                 bool bValue( false );
-                for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
+                for ( PropertyValue const & rProp : std::as_const(aWindowState) )
                 {
-                    if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKED )
+                    if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKED )
                     {
-                        if ( aWindowState[n].Value >>= bValue )
+                        if ( rProp.Value >>= bValue )
                             rElementData.m_bFloating = !bValue;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_VISIBLE )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_VISIBLE )
                     {
-                        if ( aWindowState[n].Value >>= bValue )
+                        if ( rProp.Value >>= bValue )
                             rElementData.m_bVisible = bValue;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKINGAREA )
                     {
                         ui::DockingArea eDockingArea;
-                        if ( aWindowState[n].Value >>= eDockingArea )
+                        if ( rProp.Value >>= eDockingArea )
                             rElementData.m_aDockedData.m_nDockedArea = eDockingArea;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_DOCKPOS )
                     {
                         awt::Point aPoint;
-                        if (aWindowState[n].Value >>= aPoint)
+                        if (rProp.Value >>= aPoint)
                         {
                             //tdf#90256 repair these broken Docking positions
                             if (aPoint.X < 0)
@@ -565,39 +565,39 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                             rElementData.m_aDockedData.m_aPos = aPoint;
                         }
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_POS )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_POS )
                     {
                         awt::Point aPoint;
-                        if ( aWindowState[n].Value >>= aPoint )
+                        if ( rProp.Value >>= aPoint )
                             rElementData.m_aFloatingData.m_aPos = aPoint;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_SIZE )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_SIZE )
                     {
                         awt::Size aSize;
-                        if ( aWindowState[n].Value >>= aSize )
+                        if ( rProp.Value >>= aSize )
                             rElementData.m_aFloatingData.m_aSize = aSize;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_UINAME )
-                        aWindowState[n].Value >>= rElementData.m_aUIName;
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_STYLE )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_UINAME )
+                        rProp.Value >>= rElementData.m_aUIName;
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_STYLE )
                     {
                         sal_Int32 nStyle = 0;
-                        if ( aWindowState[n].Value >>= nStyle )
+                        if ( rProp.Value >>= nStyle )
                             rElementData.m_nStyle = static_cast<ButtonType>( nStyle );
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_LOCKED )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_LOCKED )
                     {
-                        if ( aWindowState[n].Value >>= bValue )
+                        if ( rProp.Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_CONTEXT )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_CONTEXT )
                     {
-                        if ( aWindowState[n].Value >>= bValue )
+                        if ( rProp.Value >>= bValue )
                             rElementData.m_bContextSensitive = bValue;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_NOCLOSE )
+                    else if ( rProp.Name == WINDOWSTATE_PROPERTY_NOCLOSE )
                     {
-                        if ( aWindowState[n].Value >>= bValue )
+                        if ( rProp.Value >>= bValue )
                             rElementData.m_bNoClose = bValue;
                     }
                 }
@@ -2519,11 +2519,11 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
         uno::Sequence< beans::PropertyValue > aProps;
         xMenuIndex->getByIndex( nIndex ) >>= aProps;
         OUString aCommand;
-        for (sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); ++nSeqInd)
+        for ( beans::PropertyValue const & rProp : std::as_const(aProps) )
         {
-            if (aProps[nSeqInd].Name == "CommandURL")
+            if (rProp.Name == "CommandURL")
             {
-                aProps[nSeqInd].Value >>= aCommand;
+                rProp.Value >>= aCommand;
                 break;
             }
         }

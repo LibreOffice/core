@@ -140,15 +140,15 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
     const Reference< chart2::data::XDataSource > & xDataSource )
 {
     Reference< chart2::data::XLabeledDataSequence > xResult;
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
 
-    for( sal_Int32 i=0; i<aSequences.getLength(); ++i )
+    for( Reference< chart2::data::XLabeledDataSequence > const & labeledDataSeq : aSequences )
     {
         // no values are set but a label exists
-        if( ! aSequences[i]->getValues().is() &&
-            aSequences[i]->getLabel().is())
+        if( ! labeledDataSeq->getValues().is() &&
+            labeledDataSeq->getLabel().is())
         {
-            xResult.set( aSequences[i] );
+            xResult.set( labeledDataSeq );
             break;
         }
     }

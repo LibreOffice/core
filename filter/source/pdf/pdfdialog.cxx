@@ -138,11 +138,11 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 {
     maMediaDescriptor = rProps;
 
-    for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
+    for( const PropertyValue& rProp : std::as_const(maMediaDescriptor) )
     {
-        if ( maMediaDescriptor[ i ].Name == "FilterData" )
+        if ( rProp.Name == "FilterData" )
         {
-            maMediaDescriptor[ i ].Value >>= maFilterData;
+            rProp.Value >>= maFilterData;
             break;
         }
     }

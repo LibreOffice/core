@@ -117,14 +117,13 @@ BibConfig::BibConfig()
             }
         }
     }
-    Sequence< OUString > aNodeNames = GetNodeNames(cDataSourceHistory);
-    const OUString* pNodeNames = aNodeNames.getConstArray();
-    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
+    const Sequence< OUString > aNodeNames = GetNodeNames(cDataSourceHistory);
+    for(OUString const & nodeName : aNodeNames)
     {
         Sequence<OUString> aHistoryNames(3);
         OUString* pHistoryNames = aHistoryNames.getArray();
 
-        OUString sPrefix = OUStringLiteral(cDataSourceHistory) + "/" + pNodeNames[nNode] + "/";
+        OUString sPrefix = OUStringLiteral(cDataSourceHistory) + "/" + nodeName + "/";
         pHistoryNames[0] = sPrefix + "DataSourceName";
         pHistoryNames[1] = sPrefix + "Command";
         pHistoryNames[2] = sPrefix + "CommandType";
@@ -140,14 +139,13 @@ BibConfig::BibConfig()
             pHistoryValues[2] >>= pMapping->nCommandType;
             //field assignment is contained in another set
             sPrefix += "Fields";
-            Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
-            const OUString* pAssignmentNodeNames = aAssignmentNodeNames.getConstArray();
+            const Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
             Sequence<OUString> aAssignmentPropertyNames(aAssignmentNodeNames.getLength() * 2);
             OUString* pAssignmentPropertyNames = aAssignmentPropertyNames.getArray();
             sal_Int16 nFieldIdx = 0;
-            for(sal_Int32 nField = 0; nField < aAssignmentNodeNames.getLength(); nField++)
+            for(OUString const & assignName : aAssignmentNodeNames)
             {
-                OUString sSubPrefix = sPrefix + "/" + pAssignmentNodeNames[nField];
+                OUString sSubPrefix = sPrefix + "/" + assignName;
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
                 pAssignmentPropertyNames[nFieldIdx++] += "/ProgrammaticFieldName";
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;

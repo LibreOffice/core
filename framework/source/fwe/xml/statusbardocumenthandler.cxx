@@ -100,28 +100,28 @@ static void ExtractStatusbarItemParameters(
     sal_Int16&                       rStyle,
     sal_Int16&                       rWidth )
 {
-    for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
+    for ( const PropertyValue& rEntry : rProp )
     {
-        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+        if ( rEntry.Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
-            rProp[i].Value >>= rCommandURL;
+            rEntry.Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_HELPURL )
         {
-            rProp[i].Value >>= rHelpURL;
+            rEntry.Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_OFFSET )
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_OFFSET )
         {
-            rProp[i].Value >>= rOffset;
+            rEntry.Value >>= rOffset;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_STYLE )
         {
-            rProp[i].Value >>= rStyle;
+            rEntry.Value >>= rStyle;
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_WIDTH )
+        else if ( rEntry.Name == ITEM_DESCRIPTOR_WIDTH )
         {
-            rProp[i].Value >>= rWidth;
+            rEntry.Value >>= rWidth;
         }
     }
 }

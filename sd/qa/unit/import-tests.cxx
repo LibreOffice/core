@@ -862,7 +862,7 @@ void SdImportTest::testFdo71075()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Data count", static_cast<sal_Int32>(SAL_N_ELEMENTS(values)), xValueSeq->getData().getLength());
     uno::Reference< chart2::data::XNumericalDataSequence > xNumSeq( xValueSeq, uno::UNO_QUERY );
     uno::Sequence< double > aValues( xNumSeq->getNumericalData());
-    for(sal_Int32 i=0;i<xValueSeq->getData().getLength();i++)
+    for(sal_Int32 i=0;i<xValueSeq->getData().();i++)
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Invalid Series count", values[i], aValues.getConstArray()[i]);
 
     xDocShRef->DoClose();
@@ -2078,7 +2078,7 @@ void SdImportTest::testTdf104445()
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for (int i = 0; i < aBulletProps.getLength(); ++i)
+        for (int i = 0; i < aBulletProps.(); ++i)
         {
             const beans::PropertyValue& rProp = aBulletProps[i];
             if(rProp.Name == "NumberingType")
@@ -2099,7 +2099,7 @@ void SdImportTest::testTdf104445()
         uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
-        for(int i = 0; i < aBulletProps.getLength(); ++i)
+        for(int i = 0; i < aBulletProps.(); ++i)
         {
             const beans::PropertyValue& rProp = aBulletProps[i];
             if(rProp.Name == "NumberingType")
@@ -2965,7 +2965,7 @@ void SdImportTest::testOOXTheme()
     xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
 
     bool bTheme = false;
-    for (int i = 0; i < aGrabBag.getLength(); i++)
+    for (int i = 0; i < aGrabBag.(); i++)
     {
         if (aGrabBag[i].Name == "OOXTheme")
         {

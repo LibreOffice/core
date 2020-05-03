@@ -113,26 +113,25 @@ bool AddonsToolBarFactory::hasButtonsInContext(
 
     // Check before we create a toolbar that we have at least one button in
     // the current frame context.
-    for ( sal_uInt32 i = 0; i < o3tl::make_unsigned(rPropSeqSeq.getLength()); i++ )
+    for ( Sequence<PropertyValue> const & props : rPropSeqSeq )
     {
         bool    bIsButton( true );
         bool    bIsCorrectContext( false );
         sal_uInt32  nPropChecked( 0 );
 
-        const Sequence< PropertyValue >& rPropSeq = rPropSeqSeq[i];
-        for ( sal_uInt32 j = 0; j < o3tl::make_unsigned(rPropSeq.getLength()); j++ )
+        for ( PropertyValue const & prop : props )
         {
-            if ( rPropSeq[j].Name == "Context" )
+            if ( prop.Name == "Context" )
             {
                 OUString aContextList;
-                if ( rPropSeq[j].Value >>= aContextList )
+                if ( prop.Value >>= aContextList )
                     bIsCorrectContext = IsCorrectContext( aModuleIdentifier, aContextList );
                 nPropChecked++;
             }
-            else if ( rPropSeq[j].Name == "URL" )
+            else if ( prop.Name == "URL" )
             {
                 OUString aURL;
-                rPropSeq[j].Value >>= aURL;
+                prop.Value >>= aURL;
                 bIsButton = aURL != "private:separator";
                 nPropChecked++;
             }
@@ -159,14 +158,14 @@ Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
     Reference< XFrame >                     xFrame;
     OUString                           aResourceURL( ResourceURL );
 
-    for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
+    for ( PropertyValue const & arg : Args )
     {
-        if ( Args[n].Name == "ConfigurationData" )
-            Args[n].Value >>= aConfigData;
-        else if ( Args[n].Name == "Frame" )
-            Args[n].Value >>= xFrame;
-        else if ( Args[n].Name == "ResourceURL" )
-            Args[n].Value >>= aResourceURL;
+        if ( arg.Name == "ConfigurationData" )
+            arg.Value >>= aConfigData;
+        else if ( arg.Name == "Frame" )
+            arg.Value >>= xFrame;
+        else if ( arg.Name == "ResourceURL" )
+            arg.Value >>= aResourceURL;
     }
 
     if ( !aResourceURL.startsWith("private:resource/toolbar/addon_") )

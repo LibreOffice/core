@@ -73,12 +73,12 @@ void FixedTextToolbarController::executeControlCommand(
     if (rControlCommand.Command != "SetText")
         return;
 
-    for (sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++)
+    for (const NamedValue& rArg : rControlCommand.Arguments)
     {
-        if (rControlCommand.Arguments[i].Name == "Text")
+        if (rArg.Name == "Text")
         {
             OUString aText;
-            rControlCommand.Arguments[i].Value >>= aText;
+            rArg.Value >>= aText;
             m_pFixedTextControl->SetText(aText);
             m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->GetOptimalSize());
 

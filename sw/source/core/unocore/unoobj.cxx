@@ -521,21 +521,21 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
                     SfxItemSet items{rPam.GetDoc()->GetAttrPool(), aCharAutoFormatSetRange};
 
-                    for (sal_Int32 i = 0; i < props.getLength(); ++i)
+                    for (beans::NamedValue const & prop : std::as_const(props))
                     {
                         SfxItemPropertySimpleEntry const*const pEntry =
-                            rMap.getByName(props[i].Name);
+                            rMap.getByName(prop.Name);
                         if (!pEntry)
                         {
                             throw beans::UnknownPropertyException(
-                                "Unknown property: " + props[i].Name);
+                                "Unknown property: " + prop.Name);
                         }
                         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                         {
                             throw beans::PropertyVetoException(
-                                "Property is read-only: " + props[i].Name);
+                                "Property is read-only: " + prop.Name);
                         }
-                        rPropSet.setPropertyValue(*pEntry, props[i].Value, items);
+                        rPropSet.setPropertyValue(*pEntry, prop.Value, items);
                     }
 
                     SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);

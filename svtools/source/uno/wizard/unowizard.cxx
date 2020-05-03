@@ -171,20 +171,22 @@ namespace {
             throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
         // each path must be of length 1, at least
-        for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
+        sal_Int32 i = 0;
+        for ( const Sequence< sal_Int16 >& rPath : i_rPaths )
         {
-            if ( !i_rPaths[i].hasElements() )
+            if ( !rPath.hasElements() )
                 throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
             // page IDs must be in ascending order
-            auto pPageId = std::adjacent_find(i_rPaths[i].begin(), i_rPaths[i].end(), std::greater_equal<sal_Int16>());
-            if (pPageId != i_rPaths[i].end())
+            auto pPageId = std::adjacent_find(rPath.begin(), rPath.end(), std::greater_equal<sal_Int16>());
+            if (pPageId != rPath.end())
             {
                 throw IllegalArgumentException(
                     "Path " + OUString::number(i)
                     + ": invalid page ID sequence - each page ID must be greater than the previous one.",
                     i_rContext, 2 );
             }
+            ++i;
         }
 
         // if we have one path, that's okay

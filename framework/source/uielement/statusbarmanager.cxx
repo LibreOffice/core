@@ -402,7 +402,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
-        uno::Sequence< beans::PropertyValue >   aProp;
+        uno::Sequence< beans::PropertyValue >   aProps;
         OUString                                aCommandURL;
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
@@ -411,29 +411,29 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
         try
         {
-            if ( rItemContainer->getByIndex( n ) >>= aProp )
+            if ( rItemContainer->getByIndex( n ) >>= aProps )
             {
-                for ( int i = 0; i < aProp.getLength(); i++ )
+                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
                 {
-                    if ( aProp[i].Name == "CommandURL" )
+                    if ( prop.Name == "CommandURL" )
                     {
-                        aProp[i].Value >>= aCommandURL;
+                        prop.Value >>= aCommandURL;
                     }
-                    else if ( aProp[i].Name == "Style" )
+                    else if ( prop.Name == "Style" )
                     {
-                        aProp[i].Value >>= nStyle;
+                        prop.Value >>= nStyle;
                     }
-                    else if ( aProp[i].Name == "Type" )
+                    else if ( prop.Name == "Type" )
                     {
-                        aProp[i].Value >>= nType;
+                        prop.Value >>= nType;
                     }
-                    else if ( aProp[i].Name == "Width" )
+                    else if ( prop.Name == "Width" )
                     {
-                        aProp[i].Value >>= nWidth;
+                        prop.Value >>= nWidth;
                     }
-                    else if ( aProp[i].Name == "Offset" )
+                    else if ( prop.Name == "Offset" )
                     {
-                        aProp[i].Value >>= nOffset;
+                        prop.Value >>= nOffset;
                     }
                 }
 

@@ -68,7 +68,7 @@ SAL_IMPLEMENT_MAIN()
             OString o = OUStringToOString( r3->getImplementationName() , RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n" , o.getStr() );
             Sequence< OUString > seq2 = r3->getSupportedServiceNames();
-            for( int i = 0 ;i < seq2.getLength() ; i ++  )
+            for( int i = 0 ;i < seq2.() ; i ++  )
             {
                 o = OUStringToOString( seq2[i] , RTL_TEXTENCODING_ASCII_US );
                 printf( "   %s\n" , o.getStr() );

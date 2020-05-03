@@ -543,7 +543,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         if (aProps[i].Name == "NumberingType")
         {

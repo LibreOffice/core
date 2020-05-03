@@ -44,10 +44,8 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
 {
     OUString aInternalFilterName;
 
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
+    for ( const beans::PropertyValue& rProperty : rProperties )
     {
-        const beans::PropertyValue& rProperty = rProperties[i];
-
         if ( rProperty.Name == "FilterName" )
         {
             rProperty.Value >>= aInternalFilterName;
@@ -76,15 +74,15 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
     }
 
-    for ( sal_Int32 i = 0; i < maFilterDataSequence.getLength(); i++ )
+    for ( const beans::PropertyValue& rProp : std::as_const(maFilterDataSequence) )
     {
-        if ( maFilterDataSequence[i].Name == "PixelWidth" )
+        if ( rProp.Name == "PixelWidth" )
         {
-            maFilterDataSequence[i].Value >>= mnTargetWidth;
+            rProp.Value >>= mnTargetWidth;
         }
-        else if ( maFilterDataSequence[i].Name == "PixelHeight" )
+        else if ( rProp.Name == "PixelHeight" )
         {
-            maFilterDataSequence[i].Value >>= mnTargetHeight;
+            rProp.Value >>= mnTargetHeight;
         }
     }
 

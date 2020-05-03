@@ -411,14 +411,10 @@ namespace
                                 e.Context, anyEx );
             }
 
-            for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)
+            for (const uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : std::as_const(xAllPackages))
             {
-                uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
-                for (sal_Int32 j = 0; j < xPackageList.getLength(); ++j)
+                for (const uno::Reference< deployment::XPackage > & xPackage : xPackageList)
                 {
-                    uno::Reference< deployment::XPackage > xPackage = xPackageList[j];
-
                     if (xPackage.is())
                     {
                         maEntries.emplace_back(xPackage);

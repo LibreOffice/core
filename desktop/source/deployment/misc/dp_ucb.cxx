@@ -119,10 +119,9 @@ bool create_folder(
                                          RTL_TEXTENCODING_UTF8 ) );
     const Sequence<ContentInfo> infos(
         parentContent.queryCreatableContentsInfo() );
-    for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
+    for ( ContentInfo const & info : infos )
     {
         // look KIND_FOLDER:
-        ContentInfo const & info = infos[ pos ];
         if ((info.Attributes & ContentInfoAttribute::KIND_FOLDER) != 0)
         {
             // make sure the only required bootstrap property is "Title":

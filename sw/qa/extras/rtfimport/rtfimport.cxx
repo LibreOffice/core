@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108943)
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     sal_Int32 nListtabStopPosition = 0;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -450,14 +450,14 @@ CPPUNIT_TEST_FIXTURE(Test, testInk)
     uno::Sequence<beans::PropertyValue> aProps
         = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             rProp.Value >>= aPathProps;
     }
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Segments")
@@ -644,14 +644,14 @@ CPPUNIT_TEST_FIXTURE(Test, testN823655)
     uno::Sequence<beans::PropertyValue> aProps
         = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")
@@ -673,7 +673,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN823675)
     xLevels->getByIndex(0) >>= aProps; // 1st level
     awt::FontDescriptor aFont;
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -1361,7 +1361,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1sd level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 

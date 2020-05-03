@@ -44,7 +44,7 @@ void assertSequencesEqual(const uno::Sequence<beans::PropertyValue>& expected,
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The sequences should have the same length", expected.getLength(),
                                  actual.getLength());
-    for (int i = 0; i < expected.getLength(); ++i)
+    for (int i = 0; i < expected.(); ++i)
     {
         CPPUNIT_ASSERT_EQUAL(expected[i].Name, actual[i].Name);
         CPPUNIT_ASSERT_EQUAL(comphelper::anyToString(expected[i].Value),

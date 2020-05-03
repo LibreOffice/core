@@ -284,23 +284,22 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     Any aLevelAny = xLevel->getByIndex(i);
                     Sequence<PropertyValue> aLevel;
                     aLevelAny >>= aLevel;
-                    const PropertyValue* pValues = aLevel.getConstArray();
                     aNumberingTypes[i] = 0;
                     aParentNumberings[i] = 0;
-                    for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
+                    for(const PropertyValue& rProp : std::as_const(aLevel))
                     {
-                        if ( pValues[nProperty].Name == "NumberingType" )
-                            pValues[nProperty].Value >>= aNumberingTypes[i];
-                        else if ( pValues[nProperty].Name == "BulletFontName" )
-                            pValues[nProperty].Value >>= sFontNames[i];
-                        else if ( pValues[nProperty].Name == "BulletChar" )
-                            pValues[nProperty].Value >>= sBulletChars[i];
-                        else if ( pValues[nProperty].Name == "Prefix" )
-                            pValues[nProperty].Value >>= sPrefixes[i];
-                        else if ( pValues[nProperty].Name == "Suffix" )
-                            pValues[nProperty].Value >>= sSuffixes[i];
-                        else if ( pValues[nProperty].Name == "ParentNumbering" )
-                            pValues[nProperty].Value >>= aParentNumberings[i];
+                        if ( rProp.Name == "NumberingType" )
+                            rProp.Value >>= aNumberingTypes[i];
+                        else if ( rProp.Name == "BulletFontName" )
+                            rProp.Value >>= sFontNames[i];
+                        else if ( rProp.Name == "BulletChar" )
+                            rProp.Value >>= sBulletChars[i];
+                        else if ( rProp.Name == "Prefix" )
+                            rProp.Value >>= sPrefixes[i];
+                        else if ( rProp.Name == "Suffix" )
+                            rProp.Value >>= sSuffixes[i];
+                        else if ( rProp.Name == "ParentNumbering" )
+                            rProp.Value >>= aParentNumberings[i];
                     }
                     Sequence< PropertyValue > aProperties(2);
                     PropertyValue* pProperties = aProperties.getArray();

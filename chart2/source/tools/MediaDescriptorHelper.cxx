@@ -52,10 +52,8 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
     };
 
     //read given rMediaDescriptor and store in internal structures:
-    for( sal_Int32 i= rMediaDescriptor.getLength();i--;)
+    for( const beans::PropertyValue& rProp : rMediaDescriptor)
     {
-        const beans::PropertyValue& rProp = rMediaDescriptor[i];
-
         if (rProp.Name == "AsTemplate")
         {
             addModelProp(rProp);

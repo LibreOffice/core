@@ -80,7 +80,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
         if ( rArgs.hasElements() )
         {
             SbxArrayRef aArgs = new SbxArray;
-            for ( int i=0; i < rArgs.getLength(); ++i )
+            for ( int i=0; i < rArgs.(); ++i )
             {
                 SbxVariable* pVar = new SbxVariable();
                 unoToSbxValue( pVar, rArgs[ i ] );

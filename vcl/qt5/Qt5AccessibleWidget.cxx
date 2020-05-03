@@ -848,26 +848,25 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
         return QString();
     }
 
-    Sequence<PropertyValue> attribs = xText->getCharacterAttributes(offset, Sequence<OUString>());
-    const PropertyValue* pValues = attribs.getConstArray();
+    const Sequence<PropertyValue> attribs
+        = xText->getCharacterAttributes(offset, Sequence<OUString>());
     OUString aRet;
-    for (sal_Int32 i = 0; i < attribs.getLength(); i++)
+    for (PropertyValue const& prop : attribs)
     {
-        if (pValues[i].Name == "CharFontName")
+        if (prop.Name == "CharFontName")
         {
-            aRet += "font-family:" + *o3tl::doAccess<OUString>(pValues[i].Value) + ";";
+            aRet += "font-family:" + *o3tl::doAccess<OUString>(prop.Value) + ";";
             continue;
         }
-        if (pValues[i].Name == "CharHeight")
+        if (prop.Name == "CharHeight")
         {
-            aRet += "font-size:" + OUString::number(*o3tl::doAccess<double>(pValues[i].Value))
-                    + "pt;";
+            aRet += "font-size:" + OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt;";
             continue;
         }
-        if (pValues[i].Name == "CharWeight")
+        if (prop.Name == "CharWeight")
         {
-            aRet += "font-weight:"
-                    + lcl_convertFontWeight(*o3tl::doAccess<double>(pValues[i].Value)) + ";";
+            aRet += "font-weight:" + lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value))
+                    + ";";
             continue;
         }
     }

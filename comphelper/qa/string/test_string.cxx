@@ -179,7 +179,7 @@ public:
         const lang::Locale&, sal_Int16 CharType ) override
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
-        for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)
+        for (sal_Int32 nI = nStartPos; nI < rText.(); ++nI)
         {
             if (CharType == i18n::CharType::DECIMAL_DIGIT_NUMBER && !IS_DIGIT(*pStr))
                 return nI;
@@ -195,7 +195,7 @@ public:
         const lang::Locale&, sal_Int16 CharType ) override
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
-        for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)
+        for (sal_Int32 nI = nStartPos; nI < rText.(); ++nI)
         {
             if (CharType == i18n::CharType::DECIMAL_DIGIT_NUMBER && IS_DIGIT(*pStr))
                 return nI;

@@ -130,29 +130,25 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
         {
             break;
         }
-        Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
+        const Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
-        if ( serviceNames.getLength() > 0 )
+        for ( OUString const & serviceName : serviceNames )
         {
-            for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
+            if ( serviceName.startsWith( providerKey ) )
             {
-                if ( serviceNames[ index ].startsWith( providerKey ) )
+                OUString aCommand = aCmdBase;
+                OUString aDisplayName = serviceName.copy( providerKey.getLength() );
+                if( aDisplayName == "Java" || aDisplayName == "Basic" )
                 {
-                    OUString serviceName = serviceNames[ index ];
-                    OUString aCommand = aCmdBase;
-                    OUString aDisplayName = serviceName.copy( providerKey.getLength() );
-                    if( aDisplayName == "Java" || aDisplayName == "Basic" )
-                    {
-                        // no entries for Java & Basic added elsewhere
-                        break;
-                    }
-                    aCommand += aDisplayName;
-                    aDisplayName += ellipsis;
-                    pPopupMenu->InsertItem( itemId, aDisplayName );
-                    pPopupMenu->SetItemCommand( itemId, aCommand );
-                    itemId++;
+                    // no entries for Java & Basic added elsewhere
                     break;
                 }
+                aCommand += aDisplayName;
+                aDisplayName += ellipsis;
+                pPopupMenu->InsertItem( itemId, aDisplayName );
+                pPopupMenu->SetItemCommand( itemId, aCommand );
+                itemId++;
+                break;
             }
         }
     }

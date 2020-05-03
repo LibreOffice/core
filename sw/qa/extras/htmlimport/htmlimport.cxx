@@ -152,7 +152,7 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bBulletFound=false;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -173,7 +173,7 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
                 uno::UNO_QUERY);
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 

@@ -316,15 +316,14 @@ Sequence<OUString> EventAttacherImpl::getSupportedServiceNames_Static(  )
 void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
 {
     // get services from the argument list
-    const Any * pArray = Arguments.getConstArray();
-    for( sal_Int32 i = 0; i < Arguments.getLength(); i++ )
+    for( const Any& arg : Arguments )
     {
-        if( pArray[i].getValueType().getTypeClass() != TypeClass_INTERFACE )
+        if( arg.getValueType().getTypeClass() != TypeClass_INTERFACE )
             throw IllegalArgumentException();
 
         // InvocationAdapter service ?
         Reference< XInvocationAdapterFactory2 > xALAS;
-        pArray[i] >>= xALAS;
+        arg >>= xALAS;
         if( xALAS.is() )
         {
             Guard< Mutex > aGuard( m_aMutex );
@@ -332,7 +331,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         }
         // Introspection service ?
         Reference< XIntrospection > xI;
-        pArray[i] >>= xI;
+        arg >>= xI;
         if( xI.is() )
         {
             Guard< Mutex > aGuard( m_aMutex );
@@ -340,7 +339,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         }
         // Reflection service ?
         Reference< XIdlReflection > xIdlR;
-        pArray[i] >>= xIdlR;
+        arg >>= xIdlR;
         if( xIdlR.is() )
         {
             Guard< Mutex > aGuard( m_aMutex );
@@ -348,7 +347,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         }
         // Converter Service ?
         Reference< XTypeConverter > xC;
-        pArray[i] >>= xC;
+        arg >>= xC;
         if( xC.is() )
         {
             Guard< Mutex > aGuard( m_aMutex );
@@ -598,12 +597,9 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     OUString aAddListenerName = "add" + aListenerName;
 
     // Send Methods to the correct addListener-Method
-    Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
-    const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
-    for (sal_Int32 i = 0, n = aMethodSeq.getLength(); i < n ; ++i)
+    const Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
+    for (const Reference< XIdlMethod >& rxMethod : aMethodSeq)
     {
-        const Reference< XIdlMethod >& rxMethod = pMethods[i];
-
         // Is it the correct method?
         OUString aMethName = rxMethod->getName();
 

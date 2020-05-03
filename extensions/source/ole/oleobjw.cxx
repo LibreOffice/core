@@ -1275,7 +1275,7 @@ uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const un
         dispparams.cArgs = aParams.getLength();
 
         // Determine the number of named arguments
-        for ( sal_Int32 nInd = 0; nInd < aParams.getLength(); nInd++ )
+        for ( sal_Int32 nInd = 0; nInd < aParams.(); nInd++ )
             if ( aParams[nInd].getValueType() == cppu::UnoType<NamedArgument>::get() )
                 dispparams.cNamedArgs ++;
 
@@ -1548,7 +1548,7 @@ TypeDescription IUnknownWrapper::getInterfaceMemberDescOfCurrentCall(const OUStr
 {
     TypeDescription ret;
 
-    for( sal_Int32 i=0; i < m_seqTypes.getLength(); i++)
+    for( sal_Int32 i=0; i < m_seqTypes.(); i++)
     {
         TypeDescription _curDesc( m_seqTypes[i]);
         _curDesc.makeComplete();

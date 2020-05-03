@@ -2292,7 +2292,7 @@ Sequence<Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUn
             if( anyNames >>= seqAny)
             {
                 seqTypes.realloc( seqAny.getLength());
-                for( sal_Int32 i=0; i < seqAny.getLength(); i++)
+                for( sal_Int32 i=0; i < seqAny.(); i++)
                 {
                     OUString typeName;
                     seqAny[i] >>= typeName;

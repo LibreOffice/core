@@ -224,7 +224,7 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     if ( !m_xConfigAccess.is() )
         return;
 
-    Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
+    const Sequence< OUString > aPopupMenuControllers = m_xConfigAccess->getElementNames();
 
     OUString aCommand;
     OUString aModule;
@@ -233,11 +233,11 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     OUString aValue;
 
     m_aMenuControllerMap.clear();
-    for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
+    for ( OUString const & name : aPopupMenuControllers )
     {
         try
         {
-            if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService,aValue ))
+            if ( impl_getElementProps( m_xConfigAccess->getByName( name ), aCommand, aModule, aService,aValue ))
             {
                 // Create hash key from command and module as they are together a primary key to
                 // the UNO service that implements the popup menu controller.

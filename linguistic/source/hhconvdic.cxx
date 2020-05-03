@@ -65,13 +65,12 @@ static sal_Int16 checkScriptType(sal_Unicode c)
 
 static bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 {
-    bool bIsAll = true;
-    for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
+    for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
     {
         if (checkScriptType( rTxt[i]) != nScriptType)
-            bIsAll = false;
+            return false;
     }
-    return bIsAll;
+    return true;
 }
 
 

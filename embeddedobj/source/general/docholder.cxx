@@ -564,10 +564,10 @@ void DocumentHolder::FindConnectPoints(
         uno::Sequence< beans::PropertyValue > aProps;
         xMenu->getByIndex( nInd ) >>= aProps;
         OUString aCommand;
-        for ( sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); nSeqInd++ )
-            if ( aProps[nSeqInd].Name == "CommandURL" )
+        for ( beans::PropertyValue const & prop : std::as_const(aProps) )
+            if ( prop.Name == "CommandURL" )
             {
-                aProps[nSeqInd].Value >>= aCommand;
+                prop.Value >>= aCommand;
                 break;
             }
 

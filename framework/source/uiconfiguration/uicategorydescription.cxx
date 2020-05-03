@@ -164,20 +164,19 @@ void ConfigurationAccess_UICategory::fillCache()
     if ( m_bCacheFilled )
         return;
 
-    sal_Int32            i( 0 );
     OUString        aUIName;
-    Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+    const Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
-    for ( i = 0; i < aNameSeq.getLength(); i++ )
+    for ( OUString const & rName : aNameSeq )
     {
         try
         {
-            Reference< XNameAccess > xNameAccess(m_xConfigAccess->getByName( aNameSeq[i] ),UNO_QUERY);
+            Reference< XNameAccess > xNameAccess(m_xConfigAccess->getByName( rName ),UNO_QUERY);
             if ( xNameAccess.is() )
             {
                 xNameAccess->getByName( m_aPropUIName ) >>= aUIName;
 
-                m_aIdCache.emplace( aNameSeq[i], aUIName );
+                m_aIdCache.emplace( rName, aUIName );
             }
         }
         catch ( const css::lang::WrappedTargetException& )

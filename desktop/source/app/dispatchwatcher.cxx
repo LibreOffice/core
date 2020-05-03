@@ -188,21 +188,21 @@ void scriptCat(const Reference< XModel >& xDoc )
         return;
     }
 
-    Sequence< OUString > aLibNames = xLibraries->getElementNames();
+    const Sequence< OUString > aLibNames = xLibraries->getElementNames();
     std::cout << "Libraries: " << aLibNames.getLength() << "\n";
-    for ( sal_Int32 i = 0 ; i < aLibNames.getLength() ; ++i )
+    for (OUString const & libName : aLibNames)
     {
-        std::cout << "Library: '" << aLibNames[i] << "' children: ";
+        std::cout << "Library: '" << libName << "' children: ";
         Reference< XNameContainer > xContainer;
         try {
-            if (!xLibraries->isLibraryLoaded( aLibNames[i] ))
-                xLibraries->loadLibrary( aLibNames[i] );
+            if (!xLibraries->isLibraryLoaded( libName ))
+                xLibraries->loadLibrary( libName );
             xContainer = Reference< XNameContainer >(
-                xLibraries->getByName( aLibNames[i] ), UNO_QUERY );
+                xLibraries->getByName( libName ), UNO_QUERY );
         }
         catch (const css::uno::Exception &e)
         {
-            std::cout << "[" << aLibNames[i] << "] - failed to load library: " << e.Message << "\n";
+            std::cout << "[" << libName << "] - failed to load library: " << e.Message << "\n";
             continue;
         }
         if( !xContainer.is() )

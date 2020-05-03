@@ -608,8 +608,8 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
 
-        for( sal_Int32 nN = 0; nN < aAvailablePlacements.getLength(); nN++ )
-            if( aAvailablePlacements[nN] == nLabelPlacement )
+        for( sal_Int32 n : aAvailablePlacements )
+            if( n == nLabelPlacement )
                 return nLabelPlacement; //ok
 
         //otherwise use the first supported one
@@ -910,9 +910,9 @@ bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
     //returns true if the data point assigned by the given index has set its own properties
     if( index>=m_nPointCount || m_nPointCount==0)
         return false;
-    for(sal_Int32 nN=m_aAttributedDataPointIndexList.getLength();nN--;)
+    for(sal_Int32 n : m_aAttributedDataPointIndexList)
     {
-        if(index==m_aAttributedDataPointIndexList[nN])
+        if(index == n)
             return true;
     }
     return false;

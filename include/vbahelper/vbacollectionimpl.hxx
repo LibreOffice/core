@@ -248,13 +248,12 @@ protected:
 
         if( mbIgnoreCase )
         {
-            css::uno::Sequence< OUString > sElementNames = m_xNameAccess->getElementNames();
-            for( sal_Int32 i = 0; i < sElementNames.getLength(); i++ )
+            const css::uno::Sequence< OUString > sElementNames = m_xNameAccess->getElementNames();
+            for( const OUString& rName : sElementNames )
             {
-                OUString aName = sElementNames[i];
-                if( aName.equalsIgnoreAsciiCase( sIndex ) )
+                if( rName.equalsIgnoreAsciiCase( sIndex ) )
                 {
-                    return createCollectionObject( m_xNameAccess->getByName( aName ) );
+                    return createCollectionObject( m_xNameAccess->getByName( rName ) );
                 }
             }
         }

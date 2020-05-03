@@ -362,9 +362,9 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     // check if there is URL, URL must exist
     OUString aURL;
-    for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-        if ( aTempMedDescr[nInd].Name == "URL" )
-            aTempMedDescr[nInd].Value >>= aURL;
+    for ( beans::PropertyValue const & prop : std::as_const(aTempMedDescr) )
+        if ( prop.Name == "URL" )
+            prop.Value >>= aURL;
 
     if ( aURL.isEmpty() )
         throw lang::IllegalArgumentException( "No URL for the link is provided!",

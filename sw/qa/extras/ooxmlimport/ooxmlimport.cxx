@@ -1309,7 +1309,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -1331,7 +1331,7 @@ DECLARE_OOXMLIMPORT_TEST( testTdf106606, "tdf106606.docx" )
         uno::Sequence<beans::PropertyValue>     aProps;
         xLevels->getByIndex( 0 ) >>= aProps; // 1st level
 
-        for ( int i = 0; i < aProps.getLength(); ++i )
+        for ( int i = 0; i < aProps.(); ++i )
         {
             const beans::PropertyValue& rProp = aProps[i];
 

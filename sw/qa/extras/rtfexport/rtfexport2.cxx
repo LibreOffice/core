@@ -898,7 +898,7 @@ DECLARE_RTFEXPORT_TEST(testFdo59638, "fdo59638.rtf")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 

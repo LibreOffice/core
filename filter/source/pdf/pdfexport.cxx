@@ -179,14 +179,14 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                 StringRangeEnumerator::Iterator aEnd  = rRangeEnum.end();
                 while ( aIter != aEnd )
                 {
-                    Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( *aIter, rSelection, rRenderOptions ) );
+                    const Sequence< PropertyValue > aRenderer( rRenderable->getRenderer( *aIter, rSelection, rRenderOptions ) );
                     awt::Size                   aPageSize;
 
-                    for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
+                    for( const PropertyValue& rProp : aRenderer )
                     {
-                        if ( aRenderer[ nProperty ].Name == "PageSize" )
+                        if ( rProp.Name == "PageSize" )
                         {
-                            aRenderer[ nProperty].Value >>= aPageSize;
+                            rProp.Value >>= aPageSize;
                             break;
                         }
                     }
@@ -359,9 +359,9 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 
                         Sequence< beans::PropertyValue > aFilterData;
                         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
-                        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                            if ( aFilterData[nInd].Name == "Type" )
-                                aFilterData[nInd].Value >>= aTypeName;
+                        for ( const beans::PropertyValue& rProp : std::as_const(aFilterData) )
+                            if ( rProp.Name == "Type" )
+                                rProp.Value >>= aTypeName;
 
                         if ( !aTypeName.isEmpty() )
                         {
@@ -372,9 +372,9 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 
                             Sequence< beans::PropertyValue > aTypeData;
                             xTypeDetection->getByName( aTypeName ) >>= aTypeData;
-                            for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
-                                if ( aTypeData[nInd].Name == "MediaType" )
-                                    aTypeData[nInd].Value >>= aDocMimetype;
+                            for ( const beans::PropertyValue& rProp : std::as_const(aTypeData) )
+                                if ( rProp.Name == "MediaType" )
+                                    rProp.Value >>= aDocMimetype;
                         }
                     }
                 }
@@ -454,134 +454,134 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 utl::ConfigManager::getProductVersion();
             aContext.DocumentInfo.Creator = aCreator;
 
-            for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
+            for ( const beans::PropertyValue& rProp : rFilterData )
             {
-                if ( rFilterData[ nData ].Name == "PageRange" )
-                    rFilterData[ nData ].Value >>= aPageRange;
-                else if ( rFilterData[ nData ].Name == "Selection" )
-                    aSelection = rFilterData[ nData ].Value;
-                else if ( rFilterData[ nData ].Name == "UseLosslessCompression" )
-                    rFilterData[ nData ].Value >>= mbUseLosslessCompression;
-                else if ( rFilterData[ nData ].Name == "Quality" )
-                    rFilterData[ nData ].Value >>= mnQuality;
-                else if ( rFilterData[ nData ].Name == "ReduceImageResolution" )
-                    rFilterData[ nData ].Value >>= mbReduceImageResolution;
-                else if ( rFilterData[ nData ].Name == "IsSkipEmptyPages" )
-                    rFilterData[ nData ].Value >>= mbSkipEmptyPages;
-                else if ( rFilterData[ nData ].Name == "MaxImageResolution" )
-                    rFilterData[ nData ].Value >>= mnMaxImageResolution;
-                else if ( rFilterData[ nData ].Name == "UseTaggedPDF" )
-                    rFilterData[ nData ].Value >>= mbUseTaggedPDF;
-                else if ( rFilterData[ nData ].Name == "SelectPdfVersion" )
-                    rFilterData[ nData ].Value >>= mnPDFTypeSelection;
-                else if ( rFilterData[ nData ].Name == "PDFUACompliance" )
-                    rFilterData[ nData ].Value >>= mbPDFUACompliance;
-                else if ( rFilterData[ nData ].Name == "ExportNotes" )
-                    rFilterData[ nData ].Value >>= mbExportNotes;
-                else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
-                    rFilterData[ nData ].Value >>= mbExportNotesPages;
-                else if ( rFilterData[ nData ].Name == "ExportOnlyNotesPages" )
-                    rFilterData[ nData ].Value >>= mbExportOnlyNotesPages;
-                else if ( rFilterData[ nData ].Name == "UseTransitionEffects" )
-                    rFilterData[ nData ].Value >>= mbUseTransitionEffects;
-                else if ( rFilterData[ nData ].Name == "ExportFormFields" )
-                    rFilterData[ nData ].Value >>= mbExportFormFields;
-                else if ( rFilterData[ nData ].Name == "FormsType" )
-                    rFilterData[ nData ].Value >>= mnFormsFormat;
-                else if ( rFilterData[ nData ].Name == "AllowDuplicateFieldNames" )
-                    rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
+                if ( rProp.Name == "PageRange" )
+                    rProp.Value >>= aPageRange;
+                else if ( rProp.Name == "Selection" )
+                    aSelection = rProp.Value;
+                else if ( rProp.Name == "UseLosslessCompression" )
+                    rProp.Value >>= mbUseLosslessCompression;
+                else if ( rProp.Name == "Quality" )
+                    rProp.Value >>= mnQuality;
+                else if ( rProp.Name == "ReduceImageResolution" )
+                    rProp.Value >>= mbReduceImageResolution;
+                else if ( rProp.Name == "IsSkipEmptyPages" )
+                    rProp.Value >>= mbSkipEmptyPages;
+                else if ( rProp.Name == "MaxImageResolution" )
+                    rProp.Value >>= mnMaxImageResolution;
+                else if ( rProp.Name == "UseTaggedPDF" )
+                    rProp.Value >>= mbUseTaggedPDF;
+                else if ( rProp.Name == "SelectPdfVersion" )
+                    rProp.Value >>= mnPDFTypeSelection;
+                else if ( rProp.Name == "PDFUACompliance" )
+                    rProp.Value >>= mbPDFUACompliance;
+                else if ( rProp.Name == "ExportNotes" )
+                    rProp.Value >>= mbExportNotes;
+                else if ( rProp.Name == "ExportNotesPages" )
+                    rProp.Value >>= mbExportNotesPages;
+                else if ( rProp.Name == "ExportOnlyNotesPages" )
+                    rProp.Value >>= mbExportOnlyNotesPages;
+                else if ( rProp.Name == "UseTransitionEffects" )
+                    rProp.Value >>= mbUseTransitionEffects;
+                else if ( rProp.Name == "ExportFormFields" )
+                    rProp.Value >>= mbExportFormFields;
+                else if ( rProp.Name == "FormsType" )
+                    rProp.Value >>= mnFormsFormat;
+                else if ( rProp.Name == "AllowDuplicateFieldNames" )
+                    rProp.Value >>= mbAllowDuplicateFieldNames;
                 // viewer properties
-                else if ( rFilterData[ nData ].Name == "HideViewerToolbar" )
-                    rFilterData[ nData ].Value >>= mbHideViewerToolbar;
-                else if ( rFilterData[ nData ].Name == "HideViewerMenubar" )
-                    rFilterData[ nData ].Value >>= mbHideViewerMenubar;
-                else if ( rFilterData[ nData ].Name == "HideViewerWindowControls" )
-                    rFilterData[ nData ].Value >>= mbHideViewerWindowControls;
-                else if ( rFilterData[ nData ].Name == "ResizeWindowToInitialPage" )
-                    rFilterData[ nData ].Value >>= mbFitWindow;
-                else if ( rFilterData[ nData ].Name == "CenterWindow" )
-                    rFilterData[ nData ].Value >>= mbCenterWindow;
-                else if ( rFilterData[ nData ].Name == "OpenInFullScreenMode" )
-                    rFilterData[ nData ].Value >>= mbOpenInFullScreenMode;
-                else if ( rFilterData[ nData ].Name == "DisplayPDFDocumentTitle" )
-                    rFilterData[ nData ].Value >>= mbDisplayPDFDocumentTitle;
-                else if ( rFilterData[ nData ].Name == "InitialView" )
-                    rFilterData[ nData ].Value >>= mnPDFDocumentMode;
-                else if ( rFilterData[ nData ].Name == "Magnification" )
-                    rFilterData[ nData ].Value >>= mnPDFDocumentAction;
-                else if ( rFilterData[ nData ].Name == "Zoom" )
-                    rFilterData[ nData ].Value >>= mnZoom;
-                else if ( rFilterData[ nData ].Name == "InitialPage" )
-                    rFilterData[ nData ].Value >>= mnInitialPage;
-                else if ( rFilterData[ nData ].Name == "PageLayout" )
-                    rFilterData[ nData ].Value >>= mnPDFPageLayout;
-                else if ( rFilterData[ nData ].Name == "FirstPageOnLeft" )
-                    rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
-                else if ( rFilterData[ nData ].Name == "IsAddStream" )
-                    rFilterData[ nData ].Value >>= mbAddStream;
-                else if ( rFilterData[ nData ].Name == "Watermark" )
-                    rFilterData[ nData ].Value >>= msWatermark;
-                else if ( rFilterData[ nData ].Name == "TiledWatermark" )
-                    rFilterData[ nData ].Value >>= msTiledWatermark;
+                else if ( rProp.Name == "HideViewerToolbar" )
+                    rProp.Value >>= mbHideViewerToolbar;
+                else if ( rProp.Name == "HideViewerMenubar" )
+                    rProp.Value >>= mbHideViewerMenubar;
+                else if ( rProp.Name == "HideViewerWindowControls" )
+                    rProp.Value >>= mbHideViewerWindowControls;
+                else if ( rProp.Name == "ResizeWindowToInitialPage" )
+                    rProp.Value >>= mbFitWindow;
+                else if ( rProp.Name == "CenterWindow" )
+                    rProp.Value >>= mbCenterWindow;
+                else if ( rProp.Name == "OpenInFullScreenMode" )
+                    rProp.Value >>= mbOpenInFullScreenMode;
+                else if ( rProp.Name == "DisplayPDFDocumentTitle" )
+                    rProp.Value >>= mbDisplayPDFDocumentTitle;
+                else if ( rProp.Name == "InitialView" )
+                    rProp.Value >>= mnPDFDocumentMode;
+                else if ( rProp.Name == "Magnification" )
+                    rProp.Value >>= mnPDFDocumentAction;
+                else if ( rProp.Name == "Zoom" )
+                    rProp.Value >>= mnZoom;
+                else if ( rProp.Name == "InitialPage" )
+                    rProp.Value >>= mnInitialPage;
+                else if ( rProp.Name == "PageLayout" )
+                    rProp.Value >>= mnPDFPageLayout;
+                else if ( rProp.Name == "FirstPageOnLeft" )
+                    rProp.Value >>= aContext.FirstPageLeft;
+                else if ( rProp.Name == "IsAddStream" )
+                    rProp.Value >>= mbAddStream;
+                else if ( rProp.Name == "Watermark" )
+                    rProp.Value >>= msWatermark;
+                else if ( rProp.Name == "TiledWatermark" )
+                    rProp.Value >>= msTiledWatermark;
                 // now all the security related properties...
-                else if ( rFilterData[ nData ].Name == "EncryptFile" )
-                    rFilterData[ nData ].Value >>= mbEncrypt;
-                else if ( rFilterData[ nData ].Name == "DocumentOpenPassword" )
-                    rFilterData[ nData ].Value >>= aOpenPassword;
-                else if ( rFilterData[ nData ].Name == "RestrictPermissions" )
-                    rFilterData[ nData ].Value >>= mbRestrictPermissions;
-                else if ( rFilterData[ nData ].Name == "PermissionPassword" )
-                    rFilterData[ nData ].Value >>= aPermissionPassword;
-                else if ( rFilterData[ nData ].Name == "PreparedPasswords" )
-                    rFilterData[ nData ].Value >>= xEnc;
-                else if ( rFilterData[ nData ].Name == "PreparedPermissionPassword" )
-                    rFilterData[ nData ].Value >>= aPreparedPermissionPassword;
-                else if ( rFilterData[ nData ].Name == "Printing" )
-                    rFilterData[ nData ].Value >>= mnPrintAllowed;
-                else if ( rFilterData[ nData ].Name == "Changes" )
-                    rFilterData[ nData ].Value >>= mnChangesAllowed;
-                else if ( rFilterData[ nData ].Name == "EnableCopyingOfContent" )
-                    rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
-                else if ( rFilterData[ nData ].Name == "EnableTextAccessForAccessibilityTools" )
-                    rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
+                else if ( rProp.Name == "EncryptFile" )
+                    rProp.Value >>= mbEncrypt;
+                else if ( rProp.Name == "DocumentOpenPassword" )
+                    rProp.Value >>= aOpenPassword;
+                else if ( rProp.Name == "RestrictPermissions" )
+                    rProp.Value >>= mbRestrictPermissions;
+                else if ( rProp.Name == "PermissionPassword" )
+                    rProp.Value >>= aPermissionPassword;
+                else if ( rProp.Name == "PreparedPasswords" )
+                    rProp.Value >>= xEnc;
+                else if ( rProp.Name == "PreparedPermissionPassword" )
+                    rProp.Value >>= aPreparedPermissionPassword;
+                else if ( rProp.Name == "Printing" )
+                    rProp.Value >>= mnPrintAllowed;
+                else if ( rProp.Name == "Changes" )
+                    rProp.Value >>= mnChangesAllowed;
+                else if ( rProp.Name == "EnableCopyingOfContent" )
+                    rProp.Value >>= mbCanCopyOrExtract;
+                else if ( rProp.Name == "EnableTextAccessForAccessibilityTools" )
+                    rProp.Value >>= mbCanExtractForAccessibility;
                 // i56629 links extra (relative links and other related stuff)
-                else if ( rFilterData[ nData ].Name == "ExportLinksRelativeFsys" )
-                    rFilterData[ nData ].Value >>= mbExportRelativeFsysLinks;
-                else if ( rFilterData[ nData ].Name == "PDFViewSelection" )
-                    rFilterData[ nData ].Value >>= mnDefaultLinkAction;
-                else if ( rFilterData[ nData ].Name == "ConvertOOoTargetToPDFTarget" )
-                    rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
-                else if ( rFilterData[ nData ].Name == "ExportBookmarksToPDFDestination" )
-                    rFilterData[ nData ].Value >>= mbExportBmkToDest;
-                else if ( rFilterData[ nData ].Name == "ExportBookmarks" )
-                    rFilterData[ nData ].Value >>= mbExportBookmarks;
-                else if ( rFilterData[ nData ].Name == "ExportHiddenSlides" )
-                    rFilterData[ nData ].Value >>= mbExportHiddenSlides;
-                else if ( rFilterData[ nData ].Name == "SinglePageSheets" )
-                    rFilterData[ nData ].Value >>= mbSinglePageSheets;
-                else if ( rFilterData[ nData ].Name == "OpenBookmarkLevels" )
-                    rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
-                else if ( rFilterData[ nData ].Name == "SignPDF" )
-                    rFilterData[ nData ].Value >>= mbSignPDF;
-                else if ( rFilterData[ nData ].Name == "SignatureLocation" )
-                    rFilterData[ nData ].Value >>= msSignLocation;
-                else if ( rFilterData[ nData ].Name == "SignatureReason" )
-                    rFilterData[ nData ].Value >>= msSignReason;
-                else if ( rFilterData[ nData ].Name == "SignatureContactInfo" )
-                    rFilterData[ nData ].Value >>= msSignContact;
-                else if ( rFilterData[ nData ].Name == "SignaturePassword" )
-                    rFilterData[ nData ].Value >>= msSignPassword;
-                else if ( rFilterData[ nData ].Name == "SignatureCertificate" )
-                    rFilterData[ nData ].Value >>= maSignCertificate;
-                else if ( rFilterData[ nData ].Name == "SignatureTSA" )
-                    rFilterData[ nData ].Value >>= msSignTSA;
-                else if ( rFilterData[ nData ].Name == "ExportPlaceholders" )
-                    rFilterData[ nData ].Value >>= mbExportPlaceholders;
-                else if ( rFilterData[ nData ].Name == "UseReferenceXObject" )
-                    rFilterData[ nData ].Value >>= mbUseReferenceXObject;
+                else if ( rProp.Name == "ExportLinksRelativeFsys" )
+                    rProp.Value >>= mbExportRelativeFsysLinks;
+                else if ( rProp.Name == "PDFViewSelection" )
+                    rProp.Value >>= mnDefaultLinkAction;
+                else if ( rProp.Name == "ConvertOOoTargetToPDFTarget" )
+                    rProp.Value >>= mbConvertOOoTargetToPDFTarget;
+                else if ( rProp.Name == "ExportBookmarksToPDFDestination" )
+                    rProp.Value >>= mbExportBmkToDest;
+                else if ( rProp.Name == "ExportBookmarks" )
+                    rProp.Value >>= mbExportBookmarks;
+                else if ( rProp.Name == "ExportHiddenSlides" )
+                    rProp.Value >>= mbExportHiddenSlides;
+                else if ( rProp.Name == "SinglePageSheets" )
+                    rProp.Value >>= mbSinglePageSheets;
+                else if ( rProp.Name == "OpenBookmarkLevels" )
+                    rProp.Value >>= mnOpenBookmarkLevels;
+                else if ( rProp.Name == "SignPDF" )
+                    rProp.Value >>= mbSignPDF;
+                else if ( rProp.Name == "SignatureLocation" )
+                    rProp.Value >>= msSignLocation;
+                else if ( rProp.Name == "SignatureReason" )
+                    rProp.Value >>= msSignReason;
+                else if ( rProp.Name == "SignatureContactInfo" )
+                    rProp.Value >>= msSignContact;
+                else if ( rProp.Name == "SignaturePassword" )
+                    rProp.Value >>= msSignPassword;
+                else if ( rProp.Name == "SignatureCertificate" )
+                    rProp.Value >>= maSignCertificate;
+                else if ( rProp.Name == "SignatureTSA" )
+                    rProp.Value >>= msSignTSA;
+                else if ( rProp.Name == "ExportPlaceholders" )
+                    rProp.Value >>= mbExportPlaceholders;
+                else if ( rProp.Name == "UseReferenceXObject" )
+                    rProp.Value >>= mbUseReferenceXObject;
                 // Redaction & bitmap related stuff
-                else if ( rFilterData[ nData ].Name == "IsRedactMode" )
-                    rFilterData[ nData ].Value >>= mbIsRedactMode;
+                else if ( rProp.Name == "IsRedactMode" )
+                    rProp.Value >>= mbIsRedactMode;
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);

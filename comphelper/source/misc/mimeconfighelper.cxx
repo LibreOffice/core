@@ -203,9 +203,9 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& a
         uno::Sequence< beans::PropertyValue > aFilterData;
         if ( aFilterAnyData >>= aFilterData )
         {
-            for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                if ( aFilterData[nInd].Name == "DocumentService" )
-                    aFilterData[nInd].Value >>= aDocServiceName;
+            for ( const auto & prop : std::as_const(aFilterData) )
+                if ( prop.Name == "DocumentService" )
+                    prop.Value >>= aDocServiceName;
         }
     }
     catch( uno::Exception& )
@@ -234,11 +234,11 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
                 uno::Sequence< beans::PropertyValue > aType;
                 if ( xEnum->nextElement() >>= aType )
                 {
-                    for ( sal_Int32 nInd = 0; nInd < aType.getLength(); nInd++ )
+                    for ( const auto & prop : std::as_const(aType) )
                     {
                         OUString aFilterName;
-                        if ( aType[nInd].Name == "PreferredFilter"
-                          && ( aType[nInd].Value >>= aFilterName ) && !aFilterName.isEmpty() )
+                        if ( prop.Name == "PreferredFilter"
+                          && ( prop.Value >>= aFilterName ) && !aFilterName.isEmpty() )
                         {
                             OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
                             if ( !aDocumentName.isEmpty() )
@@ -452,17 +452,17 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         {
             try
             {
-                uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
-                for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
+                const uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
+                for ( const OUString & id : aClassIDs )
                 {
                     uno::Reference< container::XNameAccess > xObjectProps;
                     OUString aEntryDocName;
 
-                    if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
+                    if ( ( xObjConfig->getByName( id ) >>= xObjectProps ) && xObjectProps.is()
                       && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
-                        return GetObjPropsFromConfigEntry( GetSequenceClassIDRepresentation( aClassIDs[nInd] ),
+                        return GetObjPropsFromConfigEntry( GetSequenceClassIDRepresentation( id ),
                                                             xObjectProps );
                     }
                 }
@@ -518,13 +518,13 @@ OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& 
         {
             try
             {
-                uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
-                for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
+                const uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
+                for ( const OUString & id : aClassIDs )
                 {
                     uno::Reference< container::XNameAccess > xObjectProps;
                     OUString aEntryDocName;
 
-                    if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
+                    if ( ( xObjConfig->getByName( id ) >>= xObjectProps ) && xObjectProps.is()
                       && ( xObjectProps->getByName( "ObjectDocumentServiceName" ) >>= aEntryDocName )
                       && aEntryDocName == aDocName )
                     {
@@ -563,9 +563,9 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 {
     OUString aFilterName;
 
-    for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
-        if ( aMediaDescr[nInd].Name == "FilterName" )
-            aMediaDescr[nInd].Value >>= aFilterName;
+    for ( const auto & prop : std::as_const(aMediaDescr) )
+        if ( prop.Name == "FilterName" )
+            prop.Value >>= aFilterName;
 
     if ( aFilterName.isEmpty() )
     {
@@ -582,9 +582,9 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
         OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMD, true );
 
         // get FilterName
-        for ( sal_Int32 nInd = 0; nInd < aTempMD.getLength(); nInd++ )
-            if ( aTempMD[nInd].Name == "FilterName" )
-                aTempMD[nInd].Value >>= aFilterName;
+        for ( const auto & prop : std::as_const(aTempMD) )
+            if ( prop.Name == "FilterName" )
+                prop.Value >>= aFilterName;
 
         if ( !aFilterName.isEmpty() )
         {
@@ -601,14 +601,14 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 
             if ( xNameAccess.is() && ( xNameAccess->getByName( aTypeName ) >>= aTypes ) )
             {
-                for ( sal_Int32 nInd = 0; nInd < aTypes.getLength(); nInd++ )
+                for ( const auto & prop : std::as_const(aTypes) )
                 {
-                    if ( aTypes[nInd].Name == "PreferredFilter" && ( aTypes[nInd].Value >>= aFilterName ) )
+                    if ( prop.Name == "PreferredFilter" && ( prop.Value >>= aFilterName ) )
                     {
                         sal_Int32 nOldLen = aMediaDescr.getLength();
                         aMediaDescr.realloc( nOldLen + 1 );
                         aMediaDescr[nOldLen].Name = "FilterName";
-                        aMediaDescr[ nOldLen ].Value = aTypes[nInd].Value;
+                        aMediaDescr[ nOldLen ].Value = prop.Value;
                         break;
                     }
                 }
@@ -624,10 +624,10 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                         uno::Sequence< beans::NamedValue >& aObject )
 {
     OUString aDocName;
-    for ( sal_Int32 nInd = 0; nInd < aObject.getLength(); nInd++ )
-        if ( aObject[nInd].Name == "ObjectDocumentServiceName" )
+    for ( const auto & nv : std::as_const(aObject) )
+        if ( nv.Name == "ObjectDocumentServiceName" )
         {
-            aObject[nInd].Value >>= aDocName;
+            nv.Value >>= aDocName;
             break;
         }
 
@@ -862,14 +862,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
 
 bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
 {
-    if ( aClassID1.getLength() != aClassID2.getLength() )
-        return false;
-
-    for ( sal_Int32 nInd = 0; nInd < aClassID1.getLength(); nInd++ )
-        if ( aClassID1[nInd] != aClassID2[nInd] )
-            return false;
-
-    return true;
+    return aClassID1 == aClassID2;
 }
 
 

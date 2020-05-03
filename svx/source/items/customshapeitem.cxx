@@ -120,12 +120,11 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
     css::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
     if ( pAny )
     {   // property is already available
-        sal_Int32 i;
         if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pAny) )
         {   // old property is a sequence->each entry has to be removed from the HashPairMap
-            for ( i = 0; i < rSecSequence->getLength(); i++ )
+            for ( auto const & i : *rSecSequence )
             {
-                PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rPropVal.Name, (*rSecSequence)[ i ].Name ) ) );
+                PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rPropVal.Name, i.Name ) ) );
                 if ( aHashIter != aPropPairHashMap.end() )
                     aPropPairHashMap.erase( aHashIter );
             }
@@ -133,7 +132,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const css::beans::PropertyVal
         *pAny = rPropVal.Value;
         if ( auto rSecSequence = o3tl::tryAccess<css::uno::Sequence<beans::PropertyValue>>(*pAny) )
         {   // the new property is a sequence->each entry has to be inserted into the HashPairMap
-            for ( i = 0; i < rSecSequence->getLength(); i++ )
+            for ( sal_Int32 i = 0; i < rSecSequence->getLength(); i++ )
             {
                 beans::PropertyValue const & rPropVal2 = (*rSecSequence)[ i ];
                 aPropPairHashMap[ PropertyPair( rPropVal.Name, rPropVal2.Name ) ] = i;

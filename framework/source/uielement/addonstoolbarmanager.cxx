@@ -200,7 +200,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     sal_uInt32  nElements( 0 );
     bool    bAppendSeparator( false );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
-    for ( sal_uInt32 n = 0; n < o3tl::make_unsigned(rAddonToolbar.getLength()); n++ )
+    for ( const Sequence< PropertyValue >& rSeq : rAddonToolbar )
     {
         OUString   aURL;
         OUString   aTitle;
@@ -209,8 +209,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         OUString   aTarget;
         OUString   aControlType;
         sal_uInt16 nWidth( 0 );
-
-        const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
 
         ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
 

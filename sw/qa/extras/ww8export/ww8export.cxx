@@ -366,7 +366,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
 
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
     sal_Int32 nPasswordHash = 0;
-    for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
+    for ( sal_Int32 i = 0; i < aGrabBag.(); ++i )
     {
         if ( aGrabBag[i].Name == "FormPasswordHash" )
             aGrabBag[i].Value >>= nPasswordHash;
@@ -658,7 +658,7 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
         // first line indent settings
         sal_Int32 nIndentAt = -1;
         sal_Int32 nFirstLineIndent = -1;
-        for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
+        for(int j = 0 ; j< aPropertyValues.() ; ++j)
         {
             auto aProp = aPropertyValues[j];
             std::cout << "Prop.Name: " << aProp.Name << "\n";
@@ -1347,7 +1347,7 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     xNumRules->getByIndex(numLevel) >>= aPropertyValues;
     OUString charStyleName;
-    for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)
+    for(int j = 0 ; j< aPropertyValues.() ; ++j)
     {
         auto aProp = aPropertyValues[j];
         if (aProp.Name == "CharStyleName") {

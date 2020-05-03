@@ -345,16 +345,13 @@ void XMLFilterTestDialog::onExportBrowse()
 
                         if( aAny >>= aValues2 )
                         {
-                            PropertyValue* pValues2 = aValues2.getArray();
-                            sal_Int32 nValue;
-
                             OUString aExtension;
-                            for( nValue = 0; nValue < aValues2.getLength(); nValue++, pValues2++ )
+                            for( const PropertyValue& rProp : std::as_const(aValues2) )
                             {
-                                if ( pValues2->Name == "Extensions" )
+                                if ( rProp.Name == "Extensions" )
                                 {
                                     Sequence< OUString > aExtensions;
-                                    if( pValues2->Value >>= aExtensions )
+                                    if( rProp.Value >>= aExtensions )
                                     {
                                         const sal_Int32 nCount( aExtensions.getLength() );
                                         OUString* pExtensions = aExtensions.getArray();

@@ -220,11 +220,11 @@ namespace chart
                 Reference< XDataSource > xUsedData( DataSourceHelper::getUsedData( i_model ) );
                 if ( xUsedData.is() && xNewDataProvider.is() )
                 {
-                    Sequence< Reference< XLabeledDataSequence > > aData( xUsedData->getDataSequences() );
-                    for( sal_Int32 i=0; i<aData.getLength(); ++i )
+                    const Sequence< Reference< XLabeledDataSequence > > aData( xUsedData->getDataSequences() );
+                    for( Reference< XLabeledDataSequence > const & labeledDataSeq : aData )
                     {
-                        xNewDataProvider->registerDataSequenceForChanges( aData[i]->getValues() );
-                        xNewDataProvider->registerDataSequenceForChanges( aData[i]->getLabel() );
+                        xNewDataProvider->registerDataSequenceForChanges( labeledDataSeq->getValues() );
+                        xNewDataProvider->registerDataSequenceForChanges( labeledDataSeq->getLabel() );
                     }
                 }
             }

@@ -82,7 +82,7 @@ public:
         if (handlePasswordRequest(rContinuations, aRequest))
             return true;
 
-        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        for (sal_Int32 i = 0; i < rContinuations.(); ++i)
         {
             css::uno::Reference<css::task::XInteractionApprove> xApprove(rContinuations[i], css::uno::UNO_QUERY);
             if (xApprove.is())
@@ -121,7 +121,7 @@ public:
         }
         mbPasswordRequested = true;
 
-        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        for (sal_Int32 i = 0; i < rContinuations.(); ++i)
         {
             if (mode == css::task::PasswordRequestMode_PASSWORD_REENTER)
             {   // cancel re-enter of wrong password, to avoid infinite loop

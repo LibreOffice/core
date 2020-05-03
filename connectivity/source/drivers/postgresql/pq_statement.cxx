@@ -637,7 +637,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         // TODO: make also unqualified tables names work here. Have a look at 2.8.3. The Schema Search Path
         //       in postgresql doc
 
-        Sequence< OUString > keyColumnNames = getPrimaryKeyColumnNames( connection, schemaName, tableName );
+        const Sequence< OUString > keyColumnNames = getPrimaryKeyColumnNames( connection, schemaName, tableName );
         if( keyColumnNames.hasElements() )
         {
             OUStringBuffer buf( 128 );
@@ -646,10 +646,10 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             buf.append( " WHERE " );
             bool bAdditionalCondition = false;
             String2StringMap autoValues;
-            for( int i = 0 ; i < keyColumnNames.getLength() ; i ++ )
+            for( OUString const & columnNameUnicode : keyColumnNames )
             {
                 OUString value;
-                OString columnName = OUStringToOString( keyColumnNames[i], ConnectionSettings::encoding );
+                OString columnName = OUStringToOString( columnNameUnicode, ConnectionSettings::encoding );
                 bool bColumnMatchNamedValue = false;
                 for (auto const& namedValue : namedValues)
                 {
@@ -701,7 +701,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 
                 if( bAdditionalCondition )
                     buf.append( " AND " );
-                bufferQuoteIdentifier( buf, keyColumnNames[i], pConnectionSettings );
+                bufferQuoteIdentifier( buf, columnNameUnicode, pConnectionSettings );
                 buf.append( " = " );
                 buf.append( value );
                 bAdditionalCondition = true;

@@ -773,7 +773,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    const char* const testEmbeddedFileNames[] {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
-   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   for(int i = 0; i < aGrabBag.(); ++i)
    {
        if (aGrabBag[i].Name == "OOXEmbeddings")
        {
@@ -1500,7 +1500,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
    const char* const testEmbeddedFileNames[] = {"word/embeddings/oleObject1.bin"};
-   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   for(int i = 0; i < aGrabBag.(); ++i)
    {
        if (aGrabBag[i].Name == "OOXEmbeddings")
        {

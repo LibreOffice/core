@@ -116,7 +116,7 @@ void ScConditionalFormatTest::testCondFormatListFormats()
     uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormats.getLength());
-    for (sal_Int32 i = 0, n = xCondFormats.getLength(); i < n; ++i)
+    for (sal_Int32 i = 0, n = xCondFormats.(); i < n; ++i)
     {
         CPPUNIT_ASSERT(xCondFormats[i].is());
     }

@@ -157,11 +157,10 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
     Reference< beans::XPropertySet > xPropSet;
 
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    Sequence< Reference< chart2::XChartType > > aTypes(
+    const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
+    for( Reference< chart2::XChartType > const & xType : aTypes )
     {
-        Reference< chart2::XChartType > xType( aTypes[nN] );
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
@@ -195,11 +194,10 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     Reference< beans::XPropertySet > xPropSet;
 
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    Sequence< Reference< chart2::XChartType > > aTypes(
+    const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
+    for( Reference< chart2::XChartType > const & xType : aTypes )
     {
-        Reference< chart2::XChartType > xType( aTypes[nN] );
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
@@ -344,18 +342,16 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rProper
 void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
 {
     const Sequence< beans::Property >& rPropSeq = *StaticMinMaxLineWrapperPropertyArray::get();
-    for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
+    for(beans::Property const & prop : rPropSeq)
     {
-        OUString aPropertyName( rPropSeq[nN].Name );
-        setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( prop.Name );
     }
 }
 void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const uno::Sequence< OUString >& rNameSeq )
 {
-    for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
+    for(OUString const & s : rNameSeq)
     {
-        OUString aPropertyName( rNameSeq[nN] );
-        setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( s );
     }
 }
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )

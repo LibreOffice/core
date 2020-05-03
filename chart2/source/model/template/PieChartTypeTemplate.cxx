@@ -226,12 +226,12 @@ void PieChartTypeTemplate::adaptScales(
     //remove explicit scalings from radius axis
     //and ensure correct orientation of scales for donuts
 
-    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
     {
         try
         {
             Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1 /*nDimensionIndex*/,0 /*nAxisIndex*/
-                    , aCooSysSeq[nCooSysIdx] ) );
+                    , coords ) );
             if( xAxis.is() )
             {
                 chart2::ScaleData aScaleData( xAxis->getScaleData() );
@@ -241,7 +241,7 @@ void PieChartTypeTemplate::adaptScales(
             }
 
             xAxis = AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
-                    , aCooSysSeq[nCooSysIdx] );
+                    , coords );
             if( xAxis.is() )
             {
                 chart2::ScaleData aScaleData( xAxis->getScaleData() );
@@ -479,10 +479,10 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
                 {
                     fOffsetToSet = 0.0;
                     bSetOffset = true;
-                    for( sal_Int32 nPtIdx=0; nPtIdx<aAttributedDataPointIndexList.getLength(); ++nPtIdx )
+                    for( auto const & pointIndex : std::as_const(aAttributedDataPointIndexList) )
                     {
                         uno::Reference< beans::XPropertySet > xPointProp(
-                            xSeries->getDataPointByIndex( aAttributedDataPointIndexList[ nPtIdx ] ));
+                            xSeries->getDataPointByIndex( pointIndex ));
                         uno::Reference< beans::XPropertyState > xPointState( xPointProp, uno::UNO_QUERY );
                         double fPointOffset = 0.0;
                         if( xPointState.is() &&
@@ -504,10 +504,10 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
                 xProp->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
 
                 // remove hard attributes from data points
-                for( sal_Int32 nPtIdx=0; nPtIdx<aAttributedDataPointIndexList.getLength(); ++nPtIdx )
+                for( auto const & pointIndex : std::as_const(aAttributedDataPointIndexList) )
                 {
                     uno::Reference< beans::XPropertyState > xPointState(
-                        xSeries->getDataPointByIndex( aAttributedDataPointIndexList[ nPtIdx ] ), uno::UNO_QUERY );
+                        xSeries->getDataPointByIndex( pointIndex ), uno::UNO_QUERY );
                     if( xPointState.is())
                         xPointState->setPropertyToDefault( aOffsetPropName );
                 }
@@ -532,16 +532,16 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
     if( xCooSysCnt.is())
     {
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         ChartTypeTemplate::createAxes( aCooSysSeq );
 
         //reset scale orientation
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+        for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
         {
             try
             {
                 Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
-                        , aCooSysSeq[nCooSysIdx] ) );
+                        , coords ) );
                 if( xAxis.is() )
                 {
                     chart2::ScaleData aScaleData( xAxis->getScaleData() );
@@ -549,7 +549,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
                     xAxis->setScaleData( aScaleData );
                 }
 
-                xAxis = AxisHelper::getAxis( 1, 0, aCooSysSeq[nCooSysIdx] );
+                xAxis = AxisHelper::getAxis( 1, 0, coords );
                 if( xAxis.is() )
                 {
                     chart2::ScaleData aScaleData( xAxis->getScaleData() );

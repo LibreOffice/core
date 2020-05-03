@@ -752,7 +752,7 @@ bool SelectionManager::requestOwnership( Atom selection )
         if( pAdaptor->getTransferable().is() )
         {
             Sequence< DataFlavor > aTypes = pAdaptor->getTransferable()->getTransferDataFlavors();
-            for( int i = 0; i < aTypes.getLength(); i++ )
+            for( int i = 0; i < aTypes.(); i++ )
             {
                 SAL_INFO("vcl.unx.dtrans", "   " << aTypes.getConstArray()[i].MimeType);
             }
@@ -1406,7 +1406,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 << getString( selection )
                 << " ) = "
                 << (bSuccess ? "true" : "false"));
-        for( int i = 0; i < rTypes.getLength(); i++ )
+        for( int i = 0; i < rTypes.(); i++ )
             SAL_INFO("vcl.unx.dtrans", "type: " << rTypes.getConstArray()[i].MimeType);
     }
 #endif

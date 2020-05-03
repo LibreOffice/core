@@ -338,20 +338,20 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             dp_misc::DescriptionInfoset info(m_xComponentContext, updateData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
             std::vector< std::pair<OUString, cssu::Exception> > vecExceptions;
-            cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
+            const cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
             OSL_ENSURE(seqDownloadURLs.hasElements(), "No download URL provided!");
-            for (sal_Int32 j = 0; j < seqDownloadURLs.getLength(); j++)
+            for (OUString const & url : seqDownloadURLs)
             {
                 try
                 {
-                    OSL_ENSURE(!seqDownloadURLs[j].isEmpty(), "Download URL is empty!");
-                    bool bCancelled = download(seqDownloadURLs[j], updateData);
+                    OSL_ENSURE(!url.isEmpty(), "Download URL is empty!");
+                    bool bCancelled = download(url, updateData);
                     if (bCancelled || !updateData.sLocalURL.isEmpty())
                         break;
                 }
                 catch ( cssu::Exception & e )
                 {
-                    vecExceptions.emplace_back(seqDownloadURLs[j], e);
+                    vecExceptions.emplace_back(url, e);
                     //There can be several different errors, for example, the URL is wrong, webserver cannot be reached,
                     //name cannot be resolved. The UCB helper API does not specify different special exceptions for these
                     //cases. Therefore ignore and continue.

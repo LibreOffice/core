@@ -190,24 +190,24 @@ void ToolBarMerger::ConvertSequenceToValues(
     OUString& rControlType,
     sal_uInt16& rWidth )
 {
-    for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
+    for ( beans::PropertyValue const & prop : rSequence )
     {
-        if ( rSequence[i].Name == MERGE_TOOLBAR_URL )
-            rSequence[i].Value >>= rCommandURL;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_TITLE )
-            rSequence[i].Value >>= rLabel;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_IMAGEID )
-            rSequence[i].Value >>= rImageIdentifier;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_CONTEXT )
-            rSequence[i].Value >>= rContext;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_TARGET )
-            rSequence[i].Value >>= rTarget;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_CONTROLTYPE )
-            rSequence[i].Value >>= rControlType;
-        else if ( rSequence[i].Name == MERGE_TOOLBAR_WIDTH )
+        if ( prop.Name == MERGE_TOOLBAR_URL )
+            prop.Value >>= rCommandURL;
+        else if ( prop.Name == MERGE_TOOLBAR_TITLE )
+            prop.Value >>= rLabel;
+        else if ( prop.Name == MERGE_TOOLBAR_IMAGEID )
+            prop.Value >>= rImageIdentifier;
+        else if ( prop.Name == MERGE_TOOLBAR_CONTEXT )
+            prop.Value >>= rContext;
+        else if ( prop.Name == MERGE_TOOLBAR_TARGET )
+            prop.Value >>= rTarget;
+        else if ( prop.Name == MERGE_TOOLBAR_CONTROLTYPE )
+            prop.Value >>= rControlType;
+        else if ( prop.Name == MERGE_TOOLBAR_WIDTH )
         {
             sal_Int32 aValue = 0;
-            rSequence[i].Value >>= aValue;
+            prop.Value >>= aValue;
             rWidth = sal_uInt16( aValue );
         }
     }

@@ -1289,19 +1289,17 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
     {
     }
     Sequence< PropertyValue > aSeq;
-    OUString                  aModuleIdentifier;
 
-    for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
+    for ( OUString const & aModuleIdentifier : std::as_const(aElementNames) )
     {
-        aModuleIdentifier = aElementNames[i];
         if ( xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             OUString aWindowStateFileStr;
-            for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
+            for ( PropertyValue const & rProp : std::as_const(aSeq) )
             {
-                if ( aSeq[y].Name == "ooSetupFactoryWindowStateConfigRef" )
+                if ( rProp.Name == "ooSetupFactoryWindowStateConfigRef" )
                 {
-                    aSeq[y].Value >>= aWindowStateFileStr;
+                    rProp.Value >>= aWindowStateFileStr;
                     break;
                 }
             }

@@ -568,7 +568,7 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
@@ -639,7 +639,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
     bool bFound = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
         if (aProps[i].Name == "TextPath")
             bFound = true;
     // 2nd problem: v:textpath wasn't imported
@@ -903,7 +903,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "BulletChar")
@@ -1049,7 +1049,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
     // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
     uno::Reference<drawing::XShape> xArrow = getShape(1);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "MirroredY")

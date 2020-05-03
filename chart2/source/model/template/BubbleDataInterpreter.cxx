@@ -241,14 +241,13 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
                 }
             }
 
-            Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
+            const Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
             if( aSeqs.getLength() != aNewSequences.getLength() )
             {
 #if OSL_DEBUG_LEVEL > 0
-                sal_Int32 j=0;
-                for( ; j<aSeqs.getLength(); ++j )
+                for( auto const & j : aSeqs )
                 {
-                    assert( (aSeqs[j] == xValuesY || aSeqs[j] == xValuesX || aSeqs[j] == xValuesSize) && "All sequences should be used" );
+                    assert( (j == xValuesY || j == xValuesX || j == xValuesSize) && "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
@@ -267,12 +266,12 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
 sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
 {
-    Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
+    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
+    for( Reference< XDataSeries >  const & dataSeries : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( aSeries[i], uno::UNO_QUERY_THROW );
+            Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
             if( aSeq.getLength() != 3 )
                 return false;

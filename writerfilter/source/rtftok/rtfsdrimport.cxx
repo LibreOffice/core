@@ -970,10 +970,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             {
                 uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
                 basegfx::B2DPolygon aPoly;
-                for (sal_Int32 i = 0; i < rPolygon.getLength(); ++i)
+                for (const awt::Point& rPoint : std::as_const(rPolygon))
                 {
-                    const awt::Point& rPoint = rPolygon[i];
-                    aPoly.insert(i, basegfx::B2DPoint(rPoint.X, rPoint.Y));
+                    aPoly.append(basegfx::B2DPoint(rPoint.X, rPoint.Y));
                 }
                 basegfx::B2DHomMatrix aTransformation;
                 aTransformation.scale(1.0, obRelFlipV ? -1.0 : 1.0);

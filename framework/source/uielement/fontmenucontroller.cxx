@@ -75,7 +75,6 @@ FontMenuController::~FontMenuController()
 // private function
 void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    const OUString*    pFontNameArray = rFontNameSeq.getConstArray();
     VCLXPopupMenu*     pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( rPopupMenu ));
     PopupMenu*         pVCLPopupMenu = nullptr;
 
@@ -90,9 +89,9 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
 
     vector<OUString> aVector;
     aVector.reserve(rFontNameSeq.getLength());
-    for ( sal_Int32 i = 0; i < rFontNameSeq.getLength(); i++ )
+    for ( OUString const & s : rFontNameSeq )
     {
-        aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
+        aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(s));
     }
     sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 

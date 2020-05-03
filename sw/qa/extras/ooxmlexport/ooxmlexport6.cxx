@@ -142,7 +142,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
     // The problem was that a custom shape was not exported.
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (int i = 0; i < aProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
@@ -150,7 +150,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (int i = 0; i < aPathProps.(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")

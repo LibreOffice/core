@@ -54,16 +54,16 @@ void ConfigurationTracer::TraceBoundResources (
     const Reference<XResourceId>& rxResourceId,
     const int nIndentation)
 {
-    Sequence<Reference<XResourceId> > aResourceList (
+    const Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, OUString(), AnchorBindingMode_DIRECT));
     const OUString sIndentation ("    ");
-    for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
+    for (Reference<XResourceId> const & resourceId : aResourceList)
     {
-        OUString sLine (aResourceList[nIndex]->getResourceURL());
+        OUString sLine (resourceId->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
         SAL_INFO("sd.ui", "" << sLine);
-        TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
+        TraceBoundResources(rxConfiguration, resourceId, nIndentation+1);
     }
 }
 #endif
