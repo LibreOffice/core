@@ -108,12 +108,12 @@ IMPL_LINK_NOARG(SfxStyleDialogController, CancelHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-OUString SfxStyleDialogController::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
+OUString SfxStyleDialogController::GenerateUnusedName(SfxStyleSheetBasePool &rPool, SfxStyleFamily eFam)
 {
     OUString aNo(SfxResId(STR_NONAME));
     sal_uInt16 i = 1;
     OUString aNoName = aNo + OUString::number(i);
-    while (rPool.Find(aNoName, rPool.GetSearchFamily(), rPool.GetSearchMask()))
+    while (rPool.Find(aNoName, eFam, rPool.GetSearchMask()))
     {
         ++i;
         aNoName = aNo + OUString::number(i);
