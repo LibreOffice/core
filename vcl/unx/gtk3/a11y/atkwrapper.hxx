@@ -27,7 +27,7 @@
 
 extern "C" {
 
-namespace com { namespace sun { namespace star { namespace accessibility {
+namespace com::sun::star::accessibility {
     class XAccessibleAction;
     class XAccessibleComponent;
     class XAccessibleEditableText;
@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleTextMarkup;
     class XAccessibleTextAttributes;
     class XAccessibleValue;
-} } } }
+}
 
 struct AtkObjectWrapper
 {

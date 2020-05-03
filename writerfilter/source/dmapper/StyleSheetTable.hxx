@@ -28,9 +28,7 @@
 #include "FontTable.hxx"
 #include "LoggedResources.hxx"
 
-namespace com{ namespace sun { namespace star { namespace text{
-    class XTextDocument;
-}}}}
+namespace com::sun::star::text { class XTextDocument; }
 
 
 namespace writerfilter {
