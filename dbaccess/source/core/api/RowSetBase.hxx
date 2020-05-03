@@ -43,10 +43,10 @@
 
 #include <functional>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdb { struct RowChangeEvent; }
     namespace lang { struct Locale; }
-} } }
+}
 
 namespace dbaccess
 {

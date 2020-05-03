@@ -24,8 +24,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace container { class XContainerListener; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::container { class XContainerListener; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace toolkit
 {

@@ -22,13 +22,13 @@
 
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 class PageDescriptor;
 
 typedef std::shared_ptr<PageDescriptor> SharedPageDescriptor;
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

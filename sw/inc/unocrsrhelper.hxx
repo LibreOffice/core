@@ -38,9 +38,9 @@ struct SwSortOptions;
 class SwDoc;
 class SwRootFrame;
 
-namespace sw { namespace mark { class IMark; } }
+namespace sw::mark { class IMark; }
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
     namespace beans{
         struct PropertyValue;
         enum class PropertyState;
@@ -49,7 +49,7 @@ namespace com{ namespace sun{ namespace star{
         class XTextContent;
         class XFlatParagraphIterator;
     }
-}}}
+}
 
 enum SwGetPropertyStatesCaller
 {

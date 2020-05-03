@@ -29,12 +29,12 @@
 #include <tools/gen.hxx>
 
 
-namespace com { namespace sun { namespace star { namespace awt {
+namespace com::sun::star::awt {
     struct Point;
     struct Rectangle;
     struct Size;
     class XFocusListener;
-} } } };
+}
 class SvxPixelCtl;
 class SvxPixelCtlAccessible;
 

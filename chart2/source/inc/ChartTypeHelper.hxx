@@ -23,8 +23,8 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com::sun::star::chart2 { class XChartType; }
+namespace com::sun::star::chart2 { class XDataSeries; }
 
 namespace chart
 {

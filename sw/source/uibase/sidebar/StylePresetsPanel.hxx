@@ -20,7 +20,7 @@
 
 #include <svtools/valueset.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class StylePresetsPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
@@ -64,7 +64,7 @@ private:
     DECL_LINK(DoubleClickHdl, ValueSet*, void);
 };
 
-}} // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_STYLEPRESETSPANEL_HXX
 

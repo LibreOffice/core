@@ -35,7 +35,7 @@
 
 #include <memory>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageFormatPanel:
     public PanelLayout,
@@ -105,7 +105,7 @@ private:
     DECL_LINK(PaperModifyMarginHdl, weld::ComboBox&, void );
 };
 
-} } //end of namespace sw::sidebar
+} //end of namespace sw::sidebar
 
 #endif
 

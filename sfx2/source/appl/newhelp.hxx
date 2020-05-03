@@ -41,9 +41,9 @@
 #define MID_RENAME                              2
 #define MID_DELETE                              3
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::text { class XTextRange; }
 
 
 // ContentListBox_Impl ---------------------------------------------------

@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class RRI: public SlidingFunctionBase
 {
@@ -575,7 +575,7 @@ public:
     virtual std::string BinFuncName() const override { return "Xirr"; }
 };
 
-}}
+}
 
 #endif
 

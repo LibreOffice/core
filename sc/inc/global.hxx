@@ -36,7 +36,7 @@
 #include <map>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxItemSet;
 class SfxViewShell;
@@ -488,14 +488,14 @@ class CollatorWrapper;
 class IntlWrapper;
 class ScFieldEditEngine;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         struct Locale;
     }
     namespace i18n {
         class XOrdinalSuffix;
     }
-}}}
+}
 namespace utl {
     class TransliterationWrapper;
 }

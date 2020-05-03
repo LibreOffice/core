@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class OpAnd: public Normal
 {
@@ -54,7 +54,7 @@ public:
     virtual std::string BinFuncName() const override { return "IF"; }
 };
 
-}}
+}
 
 #endif
 

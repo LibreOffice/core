@@ -24,13 +24,13 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XLegend; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::awt { struct Rectangle; }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::chart2 { class XLegend; }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {

@@ -34,7 +34,7 @@ class VclAbstractDialog;
 struct ExchangeData;
 class SfxItemSet;
 
-namespace svx { namespace sidebar { class GalleryControl; } }
+namespace svx::sidebar { class GalleryControl; }
 
 class GalleryBrowser1 final : public SfxListener
 {

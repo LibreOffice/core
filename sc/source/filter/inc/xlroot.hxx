@@ -25,7 +25,7 @@
 #include "xlconst.hxx"
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
 namespace comphelper { class IDocPasswordVerifier; }
 
 // Forward declarations of objects in public use ==============================

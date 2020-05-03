@@ -27,7 +27,7 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 {
         class XChartDocument;
         class XDataSeries;
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace awt {
         struct Size;
     }
-}}}
+}
 
 // class for child contexts: series, data point and statistics objects
 class SchXMLSeries2Context : public SvXMLImportContext

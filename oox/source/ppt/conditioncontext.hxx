@@ -26,7 +26,7 @@
 #include <oox/ppt/timenodelistcontext.hxx>
 #include <oox/ppt/animationspersist.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** CT_TLTimeCondition */
     class CondContext
@@ -60,7 +60,7 @@ namespace oox { namespace ppt {
         AnimationConditionList     & maConditions;
     };
 
-} }
+}
 
 #endif
 

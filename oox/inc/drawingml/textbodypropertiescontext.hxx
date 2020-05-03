@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 struct TextBodyProperties;
 
@@ -44,7 +44,7 @@ private:
     ShapePtr mpShapePtr;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIESCONTEXT_HXX
 

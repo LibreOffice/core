@@ -44,31 +44,31 @@ namespace basegfx
     }
 }
 
-namespace com { namespace sun { namespace star { namespace awt
+namespace com::sun::star::awt
 {
     struct Point;
     struct Size;
     struct Rectangle;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace drawing
+namespace com::sun::star::drawing
 {
     struct HomogenMatrix3;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace geometry
+namespace com::sun::star::geometry
 {
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     struct RenderState;
     struct ViewState;
     class  XBitmap;
-} } } }
+}
 
 
 namespace vclcanvas

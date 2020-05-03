@@ -24,11 +24,8 @@
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include "swdllapi.h"
 
-namespace com { namespace sun { namespace star {
-namespace i18n {
-    class XExtendedIndexEntrySupplier;
-}
-}}}
+namespace com::sun::star::i18n { class XExtendedIndexEntrySupplier; }
+
 
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {

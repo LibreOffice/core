@@ -33,9 +33,9 @@ class SfxProgress;
 struct PasteOrDropInfos;
 class EditView;
 
-namespace sd { namespace tools {
-class EventMultiplexerEvent;
-} }
+namespace sd::tools {
+    class EventMultiplexerEvent;
+}
 
 namespace sd {
 

@@ -27,10 +27,7 @@
 #include <vcl/xtextedt.hxx>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace beans {
-    class XMultiPropertySet;
-} } } }
-
+namespace com::sun::star::beans { class XMultiPropertySet; }
 class ScrollBar;
 class SwSrcView;
 class SwSrcEditWindow;

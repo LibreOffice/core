@@ -33,9 +33,9 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/ImageTree.hxx>
 
-namespace com { namespace sun { namespace star { namespace container {
+namespace com::sun::star::container {
     class XNameAccess;
-}}}}
+}
 
 struct ImageRequestParameters
 {

@@ -27,13 +27,13 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
-namespace com { namespace sun { namespace star { namespace chart2 {
+namespace com::sun::star::chart2 {
     class XDataSeriesContainer;
     class XDataSeries;
     class XChartType;
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace chart2 {
         class XDataProvider;
         class XLabeledDataSequence;
     }
-}}}}
+}
 
 namespace chart
 {

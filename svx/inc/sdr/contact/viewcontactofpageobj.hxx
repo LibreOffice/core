@@ -25,7 +25,7 @@
 
 class SdrPage;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewContactOfPageObj final : public ViewContactOfSdrObj
 {
@@ -50,7 +50,7 @@ public:
     }
 };
 
-}}
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

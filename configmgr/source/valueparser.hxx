@@ -32,9 +32,9 @@
 
 #include "type.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class Any;
-} } } }
+}
 namespace xmlreader { struct Span; }
 
 namespace configmgr {

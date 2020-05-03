@@ -27,8 +27,8 @@
 
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XURLTransformer; }
 
 namespace chart
 {

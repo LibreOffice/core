@@ -13,12 +13,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <svx/Palette.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::frame { class XModel; }
 
 class SvxColorToolBoxControl;
 class SvxLineStyleToolBoxControl;
 
-namespace chart { namespace sidebar {
+namespace chart::sidebar {
 
 class ChartColorWrapper
 {
@@ -61,7 +61,7 @@ private:
     SvxLineStyleToolBoxControl* mpControl;
 };
 
-} }
+}
 
 #endif
 

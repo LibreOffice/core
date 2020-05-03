@@ -30,8 +30,8 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XRefreshable; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XRefreshable; }
 
 namespace chart
 {

@@ -22,7 +22,7 @@
 
 #include <oox/core/fragmenthandler2.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** CT_BuildList */
     class BuildListContext
@@ -41,7 +41,7 @@ namespace oox { namespace ppt {
         bool              mbBuildAsOne;
     };
 
-} }
+}
 
 #endif
 

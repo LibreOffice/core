@@ -27,9 +27,9 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace ooo { namespace vba { class XSink; } }
-namespace ooo { namespace vba { namespace excel { class XFileDialog; } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ooo::vba { class XSink; }
+namespace ooo::vba::excel { class XFileDialog; }
 
 typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ov::excel::XApplication, ov::XSinkCaller > ScVbaApplication_BASE;
 

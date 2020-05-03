@@ -26,7 +26,7 @@
 #include <memory>
 #include "swdllapi.h"
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     enum class InsertMode
     {
@@ -142,7 +142,7 @@ namespace sw { namespace mark
 
     OUString ExpandFieldmark(IFieldmark* pBM);
 
-}}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

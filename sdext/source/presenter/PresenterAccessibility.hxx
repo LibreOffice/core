@@ -34,7 +34,7 @@
 #include <memory>
 
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterController;
 class PresenterTextView;
@@ -108,7 +108,7 @@ private:
     PresenterPaneContainer::SharedPaneDescriptor GetPreviewPane() const;
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

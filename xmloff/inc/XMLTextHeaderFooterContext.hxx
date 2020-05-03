@@ -22,10 +22,10 @@
 
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextCursor; }
     namespace beans { class XPropertySet; }
-} } }
+}
 
 class XMLTextHeaderFooterContext final : public SvXMLImportContext
 {

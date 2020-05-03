@@ -24,7 +24,7 @@
 #include <codemaker/generatedtypeset.hxx>
 #include "skeletoncommon.hxx"
 
-namespace skeletonmaker { namespace cpp {
+namespace skeletonmaker::cpp {
 
 // referenceType
 // 0 = no reference
@@ -89,7 +89,7 @@ void generateXDispatchProvider(std::ostream& o,
                                const OString & classname,
                                const ProtocolCmdMap & protocolCmdMap);
 
-} }
+}
 
 #endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 

@@ -30,9 +30,9 @@
 
 namespace sd { class Window; }
 
-namespace sd { namespace slidesorter { class SlideSorter; } }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** Manage the horizontal and vertical scroll bars.  Listen for events, set
     their sizes, place them in the window, determine their visibilities.
@@ -244,7 +244,7 @@ private:
     void PlaceFiller (const ::tools::Rectangle& aArea);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

@@ -34,7 +34,7 @@
 #include <memory>
 #include <vector>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterPaneBase;
 class PresenterSprite;
@@ -155,7 +155,7 @@ private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

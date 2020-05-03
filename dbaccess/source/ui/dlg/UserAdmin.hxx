@@ -22,11 +22,11 @@
 #include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sdbc {
         class XConnection;
     }
-}}}
+}
 
 namespace dbaui
 {

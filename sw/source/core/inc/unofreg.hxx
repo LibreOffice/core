@@ -25,9 +25,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-} } } }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 // writer documents
 css::uno::Sequence< OUString > SwTextDocument_getSupportedServiceNames() throw();

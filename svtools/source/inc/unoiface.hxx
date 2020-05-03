@@ -28,9 +28,9 @@
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <tools/lineend.hxx>
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XNumberFormatsSupplier;
-} } } }
+}
 
 class SvNumberFormatsSupplierObj;
 

@@ -30,7 +30,7 @@ class VclWindowEvent;
 class FmFormShell;
 namespace vcl { class Window; }
 
-namespace sd { namespace tools { class EventMultiplexerEvent; } }
+namespace sd::tools { class EventMultiplexerEvent; }
 
 namespace sd {
 

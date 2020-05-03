@@ -34,7 +34,7 @@
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace svt { namespace table { class ITableDataSort; } }
+namespace svt::table { class ITableDataSort; }
 
 class Color;
 
@@ -54,7 +54,7 @@ namespace o3tl
 }
 
 
-namespace svt { namespace table
+namespace svt::table
 {
     //= ScrollbarVisibility
     enum ScrollbarVisibility
@@ -448,7 +448,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableModel > PTableModel;
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

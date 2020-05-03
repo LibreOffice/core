@@ -26,12 +26,12 @@
 #include <memory>
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XControllerManager; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XTabBar; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XControllerManager; }
+namespace com::sun::star::drawing::framework { class XTabBar; }
+namespace com::sun::star::frame { class XController; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -95,7 +95,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XTabBar>& rxViewTabBar);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

@@ -28,13 +28,13 @@
 #include <map>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace beans { struct PropertyValue; }
     namespace text { class XText; }
     namespace text { class XTextContent; }
     namespace text { class XTextSection; }
- } } }
+}
 
 // store a list of redline properties
 typedef ::std::vector<

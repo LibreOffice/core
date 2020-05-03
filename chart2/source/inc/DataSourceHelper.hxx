@@ -25,13 +25,13 @@
 #include <com/sun/star/uno/Sequence.h>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::chart2::data { class XDataSource; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

@@ -24,10 +24,10 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystemContainer; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XChartType; }
+namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {

@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 @end
 
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 MacAVObserverObject* MacAVObserverHandler::mpMacAVObserverObject = nullptr;
 
@@ -359,7 +359,6 @@ uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

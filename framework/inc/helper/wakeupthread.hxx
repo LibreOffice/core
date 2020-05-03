@@ -28,9 +28,9 @@
 #include <osl/mutex.hxx>
 #include <salhelper/thread.hxx>
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XUpdatable;
-} } } }
+}
 
 namespace framework{
 

@@ -69,11 +69,9 @@ class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
 
-namespace com{ namespace sun { namespace star {
-    namespace view{ class XSelectionSupplier; }
-}}}
+namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
-namespace sw { namespace mark { class IFieldmark; } }
+namespace sw::mark { class IFieldmark; }
 
 const long nLeftOfst = -370;
 const long nScrollX  =   30;

@@ -23,11 +23,11 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
     namespace beans { class XPropertySet; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 
 class XMLAutoMarkFileContext : public SvXMLImportContext

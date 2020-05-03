@@ -23,7 +23,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class GraphicPropertyPanel
 :   public PanelLayout,
@@ -92,7 +92,7 @@ private:
     void Initialize();
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

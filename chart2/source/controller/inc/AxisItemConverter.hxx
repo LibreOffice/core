@@ -23,16 +23,16 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XAxis; }
+namespace com::sun::star::chart2 { class XChartDocument; }
 namespace chart { struct ExplicitIncrementData; }
 namespace chart { struct ExplicitScaleData; }
 
 class SdrModel;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 class AxisItemConverter : public ItemConverter
 {
@@ -69,7 +69,7 @@ private:
     std::unique_ptr<ExplicitIncrementData>  m_pExplicitIncrement;
 };
 
-}}
+}
 
 #endif
 

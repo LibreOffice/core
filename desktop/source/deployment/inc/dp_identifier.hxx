@@ -27,9 +27,9 @@
 
 #include "dp_misc_api.hxx"
 
-namespace com { namespace sun { namespace star { namespace deployment {
+namespace com::sun::star::deployment {
     class XPackage;
-} } } }
+}
 
 namespace dp_misc {
 
