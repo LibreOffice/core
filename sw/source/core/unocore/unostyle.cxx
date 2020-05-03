@@ -906,7 +906,7 @@ uno::Sequence<OUString> XStyleFamily::getElementNames()
     if(!m_pBasePool)
         throw uno::RuntimeException();
     std::vector<OUString> vRet;
-    std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SfxStyleSearchBits::All);
+    std::unique_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
     {
         OUString sName;
