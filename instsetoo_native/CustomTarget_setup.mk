@@ -104,6 +104,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
+.PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,setup)
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,setup) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),ECH)
