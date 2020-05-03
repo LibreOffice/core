@@ -40,30 +40,30 @@ bool renderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWron
 
     static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN 5
 
-    if (nFontPixelHeight > nMinimumFontHeight)
-    {
-        const basegfx::B2DPoint aStart(aLocalTransform
-                                       * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
-        const basegfx::B2DPoint aStop(aLocalTransform
-                                      * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
-        const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
-        const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
+    if (nFontPixelHeight <= nMinimumFontHeight)
+        return true;
 
-        // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
-        // e.g. when used with mask/transparence buffer device
-        const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
+    const basegfx::B2DPoint aStart(aLocalTransform
+                                   * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
+    const basegfx::B2DPoint aStop(aLocalTransform
+                                  * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
+    const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
+    const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
 
-        const basegfx::BColor aProcessedColor(
-            rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
-        const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
+    // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
+    // e.g. when used with mask/transparence buffer device
+    const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
 
-        vcl::ScopedAntialiasing a(rOutputDevice, true);
-        rOutputDevice.EnableMapMode(false);
-        rOutputDevice.SetLineColor(Color(aProcessedColor));
-        rOutputDevice.SetFillColor();
-        rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop);
-        rOutputDevice.EnableMapMode(bMapModeEnabledState);
-    }
+    const basegfx::BColor aProcessedColor(
+        rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
+    const bool bMapModeEnabledState(rOutputDevice.IsMapModeEnabled());
+
+    vcl::ScopedAntialiasing a(rOutputDevice, true);
+    rOutputDevice.EnableMapMode(false);
+    rOutputDevice.SetLineColor(Color(aProcessedColor));
+    rOutputDevice.SetFillColor();
+    rOutputDevice.DrawWaveLine(aOrigin + aVclStart, aOrigin + aVclStop);
+    rOutputDevice.EnableMapMode(bMapModeEnabledState);
 
     // cannot really go wrong
     return true;
