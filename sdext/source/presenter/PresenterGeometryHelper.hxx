@@ -26,7 +26,7 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <vector>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Collection of geometry related convenience functions.
 */
@@ -110,7 +110,7 @@ public:
     */
 };
 
-} }
+}
 
 #endif
 

@@ -14,7 +14,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
-namespace sdr { namespace overlay {
+namespace sdr::overlay {
 
 
 class OverlayHandle final : public OverlayObjectWithBasePosition
@@ -34,7 +34,7 @@ public:
     virtual ~OverlayHandle() override;
 };
 
-}} // end of namespace sdr::overlay
+} // end of namespace sdr::overlay
 
 #endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYHANDLE_HXX
 

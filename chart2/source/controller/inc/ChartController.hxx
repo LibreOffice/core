@@ -42,23 +42,23 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XFocusListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XKeyListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XMouseListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XMouseMotionListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XPaintListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindowListener; } } } }
-namespace com { namespace sun { namespace star { namespace awt { struct Point; } } } }
-namespace com { namespace sun { namespace star { namespace document { class XUndoManager; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XLayoutManagerEventBroadcaster; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XInitialization; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XCloseable; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::accessibility { class XAccessibleContext; }
+namespace com::sun::star::awt { class XFocusListener; }
+namespace com::sun::star::awt { class XKeyListener; }
+namespace com::sun::star::awt { class XMouseListener; }
+namespace com::sun::star::awt { class XMouseMotionListener; }
+namespace com::sun::star::awt { class XPaintListener; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::awt { class XWindowListener; }
+namespace com::sun::star::awt { struct Point; }
+namespace com::sun::star::document { class XUndoManager; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XLayoutManagerEventBroadcaster; }
+namespace com::sun::star::lang { class XInitialization; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { class XCloseable; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 
 class SdrModel;
@@ -68,17 +68,17 @@ namespace svt
     class AcceleratorExecute;
 }
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
     class SelectionChangeHandler;
-}}
+}
 
 class DropTargetHelper;
 
-namespace com { namespace sun { namespace star {
-namespace graphic {
-    class XGraphic;
+namespace com::sun::star {
+    namespace graphic {
+        class XGraphic;
+    }
 }
-}}}
 
 namespace chart
 {

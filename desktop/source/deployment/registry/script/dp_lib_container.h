@@ -22,14 +22,14 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
     }
     namespace ucb {
         class XCommandEnvironment;
     }
-}}}
+}
 
 
 namespace dp_registry {

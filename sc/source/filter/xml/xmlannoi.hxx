@@ -28,8 +28,8 @@
 
 class ScXMLImport;
 enum class XmlStyleFamily;
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::drawing { class XShapes; }
 
 struct ScXMLAnnotationStyleEntry
 {

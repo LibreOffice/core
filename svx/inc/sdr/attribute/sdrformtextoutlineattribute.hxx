@@ -25,11 +25,11 @@
 
 // predefines
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrFormTextOutlineAttribute;
     class LineAttribute;
     class StrokeAttribute;
-}}
+}
 
 
 namespace drawinglayer

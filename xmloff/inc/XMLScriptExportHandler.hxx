@@ -25,9 +25,9 @@
 #include <xmloff/xmlevent.hxx>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-} } }
+}
 
 class XMLScriptExportHandler final : public XMLEventExportHandler
 {

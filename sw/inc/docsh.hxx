@@ -56,9 +56,9 @@ namespace svt
 {
 class EmbeddedObjectRef;
 }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
-namespace ooo { namespace vba { class XSinkCaller; } }
-namespace ooo { namespace vba { namespace word { class XDocument; } } }
+namespace com::sun::star::frame { class XController; }
+namespace ooo::vba { class XSinkCaller; }
+namespace ooo::vba::word { class XDocument; }
 
 // initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
 // as needed, one or both parameters may be zero

@@ -26,10 +26,7 @@
 #include <svl/lstner.hxx>
 #include "global.hxx"
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XDispatchProviderInterception;
-} } } }
-
+namespace com::sun::star::frame { class XDispatchProviderInterception; }
 class ScTabViewShell;
 
 class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<

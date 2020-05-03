@@ -22,7 +22,7 @@
 #include <ooo/vba/excel/XNames.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace sheet { class XNamedRanges; } } } }
+namespace com::sun::star::sheet { class XNamedRanges; }
 
 class ScDocument;
 

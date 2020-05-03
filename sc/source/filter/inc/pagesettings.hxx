@@ -25,7 +25,7 @@
 
 namespace oox { class AttributeList; }
 namespace oox { class PropertySet; }
-namespace oox { namespace core { class Relations; } }
+namespace oox::core { class Relations; }
 
 namespace oox {
 namespace xls {

@@ -25,7 +25,7 @@
 
 class SfxDispatcher;
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 class CellLineStylePopup : public WeldToolbarPopup
 {
@@ -50,7 +50,7 @@ public:
     virtual ~CellLineStylePopup() override;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif // INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 

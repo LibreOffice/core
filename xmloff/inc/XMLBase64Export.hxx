@@ -22,8 +22,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmltoken.hxx>
 
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream; } } } }
+namespace com::sun::star::io { class XInputStream; }
 class SvXMLExport;
 
 class XMLBase64Export

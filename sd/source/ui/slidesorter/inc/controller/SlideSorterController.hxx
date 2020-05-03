@@ -33,23 +33,15 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 namespace sd { class FuPoor; }
 namespace sd { class Window; }
 namespace vcl { class Window; }
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
-
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-} } }
-
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
+namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter::view { class SlideSorterView; }
+namespace sd::slidesorter::model { class SlideSorterModel; }
 
 class CommandEvent;
 class SdPage;
@@ -58,7 +50,7 @@ class SfxRequest;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class Animator;
 class Clipboard;
@@ -307,7 +299,7 @@ private:
     void PostModelChange();
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

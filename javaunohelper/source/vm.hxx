@@ -26,9 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace jvmaccess { class UnoVirtualMachine; }
 
 namespace javaunohelper {

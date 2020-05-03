@@ -33,7 +33,7 @@
 
 #include <map>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterController;
 
@@ -218,7 +218,7 @@ private:
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
 };
 
-} }
+}
 
 #endif
 

@@ -28,7 +28,7 @@
 class FileStream;
 class TypeManager;
 
-namespace codemaker { namespace cppumaker {
+namespace codemaker::cppumaker {
 
 class Includes {
 public:
@@ -93,7 +93,7 @@ private:
     bool m_includeTypelibTypedescriptionH;
 };
 
-} }
+}
 
 #endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 

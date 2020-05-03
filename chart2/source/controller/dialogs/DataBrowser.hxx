@@ -27,16 +27,16 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt {
         class XWindow;
     }
     namespace chart2 {
         class XChartDocument;
     }
-}}}
+}
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class OutputDevice;
 

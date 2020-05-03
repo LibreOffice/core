@@ -25,10 +25,7 @@
 #include "unoview.hxx"
 
 
-namespace com { namespace sun { namespace star { namespace presentation
-{
-    class XSlideShowView;
-} } } }
+namespace com::sun::star::presentation { class XSlideShowView; }
 
 /* Definition of UnoViewContainer class */
 

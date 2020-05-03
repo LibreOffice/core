@@ -23,7 +23,7 @@
 
 #define CELL_LINE_STYLE_ENTRIES 9
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 class CellLineStyleValueSet : public ValueSet
 {
@@ -40,7 +40,7 @@ public:
     virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif // INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLEVALUESET_HXX
 

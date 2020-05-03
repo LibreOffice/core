@@ -25,10 +25,10 @@
 #include <sal/types.h>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace style { struct TabStop; }
     namespace uno { class Any; }
-} } }
+}
 
 
 class SvxXMLTabStopExport final

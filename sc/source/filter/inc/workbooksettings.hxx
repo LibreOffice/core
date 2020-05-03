@@ -25,7 +25,7 @@
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
+namespace com::sun::star::util { struct Date; }
 
 namespace oox {
 namespace xls {

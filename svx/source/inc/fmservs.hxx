@@ -24,9 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-} } } }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 #define FM_COMPONENT_EDIT               "stardiv.one.form.component.Edit"
 #define FM_COMPONENT_TEXTFIELD          "stardiv.one.form.component.TextField"

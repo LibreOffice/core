@@ -23,10 +23,10 @@
 #include <drawingml/chart/converterbase.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 { class XDataSeries; }
-    namespace chart2 { namespace data { class XLabeledDataSequence; } }
-} } }
+    namespace chart2::data { class XLabeledDataSequence; }
+}
 
 namespace oox {
 namespace drawingml {

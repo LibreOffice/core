@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :

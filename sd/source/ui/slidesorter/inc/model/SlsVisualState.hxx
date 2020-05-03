@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <tools/gen.hxx>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 /** This class gives access to values related to the visualization of page
     objects.  This includes animation state when blending from one state to
@@ -44,7 +44,7 @@ private:
     Point maLocationOffset;
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

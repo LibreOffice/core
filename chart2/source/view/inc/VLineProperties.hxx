@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
 
 namespace chart
 {

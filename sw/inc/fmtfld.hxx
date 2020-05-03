@@ -35,7 +35,7 @@ class SwView;
 class SwFieldType;
 class SwFormatField;
 class IDocumentRedlineAccess;
-namespace com { namespace sun { namespace star { namespace text { class XTextField; } } } }
+namespace com::sun::star::text { class XTextField; }
 
 namespace sw {
     struct FindFormatForFieldHint final : SfxHint {

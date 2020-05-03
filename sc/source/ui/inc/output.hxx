@@ -36,7 +36,7 @@ namespace sc {
 namespace editeng {
     struct MisspellRanges;
 }
-namespace drawinglayer { namespace processor2d { class BaseProcessor2D; } }
+namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
 namespace vcl { class Font; }
 class EditEngine;

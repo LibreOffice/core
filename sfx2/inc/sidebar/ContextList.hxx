@@ -23,7 +23,7 @@
 
 #include <vector>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** Per context data for deck and panel descriptors.
 */
@@ -61,6 +61,6 @@ private:
     ::std::vector<Entry>::const_iterator FindBestMatch (const Context& rContext) const;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

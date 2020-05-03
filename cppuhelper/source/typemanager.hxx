@@ -24,9 +24,9 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace reflection { class XTypeDescription; }
-} } }
+}
 namespace unoidl {
     class ConstantGroupEntity;
     class Entity;

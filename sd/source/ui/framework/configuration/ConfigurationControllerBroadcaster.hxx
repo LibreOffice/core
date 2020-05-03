@@ -25,13 +25,13 @@
 #include <unordered_map>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationChangeListener; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResource; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationChangeListener; }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XResource; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** This class manages the set of XConfigurationChangeListeners and
     calls them when the ConfigurationController wants to broadcast an
@@ -134,7 +134,7 @@ private:
         const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

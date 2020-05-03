@@ -25,9 +25,9 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace util { class XCloneable; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::util { class XCloneable; }
+namespace com::sun::star::util { class XModifyListener; }
 
 namespace chart
 {

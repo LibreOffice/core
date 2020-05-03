@@ -28,7 +28,7 @@
 #include <celltypes.hxx>
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 typedef ::cppu::ImplInheritanceHelper< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;
 
@@ -76,7 +76,7 @@ private:
     OUString maName;
 };
 
-} }
+}
 
 #endif
 

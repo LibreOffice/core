@@ -34,7 +34,7 @@
 
 #include <functional>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterTextCaret
 {
@@ -272,7 +272,7 @@ private:
         const sal_Int32 nCharacterIndex) const;
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

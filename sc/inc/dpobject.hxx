@@ -35,7 +35,7 @@
 #include <vector>
 #include <map>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
 
     namespace container {
         class XIndexAccess;
@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star {
         struct DataPilotTableHeaderData;
         struct DataPilotFieldFilter;
     }
-}}}
+}
 
 namespace tools { class Rectangle; }
 class ScDPSaveData;

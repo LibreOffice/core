@@ -34,13 +34,13 @@
 #include <unordered_set>
 #include <optional>
 
-namespace com { namespace sun { namespace star { namespace sheet {
+namespace com::sun::star::sheet {
     class XDimensionsSupplier;
     struct DataPilotFieldReference;
     struct DataPilotFieldSortInfo;
     struct DataPilotFieldAutoShowInfo;
     struct DataPilotFieldLayoutInfo;
-} } } }
+}
 
 class ScDPDimensionSaveData;
 class ScDPTableData;

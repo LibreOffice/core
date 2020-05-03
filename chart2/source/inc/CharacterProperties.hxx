@@ -26,8 +26,8 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans { class XMultiPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
+namespace com::sun::star::beans { class XMultiPropertySet; }
+namespace com::sun::star::beans { struct Property; }
 
 namespace chart
 {

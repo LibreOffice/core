@@ -31,14 +31,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XAggregation;
     }
     namespace drawing {
         class XShape;
     }
-}}}
+}
 
 class SdrObject;
 struct SvEventDescription;

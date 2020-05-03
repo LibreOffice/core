@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-namespace sc { namespace sidebar {
+namespace sc::sidebar {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::ui::XUIElementFactory, css::lang::XServiceInfo
@@ -54,7 +54,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
-} } // end of namespace sc::sidebar
+} // end of namespace sc::sidebar
 
 #endif
 

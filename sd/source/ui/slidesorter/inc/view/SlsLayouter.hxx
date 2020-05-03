@@ -26,11 +26,11 @@
 #include <memory>
 
 namespace sd { class Window; }
-namespace sd { namespace slidesorter { namespace model { class SlideSorterModel; } } }
-namespace sd { namespace slidesorter { namespace view { class PageObjectLayouter; } } }
-namespace sd { namespace slidesorter { namespace view { class Theme; } } }
+namespace sd::slidesorter::model { class SlideSorterModel; }
+namespace sd::slidesorter::view { class PageObjectLayouter; }
+namespace sd::slidesorter::view { class Theme; }
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class InsertPosition;
 
@@ -233,7 +233,7 @@ private:
     Point maTrailingOffset;
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

@@ -24,7 +24,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shape.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableStyle
 {
@@ -77,7 +77,7 @@ private:
     TableStylePart  maNwCell;
 };
 
-} } }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLE_HXX
 

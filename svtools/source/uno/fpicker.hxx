@@ -26,10 +26,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
-} } }
+}
 
 css::uno::Reference<css::uno::XInterface> FilePicker_CreateInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context);

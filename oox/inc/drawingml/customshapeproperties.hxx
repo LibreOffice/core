@@ -30,7 +30,7 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/tokens.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class CustomShapeProperties;
 
@@ -150,7 +150,7 @@ private:
     sal_Int32 mnArcNum;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 

@@ -31,7 +31,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com::sun::star::chart2 { class XAxis; }
 
 namespace chart
 {

@@ -26,9 +26,9 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::frame { class XController; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
@@ -77,7 +77,7 @@ private:
     void ThrowIfDisposed() const;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

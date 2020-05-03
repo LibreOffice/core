@@ -35,7 +35,7 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleEventListener; } } } }
+namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 
 class GtkSalDisplay;
 class DocumentFocusListener;

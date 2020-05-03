@@ -26,7 +26,7 @@
 #include <memory>
 
 class SvxForbiddenCharactersTable;
-namespace com { namespace sun { namespace star { namespace i18n { struct ForbiddenCharacters; } } } }
+namespace com::sun::star::i18n { struct ForbiddenCharacters; }
 enum class CharCompressType;
 
 enum class DocumentSettingId

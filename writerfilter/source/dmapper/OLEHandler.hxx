@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-namespace com{ namespace sun{ namespace star{
+namespace com::sun::star{
     namespace graphic{
         class XGraphic;
     }
@@ -38,7 +38,7 @@ namespace com{ namespace sun{ namespace star{
     namespace uno {
         class XComponentContext;
     }
-}}}
+}
 namespace writerfilter {
 namespace dmapper
 {

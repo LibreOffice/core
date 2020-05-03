@@ -24,7 +24,7 @@
 
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                                     css::lang::XServiceInfo >
@@ -51,7 +51,6 @@ private:
     AVAssetImageGenerator* mpImageGen;
 };
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

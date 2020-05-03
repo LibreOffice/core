@@ -11,7 +11,7 @@
 
 #include <filter/msfilter/mstoolbar.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XIndexContainer; } } } }
+namespace com::sun::star::container { class XIndexContainer; }
 
 class ScCTBWrapper;
 // hmm I don't normally use these packed structures

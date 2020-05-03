@@ -31,10 +31,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class WeakReference; } } } }
+namespace com::sun::star::util { class XURLTransformer; }
+namespace com::sun::star::uno { template <class interface_type> class WeakReference; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakImplHelper <
     css::drawing::framework::XResourceId,
@@ -209,7 +209,7 @@ private:
     void ParseResourceURL();
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

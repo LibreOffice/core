@@ -31,11 +31,9 @@
 #include <uno/dispatcher.h>
 #include <uno/environment.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
+namespace com::sun::star::uno { class XInterface; }
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 class Bridge;
 
@@ -103,7 +101,7 @@ private:
     friend void releaseProxy(uno_Interface * pUnoI);
 };
 
-} } }
+}
 
 #endif
 

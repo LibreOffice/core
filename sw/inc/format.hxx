@@ -34,10 +34,10 @@ class SwDoc;
 class SfxGrabBagItem;
 class SwTextGridItem;
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrAllFillAttributesHelper;
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
-}}
+}
 
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify

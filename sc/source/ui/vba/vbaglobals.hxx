@@ -25,8 +25,8 @@
 
 #include <vbahelper/vbaglobalbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace ooo { namespace vba { namespace excel { class XApplication; } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ooo::vba::excel { class XApplication; }
 
 
 typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;

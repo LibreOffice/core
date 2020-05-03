@@ -29,7 +29,7 @@
 #include <swdllapi.h>
 #include "sharedconnection.hxx"
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace sdbc{
         class XDataSource;
         class XResultSet;
@@ -37,11 +37,11 @@ namespace com{namespace sun{namespace star{
     namespace sdbcx{
         class XColumnsSupplier;
     }
-}}}
+}
 
 class SwMailMergeConfigItem_Impl;
 class SwView;
-namespace sw { namespace mark { class IMark; }}
+namespace sw::mark { class IMark; }
 
 struct SwDocMergeInfo
 {

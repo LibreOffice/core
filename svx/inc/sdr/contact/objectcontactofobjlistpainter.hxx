@@ -28,7 +28,7 @@
 class SdrPage;
 class SdrObject;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ObjectContactPainter : public ObjectContact
 {
@@ -107,7 +107,7 @@ public:
     virtual OutputDevice* TryToGetOutputDevice() const override;
 };
 
-}}
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

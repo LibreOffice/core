@@ -38,9 +38,9 @@
 
 #include <MutexContainer.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 namespace utl { class AccessibleStateSetHelper; }
 
 

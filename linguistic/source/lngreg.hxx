@@ -24,9 +24,9 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     class XMultiServiceFactory;
-} } } }
+}
 
 extern void * LngSvcMgr_getFactory
 (

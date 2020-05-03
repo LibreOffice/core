@@ -25,7 +25,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class BitmapCache;
 class QueueProcessor;
@@ -148,7 +148,7 @@ private:
     void ProvideCacheAndProcessor();
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

@@ -22,8 +22,8 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 
-namespace com { namespace sun { namespace star { namespace sheet { class XCellRangeAddressable; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSheetCondition; } } } }
+namespace com::sun::star::sheet { class XCellRangeAddressable; }
+namespace com::sun::star::sheet { class XSheetCondition; }
 
 template< typename... Ifc >
 class ScVbaCondition : public InheritedHelperInterfaceWeakImpl< Ifc... >

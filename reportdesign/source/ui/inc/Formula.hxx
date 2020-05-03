@@ -26,9 +26,9 @@
 #include <com/sun/star/report/meta/XFormulaParser.hpp>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     class XMultiServiceFactory;
-} } } }
+}
 
 namespace svl {
 

@@ -47,7 +47,7 @@ class SwFrameFormats;
 class SwRegionRects;
 class SwTextNode;
 namespace sw { struct Extent; }
-namespace basegfx { namespace utils { class B2DClipState; } }
+namespace basegfx::utils { class B2DClipState; }
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
 #define BROWSE_HEIGHT (56700L * 10L) // 10 Meters

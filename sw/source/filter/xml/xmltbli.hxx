@@ -42,10 +42,10 @@ class SwXMLDDETableContext_Impl;
 class TableBoxIndexHasher;
 class TableBoxIndex;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextContent; }
     namespace text { class XTextCursor; }
-} } }
+}
 
 class SwXMLTableContext : public XMLTextTableContext
 {

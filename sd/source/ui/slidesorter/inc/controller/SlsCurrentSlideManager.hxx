@@ -26,11 +26,9 @@
 
 class SdPage;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** Manage the current slide.  This includes setting the according flags at
     the PageDescriptor objects and setting the current slide at the main
@@ -108,7 +106,7 @@ private:
     DECL_LINK(SwitchPageCallback, Timer*, void);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

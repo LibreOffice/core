@@ -43,7 +43,7 @@ class IDocumentRedlineAccess;
 
 namespace rtl { class OUString; }
 using rtl::OUString;
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com::sun::star::uno { class Any; }
 
  /** Document fields related interfaces
  */
