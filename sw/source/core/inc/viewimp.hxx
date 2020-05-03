@@ -44,9 +44,7 @@ class SwPagePreviewLayout;
 struct PreviewPage;
 class SwTextFrame;
 // --> OD #i76669#
-namespace sdr { namespace contact {
-        class ViewObjectContactRedirector;
-} }
+namespace sdr::contact { class ViewObjectContactRedirector; }
 // <--
 
 class SwViewShellImp

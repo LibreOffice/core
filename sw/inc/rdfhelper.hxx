@@ -21,7 +21,7 @@
 
 class SwTextNode;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame {
         class XModel;
     }
@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
         class XResource;
         class XURI;
     }
-}}}
+}
 
 /// Provides access to RDF metadata on core objects.
 class SW_DLLPUBLIC SwRDFHelper

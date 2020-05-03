@@ -26,14 +26,11 @@
 
 #include <vector>
 
-namespace svx { namespace sidebar {
-    class ValueSetWithTextControl;
-} }
-
+namespace svx::sidebar { class ValueSetWithTextControl; }
 class PageSizePopup;
 class ValueSet;
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageSizeControl final : public WeldToolbarPopup
 {
@@ -58,7 +55,7 @@ private:
     DECL_LINK(MoreButtonClickHdl_Impl, weld::Button&, void);
 };
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif
 

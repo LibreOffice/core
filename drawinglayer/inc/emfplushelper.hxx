@@ -25,7 +25,7 @@
 
 namespace emfplushelper { struct EmfPlusHelperData; }
 namespace wmfemfhelper { class TargetHolders; }
-namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
+namespace drawinglayer::geometry { class ViewInformation2D; }
 class SvMemoryStream;
 
 namespace emfplushelper

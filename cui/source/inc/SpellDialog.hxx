@@ -37,11 +37,8 @@ namespace svx{ class SpellUndoAction_Impl;}
 // forward ---------------------------------------------------------------
 
 struct SpellDialog_Impl;
+namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
-namespace com{namespace sun{namespace star{
-namespace linguistic2{
-    class XSpellChecker1;
-}}}}
 namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;

@@ -29,13 +29,13 @@
 #include <unordered_map>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::sheet { class XSpreadsheet; }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 
 namespace sc { class DataTransformation; }
 

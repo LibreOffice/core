@@ -23,11 +23,11 @@
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSheetConditionalEntries; } } } }
-namespace ooo { namespace vba { namespace excel { class XRange; } } }
-namespace ooo { namespace vba { namespace excel { class XStyle; } } }
-namespace ooo { namespace vba { namespace excel { class XStyles; } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::sheet { class XSheetConditionalEntries; }
+namespace ooo::vba::excel { class XRange; }
+namespace ooo::vba::excel { class XStyle; }
+namespace ooo::vba::excel { class XStyles; }
 
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.

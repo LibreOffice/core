@@ -35,8 +35,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XIndexReplace; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+namespace com::sun::star::container { class XIndexReplace; }
+namespace com::sun::star::lang { class XComponent; }
 
 class ScDocShell;
 class SfxItemPropertySet;

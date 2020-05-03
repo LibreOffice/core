@@ -29,25 +29,22 @@
 #include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiComponentFactory; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::xml::sax { class XWriter; }
+namespace com::sun::star::lang { class XMultiComponentFactory; }
 
-namespace com { namespace sun { namespace star {
-namespace embed
-{
-    class XStorage;
+namespace com::sun::star {
+    namespace embed {
+        class XStorage;
+    }
+    namespace xml::sax {
+        class XFastParser;
+    }
+    namespace document {
+        class XGraphicStorageHandler;
+    }
 }
-namespace xml { namespace sax
-{
-    class XFastParser;
-}}
-namespace document
-{
-    class XGraphicStorageHandler;
-}
-}}}
 
 namespace chart
 {

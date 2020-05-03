@@ -26,7 +26,7 @@
 #include <vector>
 
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class AnimationBezierFunction
 {
@@ -73,7 +73,7 @@ private:
     ::std::vector<double> maY;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

@@ -27,11 +27,9 @@
 #include <memory>
 #include <vector>
 
-namespace sd { namespace slidesorter { namespace controller {
-class SlotManager;
-} } }
+namespace sd::slidesorter::controller { class SlotManager; }
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 class SlideSorter;
 
@@ -231,7 +229,7 @@ private:
 
 typedef std::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 #endif
 

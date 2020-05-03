@@ -48,9 +48,7 @@ class Date;
 enum class CreateNameFlags;
 enum class CellShiftDisabledFlags;
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldReference;
-} } } }
+namespace com::sun::star::sheet { struct DataPilotFieldReference; }
 
 class AbstractScImportAsciiDlg : public VclAbstractDialog
 {

@@ -27,7 +27,7 @@
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** A theme is a set of properties describing fonts, colors, and bitmaps to be used to draw
     background, pane borders, and view content.
@@ -127,7 +127,7 @@ private:
     std::shared_ptr<Theme> ReadTheme();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

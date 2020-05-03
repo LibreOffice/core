@@ -25,18 +25,18 @@
 #include <deque>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
         namespace uno {
-        class XComponentContext;
+            class XComponentContext;
         }
-        namespace xml { namespace dom {
+        namespace xml::dom {
             class XDocument;
             class XNode;
-        }}
-        namespace xml { namespace xpath {
+        }
+        namespace xml::xpath {
             class XXPathAPI;
-        }}
-}}}
+        }
+}
 
 namespace dp_registry {
 namespace backend {

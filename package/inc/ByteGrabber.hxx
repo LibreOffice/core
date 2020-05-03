@@ -29,9 +29,9 @@
 
 #include <osl/mutex.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XSeekable; class XInputStream; }
-} } }
+}
 class ByteGrabber final
 {
     ::osl::Mutex m_aMutex;

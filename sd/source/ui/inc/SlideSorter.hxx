@@ -26,7 +26,7 @@
 #include <memory>
 
 namespace vcl { class Window; }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::frame { class XController; }
 namespace rtl { template <class reference_type> class Reference; }
 
 namespace sd {
@@ -36,22 +36,20 @@ class Window;
 class FuPoor;
 }
 
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
+namespace sd::slidesorter::model { class SlideSorterModel; }
 
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-class Theme;
-} } }
+namespace sd::slidesorter::view {
+    class SlideSorterView;
+    class Theme;
+}
 
-namespace sd { namespace slidesorter { namespace controller {
-class SlideSorterController;
-class SlotManager;
-class Properties;
-} } }
+namespace sd::slidesorter::controller {
+    class SlideSorterController;
+    class SlotManager;
+    class Properties;
+}
 
-namespace sd { namespace slidesorter {
+namespace sd::slidesorter {
 
 /** Show previews for all the slides in a document and allow the user to
     insert or delete slides and modify the order of the slides.
@@ -246,7 +244,7 @@ private:
     void ReleaseListeners();
 };
 
-} } // end of namespace ::sd::slidesorter
+} // end of namespace ::sd::slidesorter
 
 #endif
 

@@ -26,7 +26,7 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/ppt/timenode.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     struct Attribute
     {
@@ -58,7 +58,7 @@ namespace oox { namespace ppt {
         const TimeNodePtr& mpNode;
     };
 
-} }
+}
 
 #endif
 

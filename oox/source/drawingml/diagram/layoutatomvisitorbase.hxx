@@ -23,7 +23,7 @@
 #include "diagram.hxx"
 #include "diagramlayoutatoms.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 struct LayoutAtomVisitor
 {
@@ -89,7 +89,7 @@ private:
     size_t mnCnt;
 };
 
-} }
+}
 
 #endif
 

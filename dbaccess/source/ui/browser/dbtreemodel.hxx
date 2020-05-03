@@ -33,7 +33,7 @@
 #define CONTAINER_QUERIES       sal_uLong( 0 )
 #define CONTAINER_TABLES        sal_uLong( 1 )
 
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace dbaui
 {

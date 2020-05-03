@@ -32,9 +32,9 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonBezierCoords; } } } }
+namespace com::sun::star::awt { struct Rectangle; }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::drawing { struct PolyPolygonBezierCoords; }
 
 namespace chart
 {

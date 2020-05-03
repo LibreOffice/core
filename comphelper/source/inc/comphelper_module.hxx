@@ -23,7 +23,7 @@
 #include <comphelper/componentmodule.hxx>
 
 
-namespace comphelper { namespace module
+namespace comphelper::module
 {
 
 
@@ -52,7 +52,7 @@ namespace comphelper { namespace module
         }
     };
 
-} } // namespace comphelper::module
+} // namespace comphelper::module
 
 
 #endif // INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX

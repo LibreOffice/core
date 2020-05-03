@@ -23,7 +23,7 @@
 
 #include <vector>
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 /** Note: virtual const sal_uInt16 * GetWhichPairs() const; is still pure virtual
  */
@@ -44,6 +44,6 @@ protected:
     std::vector< std::unique_ptr<ItemConverter> >  m_aConverters;
 };
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@
 class SdPage;
 class Size;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 /** This factory class creates preview bitmaps for page objects.  It is
     merely an adapter for the PreviewRenderer.
@@ -45,7 +45,7 @@ private:
     PreviewRenderer maRenderer;
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

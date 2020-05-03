@@ -33,13 +33,13 @@
 #include "data.hxx"
 #include "modifications.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
     namespace uno {
         class Any;
         class XComponentContext;
     }
-} } }
+}
 
 namespace configmgr {
 

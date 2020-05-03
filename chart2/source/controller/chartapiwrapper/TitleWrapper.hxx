@@ -30,8 +30,8 @@
 
 #include <memory>
 
-namespace chart { namespace wrapper { class Chart2ModelContact; } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XTitle; } } } }
+namespace chart::wrapper { class Chart2ModelContact; }
+namespace com::sun::star::chart2 { class XTitle; }
 
 namespace chart
 {

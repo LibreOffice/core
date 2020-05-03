@@ -22,8 +22,8 @@
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }
 namespace weld { class RadioButton; }

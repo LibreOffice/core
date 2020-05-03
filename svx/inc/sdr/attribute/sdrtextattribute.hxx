@@ -28,18 +28,9 @@
 // predefines
 
 class SdrText;
-
-namespace drawinglayer { namespace animation {
-    class AnimationEntryList;
-}}
-
-namespace drawinglayer { namespace attribute {
-    class SdrFormTextAttribute;
-}}
-
-namespace drawinglayer { namespace attribute {
-    class ImpSdrTextAttribute;
-}}
+namespace drawinglayer::animation { class AnimationEntryList; }
+namespace drawinglayer::attribute { class SdrFormTextAttribute; }
+namespace drawinglayer::attribute { class ImpSdrTextAttribute; }
 
 
 namespace drawinglayer

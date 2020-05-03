@@ -26,7 +26,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "address.hxx"
 
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::lang { struct Locale; }
 
 class ScUnoConversion
 {

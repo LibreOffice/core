@@ -23,7 +23,7 @@
 #include "types.hxx"
 #include <com/sun/star/uno/TypeClass.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com::sun::star::uno { class Any; }
 
 class SvNumberFormatter;
 class ScDocument;

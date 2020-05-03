@@ -26,9 +26,9 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-} } }
+}
 
 class ScCursorRefEdit : public formula::RefEdit
 {

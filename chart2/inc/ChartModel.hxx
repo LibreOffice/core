@@ -55,14 +55,14 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace awt { class XRequestCallback; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
-namespace com { namespace sun { namespace star { namespace document { class XFilter; } } } }
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
+namespace com::sun::star::awt { class XRequestCallback; }
+namespace com::sun::star::chart2 { class XChartTypeTemplate; }
+namespace com::sun::star::chart2::data { class XDataProvider; }
+namespace com::sun::star::document { class XFilter; }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { class XAggregation; }
 
 class SvNumberFormatter;
 

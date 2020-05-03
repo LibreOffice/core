@@ -30,7 +30,7 @@
 
 /// @HTML
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { class XComponentContext; }
     namespace xml {
         namespace dom {
@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
         }
         namespace xpath { class XXPathAPI; }
     }
-} } }
+}
 
 namespace dp_misc {
 

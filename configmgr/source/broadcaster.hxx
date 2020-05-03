@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/ChangesEvent.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertiesChangeListener;
         class XPropertyChangeListener;
@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XContainerListener; }
     namespace lang { class XEventListener; }
     namespace util { class XChangesListener; }
-} } }
+}
 
 namespace configmgr {
 

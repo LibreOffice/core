@@ -22,7 +22,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 class FramePainter
 {
@@ -105,7 +105,7 @@ private:
     bool mbIsValid;
 };
 
-} } } // end of namespace sd::slidesorter::view
+} // end of namespace sd::slidesorter::view
 
 #endif
 

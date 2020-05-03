@@ -34,10 +34,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { class XComponentContext; }
     namespace ucb  { class XProgressHandler; }
-} } }
+}
 namespace rtl
 {
     template < class T > class Reference;

@@ -38,7 +38,7 @@ namespace svx {
 class DialControl;
 };
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class PosSizePropertyPanel
 :   public PanelLayout,
@@ -189,7 +189,7 @@ private:
 };
 
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 
 #endif // INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX

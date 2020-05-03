@@ -541,7 +541,7 @@ blacklist:
     - com/sun/star/ui/XUIElementFactory.hpp
     sc/source/ui/vba/service.hxx:
     # Used in extern declaration
-    - namespace comphelper { namespace service_decl { class ServiceDecl; } }
+    - namespace comphelper::service_decl { class ServiceDecl; } }
     sc/source/ui/vba/vbaassistant.hxx:
     # base class has to be a complete type
     - ooo/vba/XAssistant.hpp

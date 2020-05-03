@@ -23,7 +23,7 @@
 #include <oox/ppt/headerfooter.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** CT_HeaderFooter */
     class HeaderFooterContext : public ::oox::core::FragmentHandler2
@@ -35,7 +35,7 @@ namespace oox { namespace ppt {
         virtual ~HeaderFooterContext( ) override;
     };
 
-} }
+}
 
 #endif
 

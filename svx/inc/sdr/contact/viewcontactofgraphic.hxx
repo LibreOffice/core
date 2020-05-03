@@ -23,7 +23,7 @@
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdograf.hxx>
 
-namespace drawinglayer { namespace attribute { class SdrLineFillShadowTextAttribute; }}
+namespace drawinglayer::attribute { class SdrLineFillShadowTextAttribute; }
 class GraphicAttr;
 
 namespace sdr

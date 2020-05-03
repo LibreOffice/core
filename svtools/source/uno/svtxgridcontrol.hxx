@@ -32,9 +32,9 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
-namespace svt { namespace table {
+namespace svt::table {
     class TableControl;
-} }
+}
 
 typedef ::cppu::ImplInheritanceHelper  <   VCLXWindow
                                         ,   css::awt::grid::XGridControl

@@ -23,7 +23,7 @@
 #include <drawingml/textliststyle.hxx>
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextListStyleContext final : public ::oox::core::ContextHandler2
 {
@@ -37,7 +37,7 @@ private:
     TextListStyle& mrTextListStyle;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 

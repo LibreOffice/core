@@ -25,12 +25,12 @@
 #include <map>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace frame { struct DispatchDescriptor; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace util { struct URL; } } } }
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::frame { struct DispatchDescriptor; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::util { struct URL; }
 
 namespace chart
 {

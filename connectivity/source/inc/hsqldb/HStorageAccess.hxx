@@ -24,10 +24,10 @@
 
 #include <jni.h>
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
     class DataLogFile;
-} }
+}
 
 jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key );
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jstring name, jstring key, jbyteArray buffer, jint off, jint len );

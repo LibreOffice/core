@@ -36,9 +36,9 @@
 #include "misc/scopelock.hxx"
 #include "sddllapi.h"
 
-namespace com { namespace sun { namespace star { namespace animations {
+namespace com::sun::star::animations {
     class XAnimationNode;
-} } } }
+}
 
 class SfxStyleSheet;
 class SdDrawDocument;

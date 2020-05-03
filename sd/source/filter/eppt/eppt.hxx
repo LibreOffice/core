@@ -32,13 +32,13 @@
 
 #include "epptbase.hxx"
 
-namespace com { namespace sun { namespace star { namespace awt { class XControlModel; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XSimpleText; } } } }
+namespace com::sun::star::awt { class XControlModel; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::task { class XStatusIndicator; }
+namespace com::sun::star::text { class XSimpleText; }
 
 class SotStorage;
 

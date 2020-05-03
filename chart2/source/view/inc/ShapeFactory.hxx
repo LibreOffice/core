@@ -28,17 +28,17 @@
 #include <rtl/ustring.hxx>
 
 namespace chart { struct VLineProperties; }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct Direction3D; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XFormattedString; }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::drawing { struct HomogenMatrix; }
+namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
+namespace com::sun::star::drawing { struct Position3D; }
+namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::drawing { struct Direction3D; }
 
 
 namespace chart

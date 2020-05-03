@@ -33,7 +33,7 @@
 class Size;
 namespace tools { class Rectangle; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt
     {
         struct Rectangle;
@@ -64,7 +64,7 @@ namespace com { namespace sun { namespace star {
             class XLabeledDataSequence;
         }
     }
-} } }
+}
 
 // Common =====================================================================
 

@@ -24,10 +24,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameReplace; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 
 /**

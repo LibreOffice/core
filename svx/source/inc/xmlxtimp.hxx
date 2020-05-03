@@ -22,13 +22,12 @@
 
 #include <xmloff/xmlimp.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
     namespace uno { class XInterface; }
     namespace document { class XGraphicStorageHandler; }
     namespace container { class XNameContainer; }
-
-} } }
+}
 
 class SvxXMLXTableImport : public SvXMLImport
 {

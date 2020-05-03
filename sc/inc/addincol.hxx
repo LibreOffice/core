@@ -34,9 +34,9 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace reflection { class XIdlMethod; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XVolatileResult; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::reflection { class XIdlMethod; }
+namespace com::sun::star::sheet { class XVolatileResult; }
+namespace com::sun::star::uno { class XInterface; }
 
 class SfxObjectShell;
 class ScUnoAddInFuncData;

@@ -29,10 +29,10 @@ struct SwPosition;
 class SwTextNode;
 class SwCursorShell;
 
-namespace sw { namespace mark {
+namespace sw::mark {
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
     class MarkBase;
-}}
+}
 
 /** Provides access to the marks of a document.
 */

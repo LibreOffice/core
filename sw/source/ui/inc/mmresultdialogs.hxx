@@ -28,12 +28,8 @@
 class SwMailMergeWizard;
 class SfxPrinter;
 class SwSendMailDialog;
+namespace com::sun::star::mail { class XMailMessage; }
 
-namespace com{ namespace sun{ namespace star{
-    namespace mail{
-        class XMailMessage;
-    }
-}}}
 
 /// Dialog implementing the saving as of the result document.
 class SwMMResultSaveDialog : public SfxDialogController

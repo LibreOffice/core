@@ -21,7 +21,7 @@ namespace formula { class DoubleVectorRefToken; }
 namespace formula { class FormulaToken; }
 struct ScCalcConfig;
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class FormulaTreeNode;
 
@@ -242,7 +242,7 @@ public:
         int nCurWindowSize );
 };
 
-}}
+}
 
 #endif
 

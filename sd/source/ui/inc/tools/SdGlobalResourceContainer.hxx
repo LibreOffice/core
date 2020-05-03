@@ -24,8 +24,8 @@
 #include <sal/types.h>
 #include <o3tl/deleter.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { class XInterface; }
 
 namespace sd {
 

@@ -27,11 +27,11 @@
 #include <drawingml/textspacing.hxx>
 #include <optional>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace graphic { class XGraphic; }
-} } }
+}
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextParagraphProperties;
 
@@ -129,7 +129,7 @@ protected:
     TextSpacing                     maLineSpacing;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
 

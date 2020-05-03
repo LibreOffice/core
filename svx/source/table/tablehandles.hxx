@@ -23,7 +23,7 @@
 #include <svx/svdhdl.hxx>
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 enum TableEdgeState { Empty, Invisible, Visible };
 
@@ -83,8 +83,8 @@ private:
     bool            mbAnimate : 1;
 };
 
-} // end of namespace table
-} // end of namespace sdr
+} // end of namespace sdr::table
+
 
 #endif
 

@@ -35,9 +35,9 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 namespace sfx2 {
 

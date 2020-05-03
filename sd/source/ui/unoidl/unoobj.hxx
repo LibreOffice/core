@@ -23,7 +23,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <svx/unomaster.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 class SdXImpressDocument;
 class SdAnimationInfo;

@@ -29,14 +29,14 @@
 class SwPaM;
 class SfxMedium;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
     namespace uno { template<class A> class Sequence; }
     namespace uno { class Any; }
     namespace lang { class XComponent; }
     namespace lang { class XMultiServiceFactory; }
     namespace beans { struct PropertyValue; }
-} } }
+}
 
 class SwXMLWriter : public StgWriter
 {

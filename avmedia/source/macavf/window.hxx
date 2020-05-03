@@ -33,7 +33,7 @@
 - (void) play;
 @end
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Player;
 
@@ -106,7 +106,6 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

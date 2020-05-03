@@ -19,7 +19,7 @@
 
 #pragma once
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 enum class ViewState
 {
@@ -35,6 +35,6 @@ enum class SidebarPosition
     NONE    // sidebar on neither side
 };
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

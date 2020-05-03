@@ -40,7 +40,7 @@ class SwPaM;
 class SwNode;
 struct SwPosition;
 
-namespace sw { namespace mark
+namespace sw::mark
 {
     class IMark;
 
@@ -82,7 +82,7 @@ namespace sw { namespace mark
             virtual ~ContentIdxStore() {};
             static std::shared_ptr<ContentIdxStore> Create();
     };
-}}
+}
 
 namespace o3tl {
     template<> struct typed_flags<sw::mark::RestoreMode> : is_typed_flags<sw::mark::RestoreMode, 3> {};

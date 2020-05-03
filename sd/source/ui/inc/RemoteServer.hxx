@@ -19,8 +19,8 @@
 #include <sddllapi.h>
 
 namespace osl { class Mutex; }
-namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::presentation { class XSlideShowController; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 /**
 * The port for use for the main communication between LibO and remote control app.

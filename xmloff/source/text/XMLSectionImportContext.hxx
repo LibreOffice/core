@@ -24,11 +24,11 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextRange;  }
     namespace beans { class XPropertySet; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 
 /**

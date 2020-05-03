@@ -31,7 +31,7 @@ namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XFrame; }
 
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class Tools
 {
@@ -58,6 +58,6 @@ public:
 };
 
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

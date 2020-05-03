@@ -25,9 +25,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 typedef ::cppu::WeakComponentImplHelper<
     css::lang::XInitialization,
@@ -91,7 +91,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

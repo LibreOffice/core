@@ -39,7 +39,7 @@
 
 class List;
 class ColorListBox;
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageStylesPanel:
     public PanelLayout,
@@ -116,7 +116,7 @@ private:
     DECL_LINK( ModifyFillColorListHdl, ColorListBox&, void );
 };
 
-} } //end of namespace sw::sidebar
+} //end of namespace sw::sidebar
 
 #endif
 

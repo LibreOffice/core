@@ -27,10 +27,10 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com::sun::star::chart2 { class XCoordinateSystem; }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
+namespace com::sun::star::uno { class Any; }
 
 namespace chart
 {

@@ -19,14 +19,14 @@
 
 #define MORK_DRIVER_IMPL_NAME "com.sun.star.comp.sdbc.MorkDriver"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
-namespace connectivity { namespace mork {
+namespace connectivity::mork {
 class ProfileAccess;
 
 class MorkDriver:
@@ -72,7 +72,7 @@ private:
     OUString m_sProfilePath;
 };
 
-} }
+}
 
 #endif
 

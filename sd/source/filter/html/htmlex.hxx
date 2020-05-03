@@ -32,8 +32,8 @@
 #include <vector>
 
 namespace basegfx { class B2DPolyPolygon; }
-namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
-namespace com { namespace sun { namespace star { namespace ucb { class XSimpleFileAccess3; } } } }
+namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::ucb { class XSimpleFileAccess3; }
 namespace sd { class DrawDocShell; }
 namespace tools { class Rectangle; }
 
@@ -54,7 +54,7 @@ class SdPage;
 class HtmlState;
 class SdrTextObj;
 class SdrObjGroup;
-namespace sdr { namespace table { class SdrTableObj; } }
+namespace sdr::table { class SdrTableObj; }
 class SdrPage;
 class SdDrawDocument;
 class ButtonSet;

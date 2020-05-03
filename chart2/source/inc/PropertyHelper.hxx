@@ -25,7 +25,7 @@
 
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart
 {

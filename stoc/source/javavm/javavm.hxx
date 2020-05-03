@@ -34,10 +34,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XContainer; }
     namespace uno { class XComponentContext; }
-} } }
+}
 namespace jvmaccess {
     class UnoVirtualMachine;
     class VirtualMachine;

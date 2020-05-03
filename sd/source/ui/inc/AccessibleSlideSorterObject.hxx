@@ -29,10 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 class SdPage;
-
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
 namespace accessibility {
 

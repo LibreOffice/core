@@ -18,9 +18,9 @@
 
 #include <com/sun/star/awt/Size.hpp>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPages; } } } }
-namespace com { namespace sun { namespace star { namespace graphic { class XGraphicProvider; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XDrawPages; }
+namespace com::sun::star::graphic { class XGraphicProvider; }
 
 class SdDrawDocument;
 class GraphicFilter;

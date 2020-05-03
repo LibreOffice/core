@@ -24,9 +24,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XModifiable; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::util { class XModifiable; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {

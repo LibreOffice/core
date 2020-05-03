@@ -33,11 +33,11 @@
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/uno/Any.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         struct PropertyChangeEvent;
     }
-}}}
+}
 
 
 // LinguOptions

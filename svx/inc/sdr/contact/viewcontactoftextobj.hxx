@@ -23,7 +23,7 @@
 
 class SdrTextObj;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewContactOfTextObj : public ViewContactOfSdrObj
 {
@@ -33,6 +33,6 @@ public:
     virtual ~ViewContactOfTextObj() override;
 };
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

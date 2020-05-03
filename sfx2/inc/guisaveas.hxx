@@ -30,11 +30,7 @@
 #include <sfx2/signaturestate.hxx>
 
 
-namespace com { namespace sun { namespace star {
-    namespace document {
-        class XDocumentProperties;
-    }
-} } }
+namespace com::sun::star::document { class XDocumentProperties; }
 
 namespace weld { class Window; }
 class ModelData_Impl;

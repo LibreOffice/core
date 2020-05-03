@@ -23,10 +23,7 @@
 #include "viewfunc.hxx"
 #include <dptypes.hxx>
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
-
+namespace com::sun::star::sheet { struct DataPilotFieldFilter; }
 struct ScSortParam;
 struct ScQueryParam;
 class ScDBData;

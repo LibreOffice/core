@@ -24,7 +24,7 @@
 
 #include "diagram.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler2
 {
@@ -96,7 +96,7 @@ private:
     DiagramColorMap&  mrColorsMap;
 };
 
-} }
+}
 
 #endif
 

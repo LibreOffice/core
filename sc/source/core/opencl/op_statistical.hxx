@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class OpStandard: public Normal
 {
@@ -546,7 +546,7 @@ public:
     virtual bool canHandleMultiVector() const override { return true; }
 };
 
-}}
+}
 
 #endif
 

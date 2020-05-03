@@ -25,7 +25,7 @@
 
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
-namespace avmedia { namespace gstreamer {
+namespace avmedia::gstreamer {
 
 class Player;
 
@@ -77,7 +77,6 @@ private:
     css::media::ZoomLevel                       meZoomLevel;
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+} // namespace avmedia::gstreamer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@
 
 #include <tools/diagnose_ex.h>
 
-namespace sd { namespace colortoolpanel
+namespace sd::colortoolpanel
 {
 
     using ::com::sun::star::uno::Reference;

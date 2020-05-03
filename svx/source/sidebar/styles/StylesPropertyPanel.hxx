@@ -4,7 +4,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/weldutils.hxx>
 
-namespace svx { namespace sidebar{
+namespace svx::sidebar{
 
 class StylesPropertyPanel:
     public PanelLayout
@@ -32,6 +32,6 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
-} } //end of namespace svx::sidebar
+} //end of namespace svx::sidebar
 
 #endif

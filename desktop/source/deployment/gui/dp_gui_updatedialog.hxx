@@ -40,11 +40,11 @@ class MouseEvent;
 class ResId;
 namespace vcl { class Window; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace deployment { class XExtensionManager;
                            class XPackage; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace dp_gui {
 /**

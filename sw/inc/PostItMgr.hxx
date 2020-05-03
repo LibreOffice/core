@@ -47,12 +47,8 @@ class SwEditWin;
 class Color;
 class SfxItemSet;
 class SvxSearchItem;
-namespace sw { namespace annotation {
-    class SwAnnotationWin;
-}}
-namespace sw { namespace sidebarwindows {
-    class SwFrameSidebarWinContainer;
-}}
+namespace sw::annotation { class SwAnnotationWin; }
+namespace sw::sidebarwindows { class SwFrameSidebarWinContainer; }
 class SwSidebarItem;
 class SwFrame;
 namespace vcl { class Window; }

@@ -30,7 +30,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 namespace sd { class ViewShellBase; }
-namespace sd { namespace tools { class EventMultiplexerEvent; } }
+namespace sd::tools { class EventMultiplexerEvent; }
 
 class ColorListBox;
 class SvxPageItem;
@@ -44,7 +44,7 @@ class XFillHatchItem;
 
 static const long MINBODY = 284;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class SlideBackground :
     public PanelLayout,
@@ -180,7 +180,7 @@ private:
     static FieldUnit GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState);
 };
 
-}}
+}
 
 #endif
 

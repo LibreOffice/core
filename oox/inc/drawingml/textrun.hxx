@@ -26,7 +26,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <drawingml/textcharacterproperties.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextRun
 {
@@ -58,7 +58,7 @@ private:
 
 typedef std::shared_ptr< TextRun > TextRunPtr;
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 

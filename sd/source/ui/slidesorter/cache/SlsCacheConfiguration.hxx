@@ -24,9 +24,9 @@
 #include <vcl/timer.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
+namespace com::sun::star::container { class XNameAccess; }
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 /** A very simple and easy-to-use access to configuration entries regarding
     the slide sorter cache.
@@ -61,7 +61,7 @@ private:
     DECL_STATIC_LINK(CacheConfiguration, TimerCallback, Timer *, void);
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

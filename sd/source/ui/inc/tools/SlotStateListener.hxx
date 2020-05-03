@@ -25,12 +25,12 @@
 #include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XDispatch; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XDispatchProvider; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XStatusListener; } } } }
-namespace com { namespace sun { namespace star { namespace frame { struct FeatureStateEvent; } } } }
+namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::frame { class XDispatchProvider; }
+namespace com::sun::star::frame { class XStatusListener; }
+namespace com::sun::star::frame { struct FeatureStateEvent; }
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 typedef cppu::WeakComponentImplHelper<
     css::frame::XStatusListener
@@ -137,7 +137,7 @@ private:
             const css::util::URL& rURL) const;
 };
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 #endif
 

@@ -29,7 +29,7 @@
 #include <vector>
 #include <memory>
 
-namespace com{ namespace sun {namespace star{
+namespace com::sun::star{
     namespace beans{
         struct PropertyValue;
     }
@@ -45,7 +45,7 @@ namespace com{ namespace sun {namespace star{
     namespace text{
         class XTextRange;
     }
-}}}
+}
 
 namespace utl
 {

@@ -35,10 +35,10 @@
 
 class SwMailMergeConfigItem;
 
-namespace com { namespace sun { namespace star { namespace mail {
+namespace com::sun::star::mail {
     class XMailService;
     class XSmtpService;
-} } } }
+}
 
 namespace SwMailMergeHelper
 {

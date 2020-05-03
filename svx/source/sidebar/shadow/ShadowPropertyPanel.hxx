@@ -15,7 +15,7 @@
 
 class ColorListBox;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class ShadowPropertyPanel
 :   public PanelLayout,
@@ -84,7 +84,7 @@ private:
     DECL_LINK(ModifyShadowDistanceHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyShadowTransSliderHdl, weld::Scale&, void);
 };
-}
+
 }
 
 #endif

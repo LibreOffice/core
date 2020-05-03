@@ -17,7 +17,7 @@
 #include <sal/types.h>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 class MappedFile;
 struct MapEntry;
@@ -51,6 +51,6 @@ private:
     NestedMap map_;
 };
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

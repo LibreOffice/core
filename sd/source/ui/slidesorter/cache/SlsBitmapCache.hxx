@@ -26,7 +26,7 @@ class SdrPage;
 #include <osl/mutex.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class CacheCompactor;
 class BitmapCompressor;
@@ -207,7 +207,7 @@ private:
     void UpdateCacheSize (const CacheEntry& rKey, CacheOperation eOperation);
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

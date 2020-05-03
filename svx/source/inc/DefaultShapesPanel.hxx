@@ -29,7 +29,7 @@ using namespace css;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 /** This panel provides buttons for inserting shapes into a document.
 */
@@ -76,7 +76,7 @@ private:
     DECL_LINK( ShapeSelectHdl, ValueSet*, void );
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

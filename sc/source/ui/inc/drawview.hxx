@@ -24,7 +24,7 @@
 
 #include <global.hxx>
 
-namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
+namespace com::sun::star::datatransfer { class XTransferable; }
 
 class ScDocument;
 class ScViewData;

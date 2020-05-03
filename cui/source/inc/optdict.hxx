@@ -24,11 +24,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/langbox.hxx>
 
-namespace com{namespace sun{namespace star{
-namespace linguistic2{
-    class XDictionary;
-    class XSpellChecker1;
-}}}}
+namespace com::sun::star{
+    namespace linguistic2{
+        class XDictionary;
+        class XSpellChecker1;
+    }
+}
 
 // forward ---------------------------------------------------------------
 

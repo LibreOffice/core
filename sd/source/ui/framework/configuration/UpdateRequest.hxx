@@ -25,9 +25,9 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XConfigurationChangeRequest,
@@ -68,7 +68,7 @@ public:
     virtual void SAL_CALL setName (const OUString& rName) override;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

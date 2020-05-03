@@ -26,7 +26,7 @@
 
 #include <vcl/timer.hxx>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class BitmapCache;
 class RequestQueue;
@@ -93,7 +93,7 @@ private:
         const RequestPriorityClass ePriorityClass);
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

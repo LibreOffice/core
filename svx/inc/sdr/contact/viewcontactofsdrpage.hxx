@@ -25,7 +25,7 @@
 
 class SdrPage;
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 class ViewContactOfSdrPage;
 
@@ -198,7 +198,7 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
 };
 
-}}
+}
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDRPAGE_HXX
 

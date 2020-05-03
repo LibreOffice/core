@@ -25,14 +25,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
-namespace configmgr { namespace update {
+namespace configmgr::update {
 
 css::uno::Reference< css::uno::XInterface >
 create(
@@ -44,7 +44,7 @@ OUString getImplementationName();
 css::uno::Sequence< OUString >
 getSupportedServiceNames();
 
-} }
+}
 
 #endif
 

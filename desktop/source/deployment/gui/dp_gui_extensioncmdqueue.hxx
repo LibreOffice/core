@@ -31,10 +31,10 @@
 
 /// @HTML
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace task { class XInteractionRequest; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace dp_gui {
 

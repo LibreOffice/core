@@ -26,7 +26,7 @@
 
 class SdPage;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class MasterPageDescriptor;
 class MasterPageContainerChangeEvent;
@@ -183,7 +183,7 @@ public:
     MasterPageContainer::Token maChildToken;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

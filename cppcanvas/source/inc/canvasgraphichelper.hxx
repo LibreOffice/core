@@ -27,10 +27,10 @@
 
 #include <optional>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     class  XGraphicDevice;
-} } } }
+}
 
 
 /* Definition of CanvasGraphicHelper class */

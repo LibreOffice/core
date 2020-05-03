@@ -26,9 +26,9 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmlmultiimagehelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XTextCursor; class XTextContent; }
-} } }
+}
 
 class XMLTextFrameContextHyperlink_Impl;
 

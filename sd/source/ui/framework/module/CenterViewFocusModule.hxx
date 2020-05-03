@@ -25,8 +25,8 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::frame { class XController; }
 
 namespace sd {
 
@@ -34,7 +34,7 @@ class ViewShellBase;
 
 }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
@@ -87,7 +87,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

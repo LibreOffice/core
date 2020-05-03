@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::lang::XInitialization,
@@ -85,7 +85,7 @@ private:
     void ThrowIfDisposed() const;
 };
 
-} }
+}
 
 #endif
 

@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableStyle;
 
@@ -47,7 +47,7 @@ private:
 
 typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
 
-} } }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELIST_HXX
 

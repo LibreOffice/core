@@ -22,7 +22,7 @@
 
 namespace vcl { class Window; }
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 /** A single button in the tab bar.
 */
@@ -41,6 +41,6 @@ private:
     bool mbIsLeftButtonDown;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

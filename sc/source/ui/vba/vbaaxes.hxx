@@ -22,8 +22,8 @@
 #include <ooo/vba/excel/XAxes.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace ooo { namespace vba { namespace excel { class XAxis; } } }
-namespace ooo { namespace vba { namespace excel { class XChart; } } }
+namespace ooo::vba::excel { class XAxis; }
+namespace ooo::vba::excel { class XChart; }
 
 typedef CollTestImplHelper< ov::excel::XAxes > ScVbaAxes_BASE;
 class ScVbaAxes : public ScVbaAxes_BASE

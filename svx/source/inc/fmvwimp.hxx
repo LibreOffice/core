@@ -57,7 +57,7 @@ class SdrUnoObj;
 struct ImplSVEvent;
 enum class SdrInventor : sal_uInt32;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt {
         class XControl;
         class XWindow;
@@ -68,7 +68,7 @@ namespace com { namespace sun { namespace star {
     namespace util {
         class XNumberFormats;
     }
-}}}
+}
 
 class FmXFormView;
 

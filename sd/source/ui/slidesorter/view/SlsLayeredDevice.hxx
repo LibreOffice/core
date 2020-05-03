@@ -33,7 +33,7 @@ namespace vcl { class Region; }
 
 class VirtualDevice;
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 /** A simple wrapper around an OutputDevice that provides support for
     independent layers and buffering.
@@ -80,7 +80,7 @@ private:
     void RepaintRectangle (const ::tools::Rectangle& rRepaintRectangle);
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

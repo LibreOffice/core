@@ -22,7 +22,7 @@
 
 #include <svtools/valueset.hxx>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Adapt the svtools valueset to the needs of the master page controls.
 */
@@ -56,7 +56,7 @@ private:
     sal_uInt16 CalculateRowCount (sal_uInt16 nColumnCount) const;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

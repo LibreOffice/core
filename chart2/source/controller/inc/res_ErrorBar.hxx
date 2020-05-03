@@ -25,7 +25,7 @@
 #include <svx/chrtitem.hxx>
 #include "RangeSelectionListener.hxx"
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
 namespace weld { class Builder; }
 namespace weld { class Button; }
 namespace weld { class CheckButton; }

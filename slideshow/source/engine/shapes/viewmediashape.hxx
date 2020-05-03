@@ -32,19 +32,21 @@
 class SystemChildWindow;
 namespace vcl { class Window; }
 
-namespace com { namespace sun { namespace star { namespace drawing {
-    class XShape;
+namespace com::sun::star {
+    namespace drawing {
+        class XShape;
+    }
+    namespace media {
+        class XPlayer;
+        class XPlayerWindow;
+    }
+    namespace uno {
+        class XComponentContext;
+    }
+    namespace beans{
+        class XPropertySet;
+    }
 }
-namespace media {
-    class XPlayer;
-    class XPlayerWindow;
-}
-namespace uno {
-    class XComponentContext;
-}
-namespace beans{
-    class XPropertySet;
-} } } }
 
 namespace slideshow
 {

@@ -41,7 +41,7 @@ class SdrObject;
 class SwDoc;
 class SwFormat;
 class SfxItemPropertySet;
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::frame { class XModel; }
 
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper

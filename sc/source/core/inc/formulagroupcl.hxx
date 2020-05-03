@@ -12,7 +12,7 @@
 
 #include <formulagroup.hxx>
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class FormulaGroupInterpreterOpenCL : public FormulaGroupInterpreter
 {
@@ -25,7 +25,7 @@ public:
         ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) override;
 };
 
-}} // namespace sc::opencl
+} // namespace sc::opencl
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
 

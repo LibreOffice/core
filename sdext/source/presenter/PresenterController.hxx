@@ -41,7 +41,7 @@
 #include <map>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterCanvasHelper;
 class PresenterPaintManager;
@@ -212,7 +212,7 @@ private:
     void HandleNumericKeyPress (const sal_Int32 nKey, const sal_Int32 nModifiers);
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

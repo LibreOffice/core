@@ -26,7 +26,7 @@
 #define SWPAGE_WIDE_VALUE3     1800
 #define SWPAGE_UNIT_THRESHOLD  5
 
-namespace sw { namespace sidebar{
+namespace sw::sidebar{
 
 bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
                const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
@@ -187,6 +187,6 @@ void SetMirrored( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SWPAGE_WIDE_VALUE1;
     bMirrored = true;
 }
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

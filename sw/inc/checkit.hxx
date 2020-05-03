@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star { namespace i18n { class XExtendedInputSequenceChecker; } } } }
+namespace com::sun::star::i18n { class XExtendedInputSequenceChecker; }
 
 // Wrapper for the XInputSequenceChecker
 class SwCheckIt

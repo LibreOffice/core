@@ -25,7 +25,7 @@
 #include <svtools/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XDispatchProvider; } } } }
+namespace com::sun::star::frame { class XDispatchProvider; }
 
 class SvxZoomSliderItem;
 

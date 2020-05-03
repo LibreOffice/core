@@ -22,7 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class Theme;
 
@@ -36,7 +36,7 @@ private:
     Theme& mrTheme;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_OBJECTDEFAULTCONTEXT_HXX
 

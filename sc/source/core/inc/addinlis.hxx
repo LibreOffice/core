@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace sheet { class XVolatileResult; } } } }
+namespace com::sun::star::sheet { class XVolatileResult; }
 namespace rtl { template <class reference_type> class Reference; }
 
 class ScDocument;

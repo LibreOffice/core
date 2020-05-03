@@ -27,7 +27,7 @@
 
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 /** The request queue stores requests that are described by the Request
     sorted according to priority class and then priority.
@@ -122,7 +122,7 @@ private:
     int mnMaximumPriority;
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

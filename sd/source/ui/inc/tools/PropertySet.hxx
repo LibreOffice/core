@@ -26,7 +26,7 @@
 #include <map>
 #include <memory>
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::beans::XPropertySet
@@ -110,7 +110,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::tools
+} // end of namespace ::sd::tools
 
 #endif
 

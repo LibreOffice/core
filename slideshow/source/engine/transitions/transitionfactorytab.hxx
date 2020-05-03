@@ -24,7 +24,7 @@
 
 #include <sal/types.h>
 
-namespace slideshow { namespace internal {
+namespace slideshow::internal {
 
 struct TransitionInfo;
 
@@ -33,7 +33,7 @@ TransitionInfo const * getTransitionInfo(
 
 TransitionInfo const * getRandomTransitionInfo();
 
-} }
+}
 
 #endif
 

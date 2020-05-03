@@ -30,9 +30,9 @@
 #include <memory>
 #include <vector>
 
-namespace sd { namespace slidesorter { class SlideSorter; } }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** Experimental class for simple eye candy animations.
 */
@@ -118,7 +118,7 @@ private:
     void RequestNextFrame();
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

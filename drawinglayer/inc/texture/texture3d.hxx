@@ -24,9 +24,9 @@
 #include <texture/texture.hxx>
 #include <vcl/bitmapex.hxx>
 
-namespace drawinglayer { namespace primitive3d {
+namespace drawinglayer::primitive3d {
     class HatchTexturePrimitive3D;
-}}
+}
 
 namespace drawinglayer
 {

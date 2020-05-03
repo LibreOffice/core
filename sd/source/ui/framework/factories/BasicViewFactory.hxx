@@ -30,8 +30,8 @@
 #include <vcl/vclptr.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XPane; } } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XPane; }
 
 namespace sd {
 class ViewShell;
@@ -41,7 +41,7 @@ class FrameView;
 class SfxViewFrame;
 namespace vcl { class Window; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
@@ -128,7 +128,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 
