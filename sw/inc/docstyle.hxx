@@ -217,7 +217,7 @@ public:
 
     bool    IsOrganizerMode() const         { return bOrganizer; }
 
-    virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask ) override;
+    virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator( SfxStyleFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     SwDoc& GetDoc() const { return rDoc; }
 

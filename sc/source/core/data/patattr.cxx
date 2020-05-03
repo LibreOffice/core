@@ -1204,7 +1204,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument* pDoc)
         //  Assumes that "Standard" is always the 1st entry!
         if (!pStyle)
         {
-            std::unique_ptr<SfxStyleSheetIterator> pIter = pDoc->GetStyleSheetPool()->CreateIterator( SfxStyleFamily::Para, SfxStyleSearchBits::All );
+            std::unique_ptr<SfxStyleSheetIterator> pIter = pDoc->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Para);
             pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
         }
 
