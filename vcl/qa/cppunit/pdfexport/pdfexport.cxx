@@ -2161,7 +2161,7 @@ void PdfExportTest::testVersion15()
 // Check round-trip of importing and exporting the PDF with PDFium filter,
 // which imports the PDF document as multiple PDFs as graphic object.
 // Each page in the document has one PDF graphic object which content is
-// the correcponding page in the PDF. When such a document is exported,
+// the corresponding page in the PDF. When such a document is exported,
 // the PDF graphic gets embedded into the exported PDF document (as a
 // Form XObject).
 void PdfExportTest::testMultiPagePDF()
