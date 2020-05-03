@@ -23,9 +23,9 @@
 #include <chartview/chartviewdllapi.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct Direction3D; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::drawing { struct Direction3D; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart
 {

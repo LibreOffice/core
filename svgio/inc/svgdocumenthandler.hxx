@@ -24,7 +24,7 @@
 #include "svgdocument.hxx"
 #include <cppuhelper/implbase.hxx>
 
-namespace svgio { namespace svgreader { class SvgCharacterNode; }}
+namespace svgio::svgreader { class SvgCharacterNode; }
 
 namespace svgio
 {

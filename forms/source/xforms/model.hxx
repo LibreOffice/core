@@ -34,10 +34,10 @@
 
 
 // forward declaractions
-namespace com { namespace sun { namespace star
+namespace com::sun::star
 {
-    namespace xml { namespace dom { class XDocument; } }
-    namespace xml { namespace dom { class XNode; } }
+    namespace xml::dom { class XDocument; }
+    namespace xml::dom { class XNode; }
     namespace uno { template<typename T> class Sequence; }
     namespace lang { class IndexOutOfBoundsException; }
     namespace lang { class IllegalArgumentException; }
@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star
     namespace container { class XSet; }
     namespace container { class XNameContainer; }
     namespace frame { class XModel; }
-} } }
+}
 namespace xforms
 {
     class BindingCollection;

@@ -24,9 +24,9 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace ooo { namespace vba { class XHelperInterface; } }
-namespace ooo { namespace vba { namespace excel { class XFileDialogSelectedItems; } } }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ooo::vba { class XHelperInterface; }
+namespace ooo::vba::excel { class XFileDialogSelectedItems; }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XFileDialog > ScVbaFileDialog_BASE;
 

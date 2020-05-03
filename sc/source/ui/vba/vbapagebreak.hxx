@@ -24,9 +24,9 @@
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace ooo { namespace vba { namespace excel { class XRange; } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ooo::vba::excel { class XRange; }
 
 template< typename... Ifc >
 class ScVbaPageBreak : public InheritedHelperInterfaceWeakImpl< Ifc... >

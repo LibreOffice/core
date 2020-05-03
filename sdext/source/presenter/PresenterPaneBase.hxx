@@ -32,7 +32,7 @@
 #include <rtl/ref.hxx>
 
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterController;
 
@@ -121,7 +121,7 @@ protected:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

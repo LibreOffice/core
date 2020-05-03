@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering {
+namespace com::sun::star::rendering {
     class XCanvasFont;
 } } } }
 

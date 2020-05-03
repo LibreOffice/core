@@ -22,7 +22,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
 namespace chart { class ControllerLockHelper; }
 
 namespace chart

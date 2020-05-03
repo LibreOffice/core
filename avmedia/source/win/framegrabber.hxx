@@ -25,7 +25,7 @@
 
 struct IMediaDet;
 
-namespace avmedia { namespace win {
+namespace avmedia::win {
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                                     css::lang::XServiceInfo >

@@ -28,14 +28,14 @@
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace linguistic2{
         class XLinguProperties;
         class XSpellChecker1;
         class XHyphenator;
         class XThesaurus;
     }
-}}}
+}
 namespace utl{
     class TransliterationWrapper;
 }

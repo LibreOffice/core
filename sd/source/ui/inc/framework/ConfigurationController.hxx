@@ -30,12 +30,12 @@
 #include <memory>
 
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationChangeRequest; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationController,
@@ -177,7 +177,7 @@ private:
     void ThrowIfDisposed () const;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

@@ -38,7 +38,7 @@
 class SvXMLExport;
 struct XMLPropertyState;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace util { struct DateTime; }
     namespace util { struct Date; }
     namespace text { class XTextField; }
@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySetInfo; }
     namespace frame { class XModel; }
     namespace uno { template<typename A> class Sequence; }
-} } }
+}
 
 
 /// field IDs,

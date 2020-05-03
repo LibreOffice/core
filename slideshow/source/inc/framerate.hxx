@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-namespace slideshow { namespace internal {
+namespace slideshow::internal {
 
 /** Some frame rate related data.
 */
@@ -40,7 +40,7 @@ public:
     static const sal_Int32 PreferredFramesPerSecond = 50;
 };
 
-} } // end of namespace slideshow::internal
+} // end of namespace slideshow::internal
 
 #endif
 

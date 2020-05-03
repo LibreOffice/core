@@ -34,9 +34,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 
-namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
-namespace com{ namespace sun { namespace star { namespace frame { class XFrame2; } } } }
-namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
+namespace com::sun::star::awt   { class XWindow; }
+namespace com::sun::star::frame { class XFrame2; }
+namespace com::sun::star::io    { class XPersist; }
 
 #define ELEMENT_COUNT   size_t(E_ELEMENT_TYPE_COUNT)
 

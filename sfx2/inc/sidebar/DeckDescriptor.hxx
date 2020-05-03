@@ -22,7 +22,7 @@
 
 #include <sfx2/sidebar/Deck.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class DeckDescriptor
 {
@@ -48,6 +48,6 @@ public:
     ~DeckDescriptor();
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

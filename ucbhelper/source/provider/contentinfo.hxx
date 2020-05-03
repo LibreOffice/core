@@ -28,7 +28,7 @@
 
 #include <osl/mutex.hxx>
 
-namespace com { namespace sun { namespace star { namespace ucb { class XCommandEnvironment; } } } }
+namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 namespace ucbhelper {
 

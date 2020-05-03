@@ -28,11 +28,11 @@
 
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
         class Any;
         class RuntimeException;
         template<class T> class Sequence;
-} } } }
+}
 
 /** base class which encapsulates accessing (reading/writing) concrete property values
 */

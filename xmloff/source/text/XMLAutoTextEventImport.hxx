@@ -25,15 +25,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XModel; }
     namespace text { class XAutoTextContainer; }
     namespace text { class XAutoTextGroup; }
     namespace text { class XAutoTextEntry; }
     namespace uno { template<class X> class Reference; }
     namespace uno { template<class X> class Sequence; }
-    namespace xml { namespace sax { class XDocumentHandler; } }
-} } }
+    namespace xml::sax { class XDocumentHandler; }
+}
 
 
 class XMLAutoTextEventImport : public SvXMLImport

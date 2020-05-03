@@ -36,8 +36,8 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XInternalDataProvider; } } } }
+namespace com::sun::star::beans { class XPropertySetInfo; }
+namespace com::sun::star::chart2 { class XInternalDataProvider; }
 
 namespace chart
 {

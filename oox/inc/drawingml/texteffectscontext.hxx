@@ -18,7 +18,7 @@
 #include <memory>
 #include <vector>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextEffectsContext final : public oox::core::ContextHandler2
 {
@@ -42,7 +42,7 @@ private:
     sal_Int32 mnCurrentElement;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTEFFECTSCONTEXT_HXX
 

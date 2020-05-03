@@ -22,9 +22,9 @@
 #include "ItemConverter.hxx"
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XCoordinateSystem; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {

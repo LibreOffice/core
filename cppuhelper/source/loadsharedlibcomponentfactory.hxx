@@ -16,15 +16,15 @@
 
 #include "servicemanager.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno {
         class Environment;
         class XInterface;
     }
-} } }
+}
 
-namespace cppuhelper { namespace detail {
+namespace cppuhelper::detail {
 
 css::uno::Environment getEnvironment(
     OUString const & name, OUString const & implementation);
@@ -37,7 +37,7 @@ void loadSharedLibComponentFactory(
     WrapperConstructorFn * constructorFunction,
     css::uno::Reference<css::uno::XInterface> * factory);
 
-} }
+}
 
 #endif
 

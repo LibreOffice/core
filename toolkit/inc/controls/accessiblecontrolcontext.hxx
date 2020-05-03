@@ -26,9 +26,9 @@
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { class XPropertySetInfo; }
 
 namespace toolkit
 {

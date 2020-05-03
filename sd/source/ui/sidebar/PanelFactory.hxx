@@ -24,7 +24,7 @@
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::ui::XUIElementFactory
@@ -49,7 +49,7 @@ public:
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

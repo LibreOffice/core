@@ -28,12 +28,12 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceFactory; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResource; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace com::sun::star::drawing::framework { class XResourceFactory; }
+namespace com::sun::star::drawing::framework { class XResource; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 class ConfigurationControllerBroadcaster;
 class ResourceFactoryManager;
@@ -137,7 +137,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

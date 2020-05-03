@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
-namespace stoc { namespace uriproc {
+namespace stoc::uriproc {
 
 class UriReference {
 public:
@@ -104,7 +104,7 @@ private:
     void appendSchemeSpecificPart(OUStringBuffer & buffer) const;
 };
 
-} }
+}
 
 #endif
 

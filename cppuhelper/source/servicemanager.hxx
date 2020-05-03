@@ -32,9 +32,9 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     class XSingleComponentFactory;
-} } } }
+}
 namespace cppu { struct ContextEntry_Init; }
 namespace com :: sun :: star :: lang { class XSingleServiceFactory; }
 namespace com :: sun :: star :: uno { class XComponentContext; }

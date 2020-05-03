@@ -27,7 +27,7 @@
 #include <vector>
 
 namespace sd { class SmartTag; }
-namespace sd { namespace tools { class EventMultiplexerEvent; } }
+namespace sd::tools { class EventMultiplexerEvent; }
 namespace sd { class ViewShellBase; }
 struct ImplSVEvent;
 

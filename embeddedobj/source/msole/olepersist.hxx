@@ -25,10 +25,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
 OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 

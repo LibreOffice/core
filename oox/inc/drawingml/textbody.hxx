@@ -24,14 +24,14 @@
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textliststyle.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XText; }
     namespace text { class XTextCursor; }
-} } }
+}
 
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextParagraph;
 typedef RefVector< TextParagraph > TextParagraphVector;
@@ -74,7 +74,7 @@ protected:
     TextListStyle       maTextListStyle;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
 

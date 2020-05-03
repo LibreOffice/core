@@ -35,12 +35,7 @@ class ScOrcusSheet;
 class ScOrcusStyles;
 class ScOrcusFactory;
 class SfxItemSet;
-
-namespace com { namespace sun { namespace star { namespace task {
-
-class XStatusIndicator;
-
-}}}}
+namespace com::sun::star::task { class XStatusIndicator; }
 
 class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
 {

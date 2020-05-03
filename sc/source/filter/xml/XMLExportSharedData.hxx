@@ -27,8 +27,8 @@
 #include <list>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XShape; }
 
 struct ScMyDrawPage
 {

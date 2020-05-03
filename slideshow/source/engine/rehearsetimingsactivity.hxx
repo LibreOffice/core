@@ -33,7 +33,7 @@
 #include <memory>
 
 namespace vcl { class Font; }
-namespace canvas{ namespace tools{ class ElapsedTime; }}
+namespace canvas::tools{ class ElapsedTime; }
 namespace cppcanvas{ class CustomSprite; }
 namespace basegfx
 {

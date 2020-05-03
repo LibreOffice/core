@@ -22,8 +22,8 @@
 #include <ooo/vba/excel/XValidation.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::table { class XCellRange; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 typedef InheritedHelperInterfaceWeakImpl<ov::excel::XValidation > ValidationImpl_BASE;
 

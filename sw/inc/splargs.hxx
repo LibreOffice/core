@@ -31,7 +31,7 @@ class SwTextFrame;
 class SwTextNode;
 class SwIndex;
 namespace vcl { class Font; }
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
+namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {

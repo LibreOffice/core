@@ -25,10 +25,10 @@
 
 #include <types.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XEnumerationAccess; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheets; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::container { class XEnumerationAccess; }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
+namespace com::sun::star::sheet { class XSpreadsheets; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 

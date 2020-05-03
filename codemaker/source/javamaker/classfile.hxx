@@ -30,7 +30,7 @@
 
 class FileStream;
 
-namespace codemaker { namespace javamaker {
+namespace codemaker::javamaker {
 
 class ClassFile {
 public:
@@ -235,7 +235,7 @@ private:
     friend class Code;
 };
 
-} }
+}
 
 #endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
 

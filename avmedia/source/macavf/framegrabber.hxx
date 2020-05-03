@@ -24,7 +24,7 @@
 
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                                     css::lang::XServiceInfo >

@@ -33,7 +33,7 @@
 
 class ToolbarUnoDispatcher;
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class ParaPropertyPanel
     : public PanelLayout,
@@ -133,7 +133,7 @@ private:
     void limitMetricWidths();
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

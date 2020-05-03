@@ -24,9 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XSingleComponentFactory;
-} } } }
+namespace com::sun::star::lang { class XSingleComponentFactory; }
 
 namespace cppuhelper {
 

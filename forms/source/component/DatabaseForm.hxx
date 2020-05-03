@@ -69,9 +69,7 @@
 #include <cppuhelper/implbase7.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace sdbc {
-    class SQLException;
-} } } }
+namespace com::sun::star::sdbc { class SQLException; }
 
 class Timer;
 class INetMIMEMessage;

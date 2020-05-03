@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/mutex.hxx>
 
-namespace com { namespace sun { namespace star { namespace datatransfer {
+namespace com::sun::star::datatransfer {
     class XTransferable;
 } } } }
 

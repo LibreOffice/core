@@ -36,11 +36,11 @@
 
 class SvNumberFormatter;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XMultiServiceFactory;
     }
-}}}
+}
 
 namespace dbaui
 {

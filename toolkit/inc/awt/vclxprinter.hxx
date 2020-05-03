@@ -32,7 +32,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/jobset.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { class XPrinter; } } } }
+namespace com::sun::star::awt { class XPrinter; }
 namespace vcl { class OldStylePrintAdaptor; }
 class Printer;
 

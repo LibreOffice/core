@@ -37,7 +37,7 @@
 
 #include <functional>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef cppu::WeakComponentImplHelper<
     css::awt::XWindowListener,
@@ -243,7 +243,7 @@ private:
 
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

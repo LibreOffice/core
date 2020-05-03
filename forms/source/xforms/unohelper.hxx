@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XInterface;
         template<class T> class Reference;
@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertySet;
     }
-} } }
+}
 
 namespace xforms
 {

@@ -42,13 +42,13 @@
 
 using namespace com::sun::star;
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     struct NamedValue;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace lang {
+namespace com::sun::star::lang {
     class XMultiServiceFactory;
-} } } }
+}
 
 namespace webdav_ucp
 {

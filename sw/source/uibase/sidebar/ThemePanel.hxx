@@ -17,7 +17,7 @@
 #include <svtools/valueset.hxx>
 #include <svx/ColorSets.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class ThemePanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
@@ -56,7 +56,7 @@ private:
 
 };
 
-}} // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_THEMEPANEL_HXX
 
