@@ -34,7 +34,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xtextit0.hxx>
 #include "svdfmtf.hxx"
-#include "svdpdf.hxx"
+#include <svdpdf.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/eeitem.hxx>
