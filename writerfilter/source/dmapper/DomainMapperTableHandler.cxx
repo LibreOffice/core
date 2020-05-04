@@ -1252,6 +1252,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 
             if ( !aAllTableParaProperties.empty() )
             {
+                TableParagraphVectorPtr pTableParagraphs = m_rDMapper_Impl.getTableManager().getCurrentParagraphs();
                 for (size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
                 {
                     for (size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
@@ -1263,8 +1264,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                         uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rStartPara->getText(), uno::UNO_QUERY);
                         bool bApply = false;
                         // search paragraphs of the cell
-                        std::vector<TableParagraph>::iterator aIt = m_rDMapper_Impl.m_aParagraphsToEndTable.begin();
-                        while ( aIt != m_rDMapper_Impl.m_aParagraphsToEndTable.end() ) try
+                        std::vector<TableParagraph>::iterator aIt = pTableParagraphs->begin();
+                        while ( aIt != pTableParagraphs->end() ) try
                         {
                             if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, aIt->m_rStartParagraph) == 0)
                                 bApply = true;
@@ -1273,7 +1274,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                                 bool bEndOfApply = (xTextRangeCompare->compareRegionEnds(rEndPara, aIt->m_rEndParagraph) == 0);
                                 ApplyParagraphPropertiesFromTableStyle(*aIt, aAllTableParaProperties, aCellProperties[nRow][nCell]);
                                 // erase processed paragraph from list of pending paragraphs
-                                aIt = m_rDMapper_Impl.m_aParagraphsToEndTable.erase(aIt);
+                                aIt = pTableParagraphs->erase(aIt);
                                 if (bEndOfApply)
                                     break;
                             }
@@ -1435,8 +1436,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
-    if (nestedTableLevel <= 1 && m_rDMapper_Impl.m_bConvertedTable)
-        m_rDMapper_Impl.m_aParagraphsToEndTable.clear();
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();

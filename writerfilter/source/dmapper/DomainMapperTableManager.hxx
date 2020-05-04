@@ -63,6 +63,8 @@ class DomainMapperTableManager : public TableManager
     bool m_bTableSizeTypeInserted;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
     sal_uInt32 m_nLayoutType;
+    /// Collected table paragraphs for table style handling
+    std::stack< TableParagraphVectorPtr > m_aParagraphsToEndTable;
 
     std::unique_ptr<TablePropertiesHandler> m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
@@ -93,6 +95,7 @@ public:
     IntVectorPtr const & getCurrentSpans( );
     IntVectorPtr const & getCurrentCellWidths( );
     sal_uInt32 getCurrentGridBefore( );
+    TableParagraphVectorPtr getCurrentParagraphs( );
 
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();
