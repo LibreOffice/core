@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+#include <config_oox.h>
 #include <comphelper/hash.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 
@@ -15,6 +17,10 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
 
 class TestHash : public CppUnit::TestFixture
 {
@@ -26,6 +32,12 @@ public:
     void testSHA512_NoSaltNoSpin();
     void testSHA512_saltspin();
 
+    virtual void tearDown()
+    {
+#if USE_TLS_NSS
+        NSS_Shutdown();
+#endif
+    }
     CPPUNIT_TEST_SUITE(TestHash);
     CPPUNIT_TEST(testMD5);
     CPPUNIT_TEST(testSHA1);
