@@ -2753,14 +2753,15 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
-        sal_uInt16              nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = nullptr;
         bool                    bDoFill     = false;
 
         pStyleSheetPool->SetSearchMask( eFamily, SfxStyleSearchBits::Used );
+        auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
+        sal_uInt16 nCount = xIter->Count();
 
         // Check whether fill is necessary
-        pStyle = pStyleSheetPool->First();
+        pStyle = xIter->First();
         //!!! TODO: This condition isn't right any longer, because we always show some default entries
         //!!! so the list doesn't show the count
         if ( nCount != pBox->get_count() )
@@ -2773,7 +2774,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->get_text(i) != pStyle->GetName() );
-                pStyle = pStyleSheetPool->Next();
+                pStyle = xIter->Next();
                 i++;
             }
         }
@@ -2787,7 +2788,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
             std::vector<OUString> aStyles;
 
             {
-                pStyle = pStyleSheetPool->Next();
+                pStyle = xIter->Next();
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
                 {
@@ -2807,7 +2808,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
                         if( bInsert )
                             aStyles.push_back(aName);
-                        pStyle = pStyleSheetPool->Next();
+                        pStyle = xIter->Next();
                     }
                 }
                 else
@@ -2815,7 +2816,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     while ( pStyle )
                     {
                         aStyles.push_back(pStyle->GetName());
-                        pStyle = pStyleSheetPool->Next();
+                        pStyle = xIter->Next();
                     }
                 }
             }

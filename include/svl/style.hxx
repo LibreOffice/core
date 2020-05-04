@@ -259,8 +259,6 @@ public:
     const SfxItemPool&          GetPool() const { return rPool;}
 
     virtual std::unique_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::All);
-    sal_uInt16              Count();
-    SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 
     virtual SfxStyleSheetBase&  Make(const OUString&,
                                      SfxStyleFamily eFam,

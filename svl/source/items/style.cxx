@@ -705,16 +705,6 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBas
     return *this;
 }
 
-sal_uInt16 SfxStyleSheetBasePool::Count()
-{
-    return GetIterator_Impl().Count();
-}
-
-SfxStyleSheetBase *SfxStyleSheetBasePool::operator[](sal_uInt16 nIdx)
-{
-    return GetIterator_Impl()[nIdx];
-}
-
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
                                                SfxStyleFamily eFam,
                                                SfxStyleSearchBits mask)
