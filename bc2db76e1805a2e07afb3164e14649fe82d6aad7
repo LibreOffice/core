@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4d93f336_dec91f2f",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-05-04T10:43:53Z",
+      "side": 1,
+      "message": "\u003e At least shear would have an effect on the line width too..\n\nHow so? A sheared 1-width line is still a 1-width line, just sheared.",
+      "parentUuid": "d2aa8140_987c1095",
+      "revId": "bc2db76e1805a2e07afb3164e14649fe82d6aad7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d8c1f3c_88f5037d",
         "filename": "vcl/qa/cppunit/BackendBugsTest.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-05-01T08:07:00Z",
       "side": 1,
       "message": "I really would prefer that this would be added to the BackendTests - that\u0027s what they are for.",
+      "revId": "bc2db76e1805a2e07afb3164e14649fe82d6aad7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "314f36fc_d3147d3f",
+        "filename": "vcl/qa/cppunit/BackendBugsTest.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-05-04T10:43:53Z",
+      "side": 1,
+      "message": "\u003e I really would prefer that this would be added to the BackendTests - that\u0027s what they are for.\n\nI thought that one was only for \"good\" tests from visualbackendtest, but ok, I can move it.",
+      "parentUuid": "5d8c1f3c_88f5037d",
       "revId": "bc2db76e1805a2e07afb3164e14649fe82d6aad7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
