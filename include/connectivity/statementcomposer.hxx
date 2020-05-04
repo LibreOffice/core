@@ -68,6 +68,7 @@ namespace dbtools
         void    setDisposeComposer( bool _bDoDispose );
 
         void    setFilter( const OUString& _rFilter );
+        void    setHavingClause( const OUString& _rHavingClause );
         void    setOrder( const OUString& _rOrder );
 
         /** returns the composer which has been fed with the current settings
