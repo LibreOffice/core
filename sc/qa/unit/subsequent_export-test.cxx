@@ -194,6 +194,7 @@ public:
     void testPreserveTextWhitespaceXLSX();
     void testPreserveTextWhitespace2XLSX();
     void testTextDirectionXLSX();
+    void testTdf130108();
     void testTdf55417();
     void testTdf129985();
     void testTdf73063();
@@ -336,6 +337,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTextDirectionXLSX);
+    CPPUNIT_TEST(testTdf130108);
     CPPUNIT_TEST(testTdf55417);
     CPPUNIT_TEST(testTdf129985);
     CPPUNIT_TEST(testTdf73063);
@@ -4016,6 +4018,23 @@ void ScExportTest::testTextDirectionXLSX()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf130108()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf130108.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:b", "val", "1");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:i", "val", "0");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:color", "rgb", "FFFFFFFF");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "10");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor", "rgb", "FFCC0000");
 
     xDocSh->DoClose();
 }
