@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_htmlexport, \
 	msfilter \
     sal \
     sfx \
+    sot \
     sw \
     svt \
     test \

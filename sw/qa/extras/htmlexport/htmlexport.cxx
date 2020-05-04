@@ -32,6 +32,7 @@
 #include <rtl/strbuf.hxx>
 #include <svtools/rtftoken.h>
 #include <filter/msfilter/rtfutil.hxx>
+#include <sot/storage.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -1019,6 +1020,36 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     // i.e. we did not work with the Ole10Native stream, rather created an OLE1 wrapper around the
     // OLE1-in-OLE2 data, resulting in additional size.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x99ed), nData);
+
+    // Now import this back and check the ODT result.
+    mxComponent->dispose();
+    mxComponent.clear();
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    mxComponent
+        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
+    xStorable.set(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProperties);
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("Object 2"),
+                                                  uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    tools::SvRef<SotStorage> pStorage = new SotStorage(*pStream);
+    tools::SvRef<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 39409
+    // - Actual  : 0
+    // i.e. we didn't handle the case when the ole1 payload was not an ole2 container. Note how the
+    // expected value is the same as nData above + 4 bytes, since this data is length-prefixed.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(39409), pOleNative->GetSize());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
