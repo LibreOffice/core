@@ -467,8 +467,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     {
         uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
         uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-        uno::Reference< text::XText > xText = xTextAppend->getText();
-        if(xCrsr.is() && xText.is())
+        if (xCrsr.is())
         {
             xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
             SetIsDummyParaAddedForTableInSection(true);
@@ -4828,8 +4827,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 if (xTextAppend.is())
                 {
                     uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-                    uno::Reference< text::XText > xText = xTextAppend->getText();
-                    if(xCrsr.is() && xText.is())
+                    if (xCrsr.is())
                     {
                         xCrsr->gotoEnd(false);
                         uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
@@ -5410,9 +5408,9 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (xTextAppend.is())
                         {
-                            uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
                             uno::Reference< text::XText > xText = xTextAppend->getText();
-                            if(xCrsr.is() && xText.is())
+                            uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
+                            if (xCrsr.is())
                             {
                                 xCrsr->gotoEnd(false);
                                 xText->insertString(xCrsr, sSymbol, true);
@@ -5485,10 +5483,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                         if (xTextAppend.is())
                         {
-                            uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-
                             uno::Reference< text::XText > xText = xTextAppend->getText();
-                            if(xCrsr.is() && xText.is())
+                            uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
+                            if (xCrsr.is())
                             {
                                 xCrsr->gotoEnd(false);
                                 xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, false);
