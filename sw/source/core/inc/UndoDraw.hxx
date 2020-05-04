@@ -98,7 +98,7 @@ public:
 class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 {
 private:
-    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > > aDrawFormatsAndObjs;
+    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > > m_aDrawFormatsAndObjs;
 
 public:
     SwUndoDrawUnGroupConnectToLayout(const SwDoc* pDoc);

@@ -701,33 +701,33 @@ namespace {
 
 class SwHyphArgs : public SwInterHyphInfo
 {
-    const SwNode *pStart;
-    const SwNode *pEnd;
-          SwNode *pNode;
-    sal_uInt16 *pPageCnt;
-    sal_uInt16 *pPageSt;
+    const SwNode *m_pStart;
+    const SwNode *m_pEnd;
+          SwNode *m_pNode;
+    sal_uInt16 *m_pPageCnt;
+    sal_uInt16 *m_pPageSt;
 
-    sal_uInt32 nNode;
-    sal_Int32 nPamStart;
-    sal_Int32 nPamLen;
+    sal_uInt32 m_nNode;
+    sal_Int32 m_nPamStart;
+    sal_Int32 m_nPamLen;
 
 public:
     SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
                 sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
-    void SetNode( SwNode *pNew ) { pNode = pNew; }
+    void SetNode( SwNode *pNew ) { m_pNode = pNew; }
     inline void SetRange( const SwNode *pNew );
-    void NextNode() { ++nNode; }
-    sal_uInt16 *GetPageCnt() { return pPageCnt; }
-    sal_uInt16 *GetPageSt() { return pPageSt; }
+    void NextNode() { ++m_nNode; }
+    sal_uInt16 *GetPageCnt() { return m_pPageCnt; }
+    sal_uInt16 *GetPageSt() { return m_pPageSt; }
 };
 
 }
 
 SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
                          sal_uInt16* pPageCount, sal_uInt16* pPageStart )
-     : SwInterHyphInfo( rCursorPos ), pNode(nullptr),
-     pPageCnt( pPageCount ), pPageSt( pPageStart )
+     : SwInterHyphInfo( rCursorPos ), m_pNode(nullptr),
+     m_pPageCnt( pPageCount ), m_pPageSt( pPageStart )
 {
     // The following constraints have to be met:
     // 1) there is at least one Selection
@@ -737,38 +737,38 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
             "SwDoc::Hyphenate: New York, New York");
 
     const SwPosition *pPoint = pPam->GetPoint();
-    nNode = pPoint->nNode.GetIndex();
+    m_nNode = pPoint->nNode.GetIndex();
 
     // Set start
-    pStart = pPoint->nNode.GetNode().GetTextNode();
-    nPamStart = pPoint->nContent.GetIndex();
+    m_pStart = pPoint->nNode.GetNode().GetTextNode();
+    m_nPamStart = pPoint->nContent.GetIndex();
 
     // Set End and Length
     const SwPosition *pMark = pPam->GetMark();
-    pEnd = pMark->nNode.GetNode().GetTextNode();
-    nPamLen = pMark->nContent.GetIndex();
+    m_pEnd = pMark->nNode.GetNode().GetTextNode();
+    m_nPamLen = pMark->nContent.GetIndex();
     if( pPoint->nNode == pMark->nNode )
-        nPamLen = nPamLen - pPoint->nContent.GetIndex();
+        m_nPamLen = m_nPamLen - pPoint->nContent.GetIndex();
 }
 
 inline void SwHyphArgs::SetRange( const SwNode *pNew )
 {
-    m_nStart = pStart == pNew ? nPamStart : 0;
-    m_nEnd   = pEnd   == pNew ? nPamStart + nPamLen : SAL_MAX_INT32;
+    m_nStart = m_pStart == pNew ? m_nPamStart : 0;
+    m_nEnd   = m_pEnd   == pNew ? m_nPamStart + m_nPamLen : SAL_MAX_INT32;
 }
 
 void SwHyphArgs::SetPam( SwPaM *pPam ) const
 {
-    if( !pNode )
+    if( !m_pNode )
         *pPam->GetPoint() = *pPam->GetMark();
     else
     {
-        pPam->GetPoint()->nNode = nNode;
-        pPam->GetPoint()->nContent.Assign( pNode->GetContentNode(), m_nWordStart );
-        pPam->GetMark()->nNode = nNode;
-        pPam->GetMark()->nContent.Assign( pNode->GetContentNode(),
+        pPam->GetPoint()->nNode = m_nNode;
+        pPam->GetPoint()->nContent.Assign( m_pNode->GetContentNode(), m_nWordStart );
+        pPam->GetMark()->nNode = m_nNode;
+        pPam->GetMark()->nContent.Assign( m_pNode->GetContentNode(),
                                           m_nWordStart + m_nWordLen );
-        OSL_ENSURE( nNode == pNode->GetIndex(),
+        OSL_ENSURE( m_nNode == m_pNode->GetIndex(),
                 "SwHyphArgs::SetPam: Pam disaster" );
     }
 }

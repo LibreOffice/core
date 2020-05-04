@@ -436,7 +436,7 @@ SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout()
 void
 SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
 {
-    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : aDrawFormatsAndObjs)
+    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : m_aDrawFormatsAndObjs)
     {
         SdrObject* pObj( rPair.second );
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(pObj->GetUserCall()) );
@@ -455,7 +455,7 @@ SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
 void
 SwUndoDrawUnGroupConnectToLayout::RedoImpl(::sw::UndoRedoContext &)
 {
-    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : aDrawFormatsAndObjs)
+    for (const std::pair< SwDrawFrameFormat*, SdrObject* > & rPair : m_aDrawFormatsAndObjs)
     {
         SwDrawFrameFormat* pFormat( rPair.first );
         SdrObject* pObj( rPair.second );
@@ -468,7 +468,7 @@ SwUndoDrawUnGroupConnectToLayout::RedoImpl(::sw::UndoRedoContext &)
 void SwUndoDrawUnGroupConnectToLayout::AddFormatAndObj( SwDrawFrameFormat* pDrawFrameFormat,
                                                      SdrObject* pDrawObject )
 {
-    aDrawFormatsAndObjs.emplace_back( pDrawFrameFormat, pDrawObject );
+    m_aDrawFormatsAndObjs.emplace_back( pDrawFrameFormat, pDrawObject );
 }
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc )
