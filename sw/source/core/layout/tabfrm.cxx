@@ -1091,7 +1091,22 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         m_pTable->SetRowsToRepeat(0);
         return false;
     }
-    else if ( !GetIndPrev() && nRepeat == nRowCount )
+
+    // Minimum row height has the same force as "do not split row" (as long as it fits on one page)
+    //     [ for Word compatibility only - reusing existing flag TABLE_ROW_KEEP to only apply this logic to MS formats ]
+    if ( bSplitRowAllowed && bTryToSplit && !pRow->IsRowSpanLine()
+         && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
+    {
+        const SwFormatFrameSize &rSz = pRow->GetFormat()->GetFrameSize();
+        const sal_Int32 nMinHeight = rSz.GetHeightSizeType() == SwFrameSize::Minimum ? rSz.GetHeight() : 0;
+        if ( nMinHeight > nRemainingSpaceForLastRow )
+        {
+            const sal_Int32 nFullPageHeight = FindPageFrame()->getFramePrintArea().Height();
+            bSplitRowAllowed = nMinHeight > nFullPageHeight;
+        }
+    }
+
+    if ( !GetIndPrev() && nRepeat == nRowCount )
     {
         // Second case: The first non-headline row does not fit to the page.
         // If it is not allowed to be split, or it contains a sub-row that
