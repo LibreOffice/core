@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svdpdf.hxx"
+#include <svdpdf.hxx>
 
 #include <config_features.h>
 
