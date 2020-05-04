@@ -1246,7 +1246,10 @@ static Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const
             bool bApplyFilter = true;
             _rxRowSet->getPropertyValue("ApplyFilter") >>= bApplyFilter;
             if ( bApplyFilter )
+            {
                 aComposer.setFilter( getString( _rxRowSet->getPropertyValue("Filter") ) );
+                aComposer.setHavingClause( getString( _rxRowSet->getPropertyValue("HavingClause") ) );
+            }
 
             aComposer.getQuery();
 
