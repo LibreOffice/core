@@ -14,6 +14,68 @@
 #include <svtools/rtfkeywd.hxx>
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
+#include <sot/stg.hxx>
+#include <sot/storage.hxx>
+
+namespace
+{
+/// If rOle1 is native OLE1 data of size nOle1Size, wraps it in an OLE2 container.
+void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2)
+{
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
+    // OLE Package Object
+    SvGlobalName aName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
+    pStorage->SetClass(aName, SotClipboardFormatId::NONE, "");
+
+    // [MS-OLEDS] 2.3.7 CompObjHeader
+    tools::SvRef<SotStorageStream> pCompObj = pStorage->OpenSotStream("\1CompObj");
+    // Reserved1
+    pCompObj->WriteUInt32(0xfffe0001);
+    // Version
+    pCompObj->WriteUInt32(0x00000a03);
+    // Reserved2
+    pCompObj->WriteUInt32(0xffffffff);
+    pCompObj->WriteUInt32(0x0003000c);
+    pCompObj->WriteUInt32(0x00000000);
+    pCompObj->WriteUInt32(0x000000c0);
+    pCompObj->WriteUInt32(0x46000000);
+    // Rest of CompObjStream
+    // AnsiUserType
+    OString aAnsiUserType("OLE Package");
+    pCompObj->WriteUInt32(aAnsiUserType.getLength() + 1);
+    pCompObj->WriteOString(aAnsiUserType);
+    pCompObj->WriteChar(0);
+    // AnsiClipboardFormat
+    pCompObj->WriteUInt32(0x00000000);
+    // Reserved1
+    OString aReserved1("Package");
+    pCompObj->WriteUInt32(aReserved1.getLength() + 1);
+    pCompObj->WriteOString(aReserved1);
+    pCompObj->WriteChar(0);
+    // UnicodeMarker
+    pCompObj->WriteUInt32(0x71B239F4);
+    // UnicodeUserType
+    pCompObj->WriteUInt32(0x00000000);
+    // UnicodeClipboardFormat
+    pCompObj->WriteUInt32(0x00000000);
+    // Reserved2
+    pCompObj->WriteUInt32(0x00000000);
+    pCompObj->Commit();
+    pCompObj.clear();
+
+    // [MS-OLEDS] 2.3.6 OLENativeStream
+    tools::SvRef<SotStorageStream> pOleNative = pStorage->OpenSotStream("\1Ole10Native");
+    // NativeDataSize
+    pOleNative->WriteUInt32(nOle1Size);
+    pOleNative->WriteStream(rOle1, nOle1Size);
+    pOleNative->Commit();
+    pOleNative.clear();
+
+    pStorage->Commit();
+    pStorage.clear();
+    rOle2.Seek(0);
+}
+}
 
 namespace msfilter::rtfutil
 {
@@ -278,8 +340,24 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
         if (nData)
         {
-            // NativeData
-            rOle2.WriteStream(aStream, nData);
+            sal_uInt64 nPos = aStream.Tell();
+            sal_uInt8 aSignature[8];
+            aStream.ReadBytes(aSignature, SAL_N_ELEMENTS(aSignature));
+            aStream.Seek(nPos);
+            const sal_uInt8 aOle2Signature[8] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+            // Don't use Storage::IsStorageFile() here, that would seek to the start of the stream,
+            // where the magic will always mismatch.
+            if (std::memcmp(aSignature, aOle2Signature, SAL_N_ELEMENTS(aSignature)) == 0)
+            {
+                // NativeData
+                rOle2.WriteStream(aStream, nData);
+            }
+            else
+            {
+                SvMemoryStream aStorage;
+                WrapOle1InOle2(aStream, nData, aStorage);
+                rOle2.WriteStream(aStorage);
+            }
             rOle2.Seek(0);
         }
     }
