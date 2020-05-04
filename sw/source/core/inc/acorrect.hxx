@@ -34,7 +34,7 @@ class SfxItemSet;
 
 class SwDontExpandItem
 {
-    std::unique_ptr<SfxItemSet> pDontExpItems;
+    std::unique_ptr<SfxItemSet> m_pDontExpandItems;
 
 public:
     SwDontExpandItem() {}
@@ -47,11 +47,11 @@ public:
 
 class SwAutoCorrDoc : public SvxAutoCorrDoc
 {
-    SwEditShell& rEditSh;
-    SwPaM& rCursor;
-    std::unique_ptr<SwNodeIndex> pIdx;
+    SwEditShell& m_rEditSh;
+    SwPaM& m_rCursor;
+    std::unique_ptr<SwNodeIndex> m_pIndex;
     int m_nEndUndoCounter;
-    bool    bUndoIdInitialized;
+    bool    m_bUndoIdInitialized;
 
     void DeleteSel( SwPaM& rDelPam );
     void DeleteSelImpl(SwPaM & rDelPam);
