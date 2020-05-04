@@ -59,6 +59,8 @@ public:
     void                    SetPosSize( SCCOLROW nNewPos, SCSIZE nNewSize );
     void                    SetHidden( bool bNewHidden );
     void                    SetVisible( bool bNewVisible );
+
+    OString                 dumpAsString() const;
 };
 
 class ScOutlineCollection
@@ -83,6 +85,8 @@ public:
     bool empty() const;
 
     iterator FindStart(SCCOLROW nMinStart);
+
+    OString dumpAsString() const;
 };
 
 class SC_DLLPUBLIC ScOutlineArray
@@ -138,6 +142,8 @@ public:
     void finalizeImport(const ScTable& rTable);
 
     void RemoveAll();
+
+    OString dumpAsString() const;
 };
 
 class ScOutlineTable

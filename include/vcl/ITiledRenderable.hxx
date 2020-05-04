@@ -178,6 +178,31 @@ public:
     }
 
     /**
+     * Generates a serialization of the active (Calc document) sheet's geometry data.
+     *
+     * @param bColumns - if true, the column widths/hidden/filtered/groups data
+     *     are included depending on the settings of the flags bSizes, bHidden,
+     *     bFiltered and bGroups.
+     * @param bRows - if true, the row heights/hidden/filtered/groups data
+     *     are included depending on the settings of the flags bSizes, bHidden,
+     *     bFiltered and bGroups.
+     * @bSizes - if true, the column-widths and/or row-heights data (represented as a list of spans)
+     *     are included depending on the settings of the flags bColumns and bRows.
+     * @bHidden - if true, the hidden columns and/or rows data (represented as a list of spans)
+     *     are included depending on the settings of the flags bColumns and bRows.
+     * @bFiltered - if true, the filtered columns and/or rows data (represented as a list of spans)
+     *     are included depending on the settings of the flags bColumns and bRows.
+     * @bGroups - if true, the column grouping and/or row grouping data
+     *     are included depending on the settings of the flags bColumns and bRows.
+     * @return serialization of the active sheet's geometry data as OString.
+     */
+    virtual OString getSheetGeometryData(bool /*bColumns*/, bool /*bRows*/, bool /*bSizes*/,
+                                         bool /*bHidden*/, bool /*bFiltered*/, bool /*bGroups*/)
+    {
+        return "";
+    }
+
+    /**
      * Get position and size of cell cursor in Calc - as JSON in the
      * current' views' co-ordinate system.
      * (This could maybe also be used for tables in Writer/Impress in future?)

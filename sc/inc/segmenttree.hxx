@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_SEGMENTTREE_HXX
 
 #include "types.hxx"
+#include <rtl/string.hxx>
 
 #include <memory>
 
@@ -76,6 +77,8 @@ public:
 
     SCROW findLastTrue() const;
 
+    OString dumpAsString();
+
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
@@ -98,6 +101,8 @@ public:
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize);
+
+    OString dumpAsString();
 
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
@@ -146,6 +151,8 @@ public:
     SCROW findLastTrue(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
+
+    OString dumpAsString();
 
 private:
     ::std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
