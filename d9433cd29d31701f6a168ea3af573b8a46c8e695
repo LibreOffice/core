@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e9b96ce_3d2c4c27",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-05-04T06:47:41Z",
+      "side": 1,
+      "message": "Poor casting from size_t to OUString?",
+      "range": {
+        "startLine": 197,
+        "startChar": 63,
+        "endLine": 197,
+        "endChar": 82
+      },
+      "revId": "d9433cd29d31701f6a168ea3af573b8a46c8e695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba8cbc1d_b7eb7879",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-05-04T06:47:41Z",
+      "side": 1,
+      "message": "Is there any function to cast INetURLObject to OUString?",
+      "range": {
+        "startLine": 253,
+        "startChar": 53,
+        "endLine": 253,
+        "endChar": 89
+      },
+      "revId": "d9433cd29d31701f6a168ea3af573b8a46c8e695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
