@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9df53793_d1c56f20",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3553,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-04T19:57:52Z",
+      "side": 1,
+      "message": "that\u0027s not consistent formatting...",
+      "range": {
+        "startLine": 3553,
+        "startChar": 27,
+        "endLine": 3553,
+        "endChar": 28
+      },
+      "revId": "3c031d40fda15935e36ac96d9f6d1e0aad6bed08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
