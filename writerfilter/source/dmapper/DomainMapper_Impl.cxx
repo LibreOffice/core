@@ -466,8 +466,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     if (!m_aTextAppendStack.empty())
     {
         uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-        uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
-        if (xCrsr.is())
+        if (xTextAppend.is())
         {
             xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
             SetIsDummyParaAddedForTableInSection(true);
