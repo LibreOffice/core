@@ -2385,10 +2385,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                         AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
                                       !pIndPrev &&
                                       !bDontSplit;
-        const bool bEmulateTableKeepFwdMoveAllowed = IsKeepFwdMoveAllowed(bEmulateTableKeep);
+        const bool bEmulateTableKeepDontSplit = bEmulateTableKeep && !IsKeepFwdMoveAllowed(bEmulateTableKeep);
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
-             ( !bEmulateTableKeepFwdMoveAllowed ||
+             ( bEmulateTableKeepDontSplit ||
                ( ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() ||
                    !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow
                  ) && ( !bDontSplit || !pIndPrev )
@@ -2400,7 +2400,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // We better avoid splitting of a row frame if we are inside a columned
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
-            if ( !bEmulateTableKeepFwdMoveAllowed ||
+            if ( bEmulateTableKeepDontSplit ||
                  ( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() &&
                    0 == aRectFnSet.GetHeight(GetUpper()->getFrameArea())
                ) )
@@ -2473,7 +2473,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 // The repeating lines / keeping lines still fit into the upper or
                 // if we do not have an (in)direct Prev, we split anyway.
                 if( aRectFnSet.YDiff(nDeadLine, nBreakLine) >=0
-                    || !pIndPrev || !bEmulateTableKeepFwdMoveAllowed )
+                    || !pIndPrev )
                 {
                     aNotify.SetLowersComplete( false );
                     bSplit = true;
@@ -2493,7 +2493,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || !bEmulateTableKeepFwdMoveAllowed) ) );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, (bTableRowKeep && !bAllowSplitOfRow) );
                     if (!bTryToSplit && !bSplitError)
                     {
                         --nUnSplitted;
