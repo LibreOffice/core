@@ -1786,7 +1786,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     if (m_nTableDepth > 0)
                     {
                         TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
-                        m_aParagraphsToEndTable.push_back(aPending);
+                        getTableManager().getCurrentParagraphs()->push_back(aPending);
                     }
 
                     // hidden empty paragraph with a not hidden shape, set as not hidden

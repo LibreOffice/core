@@ -1058,9 +1058,6 @@ public:
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
 
-    /// Table paragraph properties may need style update based on table style
-    std::vector<TableParagraph> m_aParagraphsToEndTable;
-
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     // Start a new index section; if needed, finish current paragraph
