@@ -1739,7 +1739,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 if (xParaProps && m_nTableDepth > 0)
                 {
                     TableParagraph aPending{pParaContext, xParaProps};
-                    m_aParagraphsToEndTable.push_back(aPending);
+                    getTableManager().getCurrentParagraphs()->push_back(aPending);
                 }
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style

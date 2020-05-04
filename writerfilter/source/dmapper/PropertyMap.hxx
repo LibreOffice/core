@@ -576,6 +576,15 @@ public:
 
 typedef tools::SvRef< TablePropertyMap > TablePropertyMapPtr;
 
+/// Information about a paragraph to be finished after a table end.
+struct TableParagraph
+{
+    PropertyMapPtr m_pPropertyMap;
+    css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
+};
+
+typedef std::shared_ptr< std::vector<TableParagraph> > TableParagraphVectorPtr;
+
 } // namespace dmapper
 } // namespace writerfilter
 
