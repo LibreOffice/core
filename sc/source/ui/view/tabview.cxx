@@ -49,6 +49,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <algorithm>
@@ -2755,6 +2758,80 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     }
 
     return sRet;
+}
+
+OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+                                        bool bFiltered, bool bGroups)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:SheetGeometryData");
+
+    auto getJSONString = [](const boost::property_tree::ptree& rTree) {
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, rTree);
+        return aStream.str();
+    };
+
+    ScDocument* pDoc = aViewData.GetDocument();
+    if (!pDoc)
+        return getJSONString(aTree).c_str();
+
+    if ((!bSizes && !bHidden && !bFiltered && !bGroups) ||
+        (!bColumns && !bRows))
+    {
+        return getJSONString(aTree).c_str();
+    }
+
+    struct GeomEntry
+    {
+        SheetGeomType eType;
+        const char* pKey;
+        bool bEnabled;
+    };
+
+    const GeomEntry aGeomEntries[] = {
+        { SheetGeomType::SIZES,    "sizes",    bSizes    },
+        { SheetGeomType::HIDDEN,   "hidden",   bHidden   },
+        { SheetGeomType::FILTERED, "filtered", bFiltered },
+        { SheetGeomType::GROUPS,   "groups",   bGroups   }
+    };
+
+    struct DimensionEntry
+    {
+        const char* pKey;
+        bool bDimIsCol;
+        bool bEnabled;
+    };
+
+    const DimensionEntry aDimEntries[] = {
+        { "columns", true,  bColumns },
+        { "rows",    false, bRows    }
+    };
+
+    SCTAB nTab = aViewData.GetTabNo();
+
+    for (const auto& rDimEntry : aDimEntries)
+    {
+        if (!rDimEntry.bEnabled)
+            continue;
+
+        bool bDimIsCol = rDimEntry.bDimIsCol;
+
+        boost::property_tree::ptree aDimTree;
+        for (const auto& rGeomEntry : aGeomEntries)
+        {
+            if (!rGeomEntry.bEnabled)
+                continue;
+
+            OString aGeomDataEncoding = pDoc->dumpSheetGeomData(nTab, bDimIsCol, rGeomEntry.eType);
+            // TODO: Investigate if we can avoid the copy of the 'value' string in put().
+            aDimTree.put(rGeomEntry.pKey, aGeomDataEncoding.getStr());
+        }
+
+        aTree.add_child(rDimEntry.pKey, aDimTree);
+    }
+
+    return getJSONString(aTree).c_str();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
