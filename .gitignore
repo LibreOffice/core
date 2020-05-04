@@ -57,6 +57,7 @@
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
 /bin/officeotron.sh
+/hardened_runtime.xcent
 /Makefile
 /NEWS
 /TODO
