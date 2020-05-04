@@ -1925,11 +1925,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     auto pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
     const SwBorderAttrs *pAttrs = pAccess->Get();
 
-    const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
-    const bool bEmulateTableKeep = !bLargeTable && AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
-    // The beloved keep attribute
-    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
-
     // All rows should keep together
     const bool bDontSplit = !IsFollow() &&
                             ( !GetFormat()->GetLayoutSplit().GetValue() );
@@ -1954,6 +1949,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // if first is set to keep with next???
     bool bLastRowHasToMoveToFollow = false;
     bool bLastRowMoveNoMoreTries = false;
+
+    const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
+    const bool bEmulateTableKeep = !bLargeTable && bTableRowKeep && AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
+    // The beloved keep attribute
+    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
 
     // Join follow table, if this table is not allowed to split:
     if ( bDontSplit )
@@ -2402,10 +2402,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                         AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
                                       !pIndPrev &&
                                       !bDontSplit;
-        const bool bEmulateTableKeepFwdMoveAllowed = IsKeepFwdMoveAllowed(bEmulateTableKeep);
+        // tdf91083 MSCompat: this extends bAllowSplitOfRow (and perhaps should just replace it).
+        // If the kept-together items cannot move to a new page, a table split is in general allowed.
+        const bool bEmulateTableKeepSplitAllowed =  bEmulateTableKeep && !IsKeepFwdMoveAllowed(/*IgnoreMyOwnKeepValue=*/true);
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
-             ( !bEmulateTableKeepFwdMoveAllowed ||
+             ( bEmulateTableKeepSplitAllowed ||
                ( ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() ||
                    !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow
                  ) && ( !bDontSplit || !pIndPrev )
@@ -2413,14 +2415,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         {
             // #i29438#
             // Special DoNotSplit cases:
-            // We better avoid splitting if the table keeps with next paragraph and can move fwd still.
             // We better avoid splitting of a row frame if we are inside a columned
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
-            if ( !bEmulateTableKeepFwdMoveAllowed ||
-                 ( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() &&
-                   0 == aRectFnSet.GetHeight(GetUpper()->getFrameArea())
-               ) )
+            if ( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() &&
+                 0 == aRectFnSet.GetHeight(GetUpper()->getFrameArea())
+               )
             {
                 bTryToSplit = false;
             }
@@ -2490,7 +2490,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 // The repeating lines / keeping lines still fit into the upper or
                 // if we do not have an (in)direct Prev, we split anyway.
                 if( aRectFnSet.YDiff(nDeadLine, nBreakLine) >=0
-                    || !pIndPrev || !bEmulateTableKeepFwdMoveAllowed )
+                    || !pIndPrev || bEmulateTableKeepSplitAllowed )
                 {
                     aNotify.SetLowersComplete( false );
                     bSplit = true;
@@ -2510,7 +2510,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || !bEmulateTableKeepFwdMoveAllowed) ) );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed) ) );
                     if (!bTryToSplit && !bSplitError)
                     {
                         --nUnSplitted;

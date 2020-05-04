@@ -1998,6 +1998,13 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, "NumberFormat"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")
+{
+    // Since the row is very big, it should split over two pages.
+    // Since up to this point we haven't tried to make it match MS formats, it should start on page 1.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 2 pages", 2, getPages());
+}
+
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
