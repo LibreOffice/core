@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "996c7fa2_8c849124",
+        "filename": "hardened_runtime.xcent",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-05-04T12:34:58Z",
+      "side": 1,
+      "message": "You probably did not want to \u0027git add\u0027 this.",
+      "revId": "2914eac6947952fde35386b8fa64c6239330c8be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a773c92_9f95fd24",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-05-04T12:34:58Z",
+      "side": 1,
+      "message": "You should include the .hpp variant here.",
+      "revId": "2914eac6947952fde35386b8fa64c6239330c8be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
