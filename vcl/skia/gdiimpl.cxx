@@ -851,7 +851,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeWidth(aLineWidth.getX());
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
 
-    if (eLineJoin != basegfx::B2DLineJoin::NONE)
+    // Skia does not support basegfx::B2DLineJoin::NONE, so in that case batch only if lines
+    // are not wider than a pixel.
+    if (eLineJoin != basegfx::B2DLineJoin::NONE || fLineWidth <= 1.0)
     {
         SkPath aPath;
         aPath.setFillType(SkPathFillType::kEvenOdd);
@@ -863,7 +865,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         getDrawCanvas()->drawPath(aPath, aPaint);
         addXorRegion(aPath.getBounds());
     }
-    else // Skia does not support basegfx::B2DLineJoin::NONE, draw each line separately
+    else
     {
         for (sal_uInt32 i = 0; i < aPolyPolygonLine.count(); ++i)
         {
