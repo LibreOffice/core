@@ -1305,6 +1305,28 @@ DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 }
 #endif
 
+DECLARE_WW8EXPORT_TEST(tesTdf91083_tableKeep2, "tdf91083_tableKeep2.odt")
+{
+    //emulate table "keep with next" - split large row in order to keep with previous paragraph
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
+                                 OUString("0"), parseDump("count(//page[1]//tab)") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page 2 starts with a paragraph/title, not a table",
+                                 OUString("KeepWithNext"), parseDump("//page[2]/body/txt[1]") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
+                                 OUString("1"), parseDump("count(//page[2]//tab)") );
+    CPPUNIT_ASSERT_MESSAGE("Row itself splits, not the table at a row boundary",
+                                 "Cell 2" != parseDump("//page[3]//tab//row[2]/cell[1]/txt[1]") );
+}
+
+DECLARE_WW8EXPORT_TEST(tesTdf91083_tableKeep3, "tdf91083_tableKeep3.odt")
+{
+    //emulate table "keep with next" - split single row table in order to keep with previous paragraph
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
+                                 OUString("0"), parseDump("count(//page[1]//tab)") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sticks with previous paragraph, so it starts on page 2",
+                                 OUString("1"), parseDump("count(//page[2]//tab)") );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
 {
     // textboxes without borders were losing their spacing items in round-tripping

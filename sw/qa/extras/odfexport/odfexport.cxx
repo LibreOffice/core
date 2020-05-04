@@ -2105,6 +2105,13 @@ DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffff00), getProperty<sal_Int32>(xStyle, "BackColor"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")
+{
+    // Since the row is very big, it should split over two pages.
+    // Since up to this point we haven't tried to make it match MS formats, it should start on page 1.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 2 pages", 2, getPages());
+}
+
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
