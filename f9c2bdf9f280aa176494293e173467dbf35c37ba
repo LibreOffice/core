@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59aea151_ef594383",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-04T10:32:12Z",
+      "side": 1,
+      "message": "you could use the Change-Id instead of the commit hash (which does not change after submitting a patch)",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "f9c2bdf9f280aa176494293e173467dbf35c37ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
