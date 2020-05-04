@@ -2207,6 +2207,11 @@ sal_uInt16 TextView::Replace( const i18nutil::SearchOptions& rSearchOptions, boo
             nFound++;
 
             TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
+            // tdf#64690 - extend selection to include inserted text portions
+            if ( aSel.GetEnd().GetPara() == aSearchSel.GetEnd().GetPara() )
+            {
+                aSearchSel.GetEnd().GetIndex() += rSearchOptions.replaceString.getLength() - 1;
+            }
             aSel = aSearchSel;
             aSel.GetStart() = aNewStart;
             bFound = pTextEngine->Search( aSel, rSearchOptions );
