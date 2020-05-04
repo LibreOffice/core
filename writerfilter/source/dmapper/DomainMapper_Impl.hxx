@@ -419,13 +419,6 @@ struct SymbolData
     { }
 };
 
-/// Information about a paragraph to be finished after a table end.
-struct TableParagraph
-{
-    PropertyMapPtr m_pPropertyMap;
-    css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
-};
-
 class DomainMapper;
 class DomainMapper_Impl final
 {
@@ -1065,9 +1058,6 @@ public:
     /// store their data, and create them after frame creation
     bool m_bIsActualParagraphFramed;
     std::vector<css::uno::Any> aFramedRedlines;
-
-    /// Table paragraph properties may need style update based on table style
-    std::vector<TableParagraph> m_aParagraphsToEndTable;
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
