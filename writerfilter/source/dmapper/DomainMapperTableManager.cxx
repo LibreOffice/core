@@ -50,6 +50,7 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_bPushCurrentWidth(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
+    m_aParagraphsToEndTable(),
     m_pTablePropsHandler(new TablePropertiesHandler())
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -424,6 +425,11 @@ TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
         return nullptr;
 }
 
+TableParagraphVectorPtr DomainMapperTableManager::getCurrentParagraphs( )
+{
+    return m_aParagraphsToEndTable.top( );
+}
+
 void DomainMapperTableManager::setIsInShape(bool bIsInShape)
 {
     m_bIsInShape = bIsInShape;
@@ -439,6 +445,12 @@ void DomainMapperTableManager::startLevel( )
     {
         oCurrentWidth = m_aCellWidths.back()->back();
         m_aCellWidths.back()->pop_back();
+    }
+    std::optional<TableParagraph> oParagraph;
+    if (getTableDepthDifference() > 0 && !m_aParagraphsToEndTable.empty() && !m_aParagraphsToEndTable.top()->empty())
+    {
+        oParagraph = m_aParagraphsToEndTable.top()->back();
+        m_aParagraphsToEndTable.top()->pop_back();
     }
 
     IntVectorPtr pNewGrid = std::make_shared<vector<sal_Int32>>();
@@ -460,10 +472,14 @@ void DomainMapperTableManager::startLevel( )
     m_aGridBefore.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
+    TableParagraphVectorPtr pNewParagraphs = std::make_shared<vector<TableParagraph>>();
+    m_aParagraphsToEndTable.push( pNewParagraphs );
 
     // And push it back to the right level.
     if (oCurrentWidth)
         m_aCellWidths.back()->push_back(*oCurrentWidth);
+    if (oParagraph)
+        m_aParagraphsToEndTable.top()->push_back(*oParagraph);
 }
 
 void DomainMapperTableManager::endLevel( )
@@ -508,6 +524,7 @@ void DomainMapperTableManager::endLevel( )
     // in the endTable method called in endLevel.
     m_aTablePositions.pop_back();
     m_aTableStyleNames.pop_back();
+    m_aParagraphsToEndTable.pop();
 }
 
 void DomainMapperTableManager::endOfCellAction()
