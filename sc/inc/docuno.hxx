@@ -368,6 +368,10 @@ public:
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
     virtual void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter) override;
 
+    /// @see vcl::ITiledRenderable::getSheetGeometryData().
+    virtual OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+                                         bool bFiltered, bool bGroups) override;
+
     /// @see vcl::ITiledRenderable::getCellCursor().
     virtual void getCellCursor(tools::JsonWriter& rJsonWriter) override;
 

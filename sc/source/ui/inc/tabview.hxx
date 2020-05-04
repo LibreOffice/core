@@ -593,6 +593,10 @@ public:
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
     void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter);
+    /// @see ScModelObj::getSheetGeometryData()
+    OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+                                 bool bFiltered, bool bGroups);
+
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 
     SCROW GetLOKStartHeaderRow() const { return mnLOKStartHeaderRow; }

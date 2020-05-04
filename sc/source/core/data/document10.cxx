@@ -1025,4 +1025,13 @@ void ScDocument::RestoreTabFromCache(SCTAB nTab, SvStream& rStrm)
     pTab->RestoreFromCache(rStrm);
 }
 
+OString ScDocument::dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType eGeomType)
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return "";
+
+    return pTab->dumpSheetGeomData(bColumns, eGeomType);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
