@@ -1010,6 +1010,8 @@ label
 label-arrangement
 label-cell-address
 label-cell-range-address
+label-fill
+label-fill-color
 label-range
 label-ranges
 label-string

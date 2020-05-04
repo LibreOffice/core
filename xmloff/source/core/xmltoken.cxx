@@ -1097,6 +1097,8 @@ namespace xmloff::token {
         TOKEN( "label-arrangement",               XML_LABEL_ARRANGEMENT ),
         TOKEN( "label-cell-address",              XML_LABEL_CELL_ADDRESS ),
         TOKEN( "label-cell-range-address",        XML_LABEL_CELL_RANGE_ADDRESS ),
+        TOKEN( "label-fill",                      XML_LABEL_FILL ),
+        TOKEN( "label-fill-color",                XML_LABEL_FILL_COLOR ),
         TOKEN( "label-range",                     XML_LABEL_RANGE ),
         TOKEN( "label-ranges",                    XML_LABEL_RANGES ),
         TOKEN( "label-string",                    XML_LABEL_STRING ),
