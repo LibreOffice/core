@@ -314,10 +314,11 @@ void SfxObjectShell::LoadStyles
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
     DBG_ASSERT(pMyPool, "Dest-DocumentShell without StyleSheetPool");
     pSourcePool->SetSearchMask(SfxStyleFamily::All);
-    std::unique_ptr<Styles_Impl[]> pFound(new Styles_Impl[pSourcePool->Count()]);
+    auto xIter = pSourcePool->CreateIterator(SfxStyleFamily::All);
+    std::unique_ptr<Styles_Impl[]> pFound(new Styles_Impl[xIter->Count()]);
     sal_uInt16 nFound = 0;
 
-    SfxStyleSheetBase *pSource = pSourcePool->First();
+    SfxStyleSheetBase *pSource = xIter->First();
     while ( pSource )
     {
         SfxStyleSheetBase *pDest =
@@ -331,7 +332,7 @@ void SfxObjectShell::LoadStyles
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
         ++nFound;
-        pSource = pSourcePool->Next();
+        pSource = xIter->Next();
     }
 
     for ( sal_uInt16 i = 0; i < nFound; ++i )

@@ -111,14 +111,15 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                 SfxStyleSheetBasePool* pPool = pView->GetDocShell()->
                                                             GetStyleSheetPool();
                 pPool->SetSearchMask(SfxStyleFamily::Page);
-                if( pPool->Count() > 1 )
+                auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
+                if (xIter->Count() > 1)
                 {
                     sal_uInt16 nCount = 0;
-                    SfxStyleSheetBase* pStyle = pPool->First();
+                    SfxStyleSheetBase* pStyle = xIter->First();
                     while( pStyle )
                     {
                         aPop->InsertItem( ++nCount, pStyle->GetName() );
-                        pStyle = pPool->Next();
+                        pStyle = xIter->Next();
                     }
 
                     aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
@@ -126,7 +127,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                     if( nCurrId != USHRT_MAX)
                     {
                         // looks a bit awkward, but another way is not possible
-                        pStyle = pPool->operator[]( nCurrId - 1 );
+                        pStyle = xIter->operator[]( nCurrId - 1 );
                         SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
                         pWrtShell->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
                                     FN_SET_PAGE_STYLE,
