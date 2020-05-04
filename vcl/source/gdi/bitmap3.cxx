@@ -29,6 +29,9 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#endif
 #include <vcl/BitmapMonochromeFilter.hxx>
 
 #include <BitmapScaleSuperFilter.hxx>
@@ -777,12 +780,15 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 
 bool Bitmap::HasFastScale()
 {
-// TODO SKIA
-#if HAVE_FEATURE_OPENGL
-    return OpenGLHelper::isVCLOpenGLEnabled();
-#else
-    return false;
+#if HAVE_FEATURE_SKIA
+    if( SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+        return true;
 #endif
+#if HAVE_FEATURE_OPENGL
+    if( OpenGLHelper::isVCLOpenGLEnabled())
+        return true;
+#endif
+    return false;
 }
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
