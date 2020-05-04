@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ebe4e88_4bf10db1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-04T16:59:34Z",
+      "side": 1,
+      "message": "This commit summary tag doesn\u0027t suit reality as this unfortunately is a conglomerated change of unrelated patches not restricted to bridges.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4da2e9f_dbce76a8",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-04T16:59:34Z",
+      "side": 1,
+      "message": "I\u0027d not introduce these OSL_DEBUG_LEVEL here, explicitly having to select the info class to get output should be enough.",
+      "range": {
+        "startLine": 2196,
+        "startChar": 0,
+        "endLine": 2196,
+        "endChar": 1
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d43cec_ce99c670",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-04T16:59:34Z",
+      "side": 1,
+      "message": "Replacing to SAL_INFO here doesn\u0027t make sense, as the code is compiled only if DEBUG_MSO_ENCRYPTION_STD97 is defined and a SAL_INFO would just add another unnecessary step to define the info class one wants to see.",
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
