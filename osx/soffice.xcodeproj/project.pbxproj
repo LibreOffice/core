@@ -371,6 +371,83 @@
 		BEDCC8C82459A12E00FB02BD /* abi.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = abi.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.hxx"; sourceTree = "<group>"; };
 		BEDCC8C92459A12E00FB02BD /* callvirtualmethod.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = callvirtualmethod.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.hxx"; sourceTree = "<group>"; };
 		BEDCC8CA2459A12E00FB02BD /* callvirtualmethod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = callvirtualmethod.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.cxx"; sourceTree = "<group>"; };
+		BEDCC8F2246080F600FB02BD /* transliterationwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transliterationwrapper.cxx; path = ../unotools/source/i18n/transliterationwrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8F3246080F600FB02BD /* localedatawrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = localedatawrapper.cxx; path = ../unotools/source/i18n/localedatawrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8F4246080F600FB02BD /* readwritemutexguard.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = readwritemutexguard.cxx; path = ../unotools/source/i18n/readwritemutexguard.cxx; sourceTree = "<group>"; };
+		BEDCC8F5246080F600FB02BD /* resmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = resmgr.cxx; path = ../unotools/source/i18n/resmgr.cxx; sourceTree = "<group>"; };
+		BEDCC8F6246080F600FB02BD /* calendarwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = calendarwrapper.cxx; path = ../unotools/source/i18n/calendarwrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8F7246080F600FB02BD /* charclass.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = charclass.cxx; path = ../unotools/source/i18n/charclass.cxx; sourceTree = "<group>"; };
+		BEDCC8F8246080F600FB02BD /* caserotate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = caserotate.cxx; path = ../unotools/source/i18n/caserotate.cxx; sourceTree = "<group>"; };
+		BEDCC8F9246080F600FB02BD /* intlwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = intlwrapper.cxx; path = ../unotools/source/i18n/intlwrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8FA246080F600FB02BD /* nativenumberwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nativenumberwrapper.cxx; path = ../unotools/source/i18n/nativenumberwrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8FB246080F600FB02BD /* collatorwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = collatorwrapper.cxx; path = ../unotools/source/i18n/collatorwrapper.cxx; sourceTree = "<group>"; };
+		BEDCC8FC246080F600FB02BD /* textsearch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textsearch.cxx; path = ../unotools/source/i18n/textsearch.cxx; sourceTree = "<group>"; };
+		BEDCC8FF2460830800FB02BD /* opthtml.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = opthtml.hxx; path = ../cui/source/options/opthtml.hxx; sourceTree = "<group>"; };
+		BEDCC9002460830800FB02BD /* sdbcdriverenum.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdbcdriverenum.cxx; path = ../cui/source/options/sdbcdriverenum.cxx; sourceTree = "<group>"; };
+		BEDCC9012460830800FB02BD /* fontsubs.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontsubs.cxx; path = ../cui/source/options/fontsubs.cxx; sourceTree = "<group>"; };
+		BEDCC9022460830800FB02BD /* connpoolsettings.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = connpoolsettings.hxx; path = ../cui/source/options/connpoolsettings.hxx; sourceTree = "<group>"; };
+		BEDCC9032460830800FB02BD /* opthtml.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = opthtml.cxx; path = ../cui/source/options/opthtml.cxx; sourceTree = "<group>"; };
+		BEDCC9042460830800FB02BD /* securityoptions.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = securityoptions.cxx; path = ../cui/source/options/securityoptions.cxx; sourceTree = "<group>"; };
+		BEDCC9052460830800FB02BD /* dbregisterednamesconfig.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dbregisterednamesconfig.hxx; path = ../cui/source/options/dbregisterednamesconfig.hxx; sourceTree = "<group>"; };
+		BEDCC9062460830800FB02BD /* webconninfo.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = webconninfo.hxx; path = ../cui/source/options/webconninfo.hxx; sourceTree = "<group>"; };
+		BEDCC9072460830800FB02BD /* connpoolsettings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = connpoolsettings.cxx; path = ../cui/source/options/connpoolsettings.cxx; sourceTree = "<group>"; };
+		BEDCC9082460830800FB02BD /* personalization.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = personalization.cxx; path = ../cui/source/options/personalization.cxx; sourceTree = "<group>"; };
+		BEDCC9092460830800FB02BD /* connpoolconfig.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = connpoolconfig.cxx; path = ../cui/source/options/connpoolconfig.cxx; sourceTree = "<group>"; };
+		BEDCC90A2460830800FB02BD /* doclinkdialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doclinkdialog.cxx; path = ../cui/source/options/doclinkdialog.cxx; sourceTree = "<group>"; };
+		BEDCC90B2460830900FB02BD /* certpath.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = certpath.hxx; path = ../cui/source/options/certpath.hxx; sourceTree = "<group>"; };
+		BEDCC90C2460830900FB02BD /* treeopt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treeopt.cxx; path = ../cui/source/options/treeopt.cxx; sourceTree = "<group>"; };
+		BEDCC90D2460830900FB02BD /* optcolor.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optcolor.hxx; path = ../cui/source/options/optcolor.hxx; sourceTree = "<group>"; };
+		BEDCC90E2460830900FB02BD /* optgdlg.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optgdlg.hxx; path = ../cui/source/options/optgdlg.hxx; sourceTree = "<group>"; };
+		BEDCC90F2460830900FB02BD /* tsaurls.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = tsaurls.hxx; path = ../cui/source/options/tsaurls.hxx; sourceTree = "<group>"; };
+		BEDCC9102460830900FB02BD /* optaboutconfig.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optaboutconfig.cxx; path = ../cui/source/options/optaboutconfig.cxx; sourceTree = "<group>"; };
+		BEDCC9112460830900FB02BD /* optopencl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optopencl.cxx; path = ../cui/source/options/optopencl.cxx; sourceTree = "<group>"; };
+		BEDCC9122460830900FB02BD /* optjsearch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optjsearch.cxx; path = ../cui/source/options/optjsearch.cxx; sourceTree = "<group>"; };
+		BEDCC9132460830900FB02BD /* optupdt.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optupdt.hxx; path = ../cui/source/options/optupdt.hxx; sourceTree = "<group>"; };
+		BEDCC9142460830900FB02BD /* optupdt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optupdt.cxx; path = ../cui/source/options/optupdt.cxx; sourceTree = "<group>"; };
+		BEDCC9152460830900FB02BD /* sdbcdriverenum.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sdbcdriverenum.hxx; path = ../cui/source/options/sdbcdriverenum.hxx; sourceTree = "<group>"; };
+		BEDCC9162460830900FB02BD /* optbasic.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optbasic.hxx; path = ../cui/source/options/optbasic.hxx; sourceTree = "<group>"; };
+		BEDCC9172460830900FB02BD /* dbregister.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbregister.cxx; path = ../cui/source/options/dbregister.cxx; sourceTree = "<group>"; };
+		BEDCC9182460830900FB02BD /* optfltr.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optfltr.hxx; path = ../cui/source/options/optfltr.hxx; sourceTree = "<group>"; };
+		BEDCC9192460830900FB02BD /* optaccessibility.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optaccessibility.cxx; path = ../cui/source/options/optaccessibility.cxx; sourceTree = "<group>"; };
+		BEDCC91A2460830A00FB02BD /* cfgchart.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cfgchart.cxx; path = ../cui/source/options/cfgchart.cxx; sourceTree = "<group>"; };
+		BEDCC91B2460830A00FB02BD /* connpooloptions.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = connpooloptions.cxx; path = ../cui/source/options/connpooloptions.cxx; sourceTree = "<group>"; };
+		BEDCC91C2460830A00FB02BD /* fontsubs.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = fontsubs.hxx; path = ../cui/source/options/fontsubs.hxx; sourceTree = "<group>"; };
+		BEDCC91D2460830A00FB02BD /* webconninfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = webconninfo.cxx; path = ../cui/source/options/webconninfo.cxx; sourceTree = "<group>"; };
+		BEDCC91E2460830A00FB02BD /* optchart.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optchart.hxx; path = ../cui/source/options/optchart.hxx; sourceTree = "<group>"; };
+		BEDCC91F2460830A00FB02BD /* cuisrchdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cuisrchdlg.cxx; path = ../cui/source/options/cuisrchdlg.cxx; sourceTree = "<group>"; };
+		BEDCC9202460830A00FB02BD /* optctl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optctl.cxx; path = ../cui/source/options/optctl.cxx; sourceTree = "<group>"; };
+		BEDCC9212460830A00FB02BD /* optgenrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optgenrl.cxx; path = ../cui/source/options/optgenrl.cxx; sourceTree = "<group>"; };
+		BEDCC9222460830A00FB02BD /* dbregistersettings.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dbregistersettings.hxx; path = ../cui/source/options/dbregistersettings.hxx; sourceTree = "<group>"; };
+		BEDCC9232460830A00FB02BD /* optpath.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optpath.cxx; path = ../cui/source/options/optpath.cxx; sourceTree = "<group>"; };
+		BEDCC9242460830A00FB02BD /* optsave.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optsave.hxx; path = ../cui/source/options/optsave.hxx; sourceTree = "<group>"; };
+		BEDCC9252460830A00FB02BD /* optjsearch.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optjsearch.hxx; path = ../cui/source/options/optjsearch.hxx; sourceTree = "<group>"; };
+		BEDCC9262460830A00FB02BD /* certpath.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = certpath.cxx; path = ../cui/source/options/certpath.cxx; sourceTree = "<group>"; };
+		BEDCC9272460830A00FB02BD /* optlingu.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optlingu.cxx; path = ../cui/source/options/optlingu.cxx; sourceTree = "<group>"; };
+		BEDCC9282460830B00FB02BD /* securityoptions.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = securityoptions.hxx; path = ../cui/source/options/securityoptions.hxx; sourceTree = "<group>"; };
+		BEDCC9292460830B00FB02BD /* dbregistersettings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbregistersettings.cxx; path = ../cui/source/options/dbregistersettings.cxx; sourceTree = "<group>"; };
+		BEDCC92A2460830B00FB02BD /* optsave.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optsave.cxx; path = ../cui/source/options/optsave.cxx; sourceTree = "<group>"; };
+		BEDCC92B2460830B00FB02BD /* optctl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optctl.hxx; path = ../cui/source/options/optctl.hxx; sourceTree = "<group>"; };
+		BEDCC92C2460830B00FB02BD /* optaccessibility.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optaccessibility.hxx; path = ../cui/source/options/optaccessibility.hxx; sourceTree = "<group>"; };
+		BEDCC92D2460830B00FB02BD /* connpooloptions.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = connpooloptions.hxx; path = ../cui/source/options/connpooloptions.hxx; sourceTree = "<group>"; };
+		BEDCC92E2460830B00FB02BD /* optdict.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optdict.cxx; path = ../cui/source/options/optdict.cxx; sourceTree = "<group>"; };
+		BEDCC92F2460830B00FB02BD /* optcolor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optcolor.cxx; path = ../cui/source/options/optcolor.cxx; sourceTree = "<group>"; };
+		BEDCC9302460830B00FB02BD /* optjava.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optjava.cxx; path = ../cui/source/options/optjava.cxx; sourceTree = "<group>"; };
+		BEDCC9312460830B00FB02BD /* optfltr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optfltr.cxx; path = ../cui/source/options/optfltr.cxx; sourceTree = "<group>"; };
+		BEDCC9322460830B00FB02BD /* dbregisterednamesconfig.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbregisterednamesconfig.cxx; path = ../cui/source/options/dbregisterednamesconfig.cxx; sourceTree = "<group>"; };
+		BEDCC9332460830B00FB02BD /* optopencl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optopencl.hxx; path = ../cui/source/options/optopencl.hxx; sourceTree = "<group>"; };
+		BEDCC9342460830C00FB02BD /* optgdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optgdlg.cxx; path = ../cui/source/options/optgdlg.cxx; sourceTree = "<group>"; };
+		BEDCC9352460830C00FB02BD /* optinet2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optinet2.cxx; path = ../cui/source/options/optinet2.cxx; sourceTree = "<group>"; };
+		BEDCC9362460830C00FB02BD /* optinet2.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optinet2.hxx; path = ../cui/source/options/optinet2.hxx; sourceTree = "<group>"; };
+		BEDCC9372460830C00FB02BD /* personalization.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = personalization.hxx; path = ../cui/source/options/personalization.hxx; sourceTree = "<group>"; };
+		BEDCC9382460830C00FB02BD /* cfgchart.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = cfgchart.hxx; path = ../cui/source/options/cfgchart.hxx; sourceTree = "<group>"; };
+		BEDCC9392460830C00FB02BD /* optchart.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optchart.cxx; path = ../cui/source/options/optchart.cxx; sourceTree = "<group>"; };
+		BEDCC93A2460830C00FB02BD /* connpoolconfig.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = connpoolconfig.hxx; path = ../cui/source/options/connpoolconfig.hxx; sourceTree = "<group>"; };
+		BEDCC93B2460830C00FB02BD /* tsaurls.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tsaurls.cxx; path = ../cui/source/options/tsaurls.cxx; sourceTree = "<group>"; };
+		BEDCC93C2460830C00FB02BD /* optaboutconfig.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optaboutconfig.hxx; path = ../cui/source/options/optaboutconfig.hxx; sourceTree = "<group>"; };
+		BEDCC93D2460830C00FB02BD /* optasian.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optasian.cxx; path = ../cui/source/options/optasian.cxx; sourceTree = "<group>"; };
+		BEDCC93E2460830C00FB02BD /* optjava.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optjava.hxx; path = ../cui/source/options/optjava.hxx; sourceTree = "<group>"; };
+		BEDCC93F2460830C00FB02BD /* optbasic.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optbasic.cxx; path = ../cui/source/options/optbasic.cxx; sourceTree = "<group>"; };
+		BEDCC9402460830D00FB02BD /* doclinkdialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = doclinkdialog.hxx; path = ../cui/source/options/doclinkdialog.hxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -839,8 +916,10 @@
 			isa = PBXGroup;
 			children = (
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
+				BEDCC8FD246082D400FB02BD /* cui */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE2DAD28182FAB7900A4D2F7 /* sw */,
+				BEDCC8F02460807C00FB02BD /* unotools */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
 				BE82BE5918298DFB00A447B5 /* java */,
 				BE82BE5818298DEB00A447B5 /* sc */,
@@ -894,6 +973,113 @@
 				BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */,
 			);
 			path = "gcc3_macosx_x86-64";
+			sourceTree = "<group>";
+		};
+		BEDCC8F02460807C00FB02BD /* unotools */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8F12460808A00FB02BD /* i18n */,
+			);
+			name = unotools;
+			sourceTree = "<group>";
+		};
+		BEDCC8F12460808A00FB02BD /* i18n */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8F6246080F600FB02BD /* calendarwrapper.cxx */,
+				BEDCC8F8246080F600FB02BD /* caserotate.cxx */,
+				BEDCC8F7246080F600FB02BD /* charclass.cxx */,
+				BEDCC8FB246080F600FB02BD /* collatorwrapper.cxx */,
+				BEDCC8F9246080F600FB02BD /* intlwrapper.cxx */,
+				BEDCC8F3246080F600FB02BD /* localedatawrapper.cxx */,
+				BEDCC8FA246080F600FB02BD /* nativenumberwrapper.cxx */,
+				BEDCC8F4246080F600FB02BD /* readwritemutexguard.cxx */,
+				BEDCC8F5246080F600FB02BD /* resmgr.cxx */,
+				BEDCC8FC246080F600FB02BD /* textsearch.cxx */,
+				BEDCC8F2246080F600FB02BD /* transliterationwrapper.cxx */,
+			);
+			name = i18n;
+			sourceTree = "<group>";
+		};
+		BEDCC8FD246082D400FB02BD /* cui */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC8FE246082DE00FB02BD /* options */,
+			);
+			name = cui;
+			sourceTree = "<group>";
+		};
+		BEDCC8FE246082DE00FB02BD /* options */ = {
+			isa = PBXGroup;
+			children = (
+				BEDCC9262460830A00FB02BD /* certpath.cxx */,
+				BEDCC90B2460830900FB02BD /* certpath.hxx */,
+				BEDCC91A2460830A00FB02BD /* cfgchart.cxx */,
+				BEDCC9382460830C00FB02BD /* cfgchart.hxx */,
+				BEDCC9092460830800FB02BD /* connpoolconfig.cxx */,
+				BEDCC93A2460830C00FB02BD /* connpoolconfig.hxx */,
+				BEDCC91B2460830A00FB02BD /* connpooloptions.cxx */,
+				BEDCC92D2460830B00FB02BD /* connpooloptions.hxx */,
+				BEDCC9072460830800FB02BD /* connpoolsettings.cxx */,
+				BEDCC9022460830800FB02BD /* connpoolsettings.hxx */,
+				BEDCC91F2460830A00FB02BD /* cuisrchdlg.cxx */,
+				BEDCC9172460830900FB02BD /* dbregister.cxx */,
+				BEDCC9322460830B00FB02BD /* dbregisterednamesconfig.cxx */,
+				BEDCC9052460830800FB02BD /* dbregisterednamesconfig.hxx */,
+				BEDCC9292460830B00FB02BD /* dbregistersettings.cxx */,
+				BEDCC9222460830A00FB02BD /* dbregistersettings.hxx */,
+				BEDCC90A2460830800FB02BD /* doclinkdialog.cxx */,
+				BEDCC9402460830D00FB02BD /* doclinkdialog.hxx */,
+				BEDCC9012460830800FB02BD /* fontsubs.cxx */,
+				BEDCC91C2460830A00FB02BD /* fontsubs.hxx */,
+				BEDCC9102460830900FB02BD /* optaboutconfig.cxx */,
+				BEDCC93C2460830C00FB02BD /* optaboutconfig.hxx */,
+				BEDCC9192460830900FB02BD /* optaccessibility.cxx */,
+				BEDCC92C2460830B00FB02BD /* optaccessibility.hxx */,
+				BEDCC93D2460830C00FB02BD /* optasian.cxx */,
+				BEDCC93F2460830C00FB02BD /* optbasic.cxx */,
+				BEDCC9162460830900FB02BD /* optbasic.hxx */,
+				BEDCC9392460830C00FB02BD /* optchart.cxx */,
+				BEDCC91E2460830A00FB02BD /* optchart.hxx */,
+				BEDCC92F2460830B00FB02BD /* optcolor.cxx */,
+				BEDCC90D2460830900FB02BD /* optcolor.hxx */,
+				BEDCC9202460830A00FB02BD /* optctl.cxx */,
+				BEDCC92B2460830B00FB02BD /* optctl.hxx */,
+				BEDCC92E2460830B00FB02BD /* optdict.cxx */,
+				BEDCC9312460830B00FB02BD /* optfltr.cxx */,
+				BEDCC9182460830900FB02BD /* optfltr.hxx */,
+				BEDCC9342460830C00FB02BD /* optgdlg.cxx */,
+				BEDCC90E2460830900FB02BD /* optgdlg.hxx */,
+				BEDCC9212460830A00FB02BD /* optgenrl.cxx */,
+				BEDCC9032460830800FB02BD /* opthtml.cxx */,
+				BEDCC8FF2460830800FB02BD /* opthtml.hxx */,
+				BEDCC9352460830C00FB02BD /* optinet2.cxx */,
+				BEDCC9362460830C00FB02BD /* optinet2.hxx */,
+				BEDCC9302460830B00FB02BD /* optjava.cxx */,
+				BEDCC93E2460830C00FB02BD /* optjava.hxx */,
+				BEDCC9122460830900FB02BD /* optjsearch.cxx */,
+				BEDCC9252460830A00FB02BD /* optjsearch.hxx */,
+				BEDCC9272460830A00FB02BD /* optlingu.cxx */,
+				BEDCC9112460830900FB02BD /* optopencl.cxx */,
+				BEDCC9332460830B00FB02BD /* optopencl.hxx */,
+				BEDCC9232460830A00FB02BD /* optpath.cxx */,
+				BEDCC92A2460830B00FB02BD /* optsave.cxx */,
+				BEDCC9242460830A00FB02BD /* optsave.hxx */,
+				BEDCC9142460830900FB02BD /* optupdt.cxx */,
+				BEDCC9132460830900FB02BD /* optupdt.hxx */,
+				BEDCC9082460830800FB02BD /* personalization.cxx */,
+				BEDCC9372460830C00FB02BD /* personalization.hxx */,
+				BEDCC9002460830800FB02BD /* sdbcdriverenum.cxx */,
+				BEDCC9152460830900FB02BD /* sdbcdriverenum.hxx */,
+				BEDCC9042460830800FB02BD /* securityoptions.cxx */,
+				BEDCC9282460830B00FB02BD /* securityoptions.hxx */,
+				BEDCC90C2460830900FB02BD /* treeopt.cxx */,
+				BEDCC93B2460830C00FB02BD /* tsaurls.cxx */,
+				BEDCC90F2460830900FB02BD /* tsaurls.hxx */,
+				BEDCC91D2460830A00FB02BD /* webconninfo.cxx */,
+				BEDCC9062460830800FB02BD /* webconninfo.hxx */,
+			);
+			name = options;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
