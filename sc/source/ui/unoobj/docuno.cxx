@@ -934,6 +934,21 @@ void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::
     pTabView->getRowColumnHeaders(rRectangle, rJsonWriter);
 }
 
+OString ScModelObj::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+                                         bool bFiltered, bool bGroups)
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+
+    if (!pViewData)
+        return "";
+
+    ScTabView* pTabView = pViewData->GetView();
+    if (!pTabView)
+        return "";
+
+    return pTabView->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
+}
+
 void ScModelObj::getCellCursor(tools::JsonWriter& rJsonWriter)
 {
     SolarMutexGuard aGuard;
