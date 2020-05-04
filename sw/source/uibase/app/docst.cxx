@@ -366,8 +366,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
             if( !pArgs )
             {
-                nFamily = SfxStyleFamily::Para;
-
                 switch (nSlot)
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
