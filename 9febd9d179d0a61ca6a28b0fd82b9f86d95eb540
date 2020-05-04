@@ -22,6 +22,30 @@
       "revId": "9febd9d179d0a61ca6a28b0fd82b9f86d95eb540",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e46ab72_6f944551",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-04T13:09:40Z",
+      "side": 1,
+      "message": "Heh - of course I dislike talking about that as a regression (you know, it was conscious decision) - but yes, for any practical purpose (aside from my psychological), it\u0027s \"regression\". No added compat flags please...",
+      "parentUuid": "f86c17d9_dc1b044a",
+      "range": {
+        "startLine": 1098,
+        "startChar": 9,
+        "endLine": 1098,
+        "endChar": 102
+      },
+      "revId": "9febd9d179d0a61ca6a28b0fd82b9f86d95eb540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
