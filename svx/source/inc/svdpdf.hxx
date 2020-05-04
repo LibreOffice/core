@@ -24,9 +24,9 @@
 
 #if HAVE_FEATURE_PDFIUM
 #include <sal/config.h>
+#include <svx/svxdllapi.h>
 
 #include <memory>
-#include <sstream>
 
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
@@ -52,7 +52,7 @@ class SdrObject;
 class SvdProgressInfo;
 
 // Helper Class to import PDF
-class ImpSdrPdfImport final
+class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
 {
     std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
