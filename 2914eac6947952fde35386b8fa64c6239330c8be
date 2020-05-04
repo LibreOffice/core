@@ -33,6 +33,24 @@
       "revId": "2914eac6947952fde35386b8fa64c6239330c8be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eeb82cb_b7148136",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-05-04T12:37:21Z",
+      "side": 1,
+      "message": "Additionally: use the #include \u003c...\u003e form, not #include \"...\".",
+      "parentUuid": "1a773c92_9f95fd24",
+      "revId": "2914eac6947952fde35386b8fa64c6239330c8be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
