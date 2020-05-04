@@ -1520,8 +1520,6 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
             // screen objects needed.
             // Thus, delete call of method <SwFrame::InvalidateObjs( true )>
             pCnt->Calc(pRenderContext);
-            // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrame(..)>
-            // to format the floating screen objects
             // #i46941# - frame has to be valid
             // Note: frame could be invalid after calling its format, if it's locked.
             OSL_ENSURE( !pCnt->IsTextFrame() ||
@@ -2996,7 +2994,6 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
             case text::HoriOrientation::CENTER:
                 {
                     // OD 07.03.2003 #i9040# - consider left/right line attribute.
-                    // OD 10.03.2003 #i9040# -
                     const SwTwips nCenterSpacing = ( nMax - nWishedTableWidth ) / 2;
                     nLeftSpacing = nLeftLine +
                                    ( (nLeftOffset > 0) ?
@@ -3999,8 +3996,6 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
         long nFlyAdd = 0;
         while ( pLow )
         {
-            // OD 2004-02-18 #106629# - change condition and switch then-body
-            // and else-body
             if ( pLow->IsRowFrame() )
             {
                 // #i26945#
@@ -4041,7 +4036,6 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
     return nHeight;
 }
 
-// OD 2004-02-18 #106629# - correct type of 1st parameter
 // #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
