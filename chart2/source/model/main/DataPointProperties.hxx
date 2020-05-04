@@ -35,6 +35,9 @@ namespace DataPointProperties
     // FastProperty Ids for properties
     enum
     {
+        PROP_DATAPOINT_LABEL_FILL_STYLE,
+        PROP_DATAPOINT_LABEL_FILL_COLOR,
+
         // common
         PROP_DATAPOINT_COLOR = FAST_PROPERTY_ID_START_DATA_POINT,
         PROP_DATAPOINT_TRANSPARENCY,
