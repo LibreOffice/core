@@ -32,12 +32,14 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <osl/diagnose.h>
 #include <drawingml/chart/datasourceconverter.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/titleconverter.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
 #include <drawingml/chart/typegroupmodel.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/token/properties.hxx>
@@ -199,6 +201,20 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
 }
 
+void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
+{
+    FillProperties& rFP = rShape.getFillProperties();
+
+    if (rFP.moFillType.has() && rFP.moFillType.get() == XML_solidFill)
+    {
+        rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_SOLID);
+
+        const Color& aColor = rFP.maFillColor;
+        ::Color nColor = aColor.getColor(rGraphicHelper);
+        rPropSet.setProperty(PROP_LabelFillColor, uno::makeAny(nColor));
+    }
+}
+
 DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( const OUString& rField )
 {
     if (rField == "VALUE")
@@ -246,8 +262,10 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         }
 
         if (mrModel.mxShapeProp)
+        {
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
-
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+        }
         if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
@@ -330,8 +348,11 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
+        {
             // Import baseline border properties for these data labels.
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+        }
     }
     // import leaderline of data labels
     if( !mrModel.mbShowLeaderLines )

@@ -27,6 +27,8 @@
 #define CHART_UNONAME_LABEL_BORDER_DASH     "LabelBorderDash"
 #define CHART_UNONAME_LABEL_BORDER_DASHNAME "LabelBorderDashName"
 #define CHART_UNONAME_LABEL_BORDER_TRANS    "LabelBorderTransparency"
+#define CHART_UNONAME_LABEL_FILL_STYLE      "LabelFillStyle"
+#define CHART_UNONAME_LABEL_FILL_COLOR      "LabelFillColor"
 #define CHART_UNONAME_CUSTOM_LABEL_FIELDS   "CustomLabelFields"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

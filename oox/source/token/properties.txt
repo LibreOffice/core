@@ -287,6 +287,8 @@ LabelBorderWidth
 LabelPlacement
 LabelPosition
 LabelSeparator
+LabelFillStyle
+LabelFillColor
 CustomLabelFields
 LayoutInfo
 LeftBorder
