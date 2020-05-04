@@ -47,6 +47,7 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -69,6 +70,12 @@ SvXMLEnumMapEntry<drawing::LineStyle> const aLineStyleMap[] =
     { XML_SOLID,    drawing::LineStyle_SOLID },
     { XML_DASH,     drawing::LineStyle_DASH },
     { XML_TOKEN_INVALID, drawing::LineStyle(0) }
+};
+
+SvXMLEnumMapEntry<drawing::FillStyle> const aFillStyleMap[] =
+{
+    { XML_NONE,     drawing::FillStyle_NONE },
+    { XML_SOLID,    drawing::FillStyle_SOLID }
 };
 
 }
@@ -157,6 +164,9 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             break;
             case XML_SCH_TYPE_LABEL_BORDER_OPACITY:
                 pHdl = new XMLOpacityPropertyHdl(nullptr);
+            break;
+            case XML_SCH_TYPE_LABEL_FILL_STYLE:
+                pHdl = new XMLEnumPropertyHdl( aFillStyleMap );
             break;
             default:
                 ;
