@@ -27,4 +27,11 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
     sal \
 ))
 
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,comphelper_test,\
+       plc4 \
+       nss3 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
