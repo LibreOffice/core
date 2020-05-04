@@ -416,6 +416,27 @@ SCROW ScFlatBoolRowSegments::findLastTrue() const
     return mpImpl->findLastTrue(false);
 }
 
+OString ScFlatBoolRowSegments::dumpAsString()
+{
+    OString aOutput;
+    OString aSegment;
+    RangeData aRange;
+    SCROW nRow = 0;
+    while (getRangeData(nRow, aRange))
+    {
+        if (!nRow)
+            aSegment = (aRange.mbValue ? OStringLiteral("1") : OStringLiteral("0")) + OStringLiteral(":");
+        else
+            aSegment.clear();
+
+        aSegment += OString::number(aRange.mnRow2) + " ";
+        aOutput += aSegment;
+        nRow = aRange.mnRow2 + 1;
+    }
+
+    return aOutput;
+}
+
 ScFlatBoolColSegments::ScFlatBoolColSegments(SCCOL nMaxCol) :
     mpImpl(new ScFlatBoolSegmentsImpl(nMaxCol))
 {
@@ -460,6 +481,27 @@ void ScFlatBoolColSegments::removeSegment(SCCOL nCol1, SCCOL nCol2)
 void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize)
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), true/*bSkipStartBoundary*/);
+}
+
+OString ScFlatBoolColSegments::dumpAsString()
+{
+    OString aOutput;
+    OString aSegment;
+    RangeData aRange;
+    SCCOL nCol = 0;
+    while (getRangeData(nCol, aRange))
+    {
+        if (!nCol)
+            aSegment = (aRange.mbValue ? OStringLiteral("1") : OStringLiteral("0")) + OStringLiteral(":");
+        else
+            aSegment.clear();
+
+        aSegment += OString::number(aRange.mnCol2) + " ";
+        aOutput += aSegment;
+        nCol = aRange.mnCol2 + 1;
+    }
+
+    return aOutput;
 }
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
@@ -552,6 +594,23 @@ void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)
 void ScFlatUInt16RowSegments::setValueIf(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue, const std::function<bool(sal_uInt16)>& rPredicate)
 {
     mpImpl->setValueIf(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2), nValue, rPredicate);
+}
+
+OString ScFlatUInt16RowSegments::dumpAsString()
+{
+    OString aOutput;
+    OString aSegment;
+    RangeData aRange;
+    SCROW nRow = 0;
+    while (getRangeData(nRow, aRange))
+    {
+        aSegment = OString::number(aRange.mnValue) + ":" +
+            OString::number(aRange.mnRow2) + " ";
+        aOutput += aSegment;
+        nRow = aRange.mnRow2 + 1;
+    }
+
+    return aOutput;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

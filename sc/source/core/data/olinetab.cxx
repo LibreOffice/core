@@ -81,6 +81,13 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
     bVisible = bNewVisible;
 }
 
+OString ScOutlineEntry::dumpAsString() const
+{
+    const char* const pSep = ":";
+    return OString::number(nStart) + pSep + OString::number(nSize) +
+        pSep + (bHidden ? "1" : "0") + pSep + (bVisible ? "1" : "0");
+}
+
 ScOutlineCollection::ScOutlineCollection() {}
 
 size_t ScOutlineCollection::size() const
@@ -132,6 +139,16 @@ bool ScOutlineCollection::empty() const
 ScOutlineCollection::iterator ScOutlineCollection::FindStart(SCCOLROW nMinStart)
 {
     return m_Entries.lower_bound(nMinStart);
+}
+
+OString ScOutlineCollection::dumpAsString() const
+{
+    OString aOutput;
+    const char* const pGroupEntrySep = ",";
+    for (const auto& rKeyValuePair : m_Entries)
+        aOutput += rKeyValuePair.second.dumpAsString() + pGroupEntrySep;
+
+    return aOutput;
 }
 
 ScOutlineArray::ScOutlineArray() :
@@ -723,6 +740,16 @@ void ScOutlineArray::finalizeImport(const ScTable& rTable)
         pEntry->SetHidden(bAllHidden);
         SetVisibleBelow(aIter.LastLevel(), aIter.LastEntry(), !bAllHidden, !bAllHidden);
     }
+}
+
+OString ScOutlineArray::dumpAsString() const
+{
+    OString aOutput;
+    const char* const pLevelSep = " ";
+    for (const auto& rCollection : aCollections)
+        aOutput += rCollection.dumpAsString() + pLevelSep;
+
+    return aOutput;
 }
 
 ScOutlineTable::ScOutlineTable()

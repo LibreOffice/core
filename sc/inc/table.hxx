@@ -1081,6 +1081,15 @@ public:
     SCCOL ClampToAllocatedColumns(SCCOL nCol) const { return std::min(nCol, static_cast<SCCOL>(aCol.size() - 1)); }
     SCCOL GetAllocatedColumnsCount() const { return aCol.size(); }
 
+    /**
+     * Serializes the sheet's geometry data.
+     *
+     * @param bColumns - if true it dumps the data for columns, else it does for rows.
+     * @param eGeomType indicates the type of data to be dumped for rows/columns.
+     * @return the serialization of the sheet's geometry data as an OString.
+     */
+    OString dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType);
+
 private:
 
     void FillFormulaVertical(
@@ -1239,6 +1248,13 @@ private:
 
     void EndListeningGroup( sc::EndListeningContext& rCxt, const SCCOL nCol, SCROW nRow );
     void SetNeedsListeningGroup( SCCOL nCol, SCROW nRow );
+
+    /// Returns list-of-spans representation of the column-widths/row-heights in twips encoded as an OString.
+    OString dumpColumnRowSizes(bool bColumns);
+    /// Returns list-of-spans representation of hidden/filtered states of columns/rows encoded as an OString.
+    OString dumpHiddenFiltered(bool bColumns, bool bHidden);
+    /// Returns list-of-spans representation of the column/row groupings encoded as an OString.
+    OString dumpColumnRowGroups(bool bColumns) const;
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

@@ -4875,6 +4875,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
     OString aCommand(pCommand);
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
+    static const OString aSheetGeometryData(".uno:SheetGeometryData");
     static const OString aCellCursor(".uno:CellCursor");
     static const OString aFontSubset(".uno:FontSubset&name=");
 
@@ -4969,6 +4970,72 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         tools::JsonWriter aJsonWriter;
         pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
         return aJsonWriter.extractData();
+    }
+    else if (aCommand.startsWith(aSheetGeometryData))
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            return nullptr;
+        }
+
+        bool bColumns = true;
+        bool bRows = true;
+        bool bSizes = true;
+        bool bHidden = true;
+        bool bFiltered = true;
+        bool bGroups = true;
+        if (aCommand.getLength() > aSheetGeometryData.getLength())
+        {
+            bColumns = bRows = bSizes = bHidden = bFiltered = bGroups = false;
+
+            OString aArguments = aCommand.copy(aSheetGeometryData.getLength() + 1);
+            sal_Int32 nParamIndex = 0;
+            do
+            {
+                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
+                sal_Int32 nIndex = 0;
+                OString aKey;
+                OString aValue;
+                do
+                {
+                    OString aToken = aParamToken.getToken(0, '=', nIndex);
+                    if (!aKey.getLength())
+                        aKey = aToken;
+                    else
+                        aValue = aToken;
+
+                } while (nIndex >= 0);
+
+                bool bEnableFlag = aValue.isEmpty() ||
+                    aValue.equalsIgnoreAsciiCase("true") || aValue.toInt32() > 0;
+                if (!bEnableFlag)
+                    continue;
+
+                if (aKey == "columns")
+                    bColumns = true;
+                else if (aKey == "rows")
+                    bRows = true;
+                else if (aKey == "sizes")
+                    bSizes = true;
+                else if (aKey == "hidden")
+                    bHidden = true;
+                else if (aKey == "filtered")
+                    bFiltered = true;
+                else if (aKey == "groups")
+                    bGroups = true;
+
+            } while (nParamIndex >= 0);
+        }
+
+        OString aGeomDataStr
+            = pDoc->getSheetGeometryData(bColumns, bRows, bSizes, bHidden, bFiltered, bGroups);
+
+        if (aGeomDataStr.isEmpty())
+            return nullptr;
+
+        return convertOString(aGeomDataStr);
     }
     else if (aCommand.startsWith(aCellCursor))
     {

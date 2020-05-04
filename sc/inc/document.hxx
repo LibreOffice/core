@@ -262,6 +262,15 @@ enum RangeNameScope
     SHEET                      // with two scope on Manage Names dialog.
 };
 
+/// Represents the type of sheet geometry data.
+enum class SheetGeomType
+{
+    SIZES,                     // Column widths or row heights.
+    HIDDEN,                    // Hidden columns/rows.
+    FILTERED,                  // Filtered columns/rows.
+    GROUPS                     // Grouping of columns/rows.
+};
+
 struct ScDocStat
 {
     OUString  aDocName;
@@ -2525,6 +2534,16 @@ public:
 
     bool IsInDocShellRecalc() const   { return mbDocShellRecalc; }
     void SetDocShellRecalc(bool bSet) { mbDocShellRecalc = bSet; }
+
+    /**
+     * Serializes the specified sheet's geometry data.
+     *
+     * @param nTab is the index of the sheet to operate on.
+     * @param bColumns - if true it dumps the data for columns, else it does for rows.
+     * @param eGeomType indicates the type of data to be dumped for rows/columns.
+     * @return the serialization of the specified sheet's geometry data as an OString.
+     */
+    OString dumpSheetGeomData(SCTAB nTab, bool bColumns, SheetGeomType eGeomType);
 
 private:
 
