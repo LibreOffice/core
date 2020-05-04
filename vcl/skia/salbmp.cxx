@@ -488,6 +488,23 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    if (mPixelsSize != mSize && !mImage
+        && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+    {
+        // The bitmap has a pending scaling, but no image. This function would below call GetSkBitmap(),
+        // which would do CPU-based pixel scaling, and then it would get converted to an image.
+        // Be more efficient, first convert to an image and then the block below will scale on the GPU.
+        SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): shortcut image scaling "
+                                                 << mPixelsSize << "->" << mSize);
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        Size savedSize = mSize;
+        thisPtr->mSize = mPixelsSize; // block scaling
+        SkiaZone zone;
+        sk_sp<SkImage> image = SkiaHelper::createSkImage(GetAsSkBitmap());
+        assert(image);
+        thisPtr->mSize = savedSize;
+        thisPtr->ResetToSkImage(image);
+    }
     if (mImage)
     {
         if (mImage->width() != mSize.Width() || mImage->height() != mSize.Height())
