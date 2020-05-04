@@ -386,7 +386,7 @@
 #define RID_SVXSTR_ABOUT_VENDOR                     NC_("aboutdialog|vendor", "This release was supplied by %OOOVENDOR.")
 #define RID_SVXSTR_ABOUT_BASED_ON                   NC_("aboutdialog|libreoffice", "LibreOffice was based on OpenOffice.org.")
 #define RID_SVXSTR_ABOUT_DERIVED                    NC_("aboutdialog|derived", "%PRODUCTNAME is derived from LibreOffice which was based on OpenOffice.org")
-#define RID_SVXSTR_ABOUT_UILOCALE                   NC_("aboutdialog|uilocale", "UI-Language: $LOCALE")
+#define RID_SVXSTR_ABOUT_UILOCALE                   NC_("aboutdialog|uilocale", "UI: $LOCALE")
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
 
