@@ -62,6 +62,24 @@
       "revId": "13544acc2554737d860145854a2b162bafff956c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ec81bb1_486b6441",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-04T17:21:34Z",
+      "side": 1,
+      "message": "alternative approach: remove #ifdef DEBUG_MSO_ENCRYPTION_STD97 which nobody knows about anyway and replace lcl_* function calling SAL_INFO with SAL_INFO printing return value of lcl_* function",
+      "parentUuid": "39d43cec_ce99c670",
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
