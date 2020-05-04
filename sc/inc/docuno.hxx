@@ -366,6 +366,10 @@ public:
     /// @see vcl::ITiledRenderable::getRowColumnHeaders().
     virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle) override;
 
+    /// @see vcl::ITiledRenderable::getSheetGeometryData().
+    virtual OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
+                                         bool bFiltered, bool bGroups) override;
+
     /// @see vcl::ITiledRenderable::getCellCursor().
     virtual OString getCellCursor() override;
 

@@ -479,4 +479,108 @@ void ScTable::RestoreFromCache(SvStream& rStrm)
     }
 }
 
+OString ScTable::dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType)
+{
+    switch (eGeomType)
+    {
+        case SheetGeomType::SIZES:
+            // returns a non-empty space separated list of spans with trailing space.
+            // The format of the span is <size of any row/col in the span in print twips>:<last row/col of the span>
+            // Example (for columns with three spans if MAXCOL is 1023):   "1280:3 1049:50 1280:1023"
+            return dumpColumnRowSizes(bColumns);
+        case SheetGeomType::HIDDEN:
+            // returns a non-empty space separated list of spans with trailing space.
+            // The format of the span is:
+            // 1) First span:         <1 (span is hidden) / 0 (not hidden)>:<last row/col of the span>
+            // 2) Rest of the spans:  <last row/col of the span>
+            // The hidden state of the spans after the first can be inferred from the first span's flag as no adjacent
+            // spans can have the same state by definition of span.
+            return dumpHiddenFiltered(bColumns, /*bHidden*/ true);
+        case SheetGeomType::FILTERED:
+            // has exactly the same format as 'hidden'.
+            return dumpHiddenFiltered(bColumns, /*bHidden*/ false);
+        case SheetGeomType::GROUPS:
+            // returns a space separated list of 'levels' with trailing space.
+            // A 'level' is a comma separated list of groups(outline entries) with trailing comma.
+            // format of a group is:
+            // <start row/col of group>:<number of rows/cols in the group>:<1/0(group is hidden?)>:<1/0(control is visible?)>
+            return dumpColumnRowGroups(bColumns);
+        default:
+            ;
+    }
+
+    return "";
+}
+
+OString ScTable::dumpColumnRowSizes(bool bColumns)
+{
+    // If the data-structures are not available, just report that all
+    // rows/cols have the default sizes.
+    static const OString aDefaultForCols
+        = OString::number(STD_COL_WIDTH) + ":" + OString::number(MAXCOL) + " ";
+    static const OString aDefaultForRows
+        = OString::number(ScGlobal::nStdRowHeight) + ":" + OString::number(MAXROW) + " ";
+
+    // ScCompressedArray is a template class and we don't want to impose
+    // the restriction that its value type should be string serializable,
+    // instead just operate on the specialized object.
+    typedef ScCompressedArray<SCCOL, sal_uInt16> ColWidthsType;
+    auto dumpColWidths = [](const ColWidthsType& rWidths) -> OString {
+        OString aOutput;
+        OString aSegment;
+        SCCOL nStartCol = 0;
+        const SCCOL nMaxCol = std::min(rWidths.GetLastPos(), MAXCOL);
+        size_t nDummy = 0;
+        while (nStartCol <= nMaxCol)
+        {
+            SCCOL nEndCol;
+            sal_uInt16 nWidth = rWidths.GetValue(nStartCol, nDummy, nEndCol);
+            // The last span nEndCol is always MAXCOL+1 for some reason, and we don't want that.
+            if (nEndCol > nMaxCol)
+                nEndCol = nMaxCol;
+            aSegment = OString::number(nWidth) + ":" + OString::number(nEndCol) + " ";
+            aOutput += aSegment;
+            nStartCol = nEndCol + 1;
+        }
+
+        return aOutput;
+    };
+
+    if (bColumns)
+        return mpColWidth ? dumpColWidths(*mpColWidth) : aDefaultForCols;
+
+    return mpRowHeights ? mpRowHeights->dumpAsString() : aDefaultForRows;
+}
+
+OString ScTable::dumpHiddenFiltered(bool bColumns, bool bHidden)
+{
+    // defaults to no hidden/filtered row/cols.
+    static const OString aDefaultForCols = "0:" + OString::number(MAXCOL) + " ";
+    static const OString aDefaultForRows = "0:" + OString::number(MAXROW) + " ";
+
+    if (bHidden)
+    {
+        if (bColumns)
+            return mpHiddenCols ? mpHiddenCols->dumpAsString() : aDefaultForCols;
+
+        return mpHiddenRows ? mpHiddenRows->dumpAsString() : aDefaultForRows;
+    }
+
+    if (bColumns)
+        return mpFilteredCols ? mpFilteredCols->dumpAsString() : aDefaultForCols;
+
+    return mpFilteredRows ? mpFilteredRows->dumpAsString() : aDefaultForRows;
+}
+
+OString ScTable::dumpColumnRowGroups(bool bColumns) const
+{
+    if (!pOutlineTable)
+        return "";
+
+    if (bColumns)
+        return pOutlineTable->GetColArray().dumpAsString();
+
+    return pOutlineTable->GetRowArray().dumpAsString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
