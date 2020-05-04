@@ -60,6 +60,7 @@ namespace dbtools
         Reference< XSingleSelectQueryComposer > xComposer;
         OUString                         sCommand;
         OUString                         sFilter;
+        OUString                         sHavingClause;
         OUString                         sOrder;
         sal_Int32                               nCommandType;
         bool                                bEscapeProcessing;
@@ -189,6 +190,8 @@ namespace dbtools
                             OUString sFilter;
                             OSL_VERIFY( xQuery->getPropertyValue("Filter") >>= sFilter );
                             xComposer->setFilter( sFilter );
+                            OSL_VERIFY( xQuery->getPropertyValue("HavingClause") >>= sFilter );
+                            xComposer->setHavingClause( sFilter );
                         }
 
                         // the composed statement
@@ -212,6 +215,7 @@ namespace dbtools
                     // append sort/filter
                     xComposer->setOrder( _rData.sOrder );
                     xComposer->setFilter( _rData.sFilter );
+                    xComposer->setHavingClause( _rData.sHavingClause );
 
                     sStatement = xComposer->getQuery();
 
@@ -258,6 +262,13 @@ namespace dbtools
     void StatementComposer::setFilter( const OUString& _rFilter )
     {
         m_pData->sFilter = _rFilter;
+        m_pData->bComposerDirty = true;
+    }
+
+
+    void StatementComposer::setHavingClause( const OUString& _rHavingClause )
+    {
+        m_pData->sHavingClause = _rHavingClause;
         m_pData->bComposerDirty = true;
     }
 
