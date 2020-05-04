@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_uiimpress \
     CppunitTest_sd_html_export_tests \
     CppunitTest_sd_activex_controls_tests \
+    CppunitTest_sd_pdf_import_test \
 ))
 endif
 
