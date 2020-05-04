@@ -50,11 +50,9 @@ bool checkArrayForMatchingStrings(const char* pSource, sal_Int32 nSourceSize,
     for (OString const& rString : rStrings)
     {
         sal_Int32 nCurrentSize = nSourceSize - sal_Int32(pCurrent - pBegin);
-        printf("Current size %d -> %d\n", nCurrentSize, nSourceSize);
         pCurrent = matchArray(pCurrent, nCurrentSize, rString.getStr(), rString.getLength());
         if (pCurrent == nullptr)
             return false;
-        printf("%s\n", pCurrent);
     }
     return true;
 }
