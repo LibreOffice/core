@@ -339,7 +339,10 @@ namespace {
             {"LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE},
             {"LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH},
             {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
-            {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS}});
+            {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS},
+            {"FillStyle", CHART_UNONAME_LABEL_FILL_STYLE},
+            {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR}
+            });
                 // fix the spelling!
         return map;
     }

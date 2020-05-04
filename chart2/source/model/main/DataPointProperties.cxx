@@ -385,6 +385,17 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_STYLE,
+                  PROP_DATAPOINT_LABEL_FILL_STYLE,
+                  cppu::UnoType<drawing::FillStyle>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_COLOR,
+                  PROP_DATAPOINT_LABEL_FILL_COLOR,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
                   PROP_DATAPOINT_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
@@ -493,6 +504,8 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
     PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, sal_Int32(drawing::LineStyle_NONE));
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_STYLE);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_COLOR);
     PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_WIDTH, 0);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH, drawing::LineDash());
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH_NAME);
