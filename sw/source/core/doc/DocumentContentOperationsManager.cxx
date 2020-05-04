@@ -3438,6 +3438,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if (rRg.aStart != rRg.aEnd)
     {
         bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+        bool isRecreateEndNode(false);
         --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
@@ -3448,7 +3449,40 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         {   // recreate from previous node (could be merged now)
             if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
             {
+                std::unordered_set<SwTextFrame*> frames;
+                SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
+                if (pEndNode)
+                {
+                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    {
+                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        {
+                            frames.insert(pFrame);
+                        }
+                    }
+                }
                 sw::RecreateStartTextFrames(*pNode);
+                if (!frames.empty())
+                {   // tdf#132187 check if the end node needs new frames
+                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    {
+                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        {
+                            auto const it = frames.find(pFrame);
+                            if (it != frames.end())
+                            {
+                                frames.erase(it);
+                            }
+                        }
+                    }
+                    if (!frames.empty()) // existing frame was deleted
+                    {   // all layouts because MakeFrames recreates all layouts
+                        pEndNode->DelFrames(nullptr);
+                        isRecreateEndNode = true;
+                    }
+                }
             }
         }
         bool const isAtStartOfSection(aSavePos.GetNode().IsStartNode());
@@ -3460,7 +3494,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             // if it was the first node in the document so that MakeFrames()
             // will find the existing (wasn't deleted) frame on it
             SwNodeIndex const end(rInsPos,
-                    (rInsPos.GetNode().IsEndNode() || isAtStartOfSection)
+                    (!isRecreateEndNode || isAtStartOfSection)
                     ? 0 : +1);
             ::MakeFrames(pDest, aSavePos, end);
         }
