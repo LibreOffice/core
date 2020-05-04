@@ -426,12 +426,12 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 
     if ( pEE->pImpEditEngine->GetStyleSheetPool() )
     {
-        sal_uInt16 nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
+        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SfxStyleFamily::All );
+        sal_uInt16 nStyles = aIter.Count();
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
         fprintf( fp, "\n#Template:   %" SAL_PRIuUINT32 "\n", sal_uInt32(nStyles) );
-        SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SfxStyleFamily::All );
         SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {
