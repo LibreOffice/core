@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f86c17d9_dc1b044a",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-04T12:45:17Z",
+      "side": 1,
+      "message": "Mike: it surprised me that you agreed to remove this. Do we treat the whole thing like a regression and not worry about ANY compat flags in this case? [my opinion is that we would not use any compat flags].",
+      "range": {
+        "startLine": 1098,
+        "startChar": 9,
+        "endLine": 1098,
+        "endChar": 102
+      },
+      "revId": "9febd9d179d0a61ca6a28b0fd82b9f86d95eb540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
