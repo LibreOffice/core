@@ -1,0 +1,2 @@
+To run tests from this folder, do
+make CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME=xxxx
