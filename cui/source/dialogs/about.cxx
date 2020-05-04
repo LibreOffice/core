@@ -71,10 +71,13 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pVersionLabel->set_label(GetVersionString());
 
   OUString sbuildId = GetBuildString();
+  const long nMaxChar = 25;
   if (IsStringValidGitHash(sbuildId)) {
-    m_pBuildLabel->set_label(sbuildId);
-    m_pBuildLabel->set_uri(
-        "https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h=" + sbuildId);
+    m_pBuildLabel->set_uri("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h="
+                           + sbuildId);
+    m_pBuildLabel->set_label(sbuildId.getLength() > nMaxChar ? sbuildId.replaceAt(
+                                 nMaxChar, sbuildId.getLength() - nMaxChar, "...")
+                                                             : sbuildId);
   } else {
     m_pBuildCaption->hide();
     m_pBuildLabel->hide();
@@ -104,7 +107,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBrandImage->set_image(m_pVirDev.get());
     m_pVirDev.disposeAndClear();
   }
-  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth)) {
+  if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, nWidth * 0.9)) {
     ScopedVclPtr<VirtualDevice> m_pVirDev =
         m_pAboutImage->create_virtual_device();
     m_pVirDev->SetOutputSizePixel(aBackgroundBitmap.GetSizePixel());
