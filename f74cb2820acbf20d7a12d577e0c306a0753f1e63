@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e998f2b0_9254125b",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-05T09:23:41Z",
+      "side": 1,
+      "message": "that doesn\u0027t look quite right, the first 3 return false are for cases where moving isn\u0027t allowed.\n\nso false means either moved to a different page (if returned at the end), or not moved at all;\ntrue means moved but still on the same page (could be columns or linked frames perhaps? or the follow is actually on the same page currently).",
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55b2ef32_1cee391c",
         "filename": "sw/source/core/layout/flowfrm.cxx",
         "patchSetId": 2
@@ -36,6 +53,48 @@
       "writtenOn": "2020-05-05T07:48:07Z",
       "side": 1,
       "message": "\"different\": I left this ambiguous, because sometimes it can move back multiple (presumably completely empty) pages. But should it be more clear that it was moved to an \"earlier\" page? I assume it always moves backwards.\n\nAlthough that seems to be a bit of a nebulous concept. If moving back is going to an earlier page, and going forward is going to a new page, where am I in the middle?  Nowhere I presume, and perhaps that explains a bit of my confusion about this whole layout thing. So from a \"MovedFwd\" standpoint, if you haven\u0027t MovedFwd, you have by definition MovedBwd? And from a \"MovedBwd\" viewpoint, if I can\u0027t MoveBwd, then by definition I have MovedFwd?",
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aec4b79_41704b85",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-05T09:23:41Z",
+      "side": 1,
+      "message": "agreed.",
+      "parentUuid": "55b2ef32_1cee391c",
+      "range": {
+        "startLine": 2029,
+        "startChar": 41,
+        "endLine": 2029,
+        "endChar": 44
+      },
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e15f50eb_3893834a",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-05T09:23:41Z",
+      "side": 1,
+      "message": "note that it doesn\u0027t necessarily move to a different page, could move to a different column on the same page... in that case, the return value is still \"true\" AFAICS. so another difference to MoveFwd.",
+      "parentUuid": "c53c4ad6_b4f1aa38",
       "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
