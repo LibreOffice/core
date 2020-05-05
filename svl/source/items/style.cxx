@@ -479,7 +479,6 @@ SfxStyleSheetBase* SfxStyleSheetIterator::First()
     }
 }
 
-
 SfxStyleSheetBase* SfxStyleSheetIterator::Next()
 {
     SfxStyleSheetBase* retval = nullptr;
@@ -548,14 +547,10 @@ SfxStyleSearchBits SfxStyleSheetIterator::GetSearchMask() const
     return mask;
 }
 
-
-SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
+SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl(SfxStyleFamily eFamily, SfxStyleSearchBits eMask)
 {
-    if( !pImpl->pIter || (pImpl->pIter->GetSearchMask() != nMask) || (pImpl->pIter->GetSearchFamily() != nSearchFamily) )
-    {
-        pImpl->pIter = CreateIterator( nSearchFamily, nMask );
-    }
-
+    if (!pImpl->pIter || (pImpl->pIter->GetSearchMask() != eMask) || (pImpl->pIter->GetSearchFamily() != eFamily))
+        pImpl->pIter = CreateIterator(eFamily, eMask);
     return *pImpl->pIter;
 }
 
@@ -706,21 +701,22 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBas
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
-                                               SfxStyleFamily eFam,
-                                               SfxStyleSearchBits mask)
+                                               SfxStyleFamily eFamily,
+                                               SfxStyleSearchBits eMask)
 {
-    SfxStyleSheetIterator aIter(this,eFam,mask);
+    SfxStyleSheetIterator aIter(this, eFamily, eMask);
     return aIter.Find(rName);
 }
 
-SfxStyleSheetBase* SfxStyleSheetBasePool::First()
+SfxStyleSheetBase* SfxStyleSheetBasePool::First(SfxStyleFamily eFamily, SfxStyleSearchBits eMask)
 {
-    return GetIterator_Impl().First();
+    return GetIterator_Impl(eFamily, eMask).First();
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Next()
 {
-    return GetIterator_Impl().Next();
+    assert(pImpl->pIter && "Next called without a previous First");
+    return pImpl->pIter->Next();
 }
 
 void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
@@ -811,7 +807,7 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
 {
     const SfxStyleSearchBits nTmpMask = GetSearchMask();
     SetSearchMask(GetSearchFamily());
-    for( SfxStyleSheetBase* p = First(); p; p = Next() )
+    for( SfxStyleSheetBase* p = First(GetSearchFamily()); p; p = Next() )
     {
         if( p->GetParent() == rOld )
         {

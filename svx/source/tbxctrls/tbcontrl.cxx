@@ -972,7 +972,7 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
     {
         pPool->SetSearchMask( eStyleFamily );
 
-        pStyle = pPool->First();
+        pStyle = pPool->First(eStyleFamily);
         while ( pStyle && pStyle->GetName() != aSearchEntry )
             pStyle = pPool->Next();
     }
@@ -1143,7 +1143,7 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         {
             pPool->SetSearchMask( eStyleFamily );
 
-            pStyle = pPool->First();
+            pStyle = pPool->First(eStyleFamily);
             while (pStyle && pStyle->GetName() != rStyleName)
                 pStyle = pPool->Next();
         }

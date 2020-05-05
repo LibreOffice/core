@@ -231,7 +231,7 @@ friend class SfxStyleSheetBase;
     std::unique_ptr<SfxStyleSheetBasePool_Impl> pImpl;
 
 protected:
-    SfxStyleSheetIterator&      GetIterator_Impl();
+    SfxStyleSheetIterator&      GetIterator_Impl(SfxStyleFamily eFamily, SfxStyleSearchBits eMask);
 
     SfxItemPool&                rPool;
     SfxStyleFamily              nSearchFamily;
@@ -272,7 +272,7 @@ public:
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
-    SfxStyleSheetBase*  First();
+    SfxStyleSheetBase*  First(SfxStyleFamily eFamily, SfxStyleSearchBits eMask = SfxStyleSearchBits::All);
     SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
 

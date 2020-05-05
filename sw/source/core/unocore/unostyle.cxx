@@ -1899,7 +1899,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
             throw lang::IllegalArgumentException();
         m_pBasePool->SetSearchMask(SfxStyleFamily::Para);
         bool bStyleFound = false;
-        for(auto pBase = m_pBasePool->First(); pBase; pBase = m_pBasePool->Next())
+        for(auto pBase = m_pBasePool->First(SfxStyleFamily::Para); pBase; pBase = m_pBasePool->Next())
         {
             bStyleFound = pBase->GetName() == aStyleName;
             if (bStyleFound)

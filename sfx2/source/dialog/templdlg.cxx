@@ -906,7 +906,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag(bool bEnable)
 {
     if (pStyleSheetPool)
     {
-        SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+        SfxStyleSheetBase* pStyle = pStyleSheetPool->First(pStyleSheetPool->GetSearchFamily(), pStyleSheetPool->GetSearchMask());
         bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && bEnable;
     }
     bTreeDrag = bEnable;
@@ -962,7 +962,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     const SfxStyleFamily eFam = pItem->GetFamily();
     pStyleSheetPool->SetSearchMask(eFam, SfxStyleSearchBits::AllVisible);
     StyleTreeArr_Impl aArr;
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->First(eFam, SfxStyleSearchBits::AllVisible);
 
     bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && bTreeDrag;
 
@@ -1041,7 +1041,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     const SfxStyleFamily eFam = pItem->GetFamily();
 
     SfxStyleSearchBits nFilter (nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter].nFlags : SfxStyleSearchBits::Auto);
-    if(nFilter == SfxStyleSearchBits::Auto)   // automatic
+    if (nFilter == SfxStyleSearchBits::Auto)   // automatic
         nFilter = nAppFilter;
 
     OSL_ENSURE(pStyleSheetPool, "no StyleSheetPool");
@@ -1061,10 +1061,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         mxFilterLb->append(OUString::number(static_cast<int>(SfxStyleSearchBits::All)), SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
         const SfxStyleFilter& rFilter = pItem->GetFilterList();
         for (const SfxFilterTuple& i : rFilter)
-        {
-            SfxStyleSearchBits nFilterFlags = i.nFlags;
-            mxFilterLb->append(OUString::number(static_cast<int>(nFilterFlags)), i.aName);
-        }
+            mxFilterLb->append(OUString::number(static_cast<int>(i.nFlags)), i.aName);
         mxFilterLb->thaw();
 
         if (nActFilter < mxFilterLb->get_count() - 1)
@@ -1073,8 +1070,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
         {
             nActFilter = 0;
             mxFilterLb->set_active(1);
-            SfxStyleSearchBits nFilterFlags = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
-            pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
+            nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
+            pStyleSheetPool->SetSearchMask(eFam, nFilter);
         }
 
         // if the tree view again, select family hierarchy
@@ -1100,7 +1097,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
 
     EnableItem("watercan", false);
 
-    SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
+    SfxStyleSheetBase *pStyle = pStyleSheetPool->First(eFam, nFilter);
 
     std::unique_ptr<weld::TreeIter> xEntry = mxFmtLb->make_iterator();
     bool bEntry = mxFmtLb->get_iter_first(*xEntry);

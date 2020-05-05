@@ -135,7 +135,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
     SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
     pPool->SetSearchMask(SfxStyleFamily::Para);
     m_xStyleLB->clear();
-    const SfxStyleSheetBase* pBase = pPool->First();
+    const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para);
     while (pBase)
     {
         if (!m_pFormat || pBase->GetName() != m_pFormat->GetName())
@@ -224,7 +224,7 @@ void SwCondCollPage::SelectHdl(const weld::Widget* pBox)
         const SfxStyleSearchBits nSearchFlags = static_cast<SfxStyleSearchBits>(m_xFilterLB->get_id(nSelPos).toInt32());
         SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SfxStyleFamily::Para, nSearchFlags);
-        const SfxStyleSheetBase* pBase = pPool->First();
+        const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para, nSearchFlags);
 
         bool bEmpty = true;
         while (pBase)

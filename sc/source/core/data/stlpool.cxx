@@ -422,7 +422,7 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
 
 void ScStyleSheetPool::setAllStandard()
 {
-    SfxStyleSheetBase* pSheet = First();
+    SfxStyleSheetBase* pSheet = First(GetSearchFamily(), GetSearchMask());
     while (pSheet)
     {
         pSheet->SetMask(SfxStyleSearchBits::ScStandard);
