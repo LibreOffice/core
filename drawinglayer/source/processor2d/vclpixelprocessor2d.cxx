@@ -59,9 +59,9 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <primitive2d/pointarrayprimitive2d.hxx>
-#include <primitive2d/fillhatchprimitive2d.hxx>
-#include <primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>

@@ -27,7 +27,7 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
-#include <primitive2d/pointarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>

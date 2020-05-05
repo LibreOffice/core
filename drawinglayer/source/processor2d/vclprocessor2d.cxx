@@ -61,8 +61,8 @@
 // control support
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
-#include <primitive2d/pointarrayprimitive2d.hxx>
-#include <primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
 using namespace com::sun::star;
 
