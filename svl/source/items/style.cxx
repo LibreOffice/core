@@ -601,12 +601,10 @@ bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyl
         return false;
 }
 
-
 void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n)
 {
     nSearchFamily = eFam; nMask = n;
 }
-
 
 std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
 (
@@ -805,8 +803,6 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                                          const OUString& rNew,
                                          bool bVirtual)
 {
-    const SfxStyleSearchBits nTmpMask = GetSearchMask();
-    SetSearchMask(GetSearchFamily());
     for( SfxStyleSheetBase* p = First(GetSearchFamily()); p; p = Next() )
     {
         if( p->GetParent() == rOld )
@@ -817,7 +813,6 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                 p->aParent = rNew;
         }
     }
-    SetSearchMask(GetSearchFamily(), nTmpMask);
 }
 
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
