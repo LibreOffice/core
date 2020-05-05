@@ -103,10 +103,13 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 continue;
             }
 
+#ifndef IOS
             try
+#endif
             {
                 ProcessEvent( aEvent );
             }
+#ifndef IOS
             catch (css::uno::Exception&)
             {
                 TOOLS_WARN_EXCEPTION("vcl", "Uncaught");
@@ -122,6 +125,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
+#endif
             aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
                 break;
