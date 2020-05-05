@@ -547,6 +547,11 @@ SfxStyleSearchBits SfxStyleSheetIterator::GetSearchMask() const
     return mask;
 }
 
+SfxStyleSheetIterator* SfxStyleSheetBasePool::GetCachedIterator()
+{
+    return pImpl->pIter.get();
+}
+
 SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl(SfxStyleFamily eFamily, SfxStyleSearchBits eMask)
 {
     if (!pImpl->pIter || (pImpl->pIter->GetSearchMask() != eMask) || (pImpl->pIter->GetSearchFamily() != eFamily))

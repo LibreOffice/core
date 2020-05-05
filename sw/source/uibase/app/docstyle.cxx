@@ -3189,7 +3189,8 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
 
 void SwDocStyleSheetPool::InvalidateIterator()
 {
-    dynamic_cast<SwStyleSheetIterator&>(GetIterator_Impl(GetSearchFamily(), GetSearchMask())).InvalidateIterator();
+    if (SfxStyleSheetIterator* pIter = GetCachedIterator())
+        dynamic_cast<SwStyleSheetIterator&>(*pIter).InvalidateIterator();
 }
 
 void SwStyleSheetIterator::InvalidateIterator()
