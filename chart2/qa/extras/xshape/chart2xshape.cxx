@@ -48,7 +48,7 @@ private:
 
     void compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference = false);
     OUString getXShapeDumpString();
-    xmlDocPtr getXShapeDumpXmlDoc();
+    xmlDocUniquePtr getXShapeDumpXmlDoc();
 };
 
 namespace {
@@ -73,11 +73,11 @@ OUString Chart2XShapeTest::getXShapeDumpString()
     return xDumper->dump();
 }
 
-xmlDocPtr Chart2XShapeTest::getXShapeDumpXmlDoc()
+xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
 {
     OUString rDump = getXShapeDumpString();
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    return xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr()));
+    return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 }
 
 void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference)
@@ -173,7 +173,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
     load("chart2/qa/extras/xshape/data/ods/", "tdf76649_TrendLineBug.ods");
 
-    xmlDocPtr pXmlDoc = getXShapeDumpXmlDoc();
+    xmlDocUniquePtr pXmlDoc = getXShapeDumpXmlDoc();
 
     // Check if the regression curve exists (which means a XShape with a certain
     // name should exist in the dump)
@@ -187,7 +187,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
     OUString rDump = xDumper->dump();
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    xmlDocPtr pXmlDoc = xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr()));
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 
     {
         OString aPath( "//XShape[@text='Oct-12']/Transformation" );

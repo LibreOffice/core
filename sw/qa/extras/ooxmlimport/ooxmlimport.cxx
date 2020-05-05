@@ -361,7 +361,7 @@ DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
      * The problem was that direct formatting of the paragraph was not applied
      * to the numbering. This is easier to test using a layout dump.
      */
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[1]", "nHeight", "220");
 
     // check the bookmark portions are of the expected height
@@ -1384,7 +1384,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     ReadGraphic(aStream, aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
 
     // Get first polyline rightside x coordinate
     sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[2]", "x").toInt32();

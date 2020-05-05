@@ -257,7 +257,7 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 
 DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
 {
-    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
         // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
         // Actual: 1', i.e. the in-table field had no declaration (in the header), while the
         // outside-table one had the declaration.
@@ -266,7 +266,7 @@ DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
 
 DECLARE_ODFEXPORT_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
 {
-    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
         // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
         // Actual: 1', i.e. the in-textframe field had no declaration (in the header), while the
         // outside-textframe one had the declaration.
@@ -387,7 +387,7 @@ DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
     aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, "FillTransparenceGradient");
     CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
 
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         // check that there are 3 background-image elements
         assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']/style:background-image[@style:repeat='stretch']", 3);
@@ -535,7 +535,7 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "FillColor"));
 //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xFrameStyle2, "FillTransparence"));
 
-    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
     {
         // check that fo:background-color attribute is exported properly
         assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='encarts']/style:graphic-properties[@fo:background-color='#ffcc99']", 1);
@@ -583,7 +583,7 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle32, "FillTransparence"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x461900), getProperty<sal_Int32>(xStyle32, "CharColor"));
 
-    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
     {
         // check that fo:background-color attribute is exported properly
         assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Titre Avis expert']/style:paragraph-properties[@fo:background-color='#661900']", 1);
@@ -948,7 +948,7 @@ DECLARE_ODFEXPORT_TEST(testProtectionKey, "protection-key.fodt")
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         assertXPath(pXmlDoc, "//text:section[@text:name='Section0' and @text:protected='true' and @text:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=']");
         assertXPath(pXmlDoc, "//text:section[@text:name='Section1' and @text:protected='true' and @text:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=']");
@@ -1143,7 +1143,7 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
 
     // Table inside a textbox should be in the extension namespace.
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
         // This failed, as draw:custom-shape had a table:table child.
         assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", "Table1");
 }
@@ -1561,7 +1561,7 @@ DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
 
     // First page has no header/footer
     {
-        xmlDocPtr pXmlDoc = parseLayoutDump();
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
         // check first page
         xmlXPathObjectPtr pXmlPage1Header = getXPathNode(pXmlDoc, "/root/page[1]/header");
@@ -1932,7 +1932,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
 DECLARE_ODFEXPORT_TEST(testTableStyles3, "table_styles_3.odt")
 {
     // This test checks if default valued attributes aren't exported.
-    xmlDocPtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     if (!pXmlDoc)
         return;
 
@@ -2006,7 +2006,7 @@ DECLARE_ODFIMPORT_TEST(testTableStyles4, "table_styles_4.odt")
 DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
 {
     // Test if cell styles doesn't have a style:parent-style-name attribute.
-    xmlDocPtr pXmlDoc = parseExport("styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
     if (!pXmlDoc)
         return;
 
@@ -2055,7 +2055,7 @@ DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         // Original image (svg)
         assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/svg+xml']");
@@ -2067,7 +2067,7 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         // These failed, the attributes were missing.
         assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", "normal");
@@ -2105,7 +2105,7 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
     // Reason of such behavior unclear. So XPATH assert fails.
 
     // Parse resulting SVG as XML file.
-    // xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+    // xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
 
     // Check amount of paths required to draw an arrow.
     // Since there are still some empty paths in output test can fail later. There are just two
@@ -2156,7 +2156,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 
 DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
 {
-    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
     {
         assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
         assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']", 1);
@@ -2335,13 +2335,13 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
 DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
 {
     // check import of VisualArea settings of the embedded XLSX OLE objects
-    xmlDocPtr pXmlDoc = parseExport("Object 1/settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/settings.xml");
     if (!pXmlDoc)
         return;
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']", "903");
 
-    xmlDocPtr pXmlDoc2 = parseExport("Object 2/settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport("Object 2/settings.xml");
     if (!pXmlDoc2)
         return;
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");

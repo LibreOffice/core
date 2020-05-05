@@ -676,7 +676,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
 {
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // page 1 header: 1 paragraph, 2 flys, 1 draw object
     assertXPath(pXmlDoc, "/root/page[1]/header/txt", 1);
@@ -855,7 +855,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf73547, "tdf73547-dash.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
     double nSp = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "sp").toDouble();
@@ -884,7 +884,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
 {
-    xmlDocPtr pXmlComm = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     if (!pXmlComm)
         return;
     // there is no extra paragraph on Win32, only a single one.
@@ -909,7 +909,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "//w:object", 2);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 2);
@@ -923,7 +923,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
     // Size of the embedded OLE spreadsheet was the bad "width:28.35pt;height:28.35pt"
@@ -992,7 +992,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 DECLARE_OOXMLEXPORT_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupShape.docx")
 {
     // tdf#131922: Check if good language is used in shape group texts
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     if (!pXml)
         return;
     assertXPath(pXml,

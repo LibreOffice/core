@@ -84,7 +84,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
 {
     //There was the charts on each other, because their horizontal and vertical position was 0!
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
 }
@@ -92,7 +92,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
 {
     //OLE Object were overlapped due to missing wrap import
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
@@ -109,7 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
 {
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
         p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "l", "4910");
@@ -123,7 +123,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
 {
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "eastAsia", "Arial Unicode MS");
@@ -172,7 +172,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130120, "tdf130120.docx")
 {
     //Text for exporting the allowincell attribute:
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
         "mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
 }
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
 
     reload("Office Open XML Text", "");
 
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
     // because the exporter had no idea what markup to use for ARABIC_ZERO.
@@ -289,7 +289,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
 
     reload("Office Open XML Text", "");
 
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Without the accompanying fix in place, this test would have failed with:
     // XPath '/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt' number of nodes is incorrect
     // because the exporter had no idea what markup to use for SYMBOL_CHICAGO.
@@ -326,7 +326,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
 
     // check inline text properties
     {
-        xmlDocPtr pXmlDoc =parseExport("word/document.xml");
+        xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
         if (pXmlDoc)
         {
             assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:b");
@@ -336,7 +336,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121045, "tdf121045.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:sz", "val", "20");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:szCs", "val", "20");
@@ -357,7 +357,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121045, "tdf121045.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:sz", "val", "20");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:szCs", "val", "20");
@@ -525,7 +525,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
 {
-    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     if (!pXmlSettings)
         return;
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
@@ -533,7 +533,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
 {
-    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     if (!pXmlSettings)
         return;
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTableStyleConfNested)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     validate(maTempFile.GetFileName(), test::OOXML);
     mbExported = true;
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed, as the custom table cell
     // border properties were lost, so the outer A2 cell started to have borders, not present in the
@@ -576,7 +576,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
     aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     mbExported = true;
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -607,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     mbExported = true;
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     OString aXPath
         = "/w:document/w:body/w:p/w:r/w:rPr/w14:textFill/w14:solidFill/w14:srgbClr/w14:alpha";
@@ -642,7 +642,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     validate(maTempFile.GetFileName(), test::OOXML);
     mbExported = true;
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the accompanying fix in place, this test would have failed, the user field was
@@ -675,7 +675,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
 {
     // Import of exported DOCX failed because of wrong namespace used for wsp element
     // Now test the exported XML, in case we stop failing opening invalid files
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // The parent wpg:wgp element has three children: wpg:cNvGrpSpPr, wpg:grpSpPr, and wpg:wsp
     // (if we start legitimately exporting additional children, this needs to be adjusted to check
@@ -698,7 +698,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128820, "tdf128820.fodt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
 {
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // There was an w:r (with w:br) as an invalid child of first paragraph's w:pPr
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:pPr/w:r", 0);
@@ -736,7 +736,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77796, "tdf77796.docx")
 {
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     // cell paddings from table style
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblCellMar/w:start", "w", "5");
@@ -748,14 +748,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77796, "tdf77796.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
 {
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123757, "tdf123757.docx")
 {
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl", 2);
 }
@@ -793,7 +793,7 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     // Additional problem: top margin on page 3 was wrong.
     if (mbExported)
     {
-        xmlDocPtr pXml = parseExport("word/document.xml");
+        xmlDocUniquePtr pXml = parseExport("word/document.xml");
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: 2200
         // - Actual  : 2574
@@ -806,17 +806,17 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 {
     // Explicitly set hyphenation=auto on document level
-    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlSettings);
     assertXPath(pXmlSettings, "/w:settings/w:autoHyphenation", "val", "true");
 
     // Second paragraph has explicitly enabled hyphenation
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:p[2]/w:pPr/w:suppressAutoHyphens", "val", "false");
 
     // Default paragraph style explicitly disables hyphens
-    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlStyles);
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
@@ -824,7 +824,7 @@ DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupShapeText.docx")
 {
     // tdf#131776: Check if strikeout is used in shape group texts
-    xmlDocPtr pXml = parseExport("word/document.xml");
+    xmlDocUniquePtr pXml = parseExport("word/document.xml");
     if (!pXml)
         return;
 
@@ -864,7 +864,7 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
 {
     //The positions of OLE objects were not exported, check if now it is exported correctly
-    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     OUString aXmlVal = getXPath(p_XmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:object/v:shape", "style");
     // This data was missing

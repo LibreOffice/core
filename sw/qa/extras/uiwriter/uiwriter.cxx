@@ -1807,7 +1807,7 @@ void SwUiWriterTest::testFdo87448()
     ReadGraphic(aStream, aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
 
     // The first polyline in the document has a number of points to draw arcs,
     // the last one jumps back to the start, so we call "end" the last but one.
@@ -1867,7 +1867,7 @@ void SwUiWriterTest::testTdf68183()
 void SwUiWriterTest::testCp1000115()
 {
     createDoc("cp1000115.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     // This was 1: the long paragraph in the B1 cell did flow over to the
@@ -1907,7 +1907,7 @@ void SwUiWriterTest::testTdf63214()
 void SwUiWriterTest::testTdf90003()
 {
     createDoc("tdf90003.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
@@ -3279,7 +3279,7 @@ void SwUiWriterTest::testTdf74230()
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
     CPPUNIT_ASSERT(aTempFile.IsValid());
     //loading an XML DOM of the "styles.xml" of the TempFile
-    xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(),"styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(),"styles.xml");
     //pXmlDoc should not be null
     CPPUNIT_ASSERT(pXmlDoc);
     //asserting XPath in loaded XML DOM
@@ -4848,7 +4848,7 @@ void SwUiWriterTest::testBookmarkCollapsed()
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
-    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -4925,7 +4925,7 @@ void SwUiWriterTest::testRemoveBookmarkText()
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
-    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -5030,7 +5030,7 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNew()
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
-    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -5095,7 +5095,7 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNewAfterReload()
     save("writer8", aTempFile);
 
     // load only content.xml from the resaved document
-    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
     {
         const OString aPath("/office:document-content/office:body/office:text/text:p");
 
@@ -5134,7 +5134,7 @@ void SwUiWriterTest::testTdf88453()
 {
     createDoc("tdf88453.odt");
     calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 0: the table does not fit the first page, but it wasn't split
     // to continue on the second page.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
@@ -5204,7 +5204,7 @@ void SwUiWriterTest::testTdf98987()
 {
     createDoc("tdf98987.docx");
     calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/SdrObject", "name", "Rectangle 1");
     sal_Int32 nRectangle1 = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32();
     assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name", "Rectangle 2");
@@ -5221,7 +5221,7 @@ void SwUiWriterTest::testTdf99004()
 {
     createDoc("tdf99004.docx");
     calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nTextbox1Top = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
     sal_Int32 nTextBox1Height = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
     sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
@@ -5634,7 +5634,7 @@ void SwUiWriterTest::testTdf104032()
 void SwUiWriterTest::testTdf104440()
 {
     createDoc("tdf104440.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//page[2]/body/txt/anchored");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     // This was 0: both Text Frames in the document were anchored to a
@@ -5647,7 +5647,7 @@ void SwUiWriterTest::testTdf104440()
 void SwUiWriterTest::testTdf104425()
 {
     createDoc("tdf104425.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // The document contains one top-level 1-cell table with minimum row height set to 70 cm,
     // and the cell contents does not exceed the minimum row height.
     // It should span over 3 pages.
@@ -5709,7 +5709,7 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
 #if HAVE_MORE_FONTS
     createDoc("tdf35021_tabOverMarginDemo.doc");
     calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Tabs should go past the margin @ ~3381
     sal_Int32 nMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
     // left tab was 3381 because it got its own full line
@@ -5731,7 +5731,7 @@ void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
     createDoc("tdf106701_tabOverMarginAutotab.doc");
     calcLayout();
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // The right margin is ~3378
     sal_Int32 nRightMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
     // Automatic tabstops should never be affected by tabOverMargin compatibility
@@ -5743,7 +5743,7 @@ void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 void SwUiWriterTest::testTdf104492()
 {
     createDoc("tdf104492.docx");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // The document should split table over 3 pages.
     assertXPath(pXmlDoc, "//page", 3);
 }
@@ -5755,7 +5755,7 @@ void SwUiWriterTest::testTdf107025()
     // break into multiple lines because of overflow.
     // The test document uses DFKAI-SB shipped with Windows.
     createDoc("tdf107025.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Verify the number of characters in each line.
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nLength").toInt32());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nLength").toInt32());
@@ -5776,7 +5776,7 @@ void SwUiWriterTest::testTdf107025()
 void SwUiWriterTest::testTdf107362()
 {
     createDoc("tdf107362.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nHeight = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]" , "nHeight").toInt32();
     sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]" , "nWidth").toInt32();
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]" , "nWidth").toInt32();
@@ -5884,7 +5884,7 @@ void SwUiWriterTest::testTdf125151_protectedB()
 void SwUiWriterTest::testTdf106736()
 {
     createDoc("tdf106736-grid.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth = getXPath(pXmlDoc, "(//Text[@nType='PortionType::TabLeft'])[1]", "nWidth").toInt32();
     // In tdf106736, width of tab overflow so that it got
     // width value around 9200, expected value is around 103
@@ -6032,7 +6032,7 @@ void SwUiWriterTest::testTdf72942()
 void SwUiWriterTest::testTdf114306()
 {
     load(DATA_DIRECTORY, "fdo114306.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // There are 2 long paragraphs in cell A1.
     // A part of paragraph 2 should flow over to the second page but
@@ -6206,7 +6206,7 @@ void SwUiWriterTest::testRhbz1810732()
 void SwUiWriterTest::testTdf108524()
 {
     createDoc("tdf108524.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect two cells containing a section.
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
 
@@ -6222,7 +6222,7 @@ void SwUiWriterTest::testLinesInSectionInTable()
     // the middle of a multi-line paragraph: the section only contains oneliner
     // paragraphs instead.
     createDoc("lines-in-section-in-table.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect two cells containing a section.
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
 
@@ -6237,7 +6237,7 @@ void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
 #if HAVE_MORE_FONTS
     // Assert that paragraph "4" is on page 1 and "5" is on page 2.
     SwDoc* pDoc = createDoc("lines-in-section-in-table.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 2);
     sal_uInt32 nPara4Node = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
     CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetNodes()[nPara4Node]->GetTextNode()->GetText());
@@ -6266,7 +6266,7 @@ void SwUiWriterTest::testTableInSection()
 #if HAVE_MORE_FONTS
     // The document has a section, containing a table that spans over 2 pages.
     createDoc("table-in-sect.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // In total we expect 4 cells.
     assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell", 4);
 
@@ -6282,7 +6282,7 @@ void SwUiWriterTest::testTableInNestedSection()
     // The document has a nested section, containing a table that spans over 2 pages.
     // This crashed the layout.
     createDoc("rhbz739252-3.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Make sure the table is inside a section and spans over 2 pages.
     assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
@@ -6293,7 +6293,7 @@ void SwUiWriterTest::testTdf112741()
 {
 #if HAVE_MORE_FONTS
     createDoc("tdf112741.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 5 pages.
     assertXPath(pXmlDoc, "//page", 4);
     assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section", 1);
@@ -6318,7 +6318,7 @@ void SwUiWriterTest::testTdf113287()
 {
 #if HAVE_MORE_FONTS
     createDoc("tdf113287.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page", 2);
     sal_uInt32 nCellTop = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds", "top").toUInt32();
     sal_uInt32 nSectionTop = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds", "top").toUInt32();
@@ -6338,7 +6338,7 @@ void SwUiWriterTest::testTdf113445()
     pView->SetViewLayout(/*nColumns=*/2, /*bBookMode=*/false);
     calcLayout();
 
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page", 2);
     sal_uInt32 nPage1Left = getXPath(pXmlDoc, "//page[1]/infos/bounds", "left").toUInt32();
     sal_uInt32 nPage2Left = getXPath(pXmlDoc, "//page[2]/infos/bounds", "left").toUInt32();
@@ -6369,7 +6369,7 @@ void SwUiWriterTest::testTdf113686()
 {
 #if HAVE_MORE_FONTS
     SwDoc* pDoc = createDoc("tdf113686.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 2);
     sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/txt[last()]", "txtNodeIndex").toUInt32();
     CPPUNIT_ASSERT_EQUAL(OUString("Table2:A1-P10"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
@@ -6417,7 +6417,7 @@ void SwUiWriterTest::testSectionInTableInTable2()
 {
 #if HAVE_MORE_FONTS
     createDoc("split-section-in-nested-table.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_uInt32 nSection1 = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
     sal_uInt32 nSection1Follow = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "follow").toUInt32();
     // This failed, the section wasn't split inside a nested table.
@@ -6447,7 +6447,7 @@ void SwUiWriterTest::testSectionInTableInTable3()
     // This never returned.
     calcLayout();
 
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab", "id").toUInt32();
     sal_uInt32 nTable1Follow = getXPath(pXmlDoc, "//page[1]//body/tab", "follow").toUInt32();
     sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab", "id").toUInt32();
@@ -6468,7 +6468,7 @@ void SwUiWriterTest::testSectionInTableInTable4()
 {
 #if HAVE_MORE_FONTS
     SwDoc* pDoc = createDoc("tdf113520.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 3);
     sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
     CPPUNIT_ASSERT_EQUAL(OUString("Section1:P10"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
@@ -6506,7 +6506,7 @@ void SwUiWriterTest::testTdf112160()
 #if HAVE_MORE_FONTS
     // Assert that the A2 cell is on page 1.
     SwDoc* pDoc = createDoc("tdf112160.fodt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_uInt32 nA2CellNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
     CPPUNIT_ASSERT_EQUAL(OUString("Table1.A2"), pDoc->GetNodes()[nA2CellNode]->GetTextNode()->GetText());
 
@@ -6563,7 +6563,7 @@ void SwUiWriterTest::testTdf112448()
     createDoc("tdf112448.odt");
 
     // check actual number of line breaks in the paragraph
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", 2);
 }
 
@@ -6837,7 +6837,7 @@ void SwUiWriterTest::testHtmlCopyImages()
         SwWriter aWrt(aStream, *pDoc);
         aWrt.Write(xWrt);
     }
-    htmlDocPtr pHtmlDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pHtmlDoc);
 
     // This failed, image was lost during HTML copy.
@@ -6922,7 +6922,7 @@ void SwUiWriterTest::testFontEmbedding()
     OString aContentBaseXpath("/office:document-content/office:font-face-decls");
     OString aSettingsBaseXpath("/office:document-settings/office:settings/config:config-item-set");
 
-    xmlDocPtr pXmlDoc = nullptr;
+    xmlDocUniquePtr pXmlDoc;
     uno::Sequence<beans::PropertyValue> aDescriptor;
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -7092,7 +7092,7 @@ void SwUiWriterTest::testInconsistentBookmark()
         save("writer8", aTempFile);
 
         // load only content.xml
-        if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+        if (xmlDocUniquePtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
         {
             const OString aPath("/office:document-content/office:body/office:text/text:p");
 
