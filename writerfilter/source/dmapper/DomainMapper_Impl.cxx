@@ -1376,10 +1376,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     bool isNumberingViaStyle(false);
     //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
     //does not specify the numbering
+    sal_Int32 nListId = -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
     {
         bool bNumberingFromBaseStyle = false;
-        sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
+        nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
@@ -1679,10 +1680,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
                         // Use lcl_getListId(), so we find the list ID in parent styles as well.
                         bool bNumberingFromBaseStyle = false;
-                        sal_Int32 const nListId( isNumberingViaStyle
+                        sal_Int32 const nListId2( isNumberingViaStyle
                             ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle)
                             : static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
-                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
+                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId2))
                         {   // styles could refer to non-existing lists...
                             AbstractListDef::Pointer const& pAbsList =
                                     pList->GetAbstractDefinition();
@@ -1858,6 +1859,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_LEFT_MARGIN);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaLeftMargin", aMargin);
+                            else if (isNumberingViaStyle)
+                            {
+                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
+                                if (nParaLeftMargin != 0)
+                                    xParaProps->setPropertyValue("ParaLeftMargin", uno::makeAny(nParaLeftMargin));
+                            }
                         }
                         if ( !bRightSet )
                         {
@@ -1870,6 +1877,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             uno::Any aMargin = GetPropertyFromParaStyleSheet(PROP_PARA_FIRST_LINE_INDENT);
                             if ( aMargin != uno::Any() )
                                 xParaProps->setPropertyValue("ParaFirstLineIndent", aMargin);
+                            else if (isNumberingViaStyle)
+                            {
+                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
+                                if (nFirstLineIndent != 0)
+                                    xParaProps->setPropertyValue("ParaFirstLineIndent", uno::makeAny(nFirstLineIndent));
+                            }
                         }
                     }
                 }

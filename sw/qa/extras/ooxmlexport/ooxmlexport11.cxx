@@ -1083,6 +1083,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95374, "tdf95374.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108493, "tdf108493.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // set in the paragraph
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "709");
+    // set in the numbering style (this was 0)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "hanging", "709");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
