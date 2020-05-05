@@ -189,6 +189,7 @@ public:
     void testTdf127372();
     void testTdf127379();
     void testTdf98603();
+    void testTdf79082();
     void testTdf129372();
     void testShapeGlowEffect();
     void testTdf119087();
@@ -300,6 +301,7 @@ public:
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
+    CPPUNIT_TEST(testTdf79082);
     CPPUNIT_TEST(testTdf129372);
     CPPUNIT_TEST(testShapeGlowEffect);
     CPPUNIT_TEST(testTdf119087);
@@ -2776,6 +2778,61 @@ void SdOOXMLExportTest2::testTdf98603()
     xPropSet->getPropertyValue("CharLocaleComplex") >>= aLocale;
     CPPUNIT_ASSERT_EQUAL(OUString("he"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
+}
+
+void SdOOXMLExportTest2::testTdf79082()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf79082.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]",
+        "pos",
+        "360000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]",
+        "algn",
+        "l");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]",
+        "pos",
+        "756000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]",
+        "algn",
+        "l");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]",
+        "pos",
+        "1440000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]",
+        "algn",
+        "ctr");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]",
+        "pos",
+        "1800000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]",
+        "algn",
+        "r");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]",
+        "pos",
+        "3240000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]",
+        "algn",
+        "dec");
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest2::testTdf129372()
