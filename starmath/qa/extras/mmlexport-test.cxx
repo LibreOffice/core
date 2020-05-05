@@ -49,7 +49,7 @@ protected:
     virtual void registerNamespaces(xmlXPathContextPtr &pXmlXPathCtx) override;
 
 private:
-    xmlDocPtr exportAndParse();
+    xmlDocUniquePtr exportAndParse();
 
     SmDocShellRef mxDocShell;
 };
@@ -75,7 +75,7 @@ void MathMLExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXPathCtx)
     xmlXPathRegisterNs(pXmlXPathCtx, BAD_CAST("m"), BAD_CAST("http://www.w3.org/1998/Math/MathML"));
 }
 
-xmlDocPtr MathMLExportTest::exportAndParse()
+xmlDocUniquePtr MathMLExportTest::exportAndParse()
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -84,7 +84,7 @@ xmlDocPtr MathMLExportTest::exportAndParse()
     aStoreMedium.SetFilter(pExportFilter);
     CPPUNIT_ASSERT(mxDocShell->ConvertTo(aStoreMedium));
     aStoreMedium.Commit();
-    xmlDocPtr pDoc = parseXml(aTempFile);
+    xmlDocUniquePtr pDoc = parseXml(aTempFile);
     CPPUNIT_ASSERT(pDoc);
     return pDoc;
 }
@@ -92,7 +92,7 @@ xmlDocPtr MathMLExportTest::exportAndParse()
 void MathMLExportTest::testBlank()
 {
     mxDocShell->SetText("x`y~~z");
-    xmlDocPtr pDoc = exportAndParse();
+    xmlDocUniquePtr pDoc = exportAndParse();
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[1]", "width", "0.5em");
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mspace[2]", "width", "4em");
 }
@@ -100,7 +100,7 @@ void MathMLExportTest::testBlank()
 void MathMLExportTest::testTdf97049()
 {
     mxDocShell->SetText("intd {{1 over x} dx}");
-    xmlDocPtr pDoc = exportAndParse();
+    xmlDocUniquePtr pDoc = exportAndParse();
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", "true");
     auto aContent = getXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aContent.getLength());
@@ -113,7 +113,7 @@ void MathMLExportTest::testTdf101022()
     {                                                                   \
         mxDocShell->SetText("%GAMMA %iGAMMA {ital %GAMMA} {nitalic %iGAMMA} " \
                             "%gamma %igamma {ital %gamma} {nitalic %igamma}"); \
-        xmlDocPtr pDoc = exportAndParse();                              \
+        xmlDocUniquePtr pDoc = exportAndParse();                              \
         if (capital)                                                    \
             assertXPathNoAttribute(pDoc, "/m:math/m:semantics/m:mrow/m:mi[1]", "mathvariant"); \
         else                                                            \

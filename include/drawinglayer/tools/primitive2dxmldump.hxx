@@ -18,6 +18,12 @@
 
 namespace tools { class XmlWriter; }
 
+struct xmlDocDeleter
+{
+    void operator()(xmlDoc* p) { xmlFreeDoc(p); }
+};
+using xmlDocUniquePtr = std::unique_ptr<xmlDoc, xmlDocDeleter>;
+
 namespace drawinglayer::tools
 {
 
@@ -38,7 +44,7 @@ public:
      * into a memory stream.
      *
      */
-    xmlDocPtr dumpAndParse(const drawinglayer::primitive2d::Primitive2DContainer& aPrimitive2DSequence, const OUString& rStreamName = OUString());
+    xmlDocUniquePtr dumpAndParse(const drawinglayer::primitive2d::Primitive2DContainer& aPrimitive2DSequence, const OUString& rStreamName = OUString());
 
     /** Dumps the input primitive sequence to xml into a file. */
     void dump(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, const OUString& rStreamName);

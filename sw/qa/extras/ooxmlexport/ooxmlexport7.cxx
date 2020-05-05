@@ -41,7 +41,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST( testChildNodesOfCubicBezierTo, "FDO74774.do
        The test case ensures that there are 3 child nodes of type "pt"
        for cubicBexTo
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath( pXmlDoc,
         "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
@@ -50,7 +50,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST( testChildNodesOfCubicBezierTo, "FDO74774.do
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMSwordHang,"test_msword_hang.docx")
 {
     // fdo#74771:
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", "0");
 }
 
@@ -66,7 +66,7 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapeThemeFont, "groupshape-theme-font.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAnchorIdForWP14AndW14, "AnchorId.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", "78735EFD");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "anchorId", "78735EFD");
@@ -88,7 +88,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextWatermark, "textWatermark.docx")
     //The problem was that the watermark ID was not preserved,
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'PowerPlusWaterMarkObject' string in it
-    xmlDocPtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
     if (!pXmlHeader1)
        return;
 
@@ -105,7 +105,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'WordPictureWaterMarkObject' string in it
 
-    xmlDocPtr pXmlHeader1 = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
     if (!pXmlHeader1)
        return;
 
@@ -122,21 +122,21 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76249, "fdo76249.docx")
      * as a Locked Canvas inside a text-box for the RT file to work in MS Word, as drawing elements
      * are not allowed inside the textboxes.
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]/v:textbox[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]",1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76979, "fdo76979.docx")
 {
     // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
-    xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
     // This was "auto", not "FFFFFF".
     assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", "FFFFFF");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
             "dir", "13500000");
@@ -144,7 +144,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-preservation.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // first shape with outer shadow, rgb color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
@@ -275,7 +275,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShape3DEffectPreservation, "shape-3d-effect-preservation.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // first shape: extrusion and shift on z, rotated camera with zoom, rotated light rig
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
@@ -384,7 +384,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShape3DEffectPreservation, "shape-3d-eff
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effects-preservation.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:camera",
@@ -424,8 +424,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
 
 DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artistic-effects-preservation.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    xmlDocPtr pRelsDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pRelsDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc || !pRelsDoc)
        return;
 
@@ -523,13 +523,13 @@ DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artisti
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo77719, "fdo77719.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:custGeom[1]", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNestedAlternateContent, "nestedAlternateContent.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
@@ -540,7 +540,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNestedAlternateContent, "nestedAlternate
 
 DECLARE_OOXMLEXPORT_TEST(test76317, "test76317.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc) return;
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "hexagon");
 }
@@ -549,19 +549,19 @@ DECLARE_OOXMLEXPORT_TEST(test76317, "test76317.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo76591, "fdo76591.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "relativeHeight", "3");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test76317_2K10, "test76317_2K10.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]", "name", "adj");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77122, "LinkedTextBoxes.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     //ensure that the text box links are preserved.
     assertXPath(pXmlDoc, "//wps:txbx[1]", "id", "1");
     assertXPath(pXmlDoc, "//wps:linkedTxbx[1]", "id", "1");
@@ -569,13 +569,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO77122, "LinkedTextBoxes.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test76734_2K7, "test76734_2K7.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]", "Requires", "wps");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test77219, "test77219.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", "1");
 }
 
@@ -613,7 +613,7 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76101, "fdo76101.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:styles/w:style");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
@@ -622,33 +622,33 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76101, "fdo76101.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtAndShapeOverlapping,"ShapeOverlappingWithSdt.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]/w:t[1]");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLockedCanvas, "fdo78658.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Checking for lockedCanvas tag
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/lc:lockedCanvas", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
 {
-    xmlDocPtr pXmlDoc1 = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc1 = parseExport("word/document.xml");
     if (!pXmlDoc1) return;
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
 
-    xmlDocPtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc2) return;
     assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]","Id","rId2");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlXPathObjectPtr pXmlObjs[6];
     pXmlObjs[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
@@ -677,7 +677,7 @@ DECLARE_OOXMLEXPORT_TEST(testRubyHyperlink, "rubyhyperlink.fodt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78300,"fdo78300.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]",
                 0);
@@ -694,7 +694,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWordArtWithinDraingtool, "testWordArtWit
      *  Expected : as there is nesting of a 2007 Word Art within a drawing tool, then can be separated in two different runs.
      * */
 
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent",1);
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape",1);
     // Make sure that the shape inside a shape is exported as VML-only, no embedded mc:AlternateContent before w:pict.
@@ -714,7 +714,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78663, "fdo78663.docx")
      * We shouldn't repeat it again in <shapetype><shape> <textbox><txbxContent>
      * */
 
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path",1);
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path",1);
     // Make sure that the shape inside a shape is exported as VML-only, no embedded mc:AlternateContent before w:pict.
@@ -723,7 +723,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78663, "fdo78663.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
 {
-    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
+    xmlDocUniquePtr pXmlHeader = parseExport("word/header2.xml");
 
     if(!pXmlHeader)
         return;
@@ -742,7 +742,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79256, "fdo79256.docx")
     /* corruption issue also solved by fixing tdf#108064:
      * since that LO keeps MSO preset dash styles during OOXML export
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln/a:prstDash", "val", "lgDash");
 }
@@ -753,7 +753,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDashedLine_CustDash1000thOfPercent, "das
      * This test-file has a CUSTOM dash-line that is defined as '1000th of a percent'.
      * This should be imported by LO as-is, and exported back with the same values.
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "d" , "800000");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "sp", "300000");
@@ -772,7 +772,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDashedLine_CustDashPercentage, "dashed_l
      * This should be imported by LO as '1000th of a percent', and exported back
      * as '1000th of a percent'.
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "d" , "800000");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "sp", "300000");
@@ -786,7 +786,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDashedLine_CustDashPercentage, "dashed_l
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentInitials, "comment_initials.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/comments.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/comments.xml");
 
     assertXPath(pXmlDoc,"/w:comments/w:comment[1]", "initials", "initials");
 }
@@ -813,7 +813,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79591, "fdo79591.docx")
      * and hence was showing RT document as corrupt with error
      * message "invalid character"
      */
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "");
@@ -827,7 +827,7 @@ DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo80894, "TextFrameRotation.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Rotation value was not roundtripped for textframe.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
@@ -846,7 +846,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
     // resultant shape was with <a:noFill/> prop in <wps:spPr> hence was not visible.
     // Checking there is a shape in header without <a:noFill/> element.
 
-    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:noFill",0);
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:noFill",0);
 
@@ -858,7 +858,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
 DECLARE_OOXMLEXPORT_TEST(testWrapTightThrough, "wrap-tight-through.docx")
 {
     // These were wrapSquare without a wrap polygon before.
-    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
         // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
         assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start", "x", "-1104");
@@ -881,21 +881,21 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeGrayscale, "picture_colormode_grayscale.docx")
 {
     // The problem was that the grayscale was not exported
-    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport ("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:grayscl", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeBlackWhite, "picture_colormode_black_white.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport ("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:biLevel", "thresh", "50000");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeWatermark, "picture_colormode_watermark.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport ("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "bright", "70000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "contrast", "-70000");
 }
@@ -904,7 +904,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeWatermark, "picture_colo
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExportShadow, "bnc637947.odt")
 {
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw", "dist" , "109865");
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw", "dir" , "634411");
@@ -914,7 +914,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExportShadow, "bnc637947.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExportAdjustmentValue, "tdf91429.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", "val 50000");
 }
@@ -1011,7 +1011,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTDF93675, "no-numlevel-but-indented.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//w:ind", "start", "1418");
 }
 
@@ -1019,7 +1019,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTDF93675, "no-numlevel-but-indented.odt"
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // there should be no flipH and flipV attributes in this case
     assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipH");
     assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipV");
@@ -1043,7 +1043,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlipAndRotateCustomShape, "flip_and_rota
 DECLARE_OOXMLEXPORT_TEST(testTdf92335, "tdf92335.docx")
 {
     // Don't export redundant ListLabel character styles
-    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
         return;
 
