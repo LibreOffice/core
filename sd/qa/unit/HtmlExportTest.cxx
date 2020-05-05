@@ -17,7 +17,7 @@ using namespace css;
 class SdHTMLFilterTest : public SdModelTestBase, public XmlTestTools, public HtmlTestTools
 {
 private:
-    htmlDocPtr exportAndParseHtml(sd::DrawDocShellRef const& xDocShRef)
+    htmlDocUniquePtr exportAndParseHtml(sd::DrawDocShellRef const& xDocShRef)
     {
         FileFormat* pFormat = getFormat(HTML);
         OUString aExt = "." + OUString::createFromAscii(pFormat->pName);
@@ -32,7 +32,7 @@ public:
     {
         sd::DrawDocShellRef xDocShRef = loadURL(
             m_directories.getURLFromSrc("/sd/qa/unit/data/HtmlExportTestDocument.odp"), ODP);
-        htmlDocPtr htmlDoc = exportAndParseHtml(xDocShRef);
+        htmlDocUniquePtr htmlDoc = exportAndParseHtml(xDocShRef);
 
         assertXPath(htmlDoc, "/html", 1);
         assertXPath(htmlDoc, "/html/body", 1);

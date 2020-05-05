@@ -14,6 +14,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <libxml/tree.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <test/xmldocptr.hxx>
 #include <vector>
 
 namespace tools { class XmlWriter; }
@@ -38,7 +39,7 @@ public:
      * into a memory stream.
      *
      */
-    xmlDocPtr dumpAndParse(const drawinglayer::primitive2d::Primitive2DContainer& aPrimitive2DSequence, const OUString& rStreamName = OUString());
+    xmlDocUniquePtr dumpAndParse(const drawinglayer::primitive2d::Primitive2DContainer& aPrimitive2DSequence, const OUString& rStreamName = OUString());
 
     /** Dumps the input primitive sequence to xml into a file. */
     void dump(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, const OUString& rStreamName);

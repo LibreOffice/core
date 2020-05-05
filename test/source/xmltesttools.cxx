@@ -42,13 +42,13 @@ XmlTestTools::XmlTestTools()
 XmlTestTools::~XmlTestTools()
 {}
 
-xmlDocPtr XmlTestTools::parseXml(utl::TempFile const & aTempFile)
+xmlDocUniquePtr XmlTestTools::parseXml(utl::TempFile const & aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     return parseXmlStream(&aFileStream);
 }
 
-xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
+xmlDocUniquePtr XmlTestTools::parseXmlStream(SvStream* pStream)
 {
     std::size_t nSize = pStream->remainingSize();
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
@@ -56,10 +56,10 @@ xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
     pBuffer[nSize] = 0;
     auto pCharBuffer = reinterpret_cast<xmlChar*>(pBuffer.get());
     SAL_INFO("test", "XmlTestTools::parseXmlStream: pBuffer is '" << pCharBuffer << "'");
-    return xmlParseDoc(pCharBuffer);
+    return xmlDocUniquePtr(xmlParseDoc(pCharBuffer));
 }
 
-xmlDocPtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
+xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
 {
     SvMemoryStream aStream;
     rDumper.dump(rGDIMetaFile, aStream);
@@ -67,9 +67,9 @@ xmlDocPtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile
     return XmlTestTools::parseXmlStream(&aStream);
 }
 
-xmlXPathObjectPtr XmlTestTools::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
+xmlXPathObjectPtr XmlTestTools::getXPathNode(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
 {
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc.get());
     registerNamespaces(pXmlXpathCtx);
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     xmlXPathFreeContext(pXmlXpathCtx);
@@ -80,7 +80,7 @@ void XmlTestTools::registerNamespaces(xmlXPathContextPtr& /*pXmlXpathCtx*/)
 {
 }
 
-OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
 {
     CPPUNIT_ASSERT(pXmlDoc);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
@@ -103,7 +103,7 @@ OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const 
     return s;
 }
 
-OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
+OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     switch (pXmlObj->type)
@@ -159,19 +159,19 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
     CPPUNIT_FAIL("Invalid XPath type");
 }
 
-void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath)
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
 {
     getXPath(pXmlDoc, rXPath, ""); // it asserts that rXPath exists, and returns exactly one node
 }
 
-void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
 {
     OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OStringLiteral("In <") + pXmlDoc->name + ">, attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
                                  rExpectedValue, aValue);
 }
 
-void XmlTestTools::assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath,
+void XmlTestTools::assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
                                     const std::vector<std::pair<OString, OUString>>& aPairVector)
 {
     for (auto& rPair : aPairVector)
@@ -180,7 +180,7 @@ void XmlTestTools::assertXPathAttrs(xmlDocPtr pXmlDoc, const OString& rXPath,
     }
 }
 
-void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfNodes)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -191,12 +191,12 @@ void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNu
     xmlXPathFreeObject(pXmlObj);
 }
 
-void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
+void XmlTestTools::assertXPathContent(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OUString& rContent)
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OStringLiteral("In <") + pXmlDoc->name + ">, XPath contents of child does not match").getStr(), rContent, getXPathContent(pXmlDoc, rXPath));
 }
 
-void XmlTestTools::assertXPathNSDef(xmlDocPtr pXmlDoc, const OString& rXPath,
+void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
                                     const OUString& rNSPrefix, const OUString& rNSHref)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
@@ -223,7 +223,7 @@ void XmlTestTools::assertXPathNSDef(xmlDocPtr pXmlDoc, const OString& rXPath,
     CPPUNIT_ASSERT(bFound);
 }
 
-void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
+void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
 {
 #if LIBXML_VERSION >= 20703 /* xmlChildElementCount is only available in libxml2 >= 2.7.3 */
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
@@ -241,7 +241,7 @@ void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath,
 #endif
 }
 
-void XmlTestTools::assertXPathNoAttribute(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
@@ -253,7 +253,7 @@ void XmlTestTools::assertXPathNoAttribute(xmlDocPtr pXmlDoc, const OString& rXPa
     xmlXPathFreeObject(pXmlObj);
 }
 
-int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rChildName)
+int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rChildName)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;

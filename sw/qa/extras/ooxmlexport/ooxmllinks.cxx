@@ -178,7 +178,7 @@ DECLARE_LINKS_IMPORT_TEST(testTdf123627_import, "tdf123627.docx", USE_RELATIVE)
 DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
                           USE_TEMP_DIR)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
@@ -189,7 +189,7 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", US
 DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
@@ -201,7 +201,7 @@ DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", US
 DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", USE_RELATIVE,
                           USE_TEMP_DIR)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
@@ -211,7 +211,7 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", US
 DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
@@ -222,7 +222,7 @@ DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", US
 
 DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, USE_TEMP_DIR)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
@@ -232,7 +232,7 @@ DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, 
 
 DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
@@ -242,7 +242,7 @@ DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, 
 
 DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
@@ -253,7 +253,7 @@ DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, 
 DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
-    xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc)
         return;
 
