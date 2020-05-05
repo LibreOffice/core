@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "5e8b2dc7_2e988caa",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-05T15:28:00Z",
+      "side": 1,
+      "message": "So in the final patch set there would be implementations of scrollSubstringTo that return false not because (as is apparently the case with the current patch set) they have not been implemented yet in this work-in-progress change, but because they call into some \"platform layer\" which in turn returns some \"not implemented\" indicator?",
+      "parentUuid": "43d4fd58_00fecfe2",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38b1ce52_0cafe840",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
