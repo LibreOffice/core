@@ -9,7 +9,6 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotools/mediadescriptor.hxx>
