@@ -145,9 +145,22 @@ namespace sdr
             assert(!"GroupProperties::SetObjectItemDirect() should never be called");
         }
 
-        void GroupProperties::ClearObjectItem(const sal_uInt16 /*nWhich*/)
+        void GroupProperties::ClearObjectItem(const sal_uInt16 nWhich)
         {
-            assert(!"GroupProperties::ClearObjectItem() should never be called");
+            // iterate over contained SdrObjects
+            const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
+            OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
+            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
+
+            for(size_t a = 0; a < nCount; ++a)
+            {
+                SdrObject* pObj = pSub->GetObj(a);
+
+                if(pObj)
+                {
+                    pObj->GetProperties().ClearObjectItem(nWhich);
+                }
+            }
         }
 
         void GroupProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
