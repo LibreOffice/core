@@ -2395,6 +2395,40 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     }
 }
 
+void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
+{
+    css::uno::Sequence<css::style::TabStop> aTabStops;
+    if (GetProperty(rXPropSet, "ParaTabStops"))
+        aTabStops = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
+
+    if (aTabStops.getLength() > 0)
+        mpFS->startElementNS(XML_a, XML_tabLst);
+
+    for (const css::style::TabStop& rTabStop : std::as_const(aTabStops))
+    {
+        OString sPosition = OString::number(GetPointFromCoordinate(rTabStop.Position));
+        OString sAlignment;
+        switch (rTabStop.Alignment)
+        {
+            case css::style::TabAlign_DECIMAL:
+                sAlignment = "dec";
+                break;
+            case css::style::TabAlign_RIGHT:
+                sAlignment = "r";
+                break;
+            case css::style::TabAlign_CENTER:
+                sAlignment = "ctr";
+                break;
+            case css::style::TabAlign_LEFT:
+            default:
+                sAlignment = "l";
+        }
+        mpFS->singleElementNS(XML_a, XML_tab, XML_algn, sAlignment, XML_pos, sPosition);
+    }
+    if (aTabStops.getLength() > 0)
+        mpFS->endElementNS(XML_a, XML_tabLst);
+}
+
 bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
 {
     bool bRet = false;
@@ -2596,6 +2630,8 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     }
 
     WriteParagraphNumbering( rXPropSet, fFirstCharHeight, nLevel );
+
+    WriteParagraphTabStops( rXPropSet );
 
     mpFS->endElementNS( XML_a, XML_pPr );
 }

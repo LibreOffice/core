@@ -106,6 +106,9 @@ sal_Int32 GetCoordinate( sal_Int32 nValue );
 /** converts an emu string into 1/100th mmm */
 sal_Int32 GetCoordinate( const OUString& sValue );
 
+/** converts 1/100mm to EMU */
+sal_Int32 GetPointFromCoordinate( sal_Int32 nValue );
+
 /** converts a ST_Percentage % string into 1/1000th of % */
 sal_Int32 GetPercent( const OUString& sValue );
 
