@@ -376,6 +376,7 @@ void SwMMResultPrintDialog::FillInPrinterSettings()
     PrinterChangeHdl_Impl(*m_xPrinterLB);
 
     sal_Int32 count = xConfigItem->GetMergedDocumentCount();
+    m_xFromNF->set_max(count);
     m_xToNF->set_value(count);
     m_xToNF->set_max(count);
 }
@@ -432,6 +433,10 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     m_xSendAsLB->set_active(3);
     SendTypeHdl_Impl(*m_xSendAsLB);
 
+    const sal_Int32 nCount = xConfigItem->GetMergedDocumentCount();
+    m_xFromNF->set_max(nCount);
+    m_xToNF->set_max(nCount);
+    m_xToNF->set_value(nCount);
 }
 
 IMPL_LINK_NOARG(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, weld::ToggleButton&, void)
