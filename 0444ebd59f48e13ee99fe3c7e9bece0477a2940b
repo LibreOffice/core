@@ -16,6 +16,24 @@
       "revId": "0444ebd59f48e13ee99fe3c7e9bece0477a2940b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee6828cb_a2a85a4e",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-05-05T11:45:32Z",
+      "side": 1,
+      "message": "\u003e Shouldn\u0027t that use basegfx::fTools::equalZero\n\u003e (and other places where there is a need to check \u003d\u003d 0.0)\n\nI don\u0027t think so. Hairline is always specified as 0.0, so there\u0027s no rounding error involved, and if there\u0027s one, then it\u0027s not hairline.",
+      "parentUuid": "cfbf418f_380fe3e6",
+      "revId": "0444ebd59f48e13ee99fe3c7e9bece0477a2940b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
