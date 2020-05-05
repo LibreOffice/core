@@ -1961,7 +1961,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     if ( pSh )
     {
         SfxStyleSheetBasePool* pPool = pSh->GetStyleSheetPool();
-        pPool->SetSearchMask( SfxStyleFamily::Page );
+        pPool->SetSearchMask();
         SfxStyleSheetBase* pStyle = pPool->First(SfxStyleFamily::Page);
         OUString aStdName;
 

@@ -557,7 +557,6 @@ SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl(SfxStyleFamily eF
 SfxStyleSheetBasePool::SfxStyleSheetBasePool( SfxItemPool& r ) :
     pImpl(new SfxStyleSheetBasePool_Impl),
     rPool(r),
-    nSearchFamily(SfxStyleFamily::Para),
     nMask(SfxStyleSearchBits::All)
 {
 #ifdef DBG_UTIL
@@ -570,7 +569,6 @@ SfxStyleSheetBasePool::SfxStyleSheetBasePool( const SfxStyleSheetBasePool& r ) :
     comphelper::OWeakTypeObject(r),
     pImpl(new SfxStyleSheetBasePool_Impl),
     rPool(r.rPool),
-    nSearchFamily(r.nSearchFamily),
     nMask( r.nMask )
 {
 #ifdef DBG_UTIL
@@ -601,9 +599,9 @@ bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyl
         return false;
 }
 
-void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n)
+void SfxStyleSheetBasePool::SetSearchMask(SfxStyleSearchBits n)
 {
-    nSearchFamily = eFam; nMask = n;
+    nMask = n;
 }
 
 std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
