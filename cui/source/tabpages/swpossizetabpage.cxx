@@ -99,13 +99,15 @@ enum class LB {
 // #i22341#
     VertLine            = 0x080000, // vertical text line
 
-    LAST = VertLine
+    RelPagePrintAreaBottom = 0x100000, // bottom of text area of page
+
+    LAST = 0x200000
 };
 
 }
 
 namespace o3tl {
-    template<> struct typed_flags<LB> : is_typed_flags<LB, 0x0fffff> {};
+    template<> struct typed_flags<LB> : is_typed_flags<LB, 0x3fffff> {};
 }
 
 static RelationMap const aRelationMap[] =
@@ -118,6 +120,7 @@ static RelationMap const aRelationMap[] =
     {SwFPos::REL_FRM_RIGHT, SwFPos::MIR_REL_FRM_RIGHT, LB::RelFrameRight,   RelOrientation::FRAME_RIGHT},
     {SwFPos::REL_PG_FRAME,  SwFPos::REL_PG_FRAME,      LB::RelPageFrame,    RelOrientation::PAGE_FRAME},
     {SwFPos::REL_PG_PRTAREA,SwFPos::REL_PG_PRTAREA,    LB::RelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
+    {SwFPos::REL_PG_PRTAREA_BOTTOM,SwFPos::REL_PG_PRTAREA_BOTTOM,    LB::RelPagePrintAreaBottom,  RelOrientation::PAGE_PRINT_AREA_BOTTOM},
     {SwFPos::REL_CHAR,      SwFPos::REL_CHAR,          LB::RelChar,        RelOrientation::CHAR},
 
     {SwFPos::FLY_REL_PG_LEFT,       SwFPos::FLY_MIR_REL_PG_LEFT,    LB::FlyRelPageLeft,     RelOrientation::PAGE_LEFT},
@@ -265,7 +268,7 @@ static FrmMap const aVParaMap[] =
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
+    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL|LB::RelPagePrintAreaBottom}
 };
 
 static FrmMap const aVParaHtmlMap[] =
@@ -322,7 +325,7 @@ static FrmMap aVCharMap[] =
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB::RelChar},
     {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB::RelChar},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL},
+    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL|LB::RelPagePrintAreaBottom},
     {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelChar|LB::VertLine},
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::VertLine},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::VertLine},
