@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55b2ef32_1cee391c",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-05T07:48:07Z",
+      "side": 1,
+      "message": "Oh, I think I know why you used \"should\" here. Because of the note that the moving must be implemented in a subclass.  Yet, it is still the function MoveBwd that is causing the change to the page, so the return is not a \"should\" but a \"did\", right?",
+      "range": {
+        "startLine": 2029,
+        "startChar": 41,
+        "endLine": 2029,
+        "endChar": 44
+      },
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c53c4ad6_b4f1aa38",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-05T07:48:07Z",
+      "side": 1,
+      "message": "\"different\": I left this ambiguous, because sometimes it can move back multiple (presumably completely empty) pages. But should it be more clear that it was moved to an \"earlier\" page? I assume it always moves backwards.\n\nAlthough that seems to be a bit of a nebulous concept. If moving back is going to an earlier page, and going forward is going to a new page, where am I in the middle?  Nowhere I presume, and perhaps that explains a bit of my confusion about this whole layout thing. So from a \"MovedFwd\" standpoint, if you haven\u0027t MovedFwd, you have by definition MovedBwd? And from a \"MovedBwd\" viewpoint, if I can\u0027t MoveBwd, then by definition I have MovedFwd?",
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
