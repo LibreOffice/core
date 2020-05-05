@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "43d4fd58_00fecfe2",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-05-05T15:00:02Z",
+      "side": 1,
+      "message": "\u003e I also think it\u0027s fairly important for the caller to know whether they can trust their request was acted upon or not\n\nYes, it\u0027s very useful for screen readers, so they can print it in their log that it\u0027s the application which doesn\u0027t have support for what they requested. That allows to quickly determine that the screen reader is indeed asking what it wanted, but some implementation is needed in the application.",
+      "parentUuid": "73d2213f_f8b93f9c",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38b1ce52_0cafe840",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
