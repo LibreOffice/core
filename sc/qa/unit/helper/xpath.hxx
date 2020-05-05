@@ -15,6 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include "scqahelperdllapi.h"
+#include <test/xmltesttools.hxx>
 
 #include <memory>
 
@@ -40,7 +41,7 @@ namespace XPathHelper
      *      test several files in the same exported xml file you need to export the file manually
      *      and call the parseExport method that takes a TempFile
      */
-    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport2(ScBootstrapFixture &, ScDocShell& rShell, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
+    SCQAHELPER_DLLPUBLIC xmlDocUniquePtr parseExport2(ScBootstrapFixture &, ScDocShell& rShell, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
             const OUString& rFile, sal_Int32 nFormat);
 
     /**
@@ -55,7 +56,7 @@ namespace XPathHelper
      * Should be used when the same exported file is used for testing different files in
      * the same zip file.
      */
-    SCQAHELPER_DLLPUBLIC xmlDocPtr parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
+    SCQAHELPER_DLLPUBLIC xmlDocUniquePtr parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
             const OUString& rFile);
 }
 

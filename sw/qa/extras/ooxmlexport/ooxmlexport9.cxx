@@ -73,7 +73,7 @@ DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
     // Make sure that we check the name of the export filter.
     // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
     // name of the import filter was checked.
-    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
         assertXPath(pXmlDoc,
                     "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
                     "ContentType",
@@ -82,7 +82,7 @@ DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
 
 DECLARE_OOXMLEXPORT_TEST(testDefaultContentTypes, "fdo55381.docx")
 {
-    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
     {
         assertXPath(pXmlDoc,
                     "/ContentType:Types/ContentType:Default[@Extension='xml']",
@@ -111,7 +111,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
-    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
         assertXPath(pXmlDoc,
                     "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
                     "ContentType",
@@ -257,7 +257,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-comprehensive.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // cell A1
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:spacing", "lineRule");
@@ -333,7 +333,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 2 (missing trailing cell in merged cell range)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
 }
@@ -353,7 +353,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 
-    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     if (!pXmlDoc)
          return;
     // Validation test: order of elements was wrong. Order was: insideH, end, insideV.
@@ -664,7 +664,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColum
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310_endnoteStyleForMSO.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/endnotes.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/endnotes.xml");
     // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "val",
                 "EndnoteCharacters");
@@ -672,7 +672,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103389, "tdf103389.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // No geometry was exported for the second canvas
     // Check both canvases' geometry
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp/wps:spPr/a:prstGeom", "prst", "rect");
@@ -762,7 +762,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.
     CPPUNIT_ASSERT(nDistB >= 0);
@@ -774,7 +774,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104115, "tdf104115.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This found 0 nodes: the custom geometry was not written for the Bezier
     // curve -> Word refused to open the document.
     assertXPath(pXmlDoc, "//a:custGeom", 1);
@@ -798,7 +798,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99227, "tdf99227.docx")
     // After that, importing after export failed with
     // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word / document.xml',
     // and before commit ebf767eeb2a169ba533e1b2ffccf16f41d95df35, the drawing was silently lost.
-    xmlDocPtr pXmlDoc = parseExport("word/footnotes.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
@@ -813,7 +813,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::BOTTOM, getProperty<sal_Int16>(xTable->getCellByName("A1"), "VertOrient"));
 
     //For MSO compatibility, the textbox should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_MESSAGE("FlyTop should be 2865, not 5649", nFlyTop < sal_Int32(3000));
     sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds", "top").toInt32();
@@ -970,7 +970,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106001_2, "tdf106001-2.odt")
 {
     // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
     // Note: we disregard what's set in pPr / rPr and only care about r / rPr
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w","val","600");
 }
 
@@ -1043,7 +1043,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columns
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
 {
-    if (xmlDocPtr pXmlDoc = parseExport())
+    if (xmlDocUniquePtr pXmlDoc = parseExport())
         // This was 4: an additional sectPr was added to the document.
         assertXPath(pXmlDoc, "//w:sectPr", 3);
 }
@@ -1083,7 +1083,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
 {
-    if (xmlDocPtr pXmlDoc = parseExport("word/styles.xml"))
+    if (xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml"))
         // This was 1, <w:outlineLvl> was duplicated for Heading1.
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
 }
@@ -1244,7 +1244,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1085), xShape->getPosition().Y);
 
     // Also check the specific OOXML elements
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     CPPUNIT_ASSERT(pXmlDoc);
     // For inline controls use w:object as parent element and pictureFrame shapetype
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object", 1);
@@ -1279,7 +1279,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf111964, "tdf111964.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
     const sal_Unicode sWSReference [] { 0x2002, 0x2002, 0x2002, 0x2002, 0x2002, 0 };
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:t", sWSReference);
@@ -1354,14 +1354,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
     // LO crashed while export because of character background color handling
 
     //tdf76683 - Cannot be negative number - use firstLine instead of hanging
-    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     assertXPathNoAttribute(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "hanging");
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pPr/w:ind", "firstLine","360");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Get bookmark name
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:bookmarkStart", "name");
@@ -1379,7 +1379,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107111, "tdf107111.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that hyperlink and its properties are in place.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
@@ -1460,7 +1460,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
 {
     // A chart anchored to a footnote multiplied during import
-    xmlDocPtr pXmlDoc = parseExport("word/footnotes.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
