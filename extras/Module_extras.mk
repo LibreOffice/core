@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_tplpersonal \
 	CustomTarget_tplpresnt \
 	CustomTarget_tpl_styles \
+	CustomTarget_tpldraw \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
@@ -39,6 +40,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplpersonal \
 	Package_tplpresnt \
 	Package_tpl_styles \
+	Package_tpldraw \
 	Package_tplwizagenda \
 	Package_tplwizbitmap \
 	Package_tplwizdesktop \
