@@ -34,6 +34,24 @@
       "revId": "0444ebd59f48e13ee99fe3c7e9bece0477a2940b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b603bd2_9ab167c4",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-05T12:03:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ee6828cb_a2a85a4e",
+      "revId": "0444ebd59f48e13ee99fe3c7e9bece0477a2940b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
