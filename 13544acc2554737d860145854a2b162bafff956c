@@ -122,6 +122,24 @@
       "revId": "13544acc2554737d860145854a2b162bafff956c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e934098_14e3417c",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-05T08:40:48Z",
+      "side": 1,
+      "message": "you could return a string that contains newlines, then you need only one SAL_INFO",
+      "parentUuid": "ff91e275_51e1a63d",
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
