@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "2d00d87d_fc9c18ec",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-05T14:51:28Z",
+      "side": 1,
+      "message": "This works for me if you wish, I don\u0027t see any real reason why we\u0027d want to allow `nEndIndex` \u003e `nStartIndex`.  The only potential use for this I see would be allowing the caller to choose which end they prefer if they can\u0027t have both (e.g. if the bounding box doesn\u0027t fit in the view): we would always prefer nStratIndex, whether it\u0027s greater or not then nEndIndex, allowing to select the other end by swapping the arguments.\nBut that\u0027s not a feature of the API, so it\u0027s probably stretching it a bit too far.  And this could be relaxed in the future anyway, while adding restrictions is trickier.",
+      "parentUuid": "ef2b614b_400129b2",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "163f6d2a_871d47a7",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Is \"unimplemented\" a concept this interface is meant to model?  If not, it appears the boolean return type would be redundant.",
       "parentUuid": "506a41a4_f21d78ea",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d2213f_f8b93f9c",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-05T14:51:28Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a concept of the interface in itself, but I also think it\u0027s fairly important for the caller to know whether they can trust their request was acted upon or not.  So I think we should really forward this up to the platform layer and let that layer decide how and whether to forward the info (ATK would return FALSE).  Whether we want to model this with returning a boolean or throwing something like `css::lang::NoSupportException()` I don\u0027t really have an opinion: just tell me which way to go and I\u0027ll do that.",
+      "parentUuid": "46fa06df_bfb9d87a",
       "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

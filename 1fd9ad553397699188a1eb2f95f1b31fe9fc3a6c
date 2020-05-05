@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "fa74878b_1bdbf622",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-05T14:51:28Z",
+      "side": 1,
+      "message": "OK, I\u0027ll drop that until I have time to actually look into it -- or get enough of a hint to make implementing it easier ;)",
+      "parentUuid": "705b02c9_e5d30769",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 62
+      },
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78dee45d_6b03e39b",
         "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
         "patchSetId": 1
@@ -155,6 +179,24 @@
       "side": 1,
       "message": "At least to me, an UNOIDL enum looks like the more plausible option here (esp. as it is at least initially left unpublished).",
       "parentUuid": "098bcaeb_a81e53e8",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb3b3d7_02ed21e0",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-05T14:51:28Z",
+      "side": 1,
+      "message": "OK, I\u0027m switching to an enum then.  The only downside I really see is the need to include com/sun/star/accessibility/AccessibleScrollType.hpp in a lot of headers, and that sadly enums are represented as `Name_VALUE` which isn\u0027t as nice as `Name::VALUE`, but that doesn\u0027t really matter (and I guess comes from a pre-`enum class` era).",
+      "parentUuid": "babb1f0c_140df27b",
       "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
