@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
-#include <primitive2d/pointarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>

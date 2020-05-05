@@ -21,7 +21,7 @@
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <primitive2d/fillhatchprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 
 using namespace com::sun::star;
 
