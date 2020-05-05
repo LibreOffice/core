@@ -172,7 +172,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 
     // This failed, the right edge of the shape was outside the page
     // boundaries.
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "left").toInt32();
     sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32();
     sal_Int32 nShapeLeft
@@ -215,7 +215,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400Percen
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontEsc, "test_tdf120412.docx")
 {
-    xmlDocPtr pXmlDoc =parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
     // Superscript should be raised by 100% (11pt). Was 110% (12pt)
@@ -373,7 +373,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","dxa");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
@@ -382,7 +382,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
 {
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW", "type", "dxa");
     // This was 7349: sum of the cell widths in first row, but the table width is determined by a longer row later.
@@ -608,7 +608,7 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
 {
     // The problem was that the importer lost consecutive tables with w:gridBefore
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
 }
 
@@ -993,7 +993,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
 
     //default style has numbering enabled.  Styles inherit numbering unless specifically disabled
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//body/txt/Special", 3);  //first three paragraphs have numbering
     assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "a.");
     assertXPath(pXmlDoc, "//body/txt[2]/Special", "rText", "b.");
@@ -1181,7 +1181,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
     // since LO is exporting in the NEW way now instead of the OLD way.
     // This was 55 when using 2007's compatibilityMode of 12 (old)
 
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "0");
@@ -1191,7 +1191,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInT
 {
     if ( mbExported )
     {
-        xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
         assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
         assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]", "w", "0");
