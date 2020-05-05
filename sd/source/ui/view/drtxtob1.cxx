@@ -321,6 +321,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_PARA_ULSPACE, true );
         }
         break;
 
