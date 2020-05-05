@@ -77,6 +77,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
+{
+    load(DATA_DIRECTORY, "tdf132187.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    //without the fix in place, this test would fail with:
+    //- Expected: 1
+    //- Actual  : 70
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
 {
     load(DATA_DIRECTORY, "tdf128739.docx");
