@@ -474,8 +474,6 @@ class IdleCalcTextWidthScope : public TaskStopwatch
     ScAddress& mrCalcPos;
     MapMode maOldMapMode;
     ScStyleSheetPool* mpStylePool;
-    SfxStyleSearchBits mnOldSearchMask;
-    SfxStyleFamily meOldFamily;
     bool mbNeedMore;
     bool mbProgress;
 
@@ -484,17 +482,10 @@ public:
         mrDoc(rDoc),
         mrCalcPos(rCalcPos),
         mpStylePool(rDoc.GetStyleSheetPool()),
-        mnOldSearchMask(mpStylePool->GetSearchMask()),
-        meOldFamily(mpStylePool->GetSearchFamily()),
         mbNeedMore(false),
         mbProgress(false)
     {
-        // The old search mask / family flags must be restored so that e.g.
-        // the styles dialog shows correct listing when it's opened in-between
-        // the calls.
-
         mrDoc.EnableIdle(false);
-        mpStylePool->SetSearchMask(SfxStyleFamily::Page);
     }
 
     ~IdleCalcTextWidthScope() COVERITY_NOEXCEPT_FALSE
@@ -506,7 +497,6 @@ public:
         if (mbProgress)
             ScProgress::DeleteInterpretProgress();
 
-        mpStylePool->SetSearchMask(meOldFamily, mnOldSearchMask);
         mrDoc.EnableIdle(true);
     }
 
