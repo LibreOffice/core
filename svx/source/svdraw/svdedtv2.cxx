@@ -51,7 +51,6 @@
 #include <vector>
 #include <vcl/graph.hxx>
 
-using ::std::vector;
 using namespace com::sun::star;
 
 SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* /*pObj*/) const
@@ -767,7 +766,7 @@ struct ImpDistributeEntry
 
 }
 
-typedef vector<ImpDistributeEntry> ImpDistributeEntryList;
+typedef std::vector<ImpDistributeEntry> ImpDistributeEntryList;
 
 void SdrEditView::DistributeMarkedObjects(weld::Window* pParent)
 {
