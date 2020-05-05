@@ -19,6 +19,8 @@
 
 #include <config_locales.h>
 
+#include <sal/log.hxx>
+
 #include <lrl_include.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -141,7 +143,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         OUString rule = LocaleDataImpl::get()->getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
             collator.reset( new icu::RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status) );
-            if (! U_SUCCESS(status)) throw RuntimeException();
+            if (! U_SUCCESS(status)) {
+                OUString message = "icu::RuleBasedCollator ctor failed: " + OUString::createFromAscii(u_errorName(status));
+                SAL_WARN("i18npool", message);
+                throw RuntimeException(message);
+            }
         }
         if (!collator && OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {
             const sal_uInt8* (*func)() = nullptr;
@@ -359,10 +365,18 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 uca_base.reset( static_cast<icu::RuleBasedCollator*>(icu::Collator::createInstance(
                             icu::Locale::getRoot(), status)) );
 #endif
-                if (! U_SUCCESS(status)) throw RuntimeException();
+                if (! U_SUCCESS(status)) {
+                    OUString message = "icu::Collator::createInstance() failed: " + OUString::createFromAscii(u_errorName(status));
+                    SAL_WARN("i18npool", message);
+                    throw RuntimeException(message);
+                }
                 collator.reset( new icu::RuleBasedCollator(
                         reinterpret_cast<const uint8_t*>(ruleImage), ruleImageSize, uca_base.get(), status) );
-                if (! U_SUCCESS(status)) throw RuntimeException();
+                if (! U_SUCCESS(status)) {
+                    OUString message = "icu::RuleBasedCollator ctor failed: " + OUString::createFromAscii(u_errorName(status));
+                    SAL_WARN("i18npool", message);
+                    throw RuntimeException(message);
+                }
             }
         }
         if (!collator) {
@@ -383,7 +397,11 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 
             // load ICU collator
             collator.reset( static_cast<icu::RuleBasedCollator*>( icu::Collator::createInstance(icuLocale, status) ) );
-            if (! U_SUCCESS(status)) throw RuntimeException();
+            if (! U_SUCCESS(status)) {
+                OUString message = "icu::Collator::createInstance() failed: " + OUString::createFromAscii(u_errorName(status));
+                SAL_WARN("i18npool", message);
+                throw RuntimeException(message);
+            }
         }
     }
 
