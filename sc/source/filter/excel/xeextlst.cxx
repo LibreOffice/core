@@ -152,7 +152,7 @@ XclExpExtCF::XclExpExtCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFor
 void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
 {
     OUString aStyleName = mrFormat.GetStyle();
-    SfxStyleSheetBase* pStyle = GetDoc().GetStyleSheetPool()->Find(aStyleName);
+    SfxStyleSheetBase* pStyle = GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
     SfxItemSet& rSet = pStyle->GetItemSet();
 
     std::unique_ptr<ScTokenArray> pTokenArray(mrFormat.CreateFlatCopiedTokenArray(0));
