@@ -50,7 +50,7 @@ static void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
     fprintf(fp, "\nextern \"C\" {\n");
 
     // generate main dict. data array
-    fprintf(fp, "\nstatic const sal_uInt8 %s[] = {", name);
+    fprintf(fp, "\nalignas(4) static const sal_uInt8 %s[] = {", name);
 
     sal_Int32 count = 0;
     for (sal_Int32 i = 0; i < len; i++) {
