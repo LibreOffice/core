@@ -230,8 +230,9 @@ friend class SfxStyleSheetBase;
 
     std::unique_ptr<SfxStyleSheetBasePool_Impl> pImpl;
 
-protected:
     SfxStyleSheetIterator&      GetIterator_Impl(SfxStyleFamily eFamily, SfxStyleSearchBits eMask);
+protected:
+    SfxStyleSheetIterator*      GetCachedIterator();
 
     SfxItemPool&                rPool;
     SfxStyleFamily              nSearchFamily;
