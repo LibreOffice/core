@@ -1821,9 +1821,6 @@ WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nSty
             nStyle &= ~WB_TABSTOP;
     }
 
-    if ( IsChecked() && IsRadioCheckEnabled() )
-        ImplUncheckAllOther( /*bSetStyle=*/false );
-
     return nStyle;
 }
 
