@@ -907,7 +907,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             m_xReplaceTmplLB->clear();
             SfxStyleSheetBasePool* pStylePool = pShell->GetStyleSheetPool();
             pStylePool->SetSearchMask( pSearchItem->GetFamily() );
-            SfxStyleSheetBase* pBase = pStylePool->First();
+            SfxStyleSheetBase* pBase = pStylePool->First(pSearchItem->GetFamily());
 
             while ( pBase )
             {
@@ -1599,7 +1599,7 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     rPool.SetSearchMask( pSearchItem->GetFamily() );
     m_xSearchTmplLB->freeze();
     m_xReplaceTmplLB->freeze();
-    SfxStyleSheetBase* pBase = rPool.First();
+    SfxStyleSheetBase* pBase = rPool.First(pSearchItem->GetFamily());
 
     while ( pBase )
     {

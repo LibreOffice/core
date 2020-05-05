@@ -310,7 +310,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         pPool->SetSearchMask( SfxStyleFamily::Para );
         m_xLbDbParaColl->append_text( sNoTmpl );
 
-        const SfxStyleSheetBase* pBase = pPool->First();
+        const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Para);
         while( pBase )
         {
             m_xLbDbParaColl->append_text( pBase->GetName() );

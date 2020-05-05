@@ -1515,7 +1515,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SfxStyleFamily::Page);
 
             StyleSheetCopyResultVector aCreatedStyles;          // List of created stylesheets
-            SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
+            SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First(SfxStyleFamily::Page);
 
             while (pHisSheet)
             {

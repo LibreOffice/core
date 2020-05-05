@@ -338,7 +338,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
                 SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
                             GetView().GetDocShell()->GetStyleSheetPool();
                 pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para);
-                SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
+                SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First(SfxStyleFamily::Para);
                 while(pFirstStyle)
                 {
                     aList.push_back( pFirstStyle->GetName() );
@@ -441,7 +441,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
             weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
             SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
             pPool->SetSearchMask(SfxStyleFamily::Pseudo);
-            const SfxStyleSheetBase* pBase = pPool->First();
+            const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Pseudo);
             std::set<OUString> aNames;
             while(pBase)
             {

@@ -1142,7 +1142,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
 
     if( bChg )
     {
-        m_pPool->First();  // internal list has to be updated
+        m_pPool->First(m_pPool->GetSearchFamily(), m_pPool->GetSearchMask());  // internal list has to be updated
         m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
@@ -3189,7 +3189,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
 
 void SwDocStyleSheetPool::InvalidateIterator()
 {
-    dynamic_cast<SwStyleSheetIterator&>(GetIterator_Impl()).InvalidateIterator();
+    dynamic_cast<SwStyleSheetIterator&>(GetIterator_Impl(GetSearchFamily(), GetSearchMask())).InvalidateIterator();
 }
 
 void SwStyleSheetIterator::InvalidateIterator()

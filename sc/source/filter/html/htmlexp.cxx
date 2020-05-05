@@ -444,7 +444,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
                 SfxStyleFamily::Para );
         OSL_ENSURE( pStyleSheet, "ParaStyle not found! :-(" );
         if (!pStyleSheet)
-            pStyleSheet = pStylePool->First();
+            pStyleSheet = pStylePool->First(SfxStyleFamily::Para);
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
         aHTMLStyle.nDefaultScriptType = ScGlobal::GetDefaultScriptType();
@@ -465,7 +465,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-(" );
     if (!pStyleSheet)
-        pStyleSheet = pStylePool->First();
+        pStyleSheet = pStylePool->First(SfxStyleFamily::Page);
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
     if ( !aHTMLStyle.bInitialized )
     {

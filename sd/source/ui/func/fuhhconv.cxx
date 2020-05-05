@@ -155,7 +155,7 @@ void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const
     if( !pStyleSheetPool )
         return;
 
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->First();
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->First(pStyleSheetPool->GetSearchFamily(), pStyleSheetPool->GetSearchMask());
     while( pStyle )
     {
         SfxItemSet& rSet = pStyle->GetItemSet();

@@ -336,7 +336,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
     svx::ColorSet aColorSet = rColorSets.getColorSet(sColorSetName);
 
     pPool->SetSearchMask(SfxStyleFamily::Para);
-    pStyle = static_cast<SwDocStyleSheet*>(pPool->First());
+    pStyle = static_cast<SwDocStyleSheet*>(pPool->First(SfxStyleFamily::Para));
 
     while (pStyle)
     {
@@ -355,7 +355,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
     }
 
     pPool->SetSearchMask(SfxStyleFamily::Char);
-    pStyle = static_cast<SwDocStyleSheet*>(pPool->First());
+    pStyle = static_cast<SwDocStyleSheet*>(pPool->First(SfxStyleFamily::Char));
 
     while (pStyle)
     {
