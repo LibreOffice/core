@@ -12,6 +12,7 @@
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace
 {
@@ -602,6 +603,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     xCellA1.set(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT(xCellA1->getString().endsWith("test1"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+
+    dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, it would crash here
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    OUString aPostits = pTextDoc->getPostIts();
+    std::stringstream aStream(aPostits.toUtf8().getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+    {
+        const boost::property_tree::ptree& rComment = rValue.second;
+        OString aText(rComment.get<std::string>("text").c_str());
+        CPPUNIT_ASSERT_EQUAL(OString("Comment"), aText);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
