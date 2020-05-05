@@ -1607,15 +1607,11 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
         {
             const SfxStyleFamily eFam=GetFamilyItem_Impl()->GetFamily();
             const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-            SfxStyleSearchBits nFilter;
-            if( pItem && nActFilter != 0xffff )
-            {
+            SfxStyleSearchBits nFilter(SfxStyleSearchBits::Auto);
+            if (pItem && nActFilter != 0xffff)
                 nFilter = pItem->GetFilterList()[nActFilter].nFlags;
-                if(nFilter == SfxStyleSearchBits::Auto)    // automatic
-                    nFilter = nAppFilter;
-            }
-            else
-                nFilter=pStyleSheetPool->GetSearchMask();
+            if (nFilter == SfxStyleSearchBits::Auto)    // automatic
+                nFilter = nAppFilter;
 
             // why? : FloatingWindow must not be parent of a modal dialog
             SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool, eFam);
@@ -1719,15 +1715,11 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
 
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     const SfxStyleFamily eFam=pItem->GetFamily();
-    SfxStyleSearchBits nMask;
-    if( nActFilter != 0xffff )
-    {
+    SfxStyleSearchBits nMask(SfxStyleSearchBits::Auto);
+    if (nActFilter != 0xffff)
         nMask = pItem->GetFilterList()[nActFilter].nFlags;
-        if(nMask == SfxStyleSearchBits::Auto)    // automatic
-            nMask = nAppFilter;
-    }
-    else
-        nMask=pStyleSheetPool->GetSearchMask();
+    if (nMask == SfxStyleSearchBits::Auto)    // automatic
+        nMask = nAppFilter;
 
     pStyleSheetPool->SetSearchMask(eFam,nMask);
 
