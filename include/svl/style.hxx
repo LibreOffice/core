@@ -235,8 +235,6 @@ protected:
     SfxStyleSheetIterator*      GetCachedIterator();
 
     SfxItemPool&                rPool;
-    SfxStyleFamily              nSearchFamily;
-    SfxStyleSearchBits          nMask;
 
     void                        ChangeParent(const OUString& rOld, const OUString& rNew, SfxStyleFamily eFamily, bool bVirtual = true);
     virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits );
@@ -280,8 +278,6 @@ public:
     virtual bool                SetParent(SfxStyleFamily eFam,
                                           const OUString &rStyle,
                                           const OUString &rParent);
-
-    void                        SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
 
     void                        Reindex();
     /** Add a style sheet.

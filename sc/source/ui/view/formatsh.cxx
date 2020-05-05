@@ -369,8 +369,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         OUString                aStyleName;
         sal_uInt16              nRetMask = 0xffff;
 
-        pStylePool->SetSearchMask( eFamily );
-
         switch ( nSlotId )
         {
             case SID_STYLE_NEW:

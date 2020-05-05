@@ -110,7 +110,6 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             {
                 SfxStyleSheetBasePool* pPool = pView->GetDocShell()->
                                                             GetStyleSheetPool();
-                pPool->SetSearchMask(SfxStyleFamily::Page);
                 auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
                 if (xIter->Count() > 1)
                 {

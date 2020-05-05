@@ -438,7 +438,6 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     // remember defaults for compare in WriteCell
     if ( !aHTMLStyle.bInitialized )
     {
-        pStylePool->SetSearchMask( SfxStyleFamily::Para );
         pStyleSheet = pStylePool->Find(
                 ScResId(STR_STYLENAME_STANDARD),
                 SfxStyleFamily::Para );
@@ -461,7 +460,6 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 
     // Page style sheet printer settings, e.g. for background graphics.
     // There's only one background graphic in HTML!
-    pStylePool->SetSearchMask( SfxStyleFamily::Page );
     pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SfxStyleFamily::Page );
     OSL_ENSURE( pStyleSheet, "PageStyle not found! :-(" );
     if (!pStyleSheet)

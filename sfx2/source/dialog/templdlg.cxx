@@ -961,7 +961,6 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     if (!pItem)
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
-    pStyleSheetPool->SetSearchMask(eFam, SfxStyleSearchBits::AllVisible);
     StyleTreeArr_Impl aArr;
     SfxStyleSheetBase* pStyle = pStyleSheetPool->First(eFam, SfxStyleSearchBits::AllVisible);
 
@@ -1049,7 +1048,6 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
     if(!pStyleSheetPool)
         return;
 
-    pStyleSheetPool->SetSearchMask(eFam, nFilter);
     pItem = GetFamilyItem_Impl();
     if(nFlags & StyleFlags::UpdateFamily)   // Update view type list (Hierarchical, All, etc.
     {
@@ -1072,7 +1070,6 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             nActFilter = 0;
             mxFilterLb->set_active(1);
             nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags : SfxStyleSearchBits::Auto;
-            pStyleSheetPool->SetSearchMask(eFam, nFilter);
         }
 
         // if the tree view again, select family hierarchy
@@ -1616,7 +1613,6 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
             // why? : FloatingWindow must not be parent of a modal dialog
             SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool, eFam);
             auto nResult = aDlg.run();
-            pStyleSheetPool->SetSearchMask(eFam, nFilter);
             if (nResult ==  RET_OK)
             {
                 const OUString aTemplName(aDlg.GetName());
@@ -1714,18 +1710,16 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
         return;
 
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-    const SfxStyleFamily eFam=pItem->GetFamily();
+    const SfxStyleFamily eFam = pItem->GetFamily();
     SfxStyleSearchBits nMask(SfxStyleSearchBits::Auto);
     if (nActFilter != 0xffff)
         nMask = pItem->GetFilterList()[nActFilter].nFlags;
     if (nMask == SfxStyleSearchBits::Auto)    // automatic
         nMask = nAppFilter;
 
-    pStyleSheetPool->SetSearchMask(eFam,nMask);
-
     Execute_Impl(SID_STYLE_NEW,
                  "", GetSelectedEntry(),
-                 static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
+                 static_cast<sal_uInt16>(eFam),
                  nMask);
 }
 
