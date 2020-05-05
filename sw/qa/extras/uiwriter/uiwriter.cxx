@@ -233,6 +233,7 @@ public:
     void testSearchWithTransliterate();
     void testTdf73660();
     void testNewDocModifiedState();
+    void testTdf132187();
     void testTdf77342();
     void testTdf63553();
     void testTdf74230();
@@ -440,6 +441,7 @@ public:
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf73660);
     CPPUNIT_TEST(testNewDocModifiedState);
+    CPPUNIT_TEST(testTdf132187);
     CPPUNIT_TEST(testTdf77342);
     CPPUNIT_TEST(testTdf63553);
     CPPUNIT_TEST(testTdf74230);
@@ -4215,6 +4217,31 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL( sDocString, sOriginalDocString );
+}
+
+void SwUiWriterTest::testTdf132187()
+{
+    load(DATA_DIRECTORY, "tdf132187.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    lcl_dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    for (sal_Int32 i = 0; i < 10; ++i)
+    {
+        lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    //without the fix in place, this test would fail with:
+    //- Expected: 1
+    //- Actual  : 70
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 void SwUiWriterTest::testTdf34957()
