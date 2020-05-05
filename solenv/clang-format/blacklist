@@ -3624,10 +3624,7 @@ desktop/win32/source/unoinfo.cxx
 drawinglayer/inc/converters.hxx
 drawinglayer/inc/emfplushelper.hxx
 drawinglayer/inc/primitive2d/cropprimitive2d.hxx
-drawinglayer/inc/primitive2d/epsprimitive2d.hxx
-drawinglayer/inc/primitive2d/fillhatchprimitive2d.hxx
 drawinglayer/inc/primitive2d/graphicprimitivehelper2d.hxx
-drawinglayer/inc/primitive2d/pointarrayprimitive2d.hxx
 drawinglayer/inc/primitive2d/texteffectprimitive2d.hxx
 drawinglayer/inc/primitive2d/textlineprimitive2d.hxx
 drawinglayer/inc/primitive2d/textstrikeoutprimitive2d.hxx
@@ -5843,6 +5840,9 @@ include/drawinglayer/attribute/sdrobjectattribute3d.hxx
 include/drawinglayer/attribute/sdrsceneattribute3d.hxx
 include/drawinglayer/attribute/sdrshadowattribute.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
+include/drawinglayer/primitive2d/epsprimitive2d.hxx
+include/drawinglayer/primitive2d/fillhatchprimitive2d.hxx
+include/drawinglayer/primitive2d/pointarrayprimitive2d.hxx
 include/drawinglayer/primitive2d/discretebitmapprimitive2d.hxx
 include/drawinglayer/primitive2d/discreteshadowprimitive2d.hxx
 include/drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx
