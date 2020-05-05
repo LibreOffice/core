@@ -406,10 +406,6 @@ void SwMMResultEmailDialog::FillInEmailSettings()
 
     }
 
-    //fill mail address ListBox
-    if (m_xMailToLB->get_count())
-        return;
-
     //select first column
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(xConfigItem->GetResultSet(), uno::UNO_QUERY);
     //get the name of the actual columns
@@ -417,6 +413,9 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     uno::Sequence< OUString > aFields;
     if (xColAccess.is())
         aFields = xColAccess->getElementNames();
+
+    // fill mail address ListBox
+    assert(m_xMailToLB->get_count() == 0);
     for (const OUString& rField : std::as_const(aFields))
         m_xMailToLB->append_text(rField);
 
