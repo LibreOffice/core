@@ -43,6 +43,7 @@
 #include <view.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <wrtsh.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -722,18 +723,43 @@ namespace sw::mark
             if (!pEditWin)
                 return;
 
-            OString sPayload;
+            OStringBuffer sPayload;
             if (sAction == "show")
             {
                 sPayload = OStringLiteral("{\"action\": \"show\","
                            " \"type\": \"drop-down\", \"textArea\": \"") +
-                           m_aPortionPaintArea.SVRect().toString() + "\"}";
+                           m_aPortionPaintArea.SVRect().toString() + "\",";
+                // Add field params to the message
+                sPayload.append(" \"params\": { \"items\": [");
+
+                // List items
+                auto pParameters = this->GetParameters();
+                auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
+                css::uno::Sequence<OUString> vListEntries;
+                if (pListEntriesIter != pParameters->end())
+                {
+                    pListEntriesIter->second >>= vListEntries;
+                    for (const OUString& sItem : std::as_const(vListEntries))
+                        sPayload.append("\"" + OUStringToOString(sItem, RTL_TEXTENCODING_UTF8) + "\", ");
+                    sPayload.setLength(sPayload.getLength() - 2);
+                }
+                sPayload.append("], ");
+
+                // Selected item
+                OUString sResultKey = ODF_FORMDROPDOWN_RESULT;
+                auto pSelectedItemIter = pParameters->find(sResultKey);
+                if (pSelectedItemIter != pParameters->end())
+                {
+                    sal_Int32 nSelection = -1;
+                    pSelectedItemIter->second >>= nSelection;
+                    sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\"}}");
+                }
             }
             else
             {
                 sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
             }
-            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.getStr());
+            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
         }
     }
 
