@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2770dc54_9bada812",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-05T20:16:15Z",
+      "side": 1,
+      "message": "btw, if you would have written this as \"tdf#9341\", that bug would have automatically been updated with a link to this commit (but missing it is not too dramatic for an easy hack issue)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "7b152167a4e4c3eaac95aee8f282873681c90092",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
