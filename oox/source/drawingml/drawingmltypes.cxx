@@ -53,6 +53,12 @@ sal_Int32 GetCoordinate( const OUString& sValue )
     return GetCoordinate( nRet );
 }
 
+/** converts 1/100mm to EMU */
+sal_Int32 GetPointFromCoordinate( sal_Int32 nValue )
+{
+    return nValue * 360;
+}
+
 /** converts a ST_Percentage % string into 1/1000th of % */
 sal_Int32 GetPercent( const OUString& sValue )
 {
