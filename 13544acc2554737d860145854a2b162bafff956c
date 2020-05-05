@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ba1823a7_011c6096",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-05T01:23:45Z",
+      "side": 1,
+      "message": "There are plenty of files where this kind of thing happens, since this pattern was one of the instructions in the bugzilla issue (it also appears frequently in the previous commit #92331).\nSo, what should I do here?\nShould I replicate it to the other files?\nShould I modify it only in this file?",
+      "parentUuid": "a4da2e9f_dbce76a8",
+      "range": {
+        "startLine": 2196,
+        "startChar": 0,
+        "endLine": 2196,
+        "endChar": 1
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "39d43cec_ce99c670",
         "filename": "filter/source/msfilter/mscodec.cxx",
         "patchSetId": 7
@@ -77,6 +101,24 @@
       "side": 1,
       "message": "alternative approach: remove #ifdef DEBUG_MSO_ENCRYPTION_STD97 which nobody knows about anyway and replace lcl_* function calling SAL_INFO with SAL_INFO printing return value of lcl_* function",
       "parentUuid": "39d43cec_ce99c670",
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff91e275_51e1a63d",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-05T01:23:45Z",
+      "side": 1,
+      "message": "One thing with the alternative approach:\n`lcl_PrintDigest` prints two different things. Taking this approach means replicating every call of this function with two `SAL_INFO` calls.\n\nWhile I think it is clearer to have direct `SAL_INFO` calls, I guess it gets kind of repetitive. Isn\u0027t it better to have `SAL_INFO` calls in `lcl_PrintDigest`?",
+      "parentUuid": "2ec81bb1_486b6441",
       "revId": "13544acc2554737d860145854a2b162bafff956c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
