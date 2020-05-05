@@ -22,6 +22,30 @@
       "revId": "7b152167a4e4c3eaac95aee8f282873681c90092",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d439a5dc_322808f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-05T20:18:23Z",
+      "side": 1,
+      "message": "oops, looks like that automatism works even without the \"#\" these days---even better :)",
+      "parentUuid": "2770dc54_9bada812",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "7b152167a4e4c3eaac95aee8f282873681c90092",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
