@@ -2599,6 +2599,20 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
 
         OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
         CPPUNIT_ASSERT_EQUAL(OString("1538, 1418, 1026, 275"), sTextArea);
+
+        boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aItems.size());
+
+        OStringBuffer aItemList;
+        for (auto &item : aItems)
+        {
+            aItemList.append(item.second.get_value<std::string>().c_str());
+            aItemList.append(";");
+        }
+        CPPUNIT_ASSERT_EQUAL(OString("2019/2020;2020/2021;2021/2022;2022/2023;2023/2024;2024/2025;"), aItemList.toString());
+
+        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
     }
 
     // Move the cursor back so the button becomes hidden.
