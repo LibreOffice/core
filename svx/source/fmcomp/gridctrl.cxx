@@ -1637,7 +1637,7 @@ void DbGridControl::RemoveColumns()
 
 std::unique_ptr<DbGridColumn> DbGridControl::CreateColumn(sal_uInt16 nId) const
 {
-    return std::unique_ptr<DbGridColumn>(new DbGridColumn(nId, *const_cast<DbGridControl*>(this)));
+    return std::unique_ptr<DbGridColumn>(new DbGridColumn(nId, *this));
 }
 
 sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)

@@ -77,7 +77,7 @@ class DbGridColumn
     rtl::Reference<FmXGridCell>                           m_pCell;
 
 protected:
-    DbGridControl&      m_rParent;
+    const DbGridControl&      m_rParent;
 
 private:
     sal_Int32               m_nLastVisibleWidth;    // only valid if m_bHidden == sal_True
@@ -98,7 +98,7 @@ private:
     static ::svt::CellControllerRef s_xEmptyController;
         // used by locked columns
 public:
-    DbGridColumn(sal_uInt16 _nId, DbGridControl& rParent)
+    DbGridColumn(sal_uInt16 _nId, const DbGridControl& rParent)
         :m_rParent(rParent)
         ,m_nLastVisibleWidth(-1)
         ,m_nFormatKey(0)
