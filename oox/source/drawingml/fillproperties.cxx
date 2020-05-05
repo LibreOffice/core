@@ -354,6 +354,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // do not create gradient struct if property is not supported...
                 if( rPropMap.supportsProperty( ShapeProperty::FillGradient ) )
                 {
+<<<<<<< HEAD   (9615e7 tdf#112287 DOCX frame import: fix default vAnchor)
                     sal_Int32 nEndTrans     = 0;
                     sal_Int32 nStartTrans   = 0;
                     awt::Gradient aGradient;
@@ -363,6 +364,52 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                     // Old code, values in aGradient overwritten in many cases by newer code below
                     if( maGradientProps.maGradientStops.size() > 1 )
+=======
+                    IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
+                    sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
+                    aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterX / PER_PERCENT, 0, 100);
+                    sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
+                    aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
+                        nCenterY / PER_PERCENT, 0, 100);
+
+                    if( maGradientProps.moGradientPath.get() == XML_circle )
+                    {
+                        // Style should be radial at least when the horizontal center is at 50%.
+                        // Otherwise import as a linear gradient, because it is the most similar to the MSO radial style.
+                        aGradient.Style = awt::GradientStyle_LINEAR;
+                        if( aGradient.XOffset == 100 && aGradient.YOffset == 100 )
+                            aGradient.Angle = 450;
+                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 100 )
+                            aGradient.Angle = 3150;
+                        else if( aGradient.XOffset == 100 && aGradient.YOffset == 0 )
+                            aGradient.Angle = 1350;
+                        else if( aGradient.XOffset == 0 && aGradient.YOffset == 0 )
+                            aGradient.Angle = 2250;
+                        else
+                            aGradient.Style = awt::GradientStyle_RADIAL;
+                    }
+                    else
+                    {
+                        aGradient.Style = awt::GradientStyle_RECT;
+                    }
+
+                    ::std::swap( aGradient.StartColor, aGradient.EndColor );
+                    ::std::swap( nStartTrans, nEndTrans );
+
+                    extractGradientBorderFromStops(maGradientProps, rGraphicHelper, nPhClr,
+                                                   aGradient);
+                }
+                else if (!maGradientProps.maGradientStops.empty())
+                {
+                    // A copy of the gradient stops for local modification
+                    GradientFillProperties::GradientStopMap aGradientStops(maGradientProps.maGradientStops);
+
+                    // Add a fake gradient stop at 0% and 100% if necessary, so that the gradient always starts
+                    // at 0% and ends at 100%, to make following logic clearer (?).
+                    auto a0 = aGradientStops.find( 0.0 );
+                    if( a0 == aGradientStops.end() )
+>>>>>>> CHANGE (898e4a tdf#128794 Chart: Fix OOXML import/export of Radial gradient)
                     {
                         aGradient.StartColor = sal_Int32(maGradientProps.maGradientStops.begin()->second.getColor( rGraphicHelper, nPhClr ));
                         aGradient.EndColor = sal_Int32(maGradientProps.maGradientStops.rbegin()->second.getColor( rGraphicHelper, nPhClr ));
