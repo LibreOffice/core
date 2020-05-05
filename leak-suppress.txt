@@ -45,3 +45,9 @@ leak:SfxObjectShell::DoInitUnitTest
 # ignore some libc related leaks
 leak:__new_exitfn
 leak:__GI___strdup
+
+# ignore python leaks
+leak:_PyMem_RawMalloc
+
+# ignore leak in gpgmepp external library
+leak:mkdefsinc
