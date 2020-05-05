@@ -12,17 +12,20 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <libxml/HTMLparser.h>
 #include <libxml/HTMLtree.h>
 
 #include <unotools/tempfile.hxx>
 
+using htmlDocUniquePtr = xmlDocUniquePtr;
+
 class OOO_DLLPUBLIC_TEST HtmlTestTools
 {
 protected:
-    static htmlDocPtr parseHtml(utl::TempFile const & aTempFile);
-    static htmlDocPtr parseHtmlStream(SvStream* pStream);
+    static htmlDocUniquePtr parseHtml(utl::TempFile const & aTempFile);
+    static htmlDocUniquePtr parseHtmlStream(SvStream* pStream);
 };
 
 #endif

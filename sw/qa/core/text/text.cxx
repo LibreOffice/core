@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
 
     // Make sure that DrawTransparent() was used during rendering.
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//floattransparent");
 }

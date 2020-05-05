@@ -154,7 +154,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
 // tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
@@ -163,7 +163,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffse
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf129525, "tdf129525.rtf")
 {
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", "Overview");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "3");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[1]/w:t", "More detailed description");
@@ -182,7 +182,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     // get TOC node
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
@@ -238,7 +238,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf76683_negativeTwipsMeasure, "tdf76683_negativeTwipsMeasure.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col", 2);
     sal_uInt32 nColumn1 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", "w").toUInt32();
     sal_uInt32 nColumn2 = getXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", "w").toUInt32();
@@ -361,7 +361,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Test document has only two paragraphs. After splitting, it should contain
     // three of them.
@@ -371,7 +371,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "paraspli
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
 }
 
@@ -430,7 +430,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113183, "tdf113183.docx")
 {
     // The horizontal positioning of the star shape affected the positioning of
     // the triangle one, so the triangle was outside the page frame.
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nPageLeft = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "left").toInt32();
     sal_Int32 nPageWidth = getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32();
     sal_Int32 nShapeLeft
@@ -530,7 +530,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258_noBeforeAutospacing, "tdf113258_noBeforeA
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120511_eatenSection, "tdf120511_eatenSection.docx")
 {
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nHeight = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "height").toInt32();
     sal_Int32 nWidth  = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_MESSAGE( "Page1 is portrait", nWidth < nHeight );
@@ -564,7 +564,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaI
 DECLARE_OOXMLEXPORT_TEST(testPageBreak_after, "pageBreak_after.odt")
 {
     // The problem was that the page breakAfter put the empty page BEFORE the table
-    xmlDocPtr pDump = parseLayoutDump();
+    xmlDocUniquePtr pDump = parseLayoutDump();
     assertXPath(pDump, "/root/page[1]/body/tab", 1);
     // There should be two pages actually - a blank page after a page break.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix?? Table should be on page one of two", 1, getPages());
@@ -863,7 +863,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_BorderLine_Style, "Chart_BorderLin
     /* DOCX containing Chart with BorderLine Style as Dash Type should get preserved
      * inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:spPr/a:ln/a:prstDash", "val", "sysDot");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:spPr/a:ln/a:prstDash", "val", "sysDash");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash", "val", "dash");
@@ -874,7 +874,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot
     /* DOCX containing Chart wall (plot area) and Chart Page with BorderLine Style as Dash Type
      * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1.xml");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash", "val", "lgDashDot");
     assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash", "val", "sysDash");
 
@@ -882,20 +882,20 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChart_Plot_BorderLine_Style, "Chart_Plot
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedEmptyParagraph, "testTrackChangesDeletedEmptyParagraph.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesEmptyParagraphsInADeletion, "testTrackChangesEmptyParagraphsInADeletion.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     for (int i = 1; i < 12; ++i)
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf70234, "tdf70234.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import field with tracked deletion
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
 
@@ -908,28 +908,28 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf70234, "tdf70234.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115212, "tdf115212.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export field with tracked deletion
     assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126243, "tdf120338.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export change tracking rejection data for tracked paragraph style change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val", "Heading3");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf126245, "tdf126245.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // export change tracking rejection data for tracked numbering change
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val", "1");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import format change of empty lines, FIXME: change w:r with w:pPr in export
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
     // empty line without format change
@@ -939,14 +939,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105485, "tdf105485.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking of deleted comments
     assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125894, "tdf125894.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in frames
     assertXPath(pXmlDoc, "//w:del", 2);
     assertXPath(pXmlDoc, "//w:ins");
@@ -954,21 +954,21 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125894, "tdf125894.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128156, "tdf128156.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // import change tracking in frames
     assertXPath(pXmlDoc, "//w:ins");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125546, "tdf125546.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // compress redlines (it was 15)
     assertXPath(pXmlDoc, "//w:rPrChange", 2);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLabelWidthAndPosition_Left_FirstLineIndent, "Hau_min_list2.fodt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // list is LABEL_WIDTH_AND_POSITION with SvxAdjust::Left
     // I) LTR
     // a) all LTR cases with no number text look good in Word
@@ -1070,14 +1070,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLabelWidthAndPosition_Left_FirstLineInde
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124604, "tdf124604.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // If the numbering comes from a base style, indentation of the base style has also priority.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "0");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95374, "tdf95374.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", "0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", "1136");
@@ -1085,7 +1085,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf95374, "tdf95374.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108493, "tdf108493.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // set in the paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", "709");
     // set in the numbering style (this was 0)
@@ -1108,7 +1108,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
 {
     // DOCX table rows with tblHeader setting mustn't modify the count of the
     // repeated table header rows, when there is rows before them without tblHeader settings.
-    xmlDocPtr pDump = parseLayoutDump();
+    xmlDocUniquePtr pDump = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // table starts on page 1 and finished on page 2
@@ -1125,7 +1125,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
 {
     // DOCX tables with more than 10 repeating header lines imported without repeating header lines
     // as a workaround for MSO's limitation of header line repetition
-    xmlDocPtr pDump = parseLayoutDump();
+    xmlDocUniquePtr pDump = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // table starts on page 1 and finished on page 2
@@ -1140,12 +1140,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf81100, "tdf81100.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     // keep "repeat table header" setting of table styles
     assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader", 4);
 
-    xmlDocPtr pDump = parseLayoutDump();
+    xmlDocUniquePtr pDump = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
     // table starts on page 1 and finished on page 2
@@ -1174,7 +1174,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77417, "tdf77417.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130494, "tdf130494.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
     // keep direct formatting of table cell paragraph with removed highlighting
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
@@ -1182,7 +1182,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130494, "tdf130494.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130690, "tdf130690.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val", "yellow");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[1]/w:rPr/w:highlight", 1);
     // keep direct formatting of table cell paragraph with removed highlighting
@@ -1191,7 +1191,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130690, "tdf130690.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105215, "tdf105215.docx")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts", "ascii", "Linux Libertine G");
 
     // These were "Linux Libertine G"
@@ -1205,7 +1205,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105215, "tdf105215.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // check paragraphs with removed paragraph mark
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");

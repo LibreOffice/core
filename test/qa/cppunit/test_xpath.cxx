@@ -19,7 +19,7 @@ CPPUNIT_TEST_FIXTURE(TestXPath, test_getXPath)
 {
     const xmlChar s_xml[] = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
                             "<xml><item attrib='val'>text</item></xml>";
-    xmlDocPtr pTable = xmlParseDoc(s_xml);
+    xmlDocUniquePtr pTable(xmlParseDoc(s_xml));
     CPPUNIT_ASSERT(pTable);
     // Must get existing element content without errors
     CPPUNIT_ASSERT_ASSERTION_PASS(getXPath(pTable, "/xml/item", ""));
