@@ -72,7 +72,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if (pOrcus)
         {
             pOrcus->importODS_Styles(m_aDocument, aPath);
-            m_aDocument.GetStyleSheetPool()->setAllStandard();
+            m_aDocument.GetStyleSheetPool()->setAllParaStandard();
         }
     }
 

@@ -56,7 +56,7 @@ public:
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
-    void setAllStandard();
+    void setAllParaStandard();
 
 private:
     virtual             ~ScStyleSheetPool() override;
