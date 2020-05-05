@@ -178,7 +178,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
         m_pPool->SetSearchMask(nFamily);
 
         if ( !aName.isEmpty() )
-            m_pPool->ChangeParent( aName, rName, false );
+            m_pPool->ChangeParent(aName, rName, nFamily, false);
 
         if ( aFollow == aName )
             aFollow = rName;
@@ -729,7 +729,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
         return;
 
     // Adapt all styles which have this style as parent
-    ChangeParent( p->GetName(), p->GetParent() );
+    ChangeParent(p->GetName(), p->GetParent(), p->GetFamily());
 
     // #120015# Do not dispose, the removed StyleSheet may still be used in
     // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
@@ -801,9 +801,10 @@ void SfxStyleSheetBasePool::Clear()
 
 void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
                                          const OUString& rNew,
+                                         SfxStyleFamily eFamily,
                                          bool bVirtual)
 {
-    for( SfxStyleSheetBase* p = First(GetSearchFamily()); p; p = Next() )
+    for( SfxStyleSheetBase* p = First(eFamily); p; p = Next() )
     {
         if( p->GetParent() == rOld )
         {
