@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4f123b6d_9a9a5bab",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-05T10:16:19Z",
+      "side": 1,
+      "message": "Hmm.. OK if you shear in 2 dimensions would cause a change in scale, but that is handled in decompose.\n\nHere, I still prefer:\nbasegfx::B2DVector aVector(fLineWidth, 0.0);\naVector *\u003d rObjectToDevice;\nfLineWidth \u003d aVector.getLength();\n\nto calculate the transformed line width.",
+      "parentUuid": "4d93f336_dec91f2f",
+      "revId": "bc2db76e1805a2e07afb3164e14649fe82d6aad7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d8c1f3c_88f5037d",
         "filename": "vcl/qa/cppunit/BackendBugsTest.cxx",
         "patchSetId": 5
