@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump aDumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
     // Make sure the solid border has priority.
     // Without the accompanying fix in place, this test would have failed with:
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump aDumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: USA
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
 
     // Calc the layout and check the number of pages.
     pWrtShell->CalcLayout();
-    xmlDocPtr pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2

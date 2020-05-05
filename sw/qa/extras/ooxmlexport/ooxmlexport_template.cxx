@@ -26,7 +26,7 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testSaveAsDotX, "sample.dotx")
 {
-    xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
+    xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
 
     if (!pXmlDocCT)
         return;

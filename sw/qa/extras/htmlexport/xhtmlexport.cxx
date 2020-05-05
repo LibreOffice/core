@@ -33,7 +33,7 @@ private:
 
 DECLARE_HTMLEXPORT_TEST(testImageEmbedding, "image-mimetype.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);

@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 
     // Make sure the text is semi-transparent.
     drawinglayer::tools::Primitive2dXmlDump aDumper;
-    xmlDocPtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

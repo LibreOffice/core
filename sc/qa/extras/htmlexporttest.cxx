@@ -73,7 +73,7 @@ public:
         OUString const url(aTempDir.GetURL());
         TempFile aTempFile(&url, false);
 
-        htmlDocPtr pDoc;
+        htmlDocUniquePtr pDoc;
 
         load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
         save("HTML (StarCalc)", aTempFile);

@@ -780,7 +780,7 @@ void ScPivotTableFiltersTest::testPivotTableExportXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -800,7 +800,7 @@ void ScPivotTableFiltersTest::testPivotTableExportXLSXSingleDataField()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -824,7 +824,7 @@ void ScPivotTableFiltersTest::testPivotTableExportXLSXMultipleDataFields()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -859,7 +859,7 @@ void ScPivotTableFiltersTest::testPivotCacheExportXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pCacheDef = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+    xmlDocUniquePtr pCacheDef = XPathHelper::parseExport(pXPathFile, m_xSFactory,
                                                    "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pCacheDef);
 
@@ -1949,7 +1949,7 @@ void ScPivotTableFiltersTest::testPivotTableFirstHeaderRowXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
     assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
@@ -2332,7 +2332,7 @@ void ScPivotTableFiltersTest::testPivotTableOutlineModeXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2353,7 +2353,7 @@ void ScPivotTableFiltersTest::testPivotTableDuplicatedMemberFilterXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2373,7 +2373,7 @@ void ScPivotTableFiltersTest::testPivotTableTabularModeXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2395,7 +2395,7 @@ void ScPivotTableFiltersTest::testPivotTableDuplicateFields()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pCacheDef
+    xmlDocUniquePtr pCacheDef
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pCacheDef);
 
@@ -2448,7 +2448,7 @@ void ScPivotTableFiltersTest::testTdf123923()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+    xmlDocUniquePtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
                                                 "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2465,7 +2465,7 @@ void ScPivotTableFiltersTest::testTdf123939()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+    xmlDocUniquePtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
                                                 "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2488,7 +2488,7 @@ void ScPivotTableFiltersTest::testTdf124651()
     ScDocShellRef xDocSh = loadDoc("tdf124651_simplePivotTable.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
         "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     // We have to export name attribute, even though it's optional according to ECMA-376 standard,
@@ -2506,7 +2506,7 @@ void ScPivotTableFiltersTest::testTdf124736()
         = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
 
-    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
+    xmlDocUniquePtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory,
                                                 "xl/pivotCache/pivotCacheDefinition1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2560,7 +2560,7 @@ void ScPivotTableFiltersTest::tesTtdf124772NumFmt()
         = ScBootstrapFixture::exportTo(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
 
-    xmlDocPtr pTable
+    xmlDocUniquePtr pTable
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
     CPPUNIT_ASSERT(pTable);
 
@@ -2583,7 +2583,7 @@ void ScPivotTableFiltersTest::testTdf124810()
         ScDocShellRef xDocSh = loadDoc("pivot_dark1.", FORMAT_XLSX);
         CPPUNIT_ASSERT(xDocSh.is());
 
-        xmlDocPtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+        xmlDocUniquePtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
             "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
         xDocSh->DoClose();
         CPPUNIT_ASSERT(pTable);
@@ -2605,7 +2605,7 @@ void ScPivotTableFiltersTest::testTdf124810()
         ScDocShellRef xDocSh = loadDoc("tdf124651_simplePivotTable.", FORMAT_ODS);
         CPPUNIT_ASSERT(xDocSh.is());
 
-        xmlDocPtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+        xmlDocUniquePtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
             "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
         xDocSh->DoClose();
         CPPUNIT_ASSERT(pTable);
@@ -2626,7 +2626,7 @@ void ScPivotTableFiltersTest::testTdf124883()
     ScDocShellRef xDocSh = loadDoc("pivot-table/two-data-fields.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+    xmlDocUniquePtr pTable = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
         "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
     xDocSh->DoClose();
     CPPUNIT_ASSERT(pTable);
@@ -2643,7 +2643,7 @@ void ScPivotTableFiltersTest::testTdf125046()
     ScDocShellRef xDocSh = loadDoc("pivottable_long_text.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(
         *this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems",
@@ -2655,7 +2655,7 @@ void ScPivotTableFiltersTest::testTdf125055()
     ScDocShellRef xDocSh = loadDoc("pivottable_1s_difference.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(
         *this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
@@ -2691,7 +2691,7 @@ void ScPivotTableFiltersTest::testTdf125086()
     ScDocShellRef xDocSh = loadDoc("pivottable_fieldInRowsAndData.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
                                                "xl/pivotTables/pivotTable1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[2]", "axis", "axisRow");
