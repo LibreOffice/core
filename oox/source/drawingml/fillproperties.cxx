@@ -374,23 +374,19 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                 if( maGradientProps.moGradientPath.has() )
                 {
-                    // position of gradient center (limited to [30%;100%], otherwise gradient is too hidden)
+                    // position of gradient center (limited to [20%;80%], otherwise gradient is too hidden)
                     IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                     sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
                     aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
-                        nCenterX / PER_PERCENT, 30, 100);
+                        nCenterX / PER_PERCENT, 10, 90);
 
-                    // Style should be radial at least when the horizontal center is at 50%.
-                    awt::GradientStyle eCircle = aGradient.XOffset == 50
-                                                     ? awt::GradientStyle_RADIAL
-                                                     : awt::GradientStyle_ELLIPTICAL;
                     aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle)
-                                          ? eCircle
+                                          ? awt::GradientStyle_RADIAL
                                           : awt::GradientStyle_RECT;
 
                     sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
                     aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
-                        nCenterY / PER_PERCENT, 30, 100);
+                        nCenterY / PER_PERCENT, 20, 80);
                     ::std::swap( aGradient.StartColor, aGradient.EndColor );
                     ::std::swap( nStartTrans, nEndTrans );
 
