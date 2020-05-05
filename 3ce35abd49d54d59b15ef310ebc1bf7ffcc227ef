@@ -180,6 +180,24 @@
     },
     {
       "key": {
+        "uuid": "85ed6481_c99a3758",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2020-05-05T15:57:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean exactly by “not implemented yet in this work-in-progress” vs “\"platform layer\" which in turn returns some \"not implemented\" indicator”. What do you mean by \"platform layer\" exactly? Here I\u0027ll assume an OS-specific accessibility layer.\n\nWhat this change does for instance is to add VCLXAccessibleEdit::scrollSubstringTo which returns false, meaning that it couldn\u0027t perform the request (because it\u0027s not implemented). Do you mean something beyond this, or before this? The OS-specific accessibility layer doesn\u0027t need to be involved here, it has already forwarded the screen reader request to the proper sublayer (VCLXAccessibleEdit), and it\u0027s up to that one to either achieve the request, or return false because it doesn\u0027t implement it. I don\u0027t see why the OS-specific bits should be involved at that point or beyond.",
+      "parentUuid": "5e8b2dc7_2e988caa",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38b1ce52_0cafe840",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
