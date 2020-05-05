@@ -224,7 +224,7 @@ public:
     /**
      * Like parseExport(), but for given mail merge document.
      */
-    xmlDocPtr parseMailMergeExport(const OUString& rStreamName)
+    xmlDocUniquePtr parseMailMergeExport(const OUString& rStreamName)
     {
         if (mnCurOutputType != text::MailMergeType::FILE)
             return nullptr;
@@ -409,7 +409,7 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     // And the default value is black (wasn't copied properly by mailmerge).
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
     // And check that the resulting file has the proper default.
-    xmlDocPtr pXmlDoc = parseMailMergeExport( "styles.xml" );
+    xmlDocUniquePtr pXmlDoc = parseMailMergeExport( "styles.xml" );
     CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]", "family"));
     CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties", "stroke-color"));
 }
