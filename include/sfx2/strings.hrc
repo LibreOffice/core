@@ -336,6 +336,7 @@
 #define STR_TEMPLATE_NAME29                     NC_("STR_TEMPLATE_NAME29", "Modern business letter serif")
 #define STR_TEMPLATE_NAME30                     NC_("STR_TEMPLATE_NAME30", "Businesscard with logo")
 #define STR_TEMPLATE_NAME31                     NC_("STR_TEMPLATE_NAME31", "Simple")
+#define STR_TEMPLATE_NAME32                     NC_("STR_TEMPLATE_NAME32", "BPMN")
 
 #define STR_CLEAR_CHAR                          NC_("STR_CLEAR_CHAR", "Remove")
 #define STR_CLEAR_ALL_CHAR                      NC_("STR_CLEAR_ALL_CHAR", "Clear All")
