@@ -1635,9 +1635,9 @@ void DbGridControl::RemoveColumns()
     EditBrowseBox::RemoveColumns();
 }
 
-std::unique_ptr<DbGridColumn> DbGridControl::CreateColumn(sal_uInt16 nId) const
+std::unique_ptr<DbGridColumn> DbGridControl::CreateColumn(sal_uInt16 nId)
 {
-    return std::unique_ptr<DbGridColumn>(new DbGridColumn(nId, *const_cast<DbGridControl*>(this)));
+    return std::unique_ptr<DbGridColumn>(new DbGridColumn(nId, *this));
 }
 
 sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)

@@ -326,7 +326,7 @@ protected:
 
     virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = sal_uInt16(-1)) override;
     void RemoveColumn(sal_uInt16 nId);
-    std::unique_ptr<DbGridColumn> CreateColumn(sal_uInt16 nId) const;
+    std::unique_ptr<DbGridColumn> CreateColumn(sal_uInt16 nId);
     virtual void ColumnMoved(sal_uInt16 nId) override;
     virtual bool SaveRow() override;
     virtual bool IsTabAllowed(bool bForward) const override;
