@@ -96,6 +96,7 @@ public:
     void testColorGradientWithTransparancyDOCX();
     void testColorGradientWithTransparancyODS();
     void testColorGradientStopXLSX();
+    void testRadialColorGradientDOCX();
     void testBarChartDataPointPropDOCX();
     void testFdo83058dlblPos();
     void testAutoTitleDelXLSX();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testColorGradientWithTransparancyDOCX);
     CPPUNIT_TEST(testColorGradientWithTransparancyODS);
     CPPUNIT_TEST(testColorGradientStopXLSX);
+    CPPUNIT_TEST(testRadialColorGradientDOCX);
     CPPUNIT_TEST(testBarChartDataPointPropDOCX);
     CPPUNIT_TEST(testFdo83058dlblPos);
     CPPUNIT_TEST(testAutoTitleDelXLSX);
@@ -1345,6 +1347,20 @@ void Chart2ExportTest::testColorGradientStopXLSX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[1]", "pos", "45000");
     // Test the position of the second color
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[2]", "pos", "100000");
+}
+
+void Chart2ExportTest::testRadialColorGradientDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf128794.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Test the gradeint style
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path", "circle");
+    // Test the position of gradient center
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "l", "-30000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "t", "-10000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "r", "130000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "b", "110000");
 }
 
 void Chart2ExportTest::testBarChartDataPointPropDOCX()
