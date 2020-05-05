@@ -818,8 +818,8 @@ void SdOOXMLExportTest1::testTdf112633()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
-    xmlDocPtr pRelsDoc = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pRelsDoc = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
 
     // Check image with artistic effect exists in the slide
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/"
@@ -845,7 +845,7 @@ void SdOOXMLExportTest1::testTdf128952()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:off", "x", "360");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:xfrm/a:off", "y", "-360");
@@ -860,7 +860,7 @@ void SdOOXMLExportTest1::testTdf127090()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
 
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr", "rot", "-5400000");
 }
@@ -873,9 +873,9 @@ void SdOOXMLExportTest1::testCustomXml()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "customXml/item1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
-    xmlDocPtr pRelsDoc = parseExport(tempFile, "customXml/_rels/item1.xml.rels");
+    xmlDocUniquePtr pRelsDoc = parseExport(tempFile, "customXml/_rels/item1.xml.rels");
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
@@ -1027,7 +1027,7 @@ void SdOOXMLExportTest1::testRoundtripPrstDash()
         "sysDashDotDot",
         "sysDot"
     };
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sStart = "/p:sld/p:cSld/p:spTree/p:sp[";
     const OString sEnd = "]/p:spPr/a:ln/a:prstDash";
     for (sal_uInt16 i = 0; i < 10; i++)
@@ -1066,7 +1066,7 @@ void SdOOXMLExportTest1::testDashOnHairline()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sXmlPath = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds";
     assertXPath(pXmlDoc, sXmlPath, 11);
 }

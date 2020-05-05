@@ -517,7 +517,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
     // Verify, that the saved document still has the ODF attributes
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -525,7 +525,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has got the items in settings.xml
-    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
@@ -567,7 +567,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
     // Verify, that the saved document still has the ODF attributes
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -575,7 +575,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
-    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
     xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
@@ -609,7 +609,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
     // Verify, that the saved document has the ODF attributes
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -617,7 +617,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document still has the items in settings.xml
-    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
@@ -660,7 +660,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
     // Verify, that the saved document has the ODF attributes
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "styles.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'styles.xml'", pXmlDoc);
     const OString sPathStart("/office:document-styles/office:master-styles/draw:layer-set/draw:layer");
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='backgroundobjects' and @draw:protected='true']");
@@ -668,7 +668,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     assertXPath(pXmlDoc, sPathStart + "[@draw:name='measurelines' and @draw:display='printer']");
 
     // Verify, that the saved document has no layer items in settings.xml
-    xmlDocPtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc2 = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc2);
     const OString sPathStart2("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
     xmlXPathObjectPtr pXmlObj=getXPathNode(pXmlDoc2, sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
@@ -707,7 +707,7 @@ void SdMiscTest::testTdf119392()
     save(xDocShRef.get(), getFormat(ODG), aTempFile );
 
     // Verify correct bit order in bitfield in the config items in settings.xml
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "settings.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "settings.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
     const OString sPathStart("/office:document-settings/office:settings/config:config-item-set[@config:name='ooo:view-settings']/config:config-item-map-indexed[@config:name='Views']/config:config-item-map-entry");
     // First Byte is in order 'V-L -P- V-- measurelines controls backgroundobjects background layout'
@@ -798,7 +798,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     save(xDocShRef.get(), getFormat(ODG), aTempFile);
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     CPPUNIT_ASSERT_MESSAGE("Failed to get 'content.xml'", pXmlDoc);
     const OString sPathStart("/office:document-content/office:body/office:drawing/draw:page");
     assertXPath(pXmlDoc, sPathStart);

@@ -181,7 +181,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -190,7 +190,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImagesEnabled, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -201,7 +201,7 @@ DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbedded, "skipimage-embedded.doc")
 {
     // Embedded spreadsheet was exported as image, so content was lost. Make
     // sure it's exported as HTML instead.
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // This was 0.
@@ -216,7 +216,7 @@ DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbeddedDocument, "skipimage-embedded-docu
 {
     // Similar to testSkipImagesEmbedded, but with an embedded Writer object,
     // not a Calc one, and this time OOXML, not WW8.
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // This was 2, the HTML header was in the document two times.
@@ -227,7 +227,7 @@ DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbeddedDocument, "skipimage-embedded-docu
 
 DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -267,7 +267,7 @@ DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutton.doc")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -287,7 +287,7 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
 
 DECLARE_HTMLEXPORT_TEST(testExportUrlEncoding, "tdf76291.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // Test URI encoded hyperlink with Chinese characters
@@ -296,7 +296,7 @@ DECLARE_HTMLEXPORT_TEST(testExportUrlEncoding, "tdf76291.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // Internal url should be valid
@@ -306,7 +306,7 @@ DECLARE_HTMLEXPORT_TEST(testExportInternalUrl, "tdf90905.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExportImageBulletList, "tdf66822.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // Encoded base64 SVG bullet should match and render on browser
@@ -316,7 +316,7 @@ DECLARE_HTMLEXPORT_TEST(testExportImageBulletList, "tdf66822.odt")
 
 DECLARE_HTMLEXPORT_TEST(testTdf83890, "tdf83890.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body/ol[2]/ol", "start", "2");
@@ -337,7 +337,7 @@ DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
 
 DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -347,7 +347,7 @@ DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
 
 DECLARE_HTMLEXPORT_TEST(testEmbedImagesEnabled, "textAndImage.docx")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
@@ -363,7 +363,7 @@ DECLARE_HTMLEXPORT_TEST(testXHTML, "hello.html")
     // This was HTML, not XHTML.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     // This was lang, not xml:lang.
     assertXPath(pDoc, "/html/body", "xml:lang", "en-US");
@@ -505,7 +505,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
 
 DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // <div> was missing, so the XHTML fragment wasn't a valid
@@ -582,7 +582,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
         // Check that the replacement graphic is exported at RTF level.
         SvMemoryStream aStream;
         wrapFragment(maTempFile, aStream);
-        xmlDocPtr pDoc = parseXmlStream(&aStream);
+        xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
         CPPUNIT_ASSERT(pDoc);
         // Get the path of the RTF data.
         OUString aOlePath = getXPath(
@@ -632,7 +632,7 @@ DECLARE_HTMLEXPORT_TEST(testList, "list.html")
 
 DECLARE_HTMLEXPORT_TEST(testTransparentImage, "transparent-image.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     OUString aSource = getXPath(pDoc, "/html/body/p/img", "src");
@@ -645,7 +645,7 @@ DECLARE_HTMLEXPORT_TEST(testTransparentImageReqIf, "transparent-image.odt")
 {
     SvMemoryStream aStream;
     wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     OUString aSource = getXPath(
@@ -662,7 +662,7 @@ DECLARE_HTMLEXPORT_TEST(testOleNodataReqIf, "reqif-ole-nodata.odt")
     // This failed, io::IOException was thrown during the filter() call.
     SvMemoryStream aStream;
     wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     // Make sure the native <object> element has the required data attribute.
@@ -677,7 +677,7 @@ DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
 {
     SvMemoryStream aStream;
     wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     // Make sure that xml:lang is not written in ReqIF mode.
@@ -686,7 +686,7 @@ DECLARE_HTMLEXPORT_TEST(testNoLangReqIf, "reqif-no-lang.odt")
 
 DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // Without the accompanying fix in place, this test would have failed with 'Expected: 1; Actual:
@@ -702,7 +702,7 @@ DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
 
 DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
 {
-    htmlDocPtr pDoc = parseHtml(maTempFile);
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteReqIf)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -760,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -792,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
 
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
 
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
@@ -849,7 +849,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
 
     // Make sure the output is well-formed.
     CPPUNIT_ASSERT(pDoc);
@@ -877,7 +877,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
 
     // Make sure the output is well-formed.
     CPPUNIT_ASSERT(pDoc);
@@ -976,7 +976,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     // Get the .ole path.
     SvMemoryStream aStream;
     HtmlExportTest::wrapFragment(maTempFile, aStream);
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
     OUString aOlePath = getXPath(
         pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");

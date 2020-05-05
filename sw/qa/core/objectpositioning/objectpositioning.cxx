@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Verify that the distance between the body and anchored object bottom is indeed around 1cm.
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32();
     sal_Int32 nAnchoredBottom
         = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "bottom").toInt32();

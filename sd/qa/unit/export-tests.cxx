@@ -392,7 +392,7 @@ void SdExportTest::testTdf97630()
 #endif
     }
 
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     // text shapes
     assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='false']", 1);
 #if 1
@@ -505,7 +505,7 @@ void SdExportTest::testOOoXMLAnimations()
 
     // the problem was that legacy OOoXML animations were lost if store
     // immediately follows load because they were "converted" async by a timer
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']", 26);
     // currently getting 52 of these without the fix (depends on timing)
     assertXPath(pXmlDoc, "//anim:par", 223);
@@ -579,7 +579,7 @@ void SdExportTest::testUnknownAttributes()
 
     xDocShRef->DoClose();
 
-    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@foo:non-existent-att='bar']");
 // TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
 //    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
@@ -679,7 +679,7 @@ void SdExportTest::testTdf79082()
     utl::TempFile tempFile;
     tempFile.EnableKillingFile();
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
     // P1 should have 6 tab stops defined
     assertXPathChildren(
@@ -917,7 +917,7 @@ void SdExportTest::testTdf98477()
 
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
     assertXPath(pXmlDoc, "//anim:animateTransform", "by", "0.5,0.5");
     xDocShRef->DoClose();
 }
@@ -946,7 +946,7 @@ void SdExportTest::testTdf50499()
 
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
     assertXPath(pXmlDoc, "//anim:animate[1]", "from", "(-width/2)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "to", "(x)");
     assertXPath(pXmlDoc, "//anim:animate[3]", "by", "(height/3+width*0.1)");
@@ -1167,7 +1167,7 @@ void SdExportTest::testTdf113822()
     // Was unable to import iterate container (tdf#113822).
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
     // IterateContainer was created as ParallelTimeContainer before, so
     // the iterate type is not set too.
@@ -1188,7 +1188,7 @@ void SdExportTest::testTdf113818()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
     assertXPath(pXmlDoc, "//anim:animate[1]", "formula", "width*sin(2.5*pi*$)");
     assertXPath(pXmlDoc, "//anim:animate[1]", "values", "0;1");
     xDocShRef->DoClose();
@@ -1201,7 +1201,7 @@ void SdExportTest::testTdf119629()
     xDocShRef = saveAndReload(xDocShRef.get(), PPT);
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
     // MSO's effect node type Click parallel node, with group node, after group node
     // were missing.
@@ -1221,7 +1221,7 @@ void SdExportTest::testTdf123557()
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/trigger.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
     // Contains 2 interactive sequences and 3 triggered effects.
     assertXPath(pXmlDoc, "//draw:page", 1);

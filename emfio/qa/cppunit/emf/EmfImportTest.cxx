@@ -77,7 +77,7 @@ Primitive2DSequence Test::parseEmf(const OUString& aSource)
 void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
     drawinglayer::tools::Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));
 
     CPPUNIT_ASSERT (pDocument);
 
@@ -104,7 +104,7 @@ void Test::TestDrawString()
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::tools::Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
     // check correct import of the DrawString: height, position, text, color and font
@@ -126,7 +126,7 @@ void Test::TestDrawStringTransparent()
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::tools::Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform/unifiedtransparence", "transparence", "0.498039215686275");
@@ -149,7 +149,7 @@ void Test::TestDrawLine()
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::tools::Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
     // check correct import of the DrawLine: color and width of the line
@@ -163,7 +163,7 @@ void Test::TestLinearGradient()
     Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::tools::Primitive2dXmlDump dumper;
-    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/metafile/transform", "xy11", "1.0000656512605");
