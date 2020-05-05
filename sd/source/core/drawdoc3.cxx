@@ -1511,8 +1511,6 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // only worry about presentation templates
             OUString aName;
             SdStyleSheetPool* pSourceStyleSheetPool = static_cast<SdStyleSheetPool*>( pSourceDoc->GetStyleSheetPool() );
-            pSourceStyleSheetPool->SetSearchMask(SfxStyleFamily::Page);
-            static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SfxStyleFamily::Page);
 
             StyleSheetCopyResultVector aCreatedStyles;          // List of created stylesheets
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First(SfxStyleFamily::Page);
@@ -1604,10 +1602,6 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         }
                     }
                 }
-
-                // Now look for all of them when searching
-                pSourceStyleSheetPool->SetSearchMask(SfxStyleFamily::All);
-                mxStyleSheetPool->SetSearchMask(SfxStyleFamily::All);
             }
 
             if (bUndo && !aCreatedStyles.empty())

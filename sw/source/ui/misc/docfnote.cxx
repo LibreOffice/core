@@ -164,7 +164,6 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         // styles   special regions
         // paragraph
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    pStyleSheetPool->SetSearchMask(SfxStyleFamily::Para, SfxStyleSearchBits::SwExtra);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First(SfxStyleFamily::Para, SfxStyleSearchBits::SwExtra);
     while(pStyle)
     {

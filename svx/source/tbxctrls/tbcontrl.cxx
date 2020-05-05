@@ -970,8 +970,6 @@ void SvxStyleBox_Base::Select(bool bNonTravelSelect)
 
     if ( pPool )
     {
-        pPool->SetSearchMask( eStyleFamily );
-
         pStyle = pPool->First(eStyleFamily);
         while ( pStyle && pStyle->GetName() != aSearchEntry )
             pStyle = pPool->Next();
@@ -1141,8 +1139,6 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
         if ( pPool )
         {
-            pPool->SetSearchMask( eStyleFamily );
-
             pStyle = pPool->First(eStyleFamily);
             while (pStyle && pStyle->GetName() != rStyleName)
                 pStyle = pPool->Next();
@@ -2756,7 +2752,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
         SfxStyleSheetBase*      pStyle      = nullptr;
         bool                    bDoFill     = false;
 
-        pStyleSheetPool->SetSearchMask( eFamily, SfxStyleSearchBits::Used );
         auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::Used);
         sal_uInt16 nCount = xIter->Count();
 

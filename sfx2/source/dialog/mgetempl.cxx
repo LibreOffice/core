@@ -103,7 +103,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
 
     if ( pPool )
     {
-        pPool->SetSearchMask( pStyle->GetFamily() );
         pPool->First(pStyle->GetFamily()); // for SW - update internal list
     }
 

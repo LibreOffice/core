@@ -872,7 +872,6 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
 
     pParent = nullptr;
-    SetSearchMask(SfxStyleFamily::Pseudo);
     aName = SdResId(STR_PSEUDOSHEET_OUTLINE);
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
     {

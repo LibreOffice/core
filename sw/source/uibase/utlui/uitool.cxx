@@ -714,7 +714,6 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     const int nOffset = rToFill.get_count() > 0 ? 1 : 0;
     rToFill.freeze();
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
-    pPool->SetSearchMask(SfxStyleFamily::Char);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Char);
     const OUString sStandard(SwResId(STR_POOLCHR_STANDARD));
