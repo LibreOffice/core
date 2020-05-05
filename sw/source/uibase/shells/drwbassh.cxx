@@ -958,7 +958,8 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
         // and alignment at page areas.
         const bool bMaxVPosAtBottom = !rValidation.bFollowTextFlow ||
                                       rValidation.nVRelOrient == text::RelOrientation::PAGE_FRAME ||
-                                      rValidation.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
+                                      rValidation.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA ||
+                                      rValidation.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
         {
             SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
                                     ? aBoundRect.Bottom()

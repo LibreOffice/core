@@ -967,7 +967,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // #i18732# - adjustment vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
-                if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
+                if (_eVertRelOrient == text::RelOrientation::PAGE_FRAME
+                    || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA
+                    || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
                 {
                     if ( aRectFnSet.IsVert() && !aRectFnSet.IsVertL2R() )
                     {
@@ -996,6 +998,18 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             if ( pTmpFrame->IsHeaderFrame() )
                             {
                                 aPos.setY(aPos.getY() + pTmpFrame->getFrameArea().Height());
+                            }
+                        }
+                        else if (_eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+                        {
+                            if (rVertEnvironLayFrame.IsPageFrame())
+                            {
+                                auto& rPageFrame = static_cast<const SwPageFrame&>(rVertEnvironLayFrame);
+                                aPos.setY(rPageFrame.PrtWithoutHeaderAndFooter().Bottom());
+                            }
+                            else
+                            {
+                                aPos.AdjustY(rVertEnvironLayFrame.getFramePrintArea().Bottom());
                             }
                         }
                     }
