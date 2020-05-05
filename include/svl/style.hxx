@@ -282,7 +282,6 @@ public:
                                           const OUString &rParent);
 
     void                        SetSearchMask(SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
-    SfxStyleSearchBits          GetSearchMask() const { return nMask;}
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
 
     void                        Reindex();
