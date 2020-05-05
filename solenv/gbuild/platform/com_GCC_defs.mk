@@ -162,6 +162,9 @@ endif
 endif
 
 gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-Werror)
+ifeq ($(ENABLE_OPTIMIZED)-$(COM_IS_CLANG),TRUE-)
+gb_CFLAGS_WERROR += -Wno-stringop-overflow
+endif
 
 # This is the default in non-C++11 mode
 ifeq ($(COM_IS_CLANG),TRUE)
