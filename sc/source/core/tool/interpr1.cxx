@@ -9561,6 +9561,18 @@ void ScInterpreter::ScText()
         }
         if (nGlobalError != FormulaError::NONE)
             PushError( nGlobalError);
+        else if (sFormatString.isEmpty())
+        {
+            // Mimic the Excel behaviour that
+            // * anything numeric returns an empty string
+            // * text convertible to numeric returns an empty string
+            // * any other text returns that text
+            // Conversion was detected above.
+            if (bString)
+                PushString( aStr);
+            else
+                PushString( OUString());
+        }
         else
         {
             OUString aResult;
