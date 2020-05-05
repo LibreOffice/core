@@ -172,11 +172,6 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
         if ( pOther && pOther != this )
             return false;
 
-        SfxStyleFamily eTmpFam = m_pPool->GetSearchFamily();
-        SfxStyleSearchBits nTmpMask = m_pPool->GetSearchMask();
-
-        m_pPool->SetSearchMask(nFamily);
-
         if ( !aName.isEmpty() )
             m_pPool->ChangeParent(aName, rName, nFamily, false);
 
@@ -185,7 +180,7 @@ bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
         aName = rName;
         if (bReIndexNow)
             m_pPool->Reindex();
-        m_pPool->SetSearchMask(eTmpFam, nTmpMask);
+
         m_pPool->Broadcast( SfxStyleSheetModifiedHint( aOldName, *this ) );
     }
     return true;
