@@ -153,7 +153,7 @@ void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
 {
     OUString aStyleName = mrFormat.GetStyle();
     SfxStyleSheetBasePool* pPool = GetDoc().GetStyleSheetPool();
-    SfxStyleSheetBase* pStyle = pPool->Find(aStyleName, pPool->GetSearchFamily(), pPool->GetSearchMask());
+    SfxStyleSheetBase* pStyle = pPool->Find(aStyleName, SfxStyleFamily::Para);
     SfxItemSet& rSet = pStyle->GetItemSet();
 
     std::unique_ptr<ScTokenArray> pTokenArray(mrFormat.CreateFlatCopiedTokenArray(0));
