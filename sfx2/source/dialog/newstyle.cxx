@@ -60,7 +60,7 @@ IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::ComboBox&, rBox, void)
     m_xOKBtn->set_sensitive(!rBox.get_active_text().replaceAll(" ", "").isEmpty());
 }
 
-SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool, SfxStyleFamily eFam, SfxStyleSearchBits nMask)
+SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool, SfxStyleFamily eFam)
     : GenericDialogController(pParent, "sfx/ui/newstyle.ui", "CreateStyleDialog")
     , m_rPool(rInPool)
     , m_eSearchFamily(eFam)
@@ -76,7 +76,7 @@ SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rIn
     m_xColBox->connect_changed(LINK(this, SfxNewStyleDlg, ModifyHdl));
     m_xColBox->connect_row_activated(LINK(this, SfxNewStyleDlg, OKHdl));
 
-    auto xIter = m_rPool.CreateIterator(eFam, nMask);
+    auto xIter = m_rPool.CreateIterator(eFam, SfxStyleSearchBits::UserDefined);
     SfxStyleSheetBase *pStyle = xIter->First();
     while (pStyle)
     {
