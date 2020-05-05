@@ -24,14 +24,7 @@
 #include "vclprocessor2d.hxx"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
-
-// vcl::PDFExtOutDevData support
-
-#include <vcl/pdfextoutdevdata.hxx>
-
-
-// predefines
+#include <vcl/pdfextoutdevdata.hxx> // vcl::PDFExtOutDevData support
 
 class GDIMetaFile;
 namespace tools { class Rectangle; }
@@ -72,11 +65,8 @@ namespace basegfx {
     class BColor;
 }
 
-
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         /** VclMetafileProcessor2D class
 
             This processor derived from VclProcessor2D is the base class for rendering
@@ -194,7 +184,6 @@ namespace drawinglayer
                 OutputDevice& rOutDev);
             virtual ~VclMetafileProcessor2D() override;
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+} // end of namespace processor2d::drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
