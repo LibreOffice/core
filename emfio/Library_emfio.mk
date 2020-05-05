@@ -33,7 +33,10 @@ $(eval $(call gb_Library_use_custom_headers,emfio,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_external,emfio,boost_headers))
+$(eval $(call gb_Library_use_externals,emfio,\
+	boost_headers \
+	cppunit \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,emfio,emfio/inc/pch/precompiled_emfio))
 

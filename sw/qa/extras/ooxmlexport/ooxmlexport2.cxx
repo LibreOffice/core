@@ -87,7 +87,7 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
 
     // Validation test: order of elements were wrong.
-    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     if (!pXmlDoc)
         return;
     // Order was: rsid, next.
@@ -324,7 +324,7 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 {
     // Make sure we write qFormat for well-known style names.
-    xmlDocPtr pXmlDocCT = parseExport("word/styles.xml");
+    xmlDocUniquePtr pXmlDocCT = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlDocCT);
     assertXPath(pXmlDocCT, "//w:style[@w:styleId='Normal']/w:qFormat", 1);
 }
@@ -411,7 +411,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
     uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
 
-    xmlDocPtr pXmlDocCT = parseExport("[Content_Types].xml");
+    xmlDocUniquePtr pXmlDocCT = parseExport("[Content_Types].xml");
 
     if (!pXmlDocCT)
        return; // initial import
@@ -419,13 +419,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
     assertXPath(pXmlDocCT, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.xlsx']", "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
     // check the rels too
-    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    xmlDocUniquePtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
     assertXPath(pXmlDocRels,
         "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsx']",
         "Type",
         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
-    xmlDocPtr pXmlDocContent = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDocContent = parseExport("word/document.xml");
     assertXPath(pXmlDocContent,
         "/w:document/w:body/w:p/w:r/w:object/o:OLEObject",
         "ProgID",
@@ -516,7 +516,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCellBtlr, "cell-btlr.docx")
      * w:val="btLr"/> token was completely missing in the output.
      */
 
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:textDirection", "val", "btLr");
 }
 
@@ -586,7 +586,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
     // 'Track-Changes' (Track Revisions) wasn't exported.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
     // 'Show-Changes' should not be exported - default is true.
-    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    if (xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml"))
     {
         assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
     }
@@ -862,7 +862,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBorderSpacingExportCase2, "page-bord
     // The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
     // for Word to handle (larger than 31 points)
 
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
 
     // Assert the XPath expression - page borders
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgBorders", "offsetFrom", "page");
@@ -890,7 +890,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66145, "fdo66145.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGrabBag, "grabbag.docx")
 {
     // w:mirrorIndents was lost on roundtrip, now should be handled as a grab bag property
-    xmlDocPtr pXmlDoc = parseExport();
+    xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:mirrorIndents");
 }
 
@@ -1075,7 +1075,7 @@ DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(NoFillAttrInImagedata, "NoFillAttrInImagedata.docx")
 {
     //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "type");
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2");

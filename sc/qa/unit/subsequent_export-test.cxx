@@ -498,7 +498,7 @@ void ScExportTest::testTdf111876()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     OUString sTarget = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
 
@@ -643,7 +643,7 @@ void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
 
@@ -666,7 +666,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA1()
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha1']");
 
@@ -689,7 +689,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
 
@@ -712,7 +712,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=' and @table:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256']");
 
@@ -735,7 +735,7 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
     assertXPath(pXmlDoc, "//office:spreadsheet[@table:structure-protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
     assertXPath(pXmlDoc, "//table:table[@table:protected='true' and @table:protection-key='OX3WkEe79fv1PE+FUmfOLdwVoqI=' and @table:protection-key-digest-algorithm='http://docs.oasis-open.org/office/ns/table/legacy-hash-excel' and @loext:protection-key-digest-algorithm-2='http://www.w3.org/2000/09/xmldsig#sha1']");
 
@@ -812,7 +812,7 @@ void ScExportTest::testCommentExportXLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    const xmlDocPtr pComments
+    xmlDocUniquePtr pComments
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
 
@@ -822,7 +822,7 @@ void ScExportTest::testCommentExportXLSX()
     assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t",
                        "Komentarz");
 
-    const xmlDocPtr pVmlDrawing
+    xmlDocUniquePtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
     CPPUNIT_ASSERT(pVmlDrawing);
 
@@ -860,14 +860,14 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
 
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    const xmlDocPtr pComments
+    xmlDocUniquePtr pComments
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
     CPPUNIT_ASSERT(pComments);
 
     assertXPathContent(pComments, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t",
                        "visible comment");
 
-    const xmlDocPtr pVmlDrawing
+    xmlDocUniquePtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
     CPPUNIT_ASSERT(pVmlDrawing);
 
@@ -884,7 +884,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // tdf#124741: check that we export default width, otherwise the skipped columns would have
@@ -959,7 +959,7 @@ void ScExportTest::testXfDefaultValuesXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // cellStyleXfs don't need xfId, so we need to make sure it is not saved
@@ -986,7 +986,7 @@ void ScExportTest::testColumnWidthResaveXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // In original Excel document the width is "24"
@@ -1088,7 +1088,7 @@ void ScExportTest::testOutlineExportXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // Maximum Outline Row is 4 for this document
@@ -1235,7 +1235,7 @@ void ScExportTest::testAllRowsHiddenXLSX()
     CPPUNIT_ASSERT(xOrigDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xOrigDocSh), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr", "zeroHeight", "true" );
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 0);
@@ -1250,7 +1250,7 @@ void ScExportTest::testHiddenEmptyRowsXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     assertXPath(pSheet, "/x:worksheet/x:sheetFormatPr",  "zeroHeight", "false" );
@@ -1269,7 +1269,7 @@ void ScExportTest::testLandscapeOrientationXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // the usePrinterDefaults cannot be saved to allow opening sheets in Landscape mode via MS Excel
@@ -1454,7 +1454,7 @@ void ScExportTest::testBuiltinRangesXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     xShell->DoClose();
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in names are still there
@@ -1931,14 +1931,14 @@ void ScExportTest::testRichTextCellFormatXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // make sure the only cell in this doc is assigned some formatting record
     OUString aCellFormat = getXPath(pSheet, "/x:worksheet/x:sheetData/x:row/x:c", "s");
     CPPUNIT_ASSERT_MESSAGE("Cell format is missing", !aCellFormat.isEmpty());
 
-    xmlDocPtr pStyles = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    xmlDocUniquePtr pStyles = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
     CPPUNIT_ASSERT(pStyles);
 
     OString nFormatIdx = OString::number( aCellFormat.toInt32() + 1 );
@@ -2184,7 +2184,7 @@ void ScExportTest::testEmbeddedChartODS()
     std::shared_ptr<utl::TempFile> pTempFile(
             ScBootstrapFixture::exportTo(xShell.get(), FORMAT_ODS));
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc,
         "/office:document-content/office:body/office:spreadsheet/table:table[2]/table:table-row[7]/table:table-cell[2]/draw:frame/draw:object",
@@ -3105,7 +3105,7 @@ void ScExportTest::testCeilingFloorODSToXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/workbook.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/workbook.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // there shouldn't be any defined names during export of FLOOR and CEILING functions to .xlsx
@@ -3131,9 +3131,9 @@ void ScExportTest::testCustomXml()
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/item1.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
-    xmlDocPtr pRelsDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/_rels/item1.xml.rels");
+    xmlDocUniquePtr pRelsDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/_rels/item1.xml.rels");
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
@@ -3163,7 +3163,7 @@ void ScExportTest::testRelativePathsODS()
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pTempFile = exportTo(xDocSh.get(), FORMAT_ODS);
-    xmlDocPtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pDoc);
     OUString aURL = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "href");
@@ -3522,7 +3522,7 @@ void ScExportTest::testSheetTextBoxHyperlinkXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:nvSpPr[1]/xdr:cNvPr[1]/a:hlinkClick[1]", 1);
@@ -3535,7 +3535,7 @@ void ScExportTest::testFontSizeXLSX()
     ScDocShellRef xDocSh = loadDoc("fontSize.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     OUString fontSize = getXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "sz");
@@ -3553,7 +3553,7 @@ void ScExportTest::testSheetCharacterKerningSpaceXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CharKerningSpace = getXPath(pDoc,
@@ -3573,7 +3573,7 @@ void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CondensedCharSpace = getXPath(pDoc,
@@ -3590,7 +3590,7 @@ void ScExportTest::testTextUnderlineColorXLSX()
     ScDocShellRef xDocSh = loadDoc("underlineColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     // Make sure the underline type is double line
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "u", "dbl");
@@ -3617,7 +3617,7 @@ void ScExportTest::testSheetRunParagraphPropertyXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString aColor = getXPath(pDoc, "/x:sst/x:si/x:r[1]/x:rPr[1]/x:color", "rgb");
@@ -3632,7 +3632,7 @@ void ScExportTest::testPreserveTextWhitespaceXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si/x:t", "space", "preserve");
     xDocSh->DoClose();
@@ -3644,7 +3644,7 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/sharedStrings.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", "preserve");
     assertXPath(pDoc, "/x:sst/x:si[2]/x:r[1]/x:t", "space", "preserve");
@@ -3684,7 +3684,7 @@ void ScExportTest::testHiddenShapeXLSX()
     CPPUNIT_ASSERT_MESSAGE("Drawing object should not be visible.", !pObj->IsVisible());
     CPPUNIT_ASSERT_MESSAGE("Drawing object should not be printable.", !pObj->IsPrintable());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:nvSpPr/xdr:cNvPr", "hidden", "1");
     xDocSh->DoClose();
@@ -3695,7 +3695,7 @@ void ScExportTest::testShapeAutofitXLSX()
     ScDocShellRef xDocSh = loadDoc("testShapeAutofit.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     // TextAutoGrowHeight --> "Fit height to text" / "Resize shape to fit text" --> true
@@ -3711,7 +3711,7 @@ void ScExportTest::testHyperlinkXLSX()
     ScDocShellRef xDocSh = loadDoc("hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
 
@@ -3889,7 +3889,7 @@ void ScExportTest::testMatrixMultiplicationXLSX()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     OUString CellFormulaRange = getXPath(pDoc,
@@ -4015,7 +4015,7 @@ void ScExportTest::testTextDirectionXLSX()
     ScDocShellRef xDocSh = loadDoc("writingMode.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
@@ -4030,7 +4030,7 @@ void ScExportTest::testTdf66668()
     ScDocShellRef xDocSh = loadDoc("tdf66668.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoClose();
 }
@@ -4040,7 +4040,7 @@ void ScExportTest::testTdf130108()
     ScDocShellRef xDocSh = loadDoc("tdf130108.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:b", "val", "1");
@@ -4057,7 +4057,7 @@ void ScExportTest::testTdf55417()
     ScDocShellRef xDocSh = loadDoc("tdf55417.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment", 1);
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", 1);
@@ -4070,7 +4070,7 @@ void ScExportTest::testTdf129985()
     ScDocShellRef xDocSh = loadDoc("tdf129985.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "m/d/yyyy");
@@ -4083,7 +4083,7 @@ void ScExportTest::testTdf73063()
     ScDocShellRef xDocSh = loadDoc("tdf73063.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
@@ -4096,7 +4096,7 @@ void ScExportTest::testTdf88657ODS()
     ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "styles.xml", FORMAT_ODS);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "styles.xml", FORMAT_ODS);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//number:fraction", "min-denominator-digits", "3");
@@ -4109,7 +4109,7 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
     ScDocShellRef xDocSh = loadDoc("conditionalformat_rangelist.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
@@ -4122,7 +4122,7 @@ void ScExportTest::testConditionalFormatContainsTextXLSX()
     ScDocShellRef xDocSh = loadDoc("conditionalformat_containstext.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula", "NOT(ISERROR(SEARCH(\"test\",A1)))");
@@ -4135,7 +4135,7 @@ void ScExportTest::testConditionalFormatPriorityCheckXLSX()
     ScDocShellRef xDocSh = loadDoc("conditional_fmt_checkpriority.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     constexpr bool bHighPriorityExtensionA1 = true;  // Should A1's extension cfRule has higher priority than normal cfRule ?
@@ -4181,7 +4181,7 @@ void ScExportTest::testConditionalFormatOriginXLSX()
     ScDocShellRef xDocSh = loadDoc("conditional_fmt_origin.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
@@ -4196,7 +4196,7 @@ void ScExportTest::testTdf41722()
     ScDocShellRef xDocSh = loadDoc("tdf41722.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[1]", "operator", "containsText");
@@ -4211,7 +4211,7 @@ void ScExportTest::testTdf113621()
     ScDocShellRef xDocSh = loadDoc("tdf113621.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "A1:A1048576");
@@ -4226,7 +4226,7 @@ void ScExportTest::testEscapeCharInNumberFormatXLSX()
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     const sal_Unicode cEuro (8364);  // € symbol
@@ -4253,7 +4253,7 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);  // Convert [NatNum5] to [DBNum2] in Chinese
     CPPUNIT_ASSERT( xDocSh.is() );
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
@@ -4290,7 +4290,7 @@ void ScExportTest::testExtendedLCIDXLSX()
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     // Check export
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-107041E]dd\\-mm\\-yyyy");
@@ -4361,7 +4361,7 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrame = pURLData->GetTargetFrame();
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrame);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
     CPPUNIT_ASSERT(pDoc);
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
@@ -4386,7 +4386,7 @@ void ScExportTest::testKeepSettingsOfBlankRows()
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     // saved blank row with not default setting in A2
@@ -4457,7 +4457,7 @@ void ScExportTest::testTdf112936()
     ScDocShellRef xDocSh = loadDoc("tdf112936.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:pivotCacheDefinition", "recordCount", "4");
@@ -4476,7 +4476,7 @@ void ScExportTest::testXltxExport()
     pShell->DoInitNew();
 
     // Export as template and check content type
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *pShell, m_xSFactory, "[Content_Types].xml", FORMAT_XLTX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *pShell, m_xSFactory, "[Content_Types].xml", FORMAT_XLTX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/ContentType:Types/ContentType:Override[@PartName='/xl/workbook.xml']",
         "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
@@ -4516,7 +4516,7 @@ void ScExportTest::testTdf114969XLSX()
     ScDocShellRef xDocSh = loadDoc("sheet_name_with_dots.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", "'1.1.1.1'!C1");
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", "'1.1.1.1'!C2");
@@ -4529,7 +4529,7 @@ void ScExportTest::testTdf115192XLSX()
     ScDocShellRef xDocSh = loadDoc("test_115192.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
     assertXPathNoAttribute(pDoc, "/r:Relationships/r:Relationship[@Id='rId2']", "TargetMode");
@@ -4544,11 +4544,11 @@ void ScExportTest::testTdf91634XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:nvPicPr/xdr:cNvPr/a:hlinkClick", 1);
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://www.google.com/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
@@ -4564,7 +4564,7 @@ void ScExportTest::testTdf115159()
     CPPUNIT_ASSERT(xDocSh.is());
     xShell->DoClose();
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
@@ -4591,7 +4591,7 @@ void ScExportTest::testTdf112567()
     CPPUNIT_ASSERT(xDocSh.is());
     xShell->DoClose();
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
@@ -4618,7 +4618,7 @@ void ScExportTest::testTdf112567b()
     CPPUNIT_ASSERT(xDocSh.is());
     xShell->DoClose();
 
-    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/workbook.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
@@ -4636,13 +4636,13 @@ void ScExportTest::testTdf123645XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/a:hlinkClick", 1);
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
     assertXPathNoAttribute(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId3']", "TargetMode");
@@ -4660,11 +4660,11 @@ void ScExportTest::testTdf125173XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr/a:hlinkClick", 1);
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "http://www.google.com/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
@@ -4678,11 +4678,11 @@ void ScExportTest::testTdf79972XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "ref", "A1");
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target", "https://bugs.documentfoundation.org/show_bug.cgi?id=79972");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
@@ -4696,11 +4696,11 @@ void ScExportTest::testTdf126024XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "ref", "A2");
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target", "https://bugs.documentfoundation.org/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship", "TargetMode", "External");
@@ -4714,11 +4714,11 @@ void ScExportTest::testTdf126177XLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
-    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "location", "Munka1!A5");
 
-    xmlDocPtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
+    xmlDocUniquePtr pXmlRels = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels");
     CPPUNIT_ASSERT(pXmlRels);
     OUString aTarget = getXPath(pXmlRels, "/r:Relationships/r:Relationship", "Target");
     CPPUNIT_ASSERT(aTarget.endsWith("test.xlsx"));
@@ -4736,7 +4736,7 @@ void ScExportTest::testCommentTextVAlignment()
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
-    const xmlDocPtr pVmlDrawing
+    xmlDocUniquePtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
     CPPUNIT_ASSERT(pVmlDrawing);
 
@@ -4754,7 +4754,7 @@ void ScExportTest::testCommentTextHAlignment()
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
-    const xmlDocPtr pVmlDrawing
+    xmlDocUniquePtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
     CPPUNIT_ASSERT(pVmlDrawing);
 
@@ -4776,7 +4776,7 @@ void ScExportTest::testRotatedImageODS()
 
     std::shared_ptr<utl::TempFile> pTemp = saveAs(xDocSh.get(), FORMAT_ODS);
     CPPUNIT_ASSERT(pTemp);
-    const xmlDocPtr pXmlDoc = XPathHelper::parseExport(pTemp, m_xSFactory, "content.xml");
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pTemp, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
     const OString sPathStart = "/office:document-content/office:body/office:spreadsheet/"
@@ -4846,7 +4846,7 @@ void ScExportTest::testTdf120502()
     std::shared_ptr<utl::TempFile> pXPathFile
         = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
     xShell->DoClose();
-    const xmlDocPtr pSheet1
+    xmlDocUniquePtr pSheet1
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet1);
 
@@ -4861,7 +4861,7 @@ void ScExportTest::testTdf131372()
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
@@ -4877,7 +4877,7 @@ void ScExportTest::testTdf122331()
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet);
 
     assertXPath(pSheet, "/x:worksheet/x:sheetPr", "filterMode", "true");
@@ -4895,7 +4895,7 @@ void ScExportTest::testTdf83779()
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
-    const xmlDocPtr pVmlDrawing
+    xmlDocUniquePtr pVmlDrawing
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pVmlDrawing);
 

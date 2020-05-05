@@ -19,7 +19,7 @@
 
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-xmlDocPtr XPathHelper::parseExport2(ScBootstrapFixture & rFixture, ScDocShell& rShell, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile, sal_Int32 nFormat)
+xmlDocUniquePtr XPathHelper::parseExport2(ScBootstrapFixture & rFixture, ScDocShell& rShell, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile, sal_Int32 nFormat)
 {
     std::shared_ptr<utl::TempFile> pTempFile = rFixture.exportTo(&rShell, nFormat);
 
@@ -36,7 +36,7 @@ std::unique_ptr<SvStream> XPathHelper::parseExportStream(std::shared_ptr<utl::Te
     return pStream;
 }
 
-xmlDocPtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
+xmlDocUniquePtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
 {
     std::unique_ptr<SvStream> pStream = parseExportStream(pTempFile, xSFactory, rFile);
     return XmlTestTools::parseXmlStream(pStream.get());

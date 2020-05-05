@@ -454,10 +454,10 @@ public:
         return pStream;
     }
 
-    xmlDocPtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
+    xmlDocUniquePtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
     {
         std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
-        xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
         OUString const url(rTempFile.GetURL());
         pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
             reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));

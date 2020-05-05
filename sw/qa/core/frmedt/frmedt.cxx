@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Get the absolute position of the top of the page bottom margin area.
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     SwTwips nPagePrintAreaBottom = getXPath(pXmlDoc, "//page/infos/prtBounds", "bottom").toInt32();
 
     // Calculate the allowed bounding box of the shape, e.g. the shape's position & size dialog uses
