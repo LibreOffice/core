@@ -592,7 +592,7 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
 bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const OUString& rStyle, const OUString& rParent)
 {
-    SfxStyleSheetIterator aIter(this,eFam,SfxStyleSearchBits::All);
+    SfxStyleSheetIterator aIter(this, eFam, SfxStyleSearchBits::All);
     SfxStyleSheetBase *pStyle = aIter.Find(rStyle);
     OSL_ENSURE(pStyle, "Template not found. Writer with solar <2541?");
     if(pStyle)
@@ -653,7 +653,7 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
  */
 void SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
 {
-    SfxStyleSheetIterator aIter(this, rSheet.GetFamily(), nMask);
+    SfxStyleSheetIterator aIter(this, rSheet.GetFamily(), SfxStyleSearchBits::All);
     SfxStyleSheetBase* pOld = aIter.Find( rSheet.GetName() );
     if (pOld) {
         Remove( pOld );
