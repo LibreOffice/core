@@ -19,12 +19,24 @@
 
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
+#include "vclpixelprocessor2d.hxx"
+#include <rtl/ustring.hxx>
 #include <rtl/math.hxx>
 #include <tools/gen.hxx>
+#include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/graphictools.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
+#include <toolkit/helper/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
@@ -37,45 +49,26 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#include "vclpixelprocessor2d.hxx"
-#include <tools/stream.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
-#include <vcl/graphictools.hxx>
-#include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <comphelper/processfactory.hxx>
-#include <rtl/ustring.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx> // for Title/Description metadata
+
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-
-// for PDFExtOutDevData Graphic support
-#include <vcl/graph.hxx>
-#include <toolkit/helper/formpdfexport.hxx>
-
-// for Control printing
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-// for StructureTagPrimitive support in sd's unomodel.cxx
-#include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
-
-// for support of Title/Description in all apps when embedding pictures
-#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
 using namespace com::sun::star;
 
