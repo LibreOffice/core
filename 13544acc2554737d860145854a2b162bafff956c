@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "d415e2d1_76db1fb7",
+        "filename": "bridges/source/cpp_uno/shared/vtablefactory.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-05T09:19:42Z",
+      "side": 1,
+      "message": "this change looks good to me",
+      "range": {
+        "startLine": 247,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 9
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4da2e9f_dbce76a8",
         "filename": "emfio/source/reader/mtftools.cxx",
         "patchSetId": 7
