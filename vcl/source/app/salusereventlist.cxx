@@ -106,10 +106,13 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 continue;
             }
 
+#ifndef IOS
             try
+#endif
             {
                 ProcessEvent( aEvent );
             }
+#ifndef IOS
             catch (css::uno::Exception&)
             {
                 auto const e2 = cppu::getCaughtException();
@@ -126,6 +129,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
                 std::abort();
             }
+#endif
             if (!bHandleAllCurrentEvents)
                 break;
         }

@@ -1618,7 +1618,9 @@ int Desktop::Main()
         }
 
         // call Application::Execute to process messages in vcl message loop
+#ifndef IOS
         try
+#endif
         {
 #if HAVE_FEATURE_JAVA
             // The JavaContext contains an interaction handler which is used when
@@ -1638,6 +1640,7 @@ int Desktop::Main()
                 Execute();
             }
         }
+#ifndef IOS
         catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
         {
             RequestHandler::SetDowning();
@@ -1663,6 +1666,7 @@ int Desktop::Main()
             RequestHandler::SetDowning();
             FatalError( "Caught Unknown Exception: Aborting!");
         }
+#endif
     }
     else
     {
