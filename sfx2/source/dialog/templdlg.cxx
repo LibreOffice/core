@@ -906,7 +906,8 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag(bool bEnable)
 {
     if (pStyleSheetPool)
     {
-        SfxStyleSheetBase* pStyle = pStyleSheetPool->First(pStyleSheetPool->GetSearchFamily());
+        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+        SfxStyleSheetBase* pStyle = pItem ? pStyleSheetPool->First(pItem->GetFamily()) : nullptr;
         bAllowReParentDrop = pStyle && pStyle->HasParentSupport() && bEnable;
     }
     bTreeDrag = bEnable;
