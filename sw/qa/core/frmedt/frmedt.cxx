@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/VertOrientation.hpp>
+
 #include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
@@ -16,6 +18,8 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
+#include <frameformats.hxx>
+#include <pagefrm.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/frmedt/data/";
 
@@ -52,6 +56,55 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     // - Actual  : 9
     // i.e. SwFEShell allowed to anchor the textframe of a textbox into itself.
     CPPUNIT_ASSERT_EQUAL(nOldAnchor, nNewAnchor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
+{
+    // Insert a shape and anchor it vertically in a way, so its position is from the top of the page
+    // bottom margin area.
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("AnchorType",
+                                  uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
+    xShapeProps->setPropertyValue("VertOrientRelation",
+                                  uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    xShapeProps->setPropertyValue("VertOrientPosition",
+                                  uno::makeAny(static_cast<sal_Int32>(-11000)));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Get the absolute position of the top of the page bottom margin area.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    SwTwips nPagePrintAreaBottom = getXPath(pXmlDoc, "//page/infos/prtBounds", "bottom").toInt32();
+
+    // Calculate the allowed bounding box of the shape, e.g. the shape's position & size dialog uses
+    // this to limit the vertical position to sensible values.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRect aBoundRect;
+    RndStdIds eAnchorType = RndStdIds::FLY_AT_CHAR;
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    const auto& rFrameFormats = *pDoc->GetFrameFormats();
+    const SwPosition* pContentPos = rFrameFormats[0]->GetAnchor().GetContentAnchor();
+    sal_Int16 eHoriRelOrient = text::RelOrientation::PAGE_FRAME;
+    sal_Int16 eVertRelOrient = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;
+    bool bFollowTextFlow = false;
+    bool bMirror = false;
+    Size aPercentSize;
+    pWrtShell->CalcBoundRect(aBoundRect, eAnchorType, eHoriRelOrient, eVertRelOrient, pContentPos,
+                             bFollowTextFlow, bMirror, nullptr, &aPercentSize);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -14705
+    // - Actual  : -1134
+    // i.e. UI did not allow anchoring a shape 10cm above the bottom of the page due to wrong
+    // bounding box.
+    CPPUNIT_ASSERT_EQUAL(-1 * nPagePrintAreaBottom, aBoundRect.Pos().getY());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
