@@ -420,9 +420,9 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
     return nullptr;
 }
 
-void ScStyleSheetPool::setAllStandard()
+void ScStyleSheetPool::setAllParaStandard()
 {
-    SfxStyleSheetBase* pSheet = First(GetSearchFamily(), GetSearchMask());
+    SfxStyleSheetBase* pSheet = First(SfxStyleFamily::Para);
     while (pSheet)
     {
         pSheet->SetMask(SfxStyleSearchBits::ScStandard);
