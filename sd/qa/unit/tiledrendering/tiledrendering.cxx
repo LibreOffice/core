@@ -191,7 +191,7 @@ private:
     SdXImpressDocument* createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments = uno::Sequence<beans::PropertyValue>());
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
-    xmlDocPtr parseXmlDump();
+    xmlDocUniquePtr parseXmlDump();
 
     uno::Reference<lang::XComponent> mxComponent;
     ::tools::Rectangle m_aInvalidation;
@@ -344,7 +344,7 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     }
 }
 
-xmlDocPtr SdTiledRenderingTest::parseXmlDump()
+xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
 {
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
@@ -363,7 +363,7 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
     xmlTextWriterEndDocument(pXmlWriter);
     xmlFreeTextWriter(pXmlWriter);
 
-    return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer));
+    return xmlDocUniquePtr(xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer)));
 }
 
 void SdTiledRenderingTest::testCreateDestroy()
@@ -920,11 +920,10 @@ void SdTiledRenderingTest::testResizeTableColumn()
     pView->SdrEndTextEdit();
 
     // Remember the original cell widths.
-    xmlDocPtr pXmlDoc = parseXmlDump();
+    xmlDocUniquePtr pXmlDoc = parseXmlDump();
     OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/";
     sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
-    xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
 
     // Resize the left column, decrease its width by 1 cm.
@@ -938,7 +937,6 @@ void SdTiledRenderingTest::testResizeTableColumn()
     CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
     sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
-    xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
 
     // Now undo the resize.
@@ -951,7 +949,6 @@ void SdTiledRenderingTest::testResizeTableColumn()
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn1, nActualColumn1);
     sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
-    xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
 }
 
@@ -1726,12 +1723,11 @@ void SdTiledRenderingTest::testTdf104405()
     Scheduler::ProcessEventsToIdle();
 
     // check that the first cell has acquired the resulting vertical style
-    xmlDocPtr pXmlDoc = parseXmlDump();
+    xmlDocUniquePtr pXmlDoc = parseXmlDump();
     OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                       "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
     // the following name has a compiler-dependent part
     CPPUNIT_ASSERT_EQUAL(OUString("2"), getXPath(pXmlDoc, aPrefix, "value"));
-    xmlFreeDoc(pXmlDoc);
 }
 
 void SdTiledRenderingTest::testTdf81754()
@@ -1804,7 +1800,7 @@ void SdTiledRenderingTest::testTdf105502()
 
     // Assert that the selected A1 has now a larger font than the unselected
     // A2.
-    xmlDocPtr pXmlDoc = parseXmlDump();
+    xmlDocUniquePtr pXmlDoc = parseXmlDump();
     sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]", "height").toInt32();
     sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
     // This failed when FuText::ChangeFontSize() never did "continue" in the
@@ -1818,8 +1814,6 @@ void SdTiledRenderingTest::testTdf105502()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aFirstCell.mnRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aLastCell.mnCol);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aLastCell.mnRow);
-
-    xmlFreeDoc(pXmlDoc);
 }
 
 void SdTiledRenderingTest::testCommentCallbacks()

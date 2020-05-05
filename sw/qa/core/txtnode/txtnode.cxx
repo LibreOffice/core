@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     SwDocShell* pShell = pTextDoc->GetDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     assertXPath(pXmlDoc, "//font[1]", "orientation", "900");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false

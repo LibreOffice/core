@@ -11,10 +11,10 @@
 
 #include <memory>
 
-htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile const & aTempFile)
+htmlDocUniquePtr HtmlTestTools::parseHtml(utl::TempFile const & aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
-    htmlDocPtr doc = parseHtmlStream(&aFileStream);
+    htmlDocUniquePtr doc = parseHtmlStream(&aFileStream);
     xmlFree(doc->name);
     doc->name = reinterpret_cast<char *>(
         xmlStrdup(
@@ -24,13 +24,13 @@ htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile const & aTempFile)
     return doc;
 }
 
-htmlDocPtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
+htmlDocUniquePtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
 {
     std::size_t nSize = pStream->remainingSize();
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-    return htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), nullptr);
+    return htmlDocUniquePtr(htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), nullptr));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

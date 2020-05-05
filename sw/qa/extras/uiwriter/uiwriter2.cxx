@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Check that we actually test the line we need
     assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
@@ -980,7 +980,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123102)
     createDoc("tdf123102.odt");
     // insert a new row after a vertically merged cell
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was "3." - caused by the hidden numbered paragraph of the new merged cell
     assertXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/txt/Special", "rText", "2.");
 }
@@ -2355,7 +2355,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
     //  .uno:Cut doesn't remove the table, only the selected content of the first cell
     dispatchCommand(mxComponent, ".uno:Cut", {});
 
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab");
 
     // .uno:SelectAll selects the whole table, and UNO command Cut cuts it
@@ -2486,7 +2486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf90069)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
 {
     createDoc("tdf129655-vtextbox.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

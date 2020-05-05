@@ -90,7 +90,7 @@ public:
     {
         executeExport( "svg-export-text-decorations.odp" );
 
-        xmlDocPtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         svgDoc->name = reinterpret_cast<char *>(xmlStrdup(reinterpret_cast<xmlChar const *>(OUStringToOString(maTempFile.GetURL(), RTL_TEXTENCODING_UTF8).getStr())));
@@ -112,7 +112,7 @@ public:
     {
         executeExport("textbox-link-javascript.odp");
 
-        xmlDocPtr svgDoc = parseXml(maTempFile);
+        xmlDocUniquePtr svgDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(svgDoc);
 
         // There should be only one child (no link to javascript url)

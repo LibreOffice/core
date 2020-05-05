@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     // Make sure that the original JPG data is reused and we don't perform a PNG re-compress.
-    xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     OUString aAttributeValue = getXPath(pXmlDoc, "//svg:image", "href");
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     // Get the style of the group around the actual <path> element.
-    xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     OUString aStyle = getXPath(
         pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g", "style");
     OUString aPrefix("opacity: ");
