@@ -1208,9 +1208,10 @@ void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderConte
     // save fill and line color of output device
     Color aFill( pOutputDev->GetFillColor() );
     Color aLine( pOutputDev->GetLineColor() );
+    Color aColor(117, 114, 106);
 
     // determine selection mark color
-    Color aSelPgLineColor(COL_LIGHTBLUE);
+    Color aSelPgLineColor(aColor);
     const StyleSettings& rSettings =
         mrParentViewShell.GetWin()->GetSettings().GetStyleSettings();
     if ( rSettings.GetHighContrastMode() )
