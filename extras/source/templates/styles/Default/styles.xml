@@ -83,6 +83,16 @@
       <style:paragraph-properties fo:margin-top="0.106cm" fo:margin-bottom="0.106cm" loext:contextual-spacing="false"/>
       <style:text-properties fo:font-size="80%" fo:font-weight="bold" style:font-size-asian="80%" style:font-weight-asian="bold" style:font-size-complex="80%" style:font-weight-complex="bold"/>
     </style:style>
+    <style:style style:name="Sender" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="extra">
+    </style:style>
+    <style:style style:name="Addressee" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="extra">
+    </style:style>
+    <style:style style:name="Salutation" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="text">
+    </style:style>
+    <style:style style:name="Horizontal_20_Line" style:display-name="Horizontal Line" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="html">
+    </style:style>
+    <style:style style:name="Signature" style:family="paragraph" style:hidden="true" style:parent-style-name="Standard" style:class="text">
+    </style:style>
     <text:outline-style style:name="Outline">
       <text:outline-level-style text:level="1" style:num-format="">
         <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
