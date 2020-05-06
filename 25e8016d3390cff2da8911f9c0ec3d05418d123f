@@ -16,6 +16,24 @@
       "revId": "25e8016d3390cff2da8911f9c0ec3d05418d123f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46147803_f50f16dc",
+        "filename": "external/languagetool/ExternalProject_languagetool.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-06T09:03:03Z",
+      "side": 1,
+      "message": "This jar is part of an oxt, so without further looking into it, it should probably stay backwards compatible and use the \"classic\" published URE jars rather than libreoffice.jar.",
+      "parentUuid": "f1cfd17f_236565da",
+      "revId": "25e8016d3390cff2da8911f9c0ec3d05418d123f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
