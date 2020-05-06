@@ -1599,7 +1599,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WindowType::RADIOBUTTON:
-                pNewWindow = VclPtr<RadioButton>::Create( pParent, nWinBits );
+                pNewWindow = VclPtr<RadioButton>::Create(pParent, false, nWinBits);
                 *ppNewComp = new VCLXRadioButton;
 
                 // by default, disable RadioCheck

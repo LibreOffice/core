@@ -31,7 +31,7 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 TabItem::TabItem (vcl::Window* pParentWindow)
-    : RadioButton(pParentWindow, 0)
+    : RadioButton(pParentWindow, false, 0)
     , mbIsLeftButtonDown(false)
 {
     SetStyle(GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL | WB_NOPOINTERFOCUS);
