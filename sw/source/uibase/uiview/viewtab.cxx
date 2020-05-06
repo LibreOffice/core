@@ -701,7 +701,34 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             }
         }
         break;
+    case SID_PARAGRAPH_CHANGE_STATE:
+    {
+        const SfxPoolItem *fLineIndent, *pLeftIndent, *pRightIndent;
+        if (pReqArgs)
+        {
+            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+            rSh.GetCurAttr( aLRSpaceSet );
+            SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( RES_LR_SPACE ) );
 
+            if (pReqArgs->GetItemState(SID_PARAGRAPH_FIRST_LINE_INDENT,true,&fLineIndent) == SfxItemState::SET)
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(fLineIndent)->GetValue();
+                aParaMargin.SetTextFirstLineOfst(nPageWidth * ratio.toFloat());
+            }
+            else if (pReqArgs->GetItemState(SID_PARAGRAPH_LEFT_INDENT,true,&pLeftIndent) == SfxItemState::SET)
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pLeftIndent)->GetValue();
+                aParaMargin.SetLeft(nPageWidth * ratio.toFloat());
+            }
+            else if (pReqArgs->GetItemState(SID_PARAGRAPH_RIGHT_INDENT,true,&pRightIndent) == SfxItemState::SET)
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pRightIndent)->GetValue();
+                aParaMargin.SetRight(nPageWidth * ratio.toFloat());
+            }
+            rSh.SetAttrItem(aParaMargin);
+        }
+        break;
+    }
     case SID_HANGING_INDENT:
     {
         SfxItemSet aLRSpaceSet( GetPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );

@@ -533,6 +533,9 @@ class SvxSetItem;
 #define SID_TABSTOP_ADD_OR_CHANGE                       ( SID_SVX_START + 581 )
 #define SID_TABSTOP_ATTR_INDEX                          ( SID_SVX_START + 582 )
 #define SID_TABSTOP_ATTR_POSITION                       ( SID_SVX_START + 583 )
+#define SID_PARAGRAPH_FIRST_LINE_INDENT                 ( SID_SVX_START + 584 )
+#define SID_PARAGRAPH_LEFT_INDENT                       ( SID_SVX_START + 585 )
+#define SID_PARAGRAPH_RIGHT_INDENT                      ( SID_SVX_START + 586 )
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
@@ -645,7 +648,7 @@ class SvxSetItem;
 #define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
 #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
 #define SID_INSERT_GRIDCONTROL                          ( SID_SVX_START + 753 )
-//FREE
+#define SID_PARAGRAPH_CHANGE_STATE                      ( SID_SVX_START + 754 )
 //FREE
 //FREE
 //FREE
