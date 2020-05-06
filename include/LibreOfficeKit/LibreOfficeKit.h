@@ -446,6 +446,10 @@ struct _LibreOfficeKitDocumentClass
                                     int nX,
                                     int nY);
 
+    /// @see lok::Document::sendFormFieldEvent
+    void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
+                                const char* pArguments);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
