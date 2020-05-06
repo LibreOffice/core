@@ -125,14 +125,14 @@ private:
         int layer, FileParser * parseFile, OUString const & urls,
         bool recordAdditions);
 
-    void parseXcdFiles(int layer, OUString const & url);
+    void parseXcdFiles(int layer, std::vector<OUString> const & urls);
 
-    void parseXcsXcuLayer(int layer, OUString const & url);
+    void parseXcsXcuLayers(int layer, std::vector<OUString> const & urls);
 
     void parseXcsXcuIniLayer(
         int layer, OUString const & url, bool recordAdditions);
 
-    void parseResLayer(int layer, OUString const & url);
+    void parseResLayers(int layer, std::vector<OUString> const & urls);
 
     void parseModificationLayer(int layer, OUString const & url);
 
