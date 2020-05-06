@@ -44,6 +44,7 @@
 #include <svl/nfsymbol.hxx>
 
 #include <cmath>
+#include <array>
 
 using namespace svt;
 
@@ -137,6 +138,11 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
     nCntExp      = rNumFor.nCntExp;
 }
 
+static const std::map<LanguageType, std::array<sal_uInt8, 4>> tblDBNumToNatNum
+    = { { primary(LANGUAGE_CHINESE),    { 4, 5, 6, 0 } },
+        { primary(LANGUAGE_JAPANESE),   { 4, 5, 3, 0 } },
+        { primary(LANGUAGE_KOREAN),     { 1, 2, 3, 9 } } };
+
 // static
 sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate )
 {
@@ -156,42 +162,18 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     }
     else
     {
-        switch ( nDBNum )
-        {
-        case 1:
-            if ( eLang == primary(LANGUAGE_CHINESE) )
-                nNatNum = 4;
-            else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 1;
-            else if ( eLang == primary(LANGUAGE_KOREAN) )
-                nNatNum = 1;
-            break;
-        case 2:
-            if ( eLang == primary(LANGUAGE_CHINESE))
-                nNatNum = 5;
-            else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 4;
-            else if ( eLang == primary(LANGUAGE_KOREAN) )
-                nNatNum = 2;
-            break;
-        case 3:
-            if ( eLang == primary(LANGUAGE_CHINESE) )
-                nNatNum = 6;
-            else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 5;
-            else if ( eLang == primary(LANGUAGE_KOREAN) )
-                nNatNum = 3;
-            break;
-        case 4:
-            if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 7;
-            else if ( eLang == primary(LANGUAGE_KOREAN) )
-                nNatNum = 9;
-            break;
-        }
+
+        auto const it = tblDBNumToNatNum.find(eLang);
+        if (it != tblDBNumToNatNum.end())
+            nNatNum = tblDBNumToNatNum.at(eLang)[nDBNum - 1];
     }
     return nNatNum;
 }
+
+static const std::map<LanguageType, std::array<sal_uInt8, 9>> tblNatNumToDBNum
+    = { { primary(LANGUAGE_CHINESE),    { 1, 0, 0, 1, 2, 3, 0, 0, 0 } },
+        { primary(LANGUAGE_JAPANESE),   { 1, 2, 3, 1, 2, 3, 1, 2, 0 } },
+        { primary(LANGUAGE_KOREAN),     { 0, 2, 3, 1, 0, 0, 0, 0, 0 } } };
 
 // static
 sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate )
@@ -212,53 +194,9 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
     }
     else
     {
-        switch ( nNatNum )
-        {
-        case 1:
-            if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 1;
-            else if ( eLang == primary(LANGUAGE_KOREAN) )
-                nDBNum = 1;
-            break;
-        case 2:
-            if ( eLang == primary(LANGUAGE_KOREAN) )
-                nDBNum = 2;
-            break;
-        case 3:
-            if ( eLang == primary(LANGUAGE_KOREAN) )
-                nDBNum = 3;
-            break;
-        case 4:
-            if ( eLang == primary(LANGUAGE_CHINESE) )
-                nDBNum = 1;
-            else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 2;
-            break;
-        case 5:
-            if ( eLang == primary(LANGUAGE_CHINESE) )
-                nDBNum = 2;
-            else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 3;
-            break;
-        case 6:
-            if ( eLang == primary(LANGUAGE_CHINESE) )
-                nDBNum = 3;
-            break;
-        case 7:
-            if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 4;
-            break;
-        case 8:
-            break;
-        case 9:
-            if ( eLang == primary(LANGUAGE_KOREAN) )
-                nDBNum = 4;
-            break;
-        case 10:
-            break;
-        case 11:
-            break;
-        }
+        auto const it = tblNatNumToDBNum.find(eLang);
+        if (it != tblNatNumToDBNum.end())
+            nDBNum = tblNatNumToDBNum.at(eLang)[nNatNum - 1];
     }
     return nDBNum;
 }
