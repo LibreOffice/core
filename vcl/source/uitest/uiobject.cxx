@@ -9,6 +9,7 @@
 
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/metricfielduiobject.hxx>
+#include <vcl/uitest/formattedfielduiobject.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
@@ -18,6 +19,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
+#include <vcl/fmtfield.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
@@ -1336,6 +1338,51 @@ std::unique_ptr<UIObject> MetricFieldUIObject::create(vcl::Window* pWindow)
     MetricField* pMetricField = dynamic_cast<MetricField*>(pWindow);
     assert(pMetricField);
     return std::unique_ptr<UIObject>(new MetricFieldUIObject(pMetricField));
+}
+
+FormattedFieldUIObject::FormattedFieldUIObject(const VclPtr<FormattedField>& xFormattedField):
+    SpinFieldUIObject(xFormattedField),
+    mxFormattedField(xFormattedField)
+{
+}
+
+FormattedFieldUIObject::~FormattedFieldUIObject()
+{
+}
+
+void FormattedFieldUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "VALUE")
+    {
+        auto itPos = rParameters.find("VALUE");
+        if (itPos != rParameters.end())
+        {
+            mxFormattedField->SetValueFromString(itPos->second);
+        }
+    }
+    else
+        SpinFieldUIObject::execute(rAction, rParameters);
+}
+
+StringMap FormattedFieldUIObject::get_state()
+{
+    StringMap aMap = EditUIObject::get_state();
+    aMap["Value"] = OUString::number(mxFormattedField->GetValue());
+
+    return aMap;
+}
+
+OUString FormattedFieldUIObject::get_name() const
+{
+    return "FormattedFieldUIObject";
+}
+
+std::unique_ptr<UIObject> FormattedFieldUIObject::create(vcl::Window* pWindow)
+{
+    FormattedField* pFormattedField = dynamic_cast<FormattedField*>(pWindow);
+    assert(pFormattedField);
+    return std::unique_ptr<UIObject>(new FormattedFieldUIObject(pFormattedField));
 }
 
 TabControlUIObject::TabControlUIObject(const VclPtr<TabControl>& xTabControl):
