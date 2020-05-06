@@ -1699,6 +1699,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 {
                                     m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
                                 }
+                                else if (isNumberingViaStyle)
+                                {
+                                    uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+                                    m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                                    auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
+                                    bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                                    {
+                                        return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
+                                    });
+                                    if (bPrevParaAutoAfter)
+                                    {
+                                        // Previous after spacing is set to auto, set previous after space to 0.
+                                        m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
+                                    }
+                                }
                             }
                             if (pList->GetCurrentLevel())
                             {
