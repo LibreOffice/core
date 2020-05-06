@@ -13,7 +13,6 @@
 #include <config_poppler.h>
 #include <memory>
 #include <ostream>
-#include <utility>
 #include <sdpage.hxx>
 
 #include "sdmodeltestbase.hxx"
@@ -1366,10 +1365,10 @@ void SdImportTest::testPDFImport()
 
 void SdImportTest::testPDFImportSkipImages()
 {
-    auto pParams = std::make_unique<SfxAllItemSet>( SfxGetpApp()->GetPool() );
+    auto pParams = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
     pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, "SkipImages" ) );
 
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, std::move(pParams));
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
