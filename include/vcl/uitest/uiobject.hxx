@@ -404,6 +404,24 @@ protected:
     virtual OUString get_name() const override;
 };
 
+class FormattedFieldUIObject : public SpinFieldUIObject
+{
+    VclPtr<FormattedField> mxFormattedField;
+
+public:
+    FormattedFieldUIObject(const VclPtr<FormattedField>& xEdit);
+    virtual ~FormattedFieldUIObject() override;
+
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+    virtual OUString get_name() const override;
+};
+
 class TabControlUIObject final : public WindowUIObject
 {
 private:
