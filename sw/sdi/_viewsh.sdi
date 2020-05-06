@@ -647,6 +647,10 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin;
     ]
+    SID_PARAGRAPH_CHANGE_STATE // status()
+    [
+        ExecMethod = ExecTabWin;
+    ]
     // from here  Export = FALSE;
     FID_SEARCH_ON // status()
     [
