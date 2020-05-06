@@ -117,7 +117,7 @@ class OfficeDocument(object):
         xPeer = None
         try:
             xPeer = xToolkit.createWindow(aDescriptor)
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
 
         #define some further properties of the frame window

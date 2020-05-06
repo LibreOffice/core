@@ -213,7 +213,7 @@ class UnoDialog(object):
                 nUIColor = 0
                 try:
                     nUIColor = self.xVclWindowPeer.getProperty("DisplayBackgroundColor")
-                except IllegalArgumentException:
+                except Exception:
                     traceback.print_exc()
                     return False
 
