@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b0d1a800_d129104b",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-06T11:56:33Z",
+      "side": 1,
+      "message": "Heh: true can also mean not moved at all - when returning MoveFootnoteCntFwd. I wonder if that is a bug.",
+      "parentUuid": "e998f2b0_9254125b",
+      "revId": "f74cb2820acbf20d7a12d577e0c306a0753f1e63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55b2ef32_1cee391c",
         "filename": "sw/source/core/layout/flowfrm.cxx",
         "patchSetId": 2

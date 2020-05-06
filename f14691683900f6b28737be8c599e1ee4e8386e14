@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27f74124_27a24cf0",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-06T11:56:33Z",
+      "side": 0,
+      "message": "via cut and paste I presume. Worth specifying that here I think.",
+      "range": {
+        "startLine": 2031,
+        "startChar": 54,
+        "endLine": 2031,
+        "endChar": 64
+      },
+      "revId": "f14691683900f6b28737be8c599e1ee4e8386e14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
