@@ -7,10 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <test/bootstrapfixture.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -19,6 +16,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#include <vcl/BitmapBasicMorphologyFilter.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
 #include <BitmapSymmetryCheck.hxx>
 
@@ -29,15 +27,48 @@ namespace
 constexpr bool constWriteResultBitmap(false);
 constexpr bool constEnablePerformanceTest(false);
 
-class BitmapFilterTest : public CppUnit::TestFixture
+class BitmapFilterTest : public test::BootstrapFixture
 {
+public:
+    BitmapFilterTest()
+        : test::BootstrapFixture(true, false)
+    {
+    }
+
     void testBlurCorrectness();
+    void testBasicMorphology();
     void testPerformance();
 
     CPPUNIT_TEST_SUITE(BitmapFilterTest);
     CPPUNIT_TEST(testBlurCorrectness);
+    CPPUNIT_TEST(testBasicMorphology);
     CPPUNIT_TEST(testPerformance);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    OUString getFullUrl(const OUString& sFileName)
+    {
+        return m_directories.getURLFromSrc("vcl/qa/cppunit/data/") + sFileName;
+    }
+
+    BitmapEx loadBitmap(const OUString& sFileName)
+    {
+        Graphic aGraphic;
+        const OUString aURL(getFullUrl(sFileName));
+        SvFileStream aFileStream(aURL, StreamMode::READ);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+        return aGraphic.GetBitmapEx();
+    }
+
+    template <class BitmapT> // handle both Bitmap and BitmapEx
+    void savePNG(const OUString& sWhere, const BitmapT& rBmp)
+    {
+        SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.compressAsPNG(rBmp, aStream);
+    }
 };
 
 void BitmapFilterTest::testBlurCorrectness()
@@ -73,9 +104,7 @@ void BitmapFilterTest::testBlurCorrectness()
 
     if (constWriteResultBitmap)
     {
-        SvFileStream aStream("~/blurBefore.png", StreamMode::WRITE | StreamMode::TRUNC);
-        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(aBitmap24Bit, aStream);
+        savePNG("~/blurBefore.png", aBitmap24Bit);
     }
 
     // Perform blur
@@ -86,9 +115,7 @@ void BitmapFilterTest::testBlurCorrectness()
 
     if (constWriteResultBitmap)
     {
-        SvFileStream aStream("~/blurAfter.png", StreamMode::WRITE | StreamMode::TRUNC);
-        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(aBitmap24Bit, aStream);
+        savePNG("~/blurAfter.png", aBitmap24Bit);
     }
 
     // Check blurred bitmap parameters
@@ -104,6 +131,35 @@ void BitmapFilterTest::testBlurCorrectness()
         Bitmap::ScopedReadAccess aReadAccess(aBitmap24Bit);
         CPPUNIT_ASSERT_EQUAL(scanlineFormat, aReadAccess->GetScanlineFormat());
     }
+}
+
+void BitmapFilterTest::testBasicMorphology()
+{
+    const BitmapEx aOrigBitmap = loadBitmap("testBasicMorphology.png");
+    const BitmapEx aRefBitmapDilated1 = loadBitmap("testBasicMorphologyDilated1.png");
+    const BitmapEx aRefBitmapDilated1Eroded1 = loadBitmap("testBasicMorphologyDilated1Eroded1.png");
+    const BitmapEx aRefBitmapDilated2 = loadBitmap("testBasicMorphologyDilated2.png");
+    const BitmapEx aRefBitmapDilated2Eroded1 = loadBitmap("testBasicMorphologyDilated2Eroded1.png");
+
+    BitmapEx aTransformBitmap = aOrigBitmap;
+    BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(1));
+    if (constWriteResultBitmap)
+        savePNG("~/Dilated1.png", aTransformBitmap);
+    CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated1.GetChecksum(), aTransformBitmap.GetChecksum());
+    BitmapFilter::Filter(aTransformBitmap, BitmapErodeFilter(1));
+    if (constWriteResultBitmap)
+        savePNG("~/Dilated1Eroded1.png", aTransformBitmap);
+    CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated1Eroded1.GetChecksum(), aTransformBitmap.GetChecksum());
+
+    aTransformBitmap = aOrigBitmap;
+    BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(2));
+    if (constWriteResultBitmap)
+        savePNG("~/Dilated2.png", aTransformBitmap);
+    CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated2.GetChecksum(), aTransformBitmap.GetChecksum());
+    BitmapFilter::Filter(aTransformBitmap, BitmapErodeFilter(1));
+    if (constWriteResultBitmap)
+        savePNG("~/Dilated2Eroded1.png", aTransformBitmap);
+    CPPUNIT_ASSERT_EQUAL(aRefBitmapDilated2Eroded1.GetChecksum(), aTransformBitmap.GetChecksum());
 }
 
 void BitmapFilterTest::testPerformance()
