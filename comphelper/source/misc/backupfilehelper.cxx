@@ -1914,6 +1914,11 @@ namespace comphelper
                                                        "ForceOpenGL", "false"));
         xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/Misc",
                                                        "UseOpenCL", "false"));
+        // Do not disable Skia entirely, just force it's CPU-based raster mode.
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "ForceSkia", "false"));
+        xRootElement->appendChild(lcl_getConfigElement(xDocument, "/org.openoffice.Office.Common/VCL",
+                                                       "ForceSkiaRaster", "true"));
 
         // write back
         uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDocument, uno::UNO_QUERY);
