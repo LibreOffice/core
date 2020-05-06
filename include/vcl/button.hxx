@@ -283,6 +283,7 @@ private:
     bool            mbChecked;
     bool            mbRadioCheck;
     bool            mbStateChanged;
+    bool            mbUsesExplicitGroup;
     Link<RadioButton&,void> maToggleHdl;
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
@@ -317,7 +318,14 @@ protected:
     void            ImplAdjustNWFSizes() override;
 
 public:
-    explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
+    /*
+     bUsesExplicitGroup of true means that group() is used to set what radiobuttons are part of a group
+     while false means that contiguous radiobuttons are considered part of a group where WB_GROUP designates
+     the start of the group and all contiguous radiobuttons without WB_GROUP set form the rest of the group.
+
+     true is fairly straightforward, false leads to trick situations and is the legacy case
+    */
+    explicit        RadioButton(vcl::Window* pParent, bool bUsesExplicitGroup = true, WinBits nWinStyle = 0);
     virtual         ~RadioButton() override;
     virtual void    dispose() override;
 
