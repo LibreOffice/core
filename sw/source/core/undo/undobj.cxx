@@ -1535,13 +1535,18 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
     return node == rAnchorPos.nNode && rAnchorPos.nContent == 0;
 }
 
-static bool IsNotBackspaceHeuristic(
+static bool IsNotBackspaceHeuristic(const SwDoc& rDoc,
         SwPosition const& rStart, SwPosition const& rEnd)
 {
+    // avoid problems on exporting e.g. ooo24576-1.doc and ooo79410-1.sxw
+    // to odt
+    if (rDoc.getIDocumentRedlineAccess().IsRedlineMove())
+        return true;
     // check if the selection is backspace/delete created by DelLeft/DelRight
-    return rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex()
+    bool bRet = rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex()
         || rEnd.nContent != 0
         || rStart.nContent != rStart.nNode.GetNode().GetTextNode()->Len();
+    return bRet;
 }
 
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
@@ -1570,14 +1575,14 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
-                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                        && IsNotBackspaceHeuristic(*rAnchorPos.GetDoc(), rStart, rEnd))
                     || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection(rEnd)))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
-                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                        && IsNotBackspaceHeuristic(*rAnchorPos.GetDoc(), rStart, rEnd))
                     || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection(rStart)))));
 }
 
@@ -1612,14 +1617,14 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
-                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                        && IsNotBackspaceHeuristic(*rAnchorPos.GetDoc(), rStart, rEnd))
                     || IsAtStartOfSection(rStart))))
         && ((rAnchorPos.nNode < rEnd.nNode)
             || (rAnchorPos.nNode == rEnd.nNode
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
-                        && IsNotBackspaceHeuristic(rStart, rEnd))
+                        && IsNotBackspaceHeuristic(*rAnchorPos.GetDoc(), rStart, rEnd))
                     || IsAtEndOfSection(rEnd))));
 }
 

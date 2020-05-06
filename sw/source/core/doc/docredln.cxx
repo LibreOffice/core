@@ -1474,6 +1474,12 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
             }
         }
 
+        bool bSaveRdlMoveFlg = pDoc->getIDocumentRedlineAccess().IsRedlineMove();
+
+        // The IsRedlineMove() flag causes the behaviour of
+        // IsNotBackspaceHeuristic method to change,
+        pDoc->getIDocumentRedlineAccess().SetRedlineMove(true);
+
         if( pCSttNd && pCEndNd )
         {
             // #i100466# - force a <join next> on <delete and join> operation
@@ -1526,6 +1532,8 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         {
             pDoc->getIDocumentContentOperations().DeleteRange( aPam );
         }
+
+        pDoc->getIDocumentRedlineAccess().SetRedlineMove(bSaveRdlMoveFlg);
 
         if( pStt == GetPoint() )
             Exchange();
