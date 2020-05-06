@@ -153,32 +153,6 @@ javaFrameworkError jfw_startVM(
                 if (!aInfo)
                     return JFW_E_NO_SELECT;
 
-#ifdef _WIN32
-                //Because on Windows there is no system setting that we can use to determine
-                //if Assistive Technology Tool support is needed, we ship a .reg file that the
-                //user can use to create a registry setting. When the user forgets to set
-                //the key before he starts the office then a JRE may be selected without access bridge.
-                //When he later sets the key then we select a JRE with accessibility support but
-                //only if the user has not manually changed the selected JRE in the options dialog.
-                if (jfw::isAccessibilitySupportDesired())
-                {
-                    // If no JRE has been selected then we do not select one. This function shall then
-                    //return JFW_E_NO_SELECT
-                    if (aInfo &&
-                        (aInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
-                    {
-                        //has the user manually selected a JRE?
-                        if (settings.getJavaInfoAttrAutoSelect())
-                        {
-                            // if not then the automatism has previously selected a JRE
-                            //without accessibility support. We return JFW_E_NO_SELECT
-                            //to cause that we search for another JRE. The search code will
-                            //then prefer a JRE with accessibility support.
-                            return JFW_E_NO_SELECT;
-                        }
-                    }
-                }
-#endif
                 //check if the javavendors.xml has changed after a Java was selected
                 OString sVendorUpdate = jfw::getElementUpdated();
 
@@ -304,12 +278,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        sal_uInt64 nFeatureFlags = 0;
         std::unique_ptr<JavaInfo> aCurrentInfo;
-        //Determine if accessibility support is needed
-        bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
-        nFeatureFlags = bSupportAccessibility ?
-            JFW_FEATURE_ACCESSBRIDGE : 0;
 
 
         // 'bInfoFound' indicates whether a Java installation has been found
@@ -327,13 +296,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 aVendorSettings, &aCurrentInfo, infos)
             == javaPluginError::NONE)
         {
-            // compare features
-            // if the user does not require any features (nFeatureFlags = 0)
-            // or the Java installation provides all features, then this installation is used
-            if ((aCurrentInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
-            {
-                bInfoFound = true;
-            }
+            bInfoFound = true;
         }
 
         // if no Java installation providing all features was detected by using JAVA_HOME,
@@ -345,24 +308,9 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                     aVendorSettings, vecJavaInfosFromPath, infos)
                 == javaPluginError::NONE)
             {
-                for (auto & pJInfo: vecJavaInfosFromPath)
-                {
-                    // if the current Java installation implements all required features: use it
-                    if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
-                    {
-                        aCurrentInfo = std::move(pJInfo);
-                        bInfoFound = true;
-                        break;
-                    }
-                    else if (!aCurrentInfo)
-                    {
-                        // current Java installation does not provide all features
-                        // but no Java installation has been detected before
-                        // -> remember the current one until one is found
-                        // that provides all features
-                        aCurrentInfo = std::move(pJInfo);
-                    }
-                }
+                assert(!vecJavaInfosFromPath.empty());
+                aCurrentInfo = std::move(vecJavaInfosFromPath[0]);
+                bInfoFound = true;
             }
         }
 
@@ -382,27 +330,8 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
             if (plerr == javaPluginError::NONE)
             {
-                //iterate over all installations to find the best which has
-                //all features
-                for (auto & pJInfo: arInfos)
-                {
-                    // compare features
-                    // If the user does not require any features (nFeatureFlags = 0)
-                    // then the first installation is used
-                    if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
-                    {
-                        //the just found Java implements all required features
-                        //currently there is only accessibility!!!
-                        aCurrentInfo = std::move(pJInfo);
-                        break;
-                    }
-                    else if (!aCurrentInfo)
-                    {
-                        // We remember the first installation in aCurrentInfo if
-                        // no JavaInfo has been found before:
-                        aCurrentInfo = std::move(pJInfo);
-                    }
-                }
+                assert(!arInfos.empty());
+                aCurrentInfo = std::move(arInfos[0]);
             }
 
             if (!aCurrentInfo)
@@ -430,22 +359,10 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
                     if (aInfo)
                     {
-                        // compare features
-                        // If the user does not require any features (nFeatureFlags = 0)
-                        // then the first installation is used
-                        if ((aInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
-                        {
-                            //the just found Java implements all required features
-                            //currently there is only accessibility!!!
-                            aCurrentInfo = std::move(aInfo);
-                            break;
-                        }
-                        else if (!aCurrentInfo)
-                        {
-                            // We remember the very first installation in
-                            // aCurrentInfo:
-                            aCurrentInfo = std::move(aInfo);
-                        }
+                        //the just found Java implements all required features
+                        //currently there is only accessibility!!!
+                        aCurrentInfo = std::move(aInfo);
+                        break;
                     }
                 }//end iterate over paths
             }

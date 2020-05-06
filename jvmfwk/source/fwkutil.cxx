@@ -41,54 +41,6 @@ using namespace osl;
 namespace jfw
 {
 
-bool isAccessibilitySupportDesired()
-{
-#ifdef _WIN32
-    bool retVal = false;
-    HKEY    hKey = nullptr;
-    if (RegOpenKeyExA(HKEY_CURRENT_USER,
-                      "Software\\LibreOffice\\Accessibility\\AtToolSupport",
-                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        DWORD   dwType = 0;
-        DWORD   dwLen = 16;
-        unsigned char arData[16];
-        if( RegQueryValueExA(hKey, "SupportAssistiveTechnology", nullptr, &dwType, arData,
-                             &dwLen)== ERROR_SUCCESS)
-        {
-            if (dwType == REG_SZ)
-            {
-                arData[std::min(dwLen, DWORD(15))] = 0;
-                if (strcmp(reinterpret_cast<char*>(arData), "true") == 0
-                    || strcmp(reinterpret_cast<char*>(arData), "1") == 0)
-                    retVal = true;
-                else if (strcmp(reinterpret_cast<char*>(arData), "false") == 0
-                         || strcmp(reinterpret_cast<char*>(arData), "0") == 0)
-                    retVal = false;
-                else
-                    SAL_WARN("jfw", "bad registry value " << arData);
-            }
-            else if (dwType == REG_DWORD)
-            {
-                if (arData[0] == 1)
-                    retVal = true;
-                else if (arData[0] == 0)
-                    retVal = false;
-                else
-                    SAL_WARN(
-                        "jfw", "bad registry value " << unsigned(arData[0]));
-            }
-        }
-        RegCloseKey(hKey);
-    }
-#elif defined UNX
-    // Java is no longer required for a11y - we use atk directly.
-    bool retVal = false;
-#endif
-
-    return retVal;
-}
-
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
 {
     static const char EncodingTable[] =
