@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e0b718f_a64c131b",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-06T14:28:59Z",
+      "side": 1,
+      "message": "It seems, this is not related to the bug and its solution. Is this really needed, and the other similar changes?",
+      "range": {
+        "startLine": 809,
+        "startChar": 0,
+        "endLine": 813,
+        "endChar": 123
+      },
+      "revId": "2362660852aa6c34f34e1e7c5d429f202db0c751",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
