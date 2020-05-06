@@ -70,6 +70,10 @@ using com::sun::star::beans::theIntrospection;
 namespace pyuno
 {
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 static PyTypeObject RuntimeImpl_Type =
 {
     PyVarObject_HEAD_INIT (&PyType_Type, 0)
@@ -128,11 +132,14 @@ static PyTypeObject RuntimeImpl_Type =
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
 #if PY_VERSION_HEX >= 0x03080200
-    , 0 //Py_ssize_t tp_print
+    , nullptr //Py_ssize_t tp_print
 #endif
 #endif
 #endif
 };
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 /*----------------------------------------------------------------------
   Runtime implementation
