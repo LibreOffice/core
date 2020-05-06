@@ -536,6 +536,9 @@ class SfxStringItem;
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
+#define SID_PARAGRAPH_FIRST_LINE_INDENT                 ( SID_SVX_START + 588 )
+#define SID_PARAGRAPH_LEFT_INDENT                       ( SID_SVX_START + 589 )
+#define SID_PARAGRAPH_RIGHT_INDENT                      ( SID_SVX_START + 590 )
 
 // CAUTION! Range <591 .. 591> used by EditEngine (!)
 
@@ -645,7 +648,7 @@ class SfxStringItem;
 #define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
 #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
 //FREE
-//FREE
+#define SID_PARAGRAPH_CHANGE_STATE                      ( SID_SVX_START + 754 )
 //FREE
 //FREE
 //FREE
