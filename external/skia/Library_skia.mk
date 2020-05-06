@@ -22,6 +22,16 @@ $(eval $(call gb_Library_add_defs,skia,\
     -DSK_USER_CONFIG_HEADER="<$(BUILDDIR)/config_host/config_skia.h>" \
 ))
 
+# SK_DEBUG controls runtime checks and is controlled by config_skia.h and depends on DBG_UTIL.
+# This controls whether to build with compiler optimizations, normally yes, --enable-skia=debug
+# allows to build non-optimized. We normally wouldn't debug a 3rd-party library, and Skia
+# performance is relatively important (it may be the drawing engine used in software mode).
+ifeq ($(ENABLE_SKIA_DEBUG),)
+$(eval $(call gb_Library_add_cxxflags,skia, \
+    $(gb_COMPILEROPTFLAGS) \
+))
+endif
+
 ifeq ($(OS),WNT)
 # Skia can be built with or without UNICODE set, in LO sources we explicitly use the *W unicode
 # variants, so build Skia with UNICODE to make it also use the *W variants.
