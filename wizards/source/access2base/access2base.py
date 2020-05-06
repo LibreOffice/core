@@ -1247,7 +1247,7 @@ class _Dialog(_BasicObject):
         return self.W(_vbMethod, self.objectreference, 'EndExecute', returnvalue)
     def Execute(self):
         return self.W(_vbMethod, self.objectreference, 'Execute')
-    def Move(left = -1, top = -1, width = -1, height = -1):
+    def Move(self, left = -1, top = -1, width = -1, height = -1):
         return self.W(_vbMethod, self.objectreference, 'Move', left, top, width, height)
     def OptionGroup(self, groupname):
         return self.W(_vbMethod, self.objectreference, 'OptionGroup', groupname)
