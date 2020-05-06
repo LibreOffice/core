@@ -41,7 +41,7 @@ define gb_CObject__compiler
 			$(if $(filter %.c,$(2)), \
 				$(if $(3), $(3), $(gb_CC)), \
 				$(if $(filter -clr,$(1)), \
-					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,
+					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl, \
 						$(if $(3), $(3), $(gb_CXX))))))
 endef
 
@@ -57,10 +57,10 @@ define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(2),$(3),$(7))) \
+	$(call gb_CObject__compiler,$(2),$(3),$(7)) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
-		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
+		$(call gb_Helper_remove_overridden_flags, \
 			$(2) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
@@ -98,8 +98,8 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
-	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3),$(8))) \
-		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
+	$(call gb_CObject__compiler,$(4) $(5),$(3),$(8)) \
+		$(call gb_Helper_remove_overridden_flags, \
 			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
 		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \

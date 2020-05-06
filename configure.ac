@@ -3559,10 +3559,6 @@ if test "$_os" = "WINNT"; then
         CC=$MSVC_CXX
         CC_BASE=`first_arg_basename "$CC"`
     fi
-    if test "$BITNESS_OVERRIDE" = ""; then
-        dnl since MSVC 2012, default for x86 is -arch:SSE2:
-        MSVC_CXX="$MSVC_CXX -arch:SSE"
-    fi
     if test -z "$CXX"; then
         CXX=$MSVC_CXX
         CXX_BASE=`first_arg_basename "$CXX"`
@@ -3577,10 +3573,6 @@ if test "$_os" = "WINNT"; then
             if test -n "$VC_PRODUCT_DIR"; then
                 COMPATH=$VC_PRODUCT_DIR
             fi
-        fi
-        if test "$BITNESS_OVERRIDE" = ""; then
-            dnl since MSVC 2012, default for x86 is -arch:SSE2:
-            CC="$CC -arch:SSE"
         fi
 
         COMPATH="$COMPATH/Tools/MSVC/$vcbuildnumber"
@@ -6850,8 +6842,7 @@ else
     # MSVC seems to differentiate only between SSE and SSE2, where in fact
     # SSE2 seems to be SSE2+.
     # Even if -arch:SSE2 is the default, set it explicitly, so that the variable
-    # is not empty (and can be tested in gbuild), moreover we now default to SSE
-    # for 32bit x86.
+    # is not empty (and can be tested in gbuild).
     flag_sse2=-arch:SSE2
     flag_ssse3=-arch:SSE2
     flag_sse41=-arch:SSE2
@@ -11153,9 +11144,9 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
             AC_MSG_CHECKING([for clang-cl])
             if test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
                 CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
-                dnl match our MSVC default, also explicitly set -m32/-m64
+                dnl explicitly set -m32/-m64
                 if test "$BITNESS_OVERRIDE" = ""; then
-                    CLANG_CC="$CLANG_CC -m32 -arch:SSE"
+                    CLANG_CC="$CLANG_CC -m32"
                 else
                     CLANG_CC="$CLANG_CC -m64"
                 fi
