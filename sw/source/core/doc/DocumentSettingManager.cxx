@@ -619,7 +619,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
     // No mbSmallCapsPercentage66
     // No mbTabOverflow
-    // No mbUnbreakableNumberings
+    mbUnbreakableNumberings = rSource.mbUnbreakableNumberings;
     // No mbClippedPictures
     // No mbBackgroundParaOverDrawings
     mbTabOverMargin = rSource.mbTabOverMargin;
