@@ -796,17 +796,17 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         }
     }
     while (!unres.empty()) {
-        bool isResolved = false;
+        bool resolved = false;
         for (UnresolvedVector::iterator i(unres.begin()); i != unres.end();) {
             if (i->manager->parse(&existingDeps)) {
                 processedDeps.insert(i->name);
                 i = unres.erase(i);
-                isResolved = true;
+                resolved = true;
             } else {
                 ++i;
             }
         }
-        if (!isResolved) {
+        if (!resolved) {
             throw css::uno::RuntimeException(
                 "xcd: unresolved dependencies in " + url);
         }
