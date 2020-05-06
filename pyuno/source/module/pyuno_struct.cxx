@@ -290,6 +290,10 @@ static PyMethodDef PyUNOStructMethods[] =
     {nullptr,         nullptr,                                              0,            nullptr}
 };
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 static PyTypeObject PyUNOStructType =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
@@ -348,11 +352,14 @@ static PyTypeObject PyUNOStructType =
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
 #if PY_VERSION_HEX >= 0x03080200
-    , 0 //Py_ssize_t tp_print
+    , nullptr //Py_ssize_t tp_print
 #endif
 #endif
 #endif
 };
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 int PyUNOStruct_initType()
 {
