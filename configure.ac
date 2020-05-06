@@ -1076,7 +1076,7 @@ libo_FUZZ_ARG_ENABLE(pdfium,
 
 libo_FUZZ_ARG_ENABLE(skia,
     AS_HELP_STRING([--disable-skia],
-        [Disable building Skia.])
+        [Disable building Skia. Use --enable-skia=debug to build without optimizations.])
 )
 
 ###############################################################################
@@ -11119,7 +11119,13 @@ AC_SUBST(POPPLER_LIBS)
 AC_MSG_CHECKING([whether to build Skia])
 ENABLE_SKIA=
 if test "$enable_skia" != "no" -a "$build_skia" = "yes"; then
-    AC_MSG_RESULT([yes])
+    if test "$enable_skia" = "debug"; then
+        AC_MSG_RESULT([yes (debug)])
+        ENABLE_SKIA_DEBUG=TRUE
+    else
+        AC_MSG_RESULT([yes])
+        ENABLE_SKIA_DEBUG=
+    fi
     ENABLE_SKIA=TRUE
     AC_DEFINE(HAVE_FEATURE_SKIA)
     BUILD_TYPE="$BUILD_TYPE SKIA"
@@ -11127,6 +11133,7 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SKIA)
+AC_SUBST(ENABLE_SKIA_DEBUG)
 
 CLANG_CXXFLAGS_INTRINSICS_SSE2=
 CLANG_CXXFLAGS_INTRINSICS_SSSE3=
