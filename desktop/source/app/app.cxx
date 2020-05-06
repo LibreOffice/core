@@ -518,8 +518,8 @@ void Desktop::Init()
 
     if ( true )
     {
-        // start ipc thread only for non-remote offices
-        RequestHandler::Status aStatus = RequestHandler::Enable(true);
+        // start ipc thread only for non-remote offices (and don't setup pipe here)
+        RequestHandler::Status aStatus = RequestHandler::Enable(false);
         if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
         {
 #if defined ANDROID
