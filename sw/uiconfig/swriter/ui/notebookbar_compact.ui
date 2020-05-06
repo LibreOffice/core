@@ -105,14 +105,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-OpenFromWriter">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenFromWriter</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-OpenRemote">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenRemote</property>
       </object>
@@ -139,28 +137,24 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-AutoPilotMenu">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AutoPilotMenu</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-OpenTemplate">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenTemplate</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveAsTemplate">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAsTemplate</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-NewDoc">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NewDoc</property>
       </object>
@@ -173,14 +167,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-Reload">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Reload</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-VersionDialog">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:VersionDialog</property>
       </object>
@@ -214,14 +206,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveACopy">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveACopy</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SaveAll">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SaveAll</property>
       </object>
@@ -241,21 +231,18 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CheckOut">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CheckOut</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CancelCheckOut">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CancelCheckOut</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CheckIn">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CheckIn</property>
       </object>
@@ -282,7 +269,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-ExportDirectToPDF">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExportDirectToPDF</property>
       </object>
@@ -296,7 +282,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-ExportDirectToEPUB">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExportDirectToEPUB</property>
       </object>
@@ -316,14 +301,12 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SendMailDocAsOOo">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendMailDocAsOOo</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SendMailDocAsMS">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendMailDocAsMS</property>
       </object>
@@ -344,42 +327,36 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-NewGlobalDoc1">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NewGlobalDoc</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-NewHtmlDoc">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NewHtmlDoc</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SendOutlineToStarImpress">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendOutlineToStarImpress</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SendOutlineToClipboard">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendOutlineToClipboard</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-CreateAbstract">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CreateAbstract</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-SendAbstractToStarImpress">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendAbstractToStarImpress</property>
       </object>
@@ -392,7 +369,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-WebHtml">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WebHtml</property>
       </object>
@@ -413,7 +389,6 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="MenuFile-Print">
-        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Print</property>
       </object>
@@ -2786,6 +2761,16 @@
                                 <property name="homogeneous">False</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkToolButton" id="Files-ExportToPDF">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ExportToPDF</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2819,6 +2804,16 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExportDirectToEPUB</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="Files-ExportToEPUB">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ExportToEPUB</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
