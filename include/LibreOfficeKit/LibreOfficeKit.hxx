@@ -780,6 +780,16 @@ public:
         mpDoc->pClass->setWindowTextSelection(mpDoc, nWindowId, bSwap, nX, nY);
     }
 
+    /**
+     * Posts an event for the form field at the cursor position.
+     *
+     * @param pArguments arguments of the event.
+     */
+    void sendFormFieldEvent(const char* pArguments)
+    {
+        mpDoc->pClass->sendFormFieldEvent(mpDoc, pArguments);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
