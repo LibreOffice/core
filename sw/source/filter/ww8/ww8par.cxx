@@ -1936,8 +1936,11 @@ void SwWW8ImplReader::ImportDop()
         }
     }
 
-    // Still allow editing of form fields.
-    if (!m_xWDop->fProtEnabled)
+    // The password can force read-only, comments-only, fill-in-form-only, or require track-changes.
+    // Treat comments-only like read-only since Writer has no support for that.
+    // Still allow editing of form fields, without requiring the password.
+    // Still allow editing if track-changes is locked on. (Currently LockRev is ignored/lost on export anyway.)
+    if (!m_xWDop->fProtEnabled && !m_xWDop->fLockRev)
         m_pDocShell->SetModifyPasswordHash(m_xWDop->lKeyProtDoc);
     else if ( xDocProps.is() )
     {
