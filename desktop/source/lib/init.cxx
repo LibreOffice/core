@@ -1143,6 +1143,10 @@ static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowI
                              const int nWidth, const int nHeight);
 
 static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex);
+
+
+static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
+                                   const char* pArguments);
 } // extern "C"
 
 namespace {
@@ -1256,6 +1260,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->createViewWithOptions = doc_createViewWithOptions;
         m_pDocumentClass->completeFunction = doc_completeFunction;
+
+        m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5538,6 +5544,33 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex)
     }
 
     pDoc->completeFunction(nIndex);
+}
+
+
+static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+{
+    SolarMutexGuard aGuard;
+
+    // Supported in Writer only
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+            return;
+
+    StringMap aMap(jsonToStringMap(pArguments));
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering!");
+        return;
+    }
+
+    // Sanity check
+    if (aMap.find("type") == aMap.end() || aMap.find("cmd") == aMap.end())
+    {
+        SetLastExceptionMsg("Wrong arguments for sendFormFieldEvent!");
+        return;
+    }
+
+    pDoc->executeFromFieldEvent(aMap);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

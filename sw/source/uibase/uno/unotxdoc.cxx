@@ -181,6 +181,7 @@
 #include <fchrfmt.hxx>
 #include <redline.hxx>
 #include <DocumentRedlineManager.hxx>
+#include <xmloff/odffields.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -3389,6 +3390,41 @@ OUString SwXTextDocument::getPostIts()
     boost::property_tree::write_json(aStream, aTree);
 
     return OUString::fromUtf8(aStream.str().c_str());
+}
+
+void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
+{
+    auto aIter = aArguments.find("type");
+    if (aIter != aArguments.end() && aIter->second == "drop-down")
+    {
+        aIter = aArguments.find("cmd");
+        if (aIter != aArguments.end() && aIter->second == "selected")
+        {
+            aIter = aArguments.find("data");
+            if (aIter != aArguments.end())
+            {
+                sal_Int32 nSelection = aIter->second.toInt32();
+                SwPosition aPos(*pDocShell->GetWrtShell()->GetCursor()->GetPoint());
+                sw::mark::IFieldmark* pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                if ( !pFieldBM )
+                {
+                    --aPos.nContent;
+                    pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
+                    if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
+                    {
+                        if (nSelection >= 0)
+                        {
+                            OUString sKey = ODF_FORMDROPDOWN_RESULT;
+                            (*pFieldBM->GetParameters())[sKey] <<= nSelection;
+                            pFieldBM->Invalidate();
+                            pDocShell->GetWrtShell()->SetModified();
+                            pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 int SwXTextDocument::getPart()

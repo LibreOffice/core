@@ -44,6 +44,9 @@ namespace vcl
 class VCL_DLLPUBLIC ITiledRenderable
 {
 public:
+
+    typedef std::map<const OUString, OUString>  StringMap;
+
     virtual ~ITiledRenderable();
 
     /**
@@ -285,6 +288,14 @@ public:
 
     /// @see lok::Document::completeFunction().
     virtual void completeFunction(int /*nIndex*/)
+    {
+    }
+
+    /**
+     * Execute a form field event in the document.
+     * E.g. select an item from a drop down field's list.
+     */
+    virtual void executeFromFieldEvent(const StringMap&)
     {
     }
 };
