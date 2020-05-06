@@ -19,7 +19,6 @@
 
 #include <svx/svdobj.hxx>
 #include <comphelper/lok.hxx>
-#include <editeng/charhiddenitem.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
 #include <tabcol.hxx>
@@ -500,48 +499,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
         pFlyFormat = GetDoc()->InsertLabel(eType, rText, rSeparator,
                                            rNumberSeparator, bBefore, nId,
                                            nIdx, rCharacterStyle, bCpyBrd);
-
-        //if we succeeded in putting a caption on the content, and the
-        //content was a frame/graphic, then set the contained element
-        //to as-char anchoring because that's all msword is able to
-        //do when inside a frame, and in writer for freshly captioned
-        //elements it's largely irrelevant what the anchor of the contained
-        //type is but making it as-char by default results in very
-        //good roundtripping
-        if (pFlyFormat && bInnerCntIsFly)
-        {
-            SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
-            SwTextNode *pTextNode = aAnchIdx.GetNode().GetTextNode();
-
-            SwFormatAnchor aAnc(RndStdIds::FLY_AS_CHAR);
-            sal_Int32 nInsertPos = bBefore ? pTextNode->Len() : 0;
-            SwPosition aPos(*pTextNode, nInsertPos);
-
-            aAnc.SetAnchor(&aPos);
-
-            SwFlyFrame *pFly = GetSelectedOrCurrFlyFrame();
-            OSL_ENSURE(pFly, "SetFlyFrameAttr, no Fly selected.");
-            if (pFly)
-            {
-                SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
-                SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
-                GetDoc()->SetFlyFrameAttr(*pInnerFlyFormat, aSet);
-            }
-            //put a hard-break after the graphic to keep it separated
-            //from the caption text if the outer frame is resized
-            const sal_Int32 nIndex = bBefore ? nInsertPos : 1;
-            SwIndex aIdx(pTextNode, nIndex);
-            pTextNode->InsertText("\n", aIdx);
-            //set the hard-break to be hidden, otherwise it has
-            //non-zero width in word and so hard-break flows on
-            //the next line, pushing the caption text out of
-            //the frame making the caption apparently disappear
-            SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-            SfxItemSet aSet(GetDoc()->GetAttrPool(), {{aHidden.Which(), aHidden.Which()}});
-            aSet.Put(aHidden);
-            SwPaM aPam(*pTextNode, nIndex, *pTextNode, nIndex + 1);
-            SetAttrSet(aSet, SetAttrMode::DEFAULT, &aPam);
-        }
     }
 
     if (pFlyFormat)
