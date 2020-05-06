@@ -2150,6 +2150,10 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         return aGroup;
     }
 
+    std::vector<VclPtr<RadioButton>> aGroup;
+    if (mbUsesExplicitGroup)
+        return aGroup;
+
     //old-school
 
     // go back to first in group;
@@ -2162,7 +2166,6 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         else
             break;
     }
-    std::vector< VclPtr<RadioButton> > aGroup;
     // insert radiobuttons up to next group
     do
     {
@@ -2223,8 +2226,9 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     mbStateChanged = false;
 }
 
-RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WindowType::RADIOBUTTON )
+RadioButton::RadioButton(vcl::Window* pParent, bool bUsesExplicitGroup, WinBits nStyle)
+    : Button(WindowType::RADIOBUTTON)
+    , mbUsesExplicitGroup(bUsesExplicitGroup)
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
