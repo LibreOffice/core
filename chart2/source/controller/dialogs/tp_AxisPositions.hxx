@@ -41,6 +41,7 @@ public:
     void SetCategories( const css::uno::Sequence< OUString >& rCategories );
 
     void SupportAxisPositioning( bool bSupportAxisPositioning );
+    void SupportCategoryPositioning( bool bSupportCategoryPositioning );
 
 private: //methods:
     DECL_LINK(CrossesAtSelectHdl, weld::ComboBox&, void);
@@ -53,12 +54,17 @@ private: //member:
     css::uno::Sequence< OUString > m_aCategories;
 
     bool    m_bSupportAxisPositioning;
+    bool    m_bSupportCategoryPositioning;
 
     std::unique_ptr<weld::Frame> m_xFL_AxisLine;
     std::unique_ptr<weld::ComboBox> m_xLB_CrossesAt;
     std::unique_ptr<weld::FormattedSpinButton> m_xED_CrossesAt;
     std::unique_ptr<weld::ComboBox> m_xED_CrossesAtCategory;
     std::unique_ptr<weld::CheckButton> m_xCB_AxisBetweenCategories;
+
+    std::unique_ptr<weld::Frame> m_xFL_Position;
+    std::unique_ptr<weld::RadioButton> m_xRB_On;
+    std::unique_ptr<weld::RadioButton> m_xRB_Between;
 
     std::unique_ptr<weld::Frame> m_xFL_Labels;
     std::unique_ptr<weld::ComboBox> m_xLB_PlaceLabels;

@@ -364,6 +364,10 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         }
         break;
 
+        case SCHATTR_AXIS_SHIFTED_CATEGORY_POSITION:
+            rOutItemSet.Put(SfxBoolItem(nWhichId, rScale.ShiftedCategoryPosition));
+        break;
+
         case SCHATTR_AXIS_LABEL_POSITION:
         {
             css::chart::ChartAxisLabelPosition ePos( css::chart::ChartAxisLabelPosition_NEAR_AXIS );
@@ -806,6 +810,18 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         }
         break;
 
+        case SCHATTR_AXIS_SHIFTED_CATEGORY_POSITION:
+        {
+            bool bNewValue = static_cast<const SfxBoolItem &> (rItemSet.Get(nWhichId)).GetValue();
+            bool bOldValue = aScale.ShiftedCategoryPosition;
+            if (bOldValue != bNewValue)
+            {
+                aScale.ShiftedCategoryPosition = bNewValue;
+                bSetScale = true;
+            }
+        }
+        break;
+
         case SCHATTR_AXIS_LABEL_POSITION:
         {
             css::chart::ChartAxisLabelPosition ePos =
@@ -960,6 +976,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             }
         }
         break;
+
     }
 
     if( bSetScale )
