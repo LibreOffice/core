@@ -243,6 +243,7 @@ public:
 
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
+    void testTdf131536();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
@@ -388,6 +389,7 @@ public:
 #endif
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
+    CPPUNIT_TEST(testTdf131536);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
@@ -3826,6 +3828,23 @@ void ScFiltersTest::testBackgroundColorStandardXLSXML()
     }
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf131536()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf131536.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load named-exp-global.xml", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScAddress aPos(3,9,0);
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
+    ASSERT_FORMULA_EQUAL(rDoc, aPos, "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),\"\"),2,4)"
+                                     "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"\"),4))", nullptr);
+
+    ScAddress aPos2(4,9,0);
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos2));
+    ASSERT_FORMULA_EQUAL(rDoc, aPos2, "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),\"0\"),2,4)"
+                                      "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"0\"),4))", nullptr);
 }
 
 void ScFiltersTest::testNamedExpressionsXLSXML()
