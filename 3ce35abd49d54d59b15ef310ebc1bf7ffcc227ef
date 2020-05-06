@@ -216,6 +216,24 @@
     },
     {
       "key": {
+        "uuid": "90cdf1b0_1b6c972e",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-06T07:19:31Z",
+      "side": 1,
+      "message": "\u003e \u003e So in the final patch set there would be implementations of scrollSubstringTo that return false not because (as is apparently the case with the current patch set) they have not been implemented yet in this work-in-progress change, but because they call into some \"platform layer\" which in turn returns some \"not implemented\" indicator?\n\u003e \n\u003e No, it\u0027d be the same as in the current state of the patch: the platform accessibility layer (gtk3atktext.cxx) calls into the internal API which this patch implements only for some elements, and the other currently are stubs and return false.  What we need is for gtk3atktext.cxx\u0027s `text_wrapper_scroll_substring_to()` to be able to return `FALSE` when it didn\u0027t perform the request for some reason (e.g., not implemented).\n\n\"and the other currently are stubs and return false\":  Which is a bug that needs fixing?\n\n(Asking because if it is a bug, we don\u0027t need \"gtk3atktext.cxx\u0027s `text_wrapper_scroll_substring_to()` to be able to return `FALSE` when it didn\u0027t perform the request [because of] not implemented\", so we wouldn\u0027t need this scrollSubstringTo\u0027s boolean return type.)",
+      "parentUuid": "fb990c6f_a922cac6",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38b1ce52_0cafe840",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
