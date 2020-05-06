@@ -14,6 +14,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <wrtsh.hxx>
+
 namespace
 {
 char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data3/";
@@ -687,6 +689,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
 
     CPPUNIT_ASSERT(xCellB1->getString().endsWith("test1"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132637_protectTrackChanges)
+{
+    load(DATA_DIRECTORY, "tdf132637_protectTrackChanges.doc");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // The password should only prevent turning off track changes, not open as read-only
+    CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsReadOnly());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
