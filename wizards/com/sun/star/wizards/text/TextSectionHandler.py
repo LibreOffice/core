@@ -96,7 +96,7 @@ class TextSectionHandler(object):
             xSecondTextCursor = self.xText.createTextCursor()
             xSecondTextCursor.gotoEnd(False)
             insertTextSection(GroupName, TemplateName, xSecondTextCursor)
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
 
     def insertTextSection(self, sectionName, templateName, position):

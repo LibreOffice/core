@@ -373,7 +373,7 @@ class AgendaDocument(TextDocument):
                 self.teLocation.placeHolderText = self.agenda.cp_Location
                 self.teLocation.write(self.trLocation)
             else:
-                raise IllegalArgumentException ("No such title control...")
+                raise Exception("No such title control...")
         except Exception:
             traceback.print_exc()
 
