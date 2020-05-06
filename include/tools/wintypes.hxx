@@ -69,6 +69,7 @@ enum class WindowType : sal_uInt16
     PATTERNFIELD         ,
     NUMERICFIELD         , // 40 (344)
     METRICFIELD          ,
+    FORMATTEDFIELD       ,
     CURRENCYFIELD        ,
     DATEFIELD            ,
     TIMEFIELD            ,
