@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a26ba09b_0ac865b9",
+        "filename": "bean/test/applet/oooapplet/makefile.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-06T07:48:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07c8c4bf_7f09b18e",
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aff07b2e_1dba8e7c",
         "filename": "ridljar/Jar_libreoffice.mk",
         "patchSetId": 2
@@ -132,6 +150,30 @@
     },
     {
       "key": {
+        "uuid": "c7cd4646_d31a4687",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-06T07:48:29Z",
+      "side": 1,
+      "message": "But it is still unclear what this gb_Jar_use_internal_comprehensive_api (to which it was changed in patch set 3) is supposed to be good for.  AFAIS, gb_Jar_use_internal_comprehensive_api is not defined anywhere?",
+      "parentUuid": "96543269_d27ce15e",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 10
+      },
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29b443ef_93b2e375",
         "filename": "unotest/Jar_test.mk",
         "patchSetId": 2
@@ -161,6 +203,24 @@
       "side": 1,
       "message": "Is that necessary? I saw everywhere else just the jar name, so I thought this was unintentional.",
       "parentUuid": "29b443ef_93b2e375",
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57df7b70_4b663fee",
+        "filename": "unotest/Jar_test.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-06T07:48:29Z",
+      "side": 1,
+      "message": "this jar goes to workdir/Jar/, not instdir/program/classes/, so a relative URL of just \"libreoffice.jar\" is wrong",
+      "parentUuid": "7e63ed2c_98aae93c",
       "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
