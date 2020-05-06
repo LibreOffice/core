@@ -41,8 +41,6 @@ SdrGlowAttribute& SdrGlowAttribute::operator=(SdrGlowAttribute&&) = default;
 
 bool SdrGlowAttribute::operator==(const SdrGlowAttribute& rCandidate) const
 {
-    if (rCandidate.isDefault() != isDefault())
-        return false;
     return m_nRadius == rCandidate.m_nRadius && m_color == rCandidate.m_color;
 }
 
