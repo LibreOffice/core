@@ -27,10 +27,7 @@ SdrGlowAttribute::SdrGlowAttribute(sal_Int32 nRadius, const basegfx::BColor& rCo
 {
 }
 
-SdrGlowAttribute::SdrGlowAttribute()
-    : m_nRadius(0)
-{
-}
+SdrGlowAttribute::SdrGlowAttribute() = default;
 
 SdrGlowAttribute::SdrGlowAttribute(const SdrGlowAttribute&) = default;
 
