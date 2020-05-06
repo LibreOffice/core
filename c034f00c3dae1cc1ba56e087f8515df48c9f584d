@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1b38b6c_4d2b96b6",
+        "filename": "xmloff/source/draw/sdpropls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-06T14:02:40Z",
+      "side": 1,
+      "message": "I see, you mean your changes to this and following names.",
+      "range": {
+        "startLine": 156,
+        "startChar": 134,
+        "endLine": 156,
+        "endChar": 156
+      },
+      "revId": "c034f00c3dae1cc1ba56e087f8515df48c9f584d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
