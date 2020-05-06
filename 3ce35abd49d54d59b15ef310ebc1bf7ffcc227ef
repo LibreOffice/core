@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "4a8ab290_5f349e33",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-06T09:38:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d00d87d_fc9c18ec",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "163f6d2a_871d47a7",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 2
@@ -228,6 +246,24 @@
       "side": 1,
       "message": "\u003e \u003e So in the final patch set there would be implementations of scrollSubstringTo that return false not because (as is apparently the case with the current patch set) they have not been implemented yet in this work-in-progress change, but because they call into some \"platform layer\" which in turn returns some \"not implemented\" indicator?\n\u003e \n\u003e No, it\u0027d be the same as in the current state of the patch: the platform accessibility layer (gtk3atktext.cxx) calls into the internal API which this patch implements only for some elements, and the other currently are stubs and return false.  What we need is for gtk3atktext.cxx\u0027s `text_wrapper_scroll_substring_to()` to be able to return `FALSE` when it didn\u0027t perform the request for some reason (e.g., not implemented).\n\n\"and the other currently are stubs and return false\":  Which is a bug that needs fixing?\n\n(Asking because if it is a bug, we don\u0027t need \"gtk3atktext.cxx\u0027s `text_wrapper_scroll_substring_to()` to be able to return `FALSE` when it didn\u0027t perform the request [because of] not implemented\", so we wouldn\u0027t need this scrollSubstringTo\u0027s boolean return type.)",
       "parentUuid": "fb990c6f_a922cac6",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5976302b_57feca8e",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2020-05-06T09:38:30Z",
+      "side": 1,
+      "message": "\u003e \"and the other currently are stubs and return false\":  Which is a bug that needs fixing?\n\nWell, in a perfect world, everything would be implemented perfectly; yet it\u0027s already very useful if only some parts do.\n\nThis said, I think there are items where it\u0027s either not needed (VCLXAccessibleToolBoxItem?  VCLXAccessibleMenuItem?) or even not relevant (SwAccessibleNoTextFrame -- though, I\u0027m not sure what that actually is, implementing XAccessibleText with only stubs, and being called NoText…).  So there it might actually really make sense to say it\u0027s not implemented.\n\n\u003e (Asking because if it is a bug, we don\u0027t need \"gtk3atktext.cxx\u0027s `text_wrapper_scroll_substring_to()` to be able to return `FALSE` when it didn\u0027t perform the request [because of] not implemented\", so we wouldn\u0027t need this scrollSubstringTo\u0027s boolean return type.)\n\nWell, yes, would it all actually be implemented properly, `text_wrapper_scroll_substring_to()` could simply always return TRUE.  But then it has to be able to trust it\u0027s actually always implemented, because clients using ATK also receive `FALSE` if the application behind didn\u0027t implement the method itself: e.g. currently (without this patch) a client calling `atk_text_scroll_substring_to()` on LO would get a `FALSE` return value because LO doesn\u0027t yet implement this part of the AtkText interface, so that client would know it shouldn\u0027t expect the action to have been preformed.  And this is useful info.\n\nSo to summarize, `text_wrapper_scroll_substring_to()` *must* return `FALSE` if it didn\u0027t perform the request.  We have 2 ways of achieving this:\n1. Implement `XAccessibleText::scrollSubstringTo()` properly everywhere, so that it actually sensibly acts upon each request (thus `text_wrapper_scroll_substring_to()` never has to return `FALSE`).\n2. Have a mean to report to a caller of `XAccessibleText::scrollSubstringTo()` that the request was not honored (so `text_wrapper_scroll_substring_to()` can detect this case and return `FALSE`).\n\nI don\u0027t think the first option is totally realistic, although it\u0027d be marvelous everything worked perfectly.  Not only I\u0027m not likely gonna be able to properly implement it for all the current 18+ implementors of the XAccessibleText interface (time, complexity and lack of familiarity with LO codebase are (sad) reasons I can think of), but I\u0027m afraid as time passes and possibly more XAccessibleText implementations spawn they might not get a perfect implementation of everything, and being able to properly and easily tell \"not implemented\" is better than having non-implementations silently ignoring the request (as, as said above, end users of the ATK interface need to know), or worse, make the entry barrier of implementing XAccessibleText so high that it just ends up being completely left out.\n\nAll this (but the ATK requirements maybe, although it\u0027s sightly outside the scope of the internal API) are not real arguments for designing the interface from a semantic perspective, I get that.  But I think it makes sense from a pragmatic point of view: the world is not perfect, so we have to know whether we hit a sweet spot or not.\n\nIn the end, I really think we do need to be able to convey that the request wasn\u0027t performed, even if I can\u0027t think of a technical reason why it *could not* be made to work (I would expect to be able to get *all* scrolled-off parts of the UI visible in some way, even if if might not be straightforward to do so).\nWhether this info is conveyed by a return value or an exception, I really don\u0027t care much (even if my C heart leans towards a return value, and existing methods also seem to use this), and I have already both implementations at hand (the exception one throws NoSupportException as it seemed the best match to me, but I can change that as well).",
+      "parentUuid": "90cdf1b0_1b6c972e",
       "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
