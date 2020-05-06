@@ -659,20 +659,14 @@ void Components::parseFileLeniently(
 
 void Components::parseFiles(
     int layer, OUString const & extension, FileParser * parseFile,
-    OUString const & url, bool recursive)
+    OUString const & url, bool)
 {
     osl::Directory dir(url);
     switch (dir.open()) {
     case osl::FileBase::E_None:
         break;
-    case osl::FileBase::E_NOENT:
-        if (!recursive) {
-            return;
-        }
-        [[fallthrough]];
     default:
-        throw css::uno::RuntimeException(
-            "cannot open directory " + url);
+        return;
     }
     for (;;) {
         osl::DirectoryItem i;
@@ -743,11 +737,8 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
     switch (dir.open()) {
     case osl::FileBase::E_None:
         break;
-    case osl::FileBase::E_NOENT:
-        return;
     default:
-        throw css::uno::RuntimeException(
-            "cannot open directory " + url);
+        return;
     }
     UnresolvedVector unres;
     std::set< OUString > existingDeps;
