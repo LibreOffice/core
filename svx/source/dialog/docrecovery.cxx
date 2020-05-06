@@ -586,6 +586,9 @@ SaveProgressDialog::SaveProgressDialog(weld::Window* pParent, RecoveryCore* pCor
 
 SaveProgressDialog::~SaveProgressDialog()
 {
+    css::uno::Reference<css::lang::XComponent> xComp(m_xProgress, css::uno::UNO_QUERY);
+    if (xComp)
+        xComp->dispose();
 }
 
 short SaveProgressDialog::run()
@@ -685,6 +688,9 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
 
 RecoveryDialog::~RecoveryDialog()
 {
+    css::uno::Reference<css::lang::XComponent> xComp(m_xProgress, css::uno::UNO_QUERY);
+    if (xComp)
+        xComp->dispose();
 }
 
 short RecoveryDialog::execute()
