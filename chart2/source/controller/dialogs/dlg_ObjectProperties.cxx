@@ -98,6 +98,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bSupportingAxisPositioning(false)
         , m_bShowAxisOrigin(false)
         , m_bIsCrossingAxisIsCategoryAxis(false)
+        , m_bSupportingCategoryPositioning(false)
         , m_aCategories()
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
@@ -162,20 +163,6 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 if( aData.AxisType != chart2::AxisType::SERIES )
                     m_bHasNumberProperties = true;
 
-                sal_Int32 nCooSysIndex=0;
-                sal_Int32 nDimensionIndex=0;
-                sal_Int32 nAxisIndex=0;
-                if( AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex ) )
-                {
-                    xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
-                    //show positioning controls only if they make sense
-                    m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
-
-                    //show axis origin only for secondary y axis
-                    if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
-                        m_bShowAxisOrigin = true;
-                }
-
                 //is the crossing main axis a category axes?:
                 uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
                 uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
@@ -191,14 +178,30 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     }
                 }
 
-                m_bComplexCategoriesAxis = false;
-                if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
+                sal_Int32 nCooSysIndex=0;
+                sal_Int32 nDimensionIndex=0;
+                sal_Int32 nAxisIndex=0;
+                if( AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex ) )
                 {
-                    ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-                    if (pModel)
+                    xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
+                    //show positioning controls only if they make sense
+                    m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
+
+                    //show axis origin only for secondary y axis
+                    if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
+                        m_bShowAxisOrigin = true;
+
+                    if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
                     {
-                        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
-                        m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
+                        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+                        if (pModel)
+                        {
+                            ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
+                            m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
+                        }
+
+                        if (!m_bComplexCategoriesAxis)
+                            m_bSupportingCategoryPositioning = ChartTypeHelper::isSupportingCategoryPositioning( xChartType, nDimensionCount );
                     }
                 }
             }
@@ -547,6 +550,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
                 pPage->SetCategories( m_pParameter->GetCategories() );
             }
             pPage->SupportAxisPositioning( m_pParameter->IsSupportingAxisPositioning() );
+            pPage->SupportCategoryPositioning( m_pParameter->IsSupportingCategoryPositioning() );
         }
     }
     else if (rId == "scale")

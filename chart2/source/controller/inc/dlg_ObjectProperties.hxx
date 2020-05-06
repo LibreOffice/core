@@ -55,6 +55,7 @@ public:
     bool IsSupportingAxisPositioning() const { return m_bSupportingAxisPositioning;}
     bool ShowAxisOrigin() const { return m_bShowAxisOrigin;}
     bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
+    bool IsSupportingCategoryPositioning() const { return m_bSupportingCategoryPositioning;}
     const css::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
     const css::uno::Reference< css::chart2::XChartDocument >&
@@ -89,6 +90,7 @@ private:
     bool m_bSupportingAxisPositioning;
     bool m_bShowAxisOrigin;
     bool m_bIsCrossingAxisIsCategoryAxis;
+    bool m_bSupportingCategoryPositioning;
     css::uno::Sequence< OUString > m_aCategories;
 
     css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
