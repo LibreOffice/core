@@ -98,6 +98,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bSupportingAxisPositioning(false)
         , m_bShowAxisOrigin(false)
         , m_bIsCrossingAxisIsCategoryAxis(false)
+        , m_bSupportingCategoryPositioning(false)
         , m_aCategories()
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
@@ -170,6 +171,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
                     //show positioning controls only if they make sense
                     m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
+
+                    if( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::DATE )
+                        m_bSupportingCategoryPositioning = ChartTypeHelper::isSupportingCategoryPositioning( xChartType, nDimensionCount );
 
                     //show axis origin only for secondary y axis
                     if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
@@ -547,6 +551,7 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
                 pPage->SetCategories( m_pParameter->GetCategories() );
             }
             pPage->SupportAxisPositioning( m_pParameter->IsSupportingAxisPositioning() );
+            pPage->SupportCategoryPositioning( m_pParameter->IsSupportingCategoryPositioning() );
         }
     }
     else if (rId == "scale")
