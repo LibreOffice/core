@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		cscript /e:javascript configure.js crypto=mscng xslt=no iconv=no static=no \
 			lib=$(call gb_UnpackedTarball_get_dir,libxml2)/win32/bin.msvc \
 			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes cruntime=/MDd) \
-			cflags="-arch:SSE $(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
+			cflags="$(SOLARINC) -I$(WORKDIR)/UnpackedTarball/libxml2/include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common" \
 		&& nmake \
 	,win32)
 	$(call gb_Trace_EndRange,xmlsec,EXTERNAL)

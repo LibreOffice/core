@@ -22,7 +22,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
-		&& CFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS -arch:SSE $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" \
+		&& CFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS)" \
 			INSTALL=`cygpath -m /usr/bin/install` \
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \

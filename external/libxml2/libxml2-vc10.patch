@@ -6,7 +6,7 @@ Add SOLARINC, and disable SSE2 default for MSVC2012
  CFLAGS = $(CFLAGS) /D "HAVE_PTHREAD_H"
  !endif
  CFLAGS = $(CFLAGS) /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
-+CFLAGS = $(CFLAGS) -arch:SSE $(SOLARINC)
++CFLAGS = $(CFLAGS) $(SOLARINC)
  
  # The linker and its options.
  LD = link.exe
