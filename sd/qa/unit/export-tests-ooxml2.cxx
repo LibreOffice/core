@@ -2861,6 +2861,9 @@ void SdOOXMLExportTest2::testShapeGlowEffect()
     Color nColor;
     xShape->getPropertyValue("GlowEffectColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
+    sal_uInt16 nTransparency;
+    xShape->getPropertyValue("GlowEffectTransparency") >>= nTransparency;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(60), nTransparency);
 }
 
 void SdOOXMLExportTest2::testTdf119087()

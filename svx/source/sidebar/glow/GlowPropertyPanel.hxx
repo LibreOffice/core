@@ -40,14 +40,17 @@ private:
     sfx2::sidebar::ControllerItem maGlowController;
     sfx2::sidebar::ControllerItem maGlowColorController;
     sfx2::sidebar::ControllerItem maGlowRadiusController;
+    sfx2::sidebar::ControllerItem maGlowTransparencyController;
 
     SfxBindings* mpBindings;
 
     std::unique_ptr<weld::CheckButton> mxShowGlow;
     std::unique_ptr<weld::MetricSpinButton> mxGlowRadius;
     std::unique_ptr<ColorListBox> mxLBGlowColor;
+    std::unique_ptr<weld::MetricSpinButton> mxGlowTransparency;
     std::unique_ptr<weld::Label> mxFTRadius;
     std::unique_ptr<weld::Label> mxFTColor;
+    std::unique_ptr<weld::Label> mxFTTransparency;
 
     void Initialize();
     void UpdateControls();
@@ -55,6 +58,7 @@ private:
     DECL_LINK(ClickGlowHdl, weld::ToggleButton&, void);
     DECL_LINK(ModifyGlowColorHdl, ColorListBox&, void);
     DECL_LINK(ModifyGlowRadiusHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void);
 };
 }
 
