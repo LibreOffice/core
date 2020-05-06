@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6902b35c_85e0c130",
+        "filename": "include/vcl/settings.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-06T19:22:53Z",
+      "side": 1,
+      "message": "Neutro? does it mean Neutral ?",
+      "revId": "bd81325d8f9349cba54383dcee77d403029a9f37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
