@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -27,6 +28,7 @@
 #include <vcl/commandevent.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/fmtfield.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
@@ -829,6 +831,24 @@ void FormattedField::SetTextValue(const OUString& rText)
     ReFormat();
 }
 
+// currently used by online
+void FormattedField::SetValueFromString(const OUString& rStr)
+{
+    sal_Int32 nEnd;
+    rtl_math_ConversionStatus eStatus;
+    double fValue = ::rtl::math::stringToDouble(rStr, '.', GetDecimalDigits(), &eStatus, &nEnd );
+
+    if (eStatus == rtl_math_ConversionStatus_Ok &&
+        nEnd == rStr.getLength())
+    {
+        SetValue(fValue);
+    }
+    else
+    {
+        SAL_WARN("vcl", "fail to convert the value: " << rStr);
+    }
+}
+
 void FormattedField::EnableEmptyField(bool bEnable)
 {
     if (bEnable == m_bEnableEmptyField)
@@ -1059,6 +1079,24 @@ void FormattedField::Last()
 void FormattedField::UseInputStringForFormatting()
 {
     m_bUseInputStringForFormatting = true;
+}
+
+boost::property_tree::ptree FormattedField::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SpinField::DumpAsPropertyTree());
+    aTree.put("min", rtl::math::doubleToString(GetMinValue(),
+        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
+    aTree.put("max", rtl::math::doubleToString(GetMaxValue(),
+        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
+    aTree.put("value", rtl::math::doubleToString(GetValue(),
+        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
+
+    return aTree;
+}
+
+FactoryFunction FormattedField::GetUITestFactory() const
+{
+    return FormattedFieldUIObject::create;
 }
 
 DoubleNumericField::DoubleNumericField(vcl::Window* pParent, WinBits nStyle)

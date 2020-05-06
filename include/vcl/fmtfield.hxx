@@ -118,6 +118,8 @@ public:
 
     void    SetTextValue(const OUString& rText);
     // The String is transformed to a double (with a formatter) and SetValue is called afterwards
+    //
+    void    SetValueFromString(const OUString& rStr);
 
     bool    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
     void    EnableEmptyField(bool bEnable);
@@ -233,6 +235,10 @@ public:
      */
     void    UseInputStringForFormatting();
     bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 
 protected:
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
