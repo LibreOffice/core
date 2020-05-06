@@ -516,9 +516,6 @@ Components::Components(
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
             layer += 2; //TODO: overflow
-        } else if (type == "module") {
-            parseModuleLayer(layer, url);
-            ++layer; //TODO: overflow
         } else if (type == "res") {
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseResLayer(layer, url);
@@ -854,10 +851,6 @@ void Components::parseXcsXcuIniLayer(
             parseFileList(layer + 1, &parseXcuFile, urls, recordAdditions);
         }
     }
-}
-
-void Components::parseModuleLayer(int layer, OUString const & url) {
-    parseFiles(layer, ".xcu", &parseXcuFile, url, false);
 }
 
 void Components::parseResLayer(int layer, OUString const & url) {
