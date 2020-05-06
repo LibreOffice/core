@@ -2841,7 +2841,7 @@ const LocaleDataWrapper& AllSettings::GetNeutroLocaleDataWrapper() const
 {
     if ( !mxData->mpNeutroLocaleDataWrapper )
         const_cast<AllSettings*>(this)->mxData->mpNeutroLocaleDataWrapper.reset( new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), LanguageTag("en_US") ) );
+            comphelper::getProcessComponentContext(), LanguageTag("en-US") ) );
     return *mxData->mpNeutroLocaleDataWrapper;
 }
 
