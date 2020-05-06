@@ -850,6 +850,7 @@ geq
 glow
 glow-radius
 glow-color
+glow-transparency
 gouraud
 gradient
 angle

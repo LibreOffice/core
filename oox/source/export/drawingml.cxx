@@ -3849,11 +3849,13 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     Sequence< PropertyValue > aGlowAttribs(1);
     aGlowAttribs[0].Name = "rad";
     aGlowAttribs[0].Value = rXPropSet->getPropertyValue("GlowEffectRad");
-    Sequence< PropertyValue > aGlowProps(2);
+    Sequence< PropertyValue > aGlowProps(3);
     aGlowProps[0].Name = "Attribs";
     aGlowProps[0].Value <<= aGlowAttribs;
     aGlowProps[1].Name = "RgbClr";
     aGlowProps[1].Value = rXPropSet->getPropertyValue("GlowEffectColor");
+    aGlowProps[2].Name = "RgbClrTransparency";
+    aGlowProps[2].Value = rXPropSet->getPropertyValue("GlowEffectTransparency");
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect("glow", aGlowProps);

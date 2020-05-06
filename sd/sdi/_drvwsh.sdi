@@ -2876,4 +2876,10 @@ interface DrawView
         StateMethod = GetAttrState;
     ]
 
+    SID_ATTR_GLOW_TRANSPARENCY
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+
 }
