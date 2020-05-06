@@ -503,6 +503,7 @@ Dim oDatabaseForm As Object, iCtlCount As Integer
 	If Not IsLoaded Then Goto Trace_Error_NotOpen
 	&apos;Count number of controls thru the forms collection
 	iControlCount = 0
+
 	iCount = FormsCollection.Count
 	For i = 0 To iCount - 1
 		If i = 0 Then Set oDatabaseForm = DatabaseForm Else Set oDatabaseForm = FormsCollection.getByIndex(i)
@@ -833,6 +834,7 @@ Dim oDoc As Object, oDatabase As Object
 				End If
 			Case DBCONNECTFORM
 				Set ContainerWindow = oDoc.Document.CurrentController.Frame.ContainerWindow
+				Set FormsCollection = oDoc.Document.getDrawPage.Forms
 				Set oDatabase = Application._CurrentDb(_DocEntry, _DbEntry)
 				With oDatabase
 					Set DatabaseForm = .Form
