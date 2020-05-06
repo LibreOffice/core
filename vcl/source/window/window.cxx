@@ -3314,6 +3314,7 @@ const char* windowTypeName(WindowType nWindowType)
         case WindowType::PATTERNFIELD:              return "patternfield";
         case WindowType::NUMERICFIELD:              return "numericfield";
         case WindowType::METRICFIELD:               return "metricfield";
+        case WindowType::FORMATTEDFIELD:            return "formattedfield";
         case WindowType::CURRENCYFIELD:             return "currencyfield";
         case WindowType::DATEFIELD:                 return "datefield";
         case WindowType::TIMEFIELD:                 return "timefield";

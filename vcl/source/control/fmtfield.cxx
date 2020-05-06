@@ -292,7 +292,7 @@ FormattedField::StaticFormatter::~StaticFormatter()
 }
 
 FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
-    :SpinField(pParent, nStyle)
+    :SpinField(pParent, nStyle, WindowType::FORMATTEDFIELD)
     ,m_aLastSelection(0,0)
     ,m_dMinValue(0)
     ,m_dMaxValue(0)
