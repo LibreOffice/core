@@ -796,27 +796,29 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case NS_ooxml::LN_CT_FramePr_xAlign:
                         switch( nIntValue )
                         {
-                            case  NS_ooxml::LN_Value_doc_ST_XAlign_center  : nIntValue = text::HoriOrientation::CENTER; break;
-                            case  NS_ooxml::LN_Value_doc_ST_XAlign_right   : nIntValue = text::HoriOrientation::RIGHT; break;
-                            case  NS_ooxml::LN_Value_doc_ST_XAlign_inside  : nIntValue = text::HoriOrientation::INSIDE; break;
-                            case  NS_ooxml::LN_Value_doc_ST_XAlign_outside : nIntValue = text::HoriOrientation::OUTSIDE; break;
-                            case  NS_ooxml::LN_Value_doc_ST_XAlign_left    : nIntValue = text::HoriOrientation::LEFT; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_center  :nIntValue = text::HoriOrientation::CENTER; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_outside :
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_right   :nIntValue = text::HoriOrientation::RIGHT; break;
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_inside  :
+                            case  NS_ooxml::LN_Value_doc_ST_XAlign_left    :nIntValue = text::HoriOrientation::LEFT; break;
                             default:    nIntValue = text::HoriOrientation::NONE;
                         }
                         pParaProperties->SetxAlign( nIntValue );
                     break;
                     case NS_ooxml::LN_CT_FramePr_y:
                         pParaProperties->Sety( ConversionHelper::convertTwipToMM100(nIntValue ));
-                        pParaProperties->SetyAlign( text::VertOrientation::NONE );
+                        if (nIntValue >= 0)
+                            pParaProperties->SetyAlign(text::VertOrientation::NONE);
+                        else
+                            pParaProperties->SetyAlign(text::VertOrientation::BOTTOM);
                     break;
                     case NS_ooxml::LN_CT_FramePr_yAlign:
                         switch( nIntValue )
                         {
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_center  :nIntValue = text::VertOrientation::CENTER; break;
                             case  NS_ooxml::LN_Value_doc_ST_YAlign_top     :
-                            case  NS_ooxml::LN_Value_doc_ST_YAlign_inside  :nIntValue = text::VertOrientation::TOP; break;
-                            case  NS_ooxml::LN_Value_doc_ST_YAlign_center  :nIntValue = text::VertOrientation::CENTER;break;
-                            case  NS_ooxml::LN_Value_doc_ST_YAlign_bottom  :
-                            case  NS_ooxml::LN_Value_doc_ST_YAlign_outside :nIntValue = text::VertOrientation::BOTTOM;break;
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_inside  :nIntValue = text::VertOrientation::TOP; break;;
+                            case  NS_ooxml::LN_Value_doc_ST_YAlign_bottom  :nIntValue = text::VertOrientation::BOTTOM;break;
                             case  NS_ooxml::LN_Value_doc_ST_YAlign_inline  :
                             {
                             // HACK: This is for bnc#780851, where a table has one cell that has w:framePr,
