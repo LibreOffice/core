@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -464,6 +464,17 @@ Components::Components(
     lock_ = lock();
     OUString conf(expand("${CONFIGURATION_LAYERS}"));
     int layer = 0;
+
+    // We accept multiple xcsxcu layers and multiple res layers, but we enforce that all the xcsxcu
+    // layers come first, then all the res layers, and then the rest. We collect the xcsxcu layers
+    // in a vector until we have them all
+    bool gotAllXcsxcuAlready = false;
+    std::vector<OUString> xcsxcuUrls;
+
+    // We collect also the res layers in a vector until we have them all
+    bool gotAllResAlready = false;
+    std::vector<OUString> resUrls;
+
     for (sal_Int32 i = 0;;) {
         while (i != conf.getLength() && conf[i] == ' ') {
             ++i;
@@ -493,111 +504,137 @@ Components::Components(
         OUString type(conf.copy(i, c - i));
         OUString url(conf.copy(c + 1, n - c - 1));
         if (type == "xcsxcu") {
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            parseXcsXcuLayer(layer, url);
-            SAL_INFO("configmgr", "parseXcsXcuLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
-            layer += 2; //TODO: overflow
-        } else if (type == "bundledext") {
-            parseXcsXcuIniLayer(layer, url, false);
-            layer += 2; //TODO: overflow
-        } else if (type == "sharedext") {
-            if (sharedExtensionLayer_ != -1) {
+            if (gotAllXcsxcuAlready)
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: multiple \"sharedext\" layers");
-            }
-            sharedExtensionLayer_ = layer;
-            parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
-        } else if (type == "userext") {
-            if (userExtensionLayer_ != -1) {
-                throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: multiple \"userext\" layers");
-            }
-            userExtensionLayer_ = layer;
-            parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
+                    "CONFIGURATION_LAYERS: xcsxcu layers must be first");
+            xcsxcuUrls.push_back(url);
         } else if (type == "res") {
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            parseResLayer(layer, url);
-            SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
-            ++layer; //TODO: overflow
-#if ENABLE_DCONF
-        } else if (type == "dconf") {
-            if (url == "!") {
-                modificationTarget_ = ModificationTarget::Dconf;
-                dconf::readLayer(data_, Data::NO_LAYER);
-            } else if (url == "*") {
-                dconf::readLayer(data_, layer);
-            } else {
+            if (gotAllResAlready)
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
-                    + "\"");
+                    "CONFIGURATION_LAYERS: res layers must be after the xcsxcu ones and before the other ones");
+            // When we have collected all xcsxcu layers we process them in one cal to
+            // parseXcsXcuLayers() which calls parseXcdFiles() once to handle all the xcd files in
+            // the various xcsxcu layers.
+            if (!gotAllXcsxcuAlready) {
+                sal_uInt32 nStartTime = osl_getGlobalTimer();
+                parseXcsXcuLayers(layer, xcsxcuUrls);
+                SAL_INFO("configmgr", "parseXcsXcuLayers() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
+                layer += 2; //TODO: overflow
+                gotAllXcsxcuAlready = true;
             }
-            ++layer; //TODO: overflow
+            resUrls.push_back(url);
+        } else {
+            if (!gotAllResAlready) {
+                sal_uInt32 nStartTime = osl_getGlobalTimer();
+                parseResLayers(layer, resUrls);
+                SAL_INFO("configmgr", "parseResLayers() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
+                ++layer; //TODO: overflow
+                gotAllResAlready = true;
+            }
+            if (type == "bundledext") {
+                parseXcsXcuIniLayer(layer, url, false);
+                layer += 2; //TODO: overflow
+            } else if (type == "sharedext") {
+                if (sharedExtensionLayer_ != -1) {
+                    throw css::uno::RuntimeException(
+                        "CONFIGURATION_LAYERS: multiple \"sharedext\" layers");
+                }
+                sharedExtensionLayer_ = layer;
+                parseXcsXcuIniLayer(layer, url, true);
+                layer += 2; //TODO: overflow
+            } else if (type == "userext") {
+                if (userExtensionLayer_ != -1) {
+                    throw css::uno::RuntimeException(
+                        "CONFIGURATION_LAYERS: multiple \"userext\" layers");
+                }
+                userExtensionLayer_ = layer;
+                parseXcsXcuIniLayer(layer, url, true);
+                layer += 2; //TODO: overflow
+#if ENABLE_DCONF
+            } else if (type == "dconf") {
+                if (url == "!") {
+                    modificationTarget_ = ModificationTarget::Dconf;
+                    dconf::readLayer(data_, Data::NO_LAYER);
+                } else if (url == "*") {
+                    dconf::readLayer(data_, layer);
+                } else {
+                    throw css::uno::RuntimeException(
+                        "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
+                        + "\"");
+                }
+                ++layer; //TODO: overflow
 #endif
 #if defined(_WIN32)
-        } else if (type == "winreg") {
-            WinRegType eType;
-            if (url == "LOCAL_MACHINE" || url.isEmpty()/*backwards comp.*/) {
-                eType = WinRegType::LOCAL_MACHINE;
-            } else if (url == "CURRENT_USER") {
-                eType = WinRegType::CURRENT_USER;
-            } else {
-                throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: unknown \"winreg\" kind \"" + url
-                    + "\"");
-            }
-            OUString aTempFileURL;
-            if (dumpWindowsRegistry(&aTempFileURL, eType)) {
-                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, nullptr, nullptr, nullptr);
-                if (!getenv("SAL_CONFIG_WINREG_RETAIN_TMP"))
-                    osl::File::remove(aTempFileURL);
-            }
-            ++layer; //TODO: overflow
+            } else if (type == "winreg") {
+                WinRegType eType;
+                if (url == "LOCAL_MACHINE" || url.isEmpty()/*backwards comp.*/) {
+                    eType = WinRegType::LOCAL_MACHINE;
+                } else if (url == "CURRENT_USER") {
+                    eType = WinRegType::CURRENT_USER;
+                } else {
+                    throw css::uno::RuntimeException(
+                        "CONFIGURATION_LAYERS: unknown \"winreg\" kind \"" + url
+                        + "\"");
+                }
+                OUString aTempFileURL;
+                if (dumpWindowsRegistry(&aTempFileURL, eType)) {
+                    parseFileLeniently(&parseXcuFile, aTempFileURL, layer, nullptr, nullptr, nullptr);
+                    if (!getenv("SAL_CONFIG_WINREG_RETAIN_TMP"))
+                        osl::File::remove(aTempFileURL);
+                }
+                ++layer; //TODO: overflow
 #endif
-        } else if (type == "user") {
-            bool write;
-            if (url.startsWith("!", &url)) {
-                write = true;
-            } else if (url.startsWith("*", &url)) {
-                write = false;
-            } else {
-                write = true; // for backwards compatibility
-            }
-            if (url.isEmpty()) {
-                throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: empty \"user\" URL");
-            }
-            bool ignore = false;
+            } else if (type == "user") {
+                bool write;
+                if (url.startsWith("!", &url)) {
+                    write = true;
+                } else if (url.startsWith("*", &url)) {
+                    write = false;
+                } else {
+                    write = true; // for backwards compatibility
+                }
+                if (url.isEmpty()) {
+                    throw css::uno::RuntimeException(
+                        "CONFIGURATION_LAYERS: empty \"user\" URL");
+                }
+                bool ignore = false;
 #if ENABLE_DCONF
-            if (write) {
-                OUString token(
-                    expand("${SYSUSERCONFIG}/libreoffice/dconfwrite"));
-                osl::DirectoryItem it;
-                osl::FileBase::RC e = osl::DirectoryItem::get(token, it);
-                ignore = e == osl::FileBase::E_None;
-                SAL_INFO(
-                    "configmgr",
-                    "dconf write (<" << token << "> " << +e << "): "
-                        << int(ignore));
-                if (ignore) {
-                    modificationTarget_ = ModificationTarget::Dconf;
-                }
-            }
-#endif
-            if (!ignore) {
                 if (write) {
-                    modificationTarget_ = ModificationTarget::File;
-                    modificationFileUrl_ = url;
+                    OUString token(
+                        expand("${SYSUSERCONFIG}/libreoffice/dconfwrite"));
+                    osl::DirectoryItem it;
+                    osl::FileBase::RC e = osl::DirectoryItem::get(token, it);
+                    ignore = e == osl::FileBase::E_None;
+                    SAL_INFO(
+                        "configmgr",
+                        "dconf write (<" << token << "> " << +e << "): "
+                        << int(ignore));
+                    if (ignore) {
+                        modificationTarget_ = ModificationTarget::Dconf;
+                    }
                 }
-                parseModificationLayer(write ? Data::NO_LAYER : layer, url);
+#endif
+                if (!ignore) {
+                    if (write) {
+                        modificationTarget_ = ModificationTarget::File;
+                        modificationFileUrl_ = url;
+                    }
+                    parseModificationLayer(write ? Data::NO_LAYER : layer, url);
+                }
+                ++layer; //TODO: overflow
+            } else {
+                throw css::uno::RuntimeException(
+                    "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
             }
-            ++layer; //TODO: overflow
-        } else {
-            throw css::uno::RuntimeException(
-                "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
         }
         i = n;
+    }
+
+    // For some unit tests we get a CONFIGURATION_LAYERS that has only xcsxcu entries, nothing else
+    if (!gotAllXcsxcuAlready) {
+        sal_uInt32 nStartTime = osl_getGlobalTimer();
+        parseXcsXcuLayers(layer, xcsxcuUrls);
+        SAL_INFO("configmgr", "parseXcsXcuLayers() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
     }
 }
 
@@ -659,21 +696,11 @@ void Components::parseFileLeniently(
 
 void Components::parseFiles(
     int layer, OUString const & extension, FileParser * parseFile,
-    OUString const & url, bool recursive)
+    OUString const & url)
 {
     osl::Directory dir(url);
-    switch (dir.open()) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
-        if (!recursive) {
-            return;
-        }
-        [[fallthrough]];
-    default:
-        throw css::uno::RuntimeException(
-            "cannot open directory " + url);
-    }
+    if (dir.open() != osl::FileBase::E_None)
+        return;
     for (;;) {
         osl::DirectoryItem i;
         osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
@@ -692,7 +719,7 @@ void Components::parseFiles(
                 "cannot stat in directory " + url);
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
-            parseFiles(layer, extension, parseFile, stat.getFileURL(), true);
+            parseFiles(layer, extension, parseFile, stat.getFileURL());
         } else {
             OUString file(stat.getFileName());
             if (file.endsWith(extension)) {
@@ -738,63 +765,59 @@ void Components::parseFileList(
     }
 }
 
-void Components::parseXcdFiles(int layer, OUString const & url) {
-    osl::Directory dir(url);
-    switch (dir.open()) {
-    case osl::FileBase::E_None:
-        break;
-    case osl::FileBase::E_NOENT:
-        return;
-    default:
-        throw css::uno::RuntimeException(
-            "cannot open directory " + url);
-    }
+void Components::parseXcdFiles(int layer, std::vector<OUString> const & urls) {
     UnresolvedVector unres;
     std::set< OUString > existingDeps;
     std::set< OUString > processedDeps;
-    for (;;) {
-        osl::DirectoryItem i;
-        osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
-        if (rc == osl::FileBase::E_NOENT) {
-            break;
-        }
-        if (rc != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
-                "cannot iterate directory " + url);
-        }
-        osl::FileStatus stat(
-            osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
-            osl_FileStatus_Mask_FileURL);
-        if (i.getFileStatus(stat) != osl::FileBase::E_None) {
-            throw css::uno::RuntimeException(
-                "cannot stat in directory " + url);
-        }
-        if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
-            OUString file(stat.getFileName());
-            OUString name;
-            if (file.endsWith(".xcd", &name)) {
-                existingDeps.insert(name);
-                rtl::Reference< ParseManager > manager;
-                try {
-                    manager = new ParseManager(
-                        stat.getFileURL(),
-                        new XcdParser(layer, processedDeps, data_));
-                } catch (css::container::NoSuchElementException & e) {
-                    if (stat.getFileType() == osl::FileStatus::Link) {
-                        SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
-                        continue;
-                    }
-                    throw css::uno::RuntimeException(
-                        "stat'ed file does not exist: " + e.Message);
+    for (const auto & url : urls) {
+        osl::Directory dir(url);
+        if (dir.open() ==  osl::FileBase::E_None) {
+            for (;;) {
+                osl::DirectoryItem i;
+                osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
+                if (rc == osl::FileBase::E_NOENT) {
+                    break;
                 }
-                if (manager->parse(nullptr)) {
-                    processedDeps.insert(name);
-                } else {
-                    unres.emplace_back(name, manager);
+                if (rc != osl::FileBase::E_None) {
+                    throw css::uno::RuntimeException(
+                        "cannot iterate directory " + url);
+                }
+                osl::FileStatus stat(
+                    osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |
+                    osl_FileStatus_Mask_FileURL);
+                if (i.getFileStatus(stat) != osl::FileBase::E_None) {
+                    throw css::uno::RuntimeException(
+                        "cannot stat in directory " + url);
+                }
+                if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
+                    OUString file(stat.getFileName());
+                    OUString name;
+                    if (file.endsWith(".xcd", &name)) {
+                        existingDeps.insert(name);
+                        rtl::Reference< ParseManager > manager;
+                        try {
+                            manager = new ParseManager(
+                                stat.getFileURL(),
+                                new XcdParser(layer, processedDeps, data_));
+                        } catch (css::container::NoSuchElementException & e) {
+                            if (stat.getFileType() == osl::FileStatus::Link) {
+                                SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
+                                continue;
+                            }
+                            throw css::uno::RuntimeException(
+                                "stat'ed file does not exist: " + e.Message);
+                        }
+                        if (manager->parse(nullptr)) {
+                            processedDeps.insert(name);
+                        } else {
+                            unres.emplace_back(name, manager);
+                        }
+                    }
                 }
             }
         }
     }
+
     while (!unres.empty()) {
         bool resolved = false;
         for (UnresolvedVector::iterator i(unres.begin()); i != unres.end();) {
@@ -808,15 +831,17 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         }
         if (!resolved) {
             throw css::uno::RuntimeException(
-                "xcd: unresolved dependencies in " + url);
+                "xcd: unresolved dependencies");
         }
     }
 }
 
-void Components::parseXcsXcuLayer(int layer, OUString const & url) {
-    parseXcdFiles(layer, url);
-    parseFiles(layer, ".xcs", &parseXcsFile, url + "/schema", false);
-    parseFiles(layer + 1, ".xcu", &parseXcuFile, url + "/data", false);
+void Components::parseXcsXcuLayers(int layer, std::vector<OUString> const & urls) {
+    parseXcdFiles(layer, urls);
+    for (const auto & url : urls) {
+        parseFiles(layer, ".xcs", &parseXcsFile, url + "/schema");
+        parseFiles(layer + 1, ".xcu", &parseXcuFile, url + "/data");
+    }
 }
 
 void Components::parseXcsXcuIniLayer(
@@ -853,10 +878,13 @@ void Components::parseXcsXcuIniLayer(
     }
 }
 
-void Components::parseResLayer(int layer, OUString const & url) {
-    OUString resUrl(url + "/res");
-    parseXcdFiles(layer, resUrl);
-    parseFiles(layer, ".xcu", &parseXcuFile, resUrl, false);
+void Components::parseResLayers(int layer, std::vector<OUString> const & urls) {
+    std::vector<OUString> resUrls;
+    for (const auto & url : urls)
+        resUrls.push_back(url + "/res");
+    parseXcdFiles(layer, resUrls);
+    for (const auto & url : urls)
+        parseFiles(layer, ".xcu", &parseXcuFile, url + "/res");
 }
 
 void Components::parseModificationLayer(int layer, OUString const & url) {
@@ -872,8 +900,7 @@ void Components::parseModificationLayer(int layer, OUString const & url) {
             layer, ".xcu", &parseXcuFile,
             expand(
                 "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
-                ":UserInstallation}/user/registry/data"),
-            false);
+                ":UserInstallation}/user/registry/data"));
     }
 }
 
