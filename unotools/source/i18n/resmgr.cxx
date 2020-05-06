@@ -26,6 +26,8 @@
 #elif defined _MSC_VER
 #define _HAS_AUTO_PTR_ETC 1
 #endif
+#include <config_folders.h>
+#include <config_version.h>
 
 #include <sal/config.h>
 
@@ -39,6 +41,7 @@
 
 #include <comphelper/lok.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <rtl/crc.h>
@@ -116,26 +119,11 @@ static int IgnoringCrtReportHook(int reportType, wchar_t *message, int * /* retu
 
 namespace Translate
 {
-    std::locale Create(const char* pPrefixName, const LanguageTag& rLocale)
+    static std::locale Use(const char* pPrefixName, const OString& sIdentifier, const OString& sPath)
     {
-        static std::unordered_map<OString, std::locale> aCache;
-        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
-        OString sUnique = sIdentifier + pPrefixName;
-        auto aFind = aCache.find(sUnique);
-        if (aFind != aCache.end())
-            return aFind->second;
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
         gen.categories(boost::locale::message_facet | boost::locale::information_facet);
-#if defined(ANDROID)
-        OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
-#else
-        OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
-        rtl::Bootstrap::expandMacros(uri);
-        OUString path;
-        osl::File::getSystemPathFromFileURL(uri, path);
-        OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
-#endif
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
@@ -184,7 +172,63 @@ namespace Translate
 
 #endif
 
-        std::locale aRet(gen(sIdentifier.getStr()));
+        std::locale loc(gen(sIdentifier.getStr()));
+
+        return loc;
+    }
+
+    std::locale Create(const char* pPrefixName, const LanguageTag& rLocale)
+    {
+        static std::unordered_map<OString, std::locale> aCache;
+        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
+        OString sUnique = sIdentifier + pPrefixName;
+        auto aFind = aCache.find(sUnique);
+        if (aFind != aCache.end())
+            return aFind->second;
+
+#if !defined(ANDROID) && !defined(IOS)
+
+        // Try in the profile first
+
+        OUString sUriInProfile("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/packs/"
+                               + OUString::number(LIBO_VERSION_MAJOR) + "." + OUString::number(LIBO_VERSION_MINOR)
+                               + "/resource");
+        rtl::Bootstrap::expandMacros(sUriInProfile);
+
+        // Check if the .mo file exists for either the glibc locale or just the language
+
+        OUString sMoFileFullUri = sUriInProfile + "/" + rLocale.getGlibcLocaleString("")
+            + "/LC_MESSAGES/" + OUString::createFromAscii(pPrefixName) + ".mo";
+
+        OUString sMoFileJustLanguageUri = sUriInProfile + "/" + rLocale.getLanguage()
+            + "/LC_MESSAGES/" + OUString::createFromAscii(pPrefixName) + ".mo";
+
+        if (utl::UCBContentHelper::Exists(sMoFileFullUri)
+            || utl::UCBContentHelper::Exists(sMoFileJustLanguageUri))
+        {
+            // Yep, so let's use that location
+            OUString sPathInProfile;
+            osl::File::getSystemPathFromFileURL(sUriInProfile, sPathInProfile);
+            OString sPath = OUStringToOString(sPathInProfile, osl_getThreadTextEncoding());
+            std::locale aRet = Use(pPrefixName, sIdentifier, sPath);
+
+            aCache[sUnique] = aRet;
+            return aRet;
+        }
+#endif
+
+        // Otherwise use the normal location in the installation
+
+#if defined(ANDROID)
+        OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
+#else
+        OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
+        rtl::Bootstrap::expandMacros(uri);
+        OUString path;
+        osl::File::getSystemPathFromFileURL(uri, path);
+        OString sPath = OUStringToOString(path, osl_getThreadTextEncoding());
+#endif
+        std::locale aRet = Use(pPrefixName, sIdentifier, sPath);
 
         aCache[sUnique] = aRet;
         return aRet;
