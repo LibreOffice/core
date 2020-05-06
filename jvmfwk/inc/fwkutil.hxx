@@ -89,8 +89,6 @@ enum FileStatus
  */
 FileStatus checkFileURL(const OUString & path);
 
-bool isAccessibilitySupportDesired();
-
 }
 #endif
 
