@@ -41,13 +41,13 @@ class tdf116474(UITestCase):
         xOkBtn.executeAction("CLICK", tuple())
 
         xFrame = document.TextFrames[0]
-        self.assertEqual(document.TextFrames[0].Text.String, "\nFigure 1: Caption")
+        self.assertEqual(document.TextFrames[0].Text.String, "Figure 1: Caption")
         self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
         #Undo, redo
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
         #Verify
-        self.assertEqual(document.TextFrames[0].Text.String, "\nFigure 1: Caption")
+        self.assertEqual(document.TextFrames[0].Text.String, "Figure 1: Caption")
         self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
 
         self.ui_test.close_doc()
