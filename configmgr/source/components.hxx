@@ -132,8 +132,6 @@ private:
     void parseXcsXcuIniLayer(
         int layer, OUString const & url, bool recordAdditions);
 
-    void parseModuleLayer(int layer, OUString const & url);
-
     void parseResLayer(int layer, OUString const & url);
 
     void parseModificationLayer(int layer, OUString const & url);
