@@ -213,7 +213,7 @@ You can make one or more of the following changes to your user profile to return
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="check_disable_hw_acceleration">
-                    <property name="label" translatable="yes" context="safemodedialog|check_disable_hw_acceleration">Disable hardware acceleration (OpenGL, OpenCL)</property>
+                    <property name="label" translatable="yes" context="safemodedialog|check_disable_hw_acceleration">Disable hardware acceleration (OpenGL, OpenCL, Vulkan)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
