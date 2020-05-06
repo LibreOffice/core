@@ -468,16 +468,18 @@ public:
         // in case of a larger rotation.
         matrix.rotate(M_PI); //180 degrees
         matrix.translate(100, 100);
-        CPPUNIT_ASSERT(device->DrawPolyLineDirect(
-            matrix, basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 100));
+        CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
+                                                  basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } },
+                                                  100, 0, nullptr, basegfx::B2DLineJoin::Miter));
         exportDevice("/tmp/tdf124848-1.png", device);
         // 100px wide line should fill the entire width of the upper half
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(2, 2)));
 
         // Also check hairline.
         device->Erase();
-        CPPUNIT_ASSERT(
-            device->DrawPolyLineDirect(matrix, basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 0));
+        CPPUNIT_ASSERT(device->DrawPolyLineDirect(matrix,
+                                                  basegfx::B2DPolygon{ { 50, 50 }, { 50, 100 } }, 0,
+                                                  0, nullptr, basegfx::B2DLineJoin::Miter));
         exportDevice("/tmp/tdf124848-2.png", device);
         // 1px wide
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(50, 20)));
