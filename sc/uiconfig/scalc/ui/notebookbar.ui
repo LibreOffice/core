@@ -4173,7 +4173,7 @@
                               <object class="GtkToolButton" id="Home-MergeCells">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:MergeCells</property>
+                                <property name="action_name">.uno:ToggleMergeCells</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
