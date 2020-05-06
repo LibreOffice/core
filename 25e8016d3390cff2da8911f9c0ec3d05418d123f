@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1cfd17f_236565da",
+        "filename": "external/languagetool/ExternalProject_languagetool.mk",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-06T08:59:34Z",
+      "side": 1,
+      "message": "uhm, why not in gb_ExternalProject_use_jars above?",
+      "revId": "25e8016d3390cff2da8911f9c0ec3d05418d123f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
