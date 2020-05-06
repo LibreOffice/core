@@ -330,6 +330,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                      SCCOL nLastCol, SCROW nLastRow,
                      const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
+    nLastCol   = std::min<SCCOL>( nLastCol,   aCol.size()-2 );
     bool bFound = false;
     bool bAll =  (rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL)
                ||(rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL);
