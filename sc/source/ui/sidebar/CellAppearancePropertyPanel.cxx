@@ -150,7 +150,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
     if (aCommand == UNO_SETBORDERSTYLE)
     {
         if (!mxCellBorderStylePopup)
-            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(GetBindings()->GetDispatcher());
+            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(GetBindings()->GetDispatcher(), mpTBCellBorder);
         mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
     }
 }
