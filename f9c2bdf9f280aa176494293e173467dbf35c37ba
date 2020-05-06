@@ -22,6 +22,30 @@
       "revId": "f9c2bdf9f280aa176494293e173467dbf35c37ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "329e4efa_6b0deb5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-06T20:57:31Z",
+      "side": 1,
+      "message": "yeah but the wiki uses commit hashes - and asking gitiles to show a commit from change-id is I guess hard?",
+      "parentUuid": "59aea151_ef594383",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "f9c2bdf9f280aa176494293e173467dbf35c37ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
