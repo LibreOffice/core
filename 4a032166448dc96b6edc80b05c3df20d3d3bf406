@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf9df2b1_163318a7",
+        "filename": "sd/source/ui/view/drtxtob1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2020-05-06T12:51:03Z",
+      "side": 1,
+      "message": "In writer clicking on the indent increase button increases indent by 1.25cm while this will increase by 1cm. Both are different context so not sure if we should keep it as it is or make them same in writer and impress.",
+      "revId": "4a032166448dc96b6edc80b05c3df20d3d3bf406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
