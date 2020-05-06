@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,toolkit))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,toolkit, \
 	toolkit/qa/cppunit/Dialog \
+	toolkit/qa/cppunit/EventContainer \
 	toolkit/qa/cppunit/UnitConversion \
 ))
 
