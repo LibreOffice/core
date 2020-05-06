@@ -131,8 +131,9 @@ constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_HELPTICKS            
 constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_POSITION                        (SCHATTR_AXIS_POSITION_START + 2);
 constexpr TypedWhichId<SvxDoubleItem>         SCHATTR_AXIS_POSITION_VALUE                  (SCHATTR_AXIS_POSITION_START + 3);
 constexpr TypedWhichId<SfxUInt32Item>         SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT (SCHATTR_AXIS_POSITION_START + 4);
-constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_LABEL_POSITION                  (SCHATTR_AXIS_POSITION_START + 5);
-constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_MARK_POSITION                   (SCHATTR_AXIS_POSITION_START + 6);
+constexpr TypedWhichId<SfxBoolItem>           SCHATTR_AXIS_SHIFTED_CATEGORY_POSITION       (SCHATTR_AXIS_POSITION_START + 5);
+constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_LABEL_POSITION                  (SCHATTR_AXIS_POSITION_START + 6);
+constexpr TypedWhichId<SfxInt32Item>          SCHATTR_AXIS_MARK_POSITION                   (SCHATTR_AXIS_POSITION_START + 7);
 //axis label
 constexpr sal_uInt16                          SCHATTR_AXIS_LABEL_START                     (SCHATTR_AXIS_MARK_POSITION + 1);
 constexpr TypedWhichId<SfxBoolItem>           SCHATTR_AXIS_SHOWDESCR                       (SCHATTR_AXIS_LABEL_START);
