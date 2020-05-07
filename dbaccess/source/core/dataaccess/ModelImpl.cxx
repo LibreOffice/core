@@ -848,14 +848,17 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     aTempFile.EnableKillingFile();
     OUString sTmpFileUrl = aTempFile.GetURL();
     SignatureState aSignatureState = getScriptingSignatureState();
-    if (aSignatureState == SignatureState::OK
-        || aSignatureState == SignatureState::NOTVALIDATED
-        || aSignatureState == SignatureState::INVALID)
+    OUString sLocation = getDocFileLocation();
+    bool bIsEmbedded = sLocation.startsWith("vnd.sun.star.pkg:") && sLocation.endsWith("/EmbeddedDatabase");
+    if (!bIsEmbedded && !sLocation.isEmpty()
+        && (aSignatureState == SignatureState::OK || aSignatureState == SignatureState::NOTVALIDATED
+            || aSignatureState == SignatureState::INVALID
+            || aSignatureState == SignatureState::UNKNOWN))
     {
         bTryToPreserveScriptSignature = true;
         // We need to first save the file (which removes the macro signature), then add the macro signature again.
         // For that, we need a temporary copy of the original file.
-        osl::File::RC rc = osl::File::copy(getDocFileLocation(), sTmpFileUrl);
+        osl::File::RC rc = osl::File::copy(sLocation, sTmpFileUrl);
         if (rc != osl::FileBase::E_None)
             throw uno::RuntimeException("Could not create temp file");
     }
