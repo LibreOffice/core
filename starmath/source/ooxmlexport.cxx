@@ -30,10 +30,26 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
     if( m_pTree == nullptr )
         return;
     m_pSerializer = serializer;
-    m_pSerializer->startElementNS( XML_m, XML_oMath,
-        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math" );
-    HandleNode( m_pTree, 0 );
-    m_pSerializer->endElementNS( XML_m, XML_oMath );
+    char* aAlign = "";//TODO: Add the para adjust info for alignment
+    if (strlen(aAlign)) //export the algnment if that is set
+    {
+        m_pSerializer->startElementNS(XML_m, XML_oMathPara,
+            FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        m_pSerializer->startElementNS(XML_m, XML_oMathParaPr);
+        m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), aAlign);
+        m_pSerializer->endElementNS(XML_m, XML_oMathParaPr);
+        m_pSerializer->startElementNS(XML_m, XML_oMath);
+        HandleNode(m_pTree, 0);
+        m_pSerializer->endElementNS(XML_m, XML_oMath);
+        m_pSerializer->endElementNS(XML_m, XML_oMathPara);
+    }
+    else //inline as was before
+    {
+        m_pSerializer->startElementNS(XML_m, XML_oMath,
+            FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        HandleNode( m_pTree, 0 );
+        m_pSerializer->endElementNS( XML_m, XML_oMath );
+    }
 }
 
 // NOTE: This is still work in progress and unfinished, but it already covers a good
