@@ -113,7 +113,7 @@ class SystemDialog(object):
                 if i is not None and i.Name == "UIName":
                     return str(i.Value).replace("%productname%", "LibreOffice")
 
-            raise NullPointerException(
+            raise Exception(
                 "UIName property not found for Filter " + filterName);
         except Exception:
             traceback.print_exc()

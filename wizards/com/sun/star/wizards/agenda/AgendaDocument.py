@@ -473,13 +473,13 @@ class AgendaDocument(TextDocument):
                         itemText = item.String.lstrip().lower()
                         if itemText == \
                                 self.templateConsts.FILLIN_MINUTE_NUM:
-                            fillMinutesItem(item, topic[0].Value, "")
+                            self.fillMinutesItem(item, topic[0].Value, "")
                         elif itemText == \
                                 self.templateConsts.FILLIN_MINUTE_TOPIC:
-                            fillMinutesItem(item, topic[1].Value, "")
+                            self.fillMinutesItem(item, topic[1].Value, "")
                         elif itemText == \
                                 self.templateConsts.FILLIN_MINUTE_RESPONSIBLE:
-                            fillMinutesItem(item, topic[2].Value, "")
+                            self.fillMinutesItem(item, topic[2].Value, "")
                         elif itemText == \
                                 self.templateConsts.FILLIN_MINUTE_TIME:
                             topicTime = 0
@@ -499,7 +499,7 @@ class AgendaDocument(TextDocument):
                                 topicStartTime += topicTime * 1000
                                 time += str(topicStartTime)
 
-                            fillMinutesItem(item, time, "")
+                            self.fillMinutesItem(item, time, "")
 
                     self.textSectionHandler.removeTextSectionbyName(
                         self.templateConsts.SECTION_MINUTES)
@@ -528,7 +528,7 @@ class AgendaDocument(TextDocument):
         Range.ParaStyleName = paraStyle
         if text is None or text == "":
             if placeholder is not None and not placeholder == "":
-                placeHolder = createPlaceHolder(
+                placeHolder = self.createPlaceHolder(
                     self.xTextDocument, placeholder,
                     self.resources.resPlaceHolderHint)
                 try:
