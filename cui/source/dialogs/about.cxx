@@ -260,7 +260,7 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
 
   OUString sInfo;
   sInfo += "Version: " + m_pVersionLabel->get_label() + "\n";
-  sInfo += "Build ID: " + m_pBuildLabel->get_label() + "\n";
+  sInfo += "Build ID: " + GetBuildString() + "\n";
   sInfo += m_pEnvLabel->get_label();
   sInfo += m_pUILabel->get_label() + "\n";
   sInfo += "Locale: " + m_pLocaleLabel->get_label() + "\n";
