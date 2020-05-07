@@ -108,6 +108,7 @@ public:
     */
     PluginSlideChange( sal_Int16                                nTransitionType,
                        sal_Int16                                nTransitionSubType,
+                       const RGBColor&                          rTransitionFadeColor,
                        std::optional<SlideSharedPtr> const&   leavingSlide_,
                        const SlideSharedPtr&                    pEnteringSlide,
                        const UnoViewContainer&                  rViewContainer,
@@ -126,6 +127,7 @@ public:
         mbSuccess( false ),
         mnTransitionType( nTransitionType ),
         mnTransitionSubType( nTransitionSubType ),
+        mnTransitionFadeColor( rTransitionFadeColor ),
         mxFactory( xFactory )
     {
         // create one transition per view
@@ -150,6 +152,7 @@ public:
         uno::Reference<presentation::XTransition> rTransition = mxFactory->createTransition(
             mnTransitionType,
             mnTransitionSubType,
+            RGBAColor2UnoColor( mnTransitionFadeColor.getIntegerColor()),
             rView->getUnoView(),
             getLeavingBitmap(ViewEntry(rView))->getXBitmap(),
             getEnteringBitmap(ViewEntry(rView))->getXBitmap() );
@@ -247,6 +250,7 @@ private:
 
     sal_Int16 mnTransitionType;
     sal_Int16 mnTransitionSubType;
+    RGBColor mnTransitionFadeColor;
 
     uno::Reference<presentation::XTransitionFactory> mxFactory;
 };
@@ -844,6 +848,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
 NumberAnimationSharedPtr createPluginTransition(
     sal_Int16                                nTransitionType,
     sal_Int16                                nTransitionSubType,
+    const RGBColor&                          rTransitionFadeColor,
     std::optional<SlideSharedPtr> const&   pLeavingSlide,
     const SlideSharedPtr&                    pEnteringSlide,
     const UnoViewContainer&                  rViewContainer,
@@ -857,6 +862,7 @@ NumberAnimationSharedPtr createPluginTransition(
         std::make_shared<PluginSlideChange>(
             nTransitionType,
             nTransitionSubType,
+            rTransitionFadeColor,
             pLeavingSlide,
             pEnteringSlide,
             rViewContainer,
@@ -909,6 +915,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
             createPluginTransition(
                 nTransitionType,
                 nTransitionSubType,
+                rTransitionFadeColor,
                 std::make_optional(pLeavingSlide),
                 pEnteringSlide,
                 rViewContainer,

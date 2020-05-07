@@ -15,7 +15,11 @@ uniform float time;
 varying vec2 v_texturePosition;
 
 void main() {
-    vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
+#ifdef use_white
+    vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+#else
+    vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+#endif
     vec4 texel;
     float amount;
     if (time < 0.5) {
@@ -25,7 +29,7 @@ void main() {
         texel = texture2D(enteringSlideTexture, v_texturePosition);
         amount = (1.0 - time) * 2;
     }
-    gl_FragColor = mix(texel, black, amount);
+    gl_FragColor = mix(texel, color, amount);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

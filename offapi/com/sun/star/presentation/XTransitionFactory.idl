@@ -52,6 +52,9 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
         @param transitionSubType
         Subtype for the transition (@see ::com::sun::star::animations::TransitionSubType)
 
+        @param transitionFadeColor
+        Color to use (for some transitions)
+
         @param view
         Slide show view to display on
 
@@ -63,6 +66,7 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
      */
     XTransition createTransition( [in] short                                 transitionType,
                                   [in] short                                 transitionSubType,
+                                  [in] long                                  transitionFadeColor,
                                   [in] XSlideShowView                        view,
                                   [in] com::sun::star::rendering::XBitmap    leavingBitmap,
                                   [in] com::sun::star::rendering::XBitmap    enteringBitmap );

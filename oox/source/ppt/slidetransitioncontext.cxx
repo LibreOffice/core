@@ -138,6 +138,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
     case P14_TOKEN( ripple ):
     case P14_TOKEN( glitter ):
     case P14_TOKEN( honeycomb ):
+    case P14_TOKEN( flash ):
         // CT_Empty
         if (!mbHasTransition)
         {
