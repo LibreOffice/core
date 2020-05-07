@@ -516,16 +516,6 @@ public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle );
 };
 
-class DisclosureButton final : public CheckBox
-{
-    virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override;
-
-public:
-    explicit DisclosureButton( vcl::Window* pParent );
-
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-};
-
 #endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
