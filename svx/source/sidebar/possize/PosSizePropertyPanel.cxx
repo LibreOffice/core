@@ -865,7 +865,7 @@ void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::propert
 
     if (pControl && !pControl->GetText().isEmpty())
     {
-        OUString sValue = Application::GetSettings().GetNeutroLocaleDataWrapper().
+        OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
             getNum(pControl->GetValue(), pControl->GetDecimalDigits(), false, false);
         rState.put(pControl->get_id().toUtf8().getStr(), sValue.toUtf8().getStr());
     }
