@@ -339,17 +339,17 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
     bool bSearchNotes = (rSearchItem.GetCellType() == SvxSearchCellType::NOTE);
     // We need to cache sc::ColumnBlockConstPosition per each column.
-    std::vector< sc::ColumnBlockConstPosition > blockPos( nLastCol + 2 );
-    for( SCCOL i = 0; i <= nLastCol+1; ++i )
+    std::vector< sc::ColumnBlockConstPosition > blockPos( nLastCol + 1 );
+    for( SCCOL i = 0; i <= nLastCol; ++i )
         aCol[ i ].InitBlockPosition( blockPos[ i ] );
     if (!bAll && rSearchItem.GetBackward())
     {
         SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
-        nCol = std::min(nCol, static_cast<SCCOL>(nLastCol + 1));
-        nRow = std::min(nRow, static_cast<SCROW>(nLastRow + 1));
         if (rSearchItem.GetRowDirection())
         {
             nCol--;
+            nCol = std::min(nCol, nLastCol);
+            nRow = std::min(nRow, nLastRow);
             while (!bFound && (nRow >= 0))
             {
                 if (bSkipFiltered)
@@ -388,6 +388,8 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         else
         {
             nRow--;
+            nCol = std::min(nCol, nLastCol);
+            nRow = std::min(nRow, nLastRow);
             while (!bFound && (nCol >= 0))
             {
                 while (!bFound && (nRow >= 0))
