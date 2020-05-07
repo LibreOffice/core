@@ -571,6 +571,12 @@ namespace sw { namespace mark
 
     void DropDownFieldmark::SendLOKMessage(const OString& sAction)
     {
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && pViewShell->isLOKMobilePhone())
+        {
+              return;
+        }
+
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (!m_pButton)
