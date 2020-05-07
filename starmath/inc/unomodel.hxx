@@ -86,7 +86,7 @@ public:
     // oox::FormulaExportBase
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
             oox::core::OoxmlVersion version,
-            oox::drawingml::DocumentType documentType) override;
+            oox::drawingml::DocumentType documentType, sal_Int8 nAlign) override;
     virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding) override;
     // oox::FormulaImportBase
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) override;
