@@ -682,7 +682,7 @@ public:
     static bool                             GetMathLayoutRTL();   // returns true if UI language requires right-to-left Math Layout
     const LocaleDataWrapper&                GetLocaleDataWrapper() const;
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
-    const LocaleDataWrapper&                GetNeutroLocaleDataWrapper() const;
+    const LocaleDataWrapper&                GetNeutralLocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
 
