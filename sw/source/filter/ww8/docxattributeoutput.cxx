@@ -143,6 +143,7 @@
 #include <stdarg.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <oox/mathml/export.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -1559,7 +1560,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     DoWritePermissionsEnd();
 
     for (const auto& rpMath : m_aPostponedMaths)
-        WritePostponedMath(rpMath);
+        WritePostponedMath(rpMath.pMathObject, rpMath.nMathObjAlignment);
     m_aPostponedMaths.clear();
 
     for (const auto& rpControl : m_aPostponedFormControls)
@@ -5086,11 +5087,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_rExport.SdrExporter().endDMLAnchorInline(pFrameFormat);
 }
 
-void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat, const sal_Int8 nFormulaAlignment )
 {
     if( WriteOLEChart( pSdrObj, rSize, pFlyFrameFormat ))
         return;
-    if( WriteOLEMath( rOLENode ))
+    if( WriteOLEMath( rOLENode , nFormulaAlignment))
         return;
     PostponeOLE( rOLENode, rSize, pFlyFrameFormat );
 }
@@ -5185,18 +5186,28 @@ void DocxAttributeOutput::WritePostponedChart()
     m_aPostponedCharts.clear();
 }
 
-bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode )
+bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode ,const sal_Int8 nAlign)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
     SvGlobalName aObjName(xObj->getClassID());
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
-    m_aPostponedMaths.push_back(&rOLENode);
+
+    PostponedMathObjects aPostponedMathObject;
+    try
+    {
+        aPostponedMathObject.pMathObject = const_cast<SwOLENode*>( &rOLENode);
+        aPostponedMathObject.nMathObjAlignment = nAlign;
+        m_aPostponedMaths.push_back(aPostponedMathObject);
+    }
+    catch (const uno::Exception&)
+    {
+    }
     return true;
 }
 
-void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
+void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sal_Int8 nAlign)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(pPostponedMath)->GetOLEObj().GetOleRef());
     if (embed::EmbedStates::LOADED == xObj->getCurrentState())
@@ -5223,7 +5234,7 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
     assert( formulaexport != nullptr );
     if (formulaexport)
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
-                oox::drawingml::DOCUMENT_DOCX);
+                oox::drawingml::DOCUMENT_DOCX, nAlign);
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
@@ -5765,7 +5776,35 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 {
                     SwNodeIndex aIdx(*rFrameFormat.GetContent().GetContentIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrameFormat*>( &rFrameFormat ));
+
+                    //output variable for the formula alignment (default inline)
+                    sal_Int8 nAlign(FormulaExportBase::eFormulaAlign::INLINE);
+                    auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the forumla
+
+                    //tdf133030: Export formula position
+                    //If we have a formula with inline anchor...
+                    if(SotExchange::IsMath(xObj->getClassID()) && rFrame.IsInline())
+                    {
+                        SwPosition const* const aAPos = rFrameFormat.GetAnchor().GetContentAnchor();
+                        if(aAPos)
+                        {
+                            //Get the text node what the forumla anchored to
+                            const SwTextNode* pTextNode = aAPos->nNode.GetNode().GetTextNode();
+                            if(pTextNode && pTextNode->Len() == 1)
+                            {
+                                //Get the paragraph alignment
+                                auto aParaAdjust = pTextNode->GetSwAttrSet().GetAdjust().GetAdjust();
+                                //And set the formula according to the paragraph alignment
+                                if (aParaAdjust == SvxAdjust::Center)
+                                    nAlign = FormulaExportBase::eFormulaAlign::CENTER;
+                                else if (aParaAdjust == SvxAdjust::Right)
+                                    nAlign = FormulaExportBase::eFormulaAlign::RIGHT;
+                                else // left in the case of left and justified paragraph alignments
+                                    nAlign = FormulaExportBase::eFormulaAlign::LEFT;
+                            }
+                        }
+                    }
+                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrameFormat*>( &rFrameFormat ), nAlign);
                     m_bPostponedProcessingFly = false ;
                 }
             }
