@@ -405,7 +405,8 @@ public:
     bool CreateSlideMaster( sal_uInt32 nPageNum );
     bool CreateNotes( sal_uInt32 nPageNum );
 
-    static sal_Int8 GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, css::presentation::FadeEffect eEffect, sal_uInt8& nDirection );
+    static sal_Int8 GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, css::presentation::FadeEffect eEffect,
+        sal_Int32 nTransitionFadeColor, sal_uInt8& nDirection );
     static sal_Int8 GetTransition( css::presentation::FadeEffect eEffect, sal_uInt8& nDirection );
 };
 

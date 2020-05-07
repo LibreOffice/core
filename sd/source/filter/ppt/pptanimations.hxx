@@ -56,6 +56,9 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_WHEEL           26
 #define PPT_TRANSITION_TYPE_CIRCLE          27
 
+// undocumented(?)
+#define PPT_TRANSITION_TYPE_FLASH           30
+
 // atoms
 #define DFF_msofbtAnimEvent                         0xf125
 #define DFF_msofbtAnimNode                          0xf127

@@ -1214,6 +1214,7 @@ public:
     virtual uno::Reference< presentation::XTransition > SAL_CALL createTransition(
         sal_Int16                                             transitionType,
         sal_Int16                                             transitionSubType,
+        sal_Int32                                             transitionFadeColor,
         const uno::Reference< presentation::XSlideShowView >& view,
         const uno::Reference< rendering::XBitmap >&           leavingBitmap,
         const uno::Reference< rendering::XBitmap >&           enteringBitmap ) override
@@ -1288,7 +1289,7 @@ public:
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) {
             pTransition = makeFadeSmoothly();
         } else if( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) {
-            pTransition = makeFadeThroughBlack();
+            pTransition = makeFadeThroughColor( transitionFadeColor == 0xffffff );
         } else if( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) {
             pTransition = makeDiamond();
         } else if( transitionType == animations::TransitionType::ZOOM && transitionSubType == animations::TransitionSubType::ROTATEIN ) {

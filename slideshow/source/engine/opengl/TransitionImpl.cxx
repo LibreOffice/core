@@ -1351,37 +1351,40 @@ std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 namespace
 {
 
-class FadeThroughBlackTransition : public OGLTransitionImpl
+class FadeThroughColorTransition : public OGLTransitionImpl
 {
 public:
-    FadeThroughBlackTransition(const TransitionScene& rScene, const TransitionSettings& rSettings)
-        : OGLTransitionImpl(rScene, rSettings)
+    FadeThroughColorTransition(const TransitionScene& rScene, const TransitionSettings& rSettings, bool white)
+        : OGLTransitionImpl(rScene, rSettings), useWhite( white )
     {}
 
 private:
     virtual GLuint makeShader() const override;
+    bool useWhite;
 };
 
-GLuint FadeThroughBlackTransition::makeShader() const
+GLuint FadeThroughColorTransition::makeShader() const
 {
-    return OpenGLHelper::LoadShaders( "basicVertexShader", "fadeBlackFragmentShader" );
+    return OpenGLHelper::LoadShaders( "basicVertexShader", "fadeBlackFragmentShader",
+        useWhite ? "#define use_white" : "", "" );
 }
 
 std::shared_ptr<OGLTransitionImpl>
-makeFadeThroughBlackTransition(
+makeFadeThroughColorTransition(
         const Primitives_t& rLeavingSlidePrimitives,
         const Primitives_t& rEnteringSlidePrimitives,
-        const TransitionSettings& rSettings)
+        const TransitionSettings& rSettings,
+        bool white)
 {
-    return std::make_shared<FadeThroughBlackTransition>(
+    return std::make_shared<FadeThroughColorTransition>(
             TransitionScene(rLeavingSlidePrimitives, rEnteringSlidePrimitives),
-            rSettings)
+            rSettings, white)
         ;
 }
 
 }
 
-std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
+std::shared_ptr<OGLTransitionImpl> makeFadeThroughColor( bool white )
 {
     Primitive Slide;
 
@@ -1395,7 +1398,7 @@ std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
     TransitionSettings aSettings;
     aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
 
-    return makeFadeThroughBlackTransition(aLeavingSlide, aEnteringSlide, aSettings);
+    return makeFadeThroughColorTransition(aLeavingSlide, aEnteringSlide, aSettings, white);
 }
 
 namespace

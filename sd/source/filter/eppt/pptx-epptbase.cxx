@@ -711,7 +711,8 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
     return false;
 }
 
-sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect, sal_uInt8& nDirection )
+sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect,
+    sal_Int32 nTransitionFadeColor, sal_uInt8& nDirection )
 {
     sal_Int8 nPPTTransitionType = 0;
     nDirection = 0;
@@ -723,7 +724,12 @@ sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTra
         if ( nTransitionSubtype == TransitionSubType::CROSSFADE )
             nPPTTransitionType = PPT_TRANSITION_TYPE_SMOOTHFADE;
         else if ( nTransitionSubtype == TransitionSubType::FADEOVERCOLOR )
-            nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;
+        {
+            if( nTransitionFadeColor == static_cast<sal_Int32>(COL_WHITE) )
+                nPPTTransitionType = PPT_TRANSITION_TYPE_FLASH;
+            else
+                nPPTTransitionType = PPT_TRANSITION_TYPE_FADE;
+        }
     }
     break;
     case TransitionType::PUSHWIPE :
