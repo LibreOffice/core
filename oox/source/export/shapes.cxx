@@ -1955,7 +1955,8 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
 
     oox::FormulaExportBase *const pMagic(dynamic_cast<oox::FormulaExportBase*>(xMathModel.get()));
     assert(pMagic);
-    pMagic->writeFormulaOoxml(GetFS(), GetFB()->getVersion(), GetDocumentType());
+    pMagic->writeFormulaOoxml(GetFS(), GetFB()->getVersion(), GetDocumentType(),
+        FormulaExportBase::eFormulaAlign::INLINE);
 
     mpFS->endElementNS(XML_a14, XML_m);
     mpFS->endElementNS(XML_a, XML_p);

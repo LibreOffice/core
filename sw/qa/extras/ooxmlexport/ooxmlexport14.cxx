@@ -124,6 +124,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
         p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "b", "48378");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133030, "tdf133030.docx")
+{
+    xmlDocPtr pExport = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pExport);
+
+    assertXPath(pExport, "/w:document/w:body/w:p[3]/m:oMathPara/m:oMathParaPr/m:jc", "val", "center");
+    assertXPath(pExport, "/w:document/w:body/w:p[5]/m:oMathPara/m:oMathParaPr/m:jc", "val", "left");
+    assertXPath(pExport, "/w:document/w:body/w:p[7]/m:oMathPara/m:oMathParaPr/m:jc", "val", "right");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
 {
     xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
