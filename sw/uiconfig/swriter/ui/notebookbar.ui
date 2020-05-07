@@ -2704,6 +2704,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="File-ExportToPDF">
+                                    <property name="visible">False</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:ExportToPDF</property>
                                     <property name="use_underline">True</property>
@@ -2740,6 +2741,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkToolButton" id="File-ExportToEPUB">
+                                    <property name="visible">False</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:ExportToEPUB</property>
                                     <property name="use_underline">True</property>
