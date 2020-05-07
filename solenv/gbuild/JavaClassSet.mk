@@ -19,8 +19,14 @@
 
 gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
     -encoding utf8 \
-    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER) \
+    --release $(JAVA_TARGET_VER) \
     $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
+
+gb_JavaClassSet_JAVACCOMMAND_JAVA9 := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
+    -encoding utf8 \
+    --release 9 \
+    $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
+
 gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
@@ -43,7 +49,13 @@ $(call gb_Helper_abbreviate_dirs,\
 			-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 			-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 			@$$RESPONSEFILE &&) \
+		$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND_JAVA9) \
+			$(gb_JavaClassSet_JAVACDEBUG) \
+			-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir_java9,$(2))" \
+			-d $(call gb_JavaClassSet_get_classdir_java9,$(2)) \
+			@$$RESPONSEFILE2 &&) \
 		rm -f $$RESPONSEFILE &&) \
+		rm -f $$RESPONSEFILE2 &&) \
 	touch $(1))
 
 endef
@@ -89,6 +101,16 @@ endef
 
 define gb_JavaClassSet_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_JavaClassSet_add_sourcefile_java9
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_sourcefile,$(2))
+
+endef
+
+define gb_JavaClassSet_add_sourcefiles_java9
+$(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile_java9,$(1),$(sourcefile)))
 
 endef
 
