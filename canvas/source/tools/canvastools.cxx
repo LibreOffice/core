@@ -1317,7 +1317,7 @@ namespace canvas::tools
             for(sal_Int32 nIdx = 0; nIdx < rExtraFontProperties.getLength(); ++nIdx)
             {
                 if (rExtraFontProperties[nIdx].Name == "EmphasisMark")
-                    rExtraFontProperties[0].Value >>= rEmphasisMark;
+                    rExtraFontProperties[nIdx].Value >>= rEmphasisMark;
             }
         }
 
