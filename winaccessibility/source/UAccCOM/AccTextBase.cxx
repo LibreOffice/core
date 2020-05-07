@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -895,9 +896,51 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringToPoint(long, lon
     return E_NOTIMPL;
 }
 
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startIndex, long endIndex, IA2ScrollType type)
 {
+    SolarMutexGuard g;
+
+    ENTER_PROTECTED_BLOCK
+
+    // #CHECK XInterface#
+    if(!pRXText.is())
+        return E_FAIL;
+
+    AccessibleScrollType lUnoType;
+
+    switch(type)
+    {
+    case IA2_SCROLL_TYPE_TOP_LEFT:
+        lUnoType = AccessibleScrollType_SCROLL_TOP_LEFT;
+        break;
+    case IA2_SCROLL_TYPE_BOTTOM_RIGHT:
+        lUnoType = AccessibleScrollType_SCROLL_BOTTOM_RIGHT;
+        break;
+    case IA2_SCROLL_TYPE_TOP_EDGE:
+        lUnoType = AccessibleScrollType_SCROLL_TOP_EDGE;
+        break;
+    case IA2_SCROLL_TYPE_BOTTOM_EDGE:
+        lUnoType = AccessibleScrollType_SCROLL_BOTTOM_EDGE;
+        break;
+    case IA2_SCROLL_TYPE_LEFT_EDGE:
+        lUnoType = AccessibleScrollType_SCROLL_LEFT_EDGE;
+        break;
+    case IA2_SCROLL_TYPE_RIGHT_EDGE:
+        lUnoType = AccessibleScrollType_SCROLL_RIGHT_EDGE;
+        break;
+    case IA2_SCROLL_TYPE_ANYWHERE:
+        lUnoType = AccessibleScrollType_SCROLL_ANYWHERE;
+        break;
+    default:
+        return E_NOTIMPL;
+    }
+
+    if( GetXInterface()->scrollSubstringTo(startIndex, endIndex, lUnoType) )
+        return S_OK;
+
     return E_NOTIMPL;
+
+    LEAVE_PROTECTED_BLOCK
 }
 
 /**
