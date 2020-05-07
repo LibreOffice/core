@@ -1658,6 +1658,11 @@
           <value xml:lang="en-US">Through Black</value>
         </prop>
       </node>
+      <node oor:name="through-white" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Through White</value>
+        </prop>
+      </node>
       <node oor:name="left-right" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Left to Right</value>
@@ -2018,6 +2023,14 @@
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
           <value>through-black</value>
+        </prop>
+      </node>
+      <node oor:name="fade-through-white" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>fade</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>through-white</value>
         </prop>
       </node>
       <node oor:name="zoom-rotate-in" oor:op="replace">

@@ -271,7 +271,8 @@ std::shared_ptr<OGLTransitionImpl> makeNewsflash();
 
 std::shared_ptr<OGLTransitionImpl> makeDiamond();
 std::shared_ptr<OGLTransitionImpl> makeFadeSmoothly();
-std::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack();
+// fade through black or white
+std::shared_ptr<OGLTransitionImpl> makeFadeThroughColor( bool white = false );
 
 class SceneObject
 {

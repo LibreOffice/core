@@ -254,7 +254,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             sal_Int16 nTST = 0;
             if ( GetPropertyValue( aAny, mXPagePropSet, "TransitionSubtype" )
                 && ( aAny >>= nTST ) )
-                nTransitionType = GetTransition( nTT, nTST, eFe, nDirection );
+                nTransitionType = GetTransition( nTT, nTST, eFe, 0, nDirection );
 
         }
         if ( !nTransitionType )

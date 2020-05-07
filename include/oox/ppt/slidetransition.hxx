@@ -72,6 +72,7 @@ namespace oox::ppt {
         double mfTransitionDurationInSeconds;
         bool  mbMode; /**< https://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
         ::sal_Int32 mnAdvanceTime;
+        ::sal_Int32 mnTransitionFadeColor;
     };
 
 }
