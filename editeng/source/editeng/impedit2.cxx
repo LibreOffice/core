@@ -49,6 +49,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
+#include <rtl/character.hxx>
+
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -3828,6 +3830,13 @@ sal_Int32 ImpEditEngine::GetChar(
                         {
                             nChar = ( std::abs( nRight - nChar ) < std::abs( nLeft - nChar ) ) ? nRight : nLeft;
                         }
+                    }
+                    else
+                    {
+                        OUString aStr(pParaPortion->GetNode()->GetString());
+                        // tdf#102625: don't select middle of a pair of surrogates with mouse cursor
+                        if (rtl::isSurrogate(aStr[nChar]))
+                            --nChar;
                     }
                 }
             }
