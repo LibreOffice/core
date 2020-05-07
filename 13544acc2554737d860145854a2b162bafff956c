@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "134f64c8_7b86d2e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 1,
+      "message": "Agree. Removed the summary tag.",
+      "parentUuid": "4ebe4e88_4bf10db1",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d415e2d1_76db1fb7",
         "filename": "bridges/source/cpp_uno/shared/vtablefactory.cxx",
         "patchSetId": 7
@@ -83,6 +107,30 @@
       "side": 1,
       "message": "There are plenty of files where this kind of thing happens, since this pattern was one of the instructions in the bugzilla issue (it also appears frequently in the previous commit #92331).\nSo, what should I do here?\nShould I replicate it to the other files?\nShould I modify it only in this file?",
       "parentUuid": "a4da2e9f_dbce76a8",
+      "range": {
+        "startLine": 2196,
+        "startChar": 0,
+        "endLine": 2196,
+        "endChar": 1
+      },
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9943dd77_d5043213",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 1,
+      "message": "Removed from this location, specifically.\nNot sure what to do in other files, though.",
+      "parentUuid": "ba1823a7_011c6096",
       "range": {
         "startLine": 2196,
         "startChar": 0,
@@ -163,6 +211,24 @@
       "revId": "13544acc2554737d860145854a2b162bafff956c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d73782b_cff37731",
+        "filename": "filter/source/msfilter/mscodec.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e934098_14e3417c",
+      "revId": "13544acc2554737d860145854a2b162bafff956c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81fc9466_b04b3240",
+        "filename": "hwpfilter/source/formula.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 1,
+      "message": "I have changed the macros that showed debugging information in this file for better clarity. Since they are debugging information, I am not sure whether I should have done that.",
+      "revId": "0d73d86eb804c57d946679d739bda13791a2c52d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

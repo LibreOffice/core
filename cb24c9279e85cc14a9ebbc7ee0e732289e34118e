@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fc8a5983_ae91d602",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 0,
+      "message": "Removed.",
+      "parentUuid": "4f5be3c1_14175a51",
+      "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42762186_e27b0a59",
         "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4b52bef_bd2e849f",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 0,
+      "message": "Removed.",
+      "parentUuid": "42762186_e27b0a59",
+      "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "490b690f_2e83a879",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 0,
+      "message": "Removed.",
+      "parentUuid": "da7c3553_3dad95bd",
+      "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7498a3fa_16e670fb",
         "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
         "patchSetId": 7
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "d1c4e110_2f560e0f",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/except.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 0,
+      "message": "Removed.",
+      "parentUuid": "7498a3fa_16e670fb",
+      "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa752dd6_11dca80f",
         "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx",
         "patchSetId": 7
@@ -84,6 +156,24 @@
       "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddc8755f_9f992d99",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/rtti.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-05-07T02:57:02Z",
+      "side": 0,
+      "message": "Removed.",
+      "parentUuid": "fa752dd6_11dca80f",
+      "revId": "cb24c9279e85cc14a9ebbc7ee0e732289e34118e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
