@@ -565,7 +565,13 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     if (ImplGetPropertyValue(mXPagePropSet, "TransitionType") && (mAny >>= nTransitionType) &&
             ImplGetPropertyValue(mXPagePropSet, "TransitionSubtype") && (mAny >>= nTransitionSubtype))
-        nPPTTransitionType = GetTransition(nTransitionType, nTransitionSubtype, eFadeEffect, nDirection);
+    {
+        // FADEOVERCOLOR with black -> fade, with white -> flash
+        sal_Int32 nTransitionFadeColor = 0;
+        if( ImplGetPropertyValue(mXPagePropSet, "TransitionFadeColor"))
+            mAny >>= nTransitionFadeColor;
+        nPPTTransitionType = GetTransition(nTransitionType, nTransitionSubtype, eFadeEffect, nTransitionFadeColor, nDirection);
+    }
 
     if (!nPPTTransitionType && eFadeEffect != FadeEffect_NONE)
         nPPTTransitionType = GetTransition(eFadeEffect, nDirection);
@@ -816,6 +822,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         case PPT_TRANSITION_TYPE_ZOOM:
             nTransition = XML_zoom;
             pDirection = (nDirection == 1) ? "in" : "out";
+            break;
+        case PPT_TRANSITION_TYPE_FLASH:
+            nTransition14 = XML_flash;
+            nTransition = XML_fade;
+            bOOXmlSpecificTransition = true;
             break;
         // coverity[dead_error_line] - following conditions exist to avoid compiler warning
         case PPT_TRANSITION_TYPE_NONE:
