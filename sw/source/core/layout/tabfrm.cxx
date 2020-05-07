@@ -2380,18 +2380,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
         // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
         // the table can not move forward as it is the first one and a split is in general allowed.
-        const bool bAllowSplitOfRow = ( bTableRowKeep &&
-                                        AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
-                                      !pIndPrev &&
-                                      !bDontSplit;
+        const bool bAllowSplitOfRow = bTableRowKeep && !pIndPrev && AreAllRowsKeepWithNext(pFirstNonHeadlineRow);
         // tdf91083 MSCompat: this extends bAllowSplitOfRow (and perhaps should just replace it).
         // If the kept-together items cannot move to a new page, a table split is in general allowed.
         const bool bEmulateTableKeepSplitAllowed =  bEmulateTableKeep && !IsKeepFwdMoveAllowed(/*IgnoreMyOwnKeepValue=*/true);
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
-             ( bEmulateTableKeepSplitAllowed ||
+             ( bEmulateTableKeepSplitAllowed || bAllowSplitOfRow ||
                ( ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() ||
-                   !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow
+                   !pFirstNonHeadlineRow->ShouldRowKeepWithNext()
                  ) && ( !bDontSplit || !pIndPrev )
            ) ) )
         {
