@@ -17,32 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <PageMasterPropMapper.hxx>
+#pragma once
 
-#include <rtl/ref.hxx>
-#include <PageMasterStyleMap.hxx>
-#include <PageMasterPropHdlFactory.hxx>
+#include <xmloff/prstylei.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/families.hxx>
+#include <xmloff/dllapi.h>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
-    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory(), false/*bForExport*/)
+class XMLOFF_DLLPUBLIC XMLDrawingPageStyleContext : public XMLPropStyleContext
 {
-}
+public:
+    XMLDrawingPageStyleContext(SvXMLImport& rImport, sal_uInt16 nPrefix, OUString const& rLocalName,
+                               css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrList,
+                               SvXMLStylesContext& rStyles,
+                               ContextID_Index_Pair const pContextIDs[],
+                               XmlStyleFamily const pFamilies[]);
 
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
-        const XMLPropertyMapEntry* pEntries,
-        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory ) :
-    XMLPropertySetMapper( pEntries, rFactory, true/*bForExport*/ )
-{
-}
+    virtual void
+    FillPropertySet(css::uno::Reference<css::beans::XPropertySet> const& rPropSet) override;
 
-XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
-{
-}
+private:
+    std::unique_ptr<ContextID_Index_Pair[]> m_pContextIDs;
+    XmlStyleFamily const* const m_pFamilies;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
