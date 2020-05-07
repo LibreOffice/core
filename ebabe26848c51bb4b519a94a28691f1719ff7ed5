@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32a86c34_ba910219",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-05-07T08:13:57Z",
+      "side": 1,
+      "message": "Would it be possible to add a assert here to check the current page is increasing on every iteration ?",
+      "revId": "ebabe26848c51bb4b519a94a28691f1719ff7ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
