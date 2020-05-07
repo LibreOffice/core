@@ -34,6 +34,24 @@
       "revId": "200dd76b9247a0b3d9cac48e8d2e9e1186b009f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04cff4f5_d58d3484",
+        "filename": "toolkit/inc/controls/eventcontainer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-07T06:17:01Z",
+      "side": 1,
+      "message": "Comment added here: https://gerrit.libreoffice.org/c/core/+/93537/",
+      "parentUuid": "f1fe8baf_79cebb4f",
+      "revId": "200dd76b9247a0b3d9cac48e8d2e9e1186b009f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
