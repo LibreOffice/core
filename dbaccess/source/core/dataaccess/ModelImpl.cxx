@@ -850,7 +850,8 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     SignatureState aSignatureState = getScriptingSignatureState();
     if (aSignatureState == SignatureState::OK
         || aSignatureState == SignatureState::NOTVALIDATED
-        || aSignatureState == SignatureState::INVALID)
+        || aSignatureState == SignatureState::INVALID
+        || aSignatureState == SignatureState::UNKNOWN)
     {
         bTryToPreserveScriptSignature = true;
         // We need to first save the file (which removes the macro signature), then add the macro signature again.
