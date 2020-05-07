@@ -26,6 +26,8 @@
 #include <tools/globname.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/streamwrap.hxx>
+#include <unotools/defaultencoding.hxx>
+#include <unotools/wincodepage.hxx>
 #include <osl/diagnose.h>
 #include <filter.hxx>
 #include <document.hxx>
@@ -118,7 +120,9 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
     {
         pBookStrm->SetBufferSize( 0x8000 );     // still needed?
 
-        XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pDocument, RTL_TEXTENCODING_MS_1252 );
+        XclImpRootData aImpData(
+            eBiff, rMedium, xRootStrg, *pDocument,
+            utl_getWinTextEncodingFromLangStr(utl_getLocaleForGlobalDefaultEncoding()));
         std::unique_ptr< ImportExcel > xFilter;
         switch( eBiff )
         {
