@@ -143,6 +143,7 @@
 #include <stdarg.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <oox/mathml/export.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -1559,7 +1560,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     DoWritePermissionsEnd();
 
     for (const auto& rpMath : m_aPostponedMaths)
-        WritePostponedMath(rpMath);
+        WritePostponedMath(rpMath.pMathObject, rpMath.nMathObjAlignment);
     m_aPostponedMaths.clear();
 
     for (const auto& rpControl : m_aPostponedFormControls)
@@ -5086,11 +5087,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_rExport.SdrExporter().endDMLAnchorInline(pFrameFormat);
 }
 
-void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOLENode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat, const sal_Int8 nFormulaAlignment )
 {
     if( WriteOLEChart( pSdrObj, rSize, pFlyFrameFormat ))
         return;
-    if( WriteOLEMath( rOLENode ))
+    if( WriteOLEMath( rOLENode , nFormulaAlignment))
         return;
     PostponeOLE( rOLENode, rSize, pFlyFrameFormat );
 }
@@ -5185,18 +5186,28 @@ void DocxAttributeOutput::WritePostponedChart()
     m_aPostponedCharts.clear();
 }
 
-bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode )
+bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode ,const sal_Int8 nAlign)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
     SvGlobalName aObjName(xObj->getClassID());
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
-    m_aPostponedMaths.push_back(&rOLENode);
+
+    PostponedMathObjects aPostponedMathObject;
+    try
+    {
+        aPostponedMathObject.pMathObject = const_cast<SwOLENode*>( &rOLENode);
+        aPostponedMathObject.nMathObjAlignment = nAlign;
+        m_aPostponedMaths.push_back(aPostponedMathObject);
+    }
+    catch (const uno::Exception&)
+    {
+    }
     return true;
 }
 
-void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
+void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sal_Int8 nAlign)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(pPostponedMath)->GetOLEObj().GetOleRef());
     if (embed::EmbedStates::LOADED == xObj->getCurrentState())
@@ -5216,14 +5227,17 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
         SAL_WARN("sw.ww8", "Broken math object");
         return;
     }
+
+
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
+
     oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
     assert( formulaexport != nullptr );
     if (formulaexport)
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
-                oox::drawingml::DOCUMENT_DOCX);
+                oox::drawingml::DOCUMENT_DOCX, nAlign);
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
@@ -5765,7 +5779,40 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 {
                     SwNodeIndex aIdx(*rFrameFormat.GetContent().GetContentIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrameFormat*>( &rFrameFormat ));
+                    sal_Int8 nAlign(0); //output variable for the formula alignment (default inline)
+                    try
+                    {
+                        auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the forumla
+                        SwTextNode& rTxNode = dynamic_cast<SwTextNode&>(rFrame.GetPosition().nNode.GetNode());
+                        //check if the para empty where the formula in, and the ole object is a formula
+                        if (rTxNode.GetText().isEmpty() && SotExchange::IsMath(xObj->getClassID()))
+                        {
+                            auto xPara = rTxNode.GetXParagraph().get(); //get the paragraph where the formula in
+                            uno::Reference<beans::XPropertySet> xParaProps(xPara, uno::UNO_QUERY_THROW);
+                            style::ParagraphAdjust aParaAdjust;
+                            xParaProps->getPropertyValue("ParaAdjust") >>= aParaAdjust;//querry the para alignment
+                            switch (aParaAdjust)//convert the adjustment
+                            {
+                            case style::ParagraphAdjust::ParagraphAdjust_CENTER:
+                                nAlign = FormulaExportBase::eFormulaAlign::CENTER;
+                                break;
+                            case style::ParagraphAdjust::ParagraphAdjust_LEFT:
+                                nAlign = FormulaExportBase::eFormulaAlign::LEFT;
+                                break;
+                            case style::ParagraphAdjust::ParagraphAdjust_RIGHT:
+                                nAlign = FormulaExportBase::eFormulaAlign::RIGHT;
+                                break;
+                            default:
+                                nAlign = FormulaExportBase::eFormulaAlign::INLINE;
+                                break;
+                            }
+                        }
+
+                    }
+                    catch (uno::Exception&)
+                    {
+                    }
+                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize(), dynamic_cast<const SwFlyFrameFormat*>( &rFrameFormat ),nAlign);
                     m_bPostponedProcessingFly = false ;
                 }
             }
