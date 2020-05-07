@@ -104,6 +104,7 @@ gb_InstallScript_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScr
 gb_InternalUnoApi_get_target = $(WORKDIR)/InternalUnoApi/$(1).done
 gb_Jar_get_target = $(call gb_Jar_get_install_target,$(1))
 gb_Jar_get_classsetname = Jar/$(1)
+gb_Jar_get_classsetname_java9 = Jar/$(1)_Java9
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
 gb_JavaClassSet_get_repo_target = $(WORKDIR)/JavaClassSet/$(2)/$(1).done
 gb_JavaClassSet_get_target = $(WORKDIR)/JavaClassSet/$(1)/done

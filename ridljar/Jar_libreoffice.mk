@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Jar_Jar,libreoffice))
+$(eval $(call gb_Jar_Jar,libreoffice,Java9))
 
 $(eval $(call gb_Jar_use_customtargets,libreoffice,\
     ridljar/javamaker \
@@ -30,6 +30,10 @@ $(eval $(call gb_Jar_add_manifest_classpath,libreoffice, \
 $(eval $(call gb_Jar_add_packagedirs,libreoffice,\
     $(call gb_CustomTarget_get_workdir,ridljar/javamaker)/com \
     $(call gb_CustomTarget_get_workdir,unoil/javamaker)/com \
+))
+
+$(eval $(call gb_Jar_add_sourcefiles_java9,libreoffice,\
+    ridljar/source/libreoffice/module-info \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\

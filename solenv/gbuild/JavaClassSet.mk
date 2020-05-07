@@ -17,10 +17,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
+gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
     -encoding utf8 \
-    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER) \
+    --release $(T_JAVA_TARGET_VER) $(info $(1) X $(T_JAVA_TARGET_VER) X) \
     $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
+
 gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
@@ -71,6 +72,8 @@ $(call gb_JavaClassSet_get_target,$(1)) : \
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := \
 	$(gb_Module_CURRENTMAKEFILE) \
 	$(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : T_JAVA_TARGET_VER := \
+	$(if $(filter $(1),$(patsubst %_Java9,%,$(1))),$(JAVA_TARGET_VER),9)
 
 endef
 

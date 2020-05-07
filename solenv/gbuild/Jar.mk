@@ -69,7 +69,9 @@ endef
 
 # clean target reuses clean target of ClassSet
 .PHONY : $(call gb_Jar_get_clean_target,%)
-$(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname,%))
+$(call gb_Jar_get_clean_target,%) : \
+		$(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname,%)) \
+		$(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname_java9,%))
 	$(call gb_Output_announce,$*,$(false),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Jar_get_target,$*))
@@ -102,11 +104,14 @@ endif
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
-$(call gb_Jar_get_target,$(1)) : PACKAGEDIRS :=
+$(call gb_Jar_get_target,$(1)) : PACKAGEDIRS := \
+	$(if $(2),$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname_java9,$(1))))
 $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_Jar_get_target,$(1)) : \
-	$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
+	$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1))) \
+	$(if $(2),$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname_java9,$(1))))
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
+$(if $(2),$(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname_java9,$(1))))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_target,$(1)))
 
@@ -120,6 +125,12 @@ define gb_Jar_add_sourcefile
 $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
+
+define gb_Jar_add_sourcefile_java9
+$(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
+
+endef
+
 
 # PACKAGEROOTS is the list of all root folders created by the JavaClassSet to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
@@ -159,6 +170,11 @@ $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
 
 endef
 
+define gb_Jar_add_sourcefiles_java9
+$(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile_java9,$(1),$(sourcefile)))
+
+endef
+
 define gb_Jar_add_generated_sourcefile
 $(call gb_JavaClassSet_add_generated_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
@@ -190,6 +206,7 @@ gb_Jar_default_jars := $(gb_Jar_URE)
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_use_jar
 $(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_use_jar,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
 $(if $(filter-out $(gb_Jar_default_jars),$(2)),\
   $(call gb_Jar_add_manifest_classpath,$(1),$(2).jar))
 
@@ -197,6 +214,7 @@ endef
 
 define gb_Jar_use_system_jar
 $(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
 $(call gb_Jar_add_manifest_classpath,$(1),$(call gb_Helper_make_url,$(2)))
 
 endef
@@ -205,6 +223,7 @@ endef
 define gb_Jar_use_external_jar
 $(if $(3),,$(call gb_Output_error,gb_Jar_use_external_jar: manifest entry missing))
 $(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
 $(call gb_Jar_add_manifest_classpath,$(1),$(3))
 
 endef
@@ -236,6 +255,7 @@ endef
 
 define gb_Jar_use_customtarget
 $(call gb_JavaClassSet_use_customtarget,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_use_customtarget,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
 
 endef
 
@@ -249,6 +269,7 @@ endef
 # call gb_Jar_use_external_project,jar,externalproject
 define gb_Jar_use_external_project
 $(call gb_JavaClassSet_use_external_project,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_JavaClassSet_use_external_project,$(call gb_Jar_get_classsetname_java9,$(1)),$(2))
 endef
 
 # possible directories for jar files containing UNO services
