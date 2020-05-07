@@ -74,6 +74,7 @@ public:
     void testTdf123557();
     void testTdf113822();
     void testTdf126761();
+    void testGlow();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testTdf123557);
     CPPUNIT_TEST(testTdf113822);
     CPPUNIT_TEST(testTdf126761);
+    CPPUNIT_TEST(testGlow);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1253,6 +1255,54 @@ void SdExportTest::testTdf126761()
     sal_uInt32 nCharUnderline;
     xPropSet->getPropertyValue( "CharUnderline" ) >>= nCharUnderline;
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(1), nCharUnderline );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testGlow()
+{
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/glow.odg"), ODG);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+
+    // Check glow properties
+    bool bGlowEffect = false;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffect") >>= bGlowEffect);
+    CPPUNIT_ASSERT(bGlowEffect);
+    sal_Int32 nGlowEffectRad = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRad") >>= nGlowEffectRad);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(190500), nGlowEffectRad); // 15 pt = 190500 EMU
+    sal_Int32 nGlowEffectColor = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectColor") >>= nGlowEffectColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF4000), nGlowEffectColor); // "Brick"
+    sal_Int16 nGlowEffectTransparency = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectTransparency") >>= nGlowEffectTransparency);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nGlowEffectTransparency); // 60%
+
+    // Test ODF element
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    // check that we actually test graphic style
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
+                "family", "graphic");
+    // check loext graphic attributes
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow", "visible");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-radius", "190.5cm"); // ???
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-color", "#ff4000");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-transparency", "60%");
 
     xDocShRef->DoClose();
 }
