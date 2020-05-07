@@ -27,10 +27,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
 #include <comphelper/lok.hxx>
@@ -151,6 +154,7 @@ public:
     void testDialogInput();
     void testCalcSaveAs();
     void testControlState();
+    void testMetricField();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -210,6 +214,7 @@ public:
     CPPUNIT_TEST(testDialogInput);
     CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testControlState);
+    CPPUNIT_TEST(testMetricField);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2746,6 +2751,36 @@ void DesktopLOKTest::testControlState()
     pViewShell->GetViewFrame()->GetBindings().Update();
     pViewShell->GetViewFrame()->GetBindings().QueryControlState(SID_ATTR_TRANSFORM_WIDTH, aState);
     CPPUNIT_ASSERT(!aState.empty());
+}
+
+void DesktopLOKTest::testMetricField()
+{
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+
+    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+    CPPUNIT_ASSERT(pViewFrame);
+
+    SfxChildWindow* pSideBar = pViewFrame->GetChildWindow(SID_SIDEBAR);
+    CPPUNIT_ASSERT(pSideBar);
+
+    vcl::Window* pWin = pSideBar->GetWindow();
+    CPPUNIT_ASSERT(pWin);
+
+    WindowUIObject aWinUI(pWin);
+    std::unique_ptr<UIObject> pUIWin(aWinUI.get_child("selectwidth"));
+    CPPUNIT_ASSERT(pUIWin.get());
+
+    StringMap aMap;
+    aMap["VALUE"] = "75.06";
+    pUIWin->execute("VALUE", aMap);
+
+    StringMap aRet = pUIWin->get_state();
+    CPPUNIT_ASSERT_EQUAL(aMap["VALUE"], aRet["Value"]);
 }
 
 namespace {
