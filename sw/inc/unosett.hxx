@@ -217,7 +217,7 @@ public:
             OUString *const pBulletFontName,
             OUString *const pHeadingStyleName,
             OUString *const pParagraphStyleName,
-            SwDoc *const pDoc, SwDocShell *const pDocShell,
+            SwDoc *const pDoc,
             css::uno::Sequence<css::beans::PropertyValue> const& rProperties);
 
 };
