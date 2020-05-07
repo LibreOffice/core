@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include "mysqlc_connection.hxx"
 #include "mysqlc_propertyids.hxx"
@@ -133,6 +134,38 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_errno(pMySql),
                                                      *this, m_xConnection->getConnectionEncoding());
     m_nAffectedRows = mysql_affected_rows(pMySql);
+
+    // code from https://dev.mysql.com/doc/refman/8.0/en/c-api-multiple-queries.html
+    // a bit modified
+    int status = 0;
+    // process each statement result
+    do
+    {
+        // did current statement return data?
+        auto result = mysql_store_result(pMySql);
+        if (result)
+        {
+            // yes; process rows and free the result set
+            // process_result_set(pMySql, result);
+            mysql_free_result(result);
+        }
+        else
+        {
+            if (mysql_field_count(pMySql) == 0)
+            {
+                SAL_WARN("connectivity.mysqlc",
+                         "Number of rows affected:" << mysql_affected_rows(pMySql));
+            }
+            else // some error occurred
+            {
+                SAL_WARN("connectivity.mysqlc", "Could not retrieve result set");
+                break;
+            }
+        }
+        // more results? -1 = no, >0 = error, 0 = yes (keep looping)
+        if ((status = mysql_next_result(pMySql)) > 0)
+            SAL_WARN("connectivity.mysqlc", "Could not execute statement");
+    } while (status == 0);
 
     return !failure;
 }
