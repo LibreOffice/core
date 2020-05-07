@@ -19,6 +19,7 @@ import uno
 import traceback
 from unohelper import systemPathToFileUrl, absolutize
 from ..common.Desktop import Desktop
+from ..common.SystemDialog import SystemDialog
 
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
@@ -70,7 +71,7 @@ class OfficeDocument(object):
 
                 Desktop.dispatchURL(xMSF, ".uno:CloseDoc", xFrame)
 
-        except PropertyVetoException:
+        except Exception:
             traceback.print_exc()
 
     @classmethod
@@ -191,7 +192,7 @@ class OfficeDocument(object):
             try:
                 xComponent.close(True)
                 bState = True
-            except com.sun.star.util.CloseVetoException:
+            except Exception:
                 print ("could not close doc")
                 bState = False
 

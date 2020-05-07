@@ -169,7 +169,7 @@ class WizardDialog(UnoDialog2):
             from .SystemDialog import SystemDialog
             sError = "The files required could not be found.\n" + \
                 "Please start the LibreOffice Setup and choose 'Repair'."
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sError)
+            SystemDialog.showMessageBox(super().xMSF, "ErrorBox", OK, sError)
         except Exception:
             traceback.print_exc()
 
@@ -430,14 +430,14 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
 
-    def windowHidden():
+    def windowHidden(self):
         self.cancelWizard_1()
 
     def queryTermination(self):
         self.activate()
         raise TerminationVetoException()
 
-    def disposing(arg0):
+    def disposing(self, arg0):
         self.cancelWizard_1()
 
     def optCreateFromTemplateItemChanged(self):

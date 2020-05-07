@@ -18,6 +18,7 @@
 from .UnoDialog import UnoDialog, UIConsts
 from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
+from ..common.SystemDialog import SystemDialog
 from .event.CommonListener import ItemListenerProcAdapter, \
     ActionListenerProcAdapter, TextListenerProcAdapter, \
     AdjustmentListenerProcAdapter
@@ -199,5 +200,5 @@ class UnoDialog2(UnoDialog):
 
     def showMessageBox(self, windowServiceName, windowAttribute, MessageText):
         return SystemDialog.showMessageBox(
-            xMSF, self.xControl.Peer,
+            super().xMSF, self.xControl.Peer,
             windowServiceName, windowAttribute, MessageText)

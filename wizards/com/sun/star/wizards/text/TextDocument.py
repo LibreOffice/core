@@ -59,8 +59,8 @@ class TextDocument(object):
                 self.xDesktop = Desktop.getDesktop(xMSF);
                 self.xFrame = OfficeDocument.createNewFrame(xMSF, listener)
                 self.xTextDocument = OfficeDocument.load(
-                    xFrame, URL, "_self", xArgs);
-                self.xWindowPeer = xFrame.getComponentWindow()
+                    self.xFrame, URL, "_self", xArgs);
+                self.xWindowPeer = self.xFrame.getComponentWindow()
                 self.m_xDocProps = self.xTextDocument.DocumentProperties
                 CharLocale = self.xTextDocument.CharLocale
                 return

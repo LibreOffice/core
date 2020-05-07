@@ -122,11 +122,11 @@ class PathSelection(object):
                             FileAccess.getParentDir(sStorePath)
                         self.sDefaultName = myFA.getFilename(sStorePath)
                     return
-            elif iTransferMode == TransferMode.LOAD:
-                if iDialogType == DialogTypes.FOLDER:
+            elif self.iTransferMode == self.TransferMode.LOAD:
+                if self.iDialogType == self.DialogTypes.FOLDER:
                     #TODO: write code for picking a folder for loading
                     return
-                elif iDialogType == DialogTypes.FILE:
+                elif self.iDialogType == self.DialogTypes.FILE:
                     #TODO: write code for picking a file for loading
                     return
         except Exception:
