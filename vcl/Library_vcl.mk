@@ -330,6 +330,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicObject \
     vcl/source/graphic/UnoGraphicProvider \
     vcl/source/graphic/UnoGraphicTransformer \
+    vcl/source/graphic/VectorGraphicSearch \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \
