@@ -246,9 +246,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
             0 ); // should not be present
 
     // 7th shape with several effects: glow, inner shadow and reflection
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
-            "rad", "63500");
+    // We import glow radius (in EMU in OOXML) into integral mm100 internal representation, then
+    // export back into EMUs. This results in inaccuracies.
+    OUString rad = getXPath(pXmlDoc,
+                            "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
+                            "rad");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(63500, rad.toInt64(), 150); // actually, it returns 63360
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr",
             "val", "eb2722");

@@ -1272,7 +1272,7 @@ void SdExportTest::testGlow()
     CPPUNIT_ASSERT(bGlowEffect);
     sal_Int32 nGlowEffectRad = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRad") >>= nGlowEffectRad);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(190500), nGlowEffectRad); // 15 pt = 190500 EMU
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nGlowEffectRad); // 15 pt = 529.166... mm/100
     sal_Int32 nGlowEffectColor = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectColor") >>= nGlowEffectColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF4000), nGlowEffectColor); // "Brick"
@@ -1294,7 +1294,7 @@ void SdExportTest::testGlow()
     assertXPath(
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
-        "glow-radius", "190.5cm"); // ???
+        "glow-radius", "0.529cm");
     assertXPath(
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",

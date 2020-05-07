@@ -3115,15 +3115,15 @@ void SdImportTest::testShapeGlowEffectPPTXImpoer()
     bool bHasGlow = false;
     xShape->getPropertyValue("GlowEffect") >>= bHasGlow;
     CPPUNIT_ASSERT(bHasGlow);
-    sal_Int64 nRadius = -1;
+    sal_Int32 nRadius = -1;
     xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(139700l), nRadius);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 139700 EMU = 388.0556 mm/100
     Color nColor;
     xShape->getPropertyValue("GlowEffectColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
-    sal_uInt16 nTransparency;
+    sal_Int16 nTransparency;
     xShape->getPropertyValue("GlowEffectTransparency") >>= nTransparency;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(60), nTransparency);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
