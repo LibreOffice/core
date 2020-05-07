@@ -1281,7 +1281,7 @@ void SdExportTest::testGlow()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nGlowEffectTransparency); // 60%
 
     // Test ODF element
-    xmlDocPtr pXmlDoc = parseExport(tempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
     // check that we actually test graphic style
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
