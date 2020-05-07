@@ -62,6 +62,9 @@
 
 #include "XMLCalculationSettingsContext.hxx"
 #include <XMLNumberStylesImport.hxx>
+#include <PageMasterStyleMap.hxx>
+#include <PageMasterPropHdlFactory.hxx>
+#include <PageMasterPropMapper.hxx>
 // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
@@ -1096,6 +1099,15 @@ SvXMLImportPropertyMapper*
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::CELL, false );
     return new XMLTextImportPropertyMapper( pPropMapper, rImport );
+}
+
+SvXMLImportPropertyMapper*
+XMLTextImportHelper::CreateDrawingPageExtPropMapper(SvXMLImport& rImport)
+{
+    rtl::Reference<XMLPropertyHandlerFactory> const pFactory(new XMLPageMasterPropHdlFactory);
+    XMLPropertySetMapper *const pPropMapper(
+        new XMLPropertySetMapper(g_XMLPageMasterDrawingPageStyleMap, pFactory, false));
+    return new SvXMLImportPropertyMapper(pPropMapper, rImport);
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
@@ -2529,6 +2541,18 @@ XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
     return pStyle;
 }
 
+XMLPropStyleContext * XMLTextImportHelper::FindDrawingPage(OUString const& rName) const
+{
+    if (!m_xImpl->m_xAutoStyles.is())
+    {
+        return nullptr;
+    }
+    SvXMLStyleContext const* pStyle(
+        static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->FindStyleChildContext(
+               XmlStyleFamily::SD_DRAWINGPAGE_ID, rName, true));
+    assert(pStyle == nullptr || dynamic_cast<XMLPropStyleContext const*>(pStyle) != nullptr);
+    return const_cast<XMLPropStyleContext*>(static_cast<XMLPropStyleContext const*>(pStyle));
+}
 
 void XMLTextImportHelper::PushListContext()
 {

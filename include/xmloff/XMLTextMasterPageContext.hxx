@@ -33,6 +33,7 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {
     OUString       sFollow;
     OUString       sPageMasterName;
+    OUString m_sDrawingPageStyle;
 
     css::uno::Reference < css::style::XStyle > xStyle;
 
@@ -72,6 +73,11 @@ public:
 
     virtual void Finish( bool bOverwrite ) override;
 };
+
+struct ContextID_Index_Pair;
+
+XMLOFF_DLLPUBLIC extern ContextID_Index_Pair const g_MasterPageContextIDs[];
+XMLOFF_DLLPUBLIC extern XmlStyleFamily const g_MasterPageFamilies[];
 
 #endif
 

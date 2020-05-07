@@ -19,6 +19,7 @@
 
 #include "ximpstyl.hxx"
 #include <xmloff/maptype.hxx>
+#include <xmloff/XMLDrawingPageStyleContext.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlprmap.hxx>
@@ -129,7 +130,8 @@ SvXMLImportContextRef SdXMLDrawingPagePropertySetContext::CreateChildContext(
 
 namespace {
 
-class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
+
+class SdXMLDrawingPageStyleContext : public XMLDrawingPageStyleContext
 {
 public:
 
@@ -138,8 +140,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        SvXMLStylesContext& rStyles,
-        XmlStyleFamily nFamily = XmlStyleFamily::SD_DRAWINGPAGE_ID);
+        SvXMLStylesContext& rStyles);
 
     SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
@@ -147,11 +148,48 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
-
-    // #i35918#
-    virtual void FillPropertySet( const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
+static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
+static ContextID_Index_Pair const g_ContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+{
+    { CTF_DASHNAME , -1 },
+    { CTF_LINESTARTNAME , -1 },
+    { CTF_LINEENDNAME , -1 },
+    { CTF_FILLGRADIENTNAME, -1 },
+    { CTF_FILLTRANSNAME , -1 },
+    { CTF_FILLHATCHNAME , -1 },
+    { CTF_FILLBITMAPNAME , -1 },
+    { -1, -1 }
+};
+static XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
+{
+    XmlStyleFamily::SD_STROKE_DASH_ID,
+    XmlStyleFamily::SD_MARKER_ID,
+    XmlStyleFamily::SD_MARKER_ID,
+    XmlStyleFamily::SD_GRADIENT_ID,
+    XmlStyleFamily::SD_GRADIENT_ID,
+    XmlStyleFamily::SD_HATCH_ID,
+    XmlStyleFamily::SD_FILL_IMAGE_ID
+};
+
+}
+
+XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
+    SvXMLImport& rImport,
+    sal_uInt16 const nPrefix,
+    const OUString& rLName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles,
+    ContextID_Index_Pair const pContextIDs[],
+    XmlStyleFamily const pFamilies[])
+    : XMLPropStyleContext(rImport, nPrefix, rLName, xAttrList, rStyles, XmlStyleFamily::SD_DRAWINGPAGE_ID)
+    , m_pFamilies(pFamilies)
+{
+    size_t size(1); // for the -1 entry
+    for (ContextID_Index_Pair const* pTemp(pContextIDs); pTemp->nContextID != -1; ++size, ++pTemp);
+    m_pContextIDs.reset(new ContextID_Index_Pair[size]);
+    std::memcpy(m_pContextIDs.get(), pContextIDs, size * sizeof(ContextID_Index_Pair));
 }
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
@@ -159,9 +197,9 @@ SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-    SvXMLStylesContext& rStyles,
-    XmlStyleFamily nFamily)
-:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
+    SvXMLStylesContext& rStyles)
+    : XMLDrawingPageStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles,
+            g_ContextIDs, g_Families)
 {
 }
 
@@ -229,49 +267,27 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
 }
 
+
 // #i35918#
-void SdXMLDrawingPageStyleContext::FillPropertySet(
+void XMLDrawingPageStyleContext::FillPropertySet(
     const Reference< beans::XPropertySet > & rPropSet )
 {
-    static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
-    struct ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
-    {
-        { CTF_DASHNAME , -1 },
-        { CTF_LINESTARTNAME , -1 },
-        { CTF_LINEENDNAME , -1 },
-        { CTF_FILLGRADIENTNAME, -1 },
-        { CTF_FILLTRANSNAME , -1 },
-        { CTF_FILLHATCHNAME , -1 },
-        { CTF_FILLBITMAPNAME , -1 },
-        { -1, -1 }
-    };
-    static const XmlStyleFamily aFamilies[MAX_SPECIAL_DRAW_STYLES] =
-    {
-        XmlStyleFamily::SD_STROKE_DASH_ID,
-        XmlStyleFamily::SD_MARKER_ID,
-        XmlStyleFamily::SD_MARKER_ID,
-        XmlStyleFamily::SD_GRADIENT_ID,
-        XmlStyleFamily::SD_GRADIENT_ID,
-        XmlStyleFamily::SD_HATCH_ID,
-        XmlStyleFamily::SD_FILL_IMAGE_ID
-    };
-
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
     SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
     if( xImpPrMap.is() )
-        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+        xImpPrMap->FillPropertySet(GetProperties(), rPropSet, m_pContextIDs.get());
 
     Reference< beans::XPropertySetInfo > xInfo;
-    for( sal_uInt16 i=0; i<MAX_SPECIAL_DRAW_STYLES; i++ )
+    for (size_t i=0; m_pContextIDs[i].nContextID != -1; ++i)
     {
-        sal_Int32 nIndex = aContextIDs[i].nIndex;
+        sal_Int32 nIndex = m_pContextIDs[i].nIndex;
         if( nIndex != -1 )
         {
             struct XMLPropertyState& rState = GetProperties()[nIndex];
             OUString sStyleName;
             rState.maValue >>= sStyleName;
-            sStyleName = GetImport().GetStyleDisplayName( aFamilies[i],
+            sStyleName = GetImport().GetStyleDisplayName( m_pFamilies[i],
                                                           sStyleName );
             // get property set mapper
             rtl::Reference<XMLPropertySetMapper> rPropMapper =

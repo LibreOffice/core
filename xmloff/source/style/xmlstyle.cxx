@@ -25,7 +25,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
-#include "PageMasterPropMapper.hxx"
+#include <PageMasterPropMapper.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <xmloff/nmspmap.hxx>

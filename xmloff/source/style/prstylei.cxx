@@ -537,7 +537,8 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 {
     if(!maProperties.empty() && rFillStyleTag.getLength())
     {
-        const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
+        // no & to avoid non-obvious UAF due to the 2nd temp Reference
+        const rtl::Reference<XMLPropertySetMapper> rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
         if(rMapper.is())
         {
