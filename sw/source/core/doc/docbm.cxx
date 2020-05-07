@@ -1419,7 +1419,6 @@ namespace sw { namespace mark
             if (m_pLastActiveFieldmark != pFieldBM)
             {
                 FieldmarkWithDropDownButton& rFormField = dynamic_cast<FieldmarkWithDropDownButton&>(*pFieldBM);
-                rFormField.ShowButton(&rEditWin);
                 pNewActiveFieldmark = &rFormField;
             }
             else
@@ -1432,6 +1431,8 @@ namespace sw { namespace mark
         {
             ClearFieldActivation();
             m_pLastActiveFieldmark = pNewActiveFieldmark;
+            if(pNewActiveFieldmark)
+                pNewActiveFieldmark->ShowButton(&rEditWin);
         }
     }
 
