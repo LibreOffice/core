@@ -96,7 +96,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     std::unique_ptr<SmCursor> mpCursor;
     std::set< OUString >    maUsedSymbols;   // to export used symbols only when saving
 
-
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     bool        WriteAsMathType3( SfxMedium& );
@@ -207,7 +206,8 @@ public:
 
     void writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
             oox::core::OoxmlVersion version,
-            oox::drawingml::DocumentType documentType);
+            oox::drawingml::DocumentType documentType,
+            const sal_Int8 nAlign);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
