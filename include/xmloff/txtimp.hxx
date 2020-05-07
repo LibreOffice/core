@@ -503,6 +503,7 @@ public:
             const OUString& rName ) const;
     XMLPropStyleContext* FindPageMaster(
             const OUString& rName ) const;
+    XMLPropStyleContext* FindDrawingPage(OUString const& rName) const;
 
     const css::uno::Reference< css::container::XNameContainer> & GetParaStyles() const;
 
@@ -545,6 +546,7 @@ public:
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableCellExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateDrawingPageExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 
