@@ -337,7 +337,7 @@ public:
     virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
 
     /// @see lok::Document::completeFunction().
-    virtual void completeFunction(int /*nIndex*/)
+    virtual void completeFunction(const OUString& /*rFunctionName*/)
     {
     }
 

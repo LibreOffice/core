@@ -1090,7 +1090,7 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
 static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight);
 
-static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex);
+static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
 } // extern "C"
 
 namespace {
@@ -5411,7 +5411,7 @@ static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWin
     pWindow->SetSizePixel(Size(nWidth, nHeight));
 }
 
-static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex)
+static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char* pFunctionName)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5423,7 +5423,7 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, int nIndex)
         return;
     }
 
-    pDoc->completeFunction(nIndex);
+    pDoc->completeFunction(OUString::fromUtf8(pFunctionName));
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
