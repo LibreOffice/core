@@ -17,21 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
+#pragma once
 
-#include <xmloff/prhdlfac.hxx>
+#include <xmloff/prstylei.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/families.hxx>
+#include <xmloff/dllapi.h>
 
-class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
+class XMLOFF_DLLPUBLIC XMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
-                        XMLPageMasterPropHdlFactory();
-    virtual             ~XMLPageMasterPropHdlFactory() override;
+    XMLDrawingPageStyleContext(SvXMLImport& rImport, sal_uInt16 nPrefix, OUString const& rLocalName,
+                               css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrList,
+                               SvXMLStylesContext& rStyles,
+                               ContextID_Index_Pair const pContextIDs[],
+                               sal_uInt16 const pFamilies[]);
 
-    virtual const XMLPropertyHandler*
-                        GetPropertyHandler( sal_Int32 nType ) const override;
+    virtual void
+    FillPropertySet(css::uno::Reference<css::beans::XPropertySet> const& rPropSet) override;
+
+private:
+    std::unique_ptr<ContextID_Index_Pair[]> m_pContextIDs;
+    sal_uInt16 const* const m_pFamilies;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

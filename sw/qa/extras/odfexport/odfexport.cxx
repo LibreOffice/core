@@ -58,6 +58,7 @@ public:
     {
         std::vector<const char*> aBlacklist = {
             // These are known problems, they should be fixed one by one.
+            "sw_hatch.odt",
             "fdo86963.odt",
             "shape-relsize.odt",
             "fdo60769.odt",
@@ -1516,6 +1517,16 @@ DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
             }
         }
     } while (xParaEnum->hasMoreElements());
+}
+
+DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
+{
+    uno::Reference<container::XNameAccess> xStyles(getStyles("PageStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Blue -45 Degrees"), getProperty<OUString>(xStyle, "FillHatchName"));
+    CPPUNIT_ASSERT(!getProperty<sal_Bool>(xStyle, "FillBackground"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 }
 
 DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
