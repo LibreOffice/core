@@ -24,7 +24,7 @@ class SmOoxmlExport : public SmWordExportBase
 public:
     SmOoxmlExport(const SmNode* pIn, oox::core::OoxmlVersion version,
             oox::drawingml::DocumentType documentType);
-    void ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& m_pSerializer );
+    void ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& m_pSerializer, const sal_Int8 );
 private:
     void HandleVerticalStack( const SmNode* pNode, int nLevel ) override;
     void HandleText( const SmNode* pNode, int nLevel ) override;
