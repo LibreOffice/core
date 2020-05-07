@@ -94,6 +94,7 @@ endef
 # creates a class set and a dependency to it
 # registers target and clean target
 # adds jar files to DeliverLogTarget
+# call gb_Jar_Jar,jarname,java9modulename
 define gb_Jar_Jar
 ifeq (,$$(findstring $(1),$$(gb_Jar_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
@@ -106,7 +107,7 @@ $(call gb_Jar_get_target,$(1)) : PACKAGEDIRS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_Jar_get_target,$(1)) : \
 	$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
-$(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
+$(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)),$(2))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_target,$(1)))
 
@@ -120,6 +121,12 @@ define gb_Jar_add_sourcefile
 $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
+
+define gb_Jar_add_sourcefile_java9
+$(call gb_JavaClassSet_add_sourcefile_java9,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
 
 # PACKAGEROOTS is the list of all root folders created by the JavaClassSet to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
@@ -156,6 +163,11 @@ endef
 
 define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_Jar_add_sourcefiles_java9
+$(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile_java9,$(1),$(sourcefile)))
 
 endef
 
