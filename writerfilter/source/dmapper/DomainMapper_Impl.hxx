@@ -681,7 +681,8 @@ public:
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
-    void appendStarMath( const Value& v , sal_uInt8);
+    void appendStarMath( const Value& v);
+    void adjustLastPara(sal_Int8);
     css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
 
     /// AutoText import: each entry is placed in the separate section
