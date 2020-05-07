@@ -3696,10 +3696,4 @@ void ImageButton::ImplInitStyle()
     SetStyle( nStyle );
 }
 
-TriStateBox::TriStateBox( vcl::Window* pParent, WinBits nStyle ) :
-    CheckBox( pParent, nStyle )
-{
-    EnableTriState();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

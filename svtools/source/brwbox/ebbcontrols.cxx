@@ -230,7 +230,8 @@ namespace svt
 
         EnableChildTransparentMode();
 
-        pBox = VclPtr<TriStateBox>::Create(this,WB_CENTER|WB_VCENTER);
+        pBox = VclPtr<CheckBox>::Create(this,WB_CENTER|WB_VCENTER);
+        pBox->EnableTriState( true );
         pBox->SetLegacyNoTextAlign( true );
         pBox->EnableChildTransparentMode();
         pBox->SetPaintTransparent( true );

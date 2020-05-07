@@ -1983,13 +1983,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
-        //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
-        VclPtr<CheckBox> xCheckBox;
-        if (bIsTriState && m_bLegacy)
-            xCheckBox = VclPtr<TriStateBox>::Create(pParent, nBits);
-        else
-            xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
+        VclPtr<CheckBox> xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
         if (bIsTriState)
         {
             xCheckBox->EnableTriState(true);

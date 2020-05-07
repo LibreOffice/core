@@ -421,7 +421,7 @@ private:
     VclPtr<ScSearchEdit>   maEdSearch;
     VclPtr<ScCheckListBox> maChecks;
 
-    VclPtr<TriStateBox>     maChkToggleAll;
+    VclPtr<CheckBox>        maChkToggleAll;
     VclPtr<ImageButton>     maBtnSelectSingle;
     VclPtr<ImageButton>     maBtnUnselectSingle;
 
