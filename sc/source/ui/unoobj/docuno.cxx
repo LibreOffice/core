@@ -1077,13 +1077,13 @@ OUString ScModelObj::getPostItsPos()
     return OUString::fromUtf8(aStream.str().c_str());
 }
 
-void ScModelObj::completeFunction(int nIndex)
+void ScModelObj::completeFunction(const OUString& rFunctionName)
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
     if (pHdl)
     {
-        assert(nIndex >= 0);
-        pHdl->LOKPasteFunctionData(nIndex);
+        assert(!rFunctionName.isEmpty());
+        pHdl->LOKPasteFunctionData(rFunctionName);
     }
 }
 
