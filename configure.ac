@@ -2010,7 +2010,7 @@ AC_ARG_WITH(linker-hash-style,
 
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home=<absolute path to JDK home>],
-        [If you have installed JDK 8 or later on your system please supply the
+        [If you have installed JDK 9 or later on your system please supply the
          path here. Note that this is not the location of the java command but the
          location of the entire distribution.]),
 ,)
@@ -7451,7 +7451,7 @@ if test "$ENABLE_JAVA" != ""; then
                 _jdk_home=$regvalue
             fi
             if test -z "$with_jdk_home"; then
-                for ver in 1.8; do
+                for ver in 1.9 1.10 1.11 1.12 1.13 1.14; do
                     reg_get_value "$bitness" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
                     if test -n "$regvalue"; then
                         _jdk_home=$regvalue
@@ -7551,8 +7551,8 @@ if test "$ENABLE_JAVA" != ""; then
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10800; then
-                AC_MSG_ERROR([IBM JDK is too old, you need at least 8])
+            if test "$_jdk_ver" -lt 10900; then
+                AC_MSG_ERROR([IBM JDK is too old, you need at least 9])
             fi
 
             AC_MSG_RESULT([found (IBM JDK $_jdk)])
@@ -7570,10 +7570,10 @@ you must use the "--with-jdk-home" configure option explicitly])
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10800; then
-                AC_MSG_ERROR([JDK is too old, you need at least 8])
+            if test "$_jdk_ver" -lt 10900; then
+                AC_MSG_ERROR([JDK is too old, you need at least 9])
             fi
-            if test "$_jdk_ver" -gt 10800; then
+            if test "$_jdk_ver" -gt 10900; then
                 JAVA_CLASSPATH_NOT_SET=TRUE
             fi
 
@@ -7589,7 +7589,7 @@ you must use the "--with-jdk-home" configure option explicitly])
             JAVAFLAGS=-J-Xmx128M
         fi
     else
-        AC_MSG_ERROR([Java not found. You need at least JDK 8])
+        AC_MSG_ERROR([Java not found. You need at least JDK 9])
     fi
 else
     dnl Java disabled

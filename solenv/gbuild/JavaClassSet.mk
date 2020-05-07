@@ -17,10 +17,11 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
+gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
     -encoding utf8 \
-    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER) \
+    --release $(1) \
     $(if $(JAVA_CLASSPATH_NOT_SET),-Xlint:-options)
+
 gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
@@ -31,19 +32,34 @@ ifneq ($(gb_DEBUGLEVEL),0)
 gb_JavaClassSet_JAVACDEBUG := -g
 endif
 
+# $(PACKAGEDIRS) inherited from Jar -- assumption is the last part of the path
+# is top-level java package directory
+# for Java 9 modules, invoke javac another time, with --patch-module so that
+# it finds all the class files for whose packages the module-info contains a
+# declaration
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(filter-out $(JARDEPS),$(4)), \
 		rm -rf $(call gb_JavaClassSet_get_classdir,$(2))/* && \
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-			$(filter-out $(JARDEPS),$(4))) && \
-		$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
+			$(filter-out $(JARDEPS) $(T_JAVA9FILES),$(4))) && \
+		$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,$(JAVA_TARGET_VER)) \
 			$(gb_JavaClassSet_JAVACDEBUG) \
 			-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 			-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 			@$$RESPONSEFILE &&) \
 		rm -f $$RESPONSEFILE &&) \
+		$(if $(T_MODULENAME),\
+			RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+				$(T_JAVA9FILES)) && \
+			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
+				$(gb_JavaClassSet_JAVACDEBUG) \
+				-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
+				$(if $(T_MODULENAME),--patch-module $(T_MODULENAME)=$(subst $(gb_SPACE),:,$(strip $(dir $(PACKAGEDIRS))))) \
+				-d $(call gb_JavaClassSet_get_classdir,$(2)) \
+				@$$RESPONSEFILE &&) \
+			) \
 	touch $(1))
 
 endef
@@ -64,6 +80,7 @@ $(call gb_JavaClassSet_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@
 
 # depend on makefile to enforce a rebuild if files are removed from the classset
+# call gb_JavaClassSet_JavaClassSet,csname,java9modulename
 define gb_JavaClassSet_JavaClassSet
 $(call gb_JavaClassSet_get_target,$(1)) : \
 	$(gb_Module_CURRENTMAKEFILE) \
@@ -71,6 +88,8 @@ $(call gb_JavaClassSet_get_target,$(1)) : \
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := \
 	$(gb_Module_CURRENTMAKEFILE) \
 	$(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : T_MODULENAME := $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_JAVA9FILES :=
 
 endef
 
@@ -89,6 +108,17 @@ endef
 
 define gb_JavaClassSet_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_JavaClassSet_add_sourcefile_java9
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_sourcefile,$(2))
+$(call gb_JavaClassSet_get_target,$(1)) : T_JAVA9FILES += $(call gb_JavaClassSet__get_sourcefile,$(2))
+
+endef
+
+define gb_JavaClassSet_add_sourcefiles_java9
+$(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile_java9,$(1),$(sourcefile)))
 
 endef
 
