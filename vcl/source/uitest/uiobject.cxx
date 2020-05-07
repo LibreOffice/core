@@ -1231,6 +1231,14 @@ void MetricFieldUIObject::execute(const OUString& rAction,
         SpinFieldUIObject::execute(rAction, rParameters);
 }
 
+StringMap MetricFieldUIObject::get_state()
+{
+    StringMap aMap = EditUIObject::get_state();
+    aMap["Value"] = mxMetricField->GetValueString();
+
+    return aMap;
+}
+
 OUString MetricFieldUIObject::get_name() const
 {
     return OUString("MetricFieldUIObject");
