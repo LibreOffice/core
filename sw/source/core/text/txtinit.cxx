@@ -22,7 +22,6 @@
 #include <swfntcch.hxx>
 #include <txtfrm.hxx>
 #include "pordrop.hxx"
-#include <blink.hxx>
 #include <init.hxx>
 #include <txtfly.hxx>
 #include <dbg_lay.hxx>
@@ -54,7 +53,6 @@ void TextFinit()
     delete SwTextFrame::GetTextCache();
     delete pSwFontCache;
     delete pFntCache;
-    delete pBlink;
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();
 }

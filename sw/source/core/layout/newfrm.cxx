@@ -29,7 +29,6 @@
 #include <dflyobj.hxx>
 #include <frmtool.hxx>
 #include "virtoutp.hxx"
-#include <blink.hxx>
 #include <notxtfrm.hxx>
 #include <pagedesc.hxx>
 #include <viewimp.hxx>
@@ -522,8 +521,6 @@ void SwRootFrame::DestroyImpl()
     mbTurboAllowed = false;
     mpTurbo = nullptr;
 
-    if(pBlink)
-        pBlink->FrameDelete( this );
     SwFrameFormat *pRegisteredInNonConst = static_cast<SwFrameFormat*>(GetDep());
     if ( pRegisteredInNonConst )
     {

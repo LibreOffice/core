@@ -30,7 +30,6 @@
 #include "porlay.hxx"
 #include "porfld.hxx"
 #include "inftxt.hxx"
-#include <blink.hxx>
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
@@ -112,8 +111,6 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
 SwFieldPortion::~SwFieldPortion()
 {
     m_pFont.reset();
-    if( pBlink )
-        pBlink->Delete( this );
 }
 
 sal_uInt16 SwFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const

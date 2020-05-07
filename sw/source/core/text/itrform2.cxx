@@ -44,7 +44,6 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include <blink.hxx>
 #include "redlnitr.hxx"
 #include <pagefrm.hxx>
 #include <tgrditem.hxx>
@@ -1922,8 +1921,6 @@ void SwTextFormatter::FormatReset( SwTextFormatInfo &rInf )
     m_pFirstOfBorderMerge = nullptr;
     m_pCurr->Truncate();
     m_pCurr->Init();
-    if( pBlink && m_pCurr->IsBlinking() )
-        pBlink->Delete( m_pCurr );
 
     // delete pSpaceAdd and pKanaComp
     m_pCurr->FinishSpaceAdd();

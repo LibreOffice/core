@@ -461,7 +461,6 @@
 #include <anchoredobject.hxx>
 #include <authfld.hxx>
 #include <basesh.hxx>
-#include <blink.hxx>
 #include <bodyfrm.hxx>
 #include <bookmrk.hxx>
 #include <breakit.hxx>
