@@ -22,7 +22,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/calendar.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>

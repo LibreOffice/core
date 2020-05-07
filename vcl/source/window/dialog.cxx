@@ -48,7 +48,7 @@
 #include <vcl/event.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>

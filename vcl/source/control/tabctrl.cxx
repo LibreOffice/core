@@ -25,7 +25,7 @@
 #include <vcl/help.hxx>
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/toolkit/controllayout.hxx>
