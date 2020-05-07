@@ -1625,7 +1625,7 @@ void ScInputHandler::PasteFunctionData()
         pActiveView->ShowCursor();
 }
 
-void ScInputHandler::LOKPasteFunctionData( sal_uInt32 nIndex )
+void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 {
     if (pActiveViewSh && (pTopView || pTableView))
     {
@@ -1648,12 +1648,16 @@ void ScInputHandler::LOKPasteFunctionData( sal_uInt32 nIndex )
             InputReplaceSelection( aNewFormula );
         }
 
-        if (pFormulaData && nIndex < pFormulaData->size())
+        if (pFormulaData)
         {
-            auto aPos = pFormulaData->begin();
-            std::advance(aPos, nIndex);
-            miAutoPosFormula = aPos;
-            PasteFunctionData();
+            OUString aNew;
+            ScTypedCaseStrSet::const_iterator aPos = findText(*pFormulaData, pFormulaData->begin(), rFunctionName, aNew, /* backward = */false);
+
+            if (aPos != pFormulaData->end())
+            {
+                miAutoPosFormula = aPos;
+                PasteFunctionData();
+            }
         }
     }
 }
