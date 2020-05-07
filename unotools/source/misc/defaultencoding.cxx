@@ -13,14 +13,20 @@
 #include <unotools/defaultencoding.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <officecfg/Setup.hxx>
+#include <officecfg/System.hxx>
 
 OUString utl_getLocaleForGlobalDefaultEncoding()
 {
     if (utl::ConfigManager::IsFuzzing())
         return "en-US";
+    // First try document default language
     OUString result(officecfg::Office::Linguistic::General::DefaultLocale::get());
+    // Fallback to LO locale
     if (result.isEmpty())
         result = officecfg::Setup::L10N::ooSetupSystemLocale::get();
+    // Fallback to system locale
+    if (result.isEmpty())
+        result = officecfg::System::L10N::Locale::get();
     return result;
 }
 

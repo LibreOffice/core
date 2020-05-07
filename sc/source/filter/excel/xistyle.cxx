@@ -445,7 +445,7 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
     maData.mbStrikeout  = ::get_flag( nFlags, EXC_FONTATTR_STRIKEOUT );
     maData.mbOutline    = ::get_flag( nFlags, EXC_FONTATTR_OUTLINE );
     maData.mbShadow     = ::get_flag( nFlags, EXC_FONTATTR_SHADOW );
-    mbHasCharSet = true;
+    mbHasCharSet = maData.mnCharSet != 0;
 }
 
 void XclImpFont::ReadFontColor( XclImpStream& rStrm )
@@ -578,8 +578,6 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
     if( maFontList.size() == 1 )
     {
         UpdateAppFont( rFont.GetFontData(), rFont.HasCharSet() );
-        // #i71033# set text encoding from application font, if CODEPAGE is missing
-        SetAppFontEncoding( rFont.GetFontEncoding() );
     }
 }
 

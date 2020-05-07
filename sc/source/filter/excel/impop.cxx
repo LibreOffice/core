@@ -908,13 +908,7 @@ void ImportExcel::Rstring()
     {
         // unformatted Unicode string with separate formatting information
         XclImpString aString;
-
-        // #i63105# use text encoding from FONT record
-        rtl_TextEncoding eOldTextEnc = GetTextEncoding();
-        if( const XclImpFont* pFont = GetXFBuffer().GetFont( nXFIdx ) )
-            SetTextEncoding( pFont->GetFontEncoding() );
         aString.Read( maStrm );
-        SetTextEncoding( eOldTextEnc );
 
         // character formatting runs
         if( !aString.IsRich() )
