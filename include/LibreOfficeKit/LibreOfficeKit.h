@@ -437,7 +437,7 @@ struct _LibreOfficeKitDocumentClass
                                 int viewId);
 
     /// @see lok::Document::completeFunction().
-    void (*completeFunction) (LibreOfficeKitDocument* pThis, int nIndex);
+    void (*completeFunction) (LibreOfficeKitDocument* pThis, const char* pFunctionName);
 
     /// @see lok::Document::setWindowTextSelection
     void (*setWindowTextSelection) (LibreOfficeKitDocument* pThis,
