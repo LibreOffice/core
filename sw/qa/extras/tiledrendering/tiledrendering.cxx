@@ -2555,24 +2555,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
 
     // Move the cursor to trigger displaying of the field button.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-
-    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
-
-    // First we have a button with an empty text area.
-    {
-        std::stringstream aStream(m_aFormFieldButton.getStr());
-        boost::property_tree::ptree aTree;
-        boost::property_tree::read_json(aStream, aTree);
-
-        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
-        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
-
-        OString sType = aTree.get_child("type").get_value<std::string>().c_str();
-        CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
-
-        OString sTextArea = aTree.get_child("textArea").get_value<std::string>().c_str();
-        CPPUNIT_ASSERT_EQUAL(OString("0, 0, -1, -1"), sTextArea);
-    }
+    CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
     // Do a tile rendering to trigger the button message with a valide text area
     size_t nCanvasWidth = 1024;
