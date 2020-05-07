@@ -403,9 +403,9 @@ private:
     /// @see WriteOLE2Obj()
     void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj = nullptr);
     void WriteSrcRect( const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat );
-    void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
+    void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat, const sal_Int8 nFormulaAlignment);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
-    bool WriteOLEMath( const SwOLENode& rNode );
+    bool WriteOLEMath( const SwOLENode& rNode, const sal_Int8 nAlign );
     void PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
@@ -700,7 +700,7 @@ private:
 
     void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
-    void WritePostponedMath(const SwOLENode* pObject);
+    void WritePostponedMath(const SwOLENode* pObject, sal_Int8 /*nAlign*/);
     void WritePostponedFormControl(const SdrObject* pObject);
     void WritePostponedActiveXControl(bool bInsideRun);
     void WritePostponedDiagram();
@@ -901,7 +901,12 @@ private:
     };
     std::unique_ptr< std::vector<PostponedOLE> > m_pPostponedOLEs;
 
-    std::vector<const SwOLENode*> m_aPostponedMaths;
+    struct PostponedMathObjects
+    {
+        SwOLENode* pMathObject;
+        sal_Int8 nMathObjAlignment;
+    };
+    std::vector<PostponedMathObjects> m_aPostponedMaths;
     /// count charts consistently for unit tests
     unsigned int m_nChartCount;
     struct PostponedChart

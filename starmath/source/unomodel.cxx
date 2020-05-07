@@ -1077,9 +1077,9 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
 void SmModel::writeFormulaOoxml(
         ::sax_fastparser::FSHelperPtr const pSerializer,
         oox::core::OoxmlVersion const version,
-        oox::drawingml::DocumentType const documentType)
+        oox::drawingml::DocumentType const documentType, sal_Int8 nAlign)
 {
-    static_cast<SmDocShell*>(GetObjectShell())->writeFormulaOoxml(pSerializer, version, documentType);
+    static_cast<SmDocShell*>(GetObjectShell())->writeFormulaOoxml(pSerializer, version, documentType, nAlign);
 }
 
 void SmModel::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
