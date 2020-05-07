@@ -57,6 +57,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     , mxToolBoxBackgroundColorDispatch(new ToolbarUnoDispatcher(*mxToolBoxBackgroundColor, *m_xBuilder, rxFrame))
     , mxResetBar(m_xBuilder->weld_toolbar("resetattr"))
     , mxResetBarDispatch(new ToolbarUnoDispatcher(*mxResetBar, *m_xBuilder, rxFrame))
+    , mxDefaultBar(m_xBuilder->weld_toolbar("defaultattr"))
+    , mxDefaultBarDispatch(new ToolbarUnoDispatcher(*mxDefaultBar, *m_xBuilder, rxFrame))
     , mxPositionBar(m_xBuilder->weld_toolbar("position"))
     , mxPositionBarDispatch(new ToolbarUnoDispatcher(*mxPositionBar, *m_xBuilder, rxFrame))
     , mxSpacingBar(m_xBuilder->weld_toolbar("spacingbar"))
@@ -78,6 +80,7 @@ TextPropertyPanel::~TextPropertyPanel()
 void TextPropertyPanel::dispose()
 {
     mxResetBarDispatch.reset();
+    mxDefaultBarDispatch.reset();
     mxPositionBarDispatch.reset();
     mxSpacingBarDispatch.reset();
     mxToolBoxFontColorSwDispatch.reset();
@@ -89,6 +92,7 @@ void TextPropertyPanel::dispose()
     mxFontDispatch.reset();
 
     mxResetBar.reset();
+    mxDefaultBar.reset();
     mxPositionBar.reset();
     mxSpacingBar.reset();
     mxToolBoxFontColorSw.reset();
@@ -140,6 +144,8 @@ void TextPropertyPanel::HandleContextChange (
     mxToolBoxFontColor->set_visible(!bWriterText);
     mxToolBoxFontColorSw->set_visible(bWriterText);
     mxToolBoxBackgroundColor->set_visible(bDrawText);
+    mxResetBar->set_visible(bWriterText);
+    mxDefaultBar->set_visible(bDrawText);
 }
 
 } // end of namespace svx::sidebar
