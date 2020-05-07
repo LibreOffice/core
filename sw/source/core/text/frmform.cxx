@@ -39,7 +39,6 @@
 #include "itrform2.hxx"
 #include "widorp.hxx"
 #include "txtcache.hxx"
-#include <blink.hxx>
 #include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include <frmfmt.hxx>
@@ -1699,8 +1698,6 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
         const bool bMustFit = pPara->IsPrepMustFit();
         pPara->Truncate();
         pPara->FormatReset();
-        if( pBlink && pPara->IsBlinking() )
-            pBlink->Delete( pPara );
 
         // delete pSpaceAdd and pKanaComp
         pPara->FinishSpaceAdd();
