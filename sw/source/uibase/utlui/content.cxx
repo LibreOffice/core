@@ -1092,6 +1092,9 @@ sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
                 nTargetPos = GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() - 1;
         }
 
+        // remove the drop highlight before we change the contents of the tree so we don't
+        // try and dereference a removed entry in post-processing drop
+        m_xTreeView->unset_drag_dest_row();
         MoveOutline(nTargetPos);
 
     }
