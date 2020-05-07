@@ -734,16 +734,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_Value_math_ST_Jc_centerGroup:
         case NS_ooxml::LN_Value_math_ST_Jc_center:
-            m_pImpl->appendStarMath(val, eMathParaJc::CENTER);
+            m_pImpl->appendStarMath(val);
+            m_pImpl->adjustLastPara(sal_Int8(style::ParagraphAdjust::ParagraphAdjust_CENTER));
             break;
         case NS_ooxml::LN_Value_math_ST_Jc_left:
-            m_pImpl->appendStarMath(val, eMathParaJc::LEFT);
+            m_pImpl->appendStarMath(val);
+            m_pImpl->adjustLastPara(sal_Int8(style::ParagraphAdjust::ParagraphAdjust_LEFT));
             break;
         case NS_ooxml::LN_Value_math_ST_Jc_right:
-            m_pImpl->appendStarMath(val, eMathParaJc::RIGHT);
+            m_pImpl->appendStarMath(val);
+            m_pImpl->adjustLastPara(sal_Int8(style::ParagraphAdjust::ParagraphAdjust_RIGHT));
             break;
         case NS_ooxml::LN_starmath:
-            m_pImpl->appendStarMath( val, eMathParaJc::INLINE );
+            m_pImpl->appendStarMath(val);
             break;
         case NS_ooxml::LN_CT_FramePr_dropCap:
         case NS_ooxml::LN_CT_FramePr_lines:
