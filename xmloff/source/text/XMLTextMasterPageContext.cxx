@@ -30,6 +30,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <XMLTextHeaderFooterContext.hxx>
+#include <PageMasterImportContext.hxx>
 #include <xmloff/xmlimp.hxx>
 
 
@@ -101,6 +102,11 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
             {
                 sPageMasterName = xAttrList->getValueByIndex( i );
             }
+        }
+        else if (XML_NAMESPACE_DRAW == nPrefix
+                 && IsXMLToken(aLocalName, XML_STYLE_NAME))
+        {
+            m_sDrawingPageStyle = xAttrList->getValueByIndex(i);
         }
     }
 
@@ -256,14 +262,24 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
     if( xStyle.is() && (IsNew() || bOverwrite) )
     {
         Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+        XMLPropStyleContext * pDrawingPageStyle(nullptr);
+        if (!m_sDrawingPageStyle.isEmpty())
+        {
+            pDrawingPageStyle = GetImport().GetTextImport()->FindDrawingPage(m_sDrawingPageStyle);
+        }
+        PageStyleContext * pPageLayout(nullptr);
         if( !sPageMasterName.isEmpty() )
         {
-            XMLPropStyleContext* pStyle =
-                GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
-            if (pStyle)
-            {
-                pStyle->FillPropertySet(xPropSet);
-            }
+            pPageLayout = static_cast<PageStyleContext *>(GetImport().GetTextImport()->FindPageMaster(sPageMasterName));
+        }
+        if (pPageLayout)
+        {
+            pPageLayout->FillPropertySet_PageStyle(xPropSet, pDrawingPageStyle);
+        }
+        else if (pDrawingPageStyle)
+        {
+            // don't need to care about old background attributes in this case
+            pDrawingPageStyle->FillPropertySet(xPropSet);
         }
 
         Reference < XNameContainer > xPageStyles =
