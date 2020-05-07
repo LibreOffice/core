@@ -16,6 +16,7 @@ maven_package(
     'ridl': '//:ridl',
     'unoil': '//:unoil',
     'unoloader': '//:unoloader',
+    'libreoffice': '//:libreoffice',
   },
   src = {
     'juh': '//javaunohelper:juh-src',
