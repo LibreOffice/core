@@ -13,6 +13,7 @@
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <oox/mathml/export.hxx>
 
 using namespace oox;
 using namespace oox::core;
@@ -25,15 +26,57 @@ SmOoxmlExport::SmOoxmlExport(const SmNode *const pIn, OoxmlVersion const v,
 {
 }
 
-void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer )
+void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& serializer, const sal_Int8 nAlign )
 {
     if( m_pTree == nullptr )
         return;
     m_pSerializer = serializer;
-    m_pSerializer->startElementNS( XML_m, XML_oMath,
-        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math" );
-    HandleNode( m_pTree, 0 );
-    m_pSerializer->endElementNS( XML_m, XML_oMath );
+
+    //Formula alignment situations:
+    //
+    //  1)Inline(as before):
+    //
+    //      <m:oMath>
+    //          <m:r>  ... </m:r>
+    //      </m:oMath>
+    //
+    //  2)Aligned:
+    //
+    //      <m:oMathPara>
+    //          <m:oMathParaPr>
+    //              <m:jc m:val="left|right|center">
+    //          </m:oMathParaPr>
+    //          <m:oMath>
+    //              <m:r>  ... </m:r>
+    //          </m:oMath>
+    //      </m:oMathPara>
+
+    if (nAlign != FormulaExportBase::eFormulaAlign::INLINE)
+    {
+        m_pSerializer->startElementNS(XML_m, XML_oMathPara,
+            FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        m_pSerializer->startElementNS(XML_m, XML_oMathParaPr);
+        if (nAlign == FormulaExportBase::eFormulaAlign::CENTER)
+            m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
+        if (nAlign == FormulaExportBase::eFormulaAlign::GROUPEDCENTER)
+            m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "center");
+        if (nAlign == FormulaExportBase::eFormulaAlign::LEFT)
+            m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "left");
+        if (nAlign == FormulaExportBase::eFormulaAlign::RIGHT)
+            m_pSerializer->singleElementNS(XML_m, XML_jc, FSNS(XML_m, XML_val), "right");
+        m_pSerializer->endElementNS(XML_m, XML_oMathParaPr);
+        m_pSerializer->startElementNS(XML_m, XML_oMath);
+        HandleNode(m_pTree, 0);
+        m_pSerializer->endElementNS(XML_m, XML_oMath);
+        m_pSerializer->endElementNS(XML_m, XML_oMathPara);
+    }
+    else //else, inline as was before
+    {
+        m_pSerializer->startElementNS(XML_m, XML_oMath,
+            FSNS(XML_xmlns, XML_m), "http://schemas.openxmlformats.org/officeDocument/2006/math");
+        HandleNode( m_pTree, 0 );
+        m_pSerializer->endElementNS( XML_m, XML_oMath );
+    }
 }
 
 // NOTE: This is still work in progress and unfinished, but it already covers a good
