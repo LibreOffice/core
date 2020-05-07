@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "74670fc3_e55fff13",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-07T06:22:49Z",
+      "side": 1,
+      "message": "better leave an empty line here, as the return statement doesn\u0027t logically belong to the preceding \"jmpq *%r11\" block",
+      "revId": "0d73d86eb804c57d946679d739bda13791a2c52d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81fc9466_b04b3240",
         "filename": "hwpfilter/source/formula.cxx",
         "patchSetId": 8
