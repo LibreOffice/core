@@ -881,7 +881,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     ScMenuFloatingWindow(pParent, pDoc),
     maEdSearch(VclPtr<ScSearchEdit>::Create(this)),
     maChecks(VclPtr<ScCheckListBox>::Create(this)),
-    maChkToggleAll(VclPtr<TriStateBox>::Create(this, 0)),
+    maChkToggleAll(VclPtr<CheckBox>::Create(this, 0)),
     maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),
     maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
     maBtnOk(VclPtr<OKButton>::Create(this)),
@@ -890,6 +890,8 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     mePrevToggleAllState(TRISTATE_INDET),
     maTabStops(this)
 {
+    maChkToggleAll->EnableTriState(true);
+
     float fScaleFactor = GetDPIScaleFactor();
 
     nWidth = std::max<int>(nWidth, 200 * fScaleFactor);
