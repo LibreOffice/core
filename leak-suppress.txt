@@ -51,3 +51,6 @@ leak:_PyMem_RawMalloc
 
 # ignore leak in gpgmepp external library
 leak:mkdefsinc
+
+# idlc deliberately leaks
+leak:idlc/source/idlcmain.cxx
