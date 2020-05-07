@@ -22,6 +22,30 @@
       "revId": "dc3af35a90ae76b3914cb51a11e61cc860e0204d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "416b45bf_56b817c6",
+        "filename": "include/vcl/button.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-07T07:54:16Z",
+      "side": 1,
+      "message": "At this point there are only three places where a RadioButton is created in our code, one in toolkit and one in svx where both use \"false\" for the traditional auto-group thing.\n\nThe final one is in builder.cxx, with true, with the theory being that all those ones are now using explicit groups (the gtk version needs them to work right) so hopefully its not as dramatic a change as it might look.",
+      "parentUuid": "5413bac8_93d68900",
+      "range": {
+        "startLine": 326,
+        "startChar": 5,
+        "endLine": 326,
+        "endChar": 35
+      },
+      "revId": "dc3af35a90ae76b3914cb51a11e61cc860e0204d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
