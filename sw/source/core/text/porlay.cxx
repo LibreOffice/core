@@ -20,7 +20,6 @@
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"
-#include <blink.hxx>
 #include "redlnitr.hxx"
 #include "porfly.hxx"
 #include "porrst.hxx"
@@ -200,8 +199,6 @@ SwLineLayout::~SwLineLayout()
 {
     Truncate();
     DeleteNext();
-    if( pBlink )
-        pBlink->Delete( this );
     m_pLLSpaceAdd.reset();
     m_pKanaComp.reset();
 }
@@ -215,10 +212,9 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
         if( GetLen() )
         {
             mpNextPortion = SwTextPortion::CopyLinePortion(*this);
-            if( IsBlinking() && pBlink )
+            if( IsBlinking() )
             {
                 SetBlinking( false );
-                pBlink->Replace( this, mpNextPortion );
             }
         }
         else

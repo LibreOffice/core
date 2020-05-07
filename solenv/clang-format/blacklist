@@ -14563,7 +14563,6 @@ sw/source/core/inc/acorrect.hxx
 sw/source/core/inc/anchoredobjectposition.hxx
 sw/source/core/inc/annotationmark.hxx
 sw/source/core/inc/ascharanchoredobjectposition.hxx
-sw/source/core/inc/blink.hxx
 sw/source/core/inc/bodyfrm.hxx
 sw/source/core/inc/bookmrk.hxx
 sw/source/core/inc/cellfrm.hxx
@@ -14721,7 +14720,6 @@ sw/source/core/text/EnhancedPDFExportHelper.cxx
 sw/source/core/text/SwGrammarMarkUp.cxx
 sw/source/core/text/atrhndl.hxx
 sw/source/core/text/atrstck.cxx
-sw/source/core/text/blink.cxx
 sw/source/core/text/frmcrsr.cxx
 sw/source/core/text/frmform.cxx
 sw/source/core/text/frminf.cxx

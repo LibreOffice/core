@@ -23,7 +23,6 @@
 #include "porlin.hxx"
 #include "inftxt.hxx"
 #include "pormulti.hxx"
-#include <blink.hxx>
 #if OSL_DEBUG_LEVEL > 0
 
 static bool ChkChain( SwLinePortion *pStart )
@@ -52,8 +51,6 @@ static bool ChkChain( SwLinePortion *pStart )
 
 SwLinePortion::~SwLinePortion()
 {
-    if( pBlink )
-        pBlink->Delete( this );
 }
 
 SwLinePortion *SwLinePortion::Compress()

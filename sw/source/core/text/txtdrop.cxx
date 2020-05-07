@@ -27,7 +27,6 @@
 #include "pordrop.hxx"
 #include "itrform2.hxx"
 #include "txtpaint.hxx"
-#include <blink.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -119,8 +118,6 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
 SwDropPortion::~SwDropPortion()
 {
     pPart.reset();
-    if( pBlink )
-        pBlink->Delete( this );
 }
 
 /// nWishLen = 0 indicates that we want a whole word
