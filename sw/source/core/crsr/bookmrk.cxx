@@ -44,6 +44,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <wrtsh.hxx>
 #include <rtl/strbuf.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -714,7 +715,7 @@ namespace sw::mark
 
     void DropDownFieldmark::SendLOKMessage(const OString& sAction)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
         {
             if (!m_pButton)
               return;
