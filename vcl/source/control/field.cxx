@@ -672,7 +672,7 @@ void NumericFormatter::SetValueFromString(const OUString& rStr)
     sal_Int64 nValue;
 
     if (ImplNumericGetValue(rStr, nValue, GetDecimalDigits(),
-        Application::GetSettings().GetNeutroLocaleDataWrapper()))
+        Application::GetSettings().GetNeutralLocaleDataWrapper()))
     {
         SetValue(nValue);
     }
@@ -1790,7 +1790,7 @@ boost::property_tree::ptree MetricField::DumpAsPropertyTree()
     aTree.put("min", GetMin());
     aTree.put("max", GetMax());
     aTree.put("unit", FieldUnitToString(GetUnit()));
-    OUString sValue = Application::GetSettings().GetNeutroLocaleDataWrapper().
+    OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
         getNum(GetValue(), GetDecimalDigits(), false, false);
     aTree.put("value", sValue.toUtf8().getStr());
 
