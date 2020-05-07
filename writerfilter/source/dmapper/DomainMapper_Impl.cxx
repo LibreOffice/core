@@ -2177,7 +2177,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 
 }
 
-void DomainMapper_Impl::appendStarMath( const Value& val )
+void DomainMapper_Impl::appendStarMath( const Value& val)
 {
     uno::Reference< embed::XEmbeddedObject > formula;
     val.getAny() >>= formula;
@@ -2212,8 +2212,9 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             xComponentProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
                 uno::makeAny(sal_Int32(0)));
             Size size( 1000, 1000 );
-            if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
+            if (oox::FormulaImportBase* formulaimport = dynamic_cast<oox::FormulaImportBase*>(xInterface.get()))
                 size = formulaimport->getFormulaSize();
+
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
                 uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
