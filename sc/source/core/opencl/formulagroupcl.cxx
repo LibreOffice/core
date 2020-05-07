@@ -2704,7 +2704,7 @@ static std::shared_ptr<DynamicKernelArgument> VectorRefFactory( const ScCalcConf
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
     const std::string& s, const FormulaTreeNodeRef& ft, std::shared_ptr<SlidingFunctionBase> pCodeGen, int nResultSize ) :
-    DynamicKernelArgument(config, s, ft), mpCodeGen(std::move(pCodeGen)), mpClmem2(nullptr)
+    DynamicKernelArgument(config, s, ft), mpCodeGen(pCodeGen), mpClmem2(nullptr)
 {
     size_t nChildren = ft->Children.size();
 
