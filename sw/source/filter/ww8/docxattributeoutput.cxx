@@ -1557,7 +1557,6 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
 
     // XML_r node should be surrounded with permission-begin and permission-end nodes if it has permission.
     DoWritePermissionsEnd();
-
     for (const auto& rpMath : m_aPostponedMaths)
         WritePostponedMath(rpMath);
     m_aPostponedMaths.clear();
@@ -5219,11 +5218,12 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
+    sal_Int8 nAlign = oox::FormulaExportBase::eFormulaAlign::INLINE; //TODO: Query the aligment from the document and set it...
     oox::FormulaExportBase* formulaexport = dynamic_cast<oox::FormulaExportBase*>(dynamic_cast<SfxBaseModel*>(xInterface.get()));
     assert( formulaexport != nullptr );
     if (formulaexport)
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
-                oox::drawingml::DOCUMENT_DOCX);
+                oox::drawingml::DOCUMENT_DOCX, nAlign);
 }
 
 void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
