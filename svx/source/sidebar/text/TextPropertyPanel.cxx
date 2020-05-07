@@ -46,6 +46,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFontColorSw, "colorbar_writer");
     get(mpToolBoxFontColor, "colorbar_others");
     get(mpToolBoxBackgroundColor, "colorbar_background");
+    get(mpResetAttr, "resetattr");
+    get(mpSetDefault, "defaultattr");
 
     bool isMobilePhone = false;
     const SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -110,6 +112,9 @@ void TextPropertyPanel::HandleContextChange (
     mpToolBoxFontColor->Show(!bWriterText);
     mpToolBoxFontColorSw->Show(bWriterText);
     mpToolBoxBackgroundColor->Show(bDrawText);
+    mpResetAttr->Show(bWriterText);
+    mpSetDefault->Show(bDrawText);
+
 }
 
 } } // end of namespace svx::sidebar
