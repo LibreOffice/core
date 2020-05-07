@@ -666,6 +666,12 @@ sal_Int64 NumericFormatter::GetValueFromString(const OUString& rStr) const
         return mnLastValue;
 }
 
+OUString NumericFormatter::GetValueString() const
+{
+    return Application::GetSettings().GetNeutralLocaleDataWrapper().
+        getNum(GetValue(), GetDecimalDigits(), false, false);
+}
+
 // currently used by online
 void NumericFormatter::SetValueFromString(const OUString& rStr)
 {

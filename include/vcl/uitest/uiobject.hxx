@@ -394,6 +394,8 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
+    virtual StringMap get_state() override;
+
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
