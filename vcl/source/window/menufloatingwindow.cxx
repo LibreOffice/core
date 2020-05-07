@@ -1205,11 +1205,13 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     if (!pMenu)
         return;
 
+    // Set the clip before the buffering starts: rPaintRect may be larger than the current clip,
+    // this way the buffer -> render context copy happens with this clip.
+    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.SetClipRegion(vcl::Region(rPaintRect));
+
     // Make sure that all actual rendering happens in one go to avoid flicker.
     vcl::BufferDevice pBuffer(this, rRenderContext);
-
-    pBuffer->Push(PushFlags::CLIPREGION);
-    pBuffer->SetClipRegion(vcl::Region(rPaintRect));
 
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
@@ -1233,7 +1235,8 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     if (nHighlightedItem != ITEMPOS_INVALID)
         RenderHighlightItem(*pBuffer, nHighlightedItem);
 
-    pBuffer->Pop();
+    pBuffer.Dispose();
+    rRenderContext.Pop();
 }
 
 void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)
