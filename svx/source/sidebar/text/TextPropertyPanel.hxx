@@ -50,6 +50,8 @@ private:
     VclPtr<ToolBox> mpToolBoxFontColorSw;
     VclPtr<ToolBox> mpToolBoxFontColor;
     VclPtr<ToolBox> mpToolBoxBackgroundColor;
+    VclPtr<ToolBox> mpResetAttr;
+    VclPtr<ToolBox> mpSetDefault;
 
     vcl::EnumContext maContext;
 };
