@@ -19,7 +19,7 @@
 
 #include <memory>
 
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/stdtext.hxx>
 #include <helper/btndlg.hxx>
 #include <sal/log.hxx>

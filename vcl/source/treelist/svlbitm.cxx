@@ -22,7 +22,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/salnativewidgets.hxx>
 

@@ -80,7 +80,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/treecontrolpeer.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>

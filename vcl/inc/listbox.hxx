@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/glyphitem.hxx>

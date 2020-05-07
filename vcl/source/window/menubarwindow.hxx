@@ -22,7 +22,7 @@
 
 #include "menuwindow.hxx"
 
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>

@@ -30,7 +30,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 

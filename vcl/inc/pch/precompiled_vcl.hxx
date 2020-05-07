@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:56:04 using:
+ Generated on 2020-05-07 20:21:38 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -163,6 +163,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/fileformat.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -202,6 +203,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <test/outputdevice.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
@@ -269,7 +271,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -315,6 +316,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/transfer.hxx>
