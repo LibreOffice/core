@@ -19,7 +19,9 @@
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <bitmaps.hlst>
 #include <messagedialog.hxx>
+#include <svdata.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -1543,6 +1545,79 @@ bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
         return VclBin::set_property(rKey, rValue);
     return true;
 }
+
+class DisclosureButton final : public CheckBox
+{
+    virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override
+    {
+        /* HACK: DisclosureButton is currently assuming, that the disclosure sign
+           will fit into the rectangle occupied by a normal checkbox on all themes.
+           If this does not hold true for some theme, ImplGetCheckImageSize
+           would have to be overridden for DisclosureButton; also GetNativeControlRegion
+           for ControlType::ListNode would have to be implemented and taken into account
+        */
+
+        tools::Rectangle aStateRect(GetStateRect());
+
+        ImplControlValue aControlValue(GetState() == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
+        tools::Rectangle aCtrlRegion(aStateRect);
+        ControlState nState = ControlState::NONE;
+
+        if (HasFocus())
+            nState |= ControlState::FOCUSED;
+        if (GetButtonState() & DrawButtonFlags::Default)
+            nState |= ControlState::DEFAULT;
+        if (Window::IsEnabled())
+            nState |= ControlState::ENABLED;
+        if (IsMouseOver() && GetMouseRect().IsInside(GetPointerPosPixel()))
+            nState |= ControlState::ROLLOVER;
+
+        if (rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion,
+                                              nState, aControlValue, OUString()))
+            return;
+
+        ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
+        if (!rCtrlData.mpDisclosurePlus)
+            rCtrlData.mpDisclosurePlus.reset(new Image(StockImage::Yes, SV_DISCLOSURE_PLUS));
+        if (!rCtrlData.mpDisclosureMinus)
+            rCtrlData.mpDisclosureMinus.reset(new Image(StockImage::Yes, SV_DISCLOSURE_MINUS));
+
+        Image* pImg
+            = IsChecked() ? rCtrlData.mpDisclosureMinus.get() : rCtrlData.mpDisclosurePlus.get();
+
+        DrawImageFlags nStyle = DrawImageFlags::NONE;
+        if (!IsEnabled())
+            nStyle |= DrawImageFlags::Disable;
+
+        Size aSize(aStateRect.GetSize());
+        Size aImgSize(pImg->GetSizePixel());
+        Point aOff((aSize.Width() - aImgSize.Width()) / 2,
+                   (aSize.Height() - aImgSize.Height()) / 2);
+        aOff += aStateRect.TopLeft();
+        rRenderContext.DrawImage(aOff, *pImg, nStyle);
+    }
+
+public:
+    explicit DisclosureButton(vcl::Window* pParent)
+        : CheckBox(pParent, 0)
+    {
+    }
+
+    virtual void KeyInput( const KeyEvent& rKEvt ) override
+    {
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+        if( !aKeyCode.GetModifier()  &&
+            ( ( aKeyCode.GetCode() == KEY_ADD ) ||
+              ( aKeyCode.GetCode() == KEY_SUBTRACT ) )
+            )
+        {
+            Check( aKeyCode.GetCode() == KEY_ADD );
+        }
+        else
+            CheckBox::KeyInput( rKEvt );
+    }
+};
 
 VclExpander::VclExpander(vcl::Window *pParent)
     : VclBin(pParent)
