@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PageMasterPropHdlFactory.hxx"
+#include <PageMasterPropHdlFactory.hxx>
 #include <enummaps.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>
