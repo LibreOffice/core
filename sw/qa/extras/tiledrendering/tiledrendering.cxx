@@ -48,6 +48,7 @@
 #include <svx/svxids.hrc>
 #include <flddat.hxx>
 #include <basesh.hxx>
+#include <vcl/ITiledRenderable.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
@@ -129,6 +130,7 @@ public:
     void testHyperlink();
     void testFieldmark();
     void testDropDownFormFieldButton();
+    void testDropDownFormFieldButtonEditing();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -196,6 +198,7 @@ public:
     CPPUNIT_TEST(testHyperlink);
     CPPUNIT_TEST(testFieldmark);
     CPPUNIT_TEST(testDropDownFormFieldButton);
+    CPPUNIT_TEST(testDropDownFormFieldButtonEditing);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2557,7 +2560,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
-    // Do a tile rendering to trigger the button message with a valide text area
+    // Do a tile rendering to trigger the button message with a valid text area
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
@@ -2612,6 +2615,63 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
 
         OString sType = aTree.get_child("type").get_value<std::string>().c_str();
         CPPUNIT_ASSERT_EQUAL(OString("drop-down"), sType);
+    }
+}
+
+void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
+{
+    SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field2.odt");
+    pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // Move the cursor to trigger displaying of the field button.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
+
+    // Do a tile rendering to trigger the button message with a valid text area
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+
+    // The item with the index '1' is selected by default
+    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
+    {
+        std::stringstream aStream(m_aFormFieldButton.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
+    }
+    m_aFormFieldButton = "";
+
+    // Trigger a form field event to select a different item.
+    vcl::ITiledRenderable::StringMap aArguments;
+    aArguments["type"] = "drop-down";
+    aArguments["cmd"] = "selected";
+    aArguments["data"] = "3";
+    pXTextDocument->executeFromFieldEvent(aArguments);
+
+    // Do a tile rendering to trigger the button message.
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/10000, /*nTileHeight=*/4000);
+
+    CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
+    {
+        std::stringstream aStream(m_aFormFieldButton.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("3"), sSelected);
     }
 }
 
