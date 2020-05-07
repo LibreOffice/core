@@ -489,15 +489,6 @@ public:
                  ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
 };
 
-class VCL_DLLPUBLIC TriStateBox final : public CheckBox
-{
-                    TriStateBox( const TriStateBox & ) = delete;
-                    TriStateBox & operator= ( const TriStateBox & ) = delete;
-
-public:
-    explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle );
-};
-
 #endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

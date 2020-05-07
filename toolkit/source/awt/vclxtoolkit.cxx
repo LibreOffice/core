@@ -1668,7 +1668,8 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXToolBox;
             break;
             case WindowType::TRISTATEBOX:
-                pNewWindow = VclPtr<TriStateBox>::Create( pParent, nWinBits );
+                pNewWindow = VclPtr<CheckBox>::Create( pParent, nWinBits );
+                static_cast<CheckBox*>(pNewWindow.get())->EnableTriState(true);
             break;
             case WindowType::WARNINGBOX:
                 pNewWindow = VclPtr<WarningBox>::Create( pParent, nMessBoxStyle, nWinBits, OUString() );
