@@ -44,6 +44,7 @@ class SvXMLExportPropertyMapper;
 struct XMLPageExportNameEntry
 {
     OUString         sPageMasterName;
+    OUString         sDrawingPageStyleName;
     OUString         sStyleName;
 };
 
@@ -55,11 +56,12 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
     css::uno::Reference< css::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
-    SAL_DLLPRIVATE bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
     rtl::Reference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper > xPageMasterPropSetMapper;
     rtl::Reference < SvXMLExportPropertyMapper > xPageMasterExportPropMapper;
+    rtl::Reference<XMLPropertySetMapper> m_xPageMasterDrawingPagePropSetMapper;
+    rtl::Reference<SvXMLExportPropertyMapper> m_xPageMasterDrawingPageExportPropMapper;
 
 protected:
 
@@ -67,7 +69,7 @@ protected:
 
     void collectPageMasterAutoStyle(
                 const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-                OUString& rPageMasterName );
+                XMLPageExportNameEntry & rEntry);
 
     virtual void exportMasterPageContent(
                 const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
