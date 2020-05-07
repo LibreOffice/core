@@ -3635,7 +3635,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
                 }
                 else if( rOuterShdwProp.Name == "rad" )
                 {
-                    sal_Int32 nVal = 0;
+                    sal_Int64 nVal = 0;
                     rOuterShdwProp.Value >>= nVal;
                     aOuterShdwAttrList->add( XML_rad, OString::number( nVal ).getStr() );
                 }
@@ -3846,9 +3846,11 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     if(!hasGlow)
         return;
 
+    sal_Int32 nRad = 0;
+    rXPropSet->getPropertyValue("GlowEffectRad") >>= nRad;
     Sequence< PropertyValue > aGlowAttribs(1);
     aGlowAttribs[0].Name = "rad";
-    aGlowAttribs[0].Value = rXPropSet->getPropertyValue("GlowEffectRad");
+    aGlowAttribs[0].Value <<= oox::drawingml::convertHmmToEmu(nRad);
     Sequence< PropertyValue > aGlowProps(3);
     aGlowProps[0].Name = "Attribs";
     aGlowProps[0].Value <<= aGlowAttribs;
