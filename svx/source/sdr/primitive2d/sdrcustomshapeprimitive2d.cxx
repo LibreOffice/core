@@ -52,6 +52,13 @@ namespace drawinglayer::primitive2d
                         getWordWrap()));
             }
 
+            // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
+            if (!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrSTAttribute().getGlow());
+            }
+
             // add shadow
             if(!aRetval.empty() && !getSdrSTAttribute().getShadow().isDefault())
             {
@@ -69,12 +76,6 @@ namespace drawinglayer::primitive2d
                 {
                     aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow());
                 }
-            }
-
-            if(!aRetval.empty() && !getSdrSTAttribute().getGlow().isDefault())
-            {
-                    // glow
-                    aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrSTAttribute().getGlow());
             }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
