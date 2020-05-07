@@ -16,6 +16,24 @@
       "revId": "6820c52330c25cc8a2407312a8b0b25cdc33788a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2addfec4_d8c2ae11",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-07T07:30:35Z",
+      "side": 1,
+      "message": "I tested it and it crashed too.\nThen I noticed these lines (lines 343/344):\nfor( SCCOL i \u003d 0; i \u003c\u003d nLastCol+1; ++i )\n    aCol[ i ].InitBlockPosition( blockPos[ i ] );",
+      "parentUuid": "86320a6e_54145129",
+      "revId": "6820c52330c25cc8a2407312a8b0b25cdc33788a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
