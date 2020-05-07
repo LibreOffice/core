@@ -139,7 +139,7 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
     }
 };
 
-// Partial specializations for nComponentWidth == 0, using acess' GetColor/SetPixel
+// Partial specializations for nComponentWidth == 0, using access' GetColor/SetPixel
 
 template <typename MorphologyOp> struct pass<MorphologyOp, 0>
 {
