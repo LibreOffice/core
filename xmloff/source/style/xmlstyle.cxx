@@ -28,7 +28,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
-#include "PageMasterPropMapper.hxx"
+#include <PageMasterPropMapper.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>

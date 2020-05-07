@@ -187,6 +187,7 @@
 #define CTF_PM_FTN_LINE_STYLE           (XML_PM_CTF_START + 0x0067)
 
 extern const XMLPropertyMapEntry aXMLPageMasterStyleMap[];
+extern const XMLPropertyMapEntry g_XMLPageMasterDrawingPageStyleMap[];
 extern const XMLPropertyMapEntry aXMLPageMasterHeaderImportStyleMap[];
 extern const XMLPropertyMapEntry aXMLPageMasterFooterImportStyleMap[];
 
