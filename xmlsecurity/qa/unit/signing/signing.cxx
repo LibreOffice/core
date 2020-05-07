@@ -1344,6 +1344,52 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                    SignatureState::NOTVALIDATED, OUString());
 }
 
+/// Test if a macro signature from a ODF Database is preserved when saving
+CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroSignatureODB)
+{
+    const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "odb_signed_macros.odb");
+    const OUString sLoadMessage = "loading failed: " + aURL;
+
+    // load the file
+    if (mxComponent.is())
+        mxComponent->dispose();
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // save as ODB
+    utl::TempFile aTempFileSaveAsODB;
+    aTempFileSaveAsODB.EnableKillingFile();
+    try
+    {
+        uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(OUString("StarOffice XML (Base)")) } }));
+        xDocStorable->storeAsURL(aTempFileSaveAsODB.GetURL(), descSaveAs);
+    }
+    catch (...)
+    {
+        CPPUNIT_FAIL("Failed to save ODB file");
+    }
+
+    // Parse the resulting XML.
+    uno::Reference<embed::XStorage> xStorage
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, aTempFileSaveAsODB.GetURL(), embed::ElementModes::READ);
+    CPPUNIT_ASSERT(xStorage.is());
+    uno::Reference<embed::XStorage> xMetaInf
+        = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+    uno::Reference<io::XInputStream> xInputStream(
+        xMetaInf->openStreamElement("macrosignatures.xml", embed::ElementModes::READ),
+        uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // Make sure the signature is still there
+    assertXPath(pXmlDoc, "//dsig:Signature", "Id",
+                "ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8");
+}
+
 #endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
