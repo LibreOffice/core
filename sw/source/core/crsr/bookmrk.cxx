@@ -726,6 +726,9 @@ namespace sw::mark
             OStringBuffer sPayload;
             if (sAction == "show")
             {
+                if(m_aPortionPaintArea.IsEmpty())
+                    return;
+
                 sPayload = OStringLiteral("{\"action\": \"show\","
                            " \"type\": \"drop-down\", \"textArea\": \"") +
                            m_aPortionPaintArea.SVRect().toString() + "\",";
