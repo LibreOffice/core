@@ -3393,16 +3393,16 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
                 {
                     --aPos.nContent;
                     pFieldBM = pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
-                    if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
+                }
+                if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
+                {
+                    if (nSelection >= 0)
                     {
-                        if (nSelection >= 0)
-                        {
-                            OUString sKey = ODF_FORMDROPDOWN_RESULT;
-                            (*pFieldBM->GetParameters())[sKey] <<= nSelection;
-                            pFieldBM->Invalidate();
-                            pDocShell->GetWrtShell()->SetModified();
-                            pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
-                        }
+                        OUString sKey = ODF_FORMDROPDOWN_RESULT;
+                        (*pFieldBM->GetParameters())[sKey] <<= nSelection;
+                        pFieldBM->Invalidate();
+                        pDocShell->GetWrtShell()->SetModified();
+                        pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);
                     }
                 }
             }
