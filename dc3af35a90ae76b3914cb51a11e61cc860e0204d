@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5413bac8_93d68900",
+        "filename": "include/vcl/button.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-07T05:46:27Z",
+      "side": 1,
+      "message": "True means that groups are completely ignored at this level. I think you might want to clarify that in the comments, because when this is set, RadioButton can have no concept of the group value, and only a code-read will tell you that.\n\nI\u0027m afraid that it might lead to complications where a button is \"checked\" at this level, and then at a higher level it might miss the fact that it needs to uncheck the other group members\u0027 value. Using bUsesExplicitGroup almost effectively makes this a read-only layer in terms of functionality (that is a complete guess on my part). Or that some kind of initialization depended on the umpteen gazillion times that initializations are performed on this level.\n\nThis is a BOLD move. I hope it works. :-)",
+      "range": {
+        "startLine": 326,
+        "startChar": 5,
+        "endLine": 326,
+        "endChar": 35
+      },
+      "revId": "dc3af35a90ae76b3914cb51a11e61cc860e0204d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
