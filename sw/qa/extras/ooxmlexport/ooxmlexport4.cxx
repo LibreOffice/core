@@ -619,7 +619,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf115030, "tdf115030.docx")
     sal_Unicode aDobleDot = {0x00A8};
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[2]/m:acc/m:accPr/m:chr", "val", OUString(aDobleDot));
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/m:oMathPara/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")

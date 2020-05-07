@@ -207,7 +207,8 @@ public:
 
     void writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
             oox::core::OoxmlVersion version,
-            oox::drawingml::DocumentType documentType);
+            oox::drawingml::DocumentType documentType,
+            const sal_Int8 nAlign);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
