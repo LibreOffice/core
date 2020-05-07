@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86320a6e_54145129",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-07T07:15:22Z",
+      "side": 1,
+      "message": "why -2 and not -1?",
+      "revId": "6820c52330c25cc8a2407312a8b0b25cdc33788a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
