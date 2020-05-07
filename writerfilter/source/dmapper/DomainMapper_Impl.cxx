@@ -2214,6 +2214,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             Size size( 1000, 1000 );
             if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
                 size = formulaimport->getFormulaSize();
+
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
                 uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
