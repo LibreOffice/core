@@ -121,6 +121,12 @@ $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
+define gb_Jar_add_sourcefile_java9
+$(call gb_JavaClassSet_add_sourcefile_java9,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+
 # PACKAGEROOTS is the list of all root folders created by the JavaClassSet to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS := $(2)
@@ -156,6 +162,11 @@ endef
 
 define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_Jar_add_sourcefiles_java9
+$(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile_java9,$(1),$(sourcefile)))
 
 endef
 

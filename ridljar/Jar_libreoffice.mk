@@ -32,6 +32,10 @@ $(eval $(call gb_Jar_add_packagedirs,libreoffice,\
     $(call gb_CustomTarget_get_workdir,unoil/javamaker)/com \
 ))
 
+$(eval $(call gb_Jar_add_sourcefiles_java9,libreoffice,\
+    ridljar/source/libreoffice/module-info \
+))
+
 $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/comp/bridgefactory/BridgeFactory \
     ridljar/com/sun/star/comp/connections/Acceptor \
