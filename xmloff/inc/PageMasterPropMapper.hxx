@@ -17,32 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <PageMasterPropMapper.hxx>
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
 
-#include <rtl/ref.hxx>
-#include <xmloff/PageMasterStyleMap.hxx>
-#include <PageMasterPropHdlFactory.hxx>
+#include <xmloff/xmlprmap.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
-    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory(), false/*bForExport*/)
+class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
-}
+public:
+    explicit XMLPageMasterPropSetMapper();
+    XMLPageMasterPropSetMapper(const XMLPropertyMapEntry* pEntries,
+                               const rtl::Reference<XMLPropertyHandlerFactory>& rFactory);
+    virtual ~XMLPageMasterPropSetMapper() override;
+};
 
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
-        const XMLPropertyMapEntry* pEntries,
-        const rtl::Reference< XMLPropertyHandlerFactory >& rFactory ) :
-    XMLPropertySetMapper( pEntries, rFactory, true/*bForExport*/ )
-{
-}
-
-XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
-{
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

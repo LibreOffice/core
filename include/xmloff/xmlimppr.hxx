@@ -53,7 +53,7 @@ class SvXMLImport;
  */
 struct ContextID_Index_Pair
 {
-    sal_Int16 const nContextID;
+    sal_Int16 nContextID;
     sal_Int32 nIndex;
 };
 

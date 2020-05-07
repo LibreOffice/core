@@ -28,9 +28,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "PageMasterPropHdlFactory.hxx"
+#include <PageMasterPropHdlFactory.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
-#include "PageMasterPropMapper.hxx"
+#include <PageMasterPropMapper.hxx>
 #include "PageMasterExportPropMapper.hxx"
 
 using namespace ::com::sun::star;
