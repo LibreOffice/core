@@ -26,10 +26,9 @@ class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
 public:
     explicit XMLPageMasterPropSetMapper();
-                        XMLPageMasterPropSetMapper(
-                            const XMLPropertyMapEntry* pEntries,
-                            const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
-    virtual             ~XMLPageMasterPropSetMapper() override;
+    XMLPageMasterPropSetMapper(const XMLPropertyMapEntry* pEntries,
+                               const rtl::Reference<XMLPropertyHandlerFactory>& rFactory);
+    virtual ~XMLPageMasterPropSetMapper() override;
 };
 
 #endif
