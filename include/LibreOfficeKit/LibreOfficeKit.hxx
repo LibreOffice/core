@@ -761,9 +761,9 @@ public:
      *
      * @param nIndex is the index of the selected function
      */
-    void completeFunction(int nIndex)
+    void completeFunction(const char* pFunctionName)
     {
-        mpDoc->pClass->completeFunction(mpDoc, nIndex);
+        mpDoc->pClass->completeFunction(mpDoc, pFunctionName);
     }
 
     /**
