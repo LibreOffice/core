@@ -1468,18 +1468,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     return ::comphelper::containerToSequence(aPropertyValues);
 }
 
-static PropertyValue const* lcl_FindProperty(
-    const char* cName, std::vector<PropertyValue const*> const& rPropertyValues)
-{
-    const OUString sCmp = OUString::createFromAscii(cName);
-    for(const PropertyValue* pTemp : rPropertyValues)
-    {
-        if (sCmp == pTemp->Name)
-            return pTemp;
-    }
-    return nullptr;
-}
-
 void SwXNumberingRules::SetNumberingRuleByIndex(
             SwNumRule& rNumRule,
             const uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
@@ -1495,7 +1483,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SetPropertiesToNumFormat(aFormat, m_sNewCharStyleNames[nIndex],
         &m_sNewBulletFontNames[nIndex],
         &sHeadingStyleName, &sParagraphStyleName,
-        m_pDoc, m_pDocShell, rProperties);
+        m_pDoc, rProperties);
 
 
     if (m_pDoc && !sParagraphStyleName.isEmpty())
@@ -1541,547 +1529,436 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         OUString & rCharStyleName, OUString *const pBulletFontName,
         OUString *const pHeadingStyleName,
         OUString *const pParagraphStyleName,
-        SwDoc *const pDoc, SwDocShell *const pDocShell,
+        SwDoc *const pDoc,
         const uno::Sequence<beans::PropertyValue>& rProperties)
 {
-    // the order of the names is important!
-    static const char* aNumPropertyNames[] =
-    {
-        UNO_NAME_ADJUST,                        // 0
-        UNO_NAME_PARENT_NUMBERING,              // 1
-        UNO_NAME_PREFIX,                        // 2
-        UNO_NAME_SUFFIX,                        // 3
-        UNO_NAME_CHAR_STYLE_NAME,               // 4
-        UNO_NAME_START_WITH,                    // 5
-        UNO_NAME_LEFT_MARGIN,                   // 6
-        UNO_NAME_SYMBOL_TEXT_DISTANCE,          // 7
-        UNO_NAME_FIRST_LINE_OFFSET,             // 8
-        UNO_NAME_POSITION_AND_SPACE_MODE,       // 9
-        UNO_NAME_LABEL_FOLLOWED_BY,             // 10
-        UNO_NAME_LISTTAB_STOP_POSITION,         // 11
-        UNO_NAME_FIRST_LINE_INDENT,             // 12
-        UNO_NAME_INDENT_AT,                     // 13
-        UNO_NAME_NUMBERING_TYPE,                // 14
-        UNO_NAME_PARAGRAPH_STYLE_NAME,          // 15
-        // these are not in chapter numbering
-        UNO_NAME_BULLET_ID,                     // 16
-        UNO_NAME_BULLET_FONT,                   // 17
-        UNO_NAME_BULLET_FONT_NAME,              // 18
-        UNO_NAME_BULLET_CHAR,                   // 19
-        UNO_NAME_GRAPHIC,                       // 20
-        UNO_NAME_GRAPHIC_BITMAP,                // 21
-        UNO_NAME_GRAPHIC_SIZE,                  // 22
-        UNO_NAME_VERT_ORIENT,                   // 23
-        // these are only in chapter numbering
-        UNO_NAME_HEADING_STYLE_NAME,            // 24
-        // these two are accepted but ignored for some reason
-        UNO_NAME_BULLET_REL_SIZE,               // 25
-        UNO_NAME_BULLET_COLOR,                  // 26
-        UNO_NAME_GRAPHIC_URL,                   // 27
-
-        UNO_NAME_LIST_FORMAT                    // 28
-    };
-
-    enum {
-        NotInChapterFirst = 16,
-        NotInChapterLast = 23,
-        InChapterFirst = 24,
-        InChapterLast = 24
-    };
-
-    std::vector<PropertyValue const*> aPropertyValues;
-    bool bExcept = false;
-    for(const beans::PropertyValue& rProp : rProperties)
-    {
-        bExcept = true;
-        for(size_t j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
-        {
-            if (pDocShell &&
-                j >= static_cast<size_t>(NotInChapterFirst) &&
-                j <= static_cast<size_t>(NotInChapterLast))
-                continue;
-            if (!pDocShell &&
-                j >= static_cast<size_t>(InChapterFirst) &&
-                j <= static_cast<size_t>(InChapterLast))
-                continue;
-            if (rProp.Name.equalsAscii(aNumPropertyNames[j]))
-            {
-                bExcept = false;
-                break;
-            }
-        }
-        SAL_WARN_IF( bExcept, "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
-        aPropertyValues.push_back(& rProp);
-        if(bExcept)
-            break;
-    }
-
     bool bWrongArg = false;
-    if(!bExcept)
+    std::unique_ptr<SvxBrushItem> pSetBrush;
+    std::unique_ptr<Size> pSetSize;
+    std::unique_ptr<SwFormatVertOrient> pSetVOrient;
+    bool bCharStyleNameSet = false;
+
+    for (const beans::PropertyValue& rProp : rProperties)
     {
-        std::unique_ptr<SvxBrushItem> pSetBrush;
-        std::unique_ptr<Size> pSetSize;
-        std::unique_ptr<SwFormatVertOrient> pSetVOrient;
-        bool bCharStyleNameSet = false;
-
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aNumPropertyNames) && !bWrongArg; ++i)
+        if (rProp.Name == UNO_NAME_ADJUST)
         {
-            PropertyValue const*const pProp(
-                    lcl_FindProperty(aNumPropertyNames[i], aPropertyValues));
-            if (!pProp)
-                continue;
-            switch(i)
+            sal_Int16 nValue = text::HoriOrientation::NONE;
+            rProp.Value >>= nValue;
+            if (nValue > text::HoriOrientation::NONE &&
+                nValue <= text::HoriOrientation::LEFT &&
+                USHRT_MAX != aUnoToSvxAdjust[nValue])
             {
-                case 0: //"Adjust"
-                {
-                    sal_Int16 nValue = text::HoriOrientation::NONE;
-                    pProp->Value >>= nValue;
-                    if (nValue > text::HoriOrientation::NONE &&
-                        nValue <= text::HoriOrientation::LEFT &&
-                        USHRT_MAX != aUnoToSvxAdjust[nValue])
-                    {
-                        aFormat.SetNumAdjust(static_cast<SvxAdjust>(aUnoToSvxAdjust[nValue]));
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 1: //"ParentNumbering",
-                {
-                    sal_Int16 nSet = 0;
-                    pProp->Value >>= nSet;
-                    if(nSet >= 0 && MAXLEVEL >= nSet)
-                        aFormat.SetIncludeUpperLevels( static_cast< sal_uInt8 >(nSet) );
-                }
-                break;
-                case 2: //"Prefix",
-                {
-                    OUString uTmp;
-                    pProp->Value >>= uTmp;
-                    aFormat.SetPrefix(uTmp);
-                }
-                break;
-                case 3: //"Suffix",
-                {
-                    OUString uTmp;
-                    pProp->Value >>= uTmp;
-                    aFormat.SetSuffix(uTmp);
-                }
-                break;
-                case 4: //"CharStyleName",
-                {
-                    bCharStyleNameSet = true;
-                    OUString uTmp;
-                    pProp->Value >>= uTmp;
-                    OUString sCharFormatName;
-                    SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
-                    if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
-                    {
-                        rCharStyleName = aInvalidStyle;
-                        aFormat.SetCharFormat(nullptr);
-                    }
-                    else if(pDocShell || pDoc)
-                    {
-                        SwDoc* pLocalDoc = pDoc ? pDoc : pDocShell->GetDoc();
-                        const SwCharFormats* pFormats = pLocalDoc->GetCharFormats();
-                        const size_t nChCount = pFormats->size();
+                aFormat.SetNumAdjust(static_cast<SvxAdjust>(aUnoToSvxAdjust[nValue]));
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_PARENT_NUMBERING)
+        {
+            sal_Int16 nSet = 0;
+            rProp.Value >>= nSet;
+            if(nSet >= 0 && MAXLEVEL >= nSet)
+                aFormat.SetIncludeUpperLevels( static_cast< sal_uInt8 >(nSet) );
+        }
+        else if (rProp.Name == UNO_NAME_PREFIX)
+        {
+            OUString uTmp;
+            rProp.Value >>= uTmp;
+            aFormat.SetPrefix(uTmp);
+        }
+        else if (rProp.Name == UNO_NAME_SUFFIX)
+        {
+            OUString uTmp;
+            rProp.Value >>= uTmp;
+            aFormat.SetSuffix(uTmp);
+        }
+        else if (rProp.Name == UNO_NAME_CHAR_STYLE_NAME)
+        {
+            bCharStyleNameSet = true;
+            OUString uTmp;
+            rProp.Value >>= uTmp;
+            OUString sCharFormatName;
+            SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
+            if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
+            {
+                rCharStyleName = aInvalidStyle;
+                aFormat.SetCharFormat(nullptr);
+            }
+            else if(pDoc)
+            {
+                const SwCharFormats* pFormats = pDoc->GetCharFormats();
+                const size_t nChCount = pFormats->size();
 
-                        SwCharFormat* pCharFormat = nullptr;
-                        if (!sCharFormatName.isEmpty())
+                SwCharFormat* pCharFormat = nullptr;
+                if (!sCharFormatName.isEmpty())
+                {
+                    for(size_t j = 0; j< nChCount; ++j)
+                    {
+                        SwCharFormat* pTmp = (*pFormats)[j];
+                        if(pTmp->GetName() == sCharFormatName)
                         {
-                            for(size_t j = 0; j< nChCount; ++j)
-                            {
-                                SwCharFormat* pTmp = (*pFormats)[j];
-                                if(pTmp->GetName() == sCharFormatName)
-                                {
-                                    pCharFormat = pTmp;
-                                    break;
-                                }
-                            }
-                            if(!pCharFormat)
-                            {
+                            pCharFormat = pTmp;
+                            break;
+                        }
+                    }
+                    if(!pCharFormat)
+                    {
 
-                                SfxStyleSheetBase* pBase;
-                                SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
-                                pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
-                                if(!pBase)
-                                    pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
-                                pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
-                            }
-                        }
-                        aFormat.SetCharFormat( pCharFormat );
-                        // #i51842#
-                        // If the character format has been found its name should not be in the
-                        // char style names array
-                        rCharStyleName.clear();
-                     }
-                    else
-                        rCharStyleName = sCharFormatName;
-                }
-                break;
-                case 5: //"StartWith",
-                {
-                    sal_Int16 nVal = 0;
-                    pProp->Value >>= nVal;
-                    aFormat.SetStart(nVal);
-                }
-                break;
-                case 6: //UNO_NAME_LEFT_MARGIN,
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    // #i23727# nValue can be negative
-                    aFormat.SetAbsLSpace(convertMm100ToTwip(nValue));
-                }
-                break;
-                case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    if(nValue >= 0)
-                        aFormat.SetCharTextDistance(static_cast<short>(convertMm100ToTwip(nValue)));
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 8: //UNO_NAME_FIRST_LINE_OFFSET,
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    // #i23727# nValue can be positive
-                    nValue = convertMm100ToTwip(nValue);
-                    aFormat.SetFirstLineOffset(nValue);
-                }
-                break;
-                case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
-                {
-                    sal_Int16 nValue = 0;
-                    pProp->Value >>= nValue;
-                    if ( nValue == 0 )
-                    {
-                        aFormat.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-                    }
-                    else if ( nValue == 1 )
-                    {
-                        aFormat.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
-                    }
-                    else
-                    {
-                        bWrongArg = true;
+                        SfxStyleSheetBase* pBase;
+                        SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
+                        pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
+                        if(!pBase)
+                            pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
+                        pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
                     }
                 }
-                break;
-                case 10: // UNO_NAME_LABEL_FOLLOWED_BY
-                {
-                    sal_Int16 nValue = 0;
-                    pProp->Value >>= nValue;
-                    if ( nValue == LabelFollow::LISTTAB )
-                    {
-                        aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
-                    }
-                    else if ( nValue == LabelFollow::SPACE )
-                    {
-                        aFormat.SetLabelFollowedBy( SvxNumberFormat::SPACE );
-                    }
-                    else if ( nValue == LabelFollow::NOTHING )
-                    {
-                        aFormat.SetLabelFollowedBy( SvxNumberFormat::NOTHING );
-                    }
-                    else if ( nValue == LabelFollow::NEWLINE )
-                    {
-                        aFormat.SetLabelFollowedBy( SvxNumberFormat::NEWLINE );
-                    }
-                    else
-                    {
-                        bWrongArg = true;
-                    }
+                aFormat.SetCharFormat( pCharFormat );
+                // #i51842#
+                // If the character format has been found its name should not be in the
+                // char style names array
+                rCharStyleName.clear();
                 }
-                break;
-                case 11: // UNO_NAME_LISTTAB_STOP_POSITION
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    nValue = convertMm100ToTwip(nValue);
-                    if ( nValue >= 0 )
-                    {
-                        aFormat.SetListtabPos( nValue );
-                    }
-                    else
-                    {
-                        bWrongArg = true;
-                    }
-                }
-                break;
-                case 12: // UNO_NAME_FIRST_LINE_INDENT
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    nValue = convertMm100ToTwip(nValue);
-                    aFormat.SetFirstLineIndent( nValue );
-                }
-                break;
-                case 13: // UNO_NAME_INDENT_AT
-                {
-                    sal_Int32 nValue = 0;
-                    pProp->Value >>= nValue;
-                    nValue = convertMm100ToTwip(nValue);
-                    aFormat.SetIndentAt( nValue );
-                }
-                break;
-                case 14: //"NumberingType"
-                {
-                    sal_Int16 nSet = 0;
-                    pProp->Value >>= nSet;
-                    if(nSet >= 0)
-                        aFormat.SetNumberingType(static_cast<SvxNumType>(nSet));
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 15: //"ParagraphStyleName"
-                {
-                    if (pParagraphStyleName)
-                    {
-                        OUString uTmp;
-                        pProp->Value >>= uTmp;
-                        OUString sStyleName;
-                        SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
-                        *pParagraphStyleName = sStyleName;
-                    }
-                }
-                break;
-                case 16: //"BulletId",
-                {
-                    assert( !pDocShell );
-                    sal_Int16 nSet = 0;
-                    if( pProp->Value >>= nSet )
-                        aFormat.SetBulletChar(nSet);
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 17: //UNO_NAME_BULLET_FONT,
-                {
-                    assert( !pDocShell );
-                    awt::FontDescriptor desc;
-                    if (pProp->Value >>= desc)
-                    {
-                        // #i93725#
-                        // do not accept "empty" font
-                        if (!desc.Name.isEmpty())
-                        {
-                            vcl::Font aFont;
-                            SvxUnoFontDescriptor::ConvertToFont(desc, aFont);
-                            aFormat.SetBulletFont(&aFont);
-                        }
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 18: //"BulletFontName",
-                {
-                    assert( !pDocShell );
-                    OUString sBulletFontName;
-                    pProp->Value >>= sBulletFontName;
-                    SwDocShell* pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : nullptr;
-                    if( !sBulletFontName.isEmpty() && pLclDocShell )
-                    {
-                        const SvxFontListItem* pFontListItem =
-                                static_cast<const SvxFontListItem* >(pLclDocShell
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                        const FontList*  pList = pFontListItem->GetFontList();
-                        FontMetric aFontMetric = pList->Get(
-                            sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
-                        vcl::Font aFont(aFontMetric);
-                        aFormat.SetBulletFont(&aFont);
-                    }
-                    else if (pBulletFontName)
-                        *pBulletFontName = sBulletFontName;
-                }
-                break;
-                case 19: //"BulletChar",
-                {
-                    assert( !pDocShell );
-                    OUString aChar;
-                    pProp->Value >>= aChar;
-                    if(aChar.getLength() == 1)
-                    {
-                        aFormat.SetBulletChar(aChar.toChar());
-                    }
-                    else if(aChar.isEmpty())
-                    {
-                        // If w:lvlText's value is null - set bullet char to zero
-                        aFormat.SetBulletChar(u'\0');
-                    }
-                    else
-                    {
-                        bWrongArg = true;
-                    }
-                }
-                break;
-                case 20: //UNO_NAME_GRAPHIC,
-                {
-                    assert( !pDocShell );
-                    uno::Reference<graphic::XGraphic> xGraphic;
-                    if (pProp->Value >>= xGraphic)
-                    {
-                        if (!pSetBrush)
-                        {
-                            const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
-                            if(pOrigBrush)
-                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
-                            else
-                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
-                        }
-                        Graphic aGraphic(xGraphic);
-                        pSetBrush->SetGraphic(aGraphic);
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 21: //UNO_NAME_GRAPHIC_BITMAP,
-                {
-                    assert( !pDocShell );
-                    uno::Reference<awt::XBitmap> xBitmap;
-                    if (pProp->Value >>= xBitmap)
-                    {
-                        if(!pSetBrush)
-                        {
-                            const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
-                            if(pOrigBrush)
-                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
-                            else
-                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
-                        }
-
-                        uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
-                        Graphic aGraphic(xGraphic);
-                        pSetBrush->SetGraphic(aGraphic);
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 22: //UNO_NAME_GRAPHIC_SIZE,
-                {
-                    assert( !pDocShell );
-                    if(!pSetSize)
-                        pSetSize.reset(new Size);
-                    awt::Size size;
-                    if (pProp->Value >>= size)
-                    {
-                        size.Width = convertMm100ToTwip(size.Width);
-                        size.Height = convertMm100ToTwip(size.Height);
-                        pSetSize->setWidth( size.Width );
-                        pSetSize->setHeight( size.Height );
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 23: //VertOrient
-                {
-                    assert( !pDocShell );
-                    if(!pSetVOrient)
-                    {
-                        if(aFormat.GetGraphicOrientation())
-                            pSetVOrient.reset(aFormat.GetGraphicOrientation()->Clone());
-                        else
-                            pSetVOrient.reset(new SwFormatVertOrient);
-                    }
-                    pSetVOrient->PutValue(pProp->Value, MID_VERTORIENT_ORIENT);
-                }
-                break;
-                case 24: //"HeadingStyleName"
-                {
-                    if (pHeadingStyleName)
-                    {
-                        OUString uTmp;
-                        pProp->Value >>= uTmp;
-                        OUString sStyleName;
-                        SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
-                        *pHeadingStyleName = sStyleName;
-                    }
-                }
-                break;
-                case 25: // BulletRelSize - unsupported - only available in Impress
-                break;
-                case 26: // BulletColor - ignored too
-                break;
-                case 27: // UNO_NAME_GRAPHIC_URL
-                {
-                    assert( !pDocShell );
-                    OUString aURL;
-                    if (pProp->Value >>= aURL)
-                    {
-                        if(!pSetBrush)
-                        {
-                            const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
-                            if(pOrigBrush)
-                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
-                            else
-                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
-                        }
-
-                        Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
-                        if (!aGraphic.IsNone())
-                            pSetBrush->SetGraphic(aGraphic);
-                    }
-                    else
-                        bWrongArg = true;
-                }
-                break;
-                case 28: //"ListFormat",
-                {
-                    OUString uTmp;
-                    pProp->Value >>= uTmp;
-                    aFormat.SetListFormat(uTmp);
-                }
-                break;
+            else
+                rCharStyleName = sCharFormatName;
+        }
+        else if (rProp.Name == UNO_NAME_START_WITH)
+        {
+            sal_Int16 nVal = 0;
+            rProp.Value >>= nVal;
+            aFormat.SetStart(nVal);
+        }
+        else if (rProp.Name == UNO_NAME_LEFT_MARGIN)
+        {
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            // #i23727# nValue can be negative
+            aFormat.SetAbsLSpace(convertMm100ToTwip(nValue));
+        }
+        else if (rProp.Name == UNO_NAME_SYMBOL_TEXT_DISTANCE)
+        {
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            if (nValue >= 0)
+                aFormat.SetCharTextDistance(static_cast<short>(convertMm100ToTwip(nValue)));
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_FIRST_LINE_OFFSET)
+        {
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            // #i23727# nValue can be positive
+            nValue = convertMm100ToTwip(nValue);
+            aFormat.SetFirstLineOffset(nValue);
+        }
+        else if (rProp.Name == UNO_NAME_POSITION_AND_SPACE_MODE)
+        {
+            sal_Int16 nValue = 0;
+            rProp.Value >>= nValue;
+            if ( nValue == 0 )
+            {
+                aFormat.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
+            }
+            else if ( nValue == 1 )
+            {
+                aFormat.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
+            }
+            else
+            {
+                bWrongArg = true;
             }
         }
-        if(!bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
+        else if (rProp.Name == UNO_NAME_LABEL_FOLLOWED_BY)
         {
-            if(!pSetBrush && aFormat.GetBrush())
-                pSetBrush.reset(new SvxBrushItem(*aFormat.GetBrush()));
-
-            if(pSetBrush)
+            sal_Int16 nValue = 0;
+            rProp.Value >>= nValue;
+            if ( nValue == LabelFollow::LISTTAB )
             {
-                if(!pSetVOrient && aFormat.GetGraphicOrientation())
-                    pSetVOrient.reset( new SwFormatVertOrient(*aFormat.GetGraphicOrientation()) );
-
-                if(!pSetSize)
-                {
-                    pSetSize.reset(new Size(aFormat.GetGraphicSize()));
-                    if(!pSetSize->Width() || !pSetSize->Height())
-                    {
-                        const Graphic* pGraphic = pSetBrush->GetGraphic();
-                        if(pGraphic)
-                            *pSetSize = ::GetGraphicSizeTwip(*pGraphic, nullptr);
-                    }
-                }
-                sal_Int16 eOrient = pSetVOrient ?
-                    pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
-                aFormat.SetGraphicBrush( pSetBrush.get(), pSetSize.get(), text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+            }
+            else if ( nValue == LabelFollow::SPACE )
+            {
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::SPACE );
+            }
+            else if ( nValue == LabelFollow::NOTHING )
+            {
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::NOTHING );
+            }
+            else if ( nValue == LabelFollow::NEWLINE )
+            {
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::NEWLINE );
+            }
+            else
+            {
+                bWrongArg = true;
             }
         }
-        if ((!bCharStyleNameSet || rCharStyleName.isEmpty())
-            && aFormat.GetNumberingType() == NumberingType::BITMAP
-            && !aFormat.GetCharFormat()
-            && !SwXNumberingRules::isInvalidStyle(rCharStyleName))
+        else if (rProp.Name == UNO_NAME_LISTTAB_STOP_POSITION)
         {
-            OUString tmp;
-            SwStyleNameMapper::FillProgName(RES_POOLCHR_BULLET_LEVEL, tmp);
-            rCharStyleName = tmp;
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            nValue = convertMm100ToTwip(nValue);
+            if ( nValue >= 0 )
+            {
+                aFormat.SetListtabPos( nValue );
+            }
+            else
+            {
+                bWrongArg = true;
+            }
         }
+        else if (rProp.Name == UNO_NAME_FIRST_LINE_INDENT)
+        {
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            nValue = convertMm100ToTwip(nValue);
+            aFormat.SetFirstLineIndent( nValue );
+        }
+        else if (rProp.Name == UNO_NAME_INDENT_AT)
+        {
+            sal_Int32 nValue = 0;
+            rProp.Value >>= nValue;
+            nValue = convertMm100ToTwip(nValue);
+            aFormat.SetIndentAt( nValue );
+        }
+        else if (rProp.Name == UNO_NAME_NUMBERING_TYPE)
+        {
+            sal_Int16 nSet = 0;
+            rProp.Value >>= nSet;
+            if(nSet >= 0)
+                aFormat.SetNumberingType(static_cast<SvxNumType>(nSet));
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_PARAGRAPH_STYLE_NAME)
+        {
+            if (pParagraphStyleName)
+            {
+                OUString uTmp;
+                rProp.Value >>= uTmp;
+                OUString sStyleName;
+                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
+                *pParagraphStyleName = sStyleName;
+            }
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_ID)
+        {
+            sal_Int16 nSet = 0;
+            if( rProp.Value >>= nSet )
+                aFormat.SetBulletChar(nSet);
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_FONT)
+        {
+            awt::FontDescriptor desc;
+            if (rProp.Value >>= desc)
+            {
+                // #i93725#
+                // do not accept "empty" font
+                if (!desc.Name.isEmpty())
+                {
+                    vcl::Font aFont;
+                    SvxUnoFontDescriptor::ConvertToFont(desc, aFont);
+                    aFormat.SetBulletFont(&aFont);
+                }
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_FONT_NAME)
+        {
+            OUString sBulletFontName;
+            rProp.Value >>= sBulletFontName;
+            SwDocShell* pLclDocShell = pDoc->GetDocShell();
+            if( !sBulletFontName.isEmpty() && pLclDocShell )
+            {
+                const SvxFontListItem* pFontListItem =
+                        static_cast<const SvxFontListItem* >(pLclDocShell
+                                            ->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                const FontList*  pList = pFontListItem->GetFontList();
+                FontMetric aFontMetric = pList->Get(
+                    sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
+                vcl::Font aFont(aFontMetric);
+                aFormat.SetBulletFont(&aFont);
+            }
+            else if (pBulletFontName)
+                *pBulletFontName = sBulletFontName;
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_CHAR)
+        {
+            OUString aChar;
+            rProp.Value >>= aChar;
+            if(aChar.getLength() == 1)
+            {
+                aFormat.SetBulletChar(aChar.toChar());
+            }
+            else if(aChar.isEmpty())
+            {
+                // If w:lvlText's value is null - set bullet char to zero
+                aFormat.SetBulletChar(u'\0');
+            }
+            else
+            {
+                bWrongArg = true;
+            }
+        }
+        else if (rProp.Name == UNO_NAME_GRAPHIC)
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            if (rProp.Value >>= xGraphic)
+            {
+                if (!pSetBrush)
+                {
+                    const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
+                    if(pOrigBrush)
+                        pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
+                    else
+                        pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
+                }
+                Graphic aGraphic(xGraphic);
+                pSetBrush->SetGraphic(aGraphic);
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_GRAPHIC_BITMAP)
+        {
+            uno::Reference<awt::XBitmap> xBitmap;
+            if (rProp.Value >>= xBitmap)
+            {
+                if(!pSetBrush)
+                {
+                    const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
+                    if(pOrigBrush)
+                        pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
+                    else
+                        pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
+                }
+
+                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                Graphic aGraphic(xGraphic);
+                pSetBrush->SetGraphic(aGraphic);
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_GRAPHIC_SIZE)
+        {
+            if(!pSetSize)
+                pSetSize.reset(new Size);
+            awt::Size size;
+            if (rProp.Value >>= size)
+            {
+                size.Width = convertMm100ToTwip(size.Width);
+                size.Height = convertMm100ToTwip(size.Height);
+                pSetSize->setWidth( size.Width );
+                pSetSize->setHeight( size.Height );
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_VERT_ORIENT)
+        {
+            if(!pSetVOrient)
+            {
+                if(aFormat.GetGraphicOrientation())
+                    pSetVOrient.reset(aFormat.GetGraphicOrientation()->Clone());
+                else
+                    pSetVOrient.reset(new SwFormatVertOrient);
+            }
+            pSetVOrient->PutValue(rProp.Value, MID_VERTORIENT_ORIENT);
+        }
+        else if (rProp.Name == UNO_NAME_HEADING_STYLE_NAME)
+        {
+            if (pHeadingStyleName)
+            {
+                OUString uTmp;
+                rProp.Value >>= uTmp;
+                OUString sStyleName;
+                SwStyleNameMapper::FillUIName(uTmp, sStyleName, SwGetPoolIdFromName::TxtColl );
+                *pHeadingStyleName = sStyleName;
+            }
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_REL_SIZE)
+        {
+            // BulletRelSize - unsupported - only available in Impress
+        }
+        else if (rProp.Name == UNO_NAME_BULLET_COLOR)
+        {
+            // BulletColor - ignored too
+        }
+        else if (rProp.Name == UNO_NAME_GRAPHIC_URL)
+        {
+            OUString aURL;
+            if (rProp.Value >>= aURL)
+            {
+                if(!pSetBrush)
+                {
+                    const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
+                    if(pOrigBrush)
+                        pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
+                    else
+                        pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
+                }
+
+                Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
+                if (!aGraphic.IsNone())
+                    pSetBrush->SetGraphic(aGraphic);
+            }
+            else
+                bWrongArg = true;
+        }
+        else if (rProp.Name == UNO_NAME_LIST_FORMAT)
+        {
+            OUString uTmp;
+            rProp.Value >>= uTmp;
+            aFormat.SetListFormat(uTmp);
+        }
+        else
+        {
+            // Invalid property name
+            SAL_WARN("sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing");
+            throw uno::RuntimeException("Unknown/incorrect property " + rProp.Name);
+        }
+    }
+    if(!bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
+    {
+        if(!pSetBrush && aFormat.GetBrush())
+            pSetBrush.reset(new SvxBrushItem(*aFormat.GetBrush()));
+
+        if(pSetBrush)
+        {
+            if(!pSetVOrient && aFormat.GetGraphicOrientation())
+                pSetVOrient.reset( new SwFormatVertOrient(*aFormat.GetGraphicOrientation()) );
+
+            if(!pSetSize)
+            {
+                pSetSize.reset(new Size(aFormat.GetGraphicSize()));
+                if(!pSetSize->Width() || !pSetSize->Height())
+                {
+                    const Graphic* pGraphic = pSetBrush->GetGraphic();
+                    if(pGraphic)
+                        *pSetSize = ::GetGraphicSizeTwip(*pGraphic, nullptr);
+                }
+            }
+            sal_Int16 eOrient = pSetVOrient ?
+                pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
+            aFormat.SetGraphicBrush( pSetBrush.get(), pSetSize.get(), text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
+        }
+    }
+    if ((!bCharStyleNameSet || rCharStyleName.isEmpty())
+        && aFormat.GetNumberingType() == NumberingType::BITMAP
+        && !aFormat.GetCharFormat()
+        && !SwXNumberingRules::isInvalidStyle(rCharStyleName))
+    {
+        OUString tmp;
+        SwStyleNameMapper::FillProgName(RES_POOLCHR_BULLET_LEVEL, tmp);
+        rCharStyleName = tmp;
     }
 
     if(bWrongArg)
         throw lang::IllegalArgumentException();
-    else if(bExcept)
-        throw uno::RuntimeException();
 }
 
 uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
