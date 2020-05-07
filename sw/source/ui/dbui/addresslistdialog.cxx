@@ -166,6 +166,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     bool bEnableEdit = false;
     bool bEnableOK = true;
+    bool bSelected = false;
     m_xListLB->unselect_all();
 
     SwDBConfig aDb;
@@ -183,6 +184,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
         if (rName == rCurrentData.sDataSource)
         {
             m_xListLB->select(*m_xIter);
+            bSelected = true;
             m_xListLB->set_text(*m_xIter, rCurrentData.sCommand, 1);
             pUserData->nCommandType = rCurrentData.nCommandType;
             pUserData->xSource = rConfigItem.GetSource();
@@ -208,7 +210,10 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
         }
     }
 
-    m_xOK->set_sensitive(m_xListLB->n_children() > 0 && bEnableOK);
+    bool bHasChildren = m_xListLB->n_children() > 0;
+    if (bHasChildren && !bSelected)
+        m_xListLB->select(0); // select the first entry if nothing else selected
+    m_xOK->set_sensitive(bHasChildren && bEnableOK);
     m_xEditPB->set_sensitive(bEnableEdit);
     m_xRemovePB->set_sensitive(m_xListLB->n_children() > 0);
     m_xFilterPB->set_sensitive(m_xListLB->n_children() > 0);
