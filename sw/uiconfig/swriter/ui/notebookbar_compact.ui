@@ -2763,6 +2763,7 @@
                             </child>
                             <child>
                               <object class="GtkToolButton" id="Files-ExportToPDF">
+                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExportToPDF</property>
                               </object>
@@ -2801,7 +2802,7 @@
                             <property name="toolbar_style">both-horiz</property>
                             <child>
                               <object class="GtkToolButton" id="Files-ExportDirectToEPUB">
-                                <property name="visible">True</property>
+                                <property name="visible">False</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:ExportDirectToEPUB</property>
                               </object>
