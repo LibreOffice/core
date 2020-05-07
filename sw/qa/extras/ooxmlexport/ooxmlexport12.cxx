@@ -931,6 +931,30 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
                 "width:255.75pt;height:63.75pt");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(
+        xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "BulletChar")
+        {
+            // Check for 'BLACK UPPER RIGHT TRIANGLE' (U+25E5) as a bullet
+            CPPUNIT_ASSERT_EQUAL(OUString(u"\u25E5"), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find bullet with level 0");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 {
     // test import/export of ActiveTable (visible sheet) of embedded XLSX OLE objects
