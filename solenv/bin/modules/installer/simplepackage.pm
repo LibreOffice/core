@@ -433,7 +433,7 @@ sub create_package
                 opendir(my $dh, $sdkbindir);
                 foreach my $sdkbinary (readdir $dh) {
                     next unless -f "$sdkbindir/$sdkbinary";
-                    $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{SRCDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
+                    $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{BUILDDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
                     print "... $systemcall ...\n";
                     my $returnvalue = system($systemcall);
                     $infoline = "Systemcall: $systemcall\n";
