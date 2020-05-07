@@ -21,15 +21,6 @@
 #include <svx/xcolit.hxx>
 #include <rtl/math.hxx>
 
-namespace
-{
-sal_Int32 EMU2Pt(sal_Int32 nEMU)
-{
-    return static_cast<sal_Int32>(rtl::math::round(nEMU / 12700.0));
-}
-sal_Int32 Pt2EMU(sal_Int32 nPt) { return nPt * 12700; }
-}
-
 namespace svx::sidebar
 {
 GlowPropertyPanel::GlowPropertyPanel(vcl::Window* pParent,
@@ -96,7 +87,7 @@ IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowColorHdl, ColorListBox&, void)
 
 IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowRadiusHdl, weld::MetricSpinButton&, void)
 {
-    SdrMetricItem aItem(SDRATTR_GLOW_RAD, Pt2EMU(mxGlowRadius->get_value(FieldUnit::POINT)));
+    SdrMetricItem aItem(SDRATTR_GLOW_RAD, mxGlowRadius->get_value(FieldUnit::MM_100TH));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD, { &aItem });
 }
 
@@ -159,7 +150,7 @@ void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
                 const SdrMetricItem* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState);
                 if (pRadiusItem)
                 {
-                    mxGlowRadius->set_value(EMU2Pt(pRadiusItem->GetValue()), FieldUnit::POINT);
+                    mxGlowRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
                 }
             }
         }

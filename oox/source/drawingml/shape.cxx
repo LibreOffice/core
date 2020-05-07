@@ -1470,7 +1470,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue("GlowEffect", makeAny(true));
-            propertySet->setPropertyValue("GlowEffectRad", makeAny(static_cast<sal_Int32>(aEffectProperties.maGlow.moGlowRad.get())));
+            propertySet->setPropertyValue("GlowEffectRad", makeAny(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
             propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
             propertySet->setPropertyValue("GlowEffectTransparency", makeAny(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
