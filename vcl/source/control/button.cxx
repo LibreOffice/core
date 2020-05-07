@@ -27,7 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>

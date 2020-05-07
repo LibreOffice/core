@@ -17,7 +17,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/spinfld.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>

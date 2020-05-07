@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_WIZDLG_HXX
 
 #include <memory>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/roadmapwizard.hxx>
 #include <vcl/tabpage.hxx>

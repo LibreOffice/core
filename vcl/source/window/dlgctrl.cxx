@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>

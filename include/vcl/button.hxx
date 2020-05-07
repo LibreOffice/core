@@ -253,24 +253,6 @@ public:
     explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
 };
 
-class VCL_DLLPUBLIC HelpButton : public PushButton
-{
-protected:
-    using PushButton::ImplInit;
-private:
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
-
-                        HelpButton( const HelpButton & ) = delete;
-                        HelpButton & operator= ( const HelpButton & ) = delete;
-
-    virtual void    StateChanged( StateChangedType nStateChange ) override;
-
-public:
-    explicit        HelpButton( vcl::Window* pParent, WinBits nStyle = 0 );
-
-    virtual void    Click() override;
-};
-
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:

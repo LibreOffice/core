@@ -10,9 +10,9 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
-#include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/virdev.hxx>

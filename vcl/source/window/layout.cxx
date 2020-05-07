@@ -10,7 +10,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
