@@ -30,6 +30,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -900,9 +901,11 @@ void Qt5AccessibleWidget::removeSelection(int /* selectionIndex */)
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::removeSelection");
 }
-void Qt5AccessibleWidget::scrollToSubstring(int /* startIndex */, int /* endIndex */)
+void Qt5AccessibleWidget::scrollToSubstring(int startIndex, int endIndex)
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::scrollToSubstring");
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        xText->scrollSubstringTo(startIndex, endIndex, AccessibleScrollType_SCROLL_ANYWHERE);
 }
 
 void Qt5AccessibleWidget::selection(int selectionIndex, int* startOffset, int* endOffset) const
