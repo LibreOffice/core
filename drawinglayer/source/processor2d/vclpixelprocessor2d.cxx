@@ -975,7 +975,9 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
 
         // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
-        bitmap.Erase(rCandidate.getGlowColor());
+        const basegfx::BColor aGlowColor(
+            maBColorModifierStack.getModifiedColor(rCandidate.getGlowColor().getBColor()));
+        bitmap.Erase(Color(aGlowColor));
         // alpha mask will be scaled up automatically to match bitmap
         BitmapEx result(bitmap, AlphaMask(mask.GetBitmap()));
 
