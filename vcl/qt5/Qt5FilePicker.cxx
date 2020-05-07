@@ -431,6 +431,11 @@ void Qt5FilePicker::handleSetListValue(QComboBox* pWidget, sal_Int16 nControlAct
             pWidget->removeItem(nPos);
             break;
         }
+        case ControlActions::DELETE_ITEMS:
+        {
+            pWidget->clear();
+            break;
+        }
         case ControlActions::SET_SELECT_ITEM:
         {
             sal_Int32 nPos = 0;

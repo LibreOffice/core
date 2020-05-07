@@ -109,7 +109,8 @@ SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
     return pAttrArray->GetNextUnprotected(nRow, bUp);
 }
 
-sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const
+sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask,
+        bool bNoMatrixAtAll ) const
 {
     using namespace sc;
 
@@ -161,6 +162,11 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
             nEdges = pCell->GetMatrixEdge(aOrigin);
             if (nEdges == MatrixEdge::Nothing)
                 continue;
+
+            // A 1x1 matrix array formula is OK even for no matrix at all.
+            if (bNoMatrixAtAll
+                    && (nEdges != (MatrixEdge::Top | MatrixEdge::Left | MatrixEdge::Bottom | MatrixEdge::Right)))
+                return MatrixEdge::Inside;  // per convention Inside
 
             if (nEdges & MatrixEdge::Top)
                 bOpen = true;       // top edge opens, keep on looking

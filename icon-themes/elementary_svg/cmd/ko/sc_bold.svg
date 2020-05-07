@@ -1,4 +1,5 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="6" cy="3.41416" gradientTransform="matrix(.00000011 4.5623183 -3.2204598 .00000008 16.901396 -27.37391)" gradientUnits="userSpaceOnUse" r="3.726176"><stop offset="0" stop-color="#737373"/><stop offset=".262" stop-color="#636363"/><stop offset=".705" stop-color="#4b4b4b"/><stop offset="1" stop-color="#3f3f3f"/></radialGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><radialGradient id="a" cx="5.950466" cy="2.136038" gradientTransform="matrix(.00000011 4.5623183 -3.2204598 .00000008 13.879023 -27.147919)" gradientUnits="userSpaceOnUse" r="3.726176"><stop offset="0" stop-color="#737373"/><stop offset=".262" stop-color="#636363"/><stop offset=".705" stop-color="#4b4b4b"/><stop offset="1" stop-color="#3f3f3f"/></radialGradient>
 
 
-/&amp;amp;amp;gt;<path d="m3.522373 1.274009v3h5c-.3460452 3.7154331-1.4766573 5.2725445-5.7566906 7.330603l1.7566906 2.669397c5.955621-2.877639 7-7.8639599 7-12.9999999zm10-1v15h3v-15.00000009z" fill="url(#a)" stroke="#000" stroke-opacity=".6" transform="translate(-2.022373 .225991)"/></svg>
+
+/&amp;amp;amp;amp;gt;<path d="m10.5.5v15h3v-6h2v-4h-2v-5zm-10 1v3h5c-.3460452 3.7154331-.7199667 4.9419416-5 7l1 3c5.955621-2.877639 7-7.86396 7-13z" fill="url(#a)" stroke="#000" stroke-opacity=".6"/></svg>

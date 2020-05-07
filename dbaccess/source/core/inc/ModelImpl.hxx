@@ -184,6 +184,8 @@ private:
     */
     OUString                                     m_sDocumentURL;
 
+    SignatureState m_nScriptingSignatureState;
+
 public:
     OWeakConnectionArray                                                        m_aConnections;
     const css::uno::Reference< css::uno::XComponentContext >  m_aContext;
@@ -299,7 +301,7 @@ public:
     void    commitRootStorage();
 
     /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
-    static  bool    commitStorageIfWriteable_ignoreErrors(
+    bool    commitStorageIfWriteable_ignoreErrors(
                 const css::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 

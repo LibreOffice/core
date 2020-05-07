@@ -1094,6 +1094,30 @@ DECLARE_OOXMLEXPORT_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
     CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testArrowPosition, "tdf104565_ArrowPosition.docx")
+{
+    // tdf#104565: Test correct position.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // This is the correct Y coordinate, the incorrect was 817880.
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "516255");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx")
+{
+    // tdf#123346: Check arrow marker.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", "arrow");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

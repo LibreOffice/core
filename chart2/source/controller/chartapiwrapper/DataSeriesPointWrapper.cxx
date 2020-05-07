@@ -118,6 +118,12 @@ void lcl_AddPropertiesToVector_PointProperties(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
+                  PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "PercentageNumberFormat",
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
@@ -174,12 +180,6 @@ void lcl_AddPropertiesToVector_SeriesOnly(
     rOutProperties.emplace_back( "Axis",
                   PROP_SERIES_ATTACHED_AXIS,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-
-    rOutProperties.emplace_back( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
-                  PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
-                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }

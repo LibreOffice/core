@@ -340,8 +340,8 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
             {
                 // create from RawData
                 uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry[2]);
-                m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName()));
-                m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName()), 1);
+                m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
+                m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName(), xCert->getCertificateKind()), 1);
                 m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
             }
             catch (...)

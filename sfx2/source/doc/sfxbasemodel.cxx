@@ -2458,8 +2458,10 @@ void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Referenc
     throw lang::NoSupportException("SfxBaseModel controls all the sent notifications itself!" );
 }
 
-Sequence< document::CmisProperty > SAL_CALL SfxBaseModel::getCmisProperties()
+Sequence<document::CmisProperty> SAL_CALL SfxBaseModel::getCmisProperties()
 {
+    if (impl_isDisposed())
+        return Sequence<document::CmisProperty>();
     return m_pData->m_cmisProperties;
 }
 
@@ -2597,7 +2599,9 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
 
 uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
 {
-    uno::Sequence< document::CmisVersion > aVersions;
+    uno::Sequence<document::CmisVersion> aVersions;
+    if (impl_isDisposed())
+        return aVersions;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if ( pMedium )
     {

@@ -41,8 +41,12 @@ public:
             ScEditableTester();
 
             // calls TestBlock
+            /** @param  bNoMatrixAtAll
+                        TRUE if there must not be any matrix, not even entirely
+                        containted; for example in sorting. */
             ScEditableTester( const ScDocument* pDoc, SCTAB nTab,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                        bool bNoMatrixAtAll = false );
 
             // calls TestSelectedBlock
             ScEditableTester( const ScDocument* pDoc,
@@ -65,7 +69,8 @@ public:
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
     void    TestBlock( const ScDocument* pDoc, SCTAB nTab,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                        bool bNoMatrixAtAll = false );
     void    TestSelectedBlock( const ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );

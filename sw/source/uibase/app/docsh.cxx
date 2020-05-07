@@ -465,32 +465,41 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // We have an embedded data source definition, need to re-store it,
         // otherwise relative references will break when the new file is in a
         // different directory.
-        uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
 
-        const INetURLObject& rOldURLObject = GetMedium()->GetURLObject();
-        auto xContext(comphelper::getProcessComponentContext());
-        auto xUri = css::uri::UriReferenceFactory::create(xContext)
-            ->parse(rOldURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-        assert(xUri.is());
-        xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
-        assert(xUri.is());
-        OUString const aURL = xUri->getUriReference() + "/"
-            + INetURLObject::encode(pMgr->getEmbeddedName(),
-                INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        OUString aURL(GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
-        bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
-        if (!bCopyTo)
+        if (!aURL.isEmpty())
         {
-            if (const SfxBoolItem* pSaveToItem
-                = SfxItemSet::GetItem(rMedium.GetItemSet(), SID_SAVETO, false))
-                bCopyTo = pSaveToItem->GetValue();
-        }
+            auto xContext(comphelper::getProcessComponentContext());
+            auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(aURL);
+            assert(xUri.is());
+            xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
+                       ->createVndSunStarPkgUrlReference(xUri);
+            assert(xUri.is());
+            aURL = xUri->getUriReference() + "/"
+                   + INetURLObject::encode(pMgr->getEmbeddedName(), INetURLObject::PART_FPATH,
+                                           INetURLObject::EncodeMechanism::All);
 
-        uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
-        uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
-        SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
-                                             pMgr->getEmbeddedName(),
-                                             rMedium.GetName(), bCopyTo);
+            bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
+            if (!bCopyTo)
+            {
+                if (const SfxBoolItem* pSaveToItem
+                    = SfxItemSet::GetItem(rMedium.GetItemSet(), SID_SAVETO, false))
+                    bCopyTo = pSaveToItem->GetValue();
+            }
+
+            auto xDatabaseContext = sdb::DatabaseContext::create(xContext);
+            uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL),
+                                                                 uno::UNO_QUERY);
+            if (xDataSource)
+            {
+                uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(),
+                                                           uno::UNO_QUERY);
+                SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
+                                                     pMgr->getEmbeddedName(), rMedium.GetName(),
+                                                     bCopyTo);
+            }
+        }
     }
 
     // #i62875#

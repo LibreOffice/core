@@ -108,6 +108,8 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_doc \
     CppunitTest_sw_uibase_shells \
     CppunitTest_sw_core_frmedt \
+    CppunitTest_sw_core_txtnode \
+    CppunitTest_sw_core_objectpositioning \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)

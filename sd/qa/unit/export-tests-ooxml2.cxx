@@ -182,7 +182,10 @@ public:
     void testTdf127372();
     void testTdf127379();
     void testTdf98603();
+    void testTdf79082();
+    void testTdf119087();
     void testTdf131554();
+    void testTdf132282();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -283,7 +286,10 @@ public:
     CPPUNIT_TEST(testTdf127372);
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
+    CPPUNIT_TEST(testTdf79082);
+    CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
+    CPPUNIT_TEST(testTdf132282);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2635,6 +2641,68 @@ void SdOOXMLExportTest2::testTdf98603()
     CPPUNIT_ASSERT_EQUAL(OUString("IL"), aLocale.Country);
 }
 
+void SdOOXMLExportTest2::testTdf79082()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf79082.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]",
+        "pos",
+        "360000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[1]",
+        "algn",
+        "l");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]",
+        "pos",
+        "756000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[2]",
+        "algn",
+        "l");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]",
+        "pos",
+        "1440000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[3]",
+        "algn",
+        "ctr");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]",
+        "pos",
+        "1800000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[4]",
+        "algn",
+        "r");
+
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]",
+        "pos",
+        "3240000");
+    assertXPath(pXmlDocContent,
+        "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p/a:pPr/a:tabLst/a:tab[5]",
+        "algn",
+        "dec");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf119087()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf119087.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    // This would fail both on export validation, and reloading the saved pptx file.
+}
+
 void SdOOXMLExportTest2::testTdf131554()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf131554.pptx"), PPTX);
@@ -2642,6 +2710,18 @@ void SdOOXMLExportTest2::testTdf131554()
     uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13251), xShape->getPosition().Y);
+}
+
+void SdOOXMLExportTest2::testTdf132282()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf132282.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // Without the fix in place, the position would be 0,0, height = 1 and width = 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1736), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(763), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30523), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2604), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

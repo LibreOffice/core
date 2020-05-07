@@ -169,16 +169,6 @@ void write16(sal_uInt16 value, sal_uInt8 (& data)[2], bool littleEndian) {
     }
 }
 
-sal_uInt32 read32(sal_uInt8 const (& data)[4], bool littleEndian) {
-    if (littleEndian) {
-        return data[0] | (sal_uInt32(data[1]) << 8)
-            | (sal_uInt32(data[2]) << 16) | (sal_uInt32(data[3]) << 24);
-    } else {
-        return data[3] | (sal_uInt32(data[2]) << 8)
-            | (sal_uInt32(data[1]) << 16) | (sal_uInt32(data[0]) << 24);
-    }
-}
-
 void write32(sal_uInt32 value, sal_uInt8 (& data)[4], bool littleEndian) {
     if (littleEndian) {
         data[0] = value & 0xFF;
@@ -210,11 +200,13 @@ void Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
             {
                 write16(3, ifd->type, littleEndian);
                 write32(1, ifd->count, littleEndian);
-                write32(maOrientation, ifd->offset, littleEndian);
+                write16(
+                    maOrientation, reinterpret_cast<sal_uInt8 (&)[2]>(ifd->offset), littleEndian);
             }
             else
             {
-                sal_uInt32 nIfdOffset = read32(ifd->offset, littleEndian);
+                sal_uInt16 nIfdOffset = read16(
+                    reinterpret_cast<sal_uInt8 (&)[2]>(ifd->offset), littleEndian);
                 maOrientation = convertToOrientation(nIfdOffset);
             }
         }

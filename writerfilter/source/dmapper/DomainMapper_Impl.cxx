@@ -1674,6 +1674,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
                                 }
                             }
+                            if (pList->GetCurrentLevel())
+                            {
+                                sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
+                                if (nOverrideLevel != -1)
+                                {
+                                    // Restart list, it is overriden
+                                    m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
+                                    m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
+                                }
+                            }
                         }
                     }
 
@@ -2902,7 +2912,14 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
 
     //  The command looks like: " PAGE \* Arabic "
-    OUString sNumber = msfilter::util::findQuotedText(rCommand, "\\* ", ' ');
+    // tdf#132185: but may as well be "PAGE \* Arabic"
+    OUString sNumber;
+    constexpr OUStringLiteral rSeparator("\\* ");
+    if (sal_Int32 nStartIndex = rCommand.indexOf(rSeparator); nStartIndex >= 0)
+    {
+        nStartIndex += rSeparator.getLength();
+        sNumber = rCommand.getToken(0, ' ', nStartIndex);
+    }
 
     if( !sNumber.isEmpty() )
     {
@@ -6264,10 +6281,19 @@ void DomainMapper_Impl::ExecuteFrameConversion()
                 uno::Reference< text::XTextRange > xRange;
                 aFramedRedlines[i] >>= xRange;
                 uno::Reference<text::XTextCursor> xRangeCursor = GetTopTextAppend()->createTextCursorByRange( xRange );
-                sal_Int32 nLen = xRange->getString().getLength();
-                redLen.push_back(nLen);
-                xRangeCursor->gotoRange(m_xFrameStartRange, true);
-                redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+                if (xRangeCursor.is())
+                {
+                    sal_Int32 nLen = xRange->getString().getLength();
+                    redLen.push_back(nLen);
+                    xRangeCursor->gotoRange(m_xFrameStartRange, true);
+                    redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+                }
+                else
+                {
+                    // failed createTextCursorByRange(), for example, table inside the frame
+                    redLen.push_back(-1);
+                    redPos.push_back(-1);
+                }
             }
 
             const uno::Reference< text::XTextContent >& xTextContent = xTextAppendAndConvert->convertToTextFrame(
@@ -6280,6 +6306,9 @@ void DomainMapper_Impl::ExecuteFrameConversion()
             {
                 OUString sType;
                 beans::PropertyValues aRedlineProperties( 3 );
+                // skip failed createTextCursorByRange()
+                if (redPos[i/3] == -1)
+                    continue;
                 aFramedRedlines[i+1] >>= sType;
                 aFramedRedlines[i+2] >>= aRedlineProperties;
                 uno::Reference< text::XTextFrame > xFrame( xTextContent, uno::UNO_QUERY_THROW );

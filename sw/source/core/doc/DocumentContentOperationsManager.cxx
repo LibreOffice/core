@@ -23,6 +23,7 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>
@@ -1293,6 +1294,30 @@ namespace //local functions originally from docfmt.cxx
 
         if( pNode && pNode->IsTextNode() )
         {
+            // tdf#127606 at editing, remove different formatting of DOCX-like numbering symbol
+            if (pLayout && pNode->GetTextNode()->getIDocumentSettingAccess()->
+                    get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
+            {
+                SwContentNode* pEndNode = pEnd->nNode.GetNode().GetContentNode();
+                SwContentNode* pCurrentNode = pEndNode;
+                auto nStartIndex = pNode->GetIndex();
+                auto nEndIndex = pEndNode->GetIndex();
+                SwNodeIndex aIdx( pEnd->nNode.GetNode() );
+                while ( pCurrentNode != nullptr && nStartIndex <= pCurrentNode->GetIndex() )
+                {
+                    if (pCurrentNode->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT) &&
+                        // remove character formatting only on wholly selected paragraphs
+                        (nStartIndex < pCurrentNode->GetIndex() || pStt->nContent.GetIndex() == 0) &&
+                        (pCurrentNode->GetIndex() < nEndIndex || pEnd->nContent.GetIndex() == pEndNode->Len()))
+                    {
+                        pCurrentNode->ResetAttr(RES_PARATR_LIST_AUTOFMT);
+                        // reset also paragraph marker
+                        SwIndex nIdx( pCurrentNode, pCurrentNode->Len() );
+                        pCurrentNode->GetTextNode()->RstTextAttr(nIdx, 1);
+                    }
+                    pCurrentNode = SwNodes::GoPrevious( &aIdx );
+                }
+            }
             // #i27615#
             if (rRg.IsInFrontOfLabel())
             {
@@ -3409,6 +3434,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if (rRg.aStart != rRg.aEnd)
     {
         bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+        bool isRecreateEndNode(false);
         --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
@@ -3419,7 +3445,40 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         {   // recreate from previous node (could be merged now)
             if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
             {
+                std::unordered_set<SwTextFrame*> frames;
+                SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
+                if (pEndNode)
+                {
+                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    {
+                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        {
+                            frames.insert(pFrame);
+                        }
+                    }
+                }
                 sw::RecreateStartTextFrames(*pNode);
+                if (!frames.empty())
+                {   // tdf#132187 check if the end node needs new frames
+                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    {
+                        if (pFrame->getRootFrame()->IsHideRedlines())
+                        {
+                            auto const it = frames.find(pFrame);
+                            if (it != frames.end())
+                            {
+                                frames.erase(it);
+                            }
+                        }
+                    }
+                    if (!frames.empty()) // existing frame was deleted
+                    {   // all layouts because MakeFrames recreates all layouts
+                        pEndNode->DelFrames(nullptr);
+                        isRecreateEndNode = true;
+                    }
+                }
             }
         }
         bool const isAtStartOfSection(aSavePos.GetNode().IsStartNode());
@@ -3431,7 +3490,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             // if it was the first node in the document so that MakeFrames()
             // will find the existing (wasn't deleted) frame on it
             SwNodeIndex const end(rInsPos,
-                    (rInsPos.GetNode().IsEndNode() || isAtStartOfSection)
+                    (!isRecreateEndNode || isAtStartOfSection)
                     ? 0 : +1);
             ::MakeFrames(pDest, aSavePos, end);
         }
@@ -3838,7 +3897,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     // tdf#54819 current redlining needs also modification of paragraph style and
     // attributes added to the same grouped Undo
     if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
-        m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, nullptr);
+        m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
     std::vector<std::unique_ptr<SwUndo>> MarkUndos;
@@ -3942,7 +4001,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     }
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
-        m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE, nullptr);
+        m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     return true;
 }

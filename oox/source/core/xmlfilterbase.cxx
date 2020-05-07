@@ -625,7 +625,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
+    {
+        // The lowercase "officedocument" is intentional and according to the spec
+        // (although most other places are written "officeDocument")
         sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+    }
     else
         sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
@@ -988,7 +992,8 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
             }
 
             // Preserve non-standard (i.e. custom) entries.
-            if (!sType.match("http://schemas.openxmlformats.org"))
+            if (!sType.match("http://schemas.openxmlformats.org") // OOXML/ECMA Transitional
+                && !sType.match("http://purl.oclc.org")) // OOXML Strict
             {
                 StreamDataSequence aDataSeq;
                 if (importBinaryData(aDataSeq, sTarget))

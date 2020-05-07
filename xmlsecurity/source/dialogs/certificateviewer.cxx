@@ -106,12 +106,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
     // insert data
     css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
-    OUString sSubjectName(xmlsec::GetContentPart(xCert->getSubjectName()));
+    OUString sSubjectName(xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
     if (!sSubjectName.isEmpty())
         m_xIssuedToFT->set_label(sSubjectName);
     else
         m_xIssuedToLabelFT->hide();
-    OUString sIssuerName(xmlsec::GetContentPart(xCert->getIssuerName()));
+    OUString sIssuerName(xmlsec::GetContentPart(xCert->getIssuerName(), xCert->getCertificateKind()));
     if (!sIssuerName.isEmpty())
         m_xIssuedByFT->set_label(sIssuerName);
     else
@@ -282,7 +282,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         for (i = nCnt-1; i >= 0; i--)
         {
             const Reference< security::XCertificate > rCert = pCertPath[ i ];
-            OUString sName = xmlsec::GetContentPart( rCert->getSubjectName() );
+            OUString sName = xmlsec::GetContentPart( rCert->getSubjectName(), rCert->getCertificateKind() );
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());
