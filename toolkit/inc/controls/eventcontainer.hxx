@@ -43,6 +43,9 @@ class ScriptEventContainer final : public ::cppu::WeakImplHelper<
                                         css::container::XNameContainer,
                                         css::container::XContainer >
 {
+    // The map needs to keep the insertion order, otherwise Macro signatures would get broken
+    // if the order changes here (Dialog xml files are digitally signed too).
+    // Thus a std::map or std::unordered_map can't be used.
     NameContainerNameMap mHashMap;
     css::uno::Sequence< OUString > mNames;
     std::vector< css::uno::Any > mValues;
