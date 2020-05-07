@@ -14,11 +14,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicDescriptorTest \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
     vcl/qa/cppunit/GraphicNativeMetadataTest \
+    vcl/qa/cppunit/VectorGraphicSearchTest \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test,\
-	boost_headers \
-	glm_headers \
+$(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test, \
+    boost_headers \
+    $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 ifeq ($(TLS),NSS)
 $(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test,\
