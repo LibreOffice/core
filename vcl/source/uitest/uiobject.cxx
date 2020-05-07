@@ -10,6 +10,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/metricfielduiobject.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
@@ -1315,6 +1316,14 @@ void MetricFieldUIObject::execute(const OUString& rAction,
     }
     else
         SpinFieldUIObject::execute(rAction, rParameters);
+}
+
+StringMap MetricFieldUIObject::get_state()
+{
+    StringMap aMap = EditUIObject::get_state();
+    aMap["Value"] = mxMetricField->GetValueString();
+
+    return aMap;
 }
 
 OUString MetricFieldUIObject::get_name() const
