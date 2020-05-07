@@ -387,7 +387,7 @@ public:
     OUString getPostItsPos() override;
 
     /// @see vcl::ITiledRenderable::completeFunction().
-    virtual void completeFunction(int nIndex) override;
+    virtual void completeFunction(const OUString& rFunctionName) override;
 };
 
 class ScDrawPagesObj final : public cppu::WeakImplHelper<
