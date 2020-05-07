@@ -161,50 +161,31 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     m_pIntermediateStatesSeqs[4][0][0] = embed::EmbedStates::RUNNING;
 
     // verbs table
-    sal_Int32 nVerbTableSize = 0;
     for ( sal_Int32 nVerbInd = 0; nVerbInd < m_aObjectVerbs.getLength(); nVerbInd++ )
     {
         if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_PRIMARY )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
         else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_SHOW )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
         else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::ACTIVE;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::ACTIVE } );
         }
         else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::INPLACE_ACTIVE;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::INPLACE_ACTIVE } );
         }
         else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::UI_ACTIVE;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::UI_ACTIVE } );
         }
         else if ( m_aObjectVerbs[nVerbInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_HIDE )
         {
-            m_aVerbTable.realloc( ++nVerbTableSize );
-            m_aVerbTable[nVerbTableSize - 1].realloc( 2 );
-            m_aVerbTable[nVerbTableSize - 1][0] = m_aObjectVerbs[nVerbInd].VerbID;
-            m_aVerbTable[nVerbTableSize - 1][1] = embed::EmbedStates::RUNNING;
+            m_aVerbTable.insert( { m_aObjectVerbs[nVerbInd].VerbID, embed::EmbedStates::RUNNING } );
         }
     }
 }

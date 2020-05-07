@@ -74,9 +74,9 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
 
 sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 {
-    for ( sal_Int32 nInd = 0; nInd < m_aVerbTable.getLength(); nInd++ )
-        if ( m_aVerbTable[nInd][0] == nVerb )
-            return m_aVerbTable[nInd][1];
+    auto it = m_aVerbTable.find( nVerb );
+    if (it != m_aVerbTable.end())
+        return it->second;
 
     throw lang::IllegalArgumentException(); // TODO: unexpected verb provided
 }
