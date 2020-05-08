@@ -32,16 +32,6 @@ if [ "${KDEMAINDIR}" ]; then
 fi
 
 if [ "${GNOMEDIR}" ]; then
-  for i in `cd "${ICON_SOURCE_DIR}/hicolor"; find ??x?? ???x??? scalable -name "*.png" -o -name "*.svg"`
-  do
-    targetdir=${DESTDIR}/${GNOMEDIR}/share/icons/gnome/`dirname ${i}`
-    mkdir -p "${targetdir}"
-    destfile=$targetdir/${ICON_PREFIX:-}${ICON_PREFIX:+-}`basename ${i}`
-    cp "${ICON_SOURCE_DIR}/hicolor/${i}" "${destfile}"
-    chmod 0644 "${destfile}"
-  done
-  unset targetdir destfile
-
   mkdir -p "${DESTDIR}/${GNOMEDIR}/share/mime-info"
   cp openoffice.mime "${DESTDIR}/${GNOMEDIR}/share/mime-info/${PREFIX}.mime"
   cp openoffice.keys "${DESTDIR}/${GNOMEDIR}/share/mime-info/${PREFIX}.keys"
