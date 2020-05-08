@@ -852,7 +852,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
  * @param bCenter Draw the character centered, otherwise left aligned
  * @param bRotate Rotate the character if character rotation is set
  */
-static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& rPor,
+static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLinePortion& rPor,
                       SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
 {
@@ -860,12 +860,12 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
 
     // rRect is given in absolute coordinates
-    if ( rInf.GetTextFrame()->IsRightToLeft() )
-        rInf.GetTextFrame()->SwitchRTLtoLTR( rRect );
-    if ( rInf.GetTextFrame()->IsVertical() )
-        rInf.GetTextFrame()->SwitchVerticalToHorizontal( rRect );
+    if ( rTextPaintInfo.GetTextFrame()->IsRightToLeft() )
+        rTextPaintInfo.GetTextFrame()->SwitchRTLtoLTR( rRect );
+    if ( rTextPaintInfo.GetTextFrame()->IsVertical() )
+        rTextPaintInfo.GetTextFrame()->SwitchVerticalToHorizontal( rRect );
 
-    const SwFont* pOldFnt = rInf.GetFont();
+    const SwFont* pOldFnt = rTextPaintInfo.GetFont();
 
     // Font is generated only once:
     static SwFont s_aFnt = [&]()
@@ -880,7 +880,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
 
     // Some of the current values are set at the font:
     if ( ! bRotate )
-        s_aFnt.SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
+        s_aFnt.SetVertical( 0, rTextPaintInfo.GetTextFrame()->IsVertical() );
     else
         s_aFnt.SetVertical( pOldFnt->GetOrientation() );
 
@@ -889,10 +889,12 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
     s_aFnt.SetSize( aFontSize, s_aFnt.GetActual() );
 
-    const_cast<SwTextPaintInfo&>(rInf).SetFont( &s_aFnt );
+    SwTextPaintInfo& rNonConstTextPaintInfo = const_cast<SwTextPaintInfo&>(rTextPaintInfo);
+
+    rNonConstTextPaintInfo.SetFont( &s_aFnt );
 
     // The maximum width depends on the current orientation
-    const sal_uInt16 nDir = s_aFnt.GetOrientation( rInf.GetTextFrame()->IsVertical() );
+    const sal_uInt16 nDir = s_aFnt.GetOrientation( rTextPaintInfo.GetTextFrame()->IsVertical() );
     SwTwips nMaxWidth;
     if (nDir == 900 || nDir == 2700)
         nMaxWidth = rRect.Height();
@@ -904,7 +906,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
 
     // check if char fits into rectangle
     const OUString aTmp( cChar );
-    aFontSize = rInf.GetTextSize( aTmp ).SvLSize();
+    aFontSize = rTextPaintInfo.GetTextSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {
         SwTwips nFactor = ( 100 * aFontSize.Width() ) / nMaxWidth;
@@ -920,13 +922,13 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
 
         s_aFnt.SetSize( aFontSize, nAct );
 
-        aFontSize = rInf.GetTextSize( aTmp ).SvLSize();
+        aFontSize = rTextPaintInfo.GetTextSize( aTmp ).SvLSize();
 
         if ( aFontSize.Width() >= nOldWidth )
             break;
     }
 
-    const Point aOldPos( rInf.GetPos() );
+    const Point aOldPos( rTextPaintInfo.GetPos() );
 
     // adjust values so that tab is vertically and horizontally centered
     SwTwips nX = rRect.Left();
@@ -936,28 +938,28 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& r
     case 0 :
         if ( bCenter )
             nX += ( rRect.Width() - aFontSize.Width() ) / 2;
-        nY += ( rRect.Height() - aFontSize.Height() ) / 2 + rInf.GetAscent();
+        nY += ( rRect.Height() - aFontSize.Height() ) / 2 + rTextPaintInfo.GetAscent();
         break;
     case 900 :
         if ( bCenter )
-            nX += ( rRect.Width() - aFontSize.Height() ) / 2 + rInf.GetAscent();
+            nX += ( rRect.Width() - aFontSize.Height() ) / 2 + rTextPaintInfo.GetAscent();
         nY += ( rRect.Height() + aFontSize.Width() ) / 2;
         break;
     case 2700 :
         if ( bCenter )
-            nX += ( rRect.Width() + aFontSize.Height() ) / 2 - rInf.GetAscent();
+            nX += ( rRect.Width() + aFontSize.Height() ) / 2 - rTextPaintInfo.GetAscent();
         nY += ( rRect.Height() - aFontSize.Width() ) / 2;
         break;
     }
 
     Point aTmpPos( nX, nY );
-    const_cast<SwTextPaintInfo&>(rInf).SetPos( aTmpPos );
+    rNonConstTextPaintInfo.SetPos( aTmpPos );
     sal_uInt16 nOldWidth = rPor.Width();
     const_cast<SwLinePortion&>(rPor).Width( static_cast<sal_uInt16>(aFontSize.Width()) );
-    rInf.DrawText( aTmp, rPor );
+    rTextPaintInfo.DrawText( aTmp, rPor );
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-    const_cast<SwTextPaintInfo&>(rInf).SetFont( const_cast<SwFont*>(pOldFnt) );
-    const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
+    rNonConstTextPaintInfo.SetFont( const_cast<SwFont*>(pOldFnt) );
+    rNonConstTextPaintInfo.SetPos( aOldPos );
 }
 
 void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
