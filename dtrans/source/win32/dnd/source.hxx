@@ -31,9 +31,7 @@
 
 #include <systools/win32/comtools.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

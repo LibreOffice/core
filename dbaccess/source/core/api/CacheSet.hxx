@@ -29,7 +29,7 @@
 
 #include <vector>
 
-namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
+namespace com::sun::star::sdbc{ class XParameters; }
 
 namespace dbaccess
 {

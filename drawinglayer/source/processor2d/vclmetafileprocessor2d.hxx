@@ -40,14 +40,14 @@ class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class FillGradientAttribute;
     class LineAttribute;
     class StrokeAttribute;
     class LineStartEndAttribute;
-}}
+}
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     class GraphicPrimitive2D;
     class ControlPrimitive2D;
     class TextHierarchyFieldPrimitive2D;
@@ -67,7 +67,7 @@ namespace drawinglayer { namespace primitive2d {
     class UnifiedTransparencePrimitive2D;
     class TransparencePrimitive2D;
     class StructureTagPrimitive2D;
-}}
+}
 
 namespace basegfx {
     class BColor;

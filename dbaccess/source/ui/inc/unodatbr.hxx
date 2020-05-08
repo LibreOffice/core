@@ -43,7 +43,7 @@ class SvTreeListEntry;
 class Splitter;
 struct SvSortData;
 
-namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
+namespace com::sun::star::container { class XNameContainer; }
 
 class SvTreeList;
 namespace dbaui

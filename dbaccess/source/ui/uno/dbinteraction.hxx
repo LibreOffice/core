@@ -31,9 +31,7 @@
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/DocumentSaveRequest.hpp>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace dbtools
 {

@@ -26,7 +26,7 @@
 #include <memory>
 #include <vcl/roadmapwizard.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertySet;
     }
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
     }
-}}}
+}
 
 using vcl::WizardTypes::WizardState;
 using vcl::WizardTypes::CommitPageReason;

@@ -25,10 +25,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace deployment { class XPackageRegistry; }
     namespace uno { class XComponentContext; }
-} } }
+}
 
 namespace dp_registry {
 

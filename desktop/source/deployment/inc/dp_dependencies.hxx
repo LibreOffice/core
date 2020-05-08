@@ -28,9 +28,9 @@
 
 /// @HTML
 
-namespace com { namespace sun { namespace star { namespace xml { namespace dom {
+namespace com::sun::star::xml::dom {
     class XElement;
-} } } } }
+}
 namespace dp_misc { class DescriptionInfoset; }
 
 namespace dp_misc {

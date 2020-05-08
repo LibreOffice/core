@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-namespace comphelper { namespace service_decl { class ServiceDecl; } }
+namespace comphelper::service_decl { class ServiceDecl; }
 
 namespace dp_info {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
@@ -32,7 +32,7 @@ extern comphelper::service_decl::ServiceDecl const serviceDecl;
 
 }
 
-namespace dp_registry { namespace backend {
+namespace dp_registry::backend {
 
 namespace component {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
@@ -58,7 +58,7 @@ namespace sfwk {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
 }
 
-} }
+}
 
 #endif
 
