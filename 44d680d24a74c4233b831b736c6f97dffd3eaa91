@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b1b1386_26024ebd",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-05-08T10:59:15Z",
+      "side": 1,
+      "message": "That function is duplicate, i\u0027ll find a way to call it, just a quick solution fr now.",
+      "range": {
+        "startLine": 206,
+        "startChar": 22,
+        "endLine": 206,
+        "endChar": 33
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "529cc2a8_41581013",
+        "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-05-08T10:59:15Z",
+      "side": 1,
+      "message": "if you remove that comment line, you will see that it sets the data serie instead of data label. It was second solution idea but need more effort.",
+      "range": {
+        "startLine": 348,
+        "startChar": 12,
+        "endLine": 348,
+        "endChar": 14
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50a3d072_3b9dc7b8",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-05-08T10:59:15Z",
+      "side": 1,
+      "message": "Here I need to use a type id for Hatch, I saw that usage https://opengrok.libreoffice.org/xref/core/sw/source/core/unocore/unomapproperties.hxx?r\u003dc48790b5#519 but i couldn\u0027t find how should i use it here.",
+      "range": {
+        "startLine": 159,
+        "startChar": 71,
+        "endLine": 159,
+        "endChar": 86
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
