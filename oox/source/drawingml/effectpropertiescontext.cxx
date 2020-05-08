@@ -106,12 +106,14 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
 
         }
         case A_TOKEN( softEdge ):
+        {
+            mrEffectProperties.maSoftEdge.moRad = rAttribs.getInteger(XML_rad, 0);
+            return this; // no inner elements
+        }
         case A_TOKEN( reflection ):
         case A_TOKEN( blur ):
         {
-            if( nElement == A_TOKEN( softEdge ) )
-                mrEffectProperties.m_Effects[nPos]->msName = "softEdge";
-            else if( nElement == A_TOKEN( reflection ) )
+            if (nElement == A_TOKEN(reflection))
                 mrEffectProperties.m_Effects[nPos]->msName = "reflection";
             else if( nElement == A_TOKEN( blur ) )
                 mrEffectProperties.m_Effects[nPos]->msName = "blur";
