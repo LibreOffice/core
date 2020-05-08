@@ -341,7 +341,9 @@ namespace {
             {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
             {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS},
             {"FillStyle", CHART_UNONAME_LABEL_FILL_STYLE},
-            {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR}
+            {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR},
+            {"FillBackground", CHART_UNONAME_LABEL_FILL_BACKGROUND},
+            {"FillHatch", CHART_UNONAME_LABEL_FILL_HATCH}
             });
                 // fix the spelling!
         return map;

@@ -1093,6 +1093,8 @@ namespace xmloff { namespace token {
         XML_LABEL_CELL_ADDRESS,
         XML_LABEL_CELL_RANGE_ADDRESS,
         XML_LABEL_FILL,
+        XML_LABEL_FILL_BACKGROUND,
+        XML_LABEL_FILL_HATCH,
         XML_LABEL_FILL_COLOR,
         XML_LABEL_RANGE,
         XML_LABEL_RANGES,
