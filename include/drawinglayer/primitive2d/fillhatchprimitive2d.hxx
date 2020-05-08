@@ -24,9 +24,6 @@
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-
-// FillHatchPrimitive2D class
-
 namespace drawinglayer::primitive2d
 {
         /** FillHatchPrimitive2D class
@@ -43,7 +40,7 @@ namespace drawinglayer::primitive2d
 
             The decomposition will deliver the hatch lines.
          */
-        class FillHatchPrimitive2D final : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometrically visible area
