@@ -178,13 +178,13 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
             if ( eLang == primary(LANGUAGE_CHINESE) )
                 nNatNum = 6;
             else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 5;
+                nNatNum = 3;
             else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 3;
             break;
         case 4:
             if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 7;
+                nNatNum = 0;
             else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 9;
             break;
@@ -225,14 +225,16 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
                 nDBNum = 2;
             break;
         case 3:
-            if ( eLang == primary(LANGUAGE_KOREAN) )
+            if (eLang == primary(LANGUAGE_KOREAN))
+                nDBNum = 3;
+            else if (eLang = primary(LANGUAGE_JAPANESE))
                 nDBNum = 3;
             break;
         case 4:
             if ( eLang == primary(LANGUAGE_CHINESE) )
                 nDBNum = 1;
             else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 2;
+                nDBNum = 1;
             break;
         case 5:
             if ( eLang == primary(LANGUAGE_CHINESE) )
@@ -243,16 +245,20 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
         case 6:
             if ( eLang == primary(LANGUAGE_CHINESE) )
                 nDBNum = 3;
+            else if (eLang == primary(LANGUAGE_JAPANESE))
+                nDBNum = 3;
             break;
         case 7:
             if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nDBNum = 4;
+                nDBNum = 1;
             break;
         case 8:
             break;
         case 9:
             if ( eLang == primary(LANGUAGE_KOREAN) )
                 nDBNum = 4;
+            else if (eLang == primary(LANGUAGE_JAPANESE))
+                nDBNum = 2;
             break;
         case 10:
             break;
