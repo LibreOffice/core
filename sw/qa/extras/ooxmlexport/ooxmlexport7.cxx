@@ -390,6 +390,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
+    // first picture: glow effect with theme color and transformations, 3d rotation and extrusion
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow",
+            "rad", "228600");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr",
+            "val", "267de6");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr/a:alpha",
+            "val", "40000");
+
+
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:camera",
             "prst", "isometricRightUp");
