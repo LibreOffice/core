@@ -68,7 +68,13 @@ namespace drawinglayer
                 // shadow will be correct (using ColorModifierStack), but expensive.
                 if(!get3DShape())
                 {
-                    aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow());
+                    basegfx::B2DTuple aScale;
+                    basegfx::B2DTuple aTranslate;
+                    double fRotate = 0;
+                    double fShearX = 0;
+                    maTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+                    aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow(),
+                                                            aTranslate.getX(), aTranslate.getY());
                 }
             }
 
@@ -80,13 +86,15 @@ namespace drawinglayer
             const Primitive2DContainer& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
-            bool b3DShape)
+            bool b3DShape,
+            const basegfx::B2DHomMatrix& rTransform)
         :   BufferedDecompositionPrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
-            mb3DShape(b3DShape)
+            mb3DShape(b3DShape),
+            maTransform(rTransform)
         {
         }
 
