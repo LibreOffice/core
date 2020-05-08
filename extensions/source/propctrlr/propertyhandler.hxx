@@ -44,12 +44,12 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace inspection {
         struct LineDescriptor;
         class XPropertyControlFactory;
     }
-} } }
+}
 
 namespace vcl { class Window; }
 namespace weld { class Window; }

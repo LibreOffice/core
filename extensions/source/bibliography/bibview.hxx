@@ -26,7 +26,7 @@
 class   BibGeneralPage;
 class   BibDataManager;
 
-namespace com{ namespace sun{ namespace star{ namespace awt{ class XFocusListener;}}}}
+namespace com::sun::star::awt{ class XFocusListener;}
 
 
 namespace bib
