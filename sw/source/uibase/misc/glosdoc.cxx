@@ -387,12 +387,19 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
             if (bPathChanged || (m_aInvalidPaths != aInvalidPaths))
             {
                 m_aInvalidPaths = aInvalidPaths;
-                // wrong path, that means AutoText directory doesn't exist
+                // wrong path, that means some AutoText directory doesn't exist
 
-                ErrorHandler::HandleError( *new StringErrorInfo(
-                                        ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
-                                        DialogMask::ButtonsOk | DialogMask::MessageError ) );
-                m_bError = true;
+                // Show error message only if no valid directories. That some of the directories don't
+                // exist is normal.
+                if (m_aPath.isEmpty())
+                {
+                    ErrorHandler::HandleError( *new StringErrorInfo(
+                                            ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
+                                            DialogMask::ButtonsOk | DialogMask::MessageError ) );
+                    m_bError = true;
+                }
+                else
+                    m_bError = false;
             }
             else
                 m_bError = false;

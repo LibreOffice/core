@@ -86,6 +86,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 		--stringparam LIBO_SHARE_FOLDER $(LIBO_SHARE_FOLDER) \
 		--stringparam LIBO_SHARE_HELP_FOLDER $(LIBO_SHARE_HELP_FOLDER) \
+		--stringparam LIBO_VERSION_MAJOR_DOT_MINOR $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) \
 		$(3))
 endef
