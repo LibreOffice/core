@@ -49,6 +49,9 @@ namespace xmloff::token {
     #define TOKEN( s, e ) { sizeof(s)-1, s, std::nullopt }
 #endif
 
+    // IMPORTANT! aTokenList order MUST be in synch with XMLTokenEnum in include/xmloff/xmltoken.hxx
+    // and with xmloff/source/token/tokens.txt.
+
     struct XMLTokenEntry aTokenList[] =
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1698,6 +1701,8 @@ namespace xmloff::token {
         TOKEN( "slant-y",                         XML_SLANT_Y ),
         TOKEN( "slide",                           XML_SLIDE ),
         TOKEN( "slow",                            XML_SLOW ),
+        TOKEN( "softedge",                        XML_SOFTEDGE ),
+        TOKEN( "softedge-radius",                 XML_SOFTEDGE_RADIUS ),
         TOKEN( "solid",                           XML_SOLID ),
         TOKEN( "solid-type",                      XML_SOLID_TYPE ),
         TOKEN( "sort",                            XML_SORT ),

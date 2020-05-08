@@ -40,6 +40,8 @@
 
 namespace xmloff::token {
 
+    // IMPORTANT! XMLTokenEnum order MUST be in synch with aTokenList in
+    // xmloff/source/core/xmltoken.cxx, and with xmloff/source/token/tokens.txt.
 
     /**
      * The enumeration of all XML tokens.
@@ -1693,6 +1695,8 @@ namespace xmloff::token {
         XML_SLANT_Y,
         XML_SLIDE,
         XML_SLOW,
+        XML_SOFTEDGE,
+        XML_SOFTEDGE_RADIUS,
         XML_SOLID,
         XML_SOLID_TYPE,
         XML_SORT,
