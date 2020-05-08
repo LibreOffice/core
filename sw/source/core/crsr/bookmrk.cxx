@@ -660,7 +660,10 @@ namespace sw { namespace mark
     {
         if(m_aPortionPaintArea == rPortionPaintArea &&
            m_pButton && m_pButton->IsVisible())
+        {
+            SendLOKMessage("show");
             return;
+        }
 
         m_aPortionPaintArea = rPortionPaintArea;
         if(m_pButton)
@@ -722,7 +725,10 @@ namespace sw { namespace mark
             {
                 sPayload = "{\"action\": \"hide\", \"type\": \"drop-down\"}";
             }
-            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, sPayload.toString().getStr());
+            if (sPayload.toString() != m_sLastSentLOKMsg) {
+                m_sLastSentLOKMsg = sPayload.toString();
+                pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
+            }
         }
     }
 
