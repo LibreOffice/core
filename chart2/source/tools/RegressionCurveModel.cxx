@@ -36,23 +36,14 @@ using ::com::sun::star::beans::Property;
 
 namespace
 {
-static const OUString lcl_aImplementationName_MeanValue(
-    "com.sun.star.comp.chart2.MeanValueRegressionCurve" );
-static const OUString lcl_aImplementationName_Linear(
-    "com.sun.star.comp.chart2.LinearRegressionCurve" );
-static const OUString lcl_aImplementationName_Logarithmic(
-    "com.sun.star.comp.chart2.LogarithmicRegressionCurve" );
-static const OUString lcl_aImplementationName_Exponential(
-    "com.sun.star.comp.chart2.ExponentialRegressionCurve" );
-static const OUString lcl_aImplementationName_Potential(
-    "com.sun.star.comp.chart2.PotentialRegressionCurve" );
-static const OUString lcl_aImplementationName_Polynomial(
-    "com.sun.star.comp.chart2.PolynomialRegressionCurve" );
-static const OUString lcl_aImplementationName_MovingAverage(
-    "com.sun.star.comp.chart2.MovingAverageRegressionCurve" );
-
-static const OUString lcl_aServiceName(
-    "com.sun.star.chart2.RegressionCurve" );
+static const char lcl_aImplementationName_MeanValue[]   = "com.sun.star.comp.chart2.MeanValueRegressionCurve";
+static const char lcl_aImplementationName_Linear[]      = "com.sun.star.comp.chart2.LinearRegressionCurve";
+static const char lcl_aImplementationName_Logarithmic[] = "com.sun.star.comp.chart2.LogarithmicRegressionCurve";
+static const char lcl_aImplementationName_Exponential[] = "com.sun.star.comp.chart2.ExponentialRegressionCurve";
+static const char lcl_aImplementationName_Potential[]   = "com.sun.star.comp.chart2.PotentialRegressionCurve";
+static const char lcl_aImplementationName_Polynomial[]  = "com.sun.star.comp.chart2.PolynomialRegressionCurve";
+static const char lcl_aImplementationName_MovingAverage[] = "com.sun.star.comp.chart2.MovingAverageRegressionCurve";
+static const char lcl_aServiceName[] = "com.sun.star.chart2.RegressionCurve";
 
 enum
 {
