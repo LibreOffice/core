@@ -1610,12 +1610,12 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
         Reference< XMultiPropertySet > xProps( _rxControl->getModel(), UNO_QUERY );
         if ( xProps.is() )
         {
-            Sequence< OUString > aNames( 4 );
-            OUString* pNames = aNames.getArray();
-            *pNames++ = "PositionX";
-            *pNames++ = "PositionY";
-            *pNames++ = "Width";
-            *pNames++ = "Height";
+            const Sequence< OUString > aNames {
+              "PositionX",
+              "PositionY",
+              "Width",
+              "Height"
+            };
 
             xProps->addPropertiesChangeListener( aNames, this );
         }
