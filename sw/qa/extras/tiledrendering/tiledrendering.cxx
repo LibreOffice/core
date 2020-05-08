@@ -2574,7 +2574,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
         CPPUNIT_ASSERT_EQUAL(OString("0, 0, -1, -1"), sTextArea);
     }
 
-    // Do a tile rendering to trigger the button message with a valide text area
+    // Do a tile rendering to trigger the button message with a valid text area
     size_t nCanvasWidth = 1024;
     size_t nCanvasHeight = 512;
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
