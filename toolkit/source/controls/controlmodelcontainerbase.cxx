@@ -94,21 +94,6 @@ struct DisposeControlModel
 
 }
 
-// functor for searching control model by name
-struct FindControlModel
-{
-private:
-    const OUString& m_rName;
-
-public:
-    explicit FindControlModel( const OUString& _rName ) : m_rName( _rName ) { }
-
-    bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
-    {
-        return _rCompare.second == m_rName;
-    }
-};
-
 
 // functor for cloning a control model, and insertion into a target list
 struct CloneControlModel
@@ -289,7 +274,7 @@ rtl::Reference<UnoControlModel> ControlModelContainerBase::Clone() const
 
 ControlModelContainerBase::UnoControlModelHolderVector::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
 {
-    return ::std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
+    return ::std::find_if( maModels.begin(), maModels.end(), [&](const UnoControlModelHolder& elem) { return elem.second == rName; });
 }
 
 // ::XMultiServiceFactory

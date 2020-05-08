@@ -73,7 +73,6 @@ public:
     typedef ::std::vector< ModelGroup >                 AllGroups;
 
     friend struct CloneControlModel;
-    friend struct FindControlModel;
     friend struct CompareControlModel;
 
 protected:
