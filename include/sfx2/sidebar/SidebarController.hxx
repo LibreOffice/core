@@ -134,6 +134,7 @@ public:
     FocusManager& GetFocusManager() { return maFocusManager;}
 
     ResourceManager* GetResourceManager() { return mpResourceManager.get();}
+    auto& GetCurrentDeckId() const { return msCurrentDeckId; }
 
    // std::unique_ptr<ResourceManager> GetResourceManager() { return mpResourceManager;}
 
