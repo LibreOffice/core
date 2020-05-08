@@ -22,16 +22,10 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/GraphicObject.hxx>
 
-
-// predefines
-
 class Graphic;
 
-
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** Helper method with supports decomposing a Graphic with all
             possible contents to lower level primitives.
 
@@ -60,7 +54,6 @@ namespace drawinglayer
             double fGamma = 1.0,            // ]0.0 .. 10.0]
             bool bInvert = false);
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
