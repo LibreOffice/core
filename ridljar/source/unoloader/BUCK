@@ -2,6 +2,7 @@
 java_sources(
   name = 'unoloader-src',
   srcs = glob(['com/**']),
+  root = '.',
   visibility = ['PUBLIC'],
 )
 
