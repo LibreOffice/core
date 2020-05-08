@@ -142,7 +142,9 @@ OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGr
 
 OUString ModelObjectHelper::insertFillHatch(const drawing::Hatch& rHatch)
 {
-    return maHatchContainer.insertObject( gaHatchNameBase, Any( rHatch ), true );
+    OUString sName = maHatchContainer.insertObject( gaHatchNameBase, Any( rHatch ), true );
+    printf("DEBUG>>> ModelObjectHelper::insertFillHatch : this = %p, HatchName = %s\n", this, sName.toUtf8().getStr());fflush(stdout);
+    return sName;
 }
 
 uno::Reference<awt::XBitmap> ModelObjectHelper::getFillBitmap(OUString const & rGraphicName)

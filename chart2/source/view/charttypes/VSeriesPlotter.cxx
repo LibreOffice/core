@@ -589,11 +589,14 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             }
         }
 
+        printf("VSeriesPlotter.cxx : before getproplist");fflush(stdout);
         //prepare properties for multipropertyset-interface of shape
         tNameSequence* pPropNames;
         tAnySequence* pPropValues;
         if( !rDataSeries.getTextLabelMultiPropertyLists( nPointIndex, pPropNames, pPropValues ) )
             return xTextShape;
+
+        printf("VSeriesPlotter.cxx : after getproplist");fflush(stdout);
 
         // set text alignment for the text shape to be created.
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );

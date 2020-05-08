@@ -110,10 +110,20 @@ DrawModelWrapper::DrawModelWrapper()
     m_pRefDevice->SetMapMode(aMapMode);
     SetRefDevice(m_pRefDevice.get());
     rOutliner.SetRefDevice(m_pRefDevice.get());
+
+    OUString aStr("msFillHatch1"); // We can add a new hatch to hatch list that.
+    GetHatchList()->Insert(std::make_unique<XHatchEntry>(XHatch(COL_YELLOW ,css::drawing::HatchStyle_DOUBLE, 80,450), aStr));
 }
 
 DrawModelWrapper::~DrawModelWrapper()
 {
+    const auto& pHlist = GetHatchList();
+    for (int i = 0; pHlist && i < pHlist->Count(); ++i)
+    {
+        OUString sName = pHlist->GetHatch(i)->GetName();
+        printf("DEBUG>>> HatchList[%d] = %s\n", i, sName.toUtf8().getStr());
+    }
+    fflush(stdout);
     //remove m_pChartItemPool from pool chain
     if(m_pChartItemPool)
     {
