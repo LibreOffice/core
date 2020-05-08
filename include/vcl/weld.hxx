@@ -1894,11 +1894,19 @@ public:
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
+<<<<<<< HEAD   (8eebe3 ICU requires that a collator charset data array is four-byte)
         insert(-1, rId, rStr, &rImage, nullptr, false);
+=======
+        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
+>>>>>>> CHANGE (040fdd this should be Indet to indicate neither radio or check butt)
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
+<<<<<<< HEAD   (8eebe3 ICU requires that a collator charset data array is four-byte)
         insert(-1, rId, rStr, nullptr, &rImage, false);
+=======
+        insert(-1, rId, rStr, nullptr, &rImage, TRISTATE_INDET);
+>>>>>>> CHANGE (040fdd this should be Indet to indicate neither radio or check butt)
     }
 
     virtual ~Menu() {}
