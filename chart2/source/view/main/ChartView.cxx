@@ -544,7 +544,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
             for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
             {
-                uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
+                uno::Reference< XDataSeries > const & xDataSeries = aSeriesList[nS];
                 if(!xDataSeries.is())
                     continue;
                 if( !bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries) )

@@ -609,8 +609,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             Sequence< uno::Reference< XFormattedString > > aFormattedLabels( aCustomLabels.getLength() );
             for( int i = 0; i < aFormattedLabels.getLength(); i++ )
             {
-                uno::Reference< XFormattedString > xString( aCustomLabels[i], uno::UNO_QUERY );
-                aFormattedLabels[i] = xString;
+                aFormattedLabels[i] = aCustomLabels[i];
             }
 
             // center the text

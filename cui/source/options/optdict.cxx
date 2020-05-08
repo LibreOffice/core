@@ -294,7 +294,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, const OU
         }
         Reference< XDictionary >  xDic;
         if (nPos != -1)
-            xDic.set( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            xDic = aDics[ nPos ];
         if (xDic.is())
             SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
 
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, weld::ComboBox&, vo
     // display dictionary
     ShowWords_Impl( nPos );
     // enable or disable new and delete button according to file attributes
-    Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+    Reference< XDictionary > const & xDic = aDics[ nPos ];
     if (xDic.is())
         SetLanguage_Impl( LanguageTag( xDic->getLocale() ).getLanguageType() );
 
@@ -414,7 +414,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, weld::ComboBox&, vo
 {
     int nDicPos = m_xAllDictsLB->get_active();
     LanguageType nLang = m_xLangLB->get_active_id();
-    Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
+    Reference< XDictionary > const & xDic = aDics[ nDicPos ];
     LanguageType nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
 
     if ( nLang == nOldLang )
@@ -606,7 +606,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
         if (nPos != -1 && !aNewWord.isEmpty())
         {
             DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");
-            Reference< XDictionary >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            Reference< XDictionary > const & xDic = aDics[ nPos ];
             if (xDic.is())
             {
                 // make changes in dic

@@ -329,6 +329,20 @@ static const RecordType* extractTemplateType(const clang::Type* cceType)
             return recordType;
     }
 
+    // extract Foo from Reference<Foo>
+    if (auto subst = dyn_cast<SubstTemplateTypeParmType>(cceType))
+    {
+        if (auto recType = dyn_cast<RecordType>(subst->desugar().getTypePtr()))
+        {
+            if (auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(recType->getDecl()))
+            {
+                auto const& args = ctsd->getTemplateArgs();
+                if (args.size() > 0 && args[0].getKind() == TemplateArgument::ArgKind::Type)
+                    return dyn_cast_or_null<RecordType>(args[0].getAsType().getTypePtr());
+            }
+        }
+    }
+
     if (auto elaboratedType = dyn_cast<ElaboratedType>(cceType))
         cceType = elaboratedType->desugar().getTypePtr();
     auto cceTST = dyn_cast<TemplateSpecializationType>(cceType);

@@ -213,7 +213,7 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     ::connectivity::OSQLColumns::Vector::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);
     if(first != m_aColumns->end())
-        xNamed.set(*first,UNO_QUERY);
+        xNamed = *first;
 
     return xNamed;
 }

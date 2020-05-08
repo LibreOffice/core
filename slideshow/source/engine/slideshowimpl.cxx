@@ -1410,7 +1410,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     {
         PolyPolygonVector aPolygons = rPoly.second;
         //Get shapes for the slide
-        css::uno::Reference< css::drawing::XShapes > Shapes(rPoly.first, css::uno::UNO_QUERY);
+        css::uno::Reference< css::drawing::XShapes > Shapes = rPoly.first;
         //Retrieve polygons for one slide
         for( const auto& pPolyPoly : aPolygons )
         {
