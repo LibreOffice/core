@@ -107,6 +107,8 @@ public:
     void testGetRowColumnHeadersInvalidation();
     void testJumpHorizontallyInvalidation();
     void testJumpToLastRowInvalidation();
+    void testSheetGeometryDataInvariance();
+    void testSheetGeometryDataCorrectness();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -148,6 +150,8 @@ public:
     CPPUNIT_TEST(testGetRowColumnHeadersInvalidation);
     CPPUNIT_TEST(testJumpHorizontallyInvalidation);
     CPPUNIT_TEST(testJumpToLastRowInvalidation);
+    CPPUNIT_TEST(testSheetGeometryDataInvariance);
+    CPPUNIT_TEST(testSheetGeometryDataCorrectness);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1891,6 +1895,349 @@ void ScTiledRenderingTest::testRowColumnHeaders()
     SfxLokHelper::setView(nView1);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+// Helper structs for setup and testing of ScModelObj::getSheetGeometryData()
+struct SpanEntry
+{
+    size_t nVal;
+    SCCOLROW nEnd;
+};
+
+struct SheetDimData
+{
+    typedef std::vector<SpanEntry> SpanList;
+    SpanList aSizes;
+    SpanList aHidden;
+    SpanList aFiltered;
+    // TODO: Add group info too to test.
+
+    void setDataToDoc(ScDocument* pDoc, bool bCol) const
+    {
+        SCCOLROW nStart = 0;
+        // sizes
+        for (const auto& rSpan : aSizes)
+        {
+            if (bCol)
+            {
+                for (SCCOLROW nIdx = nStart; nIdx <= rSpan.nEnd; ++nIdx)
+                    pDoc->SetColWidthOnly(nIdx, 0, rSpan.nVal);
+            }
+            else
+                pDoc->SetRowHeightOnly(nStart, rSpan.nEnd, 0, rSpan.nVal);
+
+            nStart = rSpan.nEnd + 1;
+        }
+
+        nStart = 0;
+        // hidden
+        for (const auto& rSpan : aHidden)
+        {
+            if (bCol)
+                pDoc->SetColHidden(nStart, rSpan.nEnd, 0, !!rSpan.nVal);
+            else
+                pDoc->SetRowHidden(nStart, rSpan.nEnd, 0, !!rSpan.nVal);
+
+            nStart = rSpan.nEnd + 1;
+        }
+
+        // There is no ScDocument interface to set ScTable::mpFilteredCols
+        // It seems ScTable::mpFilteredCols is not really used !?
+        if (bCol)
+            return;
+
+        nStart = 0;
+        // filtered
+        for (const auto& rSpan : aFiltered)
+        {
+            pDoc->SetRowFiltered(nStart, rSpan.nEnd, 0, !!rSpan.nVal);
+            nStart = rSpan.nEnd + 1;
+        }
+    }
+
+    void testPropertyTree(const boost::property_tree::ptree& rTree, bool bCol) const
+    {
+        struct SpanListWithKey
+        {
+            OString aKey;
+            const SpanList& rSpanList;
+        };
+
+        const SpanListWithKey aPairList[] = {
+            { "sizes",    aSizes    },
+            { "hidden",   aHidden   },
+            { "filtered", aFiltered }
+        };
+
+        for (const auto& rEntry : aPairList)
+        {
+            // There is no ScDocument interface to set ScTable::mpFilteredCols
+            // It seems ScTable::mpFilteredCols is not really used !?
+            if (bCol && rEntry.aKey == "filtered")
+                continue;
+
+            bool bBooleanValue = rEntry.aKey != "sizes";
+            OString aExpectedEncoding;
+            bool bFirst = true;
+            for (const auto& rSpan : rEntry.rSpanList)
+            {
+                size_t nVal = rSpan.nVal;
+                if (bBooleanValue && bFirst)
+                    nVal = static_cast<size_t>(!!nVal);
+                if (!bBooleanValue || bFirst)
+                    aExpectedEncoding += OString::number(nVal) + ":";
+                aExpectedEncoding += OString::number(rSpan.nEnd) + " ";
+                bFirst = false;
+            }
+
+            // Get the tree's value for the property key ("sizes"/"hidden"/"filtered").
+            OString aTreeValue = rTree.get<std::string>(rEntry.aKey.getStr()).c_str();
+
+            CPPUNIT_ASSERT_EQUAL(aExpectedEncoding, aTreeValue);
+        }
+    }
+};
+
+class SheetGeometryData
+{
+    SheetDimData aCols;
+    SheetDimData aRows;
+
+public:
+
+    SheetGeometryData()
+    {
+        aCols = {
+            // width spans
+            { { STD_COL_WIDTH, MAXCOL } },
+            // hidden spans
+            { { 0,             MAXCOL } },
+            // filtered spans
+            { { 0,             MAXCOL } }
+        };
+
+        aRows = {
+            // height spans
+            { { ScGlobal::nStdRowHeight, MAXROW } },
+            // hidden spans
+            { { 0,                       MAXROW } },
+            // filtered spans
+            { { 0,                       MAXROW } }
+        };
+    }
+
+    SheetGeometryData(const SheetDimData& rCols, const SheetDimData& rRows) :
+        aCols(rCols), aRows(rRows)
+    {}
+
+    void setDataToDoc(ScDocument* pDoc) const
+    {
+        aCols.setDataToDoc(pDoc, true);
+        aRows.setDataToDoc(pDoc, false);
+    }
+
+    void parseTest(const OString& rJSON) const
+    {
+        // Assumes all flags passed to getSheetGeometryData() are true.
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(rJSON.getStr());
+        boost::property_tree::read_json(aStream, aTree);
+
+        CPPUNIT_ASSERT_EQUAL(OString(".uno:SheetGeometryData"), OString(aTree.get<std::string>("commandName").c_str()));
+
+        aCols.testPropertyTree(aTree.get_child("columns"), true);
+        aRows.testPropertyTree(aTree.get_child("rows"), false);
+    }
+};
+
+// getSheetGeometryData() should return the exact same message
+// irrespective of client zoom and view-area. Switching views
+// should also not alter it.
+void ScTiledRenderingTest::testSheetGeometryDataInvariance()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    const SheetGeometryData aSGData(
+        // cols
+        {
+            // width spans
+            {
+                { STD_COL_WIDTH,   20     },
+                { 2*STD_COL_WIDTH, 26     },
+                { STD_COL_WIDTH,   MAXCOL }
+            },
+
+            // hidden spans
+            {
+                { 0, 5      },
+                { 1, 12     },
+                { 0, MAXCOL }
+            },
+
+            // filtered spans
+            {
+                { 0, 50     },
+                { 1, 59     },
+                { 0, MAXCOL }
+            }
+        },
+
+        // rows
+        {
+            // height spans
+            {
+                { 300,  50     },
+                { 600,  65     },
+                { 300,  MAXROW }
+            },
+
+            // hidden spans
+            {
+                { 1, 100    },
+                { 0, 500    },
+                { 1, 578    },
+                { 0, MAXROW }
+            },
+
+            // filtered spans
+            {
+                { 0, 150    },
+                { 1, 159    },
+                { 0, MAXROW }
+            }
+        }
+    );
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Try with the default empty document once (nIdx = 0) and then with sheet geometry settings (nIdx = 1)
+    for (size_t nIdx = 0; nIdx < 2; ++nIdx)
+    {
+        if (nIdx)
+            aSGData.setDataToDoc(pDoc);
+
+        SfxLokHelper::setView(nView1);
+        OString aGeomStr1 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+                /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+
+        SfxLokHelper::setView(nView2);
+        pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
+        pModelObj->setClientZoom(256, 256, 6636, 6636);
+        OString aGeomStr2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+                /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+
+        // Check vs. view #1
+        SfxLokHelper::setView(nView1);
+        OString aGeomStr1_2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+                /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+        CPPUNIT_ASSERT_EQUAL(aGeomStr1, aGeomStr1_2);
+
+        // Check vs. view #2
+        SfxLokHelper::setView(nView2);
+        OString aGeomStr2_2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+                /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+        CPPUNIT_ASSERT_EQUAL(aGeomStr2, aGeomStr2_2);
+    }
+
+    SfxLokHelper::setView(nView1);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+    SfxLokHelper::setView(nView2);
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    const SheetGeometryData aSGData(
+        // cols
+        {
+            // width spans
+            {
+                { STD_COL_WIDTH,   20     },
+                { 2*STD_COL_WIDTH, 26     },
+                { STD_COL_WIDTH,   MAXCOL }
+            },
+
+            // hidden spans
+            {
+                { 0, 5      },
+                { 1, 12     },
+                { 0, MAXCOL }
+            },
+
+            // filtered spans
+            {
+                { 0, 50     },
+                { 1, 59     },
+                { 0, MAXCOL }
+            }
+        },
+
+        // rows
+        {
+            // height spans
+            {
+                { 300,  50     },
+                { 600,  65     },
+                { 300,  MAXROW }
+            },
+
+            // hidden spans
+            {
+                { 1, 100    },
+                { 0, 500    },
+                { 1, 578    },
+                { 0, MAXROW }
+            },
+
+            // filtered spans
+            {
+                { 0, 150    },
+                { 1, 159    },
+                { 0, MAXROW }
+            }
+        }
+    );
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // with the default empty sheet and test the JSON encoding.
+    OString aGeomDefaultStr = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+            /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+    SheetGeometryData().parseTest(aGeomDefaultStr);
+
+    // Apply geometry settings to the sheet and then test the resulting JSON encoding.
+    aSGData.setDataToDoc(pDoc);
+    OString aGeomStr = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
+            /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
+    aSGData.parseTest(aGeomStr);
+
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
 }
 
