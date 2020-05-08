@@ -51,7 +51,7 @@
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="24pt"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
@@ -59,14 +59,13 @@
     </style:style>
     <style:style style:name="P4" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="22pt" fo:language="en" fo:country="US"/>
     </style:style>
     <style:style style:name="P5" style:family="paragraph">
       <loext:graphic-properties draw:fill="none"/>
       <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="T1" style:family="text">
-      <style:text-properties fo:font-size="22pt" fo:language="en" fo:country="US"/>
+      <style:text-properties fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt" fo:language="en" fo:country="US"/>
     </style:style>
     <text:list-style style:name="L1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
@@ -153,7 +152,7 @@
             </text:p>
           </draw:text-box>
         </draw:frame>
-        <draw:frame draw:style-name="gr2" draw:text-style-name="P5" draw:layer="layout" svg:width="3.533cm" svg:height="0.932cm" svg:x="2.267cm" svg:y="7.545cm">
+        <draw:frame draw:style-name="gr2" draw:text-style-name="P5" draw:layer="layout" svg:width="2.327cm" svg:height="0.819cm" svg:x="2.267cm" svg:y="7.545cm">
           <draw:image xlink:href="Pictures/10000000000000580000001F99D2A38C014B254B.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" loext:mime-type="image/png">
             <text:p/>
           </draw:image>
