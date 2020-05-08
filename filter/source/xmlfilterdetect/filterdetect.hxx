@@ -25,9 +25,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 class FilterDetect final : public cppu::WeakImplHelper <
     css::document::XExtendedFilterDetection,

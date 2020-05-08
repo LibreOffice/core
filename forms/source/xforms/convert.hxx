@@ -23,11 +23,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace uno
+namespace com::sun::star::uno
 {
     class Any;
     class Type;
-} } } }
+}
 
 namespace xforms
 {
