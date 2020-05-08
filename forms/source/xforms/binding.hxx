@@ -44,7 +44,7 @@ namespace xforms
     class Model;
     class EvaluationContext;
 }
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace xml {
         namespace xpath { class XXPathAPI; }
         namespace dom
@@ -56,7 +56,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace xforms { class XModel; }
     namespace xsd { class XDataType; }
-} } }
+}
 
 
 namespace xforms
