@@ -25,9 +25,7 @@
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <svtools/colorcfg.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans {
-    class XMultiPropertySet;
-} } } }
+namespace com::sun::star::beans { class XMultiPropertySet; }
 
 namespace dbaui
 {

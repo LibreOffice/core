@@ -47,7 +47,7 @@ class SvTreeListBox;
 class TransferableHelper;
 class TransferableClipboardListener;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container {
         class XNameContainer;
         class XContainer;
@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star {
     namespace ucb {
         class XContent;
     }
-}}}
+}
 
 namespace dbaui
 {

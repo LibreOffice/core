@@ -36,7 +36,7 @@
 #include "commontypes.hxx"
 #include "IUpdateHelper.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt{
         struct FontDescriptor;
     }
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
         class XPreparedStatement;
         class XDatabaseMetaData;
     }
-}}}
+}
 
 #define COLUMN_POSITION_NOT_FOUND   (sal_Int32(-1))
 

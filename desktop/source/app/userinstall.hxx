@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-namespace desktop { namespace userinstall {
+namespace desktop::userinstall {
 
 enum Status {
     EXISTED,
@@ -34,7 +34,7 @@ enum Status {
 
 Status finalize();
 
-} }
+}
 
 #endif
 

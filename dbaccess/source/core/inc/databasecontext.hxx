@@ -42,13 +42,13 @@
 #include <cppuhelper/compbase.hxx>
 
 // needed for registration
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang
     {
         class XMultiServiceFactory;
         class IllegalArgumentException;
     }
-} } }
+}
 
 namespace dbaccess
 {

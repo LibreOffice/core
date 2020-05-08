@@ -26,12 +26,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
-} } }
+}
 
-namespace drawinglayer { namespace unorenderer {
+namespace drawinglayer::unorenderer {
 
 css::uno::Sequence<OUString>
 XPrimitive2DRenderer_getSupportedServiceNames();
@@ -42,7 +42,7 @@ css::uno::Reference<css::uno::XInterface>
 XPrimitive2DRenderer_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
-} }
+}
 
 #endif
 

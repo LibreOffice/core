@@ -23,12 +23,12 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace deployment {
+namespace com::sun::star::deployment {
         class XPackage;
-}}}}
-namespace com { namespace sun { namespace star { namespace xml { namespace dom {
+}
+namespace com::sun::star::xml::dom {
         class XNode;
-}}}}}
+}
 
 
 namespace dp_gui {

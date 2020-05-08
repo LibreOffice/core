@@ -22,11 +22,11 @@
 
 #include <sal/config.h>
 
-namespace desktop { namespace langselect {
+namespace desktop::langselect {
 
 bool prepareLocale();
 
-} }
+}
 
 #endif
 
