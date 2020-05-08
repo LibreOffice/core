@@ -728,7 +728,7 @@ typedef enum
     LOK_CALLBACK_TAB_STOP_LIST = 48,
 
     /**
-     * Sends all informations for displaying form field button for a text based field.
+     * Sends all information for displaying form field button for a text based field.
      *
      * It contains the position where the frame with the button should be displayed and
      * also contains all information that the popup window needs.
