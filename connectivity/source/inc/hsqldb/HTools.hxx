@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
 
     class HTools
@@ -44,7 +44,7 @@ namespace connectivity { namespace hsqldb
     };
 
 
-} } // namespace connectivity::hsqldb
+} // namespace connectivity::hsqldb
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTOOLS_HXX

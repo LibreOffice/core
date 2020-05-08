@@ -25,12 +25,12 @@
 
 #include <map>
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 typedef std::map< ItemConverter::tWhichIdType, std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
     ItemPropertyMapType;
 
-}}
+}
 
 #endif
 

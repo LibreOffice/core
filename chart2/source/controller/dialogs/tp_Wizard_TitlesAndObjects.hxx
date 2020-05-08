@@ -28,8 +28,8 @@
 
 namespace chart { class LegendPositionResources; }
 namespace chart { class TitleResources; }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {

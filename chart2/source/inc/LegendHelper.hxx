@@ -23,9 +23,9 @@
 #include "charttoolsdllapi.hxx"
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XLegend; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2 { class XLegend; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {

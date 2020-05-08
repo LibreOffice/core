@@ -24,14 +24,14 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurve; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurveCalculator; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XRegressionCurveContainer; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2 { class XRegressionCurve; }
+namespace com::sun::star::chart2 { class XRegressionCurveCalculator; }
+namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
+namespace com::sun::star::chart2::data { class XDataSource; }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

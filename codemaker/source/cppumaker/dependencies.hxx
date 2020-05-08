@@ -31,7 +31,7 @@ class TypeManager;
 
 /// @HTML
 
-namespace codemaker { namespace cppumaker {
+namespace codemaker::cppumaker {
 
 /**
    A simple class to track which other entities a given entity depends on.
@@ -121,7 +121,7 @@ private:
     bool m_sequenceDependency;
 };
 
-} }
+}
 
 #endif
 

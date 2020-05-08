@@ -23,13 +23,13 @@
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2::data { class XDataProvider; }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::chart2::data { class XDataSource; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 namespace chart
 {

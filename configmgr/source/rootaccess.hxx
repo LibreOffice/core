@@ -34,13 +34,13 @@
 #include "access.hxx"
 #include "modifications.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class Any;
         class Type;
     }
     namespace util { class XChangesListener; }
-} } }
+}
 
 namespace configmgr {
 

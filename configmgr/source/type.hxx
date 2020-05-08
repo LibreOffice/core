@@ -23,10 +23,10 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class Any;
     class Type;
-} } } }
+}
 
 namespace configmgr {
 

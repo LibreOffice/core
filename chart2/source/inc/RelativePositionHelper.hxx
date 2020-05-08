@@ -25,8 +25,8 @@
 #include <com/sun/star/awt/Point.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { struct RelativeSize; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::chart2 { struct RelativeSize; }
 
 namespace chart
 {

@@ -62,7 +62,7 @@
 #include <limits>
 #include <ostream>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     struct EventObject;
 } } }
 

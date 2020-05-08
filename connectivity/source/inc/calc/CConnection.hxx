@@ -25,9 +25,9 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <unotools/closeveto.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { class XSpreadsheetDocument; }
-} } }
+}
 
 namespace utl { class CloseVeto; }
 

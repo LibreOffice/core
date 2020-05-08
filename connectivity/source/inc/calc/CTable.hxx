@@ -22,13 +22,13 @@
 #include <component/CTable.hxx>
 #include <tools/date.hxx>
 
-namespace com { namespace sun { namespace star { namespace sheet {
+namespace com::sun::star::sheet {
     class XSpreadsheet;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace com::sun::star::util {
     class XNumberFormats;
-} } } }
+}
 
 
 namespace connectivity

@@ -21,11 +21,11 @@
 
 #include <vcl/transfer.hxx>
 
-namespace com { namespace sun { namespace star {
-namespace chart2 {
-    class XChartDocument;
+namespace com::sun::star {
+    namespace chart2 {
+        class XChartDocument;
+    }
 }
-}}}
 
 namespace chart
 {

@@ -26,11 +26,11 @@
 namespace basegfx {
     class B2DPolyPolygon;
 }
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     struct Texture;
     struct StrokeAttributes;
-} } } }
+}
 
 
 /* Definition of internal::PolyPolyActionFactory */

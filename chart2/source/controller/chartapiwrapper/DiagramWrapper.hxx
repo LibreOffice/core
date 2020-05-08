@@ -38,8 +38,8 @@
 #include <com/sun/star/chart/X3DDefaultSetter.hpp>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::lang { class XEventListener; }
 
 namespace chart
 {

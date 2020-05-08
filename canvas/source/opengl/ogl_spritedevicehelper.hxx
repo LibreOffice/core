@@ -23,10 +23,10 @@
 namespace vcl { class Window; }
 class SystemChildWindow;
 namespace basegfx{ class B2IVector; class B2DHomMatrix; }
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Rectangle; }
     namespace geometry { struct AffineMatrix2D; }
-}}}
+}
 
 namespace oglcanvas
 {

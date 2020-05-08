@@ -27,14 +27,14 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class SdrModel;
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 class DataPointItemConverter : public ItemConverter
 {
@@ -84,7 +84,7 @@ private:
     css::uno::Reference<css::chart2::XDataSeries> m_xSeries;
 };
 
-}}
+}
 
 #endif
 

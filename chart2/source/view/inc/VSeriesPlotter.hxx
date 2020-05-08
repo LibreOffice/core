@@ -27,15 +27,15 @@
 #include "LegendEntryProvider.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 
-namespace com { namespace sun { namespace star { namespace awt { struct Point; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com::sun::star::awt { struct Point; }
+namespace com::sun::star::chart2 { class XChartType; }
 
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { struct ExplicitScaleData; }
 namespace chart { class ChartModel; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace util {
         class XNumberFormatsSupplier;
     }
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
         class XColorScheme;
         class XRegressionCurveCalculator;
     }
-}}}
+}
 
 namespace chart {
 

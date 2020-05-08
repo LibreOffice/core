@@ -31,8 +31,8 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace awt { struct Rectangle; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com::sun::star::awt { struct Rectangle; }
+namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace chart
 {

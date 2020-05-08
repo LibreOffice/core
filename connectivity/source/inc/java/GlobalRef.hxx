@@ -24,7 +24,7 @@
 #include <java/lang/Object.hxx>
 
 
-namespace connectivity { namespace jdbc
+namespace connectivity::jdbc
 {
     /** helper class to hold a local ref to a JNI object
     */
@@ -97,7 +97,7 @@ namespace connectivity { namespace jdbc
     };
 
 
-} } // namespace connectivity::jdbc
+} // namespace connectivity::jdbc
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_GLOBALREF_HXX

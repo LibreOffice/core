@@ -21,7 +21,7 @@
 
 #include <WrappedProperty.hxx>
 
-namespace chart { namespace wrapper { class ChartDocumentWrapper; } }
+namespace chart::wrapper { class ChartDocumentWrapper; }
 
 namespace chart
 {
