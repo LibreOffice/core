@@ -29,6 +29,13 @@ struct EffectGlowProperties
     void assignUsed( const EffectGlowProperties& rSourceProps );
 };
 
+struct EffectSoftEdgeProperties
+{
+    OptValue<sal_Int64> moRad; // size of effect
+
+    void assignUsed(const EffectSoftEdgeProperties& rSourceProps);
+};
+
 struct EffectShadowProperties
 {
     OptValue< sal_Int64 > moShadowDist;
@@ -54,6 +61,7 @@ struct EffectProperties
 {
     EffectShadowProperties maShadow;
     EffectGlowProperties maGlow;
+    EffectSoftEdgeProperties maSoftEdge;
 
     /** Stores all effect properties, including those not supported by core yet */
     std::vector<std::unique_ptr<Effect>> m_Effects;

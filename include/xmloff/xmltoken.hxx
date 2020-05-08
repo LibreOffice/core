@@ -1693,6 +1693,8 @@ namespace xmloff::token {
         XML_SLANT_Y,
         XML_SLIDE,
         XML_SLOW,
+        XML_SOFTEDGE,
+        XML_SOFTEDGE_RADIUS,
         XML_SOLID,
         XML_SOLID_TYPE,
         XML_SORT,
