@@ -57,6 +57,8 @@ extras_PRESENTATIONS_XMLFILES := \
 	Blueprint_Plans/Pictures/10000000000000580000001F99D2A38C014B254B.png \
 	Blueprint_Plans/Pictures/100000000000033C0000026D847ACE982C6E20B6.png \
 	Blueprint_Plans/Pictures/10000000000004220000031A5C2E04AB7C51FB60.png \
+	Blueprint_Plans/Pictures/1000020100000500000002D03918081590A75FCF.png \
+	Blueprint_Plans/Pictures/1000020100000500000002D0F25E20EA381A5EBD.png \
 	Blueprint_Plans/styles.xml \
 	Blueprint_Plans/Thumbnails/thumbnail.png \
 	BrightBlue/content.xml \
