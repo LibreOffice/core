@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c01f44d_6f51bf5f",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-08T10:10:11Z",
+      "side": 1,
+      "message": "sal_Int32(i) ?",
+      "parentUuid": "9e9b96ce_3d2c4c27",
+      "range": {
+        "startLine": 197,
+        "startChar": 63,
+        "endLine": 197,
+        "endChar": 82
+      },
+      "revId": "d9433cd29d31701f6a168ea3af573b8a46c8e695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba8cbc1d_b7eb7879",
         "filename": "svx/qa/unit/gallery/test_gallery.cxx",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-05-04T06:47:41Z",
       "side": 1,
       "message": "Is there any function to cast INetURLObject to OUString?",
+      "range": {
+        "startLine": 253,
+        "startChar": 53,
+        "endLine": 253,
+        "endChar": 89
+      },
+      "revId": "d9433cd29d31701f6a168ea3af573b8a46c8e695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff7d1f2f_15f97daf",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-08T10:10:11Z",
+      "side": 1,
+      "message": "aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)\n\nThm means Theme, rename that to full name, no abbreviations!",
+      "parentUuid": "ba8cbc1d_b7eb7879",
       "range": {
         "startLine": 253,
         "startChar": 53,
