@@ -306,6 +306,7 @@ namespace sw {
 
         private:
             SwRect m_aPortionPaintArea;
+            OString m_sLastSentLOKMsg;
         };
 
         /// Fieldmark representing a date form field.
