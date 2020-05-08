@@ -37,7 +37,7 @@ namespace drawinglayer::primitive2d
             should process it (Currently it is only used for grid visualisation,
             but this may change).
          */
-        class PointArrayPrimitive2D final : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PointArrayPrimitive2D final : public BasePrimitive2D
         {
         private:
             /// the array of positions
