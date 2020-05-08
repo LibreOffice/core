@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "854d91ca_09f4ef74",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_statement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-08T09:06:35Z",
+      "side": 1,
+      "message": "as far as I can tell, this is not an error condition, so should be a SAL_INFO ?",
+      "revId": "2d2480019e1972b0d13fc5a2b2cd6ba9b7dd3577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b583d623_2be74361",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_statement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-08T09:06:35Z",
+      "side": 1,
+      "message": "would be useful to log error code here",
+      "revId": "2d2480019e1972b0d13fc5a2b2cd6ba9b7dd3577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
