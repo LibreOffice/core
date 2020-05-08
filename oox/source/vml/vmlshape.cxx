@@ -632,10 +632,16 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
 
     if ( rTypeModel.maPositionHorizontalRelative == "page" )
         rPropSet.setAnyProperty(PROP_HoriOrientRelation, makeAny(text::RelOrientation::PAGE_FRAME));
-    else if ( rTypeModel.maPositionVerticalRelative == "margin" )
-        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
-    else if ( rTypeModel.maPositionVerticalRelative == "text" )
-        rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
+    else if ( rTypeModel.maPositionHorizontalRelative == "margin" )
+        rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
+    else if (rTypeModel.maPositionHorizontalRelative == "right-margin-area" ||
+             rTypeModel.maPositionHorizontalRelative == "inner-margin-area")
+        rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::PAGE_RIGHT);
+    else if (rTypeModel.maPositionHorizontalRelative == "left-margin-area" ||
+             rTypeModel.maPositionHorizontalRelative == "outer-margin-area")
+        rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::PAGE_LEFT);
+    else if ( rTypeModel.maPositionHorizontalRelative == "text" )
+        rPropSet.setProperty(PROP_HoriOrientRelation, text::RelOrientation::FRAME);
 
     if ( rTypeModel.maPositionVertical == "center" )
         rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::CENTER));
