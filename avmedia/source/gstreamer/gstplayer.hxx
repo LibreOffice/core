@@ -28,7 +28,7 @@
 
 typedef struct _GstVideoOverlay GstVideoOverlay;
 
-namespace avmedia { namespace gstreamer {
+namespace avmedia::gstreamer {
 
 
 typedef ::cppu::WeakComponentImplHelper< css::media::XPlayer,
@@ -102,7 +102,6 @@ private:
     osl::Condition          maSizeCondition;
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+} // namespace avmedia::gstreamer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

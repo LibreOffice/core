@@ -23,7 +23,7 @@
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace avmedia { namespace gstreamer {
+namespace avmedia::gstreamer {
 
 typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
                                 css::lang::XServiceInfo > FrameGrabber_BASE;
@@ -55,7 +55,6 @@ private:
     explicit FrameGrabber( const OUString &aURL );
 };
 
-} // namespace gst
-} // namespace avmedia
+} // avmedia::gst
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

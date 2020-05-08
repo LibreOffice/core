@@ -25,7 +25,7 @@
 
 #include <com/sun/star/media/XPlayer.hpp>
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Player
 :   public MacAVObserverHandler
@@ -79,7 +79,6 @@ private:
     bool                mbLooping;
 };
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
