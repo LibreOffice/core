@@ -44,6 +44,15 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    OUString posHorizontalRel = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    CPPUNIT_ASSERT(posHorizontalRel.indexOf("margin-left:9.9pt") >= 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
