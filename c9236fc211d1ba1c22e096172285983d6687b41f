@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "31a08251_6aca7edd",
+        "filename": "writerfilter/source/dmapper/NumberingManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-08T07:24:11Z",
+      "side": 0,
+      "message": "This seems never be true? So the following code is actually dead. Changing it to check listid would change the logic?",
+      "range": {
+        "startLine": 1180,
+        "startChar": 16,
+        "endLine": 1180,
+        "endChar": 85
+      },
+      "revId": "c9236fc211d1ba1c22e096172285983d6687b41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c9294408_63f7aa62",
         "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
         "patchSetId": 1
@@ -13,6 +36,30 @@
       "writtenOn": "2020-04-13T18:38:18Z",
       "side": 0,
       "message": "I did test this to see if it should change the LinkId, but that causes a unit test failure.",
+      "range": {
+        "startLine": 1115,
+        "startChar": 97,
+        "endLine": 1115,
+        "endChar": 107
+      },
+      "revId": "c9236fc211d1ba1c22e096172285983d6687b41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aeabf01_34988b1e",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-08T07:24:11Z",
+      "side": 0,
+      "message": "This sets numid to another object\u0027s numid; but there\u0027s no code ever that sets any object\u0027s numid to anything other than -1 set in ctor? so in fact, this should never change actual value.",
+      "parentUuid": "c9294408_63f7aa62",
       "range": {
         "startLine": 1115,
         "startChar": 97,
