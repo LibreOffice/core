@@ -216,9 +216,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
             "val", "50000");
 
     // 4th shape with soft edge
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
-            "rad", "127000");
+    // We import soft edge radius (in EMU in OOXML) into integral mm100 internal representation,
+    // then export back into EMUs. This results in inaccuracies.
+    OUString rad
+        = getXPath(pXmlDoc,
+                   "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                   "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
+                   "rad");
+    // Use precision of 1/2 of 100th of mm, which is 180 EMU
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(127000, rad.toInt64(), 180); // actually, it returns 127080
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge/*",
             0 ); // should not be present
@@ -248,10 +254,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
     // 7th shape with several effects: glow, inner shadow and reflection
     // We import glow radius (in EMU in OOXML) into integral mm100 internal representation, then
     // export back into EMUs. This results in inaccuracies.
-    OUString rad = getXPath(pXmlDoc,
-                            "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-                            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
-                            "rad");
+    rad = getXPath(pXmlDoc,
+                   "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                   "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
+                   "rad");
     CPPUNIT_ASSERT_DOUBLES_EQUAL(63500, rad.toInt64(), 150); // actually, it returns 63360
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr",
@@ -433,9 +439,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
             0 ); // should not be present
 
     // third picture: soft edge effect
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge",
-            "rad", "63500");
+    // We import soft edge radius (in EMU in OOXML) into integral mm100 internal representation,
+    // then export back into EMUs. This results in inaccuracies.
+    OUString rad
+        = getXPath(pXmlDoc,
+                   "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+                   "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge",
+                   "rad");
+    // Use precision of 1/2 of 100th of mm, which is 180 EMU
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(63500, rad.toInt64(), 180); // actually, it returns 63360
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artistic-effects-preservation.docx")
