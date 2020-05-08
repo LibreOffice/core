@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "1108ccab_7f6a6700",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:15:56Z",
+      "side": 1,
+      "message": "no, the interesting point is that we need to generate it still afaics\n\nsince that jar exists but is a dummy just referencing libreoffice.jar",
+      "parentUuid": "e980ff2e_9c2ea273",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1735588_9f1a118e",
         "filename": "solenv/bin/version.py",
         "patchSetId": 6
@@ -53,6 +77,30 @@
       "writtenOn": "2020-05-08T17:42:16Z",
       "side": 1,
       "message": "Remove this as well?",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d07d1ba_062857d3",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:15:56Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "c1735588_9f1a118e",
       "range": {
         "startLine": 10,
         "startChar": 2,
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "6684d8f9_291cb534",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:15:56Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "676be287_e3d1b8d1",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "98208171_6e871ae2",
         "filename": "solenv/bin/version.py",
         "patchSetId": 6
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "581acdaf_1a2bc733",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:15:56Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "98208171_6e871ae2",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 19
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e26f20ca_b11e89ba",
         "filename": "solenv/bin/version.py",
         "patchSetId": 6
@@ -122,6 +218,30 @@
       "writtenOn": "2020-05-08T17:42:16Z",
       "side": 1,
       "message": "Same here, remove all items that you removed from the build?",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 84
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2911cfa_b37baef1",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:15:56Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "e26f20ca_b11e89ba",
       "range": {
         "startLine": 44,
         "startChar": 9,
