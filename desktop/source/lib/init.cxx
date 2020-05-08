@@ -2695,7 +2695,32 @@ static void doc_iniUnoCommands ()
         OUString(".uno:TransformPosX"),
         OUString(".uno:TransformPosY"),
         OUString(".uno:TransformWidth"),
-        OUString(".uno:TransformHeight")
+        OUString(".uno:TransformHeight"),
+        OUString(".uno:ObjectBackOne"),
+        OUString(".uno:SendToBack"),
+        OUString(".uno:ObjectForwardOne"),
+        OUString(".uno:BringToFront"),
+        OUString(".uno:WrapRight"),
+        OUString(".uno:WrapThrough"),
+        OUString(".uno:WrapLeft"),
+        OUString(".uno:WrapIdeal"),
+        OUString(".uno:WrapOn"),
+        OUString(".uno:WrapOff"),
+        OUString(".uno:UpdateCurIndex"),
+        OUString(".uno:InsertCaptionDialog"),
+        OUString(".uno:FormatGroup"),
+        OUString(".uno:SplitTable"),
+        OUString(".uno:MergeCells"),
+        OUString(".uno:DeleteNote"),
+        OUString(".uno:AcceptChanges"),
+        OUString(".uno:FormatPaintbrush"),
+        OUString(".uno:SetDefault"),
+        OUString(".uno:ParaLeftToRight"),
+        OUString(".uno:ParaRightToLeft"),
+        OUString(".uno:ParaspaceIncrease"),
+        OUString(".uno:ParaspaceDecrease"),
+        OUString(".uno:AcceptTrackedChange"),
+        OUString(".uno:RejectTrackedChange")
     };
 
     util::URL aCommandURL;
