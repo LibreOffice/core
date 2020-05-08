@@ -1,20 +1,21 @@
-
-java_sources(
+genrule(
   name = 'juh-src',
-  srcs = glob(['com/**']),
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE SOURCE ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'juh-src.jar',
   visibility = ['PUBLIC'],
 )
 
-java_doc(
+genrule(
   name = 'juh-javadoc',
-  title = 'LibreOffice Makes it easier to use UNO with Java',
-  pkgs = [
-    'com.sun.star',
-  ],
-  paths = ['.'],
-  srcs = glob(['com/**']),
-  deps = [
-    '//:juh',
-  ],
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE JAVADOC ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'juh-javadoc.jar',
   visibility = ['PUBLIC'],
 )
