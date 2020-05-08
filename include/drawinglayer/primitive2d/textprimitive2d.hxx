@@ -32,10 +32,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** TextSimplePortionPrimitive2D class
 
             This is the basic primitive for representing a text portion. It contains
@@ -181,8 +179,7 @@ namespace drawinglayer
         /// small helper to have a compare operator for Locale
         bool DRAWINGLAYER_DLLPUBLIC LocalesAreEqual(const css::lang::Locale& rA, const css::lang::Locale& rB);
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
