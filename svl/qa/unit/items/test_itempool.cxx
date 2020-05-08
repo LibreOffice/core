@@ -90,6 +90,8 @@ void PoolItemTest::testPool()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pImpl->maPoolItemArrays[3].size());
     pPool->Put(aNotherFour);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pImpl->maPoolItemArrays[3].size());
+
+    SfxItemPool::Free(pPool);
 }
 
 
