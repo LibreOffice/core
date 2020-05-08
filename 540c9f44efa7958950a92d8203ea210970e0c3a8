@@ -274,6 +274,30 @@
       "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cf1a7ca_d626b4f6",
+        "filename": "solenv/maven/mvn.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:16:17Z",
+      "side": 1,
+      "message": "no, as said for the other file one still needs to publish those \"dummy jars\" imho.\n\nWhich makes this more complicated here..",
+      "parentUuid": "f8a50a3a_87b3183e",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
