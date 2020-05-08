@@ -322,6 +322,30 @@
       "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f5f8f86_c4c391eb",
+        "filename": "solenv/maven/mvn.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2020-05-08T19:34:19Z",
+      "side": 1,
+      "message": "\u003e Why should it publish dummy jars? Can\u0027t them just be removed?\n\nBecause people have them referenced?\n\n\u003e I tried to build LO from head to verify that change, but it\u0027s failing to build here. i cherry-picked your change on top of: [1]\n\nSystem-poppler? https://bugs.documentfoundation.org/show_bug.cgi?id\u003d131353",
+      "parentUuid": "d4f7161b_54b1eef6",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
