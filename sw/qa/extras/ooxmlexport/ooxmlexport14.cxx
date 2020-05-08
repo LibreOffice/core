@@ -35,6 +35,19 @@ protected:
     }
 };
 
+DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
+{
+    uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
+    sal_Int16 nRelativePosR = 0;
+    XPropsRight->getPropertyValue("HoriOrientRelation")>>=nRelativePosR;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(4), nRelativePosR);
+
+    uno::Reference<beans::XPropertySet> XPropsLeft(getShape(2), uno::UNO_QUERY);
+    sal_Int16 nRelativePosL = 0;
+    XPropsLeft->getPropertyValue("HoriOrientRelation") >>= nRelativePosL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(3), nRelativePosL);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
