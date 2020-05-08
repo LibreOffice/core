@@ -179,6 +179,12 @@ DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section4 is protected", false, getProperty<bool>(xSect, "IsProtected"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf61423_pageStyleInTable, "tdf61423_pageStyleInTable.odt")
+{
+    // a RES_PAGEDESC in each cell was adding 6 page breaks.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf73056_cellMargins, "tdf73056_cellMargins.doc")
 {
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );

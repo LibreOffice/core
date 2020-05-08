@@ -2657,7 +2657,11 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 void WW8Export::SectionBreaksAndFrames( const SwTextNode& rNode )
 {
     // output page/section breaks
-    OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
+    // Writer doesn't allow page breaks inside tables, but if they are there, don't export them
+    // at least not on the first paragraph.
+    const SwNode* pSectionNode = rNode.FindTableBoxStartNode();  //finds cell start node
+    if ( !pSectionNode || pSectionNode->GetIndex() + 1 != rNode.GetIndex() )
+        OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
 }
 
 namespace {
