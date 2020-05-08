@@ -33,12 +33,12 @@ namespace drawinglayer::primitive2d
 {
 /** PolygonHairlinePrimitive2D class
 
-            This primitive defines a Hairline. Since hairlines are view-dependent,
-            this primitive is view-dependent, too.
+    This primitive defines a Hairline. Since hairlines are view-dependent,
+    this primitive is view-dependent, too.
 
-            This is one of the non-decomposable primitives, so a renderer
-            should process it.
-         */
+    This is one of the non-decomposable primitives, so a renderer
+    should process it.
+ */
 class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D final : public BasePrimitive2D
 {
 private:
@@ -69,13 +69,13 @@ public:
 
 /** PolygonMarkerPrimitive2D class
 
-            This primitive defines a two-colored marker hairline which is
-            dashed with the given dash length. Since hairlines are view-dependent,
-            this primitive is view-dependent, too.
+    This primitive defines a two-colored marker hairline which is
+    dashed with the given dash length. Since hairlines are view-dependent,
+    this primitive is view-dependent, too.
 
-            It will be decomposed to the needed PolygonHairlinePrimitive2D if
-            not handled directly by a renderer.
-         */
+    It will be decomposed to the needed PolygonHairlinePrimitive2D if
+    not handled directly by a renderer.
+ */
 class DRAWINGLAYER_DLLPUBLIC PolygonMarkerPrimitive2D final
     : public BufferedDecompositionPrimitive2D
 {
@@ -127,10 +127,10 @@ public:
 
 /** PolygonStrokePrimitive2D class
 
-            This primitive defines a line with line width, line join, line color
-            and stroke attributes. It will be decomposed dependent on the definition
-            to the needed primitives, e.g. filled PolyPolygons for fat lines.
-         */
+    This primitive defines a line with line width, line join, line color
+    and stroke attributes. It will be decomposed dependent on the definition
+    to the needed primitives, e.g. filled PolyPolygons for fat lines.
+ */
 class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
 {
 private:
@@ -177,9 +177,9 @@ public:
 
 /** PolygonWavePrimitive2D class
 
-            This primitive defines a waveline based on a PolygonStrokePrimitive2D
-            where the wave is defined by wave width and wave length.
-         */
+    This primitive defines a waveline based on a PolygonStrokePrimitive2D
+    where the wave is defined by wave width and wave length.
+ */
 class PolygonWavePrimitive2D final : public PolygonStrokePrimitive2D
 {
 private:
@@ -221,10 +221,10 @@ public:
 
 /** PolygonStrokeArrowPrimitive2D class
 
-            This primitive defines a PolygonStrokePrimitive2D,
-            possibly extended by start and end definitions, which are
-            normally used for arrows.
-         */
+    This primitive defines a PolygonStrokePrimitive2D,
+    possibly extended by start and end definitions, which are
+    normally used for arrows.
+ */
 class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D final : public PolygonStrokePrimitive2D
 {
 private:
