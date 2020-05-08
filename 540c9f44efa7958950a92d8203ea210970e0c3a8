@@ -298,6 +298,30 @@
       "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f7161b_54b1eef6",
+        "filename": "solenv/maven/mvn.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T19:23:12Z",
+      "side": 1,
+      "message": "Why should it publish dummy jars? Can\u0027t them just be removed?\n\nI tried to build LO from head to verify that change, but it\u0027s failing to build here. i cherry-picked your change on top of: [1]\n\n  [CXX] sal/rtl/crc.cxx\n/home/davido/projects/libo/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx: In member function ‘virtual void pdfi::PDFOutDev::processLink(AnnotLink*)’:\n/home/davido/projects/libo/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx:567:64: error: base operand of ‘-\u003e’ has non-pointer type ‘const string’ {aka ‘const std::__cxx11::basic_string\u003cchar\u003e’}\n  567 |     const char* pURI \u003d static_cast\u003cLinkURI*\u003e(pAction)-\u003egetURI()-\u003ec_str();\n      |                                                                ^~\nmake[1]: *** [/home/davido/projects/libo/solenv/gbuild/LinkTarget.mk:306: /home/davido/projects/libo/workdir/CxxObject/sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.o] Error 1\nmake[1]: *** Waiting for unfinished jobs....\nmake: *** [Makefile:282: build] Error 2\n\n[1] c35aef260feda34eae5e4b8a39f1baaa716b717d",
+      "parentUuid": "6cf1a7ca_d626b4f6",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
