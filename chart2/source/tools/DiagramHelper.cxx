@@ -479,20 +479,18 @@ void DiagramHelper::setDimension(
 
         //change all coordinate systems:
         Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+        const Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        for( Reference<XCoordinateSystem> const & xOldCooSys : aCooSysList )
         {
-            Reference< XCoordinateSystem > xOldCooSys( aCooSysList[nCS], uno::UNO_QUERY );
             Reference< XCoordinateSystem > xNewCooSys;
 
             Reference< XChartTypeContainer > xChartTypeContainer( xOldCooSys, uno::UNO_QUERY );
             if( !xChartTypeContainer.is() )
                 continue;
 
-            Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-            for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+            const Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+            for( Reference< XChartType > const & xChartType : aChartTypeList )
             {
-                Reference< XChartType > xChartType( aChartTypeList[nT], uno::UNO_QUERY );
                 bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
                 if(!xNewCooSys.is())
                 {

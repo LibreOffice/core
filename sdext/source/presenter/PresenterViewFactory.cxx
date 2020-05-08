@@ -289,7 +289,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
                     = dynamic_cast<CachablePresenterView*>(iView->second.first.get());
                 if (pView != nullptr)
                     pView->ActivatePresenterView();
-                return Reference<XResource>(iView->second.first, UNO_QUERY);
+                return iView->second.first;
             }
 
             // Right view, wrong pane.  Create a new view.

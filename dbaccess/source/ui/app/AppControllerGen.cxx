@@ -701,7 +701,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     {
         try
         {
-            Reference< XModel > xModel(component.second,UNO_QUERY);
+            Reference< XModel > xModel = component.second;
 
             // Send document as e-Mail using stored/default type
             eResult = aSendMail.AttachDocument(xModel,component.first);

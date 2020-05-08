@@ -147,4 +147,13 @@ struct Test13
     }
 };
 
+void test14(css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> seq)
+{
+    for (sal_Int32 i = 0; i < seq.getLength(); ++i)
+    {
+        // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
+        css::uno::Reference<css::io::XStreamListener> xDataSeries(seq[i], css::uno::UNO_QUERY);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

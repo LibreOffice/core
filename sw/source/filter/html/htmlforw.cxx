@@ -106,8 +106,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         }
         else if( auto x2 = o3tl::tryAccess<uno::Reference<form::XForm>>(aTmp) )
         {
-            uno::Reference< form::XFormComponent > xFC( *x2, uno::UNO_QUERY );
-            if( rFormComp == xFC )
+            if( rFormComp == *x2 )
                 break;
         }
         else

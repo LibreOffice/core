@@ -195,7 +195,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
 {
     for( const auto& rObj : pImpl->maNameToObjectMap )
     {
-        uno::Reference < util::XCloseable > xClose( rObj.second, uno::UNO_QUERY );
+        uno::Reference < util::XCloseable > const & xClose = rObj.second;
         if( xClose.is() )
         {
             try

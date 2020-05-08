@@ -162,7 +162,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
      * oPara = oParas.nextElement
      */
 
-    xParaEnumAccess.set(getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, "TextRange"), uno::UNO_QUERY);
+    xParaEnumAccess = getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, "TextRange");
     xParaEnum = xParaEnumAccess->createEnumeration();
     xParaEnum->nextElement();
     bool bCaught = false;
@@ -179,10 +179,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCommentsNested, "comments-nested.odt")
 {
-    uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
 
-    uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInner = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
 }
 

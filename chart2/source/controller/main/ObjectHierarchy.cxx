@@ -433,7 +433,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
 
                     ObjectHierarchy::tChildContainer aSeriesSubContainer;
 
-                    Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
+                    Reference< chart2::XDataSeries > const & xSeries = aSeriesSeq[nSeriesIdx];
 
                     // data labels
                     if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )

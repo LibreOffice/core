@@ -186,14 +186,12 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
 
 DECLARE_RTFEXPORT_TEST(testCommentsNested, "comments-nested.odt")
 {
-    uno::Reference<beans::XPropertySet> xOuter(
-        getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 2), "TextField"),
-        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOuter
+        = getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content").trim());
 
-    uno::Reference<beans::XPropertySet> xInner(
-        getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 4), "TextField"),
-        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInner
+        = getProperty<uno::Reference<beans::XPropertySet>>(getRun(getParagraph(1), 4), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content").trim());
 }
 

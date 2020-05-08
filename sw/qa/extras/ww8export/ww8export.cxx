@@ -644,10 +644,9 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
         auto xPara = getParagraph(nPara);
 
         // get the numbering rules effective at this paragraph
-        uno::Reference<container::XIndexReplace> xNumRules(
+        uno::Reference<container::XIndexReplace> xNumRules =
             getProperty< uno::Reference<container::XIndexReplace> >(
-                xPara, "NumberingRules"),
-            uno::UNO_QUERY);
+                xPara, "NumberingRules");
 
         // get the numbering level of this paragraph, and the properties
         // associated with that numbering level
@@ -936,10 +935,10 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 
 DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 {
-    uno::Reference<beans::XPropertySet> xOuter(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
 
-    uno::Reference<beans::XPropertySet> xInner(getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xInner = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 4), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
 }
 
@@ -1269,7 +1268,7 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
         else if (sKind == "Annotation")
         {
             // Check if the comment text is correct and save the name of the comment
-            uno::Reference<beans::XPropertySet> xComment(getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField"), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xComment = getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField");
             CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, getProperty<OUString>(xComment, "Content"));
             sNames[aTextPortions[i].nAnnotationID] = getProperty<OUString>(xComment, "Name");
         }
@@ -1340,10 +1339,10 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
 {
     // The bullet colour of paragraph #3 should be COL_AUTO
     auto xPara = getParagraph(3);
-    uno::Reference<container::XIndexReplace> xNumRules(
+    uno::Reference<container::XIndexReplace> xNumRules =
         getProperty< uno::Reference<container::XIndexReplace> >(
-            xPara, "NumberingRules"),
-        uno::UNO_QUERY);
+            xPara, "NumberingRules");
+
     int numLevel = getProperty<sal_Int32>(xPara, "NumberingLevel");
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     xNumRules->getByIndex(numLevel) >>= aPropertyValues;

@@ -442,8 +442,8 @@ DECLARE_RTFEXPORT_TEST(testFdo49659, "fdo49659.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
     // The graphic was also empty
-    uno::Reference<beans::XPropertySet> xGraphic(
-        getProperty<uno::Reference<beans::XPropertySet>>(getShape(1), "Graphic"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic
+        = getProperty<uno::Reference<beans::XPropertySet>>(getShape(1), "Graphic");
     CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL,
                          getProperty<sal_Int8>(xGraphic, "GraphicType"));
 }
