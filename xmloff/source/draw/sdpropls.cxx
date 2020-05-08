@@ -146,17 +146,21 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextChainNextName",              XML_NAMESPACE_DRAW,   XML_CHAIN_NEXT_NAME,      XML_TYPE_STRING, 0 ),
 
     // shadow attributes
-    GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
+    GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
     GMAP( "ShadowXDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 ),
     GMAP( "ShadowYDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 ),
     GMAP( "ShadowColor",                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
 
     // glow attributes
-    GMAPV( "GlowEffect",                       XML_NAMESPACE_LO_EXT, XML_GLOW,                 XML_SD_TYPE_GLOW  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( "GlowEffect",                       XML_NAMESPACE_LO_EXT, XML_GLOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectRad",                    XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectColor",                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectTransparency",           XML_NAMESPACE_LO_EXT, XML_GLOW_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+
+    // soft edge attributes
+    GMAPV( "SoftEdge",                      XML_NAMESPACE_LO_EXT, XML_SOFTEDGE,             XML_SD_TYPE_VISIBLE_HIDDEN, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( "SoftEdgeRad",                   XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // graphic attributes
     GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
@@ -232,7 +236,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, XML_SHININESS,              XML_TYPE_PERCENT, 0 ),
 
     // 3D shadow attributes
-    GMAP( "D3DShadow3D",                        XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
+    GMAP( "D3DShadow3D",                        XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_VISIBLE_HIDDEN, 0 ),
 
     // #FontWork# attributes
     GMAP( "FontWorkStyle",                  XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE| MID_FLAG_ELEMENT_ITEM_EXPORT, CTF_FONTWORK_STYLE  ),
@@ -1020,12 +1024,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( aXML_PresChange_EnumMap );
                 break;
             }
-            case XML_SD_TYPE_SHADOW :
-            {
-                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
-                break;
-            }
-            case XML_SD_TYPE_GLOW :
+            case XML_SD_TYPE_VISIBLE_HIDDEN:
             {
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
                 break;
