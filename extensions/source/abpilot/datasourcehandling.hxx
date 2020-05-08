@@ -27,11 +27,11 @@
 #include "abptypes.hxx"
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         class XPropertySet;
     }
-} } }
+}
 
 namespace weld { class Window; }
 

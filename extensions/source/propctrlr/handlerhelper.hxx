@@ -30,11 +30,11 @@
 #include <vector>
 
 namespace weld { class Builder; class Widget; class Window; }
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace inspection {
         struct LineDescriptor;
     }
-} } }
+}
 
 namespace pcr
 {
