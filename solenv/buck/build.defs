@@ -1,11 +1,13 @@
 def java_sources(
     name,
     srcs,
+    root = None,
     visibility = []
   ):
   java_library(
     name = name,
     resources = srcs,
+    resources_root = root,
     visibility = visibility,
   )
 

@@ -1,21 +1,23 @@
 
-java_sources(
+genrule(
   name = 'jurt-src',
-  srcs = glob(['com/**']),
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE SOURCE ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'jurt-src.jar',
   visibility = ['PUBLIC'],
 )
 
-java_doc(
+genrule(
   name = 'jurt-javadoc',
-  title = 'LibreOffice Java Uno Runtime',
-  pkgs = [
-    'com.sun.star',
-  ],
-  paths = ['.'],
-  srcs = glob(['com/**']),
-  deps = [
-    '//:jurt',
-    '//:unoloader',
-  ],
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE JAVADOC ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'jurt-javadoc.jar',
   visibility = ['PUBLIC'],
 )
+

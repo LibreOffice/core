@@ -2,6 +2,7 @@
 java_sources(
   name = 'officebean-src',
   srcs = glob(['com/**']),
+  root = '.',
   visibility = ['PUBLIC'],
 )
 
@@ -14,10 +15,8 @@ java_doc(
   paths = ['.'],
   srcs = glob(['com/**']),
   deps = [
-    '//:juh',
+    '//:libreoffice',
     '//:officebean',
-    '//:unoil',
-    '//:ridl',
   ],
   visibility = ['PUBLIC'],
 )
