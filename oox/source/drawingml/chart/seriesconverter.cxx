@@ -22,6 +22,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
@@ -46,6 +47,7 @@
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <drawingml/lineproperties.hxx>
@@ -53,6 +55,7 @@
 #include <drawingml/textrun.hxx>
 #include <drawingml/textfield.hxx>
 #include <drawingml/textbody.hxx>
+#include <drawingml/hatchmap.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -238,7 +241,7 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
 }
 
-void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
+void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper, ModelObjectHelper& rModelObjHelper )
 {
     FillProperties& rFP = rShape.getFillProperties();
 
@@ -250,6 +253,22 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
         ::Color nColor = aColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LabelFillColor, uno::makeAny(nColor));
     }
+    else if(rFP.moFillType.has() && rFP.moFillType.get() == XML_pattFill)
+    {
+        rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_HATCH);
+        rPropSet.setProperty(PROP_LabelFillBackground, true);
+
+        Color aHatchColor( rFP.maPatternProps.maPattFgColor );
+        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.get(), aHatchColor.getColor(rGraphicHelper, 0));
+
+        OUString sHatchName = rModelObjHelper.insertFillHatch(aHatch);
+        rPropSet.setProperty(PROP_LabelFillHatchName, sHatchName);
+
+        const Color& aColor = rFP.maPatternProps.maPattBgColor;
+        ::Color nColor = aColor.getColor(rGraphicHelper);
+        rPropSet.setProperty(PROP_LabelFillColor, uno::makeAny(nColor));
+    }
+
 }
 
 DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( const OUString& rField )
@@ -312,7 +331,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if (mrModel.mxShapeProp)
         {
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
-            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(), getFilter().getModelObjectHelper());
         }
         if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
         {
@@ -399,7 +418,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         {
             // Import baseline border properties for these data labels.
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
-            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
+            importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(), getFilter().getModelObjectHelper());
         }
     }
 

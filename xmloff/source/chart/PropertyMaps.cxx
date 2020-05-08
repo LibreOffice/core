@@ -75,7 +75,8 @@ SvXMLEnumMapEntry<drawing::LineStyle> const aLineStyleMap[] =
 SvXMLEnumMapEntry<drawing::FillStyle> const aFillStyleMap[] =
 {
     { XML_NONE,     drawing::FillStyle_NONE },
-    { XML_SOLID,    drawing::FillStyle_SOLID }
+    { XML_SOLID,    drawing::FillStyle_SOLID },
+    { XML_HATCH,    drawing::FillStyle_HATCH }
 };
 
 }
