@@ -8391,7 +8391,7 @@ private:
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
-        if (pEvent->keyval == GDK_KEY_Return)
+        if (pEvent->keyval == GDK_KEY_Return || pEvent->keyval == GDK_KEY_KP_Enter)
         {
             signal_activated();
             return true;
