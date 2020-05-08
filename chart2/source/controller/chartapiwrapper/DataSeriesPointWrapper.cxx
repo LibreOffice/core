@@ -48,6 +48,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -84,7 +85,9 @@ enum
     PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
     PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS,
     PROP_SERIES_DATAPOINT_LABEL_FILL_STYLE,
-    PROP_SERIES_DATAPOINT_LABEL_FILL_COLOR
+    PROP_SERIES_DATAPOINT_LABEL_FILL_COLOR,
+    PROP_SERIES_DATAPOINT_LABEL_FILL_BACKGROUND,
+    PROP_SERIES_DATAPOINT_LABEL_FILL_HATCH_NAME
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
@@ -170,6 +173,16 @@ void lcl_AddPropertiesToVector_PointProperties(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
+                  PROP_SERIES_DATAPOINT_LABEL_FILL_BACKGROUND,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_HATCH_NAME,
+                  PROP_SERIES_DATAPOINT_LABEL_FILL_HATCH_NAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
                   PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
