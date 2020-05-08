@@ -195,6 +195,7 @@ public:
     void testTdf119087();
     void testTdf131554();
     void testTdf132282();
+    void testTdf132201EffectOrder();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
+    CPPUNIT_TEST(testTdf132201EffectOrder);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2892,6 +2894,25 @@ void SdOOXMLExportTest2::testTdf132282()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(763), xShape->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30523), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2604), xShape->getSize().Height);
+}
+
+void SdOOXMLExportTest2::testTdf132201EffectOrder()
+{
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/effectOrder.pptx"),
+                             PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst", 2);
+    // The relative order of effects is important: glow must be before shadow
+    CPPUNIT_ASSERT_EQUAL(0, getXPathPosition(pXmlDocContent,
+                                             "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst",
+                                             "glow"));
+    CPPUNIT_ASSERT_EQUAL(1, getXPathPosition(pXmlDocContent,
+                                             "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst",
+                                             "outerShdw"));
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
