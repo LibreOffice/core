@@ -1,20 +1,46 @@
 
-java_sources(
+genrule(
   name = 'ridl-src',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE SOURCE ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'ridl-src.jar',
+  visibility = ['PUBLIC'],
+)
+
+genrule(
+  name = 'ridl-javadoc',
+  cmd = ' && '.join([
+    'cd $TMP',
+    'echo "FAKE JAVADOC ARCHIVE" > README',
+    'zip -qr $OUT *',
+  ]),
+  out = 'ridl-javadoc.jar',
+  visibility = ['PUBLIC'],
+)
+
+java_sources(
+  name = 'libreoffice-src',
   srcs = glob(['com/**']),
+  root = '.',
   visibility = ['PUBLIC'],
 )
 
 java_doc(
-  name = 'ridl-javadoc',
+  name = 'libreoffice-javadoc',
   title = 'LibreOffice types for the Java Uno typesystem',
   pkgs = [
-    'com.sun.star',
+    'com.sun.star.comp',
+    'com.sun.star.lib',
+    'com.sun.star.uno',
   ],
   paths = ['.'],
   srcs = glob(['com/**']),
   deps = [
-    '//:ridl',
+    '//:unoloader',
+    '//:libreoffice',
   ],
   visibility = ['PUBLIC'],
 )
