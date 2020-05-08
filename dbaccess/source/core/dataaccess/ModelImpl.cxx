@@ -846,7 +846,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     bool bTryToPreserveScriptSignature = false;
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    OUString m_sTmpFileUrl = aTempFile.GetURL();
+    OUString sTmpFileUrl = aTempFile.GetURL();
     SignatureState aSignatureState = getScriptingSignatureState();
     OUString sLocation = getDocFileLocation();
     bool bIsEmbedded = sLocation.startsWith("vnd.sun.star.pkg:") && sLocation.endsWith("/EmbeddedDatabase");
@@ -858,7 +858,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
         bTryToPreserveScriptSignature = true;
         // We need to first save the file (which removes the macro signature), then add the macro signature again.
         // For that, we need a temporary copy of the original file.
-        osl::File::RC rc = osl::File::copy(sLocation, m_sTmpFileUrl);
+        osl::File::RC rc = osl::File::copy(sLocation, sTmpFileUrl);
         if (rc != osl::FileBase::E_None)
             throw uno::RuntimeException("Could not create temp file");
     }
@@ -890,9 +890,9 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
             {
                 Reference<XStorage> xReadOrig
                     = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                        ZIP_STORAGE_FORMAT_STRING, m_sTmpFileUrl, ElementModes::READ);
+                        ZIP_STORAGE_FORMAT_STRING, sTmpFileUrl, ElementModes::READ);
                 if (!xReadOrig.is())
-                    throw uno::RuntimeException("Could not read " + m_sTmpFileUrl);
+                    throw uno::RuntimeException("Could not read " + sTmpFileUrl);
                 uno::Reference<embed::XStorage> xMetaInf
                     = xReadOrig->openStorageElement("META-INF", embed::ElementModes::READ);
 
