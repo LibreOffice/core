@@ -287,6 +287,8 @@ LabelBorderWidth
 LabelPlacement
 LabelPosition
 LabelSeparator
+LabelFillBackground
+LabelFillHatchName
 LabelFillStyle
 LabelFillColor
 CustomLabelFields
