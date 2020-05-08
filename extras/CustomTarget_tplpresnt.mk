@@ -44,7 +44,6 @@ extras_PRESENTATIONS_XMLFILES := \
 	Beehive/content.xml \
 	Beehive/META-INF/manifest.xml \
 	Beehive/meta.xml \
-	Beehive/Pictures/1000000000000020000000204B249CA79A42C6D7.png \
 	Beehive/styles.xml \
 	Beehive/Thumbnails/thumbnail.png \
 	Blue_Curve/content.xml \
