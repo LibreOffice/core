@@ -54,7 +54,7 @@
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="16.5pt"/>
+      <style:text-properties fo:font-size="16.5pt" style:font-size-asian="16.5pt" style:font-size-complex="16.5pt"/>
     </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>

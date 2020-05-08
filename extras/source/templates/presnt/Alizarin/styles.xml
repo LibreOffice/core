@@ -22,7 +22,7 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Source Sans Pro2" fo:font-size="24pt" fo:language="de" fo:country="AT" style:font-name-asian="Segoe UI" style:font-size-asian="24pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Tahoma" style:font-size-complex="24pt" style:language-complex="hi" style:country-complex="IN"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Source Sans Pro2" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0.05cm" svg:stroke-color="#000000" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="justify" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080">
@@ -86,41 +86,41 @@
     </style:style>
     <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
-      <style:text-properties fo:font-size="18pt"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Title_20_A4" style:display-name="Title A4" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
-      <style:text-properties fo:font-size="44pt"/>
+      <style:text-properties fo:font-size="44pt" style:font-size-asian="44pt" style:font-size-complex="44pt"/>
     </style:style>
     <style:style style:name="Heading_20_A4" style:display-name="Heading A4" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="Text_20_A4" style:display-name="Text A4" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
     </style:style>
     <style:style style:name="A4" style:family="graphic" style:parent-style-name="Text">
       <style:graphic-properties draw:fill="none"/>
-      <style:text-properties fo:font-size="18pt"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Title_20_A0" style:display-name="Title A0" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
-      <style:text-properties fo:font-size="96pt"/>
+      <style:text-properties fo:font-size="96pt" style:font-size-asian="96pt" style:font-size-complex="96pt"/>
     </style:style>
     <style:style style:name="Heading_20_A0" style:display-name="Heading A0" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
-      <style:text-properties fo:font-size="72pt"/>
+      <style:text-properties fo:font-size="72pt" style:font-size-asian="72pt" style:font-size-complex="72pt"/>
     </style:style>
     <style:style style:name="Text_20_A0" style:display-name="Text A0" style:family="graphic" style:parent-style-name="A4">
       <style:graphic-properties draw:stroke="none"/>
     </style:style>
     <style:style style:name="Graphic" style:family="graphic">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
-      <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt"/>
+      <style:text-properties style:font-name="Liberation Sans" fo:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
     </style:style>
     <style:style style:name="Shapes" style:family="graphic" style:parent-style-name="Graphic">
       <style:graphic-properties draw:stroke="none" draw:fill="gradient" draw:fill-gradient-name="Shapes"/>
-      <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
+      <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
     </style:style>
     <style:style style:name="Filled" style:family="graphic" style:parent-style-name="Shapes">
       <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled"/>
@@ -253,7 +253,7 @@
     <style:style style:name="Alizarin-notes" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:paragraph-properties fo:margin-left="0.6cm" fo:margin-right="0cm" fo:text-indent="-0.6cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro1" fo:font-family="&apos;Source Sans Pro&apos;" style:font-style-name="標準" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro1" fo:font-family="&apos;Source Sans Pro&apos;" style:font-style-name="標準" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt" fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin-outline1" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:auto-grow-height="false" draw:fit-to-size="shrink-to-fit" style:shrink-to-fit="true">
@@ -301,39 +301,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.301cm" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold2" fo:font-family="&apos;Source Sans Pro Semibold&apos;" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:letter-kerning="true" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="600" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="600" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold2" fo:font-family="&apos;Source Sans Pro Semibold&apos;" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:letter-kerning="true" style:font-size-asian="19.5pt" style:font-style-asian="normal" style:font-weight-asian="600" style:font-size-complex="19.5pt" style:font-style-complex="normal" style:font-weight-complex="600" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin-outline2" style:family="presentation" style:parent-style-name="Alizarin-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-indent="0cm"/>
-      <style:text-properties style:font-name="Source Sans Pro Light" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16.5pt" fo:font-weight="250" style:font-size-asian="22pt" style:font-weight-asian="250" style:font-size-complex="22pt" style:font-weight-complex="250"/>
+      <style:text-properties style:font-name="Source Sans Pro Light" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16.5pt" fo:font-weight="250" style:font-size-asian="16.5pt" style:font-weight-asian="250" style:font-size-complex="16.5pt" style:font-weight-complex="250"/>
     </style:style>
     <style:style style:name="Alizarin-outline3" style:family="presentation" style:parent-style-name="Alizarin-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="13.5pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+      <style:text-properties fo:font-size="13.5pt" style:font-size-asian="13.5pt" style:font-size-complex="13.5pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline4" style:family="presentation" style:parent-style-name="Alizarin-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.15cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline5" style:family="presentation" style:parent-style-name="Alizarin-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline6" style:family="presentation" style:parent-style-name="Alizarin-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline7" style:family="presentation" style:parent-style-name="Alizarin-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline8" style:family="presentation" style:parent-style-name="Alizarin-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
     </style:style>
     <style:style style:name="Alizarin-outline9" style:family="presentation" style:parent-style-name="Alizarin-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
     </style:style>
     <style:style style:name="Alizarin-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
@@ -433,7 +433,7 @@
       <style:paragraph-properties fo:text-align="start" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="&apos;Source Sans Pro Black&apos;" style:font-style-name="黒" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="900" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="900" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="&apos;Source Sans Pro Black&apos;" style:font-style-name="黒" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="900" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="900" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin0-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#fffde7" draw:fill-image-width="0cm" draw:fill-image-height="0cm"/>
@@ -497,39 +497,39 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.301cm" fo:text-indent="0cm" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold2" fo:font-family="&apos;Source Sans Pro Semibold&apos;" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:letter-kerning="true" style:font-size-asian="26pt" style:font-style-asian="normal" style:font-weight-asian="600" style:font-size-complex="26pt" style:font-style-complex="normal" style:font-weight-complex="600" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#1c1c1c" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Semibold2" fo:font-family="&apos;Source Sans Pro Semibold&apos;" style:font-style-name="Semibold" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="19.5pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="600" style:letter-kerning="true" style:font-size-asian="19.5pt" style:font-style-asian="normal" style:font-weight-asian="600" style:font-size-complex="19.5pt" style:font-style-complex="normal" style:font-weight-complex="600" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Alizarin0-outline2" style:family="presentation" style:parent-style-name="Alizarin0-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.299cm" fo:text-indent="0cm"/>
-      <style:text-properties style:font-name="Source Sans Pro Light" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16.5pt" fo:font-weight="250" style:font-size-asian="22pt" style:font-weight-asian="250" style:font-size-complex="22pt" style:font-weight-complex="250"/>
+      <style:text-properties style:font-name="Source Sans Pro Light" fo:font-family="&apos;Source Sans Pro Light&apos;" style:font-style-name="細字" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16.5pt" fo:font-weight="250" style:font-size-asian="16.5pt" style:font-weight-asian="250" style:font-size-complex="16.5pt" style:font-weight-complex="250"/>
     </style:style>
     <style:style style:name="Alizarin0-outline3" style:family="presentation" style:parent-style-name="Alizarin0-outline2">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.224cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="13.5pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+      <style:text-properties fo:font-size="13.5pt" style:font-size-asian="13.5pt" style:font-size-complex="13.5pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline4" style:family="presentation" style:parent-style-name="Alizarin0-outline3">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.15cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline5" style:family="presentation" style:parent-style-name="Alizarin0-outline4">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline6" style:family="presentation" style:parent-style-name="Alizarin0-outline5">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline7" style:family="presentation" style:parent-style-name="Alizarin0-outline6">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.075cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="12pt" style:font-size-asian="16pt" style:font-size-complex="16pt"/>
+      <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline8" style:family="presentation" style:parent-style-name="Alizarin0-outline7">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
     </style:style>
     <style:style style:name="Alizarin0-outline9" style:family="presentation" style:parent-style-name="Alizarin0-outline8">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.074cm" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+      <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
     </style:style>
     <style:style style:name="Alizarin0-subtitle" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="false">
@@ -629,7 +629,7 @@
       <style:paragraph-properties fo:text-align="start" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="&apos;Source Sans Pro Black&apos;" style:font-style-name="黒" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="900" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="900" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Source Sans Pro Black" fo:font-family="&apos;Source Sans Pro Black&apos;" style:font-style-name="黒" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="900" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="900" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="900" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:presentation-page-layout style:name="AL0T26">
       <presentation:placeholder presentation:object="handout" svg:x="2.058cm" svg:y="1.743cm" svg:width="10.556cm" svg:height="-0.233cm"/>
@@ -1017,7 +1017,7 @@
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+                <text:page-number></text:page-number>
               </text:span>
             </text:p>
           </draw:text-box>
@@ -1058,7 +1058,7 @@
         <draw:text-box>
           <text:p text:style-name="MP15">
             <text:span text:style-name="MT2">
-              <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+              <text:page-number></text:page-number>
             </text:span>
           </text:p>
         </draw:text-box>
@@ -1100,7 +1100,7 @@
           <draw:text-box>
             <text:p text:style-name="MP3">
               <text:span text:style-name="MT1">
-                <text:page-number>&lt;Foliennummer&gt;</text:page-number>
+                <text:page-number></text:page-number>
               </text:span>
             </text:p>
           </draw:text-box>
