@@ -28,6 +28,8 @@
 #define CHART_UNONAME_LABEL_BORDER_DASHNAME "LabelBorderDashName"
 #define CHART_UNONAME_LABEL_BORDER_TRANS    "LabelBorderTransparency"
 #define CHART_UNONAME_LABEL_FILL_STYLE      "LabelFillStyle"
+#define CHART_UNONAME_LABEL_FILL_BACKGROUND "LabelFillBackground"
+#define CHART_UNONAME_LABEL_FILL_HATCH_NAME "LabelFillHatchName"
 #define CHART_UNONAME_LABEL_FILL_COLOR      "LabelFillColor"
 #define CHART_UNONAME_CUSTOM_LABEL_FIELDS   "CustomLabelFields"
 
