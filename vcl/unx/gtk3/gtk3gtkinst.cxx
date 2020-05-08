@@ -14476,7 +14476,7 @@ private:
         if (nStart == -1)
             nStart = 0;
 
-        // Try match case insensitive from current position
+        // Try match case sensitive from current position
         int nPos = m_pTreeView->starts_with(aStartText, 0, nStart, true);
         if (nPos == -1 && nStart != 0)
         {
