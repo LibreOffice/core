@@ -2094,11 +2094,11 @@ public:
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_FALSE);
+        insert(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage, TRISTATE_FALSE);
+        insert(-1, rId, rStr, nullptr, &rImage, TRISTATE_INDET);
     }
 
     // return the number of toplevel nodes
