@@ -47,6 +47,8 @@ namespace drawinglayer
             // making exceptions with shadow generation
             bool                                        mb3DShape : 1;
 
+            basegfx::B2DHomMatrix maTransform;
+
         protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
@@ -57,7 +59,8 @@ namespace drawinglayer
                 const Primitive2DContainer& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
-                bool b3DShape);
+                bool b3DShape,
+                const basegfx::B2DHomMatrix& rObjectMatrix);
 
             // data access
             const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
