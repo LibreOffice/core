@@ -26,9 +26,9 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/link.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 class VclWindowEvent;
 
 namespace framework{

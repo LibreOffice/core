@@ -27,7 +27,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace filter{ namespace config {
+namespace filter::config {
 
 class TerminateDetection;
 
@@ -400,7 +400,7 @@ public:
     }
 };
 
-}}
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_TYPEDETECTION_HXX
 
