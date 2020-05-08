@@ -944,6 +944,20 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="zeroToHundredPercent"/>
           </rng:attribute>
         </rng:optional>
+        <!-- TODO: no proposal for loext:softedge* -->
+        <rng:optional>
+          <rng:attribute name="loext:softedge">
+            <rng:choice>
+              <rng:value>visible</rng:value>
+              <rng:value>hidden</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="loext:softedge-radius">
+            <rng:ref name="length"/>
+          </rng:attribute>
+        </rng:optional>
       </rng:interleave>
     </rng:define>
 

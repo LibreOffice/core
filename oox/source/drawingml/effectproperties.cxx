@@ -22,6 +22,11 @@ void EffectGlowProperties ::assignUsed(const EffectGlowProperties& rSourceProps)
     moGlowColor.assignIfUsed( rSourceProps.moGlowColor );
 }
 
+void EffectSoftEdgeProperties::assignUsed(const EffectSoftEdgeProperties& rSourceProps)
+{
+    moRad.assignIfUsed(rSourceProps.moRad);
+}
+
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
     moShadowDist.assignIfUsed( rSourceProps.moShadowDist );
@@ -35,6 +40,7 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
     maGlow.assignUsed(rSourceProps.maGlow);
+    maSoftEdge.assignUsed(rSourceProps.maSoftEdge);
     if (!rSourceProps.m_Effects.empty())
     {
         m_Effects.clear();

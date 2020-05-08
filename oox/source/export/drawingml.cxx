@@ -3750,12 +3750,13 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         bool bHasShadow = false;
         if( GetProperty( rXPropSet, "Shadow" ) )
             mAny >>= bHasShadow;
-        bool bHasGlow = false;
-        if( GetProperty( rXPropSet, "GlowEffect") )
-            mAny >>= bHasGlow;
-        //rXPropSet->getPropertyValue("GlowEffect") >>= bHasGlow;
+        bool bHasEffects = bHasShadow;
+        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffect"))
+            mAny >>= bHasEffects;
+        if (!bHasEffects && GetProperty(rXPropSet, "SoftEdge"))
+            mAny >>= bHasEffects;
 
-        if( bHasShadow || bHasGlow )
+        if (bHasEffects)
         {
             mpFS->startElementNS(XML_a, XML_effectLst);
             WriteGlowEffect(rXPropSet);
@@ -3782,6 +3783,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
                 WriteShapeEffect( "outerShdw", aShadowGrabBag );
             }
+            WriteSoftEdgeEffect(rXPropSet);
             mpFS->endElementNS(XML_a, XML_effectLst);
         }
     }
@@ -3848,6 +3850,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         }
         if (!bGlowWritten)
             WriteGlowEffect(rXPropSet);
+        WriteSoftEdgeEffect(rXPropSet); // the last
 
         mpFS->endElementNS(XML_a, XML_effectLst);
     }
@@ -3875,6 +3878,25 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect("glow", aGlowProps);
+}
+
+void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
+{
+    bool hasEffect = false;
+    rXPropSet->getPropertyValue("SoftEdge") >>= hasEffect;
+    if (!hasEffect)
+        return;
+
+    sal_Int32 nRad = 0;
+    rXPropSet->getPropertyValue("SoftEdgeRad") >>= nRad;
+    css::uno::Sequence<css::beans::PropertyValue> aAttribs(1);
+    aAttribs[0].Name = "rad";
+    aAttribs[0].Value <<= oox::drawingml::convertHmmToEmu(nRad);
+    css::uno::Sequence<css::beans::PropertyValue> aProps(1);
+    aProps[0].Name = "Attribs";
+    aProps[0].Value <<= aAttribs;
+
+    WriteShapeEffect("softEdge", aProps);
 }
 
 void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
