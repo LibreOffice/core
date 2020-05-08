@@ -167,6 +167,13 @@ SlideTransitionContext::~SlideTransitionContext() throw()
             maTransition.setPresetTransition(rAttribs.getString(XML_prst, ""));
         }
         return this;
+    case PPT_TOKEN( strips ):
+        if (!mbHasTransition)
+        {
+            mbHasTransition = true;
+            maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_ld ), 0 );
+        }
+        return this;
 
 
     default:

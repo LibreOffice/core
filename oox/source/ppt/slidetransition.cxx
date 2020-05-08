@@ -439,6 +439,10 @@ namespace oox::ppt {
             mnTransitionSubType = TransitionSubType::FADEOVERCOLOR;
             mnTransitionFadeColor = static_cast<sal_Int32>(COL_WHITE);
             break;
+        case PPT_TOKEN(strips):
+            mnTransitionType = TransitionType::SLIDEWIPE;
+            mnTransitionSubType = ooxToOdpCornerDirections( param1 );
+            break;
         default:
             mnTransitionType = 0;
             break;
