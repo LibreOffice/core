@@ -32,6 +32,18 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         return OString(filename).endsWith(".docx");
     }
+
+    // We import OOXML's EMUs into integral mm100 internal representation, then export back into
+    // EMUs. This results in inaccuracies.
+    void assertXPathHasApproxEMU(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
+                                 const OString& rAttribute, sal_Int64 nAttributeVal)
+    {
+        OUString val = getXPath(pXmlDoc, rXPath, rAttribute);
+        // Use precision of 1/2 of 100th of mm, which is 180 EMU
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            OString("XPath: " + rXPath + "\nAttribute: " + rAttribute).getStr(), nAttributeVal,
+            val.toInt64(), 180);
+    }
 };
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
@@ -216,9 +228,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
             "val", "50000");
 
     // 4th shape with soft edge
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
-            "rad", "127000");
+    assertXPathHasApproxEMU(
+        pXmlDoc,
+        "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
+        "rad", 127000); // actually, it returns 127080
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge/*",
             0 ); // should not be present
@@ -246,13 +260,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-p
             0 ); // should not be present
 
     // 7th shape with several effects: glow, inner shadow and reflection
-    // We import glow radius (in EMU in OOXML) into integral mm100 internal representation, then
-    // export back into EMUs. This results in inaccuracies.
-    OUString rad = getXPath(pXmlDoc,
+    assertXPathHasApproxEMU(pXmlDoc,
                             "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
                             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
-                            "rad");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(63500, rad.toInt64(), 150); // actually, it returns 63360
+                            "rad", 63500); // actually, it returns 63360
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr",
             "val", "eb2722");
@@ -433,9 +444,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
             0 ); // should not be present
 
     // third picture: soft edge effect
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge",
-            "rad", "63500");
+    assertXPathHasApproxEMU(
+        pXmlDoc,
+        "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+        "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge",
+        "rad", 63500); // actually, it returns 63360
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artistic-effects-preservation.docx")

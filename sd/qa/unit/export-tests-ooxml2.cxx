@@ -196,6 +196,7 @@ public:
     void testTdf131554();
     void testTdf132282();
     void testTdf132201EffectOrder();
+    void testShapeSoftEdgeEffect();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
     CPPUNIT_TEST(testTdf132201EffectOrder);
+    CPPUNIT_TEST(testShapeSoftEdgeEffect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2913,6 +2915,20 @@ void SdOOXMLExportTest2::testTdf132201EffectOrder()
                                              "outerShdw"));
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testShapeSoftEdgeEffect()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-soft-edges.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+    bool bHasSoftEdges = false;
+    xShapeProps->getPropertyValue("SoftEdge") >>= bHasSoftEdges;
+    CPPUNIT_ASSERT(bHasSoftEdges);
+    sal_Int32 nRadius = -1;
+    xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

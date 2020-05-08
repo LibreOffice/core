@@ -1474,6 +1474,15 @@ Reference< XShape > const & Shape::createAndInsert(
             propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
             propertySet->setPropertyValue("GlowEffectTransparency", makeAny(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
+
+        // Set soft edge effect properties
+        if (aEffectProperties.maSoftEdge.moRad.has())
+        {
+            uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
+            propertySet->setPropertyValue("SoftEdge", makeAny(true));
+            propertySet->setPropertyValue(
+                "SoftEdgeRad", makeAny(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
+        }
     }
 
     if( mxShape.is() )

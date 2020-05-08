@@ -73,7 +73,7 @@ namespace sdr::properties
                     // Graphic attributes, 3D properties, CustomShape
                     // properties:
                     SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                    SDRATTR_GLOW_FIRST, SDRATTR_GLOW_LAST,
+                    SDRATTR_GLOW_FIRST, SDRATTR_SOFTEDGE_LAST,
                     // Range from SdrTextObj:
                     EE_ITEMS_START, EE_ITEMS_END>{});
         }

@@ -333,6 +333,9 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_GLOW_COLOR - SDRATTR_START ] = new XColorItem(SDRATTR_GLOW_COLOR, aNullCol);
     rPoolDefaults[ SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START ] = new SdrPercentItem(SDRATTR_GLOW_TRANSPARENCY, 0);
 
+    rPoolDefaults[SDRATTR_SOFTEDGE - SDRATTR_START] = new SdrOnOffItem(SDRATTR_SOFTEDGE, false);
+    rPoolDefaults[SDRATTR_SOFTEDGE_RAD - SDRATTR_START] = new SdrMetricItem(SDRATTR_SOFTEDGE_RAD, 0);
+
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_SHADOWCOLOR-SDRATTR_START]._nSID=SID_ATTR_SHADOW_COLOR;
@@ -351,6 +354,9 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_GLOW_RAD - SDRATTR_START]._nSID = SID_ATTR_GLOW_RADIUS;
     mpLocalItemInfos[SDRATTR_GLOW_COLOR - SDRATTR_START]._nSID = SID_ATTR_GLOW_COLOR;
     mpLocalItemInfos[SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START]._nSID = SID_ATTR_GLOW_TRANSPARENCY;
+
+    mpLocalItemInfos[SDRATTR_SOFTEDGE - SDRATTR_START]._nSID = SID_ATTR_SOFTEDGE;
+    mpLocalItemInfos[SDRATTR_SOFTEDGE_RAD - SDRATTR_START]._nSID = SID_ATTR_SOFTEDGE_RADIUS;
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);
@@ -462,6 +468,9 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_GLOW_RAD          : pResId = SIP_SA_GLOW_RAD;break;
         case SDRATTR_GLOW_COLOR        : pResId = SIP_SA_GLOW_COLOR;break;
         case SDRATTR_GLOW_TRANSPARENCY : pResId = SIP_SA_GLOW_TRANSPARENCY;break;
+
+        case SDRATTR_SOFTEDGE          : pResId = SIP_SA_SOFTEDGE; break;
+        case SDRATTR_SOFTEDGE_RAD      : pResId = SIP_SA_SOFTEDGE_RAD; break;
 
         case SDRATTR_CAPTIONTYPE      : pResId = SIP_SA_CAPTIONTYPE;break;
         case SDRATTR_CAPTIONFIXEDANGLE: pResId = SIP_SA_CAPTIONFIXEDANGLE;break;

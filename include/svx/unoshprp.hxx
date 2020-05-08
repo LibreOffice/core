@@ -215,6 +215,10 @@
     { OUString{"GlowEffectColor"},                SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { OUString{"GlowEffectTransparency"},         SDRATTR_GLOW_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0 },
 
+#define SOFTEDGE_PROPERTIES \
+    { OUString("SoftEdge"),                 SDRATTR_SOFTEDGE,           cppu::UnoType<bool>::get(),           0,      0}, \
+    { OUString{"SoftEdgeRad"},              SDRATTR_SOFTEDGE_RAD,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},
+
 #define SHADOW_PROPERTIES \
     { OUString(UNO_NAME_SHADOW),            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
     { OUString(UNO_NAME_SHADOWCOLOR),       SDRATTR_SHADOWCOLOR,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \

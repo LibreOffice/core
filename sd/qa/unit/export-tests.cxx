@@ -75,6 +75,7 @@ public:
     void testTdf113822();
     void testTdf126761();
     void testGlow();
+    void testSoftEdges();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testTdf113822);
     CPPUNIT_TEST(testTdf126761);
     CPPUNIT_TEST(testGlow);
+    CPPUNIT_TEST(testSoftEdges);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1303,6 +1305,40 @@ void SdExportTest::testGlow()
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
         "glow-transparency", "60%");
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testSoftEdges()
+{
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odg/softedges.odg"), ODG);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
+    auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+
+    // Check glow properties
+    bool bEffect = false;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdge") >>= bEffect);
+    CPPUNIT_ASSERT(bEffect);
+    sal_Int32 nRad = 0;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRad);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRad); // 18 pt
+
+    // Test ODF element
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
+
+    // check that we actually test graphic style
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
+                "family", "graphic");
+    // check loext graphic attributes
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "softedge", "visible");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "softedge-radius", "0.635cm");
 
     xDocShRef->DoClose();
 }

@@ -43,7 +43,7 @@
 #define XML_SD_TYPE_FILLSTYLE                       (XML_SD_TYPES_START +  9 )
 #define XML_SD_TYPE_GRADIENT                        (XML_SD_TYPES_START + 10 )
 #define XML_SD_TYPE_GRADIENT_STEPCOUNT              (XML_SD_TYPES_START + 11 )
-#define XML_SD_TYPE_SHADOW                          (XML_SD_TYPES_START + 12 )
+#define XML_SD_TYPE_VISIBLE_HIDDEN                  (XML_SD_TYPES_START + 12 )
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 13 )
 #define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 14 )
 #define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 15 )
@@ -68,7 +68,6 @@
 #define XML_SD_TYPE_IMAGE_SCALE_MODE                (XML_SD_TYPES_START + 34 )
 #define XML_SD_TYPE_LINECAP                         (XML_SD_TYPES_START + 35 )
 #define XML_SD_TYPE_FITTOSIZE_AUTOFIT               (XML_SD_TYPES_START + 36 )
-#define XML_SD_TYPE_GLOW                            (XML_SD_TYPES_START + 37 )
 
 //////////////////////////////////////////////////////////////////////////////
 // 3D property types
