@@ -1923,7 +1923,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    const bool bTableRowKeep = !bDontSplit && GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
+    const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
+    const bool bTableRowKeep = !bDontSplit && !bLargeTable &&
+                               GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
 
     // The Magic Move: Used for the table row keep feature.
     // If only the last row of the table wants to keep (implicitly by setting
@@ -1935,7 +1937,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     bool bLastRowHasToMoveToFollow = false;
     bool bLastRowMoveNoMoreTries = false;
 
-    const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
     const bool bEmulateTableKeep = !bLargeTable && bTableRowKeep && AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
     // The beloved keep attribute
     const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
@@ -2378,20 +2379,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // 3. The table is allowed to split or we do not have a pIndPrev:
         SwFrame* pIndPrev = GetIndPrev();
         const SwRowFrame* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
-        // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
-        // the table can not move forward as it is the first one and a split is in general allowed.
-        const bool bAllowSplitOfRow = ( bTableRowKeep &&
-                                        AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
-                                      !pIndPrev &&
-                                      !bDontSplit;
-        // tdf91083 MSCompat: this extends bAllowSplitOfRow (and perhaps should just replace it).
+
+        // tdf91083 #i120016# MSCompat: if this row wants to keep, allow split in case that all rows want to keep with next.
         // If the kept-together items cannot move to a new page, a table split is in general allowed.
         const bool bEmulateTableKeepSplitAllowed =  bEmulateTableKeep && !IsKeepFwdMoveAllowed(/*IgnoreMyOwnKeepValue=*/true);
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
              ( bEmulateTableKeepSplitAllowed ||
                ( ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() ||
-                   !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow
+                   !pFirstNonHeadlineRow->ShouldRowKeepWithNext()
                  ) && ( !bDontSplit || !pIndPrev )
            ) ) )
         {
@@ -2492,7 +2488,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed) ) );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, (bTableRowKeep && !bEmulateTableKeepSplitAllowed) );
                     if (!bTryToSplit && !bSplitError)
                     {
                         --nUnSplitted;
