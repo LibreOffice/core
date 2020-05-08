@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94e94303_c2840b90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "May be add Test Plan? You should be able to publish to local Maven repository and Maven Central?",
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e980ff2e_9c2ea273",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Remove this as well?",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1735588_9f1a118e",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Remove this as well?",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "676be287_e3d1b8d1",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Remove this as well?",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98208171_6e871ae2",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Remove this as well?",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 19
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e26f20ca_b11e89ba",
+        "filename": "solenv/bin/version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Same here, remove all items that you removed from the build?",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 84
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a50a3a_87b3183e",
+        "filename": "solenv/maven/mvn.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-08T17:42:16Z",
+      "side": 1,
+      "message": "Same here, remove all stuf that you removed from build. Basically search for every buck file, and remove removed stuff?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "540c9f44efa7958950a92d8203ea210970e0c3a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
