@@ -36,7 +36,7 @@
 #define USE_DOUBLE_MMAP
 #endif
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 /** Hand out vtable structures for interface type descriptions.
  */
@@ -217,7 +217,7 @@ private:
     rtl_arena_type * m_arena;
 };
 
-} } }
+}
 
 #endif
 

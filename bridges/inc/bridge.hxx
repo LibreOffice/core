@@ -30,7 +30,7 @@
 #include <uno/environment.h>
 #include <uno/mapping.h>
 
-namespace bridges { namespace cpp_uno { namespace shared {
+namespace bridges::cpp_uno::shared {
 
 // private:
 extern "C" void freeMapping(uno_Mapping *);
@@ -112,7 +112,7 @@ private:
         typelib_InterfaceTypeDescription * pTypeDescr);
 };
 
-} } }
+}
 
 #endif
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/media/XManager.hpp>
 
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
                                                css::lang::XServiceInfo >
@@ -47,7 +47,6 @@ private:
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 };
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

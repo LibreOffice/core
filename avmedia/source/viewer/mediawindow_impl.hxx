@@ -24,14 +24,14 @@
 
 #include <mediacontrol.hxx>
 
-namespace com { namespace sun { namespace star { namespace media {
+namespace com::sun::star::media {
     class XPlayer;
     class XPlayerWindow;
-}}}}
+}
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-}}}}
+}
 
 class BitmapEx;
 

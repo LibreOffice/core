@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace macavf {
+namespace avmedia::macavf {
 
 FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& /*rxMgr*/ )
 :   mpImageGen( nullptr )
@@ -101,7 +101,6 @@ uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
     return { AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME };
 }
 
-} // namespace macavf
-} // namespace avmedia
+} // namespace avmedia::macavf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
