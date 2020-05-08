@@ -710,7 +710,7 @@ darwin*) # macOS or iOS
         _os=Darwin
         INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
         INSTROOTCONTENTSUFFIX=/Contents
-        SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
+        SDKDIRNAME=${PRODUCTNAME}${PRODUCTVERSION}_SDK
     fi
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
