@@ -1121,7 +1121,7 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
-void setupSidebar(bool bShow, OUString sidebarDeckId = "")
+void setupSidebar(bool bShow, OUString sidebarDeckId = "", bool switchToDefault = false)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
@@ -1148,6 +1148,12 @@ void setupSidebar(bool bShow, OUString sidebarDeckId = "")
         {
             pDockingWin->GetSidebarController()->SwitchToDeck(sidebarDeckId);
         }
+        else
+        {
+            if (switchToDefault)
+                pDockingWin->GetSidebarController()->SwitchToDefaultDeck();
+        }
+
         pDockingWin->SyncUpdate();
     }
     else
@@ -3631,7 +3637,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    OUString sidebarDeckId = "PropertyDeck";
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
 
@@ -3765,13 +3770,16 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
     {
-        sidebarDeckId = "WriterPageDeck";
-        setupSidebar(true, sidebarDeckId);
+        setupSidebar(true, "WriterPageDeck");
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
-        setupSidebar(true, sidebarDeckId);
+        bool switchToDefault = false;
+        if (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
+            switchToDefault = true;
+
+        setupSidebar(true, "", switchToDefault);
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")
