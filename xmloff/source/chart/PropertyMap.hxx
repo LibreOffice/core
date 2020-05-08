@@ -25,6 +25,7 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/xmlement.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -154,6 +155,8 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     MAP_ENTRY_ODF_EXT( "LabelFillColor", LO_EXT, XML_LABEL_FILL_COLOR, XML_TYPE_COLOR ),
     MAP_ENTRY_ODF_EXT( "LabelFillStyle", LO_EXT, XML_LABEL_FILL, XML_SCH_TYPE_LABEL_FILL_STYLE ),
+    MAP_ENTRY_ODF_EXT( "LabelFillBackground", LO_EXT, XML_FILL_HATCH_SOLID, XML_TYPE_BOOL ),
+    MAP_ENTRY_ODF_EXT( "LabelFillHatchName", LO_EXT, XML_FILL_HATCH_NAME, XML_TYPE_STYLENAME),
 
     MAP_ENTRY( "ScaleText", CHART, XML_SCALE_TEXT, XML_TYPE_BOOL ),
 
