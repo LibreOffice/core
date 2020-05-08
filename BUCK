@@ -34,26 +34,23 @@ prebuilt_jar(
   visibility = ['PUBLIC'],
 )
 
+prebuilt_jar(
+  name = 'libreoffice',
+  binary_jar = 'instdir/program/classes/libreoffice.jar',
+  visibility = ['PUBLIC'],
+)
+
 zip_file(
   name = 'api',
   srcs = [
-   ':juh',
-   '//javaunohelper:juh-src',
-   '//javaunohelper:juh-javadoc',
-   ':jurt',
-   '//jurt:jurt-src',
-   '//jurt:jurt-javadoc',
    ':officebean',
    '//bean:officebean-src',
    '//bean:officebean-javadoc',
-   ':ridl',
-   '//ridljar:ridl-src',
-   '//ridljar:ridl-javadoc',
-   ':unoil',
-   '//unoil:unoil-src',
-   '//unoil:unoil-javadoc',
    ':unoloader',
    '//ridljar/source/unoloader:unoloader-src',
    '//ridljar/source/unoloader:unoloader-javadoc',
+   ':libreoffice',
+   '//ridljar/:libreoffice-src',
+   '//ridljar/:libreoffice-javadoc',
   ]
 )
