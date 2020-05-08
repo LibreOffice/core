@@ -527,10 +527,10 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
     return true;
 }
 
-bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rInf,
-        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const
+bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
+        OUString & rOutString, SwFont & rFont, int & rDeltaY) const
 {
-    if (!rInf.GetOpt().IsShowBookmarks())
+    if (!rTextPaintInfo.GetOpt().IsShowBookmarks())
     {
         return false;
     }
@@ -539,30 +539,30 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rInf,
 
     // init font: we want OpenSymbol to ensure it doesn't look too crazy;
     // thin and a bit higher than the surrounding text
-    auto const nOrigAscent(rTmpFont.GetAscent(rInf.GetVsh(), *rInf.GetOut()));
-    rTmpFont.SetName("OpenSymbol", rTmpFont.GetActual());
-    Size size(rTmpFont.GetSize(rTmpFont.GetActual()));
+    auto const nOrigAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
+    rFont.SetName("OpenSymbol", rFont.GetActual());
+    Size aSize(rFont.GetSize(rFont.GetActual()));
     // use also the external leading (line gap) of the portion, but don't use
     // 100% of it because i can't figure out how to baseline align that
-    auto const nFactor = (Height() * 95) / size.Height();
-    rTmpFont.SetProportion(nFactor);
-    rTmpFont.SetWeight(WEIGHT_THIN, rTmpFont.GetActual());
-    rTmpFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
+    auto const nFactor = (Height() * 95) / aSize.Height();
+    rFont.SetProportion(nFactor);
+    rFont.SetWeight(WEIGHT_THIN, rFont.GetActual());
+    rFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
     // reset these to default...
-    rTmpFont.SetAlign(ALIGN_BASELINE);
-    rTmpFont.SetUnderline(LINESTYLE_NONE);
-    rTmpFont.SetOverline(LINESTYLE_NONE);
-    rTmpFont.SetStrikeout(STRIKEOUT_NONE);
-    rTmpFont.SetOutline(false);
-    rTmpFont.SetShadow(false);
-    rTmpFont.SetTransparent(false);
-    rTmpFont.SetEmphasisMark(FontEmphasisMark::NONE);
-    rTmpFont.SetEscapement(0);
-    rTmpFont.SetPitch(PITCH_DONTKNOW, rTmpFont.GetActual());
-    rTmpFont.SetRelief(FontRelief::NONE);
+    rFont.SetAlign(ALIGN_BASELINE);
+    rFont.SetUnderline(LINESTYLE_NONE);
+    rFont.SetOverline(LINESTYLE_NONE);
+    rFont.SetStrikeout(STRIKEOUT_NONE);
+    rFont.SetOutline(false);
+    rFont.SetShadow(false);
+    rFont.SetTransparent(false);
+    rFont.SetEmphasisMark(FontEmphasisMark::NONE);
+    rFont.SetEscapement(0);
+    rFont.SetPitch(PITCH_DONTKNOW, rFont.GetActual());
+    rFont.SetRelief(FontRelief::NONE);
 
     // adjust Y position to account for different baselines of the fonts
-    auto const nOSAscent(rTmpFont.GetAscent(rInf.GetVsh(), *rInf.GetOut()));
+    auto const nOSAscent(rFont.GetAscent(rTextPaintInfo.GetVsh(), *rTextPaintInfo.GetOut()));
     rDeltaY = nOSAscent - nOrigAscent;
 
     return true;
