@@ -35,6 +35,52 @@ protected:
     }
 };
 
+<<<<<<< HEAD   (acc1bd tdf#127167 Do not reset Draw/Impress page size)
+=======
+DECLARE_OOXMLIMPORT_TEST(Tdf130907, "tdf130907.docx")
+{
+    uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
+    CPPUNIT_ASSERT(xPara1.is());
+    uno::Reference<beans::XPropertySet> xFormula1Props(xPara1, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFormula1Props.is());
+    sal_Int16 nHOri1;
+    xFormula1Props->getPropertyValue("ParaAdjust") >>= nHOri1;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not left!",
+        sal_Int16(style::ParagraphAdjust::ParagraphAdjust_LEFT), nHOri1);
+
+    uno::Reference<text::XTextRange> xPara2 = getParagraph(3);
+    CPPUNIT_ASSERT(xPara2.is());
+    uno::Reference<beans::XPropertySet> xFormula2Props(xPara2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFormula2Props.is());
+    sal_Int16 nHOri2;
+    xFormula2Props->getPropertyValue("ParaAdjust") >>= nHOri2;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not center!",
+        sal_Int16(style::ParagraphAdjust::ParagraphAdjust_CENTER), nHOri2);
+
+    uno::Reference<text::XTextRange> xPara3 = getParagraph(5);
+    CPPUNIT_ASSERT(xPara3.is());
+    uno::Reference<beans::XPropertySet> xFormula3Props(xPara3, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFormula3Props.is());
+    sal_Int16 nHOri3;
+    xFormula3Props->getPropertyValue("ParaAdjust") >>= nHOri3;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not right!",
+        sal_Int16(style::ParagraphAdjust::ParagraphAdjust_RIGHT), nHOri3);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
+{
+    uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
+    sal_Int16 nRelativePosR = 0;
+    XPropsRight->getPropertyValue("HoriOrientRelation")>>=nRelativePosR;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(4), nRelativePosR);
+
+    uno::Reference<beans::XPropertySet> XPropsLeft(getShape(2), uno::UNO_QUERY);
+    sal_Int16 nRelativePosL = 0;
+    XPropsLeft->getPropertyValue("HoriOrientRelation") >>= nRelativePosL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(3), nRelativePosL);
+}
+
+>>>>>>> CHANGE (52442a tdf#123622 DOCX VML import: fix relative horizontal alignmen)
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
