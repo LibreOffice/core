@@ -1085,6 +1085,33 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "SortDescending" ||
              aEvent.FeatureURL.Path == "AcceptAllTrackedChanges" ||
              aEvent.FeatureURL.Path == "RejectAllTrackedChanges" ||
+             aEvent.FeatureURL.Path == "AcceptTrackedChange" ||
+             aEvent.FeatureURL.Path == "RejectTrackedChange" ||
+             aEvent.FeatureURL.Path == "NextTrackedChange" ||
+             aEvent.FeatureURL.Path == "PreviousTrackedChange" ||
+             aEvent.FeatureURL.Path == "FormatGroup" ||
+             aEvent.FeatureURL.Path == "ObjectBackOne" ||
+             aEvent.FeatureURL.Path == "SendToBack" ||
+             aEvent.FeatureURL.Path == "ObjectForwardOne" ||
+             aEvent.FeatureURL.Path == "BringToFront" ||
+             aEvent.FeatureURL.Path == "WrapRight" ||
+             aEvent.FeatureURL.Path == "WrapThrough" ||
+             aEvent.FeatureURL.Path == "WrapLeft" ||
+             aEvent.FeatureURL.Path == "WrapIdeal" ||
+             aEvent.FeatureURL.Path == "WrapOn" ||
+             aEvent.FeatureURL.Path == "WrapOff" ||
+             aEvent.FeatureURL.Path == "UpdateCurIndex" ||
+             aEvent.FeatureURL.Path == "InsertCaptionDialog" ||
+             aEvent.FeatureURL.Path == "MergeCells" ||
+             aEvent.FeatureURL.Path == "SplitTable" ||
+             aEvent.FeatureURL.Path == "DeleteNote" ||
+             aEvent.FeatureURL.Path == "AcceptChanges" ||
+             aEvent.FeatureURL.Path == "FormatPaintbrush" ||
+             aEvent.FeatureURL.Path == "SetDefault" ||
+             aEvent.FeatureURL.Path == "ParaLeftToRight" ||
+             aEvent.FeatureURL.Path == "ParaRightToLeft" ||
+             aEvent.FeatureURL.Path == "ParaspaceIncrease" ||
+             aEvent.FeatureURL.Path == "ParaspaceDecrease" ||
              aEvent.FeatureURL.Path == "TableDialog" ||
              aEvent.FeatureURL.Path == "FormatCellDialog" ||
              aEvent.FeatureURL.Path == "FontDialog" ||
