@@ -82,6 +82,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString listId;
     OUString listStyle;
     {
@@ -115,6 +116,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString listId;
     OUString listStyle;
     {
@@ -180,6 +182,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString listId;
     OUString listStyle;
     // Lists with override
@@ -257,11 +260,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "HeaderText");
     CPPUNIT_ASSERT_EQUAL( OUString("General header"), xHeaderText->getString());
@@ -278,6 +283,7 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
@@ -288,6 +294,7 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -304,6 +311,7 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
     // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
@@ -326,6 +334,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscript_charStyleSize.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     // The word "Base" should not be subscripted.
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
@@ -335,6 +344,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_subscript_charStyleSize, "tdf99602_subscri
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSubscript.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     // The word "Base" should not be subscripted.
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
@@ -345,6 +355,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSubscript2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
     // subscript custom: Proportional size is 80%, lower by 25%.
@@ -357,6 +368,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSu
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124637_sectionMargin, "tdf124637_sectionMargin.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // sections 0 and 1 must be related to footnotes...
@@ -405,6 +417,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
@@ -438,6 +451,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=1 (no goofy exception)
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
@@ -455,6 +469,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
 
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -470,6 +485,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
 
 DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // <wp:anchor allowOverlap="0"> was lost on roundtrip, we always wrote "1" on export.
     bool bAllowOverlap1 = getProperty<bool>(getShape(1), "AllowOverlap");
     CPPUNIT_ASSERT(!bAllowOverlap1);
@@ -479,6 +495,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
     if (!mbExported)
@@ -525,6 +542,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
     // Without the accompanying fix in place, this test would have failed with
@@ -534,6 +552,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 2; Actual  : 0', i.e. the first paragraph's ParaAdjust was
     // left, not block.
@@ -554,6 +573,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -582,6 +602,7 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
@@ -592,6 +613,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the table width is 4000
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tblPr/w:tblW", "w", "4000");
@@ -599,6 +621,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameSizeExport, "floating-tables-anchor
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Visibility of shapes wasn't imported/exported, for now base printable property on that, too
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, "Visible"));
@@ -613,6 +636,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed, as the portion text was
     // only "Er horte leise Schritte hinter", which means the 1st line of the 2nd paragraph was
@@ -623,6 +647,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextInput, "textinput.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -714,6 +739,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
 //tdf#125298: fix charlimit restrictions in bookmarknames and field references if they contain non-ascii characters
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125298, "tdf125298_crossreflink_nonascii_charlimit.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // check whether test file keeps non-ascii values or not
     OUString bookmarkName1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart[1]", "name");
@@ -748,6 +774,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
@@ -771,6 +798,7 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119037, "tdf119037.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -827,6 +855,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119037, "tdf119037.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     auto checkAttrIsInt = [&](const OString& sAttrName) {
@@ -852,6 +881,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     discardDumpedLayout();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
@@ -859,6 +889,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc || !pXmlRels)
@@ -870,6 +901,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // Without the accompanying fix in place, this test would have failed with 'Expected:
@@ -880,6 +912,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125518, "tdf125518.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -902,6 +935,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125518, "tdf125518.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"),
                          getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
@@ -919,6 +953,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131594, "tdf131594.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // lnNumType should not be exported if w:countBy="0"
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:lnNumType", 0);
@@ -926,6 +961,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131594, "tdf131594.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // auto distance of line numbering is 0.5 cm
     assertXPath(pXmlDoc, "//w:lnNumType", "distance", "283");
@@ -933,6 +969,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1010,6 +1047,7 @@ DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
 
 DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Fill transparency was lost during export
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
@@ -1017,6 +1055,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf127085, "tdf127085.docx")
 
 DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Combobox without an item list lost during import
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
@@ -1027,6 +1066,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
 
 DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Unicode characters were converted to question marks.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
@@ -1037,6 +1077,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127116, "tdf127116.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -1047,6 +1088,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127116, "tdf127116.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
     if (!pXmlRels)
         return;
@@ -1056,6 +1098,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
@@ -1069,6 +1112,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
@@ -1078,6 +1122,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:bookmarkStart", "name");
@@ -1087,6 +1132,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -1097,6 +1143,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127734, "internal_hyperlink_region.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
@@ -1106,6 +1153,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127734, "internal_hyperlink_region.od
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127735, "internal_hyperlink_table.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:bookmarkStart", "name");
@@ -1115,6 +1163,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127735, "internal_hyperlink_table.odt
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123628, "tdf123628.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
@@ -1127,6 +1176,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123628, "tdf123628.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara,1), uno::UNO_QUERY);
     OUString unVisitedStyleName = getProperty<OUString>(xRun, "UnvisitedCharStyleName");
@@ -1137,6 +1187,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
         return;
@@ -1146,12 +1197,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127579, "tdf127579.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;
     uno::Reference<beans::XPropertySet> xProps1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);
