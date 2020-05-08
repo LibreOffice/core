@@ -44,7 +44,7 @@ protected:
     }
 };
 
-DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
+DECLARE_OOXMLIMPORT_TEST(Tdf130907, "tdf130907.docx")
 {
     uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
     CPPUNIT_ASSERT(xPara1.is());
@@ -72,6 +72,19 @@ DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
     xFormula3Props->getPropertyValue("ParaAdjust") >>= nHOri3;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not right!",
         sal_Int16(style::ParagraphAdjust::ParagraphAdjust_RIGHT), nHOri3);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
+{
+    uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
+    sal_Int16 nRelativePosR = 0;
+    XPropsRight->getPropertyValue("HoriOrientRelation")>>=nRelativePosR;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(4), nRelativePosR);
+
+    uno::Reference<beans::XPropertySet> XPropsLeft(getShape(2), uno::UNO_QUERY);
+    sal_Int16 nRelativePosL = 0;
+    XPropsLeft->getPropertyValue("HoriOrientRelation") >>= nRelativePosL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape inside the margin", sal_Int16(3), nRelativePosL);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
