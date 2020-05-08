@@ -352,8 +352,82 @@
 		BE82C42418C86E010050EB79 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
 		BE82C42518C86E010050EB79 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
 		BE82C42618C86E010050EB79 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
+		BEBF3E2D246588AE00415E87 /* salinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salinit.cxx; path = ../sal/osl/unx/salinit.cxx; sourceTree = "<group>"; };
+		BEBF3E2E246588AE00415E87 /* module.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = module.cxx; path = ../sal/osl/unx/module.cxx; sourceTree = "<group>"; };
+		BEBF3E2F246588AE00415E87 /* unixerrnostring.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unixerrnostring.hxx; path = ../sal/osl/unx/unixerrnostring.hxx; sourceTree = "<group>"; };
+		BEBF3E30246588AE00415E87 /* file_url.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = file_url.hxx; path = ../sal/osl/unx/file_url.hxx; sourceTree = "<group>"; };
+		BEBF3E31246588AE00415E87 /* file_path_helper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_path_helper.cxx; path = ../sal/osl/unx/file_path_helper.cxx; sourceTree = "<group>"; };
+		BEBF3E32246588AE00415E87 /* interlck.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interlck.cxx; path = ../sal/osl/unx/interlck.cxx; sourceTree = "<group>"; };
+		BEBF3E33246588AE00415E87 /* file_error_transl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = file_error_transl.hxx; path = ../sal/osl/unx/file_error_transl.hxx; sourceTree = "<group>"; };
+		BEBF3E34246588AE00415E87 /* process_impl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = process_impl.cxx; path = ../sal/osl/unx/process_impl.cxx; sourceTree = "<group>"; };
+		BEBF3E35246588AE00415E87 /* file_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = file_impl.hxx; path = ../sal/osl/unx/file_impl.hxx; sourceTree = "<group>"; };
+		BEBF3E36246588AE00415E87 /* sockimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sockimpl.hxx; path = ../sal/osl/unx/sockimpl.hxx; sourceTree = "<group>"; };
+		BEBF3E37246588AE00415E87 /* backtrace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = backtrace.h; path = ../sal/osl/unx/backtrace.h; sourceTree = "<group>"; };
+		BEBF3E38246588AE00415E87 /* file_path_helper.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = file_path_helper.hxx; path = ../sal/osl/unx/file_path_helper.hxx; sourceTree = "<group>"; };
+		BEBF3E39246588AE00415E87 /* process.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = process.cxx; path = ../sal/osl/unx/process.cxx; sourceTree = "<group>"; };
+		BEBF3E3A246588AE00415E87 /* soffice.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = soffice.hxx; path = ../sal/osl/unx/soffice.hxx; sourceTree = "<group>"; };
+		BEBF3E3B246588AE00415E87 /* osxlocale.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = osxlocale.cxx; path = ../sal/osl/unx/osxlocale.cxx; sourceTree = "<group>"; };
+		BEBF3E3C246588AE00415E87 /* createfilehandlefromfd.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = createfilehandlefromfd.hxx; path = ../sal/osl/unx/createfilehandlefromfd.hxx; sourceTree = "<group>"; };
+		BEBF3E3D246588AE00415E87 /* file_stat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_stat.cxx; path = ../sal/osl/unx/file_stat.cxx; sourceTree = "<group>"; };
+		BEBF3E3E246588AE00415E87 /* readwrite_helper.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = readwrite_helper.hxx; path = ../sal/osl/unx/readwrite_helper.hxx; sourceTree = "<group>"; };
+		BEBF3E3F246588AE00415E87 /* file_error_transl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_error_transl.cxx; path = ../sal/osl/unx/file_error_transl.cxx; sourceTree = "<group>"; };
+		BEBF3E40246588AE00415E87 /* backtraceapi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = backtraceapi.cxx; path = ../sal/osl/unx/backtraceapi.cxx; sourceTree = "<group>"; };
+		BEBF3E41246588AE00415E87 /* system.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = system.cxx; path = ../sal/osl/unx/system.cxx; sourceTree = "<group>"; };
+		BEBF3E42246588AE00415E87 /* nlsupport.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = nlsupport.hxx; path = ../sal/osl/unx/nlsupport.hxx; sourceTree = "<group>"; };
+		BEBF3E43246588AE00415E87 /* mutex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mutex.cxx; path = ../sal/osl/unx/mutex.cxx; sourceTree = "<group>"; };
+		BEBF3E44246588AE00415E87 /* nlsupport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nlsupport.cxx; path = ../sal/osl/unx/nlsupport.cxx; sourceTree = "<group>"; };
+		BEBF3E45246588AE00415E87 /* file_volume.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_volume.cxx; path = ../sal/osl/unx/file_volume.cxx; sourceTree = "<group>"; };
+		BEBF3E46246588AE00415E87 /* time.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = time.cxx; path = ../sal/osl/unx/time.cxx; sourceTree = "<group>"; };
+		BEBF3E47246588AE00415E87 /* memory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = memory.cxx; path = ../sal/osl/unx/memory.cxx; sourceTree = "<group>"; };
+		BEBF3E48246588AF00415E87 /* conditn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = conditn.cxx; path = ../sal/osl/unx/conditn.cxx; sourceTree = "<group>"; };
+		BEBF3E49246588AF00415E87 /* saltime.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = saltime.hxx; path = ../sal/osl/unx/saltime.hxx; sourceTree = "<group>"; };
+		BEBF3E4A246588AF00415E87 /* signal.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = signal.cxx; path = ../sal/osl/unx/signal.cxx; sourceTree = "<group>"; };
+		BEBF3E4B246588AF00415E87 /* uunxapi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uunxapi.cxx; path = ../sal/osl/unx/uunxapi.cxx; sourceTree = "<group>"; };
+		BEBF3E4C246588AF00415E87 /* uunxapi.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = uunxapi.hxx; path = ../sal/osl/unx/uunxapi.hxx; sourceTree = "<group>"; };
+		BEBF3E4D246588AF00415E87 /* system.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = system.mm; path = ../sal/osl/unx/system.mm; sourceTree = "<group>"; };
+		BEBF3E4E246588AF00415E87 /* file_url.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_url.cxx; path = ../sal/osl/unx/file_url.cxx; sourceTree = "<group>"; };
+		BEBF3E4F246588AF00415E87 /* readwrite_helper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = readwrite_helper.cxx; path = ../sal/osl/unx/readwrite_helper.cxx; sourceTree = "<group>"; };
+		BEBF3E50246588AF00415E87 /* uunxapi.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = uunxapi.mm; path = ../sal/osl/unx/uunxapi.mm; sourceTree = "<group>"; };
+		BEBF3E51246588AF00415E87 /* backtrace.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = backtrace.c; path = ../sal/osl/unx/backtrace.c; sourceTree = "<group>"; };
+		BEBF3E52246588AF00415E87 /* tempfile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tempfile.cxx; path = ../sal/osl/unx/tempfile.cxx; sourceTree = "<group>"; };
+		BEBF3E53246588AF00415E87 /* security.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = security.cxx; path = ../sal/osl/unx/security.cxx; sourceTree = "<group>"; };
+		BEBF3E54246588AF00415E87 /* file_misc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file_misc.cxx; path = ../sal/osl/unx/file_misc.cxx; sourceTree = "<group>"; };
+		BEBF3E55246588AF00415E87 /* profile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = profile.cxx; path = ../sal/osl/unx/profile.cxx; sourceTree = "<group>"; };
+		BEBF3E56246588AF00415E87 /* random.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = random.cxx; path = ../sal/osl/unx/random.cxx; sourceTree = "<group>"; };
+		BEBF3E57246588AF00415E87 /* thread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = thread.cxx; path = ../sal/osl/unx/thread.cxx; sourceTree = "<group>"; };
+		BEBF3E58246588AF00415E87 /* file.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../sal/osl/unx/file.cxx; sourceTree = "<group>"; };
+		BEBF3E59246588AF00415E87 /* socket.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = socket.cxx; path = ../sal/osl/unx/socket.cxx; sourceTree = "<group>"; };
+		BEBF3E5A246588AF00415E87 /* system.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = system.hxx; path = ../sal/osl/unx/system.hxx; sourceTree = "<group>"; };
+		BEBF3E5B246588AF00415E87 /* secimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = secimpl.hxx; path = ../sal/osl/unx/secimpl.hxx; sourceTree = "<group>"; };
+		BEBF3E5C246588AF00415E87 /* pipe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pipe.cxx; path = ../sal/osl/unx/pipe.cxx; sourceTree = "<group>"; };
+		BEBF3E5D246588B000415E87 /* soffice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = soffice.cxx; path = ../sal/osl/unx/soffice.cxx; sourceTree = "<group>"; };
+		BEBF3E5F246588D100415E87 /* loadmodulerelative.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = loadmodulerelative.cxx; path = ../sal/osl/all/loadmodulerelative.cxx; sourceTree = "<group>"; };
+		BEBF3E60246588D100415E87 /* debugbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = debugbase.cxx; path = ../sal/osl/all/debugbase.cxx; sourceTree = "<group>"; };
+		BEBF3E61246588D100415E87 /* filepath.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filepath.cxx; path = ../sal/osl/all/filepath.cxx; sourceTree = "<group>"; };
+		BEBF3E62246588D100415E87 /* log.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = log.cxx; path = ../sal/osl/all/log.cxx; sourceTree = "<group>"; };
+		BEBF3E63246588D100415E87 /* utility.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utility.cxx; path = ../sal/osl/all/utility.cxx; sourceTree = "<group>"; };
+		BEBF3E64246588D100415E87 /* signalshared.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = signalshared.cxx; path = ../sal/osl/all/signalshared.cxx; sourceTree = "<group>"; };
+		BEBF3E65246588D100415E87 /* compat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = compat.cxx; path = ../sal/osl/all/compat.cxx; sourceTree = "<group>"; };
+		BEBF3E69246590A500415E87 /* redlndlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = redlndlg.cxx; path = ../sw/source/uibase/misc/redlndlg.cxx; sourceTree = "<group>"; };
+		BEBF3E6A246590A500415E87 /* swruler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = swruler.cxx; path = ../sw/source/uibase/misc/swruler.cxx; sourceTree = "<group>"; };
+		BEBF3E6B246590A500415E87 /* numberingtypelistbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = numberingtypelistbox.cxx; path = ../sw/source/uibase/misc/numberingtypelistbox.cxx; sourceTree = "<group>"; };
+		BEBF3E6C246590A500415E87 /* glosdoc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glosdoc.cxx; path = ../sw/source/uibase/misc/glosdoc.cxx; sourceTree = "<group>"; };
+		BEBF3E6D246590A500415E87 /* glshell.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glshell.cxx; path = ../sw/source/uibase/misc/glshell.cxx; sourceTree = "<group>"; };
+		BEBF3E70246593C700415E87 /* pgfnote.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pgfnote.cxx; path = ../sw/source/ui/misc/pgfnote.cxx; sourceTree = "<group>"; };
+		BEBF3E71246593C700415E87 /* titlepage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = titlepage.cxx; path = ../sw/source/ui/misc/titlepage.cxx; sourceTree = "<group>"; };
+		BEBF3E72246593C700415E87 /* srtdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = srtdlg.cxx; path = ../sw/source/ui/misc/srtdlg.cxx; sourceTree = "<group>"; };
+		BEBF3E73246593C700415E87 /* glosbib.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glosbib.cxx; path = ../sw/source/ui/misc/glosbib.cxx; sourceTree = "<group>"; };
+		BEBF3E74246593C700415E87 /* bookmark.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bookmark.cxx; path = ../sw/source/ui/misc/bookmark.cxx; sourceTree = "<group>"; };
+		BEBF3E75246593C700415E87 /* linenum.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linenum.cxx; path = ../sw/source/ui/misc/linenum.cxx; sourceTree = "<group>"; };
+		BEBF3E76246593C700415E87 /* num.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = num.cxx; path = ../sw/source/ui/misc/num.cxx; sourceTree = "<group>"; };
+		BEBF3E77246593C700415E87 /* glossary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glossary.cxx; path = ../sw/source/ui/misc/glossary.cxx; sourceTree = "<group>"; };
+		BEBF3E78246593C700415E87 /* insfnote.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = insfnote.cxx; path = ../sw/source/ui/misc/insfnote.cxx; sourceTree = "<group>"; };
+		BEBF3E79246593C700415E87 /* outline.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outline.cxx; path = ../sw/source/ui/misc/outline.cxx; sourceTree = "<group>"; };
+		BEBF3E7A246593C700415E87 /* impfnote.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = impfnote.hxx; path = ../sw/source/ui/misc/impfnote.hxx; sourceTree = "<group>"; };
+		BEBF3E7B246593C700415E87 /* docfnote.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docfnote.cxx; path = ../sw/source/ui/misc/docfnote.cxx; sourceTree = "<group>"; };
+		BEBF3E7C246593C700415E87 /* swmodalredlineacceptdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = swmodalredlineacceptdlg.cxx; path = ../sw/source/ui/misc/swmodalredlineacceptdlg.cxx; sourceTree = "<group>"; };
+		BEBF3E7D246593C700415E87 /* pggrid.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pggrid.cxx; path = ../sw/source/ui/misc/pggrid.cxx; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
-		BECB749D17189A3B001BEB85 /* crsrsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crsrsh.cxx; path = ../sw/source/core/crsr/crsrsh.cxx; sourceTree = "<group>"; };
 		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
 		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
 		BEDCC8BB2459A10600FB02BD /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
@@ -615,14 +689,6 @@
 				BE2DAD27182FAB5200A4D2F7 /* wrkwin.cxx */,
 			);
 			name = window;
-			sourceTree = "<group>";
-		};
-		BE2DAD28182FAB7900A4D2F7 /* sw */ = {
-			isa = PBXGroup;
-			children = (
-				BECB749D17189A3B001BEB85 /* crsrsh.cxx */,
-			);
-			name = sw;
 			sourceTree = "<group>";
 		};
 		BE2DAD29182FABD200A4D2F7 /* quartz */ = {
@@ -912,18 +978,164 @@
 			name = control;
 			sourceTree = "<group>";
 		};
+		BEBF3E2A2465886A00415E87 /* sal */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E2B2465888500415E87 /* osl */,
+			);
+			name = sal;
+			sourceTree = "<group>";
+		};
+		BEBF3E2B2465888500415E87 /* osl */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E5E246588B800415E87 /* all */,
+				BEBF3E2C2465888C00415E87 /* unx */,
+			);
+			name = osl;
+			sourceTree = "<group>";
+		};
+		BEBF3E2C2465888C00415E87 /* unx */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E51246588AF00415E87 /* backtrace.c */,
+				BEBF3E37246588AE00415E87 /* backtrace.h */,
+				BEBF3E40246588AE00415E87 /* backtraceapi.cxx */,
+				BEBF3E48246588AF00415E87 /* conditn.cxx */,
+				BEBF3E3C246588AE00415E87 /* createfilehandlefromfd.hxx */,
+				BEBF3E3F246588AE00415E87 /* file_error_transl.cxx */,
+				BEBF3E33246588AE00415E87 /* file_error_transl.hxx */,
+				BEBF3E35246588AE00415E87 /* file_impl.hxx */,
+				BEBF3E54246588AF00415E87 /* file_misc.cxx */,
+				BEBF3E31246588AE00415E87 /* file_path_helper.cxx */,
+				BEBF3E38246588AE00415E87 /* file_path_helper.hxx */,
+				BEBF3E3D246588AE00415E87 /* file_stat.cxx */,
+				BEBF3E4E246588AF00415E87 /* file_url.cxx */,
+				BEBF3E30246588AE00415E87 /* file_url.hxx */,
+				BEBF3E45246588AE00415E87 /* file_volume.cxx */,
+				BEBF3E58246588AF00415E87 /* file.cxx */,
+				BEBF3E32246588AE00415E87 /* interlck.cxx */,
+				BEBF3E47246588AE00415E87 /* memory.cxx */,
+				BEBF3E2E246588AE00415E87 /* module.cxx */,
+				BEBF3E43246588AE00415E87 /* mutex.cxx */,
+				BEBF3E44246588AE00415E87 /* nlsupport.cxx */,
+				BEBF3E42246588AE00415E87 /* nlsupport.hxx */,
+				BEBF3E3B246588AE00415E87 /* osxlocale.cxx */,
+				BEBF3E5C246588AF00415E87 /* pipe.cxx */,
+				BEBF3E34246588AE00415E87 /* process_impl.cxx */,
+				BEBF3E39246588AE00415E87 /* process.cxx */,
+				BEBF3E55246588AF00415E87 /* profile.cxx */,
+				BEBF3E56246588AF00415E87 /* random.cxx */,
+				BEBF3E4F246588AF00415E87 /* readwrite_helper.cxx */,
+				BEBF3E3E246588AE00415E87 /* readwrite_helper.hxx */,
+				BEBF3E2D246588AE00415E87 /* salinit.cxx */,
+				BEBF3E49246588AF00415E87 /* saltime.hxx */,
+				BEBF3E5B246588AF00415E87 /* secimpl.hxx */,
+				BEBF3E53246588AF00415E87 /* security.cxx */,
+				BEBF3E4A246588AF00415E87 /* signal.cxx */,
+				BEBF3E59246588AF00415E87 /* socket.cxx */,
+				BEBF3E36246588AE00415E87 /* sockimpl.hxx */,
+				BEBF3E5D246588B000415E87 /* soffice.cxx */,
+				BEBF3E3A246588AE00415E87 /* soffice.hxx */,
+				BEBF3E41246588AE00415E87 /* system.cxx */,
+				BEBF3E5A246588AF00415E87 /* system.hxx */,
+				BEBF3E4D246588AF00415E87 /* system.mm */,
+				BEBF3E52246588AF00415E87 /* tempfile.cxx */,
+				BEBF3E57246588AF00415E87 /* thread.cxx */,
+				BEBF3E46246588AE00415E87 /* time.cxx */,
+				BEBF3E2F246588AE00415E87 /* unixerrnostring.hxx */,
+				BEBF3E4B246588AF00415E87 /* uunxapi.cxx */,
+				BEBF3E4C246588AF00415E87 /* uunxapi.hxx */,
+				BEBF3E50246588AF00415E87 /* uunxapi.mm */,
+			);
+			name = unx;
+			sourceTree = "<group>";
+		};
+		BEBF3E5E246588B800415E87 /* all */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E65246588D100415E87 /* compat.cxx */,
+				BEBF3E60246588D100415E87 /* debugbase.cxx */,
+				BEBF3E61246588D100415E87 /* filepath.cxx */,
+				BEBF3E5F246588D100415E87 /* loadmodulerelative.cxx */,
+				BEBF3E62246588D100415E87 /* log.cxx */,
+				BEBF3E64246588D100415E87 /* signalshared.cxx */,
+				BEBF3E63246588D100415E87 /* utility.cxx */,
+			);
+			name = all;
+			sourceTree = "<group>";
+		};
+		BEBF3E662465907000415E87 /* sw */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E6E246593A300415E87 /* ui */,
+				BEBF3E672465907D00415E87 /* uibase */,
+			);
+			name = sw;
+			sourceTree = "<group>";
+		};
+		BEBF3E672465907D00415E87 /* uibase */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E682465908300415E87 /* misc */,
+			);
+			name = uibase;
+			sourceTree = "<group>";
+		};
+		BEBF3E682465908300415E87 /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E6C246590A500415E87 /* glosdoc.cxx */,
+				BEBF3E6D246590A500415E87 /* glshell.cxx */,
+				BEBF3E6B246590A500415E87 /* numberingtypelistbox.cxx */,
+				BEBF3E69246590A500415E87 /* redlndlg.cxx */,
+				BEBF3E6A246590A500415E87 /* swruler.cxx */,
+			);
+			name = misc;
+			sourceTree = "<group>";
+		};
+		BEBF3E6E246593A300415E87 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E6F246593AD00415E87 /* misc */,
+			);
+			name = ui;
+			sourceTree = "<group>";
+		};
+		BEBF3E6F246593AD00415E87 /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E74246593C700415E87 /* bookmark.cxx */,
+				BEBF3E7B246593C700415E87 /* docfnote.cxx */,
+				BEBF3E73246593C700415E87 /* glosbib.cxx */,
+				BEBF3E77246593C700415E87 /* glossary.cxx */,
+				BEBF3E7A246593C700415E87 /* impfnote.hxx */,
+				BEBF3E78246593C700415E87 /* insfnote.cxx */,
+				BEBF3E75246593C700415E87 /* linenum.cxx */,
+				BEBF3E76246593C700415E87 /* num.cxx */,
+				BEBF3E79246593C700415E87 /* outline.cxx */,
+				BEBF3E70246593C700415E87 /* pgfnote.cxx */,
+				BEBF3E7D246593C700415E87 /* pggrid.cxx */,
+				BEBF3E72246593C700415E87 /* srtdlg.cxx */,
+				BEBF3E7C246593C700415E87 /* swmodalredlineacceptdlg.cxx */,
+				BEBF3E71246593C700415E87 /* titlepage.cxx */,
+			);
+			name = misc;
+			sourceTree = "<group>";
+		};
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
 				BEDCC8FD246082D400FB02BD /* cui */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
-				BE2DAD28182FAB7900A4D2F7 /* sw */,
-				BEDCC8F02460807C00FB02BD /* unotools */,
-				BE82BE5A18298E2E00A447B5 /* vcl */,
 				BE82BE5918298DFB00A447B5 /* java */,
+				BEBF3E2A2465886A00415E87 /* sal */,
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
+				BEBF3E662465907000415E87 /* sw */,
+				BEDCC8F02460807C00FB02BD /* unotools */,
+				BE82BE5A18298E2E00A447B5 /* vcl */,
 			);
 			sourceTree = "<group>";
 		};
