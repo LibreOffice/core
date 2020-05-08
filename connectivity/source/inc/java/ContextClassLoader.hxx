@@ -28,7 +28,7 @@ namespace comphelper
 }
 
 
-namespace connectivity { namespace jdbc
+namespace connectivity::jdbc
 {
     class ContextClassLoaderScope
     {
@@ -74,7 +74,7 @@ namespace connectivity { namespace jdbc
     };
 
 
-} } // namespace connectivity::jdbc
+} // namespace connectivity::jdbc
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_CONTEXTCLASSLOADER_HXX

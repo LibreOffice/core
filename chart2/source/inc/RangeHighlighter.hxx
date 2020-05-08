@@ -24,15 +24,15 @@
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
-namespace com { namespace sun { namespace star {
-namespace chart2 {
-    class XDiagram;
-    class XDataSeries;
-    class XAxis;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star {
+    namespace chart2 {
+        class XDiagram;
+        class XDataSeries;
+        class XAxis;
+    }
+}
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {

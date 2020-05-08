@@ -33,9 +33,9 @@
 #include <optional>
 
 namespace chart { class ExplicitCategoriesProvider; }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XTextualDataSequence; } } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XAxis; }
+namespace com::sun::star::chart2::data { class XTextualDataSequence; }
 
 namespace chart
 {

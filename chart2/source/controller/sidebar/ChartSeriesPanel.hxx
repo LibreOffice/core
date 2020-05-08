@@ -27,8 +27,8 @@
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 
-namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
+namespace com::sun::star::util { class XModifyListener; }
+namespace com::sun::star::view { class XSelectionChangeListener; }
 
 namespace chart {
 

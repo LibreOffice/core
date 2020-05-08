@@ -24,15 +24,16 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com{namespace sun{namespace star{
-namespace beans{
-    class XPropertySet;
+namespace com::sun::star{
+    namespace beans{
+        class XPropertySet;
+    }
+    namespace linguistic2{
+        class XDictionary;
+        class XDictionaryList;
+        class XLinguProperties;
+    }
 }
-namespace linguistic2{
-    class XDictionary;
-    class XDictionaryList;
-    class XLinguProperties;
-}}}}
 
 class SvTreeListEntry;
 class SvxLinguData_Impl;

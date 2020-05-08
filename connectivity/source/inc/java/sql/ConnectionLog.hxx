@@ -27,15 +27,15 @@
 // Strange enough, GCC requires the following forward declarations of the various
 // convertLogArgToString flavors to be *before* the inclusion of comphelper/logging.hxx
 
-namespace com { namespace sun { namespace star { namespace util
+namespace com::sun::star::util
 {
     struct Date;
     struct Time;
     struct DateTime;
-} } } }
+}
 
 
-namespace comphelper { namespace log { namespace convert
+namespace comphelper::log::convert
 {
 
 
@@ -45,7 +45,7 @@ namespace comphelper { namespace log { namespace convert
     OUString convertLogArgToString( const css::util::DateTime& _rDateTime );
 
 
-} } }
+}
 
 
 #include <comphelper/logging.hxx>
@@ -56,7 +56,7 @@ namespace connectivity
 }
 
 
-namespace connectivity { namespace java { namespace sql {
+namespace connectivity::java::sql {
 
     typedef ::comphelper::EventLogger ConnectionLog_Base;
     class ConnectionLog : public ConnectionLog_Base
@@ -122,7 +122,7 @@ namespace connectivity { namespace java { namespace sql {
     };
 
 
-} } } // namespace connectivity::java::sql
+} // namespace connectivity::java::sql
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTIONLOG_HXX

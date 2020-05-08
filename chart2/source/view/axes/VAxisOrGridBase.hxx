@@ -25,7 +25,7 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
+namespace com::sun::star::drawing { struct HomogenMatrix; }
 
 namespace chart
 {

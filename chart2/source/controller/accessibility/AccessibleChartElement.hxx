@@ -22,9 +22,9 @@
 #include <AccessibleBase.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
-namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XFont; } } } }
+namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::accessibility { class XAccessibleContext; }
+namespace com::sun::star::awt { class XFont; }
 
 namespace chart
 {

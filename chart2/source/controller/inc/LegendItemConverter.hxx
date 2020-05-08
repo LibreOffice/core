@@ -23,8 +23,8 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace awt { struct Size; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 class SdrModel;
 

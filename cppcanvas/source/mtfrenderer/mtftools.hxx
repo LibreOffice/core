@@ -31,10 +31,10 @@ namespace basegfx
     class B2DVector;
     class B2DPoint;
 }
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     struct RenderState;
-} } } }
+}
 
 
 namespace cppcanvas

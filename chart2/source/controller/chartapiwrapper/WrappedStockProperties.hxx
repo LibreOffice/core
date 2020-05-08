@@ -24,8 +24,8 @@
 #include <vector>
 
 namespace chart { class WrappedProperty; }
-namespace chart { namespace wrapper { class Chart2ModelContact; } }
-namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
+namespace chart::wrapper { class Chart2ModelContact; }
+namespace com::sun::star::beans { struct Property; }
 
 namespace chart
 {

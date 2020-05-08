@@ -27,10 +27,10 @@
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com::sun::star::rendering
 {
     struct RealPoint2D;
-} } } }
+}
 
 
 namespace cppcanvas

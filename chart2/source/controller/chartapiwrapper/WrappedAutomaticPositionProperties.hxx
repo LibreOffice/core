@@ -25,7 +25,7 @@
 #include <vector>
 
 namespace chart { class WrappedProperty; }
-namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
+namespace com::sun::star::beans { struct Property; }
 
 namespace chart
 {

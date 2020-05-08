@@ -23,10 +23,10 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::drawing { struct HomogenMatrix; }
+namespace com::sun::star::drawing { struct Position3D; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart { struct ExplicitScaleData; }
 

@@ -22,8 +22,8 @@
 #include <memory>
 #include <svx/view3d.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::drawing { class XShape; }
+namespace com::sun::star::frame { class XModel; }
 
 class SdrModel;
 

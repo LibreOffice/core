@@ -21,10 +21,10 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString2; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XFormattedString2; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {

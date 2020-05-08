@@ -24,7 +24,7 @@
 #include <cppuhelper/weakref.hxx>
 
 namespace chart { class DrawViewWrapper; }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

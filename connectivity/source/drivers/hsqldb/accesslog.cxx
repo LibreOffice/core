@@ -28,7 +28,7 @@
 
 #include <osl/thread.h>
 
-namespace connectivity { namespace hsqldb
+namespace connectivity::hsqldb
 {
     typedef std::map<OUString, FILE *> TDebugStreamMap;
     TDebugStreamMap& getStreams()

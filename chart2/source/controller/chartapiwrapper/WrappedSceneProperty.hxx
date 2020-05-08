@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-namespace chart { namespace wrapper { class Chart2ModelContact; } }
+namespace chart::wrapper { class Chart2ModelContact; }
 
 namespace chart
 {

@@ -25,15 +25,15 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XCoordinateSystem; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XRangeHighlighter; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::chart2 { class XChartType; }
+namespace com::sun::star::chart2 { class XCoordinateSystem; }
+namespace com::sun::star::chart2 { class XDataSeries; }
+namespace com::sun::star::chart2 { class XDiagram; }
+namespace com::sun::star::chart2::data { class XDataProvider; }
+namespace com::sun::star::chart2::data { class XRangeHighlighter; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {

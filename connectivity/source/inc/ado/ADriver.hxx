@@ -26,9 +26,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-}}}}
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace connectivity
 {

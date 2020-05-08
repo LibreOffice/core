@@ -23,8 +23,8 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include "charttoolsdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::chart2 { class XDiagram; }
 
 namespace chart
 {

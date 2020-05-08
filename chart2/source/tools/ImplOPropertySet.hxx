@@ -26,7 +26,7 @@
 #include <map>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace style { class XStyle; } } } }
+namespace com::sun::star::style { class XStyle; }
 
 namespace property
 {

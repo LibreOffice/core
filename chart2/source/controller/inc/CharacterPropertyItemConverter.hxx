@@ -24,7 +24,7 @@
 
 #include <optional>
 
-namespace chart { namespace wrapper {
+namespace chart::wrapper {
 
 class CharacterPropertyItemConverter final : public ItemConverter
 {
@@ -55,7 +55,7 @@ private:
     std::optional<css::awt::Size> m_pRefSize;
 };
 
-}}
+}
 
 #endif
 

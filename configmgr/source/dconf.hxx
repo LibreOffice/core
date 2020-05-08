@@ -17,13 +17,13 @@ namespace configmgr {
     struct Data;
 }
 
-namespace configmgr { namespace dconf {
+namespace configmgr::dconf {
 
 void readLayer(Data & data, int layer);
 
 void writeModifications(Components & components, Data & data);
 
-} }
+}
 
 #endif
 

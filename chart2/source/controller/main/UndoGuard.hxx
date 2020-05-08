@@ -25,8 +25,8 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace document { class XUndoManager; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com::sun::star::document { class XUndoManager; }
+namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

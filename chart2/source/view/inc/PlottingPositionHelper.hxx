@@ -29,10 +29,10 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XTransformation; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct HomogenMatrix; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonShape3D; } } } }
+namespace com::sun::star::chart2 { class XTransformation; }
+namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::drawing { struct HomogenMatrix; }
+namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace chart
 {
