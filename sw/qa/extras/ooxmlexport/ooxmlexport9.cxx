@@ -108,6 +108,7 @@ DECLARE_OOXMLEXPORT_TEST(testDefaultContentTypes, "fdo55381.docx")
 
 DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
@@ -120,6 +121,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
 
 DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
@@ -128,6 +130,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, near-page-width table was imported as a TextFrame.
@@ -136,6 +139,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
 
 DECLARE_SW_ROUNDTRIP_TEST(testTdf108269, "tdf108269.docm", nullptr, DocmTest)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported)
         return;
 
@@ -148,12 +152,14 @@ DECLARE_SW_ROUNDTRIP_TEST(testTdf108269, "tdf108269.docm", nullptr, DocmTest)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was true, <w:effect w:val="none"/> resulted in setting the blinking font effect.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 494, in-numbering paragraph's automating spacing was handled as visible spacing, while it should not.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaTopMargin"));
@@ -161,6 +167,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 0, numbering rules with automatic spacing meant 0
     // before/autospacing for all text nodes, even for ones at the start/end of
     // a numbered text node block.
@@ -170,6 +177,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690, "tdf106690.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -182,6 +190,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106690Cell, "tdf106690-cell.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122342, "tdf122342.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // These were 494, style based numbering rules with automatic spacing meant 0
     // before/autospacing for all text nodes, even for ones at the start/end of
     // a numbered text node block.
@@ -193,6 +202,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122342, "tdf122342.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -206,6 +216,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_directAfter, "tdf129575-directAfter.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -218,6 +229,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_directAfter, "tdf129575-directAfter.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_styleAfter, "tdf129575-styleAfter.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -230,6 +242,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_styleAfter, "tdf129575-styleAfter.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -257,6 +270,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129575_docDefault, "tdf129575-docDefault.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-comprehensive.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // cell A1
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p/w:pPr/w:pStyle", "val", "Normal");
@@ -333,6 +347,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 2 (missing trailing cell in merged cell range)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
@@ -340,6 +355,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The second paragraph (first numbered one) had 0 bottom margin:
     // autospacing was even collapsed between different numbering styles.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
@@ -349,6 +365,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
@@ -366,6 +383,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf109306, "tdf109306.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Both types of relative width specification (pct): simple integers (in fiftieths of percent)
@@ -379,6 +397,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109306, "tdf109306.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testKern, "kern.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoKerning"));
     // This failed: kerning was also enabled for the second paragraph.
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(2), 1), "CharAutoKerning"));
@@ -420,6 +439,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(7616), getShape(1)->getSize().Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(8001), getShape(2)->getSize().Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(4001), getShape(3)->getSize().Width, 10);
@@ -449,6 +469,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSecti
 
 DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_dontEquallyDistributeColumns.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
@@ -459,6 +480,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_do
 
 DECLARE_OOXMLEXPORT_TEST(testTdf98700_keepWithNext, "tdf98700_keepWithNext.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading style keeps with next", true, getProperty<bool>(getParagraph(1), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default style doesn't keep with next", false, getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading 1 style inherits keeps with next", true, getProperty<bool>(getParagraph(3), "ParaKeepTogether"));
@@ -647,12 +669,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103975_notPageBreakD, "tdf103975_notPageBreakD.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103975_notPageBreakE, "tdf103975_notPageBreakE.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the column break was getting lost.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColumns.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
     uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
@@ -664,6 +688,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112352_nextPageColumns, "tdf112352_nextPageColum
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310_endnoteStyleForMSO.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/endnotes.xml");
     // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "val",
@@ -672,6 +697,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103389, "tdf103389.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // No geometry was exported for the second canvas
     // Check both canvases' geometry
@@ -681,6 +707,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103389, "tdf103389.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 0, left margin inside a shape+text wasn't imported from DOCX.
     // 360000 EMU, but layout uses twips.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(567), parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32());
@@ -689,6 +716,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // We have two shapes: a frame and an image
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -702,6 +730,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Relative positions to the left or right margin (MS Word naming) was not handled.
     uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
     sal_Int16 nValue;
@@ -719,6 +748,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xShape(getShapeByName("Frame1"), uno::UNO_QUERY);
     // This was 250, <wps:bodyPr ... rIns="0" ...> was ignored for an outer shape.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xShape, "TextRightDistance"));
@@ -726,6 +756,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(5, getPages());
     // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
     uno::Reference<beans::XPropertySet> defaultStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), defaultStyle->getPropertyValue("PageStyleLayout"));
@@ -754,6 +785,7 @@ DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // This was 1: only the inner, not the outer table was created.
@@ -762,6 +794,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79329, "tdf79329.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     sal_Int32 nDistB = getXPath(pXmlDoc, "//wp:anchor", "distB").toInt32();
     // This was -260350, which is not a valid value for an unsigned type.
@@ -774,6 +807,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103982, "tdf103982.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104115, "tdf104115.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This found 0 nodes: the custom geometry was not written for the Bezier
     // curve -> Word refused to open the document.
@@ -782,6 +816,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104115, "tdf104115.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
     OUString sContent;
     xTextField->getPropertyValue("Content") >>= sContent;
@@ -794,6 +829,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103651, "tdf103651.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99227, "tdf99227.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // A drawing anchored as character to a footnote caused write past end of document.xml at export to docx.
     // After that, importing after export failed with
     // SAXParseException: '[word/document.xml line 2]: Extra content at the end of the document', Stream 'word / document.xml',
@@ -805,6 +841,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99227, "tdf99227.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -822,11 +859,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112446_frameStyle, "tdf112446_frameStyle.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
 
@@ -850,6 +889,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
     uno::Reference<text::XFootnote> xEndnote;
@@ -875,6 +915,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", sal_Int32(0xFF007F), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
     xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
@@ -932,6 +973,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endno
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This crashed: the comment field contained a table with a <w:hideMark/>.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XElementAccess> xTextFields(xTextFieldsSupplier->getTextFields());
@@ -940,6 +982,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104150, "tdf104150.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was 0xff0000, i.e. red: background shape wasn't ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
@@ -947,6 +990,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104150, "tdf104150.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103976, "tdf103976.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -962,12 +1006,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103976, "tdf103976.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106001, "tdf106001.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 0 (1 on UI), while Word treats outliers as 100 (outlier = not in [1..600])
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>( 100 ), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharScaleWidth" ));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106001_2, "tdf106001-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
     // Note: we disregard what's set in pPr / rPr and only care about r / rPr
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -976,6 +1022,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106001_2, "tdf106001-2.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99074, "tdf99074.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> const xController(
         xModel->getCurrentController(), uno::UNO_QUERY);
@@ -990,6 +1037,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99074, "tdf99074.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First problem: the first two paragraphs did not have their own text section, so the whole document had two columns.
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First."), "TextSection");
     CPPUNIT_ASSERT(xTextSection.is());
@@ -1007,6 +1055,7 @@ DECLARE_OOXMLEXPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx
 
 DECLARE_OOXMLEXPORT_TEST(testMultiColumnSeparator, "multi-column-separator-with-line.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First data."), "TextSection");
     CPPUNIT_ASSERT(xTextSection.is());
     uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
@@ -1018,6 +1067,7 @@ DECLARE_OOXMLEXPORT_TEST(testMultiColumnSeparator, "multi-column-separator-with-
 
 DECLARE_OOXMLEXPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was false, last section was balanced, but it's unbalanced in Word.
@@ -1026,6 +1076,7 @@ DECLARE_OOXMLEXPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columnsInSectionsOnly.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("DontBalanceTextColumns?", true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
@@ -1043,6 +1094,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columns
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         // This was 4: an additional sectPr was added to the document.
         assertXPath(pXmlDoc, "//w:sectPr", 3);
@@ -1050,6 +1102,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT(getShape(1)->getSize().Width > 0);
     // This failed: the second arrow was invisible because it had zero width.
     CPPUNIT_ASSERT(getShape(2)->getSize().Width > 0);
@@ -1057,6 +1110,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was 0: footnote separator was disabled even in case the document
     // had no footnotes.
@@ -1066,6 +1120,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 #if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
@@ -1075,6 +1130,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was true, a balanced section from ODF turned into a non-balanced one after OOXML roundtrip.
@@ -1083,6 +1139,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml"))
         // This was 1, <w:outlineLvl> was duplicated for Heading1.
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
@@ -1090,6 +1147,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107618, "tdf107618.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // This was false, header was lost on export.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
@@ -1097,6 +1155,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107618, "tdf107618.doc")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108682, "tdf108682.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto aLineSpacing = getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing");
     // This was style::LineSpacingMode::PROP.
     CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::FIX, aLineSpacing.Mode);
@@ -1106,6 +1165,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108682, "tdf108682.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
 
@@ -1123,6 +1183,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
@@ -1133,6 +1194,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
@@ -1142,6 +1204,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHanging
 
 DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xControlShape.is() );
 
@@ -1172,6 +1235,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
 
 DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xControlShape.is() );
 
@@ -1199,6 +1263,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xControlShape.is());
@@ -1260,6 +1325,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -1279,6 +1345,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf111964, "tdf111964.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Unicode spaces that are not XML whitespace must not be trimmed
     const sal_Unicode sWSReference [] { 0x2002, 0x2002, 0x2002, 0x2002, 0x2002, 0 };
@@ -1287,6 +1354,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf111964, "tdf111964.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape1.is());
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
@@ -1300,6 +1368,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two issues were here:
     //  1) second shape was not export (it is anchored to the end of the run)
     //  2) inline property was inherited to the second shape by mistake
@@ -1334,6 +1403,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_group.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Optionbutton groups were not handled
     // The two optionbutton should have the same group name
     const OUString sGroupName = "GroupX";
@@ -1351,6 +1421,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     // LO crashed while export because of character background color handling
 
     //tdf76683 - Cannot be negative number - use firstLine instead of hanging
@@ -1361,6 +1432,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Get bookmark name
@@ -1379,6 +1451,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107111, "tdf107111.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Ensure that hyperlink and its properties are in place.
@@ -1390,6 +1463,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107111, "tdf107111.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xShape->getAnchor() != nullptr);
 
@@ -1411,6 +1485,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789_2, "tdf90789-2.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -1459,6 +1534,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // A chart anchored to a footnote multiplied during import
     xmlDocUniquePtr pXmlDoc = parseExport("word/footnotes.xml");
 
