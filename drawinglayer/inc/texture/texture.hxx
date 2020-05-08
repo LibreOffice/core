@@ -28,11 +28,8 @@
 #include <vector>
 #include <functional>
 
-
-namespace drawinglayer
+namespace drawinglayer::texture
 {
-    namespace texture
-    {
         class GeoTexSvx
         {
         public:
@@ -47,14 +44,7 @@ namespace drawinglayer
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         /// helper class for processing equal number of matrices and colors
         /// for texture processing
         struct B2DHomMatrixAndBColor
@@ -62,14 +52,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix   maB2DHomMatrix;
             basegfx::BColor         maBColor;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradient : public GeoTexSvx
         {
         protected:
@@ -95,14 +78,7 @@ namespace drawinglayer
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
                 basegfx::BColor& rOuterColor) = 0;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientLinear final : public GeoTexSvxGradient
         {
             double                  mfUnitMinX;
@@ -125,14 +101,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientAxial final : public GeoTexSvxGradient
         {
             double                  mfUnitMinX;
@@ -154,14 +123,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientRadial final : public GeoTexSvxGradient
         {
         public:
@@ -180,14 +142,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientElliptical final : public GeoTexSvxGradient
         {
         public:
@@ -207,14 +162,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientSquare final : public GeoTexSvxGradient
         {
         public:
@@ -234,14 +182,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxGradientRect final : public GeoTexSvxGradient
         {
         public:
@@ -261,14 +202,7 @@ namespace drawinglayer
                 basegfx::BColor& rOuterColor) override;
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         class GeoTexSvxHatch final : public GeoTexSvx
         {
             basegfx::B2DRange                   maOutputRange;
@@ -295,14 +229,7 @@ namespace drawinglayer
             double getDistanceToHatch(const basegfx::B2DPoint& rUV) const;
             const basegfx::B2DHomMatrix& getBackTextureTransform() const;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace texture
-    {
         // This class applies a tiling to the unit range. The given range
         // will be repeated inside the unit range in X and Y and for each
         // tile a matrix will be created (by appendTransformations) that
@@ -334,8 +261,7 @@ namespace drawinglayer
             void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const;
             sal_uInt32 getNumberOfTiles() const;
         };
-    } // end of namespace texture
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::texture
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
