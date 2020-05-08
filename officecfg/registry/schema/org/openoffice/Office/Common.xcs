@@ -1619,6 +1619,7 @@
           </info>
           <value>
             <it>$(insturl)/@LIBO_SHARE_FOLDER@/autotext/$(vlang)</it>
+            <it>$(userurl)/../packs/@LIBO_VERSION_MAJOR_DOT_MINOR@/autotext/$(vlang)</it>
             <it>$(userurl)/autotext</it>
           </value>
         </prop>
@@ -1813,6 +1814,7 @@
           </info>
           <value>
             <it>$(insturl)/@LIBO_SHARE_FOLDER@/autotext/$(vlang)</it>
+            <it>$(userurl)/../packs/@LIBO_VERSION_MAJOR_DOT_MINOR@/autotext/$(vlang)</it>
             <it>$(userurl)/autotext</it>
           </value>
         </prop>
