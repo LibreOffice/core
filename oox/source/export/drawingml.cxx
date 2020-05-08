@@ -3742,6 +3742,9 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         }
     }
 
+    // tdf#132201: the order of effects is important. Effects order (CT_EffectList in ECMA-376):
+    // blur -> fillOverlay -> glow -> innerShdw -> outerShdw -> prstShdw -> reflection -> softEdge
+
     if( !aEffects.hasElements() )
     {
         bool bHasShadow = false;
@@ -3755,6 +3758,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         if( bHasShadow || bHasGlow )
         {
             mpFS->startElementNS(XML_a, XML_effectLst);
+            WriteGlowEffect(rXPropSet);
             if( bHasShadow )
             {
                 Sequence< PropertyValue > aShadowGrabBag( 3 );
@@ -3778,7 +3782,6 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
                 WriteShapeEffect( "outerShdw", aShadowGrabBag );
             }
-            WriteGlowEffect(rXPropSet);
             mpFS->endElementNS(XML_a, XML_effectLst);
         }
     }
@@ -3820,8 +3823,18 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         }
 
         mpFS->startElementNS(XML_a, XML_effectLst);
+        bool bGlowWritten = false;
         for( const auto& rEffect : std::as_const(aEffects) )
         {
+            if (!bGlowWritten
+                && (rEffect.Name == "innerShdw" || rEffect.Name == "outerShdw"
+                    || rEffect.Name == "prstShdw" || rEffect.Name == "reflection"
+                    || rEffect.Name == "softEdge"))
+            {
+                WriteGlowEffect(rXPropSet);
+                bGlowWritten = true;
+            }
+
             if( rEffect.Name == "outerShdw" )
             {
                 WriteShapeEffect( rEffect.Name, aOuterShdwProps );
@@ -3833,7 +3846,8 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 WriteShapeEffect( rEffect.Name, aEffectProps );
             }
         }
-        WriteGlowEffect(rXPropSet);
+        if (!bGlowWritten)
+            WriteGlowEffect(rXPropSet);
 
         mpFS->endElementNS(XML_a, XML_effectLst);
     }
