@@ -12,6 +12,7 @@ M = {
   'ridl': 'ridljar',
   'unoil': 'unoil',
   'unoloader': 'ridljar',
+  'libreoffice': 'ridljar',
 }
 
 parser = OptionParser()
