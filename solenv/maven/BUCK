@@ -16,6 +16,7 @@ maven_package(
     'ridl': '//:ridl',
     'unoil': '//:unoil',
     'unoloader': '//:unoloader',
+    'libreoffice': '//:libreoffice',
   },
   src = {
     'juh': '//javaunohelper:juh-src',
@@ -24,6 +25,7 @@ maven_package(
     'ridl': '//ridljar:ridl-src',
     'unoil': '//unoil:unoil-src',
     'unoloader': '//ridljar/source/unoloader:unoloader-src',
+    'libreoffice': '//ridljar:libreoffice-src',
   },
   doc = {
     'juh': '//javaunohelper:juh-javadoc',
@@ -32,6 +34,7 @@ maven_package(
     'ridl': '//ridljar:ridl-javadoc',
     'unoil': '//unoil:unoil-javadoc',
     'unoloader': '//ridljar/source/unoloader:unoloader-javadoc',
+    'libreoffice': '//ridljar:libreoffice-javadoc',
   },
 )
 
