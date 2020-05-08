@@ -48,7 +48,7 @@ Directory gid_Dir_Sdkoo_Sdk
     ParentID = PREDEFINED_PROGDIR;
 #endif
 #ifdef MACOSX
-    DosName = "LibreOffice${PRODUCTVERSION}_SDK";
+    DosName = "${PRODUCTNAME}${PRODUCTVERSION}_SDK";
 #else
     DosName = "sdk";
 #endif
