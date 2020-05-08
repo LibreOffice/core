@@ -25,14 +25,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
-namespace emfio { namespace emfreader {
+namespace emfio::emfreader {
 
 css::uno::Reference< css::uno::XInterface >
 XEmfParser_createInstance( css::uno::Reference< css::uno::XComponentContext > const &);
@@ -42,7 +42,7 @@ OUString XEmfParser_getImplementationName();
 css::uno::Sequence< OUString >
 XEmfParser_getSupportedServiceNames();
 
-} }
+}
 
 #endif
 

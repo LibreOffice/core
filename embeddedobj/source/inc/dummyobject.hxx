@@ -31,7 +31,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star {
         struct PropertyValue;
         struct NamedValue;
     }
-}}}
+}
 
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;

@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "addresssettings.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang {
         class XMultiServiceFactory;
     }
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertySet;
     }
-} } }
+}
 namespace weld { class Window; }
 
 namespace abp

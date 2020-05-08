@@ -37,7 +37,7 @@
 #include <rtl/ref.hxx>
 #include <map>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star {
         struct PropertyValue;
         struct NamedValue;
     }
-}}}
+}
 
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;

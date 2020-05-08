@@ -34,11 +34,11 @@
 #include "bibmod.hxx"
 class BibDataManager;
 class BibFrameCtrl_Impl;
-namespace com{namespace sun{namespace star{
-    namespace form { namespace runtime {
+namespace com::sun::star{
+    namespace form::runtime {
         class XFormController;
-    } }
-}}}
+    }
+}
 class BibStatusDispatch
 {
 public:
