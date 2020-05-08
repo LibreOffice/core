@@ -149,13 +149,13 @@ namespace sdr::contact
                 basegfx::B2DHomMatrix aTextBoxMatrix;
                 bool bWordWrap(false);
 
+                // take unrotated snap rect as default, then get the
+                // unrotated text box. Rotation needs to be done centered
+                const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
+
                 if(bHasText)
                 {
-                    // take unrotated snap rect as default, then get the
-                    // unrotated text box. Rotation needs to be done centered
-                    const tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-                    const basegfx::B2DRange aObjectRange = vcl::unotools::b2DRectangleFromRectangle(aObjectBound);
-
                     // #i101684# get the text range unrotated and absolute to the object range
                     const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
 
@@ -230,6 +230,12 @@ namespace sdr::contact
                     bWordWrap = GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue();
                 }
 
+                // fill object matrix
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aObjectRange.getWidth(), aObjectRange.getHeight(),
+                    /*fShearX=*/0, /*fRotate=*/0,
+                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+
                 // create primitive
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
@@ -237,7 +243,8 @@ namespace sdr::contact
                         xGroup,
                         aTextBoxMatrix,
                         bWordWrap,
-                        b3DShape));
+                        b3DShape,
+                        aObjectMatrix));
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
             }
 
