@@ -69,6 +69,30 @@
       "revId": "c9236fc211d1ba1c22e096172285983d6687b41f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fed3dae_6e6bc04b",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-08T07:32:53Z",
+      "side": 0,
+      "message": "This is a very recent entry, which seems like it just attempts to do a \"clone\" and therefore should be safe to remove.",
+      "parentUuid": "1aeabf01_34988b1e",
+      "range": {
+        "startLine": 1115,
+        "startChar": 97,
+        "endLine": 1115,
+        "endChar": 107
+      },
+      "revId": "c9236fc211d1ba1c22e096172285983d6687b41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
