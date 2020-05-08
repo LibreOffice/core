@@ -44,7 +44,7 @@ protected:
     }
 };
 
-DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
+DECLARE_OOXMLIMPORT_TEST(Tdf130907, "tdf130907.docx")
 {
     uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
     CPPUNIT_ASSERT(xPara1.is());
@@ -52,7 +52,7 @@ DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
     CPPUNIT_ASSERT(xFormula1Props.is());
     sal_Int16 nHOri1;
     xFormula1Props->getPropertyValue("HoriOrient") >>= nHOri1;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not left!",sal_Int16(3),nHOri1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not left!", sal_Int16(3), nHOri1);
 
     uno::Reference<text::XTextRange> xPara2 = getParagraph(3);
     CPPUNIT_ASSERT(xPara2.is());
@@ -69,6 +69,15 @@ DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
     sal_Int16 nHOri3;
     xFormula3Props->getPropertyValue("HoriOrient") >>= nHOri3;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not right!", sal_Int16(1), nHOri3);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    OUString posHorizontalRel = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    CPPUNIT_ASSERT(posHorizontalRel.indexOf("margin-left:9.9pt") >= 0);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
