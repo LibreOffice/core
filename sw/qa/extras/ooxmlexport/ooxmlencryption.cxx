@@ -23,6 +23,7 @@ protected:
 
 DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2007, "Encrypted_MSO2007_abc.docx", "abc", Test)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(OUString("abc"), xParagraph->getString());
@@ -30,6 +31,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2007, "Encrypted_MSO2007_abc.docx", "ab
 
 DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2010, "Encrypted_MSO2010_abc.docx", "abc", Test)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Agile encryption format, AES 128, CBC, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(OUString("abc"), xParagraph->getString());
@@ -37,6 +39,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2010, "Encrypted_MSO2010_abc.docx", "ab
 
 DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2013, "Encrypted_MSO2013_abc.docx", "abc", Test)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Agile encryption format, AES 256, CBC, SHA512
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(OUString("ABC"), xParagraph->getString());
@@ -44,6 +47,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2013, "Encrypted_MSO2013_abc.docx", "ab
 
 DECLARE_SW_ROUNDTRIP_TEST(testPasswordLOStandard, "Encrypted_LO_Standard_abc.docx", "abc", Test)
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(OUString("ABC"), xParagraph->getString());
