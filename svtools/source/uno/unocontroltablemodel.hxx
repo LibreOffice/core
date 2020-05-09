@@ -31,7 +31,7 @@
 #include <memory>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -148,7 +148,7 @@ namespace svt { namespace table
     };
 
 
-} } // svt::table
+} // svt::table
 
 
 

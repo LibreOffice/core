@@ -22,7 +22,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 
-namespace svt { namespace uno
+namespace svt::uno
 {
 
 
@@ -55,7 +55,7 @@ namespace svt { namespace uno
     };
 
 
-} } // namespace svt::uno
+} // namespace svt::uno
 
 
 
