@@ -1135,6 +1135,28 @@ Reference< XPropertySet > OCopyTableWizard::createView() const
     return ::dbaui::createView( m_sName, m_xDestConnection, sCommand );
 }
 
+Reference< XPropertySet > OCopyTableWizard::returnTable()
+{
+    if ( getOperation() == CopyTableOperation::AppendData )
+        return getTable();
+    else
+        return createTable();
+}
+
+Reference< XPropertySet > OCopyTableWizard::getTable()
+{
+    Reference< XPropertySet > xTable;
+
+    Reference<XTablesSupplier> xSup( m_xDestConnection, UNO_QUERY );
+    Reference< XNameAccess > xTables;
+    if(xSup.is())
+        xTables = xSup->getTables();
+    if(xTables.is() && xTables->hasByName(m_sName))
+        xTables->getByName(m_sName) >>= xTable;
+
+    return xTable;
+}
+
 Reference< XPropertySet > OCopyTableWizard::createTable()
 {
     Reference< XPropertySet > xTable;
@@ -1143,126 +1165,122 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
     Reference< XNameAccess > xTables;
     if(xSup.is())
         xTables = xSup->getTables();
-    if ( getOperation() != CopyTableOperation::AppendData )
+    Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
+    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
+    if(!xFact.is())
+        return nullptr;
+
+    xTable = xFact->createDataDescriptor();
+    OSL_ENSURE(xTable.is(),"Could not create a new object!");
+    if(!xTable.is())
+        return nullptr;
+
+    OUString sCatalog,sSchema,sTable;
+    Reference< XDatabaseMetaData> xMetaData = m_xDestConnection->getMetaData();
+    ::dbtools::qualifiedNameComponents(xMetaData,
+                                       m_sName,
+                                       sCatalog,
+                                       sSchema,
+                                       sTable,
+                                       ::dbtools::EComposeRule::InDataManipulation);
+
+    if ( sCatalog.isEmpty() && xMetaData->supportsCatalogsInTableDefinitions() )
     {
-        Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
-        OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-        if(!xFact.is())
-            return nullptr;
+        sCatalog = m_xDestConnection->getCatalog();
+    }
 
-        xTable = xFact->createDataDescriptor();
-        OSL_ENSURE(xTable.is(),"Could not create a new object!");
-        if(!xTable.is())
-            return nullptr;
-
-        OUString sCatalog,sSchema,sTable;
-        Reference< XDatabaseMetaData> xMetaData = m_xDestConnection->getMetaData();
-        ::dbtools::qualifiedNameComponents(xMetaData,
-                                            m_sName,
-                                            sCatalog,
-                                            sSchema,
-                                            sTable,
-                                            ::dbtools::EComposeRule::InDataManipulation);
-
-        if ( sCatalog.isEmpty() && xMetaData->supportsCatalogsInTableDefinitions() )
+    if ( sSchema.isEmpty() && xMetaData->supportsSchemasInTableDefinitions() )
+    {
+        // query of current schema is quite inconsistent. In case of some
+        // DBMS's each user has their own schema.
+        sSchema = xMetaData->getUserName();
+        // In case of mysql it is not that simple
+        if(xMetaData->getDatabaseProductName() == "MySQL")
         {
-            sCatalog = m_xDestConnection->getCatalog();
+            Reference< XStatement > xSelect = m_xDestConnection->createStatement();
+            Reference< XResultSet > xRs = xSelect->executeQuery("select database()");
+            (void)xRs->next(); // first and only result
+            Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
+            sSchema = xRow->getString(1);
         }
+    }
 
-        if ( sSchema.isEmpty() && xMetaData->supportsSchemasInTableDefinitions() )
+    xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
+    xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
+    xTable->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+
+    Reference< XColumnsSupplier > xSuppDestinationColumns( xTable, UNO_QUERY );
+    // now append the columns
+    const ODatabaseExport::TColumnVector& rVec = getDestVector();
+    appendColumns( xSuppDestinationColumns, &rVec );
+    // now append the primary key
+    Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
+    appendKey(xKeySup, &rVec);
+
+    Reference<XAppend> xAppend(xTables,UNO_QUERY);
+    if(xAppend.is())
+        xAppend->appendByDescriptor(xTable);
+
+    //  xTable = NULL;
+    // we need to reget the table because after appending it, it is no longer valid
+    if(xTables->hasByName(m_sName))
+        xTables->getByName(m_sName) >>= xTable;
+    else
+    {
+        OUString sComposedName(
+            ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false ) );
+        if(xTables->hasByName(sComposedName))
         {
-            // query of current schema is quite inconsistent. In case of some
-            // DBMS's each user has their own schema.
-            sSchema = xMetaData->getUserName();
-            // In case of mysql it is not that simple
-            if(xMetaData->getDatabaseProductName() == "MySQL")
-            {
-                Reference< XStatement > xSelect = m_xDestConnection->createStatement();
-                Reference< XResultSet > xRs = xSelect->executeQuery("select database()");
-                (void)xRs->next(); // first and only result
-                Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
-                sSchema = xRow->getString(1);
-            }
+            xTables->getByName(sComposedName) >>= xTable;
+            m_sName = sComposedName;
         }
-
-        xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-        xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-        xTable->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
-
-        Reference< XColumnsSupplier > xSuppDestinationColumns( xTable, UNO_QUERY );
-        // now append the columns
-        const ODatabaseExport::TColumnVector& rVec = getDestVector();
-        appendColumns( xSuppDestinationColumns, &rVec );
-        // now append the primary key
-        Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-        appendKey(xKeySup, &rVec);
-
-        Reference<XAppend> xAppend(xTables,UNO_QUERY);
-        if(xAppend.is())
-            xAppend->appendByDescriptor(xTable);
-
-        //  xTable = NULL;
-        // we need to reget the table because after appending it, it is no longer valid
-        if(xTables->hasByName(m_sName))
-            xTables->getByName(m_sName) >>= xTable;
         else
+            xTable = nullptr;
+    }
+
+    if(xTable.is())
+    {
+        xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
+        // insert new table name into table filter
+        ::dbaui::appendToFilter(m_xDestConnection, m_sName, GetComponentContext(), m_xAssistant.get());
+
+        // copy ui settings
+        m_rSourceObject.copyUISettingsTo( xTable );
+        //copy filter and sorting
+        m_rSourceObject.copyFilterAndSortingTo(m_xDestConnection,xTable);
+        // set column mappings
+        Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
+        Sequence< OUString> aSeq = xNameAccess->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
+
+        for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
         {
-            OUString sComposedName(
-                ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::EComposeRule::InDataManipulation, false ) );
-            if(xTables->hasByName(sComposedName))
+            ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(*pIter);
+
+            if ( aDestIter != m_vDestColumns.end() )
             {
-                xTables->getByName(sComposedName) >>= xTable;
-                m_sName = sComposedName;
-            }
-            else
-                xTable = nullptr;
-        }
-        if(xTable.is())
-        {
-            xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
-            // insert new table name into table filter
-            ::dbaui::appendToFilter(m_xDestConnection, m_sName, GetComponentContext(), m_xAssistant.get());
+                ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
 
-            // copy ui settings
-            m_rSourceObject.copyUISettingsTo( xTable );
-            //copy filter and sorting
-            m_rSourceObject.copyFilterAndSortingTo(m_xDestConnection,xTable);
-            // set column mappings
-            Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
-            Sequence< OUString> aSeq = xNameAccess->getElementNames();
-            const OUString* pIter = aSeq.getConstArray();
-            const OUString* pEnd   = pIter + aSeq.getLength();
-
-            for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
-            {
-                ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(*pIter);
-
-                if ( aDestIter != m_vDestColumns.end() )
-                {
-                    ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
-                    sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
-
-                    ODatabaseExport::TPositions::iterator aPosFind = std::find_if(
-                        m_vColumnPositions.begin(),
-                        m_vColumnPositions.end(),
-                        [nPos] (const ODatabaseExport::TPositions::value_type& tPos) {
-                            return tPos.first == nPos;
-                        }
-                    );
-
-                    if ( m_vColumnPositions.end() != aPosFind )
-                    {
-                        aPosFind->second = nNewPos;
-                        OSL_ENSURE( m_vColumnTypes.size() > o3tl::make_unsigned( aPosFind - m_vColumnPositions.begin() ),
-                            "Invalid index for vector!" );
-                        m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();
+                ODatabaseExport::TPositions::iterator aPosFind = std::find_if(
+                    m_vColumnPositions.begin(),
+                    m_vColumnPositions.end(),
+                    [nPos] (const ODatabaseExport::TPositions::value_type& tPos) {
+                        return tPos.first == nPos;
                     }
+                );
+
+                if ( m_vColumnPositions.end() != aPosFind )
+                {
+                    aPosFind->second = nNewPos;
+                    OSL_ENSURE( m_vColumnTypes.size() > o3tl::make_unsigned( aPosFind - m_vColumnPositions.begin() ),
+                        "Invalid index for vector!" );
+                    m_vColumnTypes[ aPosFind - m_vColumnPositions.begin() ] = (*aFind)->second->GetType();
                 }
             }
         }
     }
-    else if(xTables.is() && xTables->hasByName(m_sName))
-        xTables->getByName(m_sName) >>= xTable;
 
     return xTable;
 }
