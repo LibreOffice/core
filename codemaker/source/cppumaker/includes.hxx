@@ -22,7 +22,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-
+#include <vector>
 #include "dependencies.hxx"
 
 class FileStream;
@@ -58,6 +58,7 @@ public:
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
     void addTypelibTypedescriptionH()
         { m_includeTypelibTypedescriptionH = true; }
+    void addCustom(const OUString& s) { m_custom.push_back(s); }
     void dump(
         FileStream & out, OUString const * companionHdl, bool exceptions);
 
@@ -91,6 +92,7 @@ private:
     bool m_includeSalTypesH;
     bool m_includeTypelibTypeclassH;
     bool m_includeTypelibTypedescriptionH;
+    std::vector<OUString> m_custom;
 };
 
 }
