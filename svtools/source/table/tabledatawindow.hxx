@@ -22,7 +22,7 @@
 #include <vcl/window.hxx>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
     class TableControl_Impl;
     class TableFunctionSet;
@@ -59,7 +59,7 @@ namespace svt { namespace table
         static void impl_hideTipWindow();
     };
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 

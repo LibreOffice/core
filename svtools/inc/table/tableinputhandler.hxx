@@ -25,7 +25,7 @@ class MouseEvent;
 class KeyEvent;
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
 
@@ -57,7 +57,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableInputHandler >   PTableInputHandler;
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

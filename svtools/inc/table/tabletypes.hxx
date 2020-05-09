@@ -22,7 +22,7 @@
 #include <sal/types.h>
 
 
-namespace svt { namespace table
+namespace svt::table
 {
 
     /// a value denoting the size of a table
@@ -46,7 +46,7 @@ namespace svt { namespace table
 #define ROW_INVALID             (::svt::table::RowPos(-2))
 
 
-} } // namespace svt::table
+} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
