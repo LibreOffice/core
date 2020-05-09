@@ -254,6 +254,8 @@ void Includes::dump(
         dumpEmptyLineBeforeFirst(out, &first);
         out << "#include \"typelib/typedescription.h\"\n";
     }
+    for (OUString const & s : m_custom)
+        out << s << "\n";
 }
 
 void Includes::dumpInclude(
