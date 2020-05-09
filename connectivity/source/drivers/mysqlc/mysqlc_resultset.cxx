@@ -111,12 +111,13 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     , m_pResult(pResult)
     , m_encoding(_encoding)
 {
+    assert(m_pResult);
     m_xMetaData = new OResultSetMetaData(rConn, m_pResult);
 }
 
 void OResultSet::ensureResultFetched()
 {
-    if (!m_bResultFetched)
+    if (m_pResult)
     {
         fetchResult();
     }
@@ -124,7 +125,7 @@ void OResultSet::ensureResultFetched()
 
 void OResultSet::ensureFieldInfoFetched()
 {
-    if (m_bResultFetched)
+    if (m_pResult == nullptr)
         return; // already fetched
 
     // it works only if result set is produced via mysql_store_result
@@ -165,8 +166,8 @@ void OResultSet::fetchResult()
     if (errorNum)
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
             mysql_error(m_pMysql), mysql_sqlstate(m_pMysql), errorNum, *this, m_encoding);
-    m_bResultFetched = true;
     mysql_free_result(m_pResult);
+    m_pResult = nullptr;
 }
 
 void OResultSet::disposing()
@@ -175,6 +176,11 @@ void OResultSet::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
+    if (m_pResult != nullptr)
+    {
+        mysql_free_result(m_pResult);
+        m_pResult = nullptr;
+    }
     m_aStatement = nullptr;
     m_xMetaData = nullptr;
 }
@@ -575,7 +581,11 @@ void SAL_CALL OResultSet::close()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    m_pResult = nullptr;
+    if (m_pResult != nullptr)
+    {
+        mysql_free_result(m_pResult);
+        m_pResult = nullptr;
+    }
     dispose();
 }
 
