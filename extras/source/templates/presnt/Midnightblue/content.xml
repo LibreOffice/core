@@ -45,102 +45,47 @@
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
     </style:style>
-    <style:style style:name="P2" style:family="paragraph">
-      <loext:graphic-properties draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="16.5pt"/>
-    </style:style>
-    <style:style style:name="P3" style:family="paragraph">
-      <loext:graphic-properties draw:fill-color="#ffffff"/>
-    </style:style>
-    <text:list-style style:name="L1">
-      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
-        <style:list-level-properties text:space-before="0.3cm" text:min-label-width="0.9cm"/>
-        <style:text-properties fo:font-family="StarSymbol" style:font-charset="x-symbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="2" text:bullet-char="–">
-        <style:list-level-properties text:space-before="1.5cm" text:min-label-width="0.9cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="75%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
-        <style:list-level-properties text:space-before="2.8cm" text:min-label-width="0.8cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="4" text:bullet-char="–">
-        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="75%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
-        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
-        <style:list-level-properties text:space-before="6.6cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
-        <style:list-level-properties text:space-before="7.8cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
-        <style:list-level-properties text:space-before="9cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
-        <style:list-level-properties text:space-before="10.2cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
-        <style:list-level-properties text:space-before="11.4cm" text:min-label-width="0.6cm"/>
-        <style:text-properties fo:font-family="StarSymbol" fo:color="#2c3e50" fo:font-size="45%"/>
-      </text:list-level-style-bullet>
-    </text:list-style>
   </office:automatic-styles>
   <office:body>
     <office:presentation>
       <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Midnightblue1" presentation:presentation-page-layout-name="AL1T0">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:frame presentation:style-name="pr1" draw:text-style-name="P1" draw:layer="layout" svg:width="26cm" svg:height="1.997cm" svg:x="1cm" svg:y="7.875cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr1" draw:layer="layout" svg:width="26cm" svg:height="1.997cm" svg:x="1cm" svg:y="7.875cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr2" draw:text-style-name="P2" draw:layer="layout" svg:width="26cm" svg:height="4.125cm" svg:x="1cm" svg:y="10.875cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr2" draw:text-style-name="P1" draw:layer="layout" svg:width="26cm" svg:height="4.125cm" svg:x="1cm" svg:y="10.875cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="1" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr3" draw:text-style-name="P3" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:frame presentation:style-name="pr3" draw:text-style-name="P1" draw:layer="layout" svg:width="16.8cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true" presentation:user-transformed="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page2" draw:style-name="dp3" draw:master-page-name="Midnightblue" presentation:presentation-page-layout-name="AL2T1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="layout" svg:width="26cm" svg:height="1.997cm" svg:x="1cm" svg:y="0.627cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr4" draw:layer="layout" svg:width="26cm" svg:height="2cm" svg:x="1cm" svg:y="0.627cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr5" draw:text-style-name="P1" draw:layer="layout" svg:width="26cm" svg:height="10.5cm" svg:x="1cm" svg:y="4.125cm" presentation:class="outline" presentation:user-transformed="true">
-          <draw:text-box>
-            <text:list text:style-name="L1">
-              <text:list-item>
-                <text:p>Test</text:p>
-              </text:list-item>
-            </text:list>
-          </draw:text-box>
+        <draw:frame presentation:style-name="pr5" draw:layer="layout" svg:width="26cm" svg:height="10.5cm" svg:x="1cm" svg:y="4.125cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="2" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr6" draw:text-style-name="P3" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="pr6" draw:text-style-name="P1" draw:layer="layout" svg:width="16.8cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page3" draw:style-name="dp3" draw:master-page-name="Midnightblue2" presentation:presentation-page-layout-name="AL2T1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:frame presentation:style-name="pr7" draw:text-style-name="P1" draw:layer="layout" svg:width="13cm" svg:height="4.5cm" svg:x="7.5cm" svg:y="4cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr7" draw:layer="layout" svg:width="13cm" svg:height="4.5cm" svg:x="7.5cm" svg:y="4cm" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="3" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr8" draw:text-style-name="P3" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="pr8" draw:text-style-name="P1" draw:layer="layout" svg:width="16.8cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
