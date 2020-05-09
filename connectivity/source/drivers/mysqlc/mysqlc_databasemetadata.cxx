@@ -271,7 +271,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated() { return true; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions() { return true; }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets() { return false; }
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets() { return true; }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause() { return true; }
 
