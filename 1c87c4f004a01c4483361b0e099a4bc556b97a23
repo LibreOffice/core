@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17630dfe_93abed9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-05-09T08:27:33Z",
+      "side": 1,
+      "message": "Test Plan:\n\n0. cd ~/projects\n1. git clone https://github.com/facebook/buck.git\n2. cd buck\n3. ant\n4. cd ~/bin\n5. ln -s $HOME/projects/buck/bin/buck .\n6. cd $HOME/projects/libo\n7. buck build api_install\n8. buck build api_deploy",
+      "revId": "1c87c4f004a01c4483361b0e099a4bc556b97a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
