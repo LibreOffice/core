@@ -24,10 +24,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** PatternFillPrimitive2D class
 
             This primitive allows filling a given tools::PolyPolygon with a pattern
@@ -88,8 +86,7 @@ namespace drawinglayer
             // XAccounting
             virtual sal_Int64 SAL_CALL estimateUsage() override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

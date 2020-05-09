@@ -24,10 +24,8 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         // This primitive is used to represent geometry for non-visible objects,
         // e.g. a PresObj's outline. To still be able to use primitives for HitTest
         // functionality, the 2d decompositions will produce an as much as possible
@@ -52,8 +50,7 @@ namespace drawinglayer
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

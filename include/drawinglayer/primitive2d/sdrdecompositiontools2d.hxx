@@ -32,10 +32,8 @@ namespace basegfx {
 }
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         // helpers to create HitTestPrimitives Line
         Primitive2DReference DRAWINGLAYER_DLLPUBLIC createHiddenGeometryPrimitives2D(
             const basegfx::B2DHomMatrix& rMatrix);
@@ -57,8 +55,7 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& rPolygon,
             const basegfx::B2DHomMatrix& rMatrix);
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

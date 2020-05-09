@@ -28,10 +28,8 @@
 
 // HelplinePrimitive2D class
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** HelplineStyle2D definition
 
             The available styles of Helplines
@@ -102,8 +100,7 @@ namespace drawinglayer
             /// Override standard getDecomposition to be view-dependent here
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

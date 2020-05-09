@@ -30,10 +30,8 @@
 
 // SvgGradientEntry class
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /// a single GradientStop defining a color and opacity at a distance
         class SvgGradientEntry
         {
@@ -69,16 +67,8 @@ namespace drawinglayer
 
         typedef ::std::vector< SvgGradientEntry > SvgGradientEntryVector;
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+        // SvgGradientHelper class
 
-
-// SvgGradientHelper class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         enum class SpreadMethod
         {
             Pad,
@@ -176,16 +166,7 @@ namespace drawinglayer
             /// compare operator
             bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// SvgLinearGradientPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /// the basic linear gradient primitive
         class DRAWINGLAYER_DLLPUBLIC SvgLinearGradientPrimitive2D final : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
         {
@@ -230,16 +211,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// SvgRadialGradientPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /// the basic radial gradient primitive
         class DRAWINGLAYER_DLLPUBLIC SvgRadialGradientPrimitive2D final : public BufferedDecompositionPrimitive2D, public SvgGradientHelper
         {
@@ -294,16 +266,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // SvgLinearAtomPrimitive2D class
 
-// SvgLinearAtomPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /*  basic primitive for a single linear GradientRun in unit coordinates.
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
@@ -338,16 +303,9 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
+        // SvgRadialAtomPrimitive2D class
 
-// SvgRadialAtomPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /*  basic primitive for a single radial GradientRun in unit coordinates.
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
@@ -405,8 +363,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
