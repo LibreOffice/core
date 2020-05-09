@@ -187,7 +187,7 @@ namespace sdbtools
                 { CompositionType::ForDataManipulation,      EComposeRule::InDataManipulation },
                 { CompositionType::ForProcedureCalls,        EComposeRule::InProcedureCalls },
                 { CompositionType::ForPrivilegeDefinitions,  EComposeRule::InPrivilegeDefinitions },
-                { CompositionType::ForPrivilegeDefinitions,  EComposeRule::Complete }
+                { CompositionType::Complete,                 EComposeRule::Complete }
             };
 
             bool found = false;
