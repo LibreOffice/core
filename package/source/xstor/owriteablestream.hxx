@@ -50,9 +50,9 @@
 
 #include "ocompinstream.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
-} } } }
+}
 
 namespace package {
     // all data in aHash1 is contained in aHash2
