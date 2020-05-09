@@ -6988,7 +6988,10 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                     FSNS( XML_w, XML_cs ), aFamilyName,
                     FSNS( XML_w, XML_hint ), "default" );
         }
-        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
+        else
+        {
+            m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
+        }
 
         WriteCollectedRunProperties();
 

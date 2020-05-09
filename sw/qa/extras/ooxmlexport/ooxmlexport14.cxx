@@ -680,6 +680,22 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", "bar");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Ensure that for list=1 and level=0 we wrote correct bullet char and correct font
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:lvlText",
+                "val", u"\uF0B7");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "ascii", "Symbol");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "hAnsi", "Symbol");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "cs", "Symbol");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
