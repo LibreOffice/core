@@ -45,11 +45,11 @@ namespace oox {
     namespace vml { class VMLExport; }
 }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XModel; }
     namespace drawing { class XShape; }
     namespace awt { class XControlModel; }
-} } }
+}
 
 /// Data to be written in the document settings part of the document
 struct DocxSettingsData

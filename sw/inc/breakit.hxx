@@ -27,8 +27,8 @@
 #include "swdllapi.h"
 
 enum class SvtScriptType;
-namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::i18n { class XBreakIterator; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class SW_DLLPUBLIC SwBreakIt
 {

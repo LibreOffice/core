@@ -59,12 +59,8 @@ class SwTextField;
 namespace i18nutil {
     struct SearchOptions2;
 }
-namespace com { namespace sun { namespace star { namespace text {
-    class XTextRange;
-}}}}
-namespace com { namespace sun { namespace star { namespace container {
-    class XStringKeyMap;
-}}}}
+namespace com::sun::star::text { class XTextRange; }
+namespace com::sun::star::container { class XStringKeyMap; }
 
 // enum and struct to get information via the Doc-Position
 

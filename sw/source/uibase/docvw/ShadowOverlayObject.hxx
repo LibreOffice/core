@@ -24,7 +24,7 @@
 
 class SwView;
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 enum ShadowState
 {
@@ -59,7 +59,7 @@ public:
         static std::unique_ptr<ShadowOverlayObject> CreateShadowOverlayObject( SwView const & rDocView );
 };
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 #endif
 

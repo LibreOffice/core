@@ -22,7 +22,7 @@
 
 #include "txtfld.hxx"
 
-namespace sw { namespace mark { class IMark; } }
+namespace sw::mark { class IMark; }
 
 class SwTextAnnotationField final : public SwTextField
 {

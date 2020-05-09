@@ -116,10 +116,10 @@ enum MakePageType
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrAllFillAttributesHelper;
     typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
-}}
+}
 
 /// Helper class to isolate geometry-defining members of SwFrame
 /// and to control their accesses. Moved to own class to have no

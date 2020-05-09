@@ -65,14 +65,14 @@ enum class ExpandMode;
 enum class SwFieldIds : sal_uInt16;
 class SwField;
 
-namespace sw { namespace mark { enum class RestoreMode; } }
+namespace sw::mark { enum class RestoreMode; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         template < class > class Sequence;
     }
     namespace text { class XTextContent; }
-} } }
+}
 
 typedef std::set< sal_Int32 > SwSoftPageBreakList;
 

@@ -27,7 +27,7 @@
 #include "swdllapi.h"
 
 class SwXMLTextBlocks;
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com::sun::star::embed { class XStorage; }
 
 class SW_DLLPUBLIC SwAutoCorrect final : public SvxAutoCorrect
 {

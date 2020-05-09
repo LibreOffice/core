@@ -47,8 +47,8 @@ class SfxFilter;
 class SfxFilterContainer;
 class SotStorage;
 class SvStream;
-namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename> class Reference; } } } }
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::uno { template <typename> class Reference; }
 
 struct SwIoDetect
 {

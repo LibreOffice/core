@@ -22,11 +22,11 @@
 
 #include <vcl/menubtn.hxx>
 
-namespace sw { namespace annotation {
+namespace sw::annotation {
     class SwAnnotationWin;
-} }
+}
 
-namespace sw { namespace annotation {
+namespace sw::annotation {
 
 class AnnotationMenuButton : public MenuButton
 {
@@ -47,7 +47,7 @@ class AnnotationMenuButton : public MenuButton
         sw::annotation::SwAnnotationWin& mrSidebarWin;
 };
 
-} } // end of namespace sw::annotation
+} // end of namespace sw::annotation
 
 #endif
 

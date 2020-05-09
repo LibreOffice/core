@@ -41,11 +41,11 @@ class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace i18n { struct Boundary; }
     namespace accessibility { class XAccessibleHyperlink; }
     namespace style { struct TabStop; }
-} } }
+}
 
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue > tAccParaPropValMap;

@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/weld.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
     class WrapPropertyPanel
         : public PanelLayout
@@ -81,7 +81,7 @@ namespace sw { namespace sidebar {
         DECL_LINK(SpacingLBHdl, weld::ComboBox&, void);
     };
 
-} } // end of namespace ::sw::sidebar
+} // end of namespace ::sw::sidebar
 
 #endif
 

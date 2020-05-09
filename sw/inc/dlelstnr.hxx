@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace linguistic2 {
         class XLinguServiceManager2;
         class XProofreadingIterator;
@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace frame {
         class XDesktop2;
     }
-} } }
+}
 
 /** EventListener that triggers spellchecking and hyphenation.
 

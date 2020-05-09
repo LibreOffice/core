@@ -38,12 +38,12 @@ class SwTOXEntryTabPage;
 class SwOneExampleFrame;
 class SwWrtShell;
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace text{
         class XTextSection;
         class XDocumentIndex;
     }
-}}}
+}
 
 struct SwIndexSections_Impl
 {
