@@ -143,8 +143,8 @@ bool OPreparedResultSet::fetchResult()
     if (failure == 1)
     {
         MYSQL* pMysql = m_rConnection.getMysqlConnection();
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql), mysql_errno(pMysql),
-                                                     *this, m_encoding);
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMysql), mysql_sqlstate(pMysql),
+                                                     mysql_errno(pMysql), *this, m_encoding);
     }
     else if (failure == MYSQL_NO_DATA)
         return false;
@@ -341,12 +341,12 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_NEWDECIMAL:
             return getString(nColumnIndex);
         case MYSQL_TYPE_BLOB:
-            throw SQLException("Column with type BLOB cannot be converted", *this, OUString(), 1,
+            throw SQLException("Column with type BLOB cannot be converted", *this, "22000", 1,
                                Any());
         default:
             SAL_WARN("connectivity.mysqlc", "OPreparedResultSet::getRowSetValue: unknown type: "
                                                 << m_aFields[nColumnIndex - 1].type);
-            throw SQLException("Unknown column type when fetching result", *this, OUString(), 1,
+            throw SQLException("Unknown column type when fetching result", *this, "22000", 1,
                                Any());
     }
 }
@@ -1073,11 +1073,11 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OPreparedResultSet::g
 void OPreparedResultSet::checkColumnIndex(sal_Int32 index)
 {
     if (!m_aData)
-        throw SQLException("Cursor out of range", *this, OUString(), 1, Any());
+        throw SQLException("Cursor out of range", *this, "HY109", 1, Any());
     if (index < 1 || index > static_cast<int>(m_nColumnCount))
     {
         /* static object for efficiency or thread safety is a problem ? */
-        throw SQLException("index out of range", *this, OUString(), 1, Any());
+        throw SQLException("index out of range", *this, "42S22", 1, Any());
     }
 }
 
