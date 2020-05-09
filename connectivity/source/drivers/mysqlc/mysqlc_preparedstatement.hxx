@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <cppuhelper/compbase4.hxx>
 
 namespace connectivity
 {
@@ -52,8 +53,7 @@ struct BindMetaData
     my_bool error = false;
 };
 
-typedef ::cppu::ImplHelper5<css::sdbc::XPreparedStatement, css::sdbc::XParameters,
-                            css::sdbc::XPreparedBatchExecution,
+typedef ::cppu::ImplHelper4<css::sdbc::XPreparedStatement, css::sdbc::XParameters,
                             css::sdbc::XResultSetMetaDataSupplier, css::lang::XServiceInfo>
     OPreparedStatement_BASE;
 
@@ -149,9 +149,9 @@ public:
     void SAL_CALL clearParameters() override;
 
     // XPreparedBatchExecution
-    void SAL_CALL addBatch() override;
-    void SAL_CALL clearBatch() override;
-    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
+    // void SAL_CALL addBatch() override;
+    // void SAL_CALL clearBatch() override;
+    // css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 
     // XCloseable
     void SAL_CALL close() override;
