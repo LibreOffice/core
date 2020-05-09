@@ -23,11 +23,11 @@
 #include <UndoActions.hxx>
 #include <functional>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XShape;
     }
-}}}
+}
 
 namespace rptui
 {
