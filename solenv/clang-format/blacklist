@@ -13717,6 +13717,8 @@ svx/source/sidebar/area/AreaPropertyPanel.cxx
 svx/source/sidebar/area/AreaPropertyPanel.hxx
 svx/source/sidebar/area/AreaPropertyPanelBase.cxx
 svx/source/sidebar/area/AreaTransparencyGradientPopup.cxx
+svx/source/sidebar/inspector/InspectorTextPanel.cxx
+svx/source/sidebar/inspector/InspectorTextPanel.hxx
 svx/source/sidebar/graphic/GraphicPropertyPanel.cxx
 svx/source/sidebar/graphic/GraphicPropertyPanel.hxx
 svx/source/sidebar/line/LinePropertyPanel.cxx
