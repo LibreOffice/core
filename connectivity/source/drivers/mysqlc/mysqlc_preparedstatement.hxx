@@ -93,11 +93,6 @@ public:
     sal_Bool SAL_CALL execute() override;
     Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 
-    // XStatement
-    using OCommonStatement::execute;
-    using OCommonStatement::executeQuery;
-    using OCommonStatement::executeUpdate;
-
     // XParameters
     void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType) override;
 

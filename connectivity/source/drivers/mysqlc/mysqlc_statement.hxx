@@ -32,7 +32,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <rtl/ref.hxx>
 
 namespace connectivity
@@ -43,10 +43,10 @@ using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::sdbc::SQLWarning;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Type;
 
-typedef ::cppu::WeakComponentImplHelper5<css::sdbc::XStatement, css::sdbc::XWarningsSupplier,
-                                         css::util::XCancellable, css::sdbc::XCloseable,
-                                         css::sdbc::XMultipleResults>
+typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XWarningsSupplier, css::util::XCancellable,
+                                         css::sdbc::XCloseable>
     OCommonStatement_IBase;
 
 //************ Class: OCommonStatement
@@ -71,7 +71,6 @@ protected:
 
 protected:
     void closeResultSet();
-    sal_Bool getResult();
 
     // OPropertyArrayUsageHelper
     ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
@@ -98,10 +97,7 @@ public:
 
     // XInterface
     void SAL_CALL release() throw() override;
-
     void SAL_CALL acquire() throw() override;
-
-    // XInterface
     Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
     //XTypeProvider
@@ -109,15 +105,6 @@ public:
 
     // XPropertySet
     css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
-
-    // XStatement
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL executeQuery(const OUString& sql) override;
-
-    sal_Int32 SAL_CALL executeUpdate(const OUString& sql) override;
-
-    sal_Bool SAL_CALL execute(const OUString& sql) override;
-
-    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 
     // XWarningsSupplier
     Any SAL_CALL getWarnings() override;
@@ -130,13 +117,6 @@ public:
     // XCloseable
     void SAL_CALL close() override;
 
-    // XMultipleResults
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getResultSet() override;
-
-    sal_Int32 SAL_CALL getUpdateCount() override;
-
-    sal_Bool SAL_CALL getMoreResults() override;
-
     // other methods
     OConnection* getOwnConnection() const { return m_xConnection.get(); }
 
@@ -144,10 +124,15 @@ private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-class OStatement final : public OCommonStatement, public css::lang::XServiceInfo
+typedef ::cppu::ImplHelper3<css::lang::XServiceInfo, css::sdbc::XMultipleResults,
+                            css::sdbc::XStatement>
+    OStatement_BASE;
 
+class OStatement final : public OCommonStatement, public OStatement_BASE
 {
     virtual ~OStatement() override = default;
+
+    bool getResult();
 
 public:
     // A constructor which is required for the return of the objects
@@ -162,10 +147,24 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
+    //XInterface
     Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-
     void SAL_CALL acquire() throw() override;
     void SAL_CALL release() throw() override;
+
+    //XTypeProvider
+    css::uno::Sequence<Type> SAL_CALL getTypes() override;
+
+    // XStatement
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL executeQuery(const OUString& sql) override;
+    sal_Int32 SAL_CALL executeUpdate(const OUString& sql) override;
+    sal_Bool SAL_CALL execute(const OUString& sql) override;
+    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
+
+    // XMultipleResults
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getResultSet() override;
+    sal_Int32 SAL_CALL getUpdateCount() override;
+    sal_Bool SAL_CALL getMoreResults() override;
 
     // XBatchExecution
     // void SAL_CALL addBatch(const OUString& sql) override;
