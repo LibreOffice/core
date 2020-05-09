@@ -40,6 +40,8 @@
 
 namespace xmloff::token {
 
+    // IMPORTANT! XMLTokenEnum order MUST be in synch with aTokenList in
+    // xmloff/source/core/xmltoken.cxx, and with xmloff/source/token/tokens.txt.
 
     /**
      * The enumeration of all XML tokens.

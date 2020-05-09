@@ -49,6 +49,9 @@ namespace xmloff::token {
     #define TOKEN( s, e ) { sizeof(s)-1, s, std::nullopt }
 #endif
 
+    // IMPORTANT! aTokenList order MUST be in synch with XMLTokenEnum in include/xmloff/xmltoken.hxx
+    // and with xmloff/source/token/tokens.txt.
+
     struct XMLTokenEntry aTokenList[] =
     {
 #if OSL_DEBUG_LEVEL > 0

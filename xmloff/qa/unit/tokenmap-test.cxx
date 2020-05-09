@@ -62,6 +62,8 @@ void TokenmapTest::test_roundTrip()
 void TokenmapTest::test_listEquality()
 {
     //make sure the two token lists stay in sync
+    // This depends on same order in three places: XMLTokenEnum in include/xmloff/xmltoken.hxx,
+    // aTokenList in xmloff/source/core/xmltoken.cxx, and xmloff/source/token/tokens.txt
     for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
     {
         Sequence< sal_Int8 > rUtf8Name = pTokenMap->getUtf8TokenName(nToken);
