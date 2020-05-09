@@ -108,10 +108,10 @@ void SAL_CALL OCommonStatement::close()
     disposeResultSet();
 }
 
-void SAL_CALL OStatement::clearBatch()
-{
-    // if you support batches clear it here
-}
+// void SAL_CALL OStatement::clearBatch()
+// {
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("com:sun:star:sdbc:XBatchExecution");
+// }
 
 sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
 {
@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL OCommonStatement::getUpdateCount() { return m_nAffectedRows; 
 
 Any SAL_CALL OStatement::queryInterface(const Type& rType)
 {
-    Any aRet = ::cppu::queryInterface(rType, static_cast<XBatchExecution*>(this));
+    Any aRet = ::cppu::queryInterface(rType, static_cast<XServiceInfo*>(this));
     if (!aRet.hasValue())
     {
         aRet = OCommonStatement::queryInterface(rType);
@@ -188,19 +188,21 @@ Any SAL_CALL OStatement::queryInterface(const Type& rType)
     return aRet;
 }
 
-void SAL_CALL OStatement::addBatch(const OUString&)
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
-}
+// void SAL_CALL OStatement::addBatch(const OUString&)
+// {
+//     MutexGuard aGuard(m_aMutex);
+//     checkDisposed(rBHelper.bDisposed);
 
-Sequence<sal_Int32> SAL_CALL OStatement::executeBatch()
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("com:sun:star:sdbc:XBatchExecution");
+// }
 
-    return Sequence<sal_Int32>();
-}
+// Sequence<sal_Int32> SAL_CALL OStatement::executeBatch()
+// {
+//     MutexGuard aGuard(m_aMutex);
+//     checkDisposed(rBHelper.bDisposed);
+
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("com:sun:star:sdbc:XBatchExecution");
+// }
 
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
 {
