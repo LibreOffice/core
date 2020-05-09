@@ -29,7 +29,7 @@
 #include <vector>
 #include <functional>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** This class gives access to the configuration.  Create an object of this
     class for one node of the configuration.  This will be the root node.
@@ -170,7 +170,7 @@ private:
     css::uno::Any maNode;
 };
 
-} } // end of namespace sdext::tools
+} // end of namespace sdext::tools
 
 #endif
 

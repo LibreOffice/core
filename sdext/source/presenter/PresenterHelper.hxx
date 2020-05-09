@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Collection of helper functions that do not fit in anywhere else.
     Provide access to frequently used strings of the drawing framework.
@@ -53,7 +53,7 @@ namespace PresenterHelper
         const css::uno::Reference<css::frame::XController>& rxController);
 }
 
-} } // end of namespace presenter
+} // end of namespace presenter
 
 #endif
 

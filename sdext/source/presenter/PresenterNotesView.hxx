@@ -34,7 +34,7 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterButton;
 class PresenterScrollBar;
@@ -149,7 +149,7 @@ private:
     void UpdateScrollBar();
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

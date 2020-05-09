@@ -28,7 +28,7 @@
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Collection of functions to ease the life of a canvas user.
 */
@@ -100,7 +100,7 @@ private:
         const css::rendering::RenderState& rDefaultRenderState);
 };
 
-} }
+}
 
 #endif
 

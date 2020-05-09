@@ -33,11 +33,9 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** The timer allows tasks to be scheduled for execution at a specified time
     in the future.
@@ -117,7 +115,7 @@ private:
     void CheckCurrentTime (const TimeValue& rCurrentTime);
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 
