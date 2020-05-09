@@ -130,7 +130,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     int failure = mysql_real_query(pMySql, toExec.getStr(), toExec.getLength());
 
     if (failure)
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_errno(pMySql),
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_sqlstate(pMySql), mysql_errno(pMySql),
                                                      *this, m_xConnection->getConnectionEncoding());
     m_nAffectedRows = mysql_affected_rows(pMySql);
 
@@ -149,13 +149,13 @@ Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const OUString& sq
     // toExec = mysqlc_sdbc_driver::escapeSql(toExec);
     int failure = mysql_real_query(pMySql, toExec.getStr(), toExec.getLength());
     if (failure)
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_errno(pMySql),
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_sqlstate(pMySql), mysql_errno(pMySql),
                                                      *this, m_xConnection->getConnectionEncoding());
 
     m_pMysqlResult = mysql_store_result(pMySql);
     if (m_pMysqlResult == nullptr)
     {
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_errno(pMySql),
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_sqlstate(pMySql), mysql_errno(pMySql),
                                                      *this, m_xConnection->getConnectionEncoding());
     }
 
