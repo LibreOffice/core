@@ -755,12 +755,12 @@ namespace sw::mark
                 // Selected item
                 OUString sResultKey = ODF_FORMDROPDOWN_RESULT;
                 auto pSelectedItemIter = pParameters->find(sResultKey);
+                sal_Int32 nSelection = -1;
                 if (pSelectedItemIter != pParameters->end())
                 {
-                    sal_Int32 nSelection = -1;
                     pSelectedItemIter->second >>= nSelection;
-                    sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\"}}");
                 }
+                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\"}}");
             }
             else
             {
