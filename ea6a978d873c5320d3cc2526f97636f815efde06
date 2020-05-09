@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f8ab569_df8097a4",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-09T16:40:47Z",
+      "side": 1,
+      "message": "This doesn\u0027t work for Ubuntu 16.04.\n\nvcl/unx/gtk3/gtk3gtkinst.cxx: In member function \\u2018void {anonymous}::GtkInstanceWidget::async_drag_cancel(void*)\\u2019:\nvcl/unx/gtk3/gtk3gtkinst.cxx:3079:49: error: \\u2018GDK_DRAG_CANCEL_USER_CANCELLED\\u2019 was not declared in this scope\n     g_signal_emit_by_name(context, \"cancel\", 0, GDK_DRAG_CANCEL_USER_CANCELLED);\n                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nvcl/unx/gtk3/gtk3gtkinst.cxx:3079:49: note: suggested alternative: \\u2018GTK_DRAG_RESULT_USER_CANCELLED\\u2019\n     g_signal_emit_by_name(context, \"cancel\", 0, GDK_DRAG_CANCEL_USER_CANCELLED);\n                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                                                 GTK_DRAG_RESULT_USER_CANCELLED",
+      "range": {
+        "startLine": 3079,
+        "startChar": 0,
+        "endLine": 3079,
+        "endChar": 78
+      },
+      "revId": "ea6a978d873c5320d3cc2526f97636f815efde06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
