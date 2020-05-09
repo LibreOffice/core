@@ -26,7 +26,7 @@
 
 #include <memory>
 
-namespace com {  namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing {
         class XDrawPage;
         class XDrawPagesSupplier;
@@ -36,7 +36,8 @@ namespace com {  namespace sun { namespace star {
     }
     namespace animations {
         class XAnimationNode;
-} } } }
+    }
+}
 
 namespace basegfx
 {

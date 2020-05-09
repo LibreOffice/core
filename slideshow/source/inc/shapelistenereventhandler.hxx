@@ -23,12 +23,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing
-{
-    class XShape;
-} namespace presentation {
-    class XShapeEventListener;
-} } } }
+namespace com::sun::star {
+    namespace drawing {
+        class XShape;
+    }
+    namespace presentation {
+        class XShapeEventListener;
+    }
+}
 
 /* Definition of ShapeListenerEventHandler interface */
 

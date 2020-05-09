@@ -23,10 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-namespace com{ namespace sun{ namespace star{ namespace uno
-{
-    class XComponentContext;
-}}}}
+namespace com::sun::star::uno { class XComponentContext; }
 
 
 namespace slideshow

@@ -39,9 +39,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace beans {
-    struct NamedValue;
-} } } }
+namespace com::sun::star::beans { struct NamedValue; }
 namespace basegfx
 {
     class B2DRange;
@@ -84,7 +82,7 @@ namespace slideshow
     }
 }
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
 
         template <typename T>
         inline ::std::size_t hash_value(
@@ -96,7 +94,7 @@ namespace com { namespace sun { namespace star { namespace uno {
             return slideshow::internal::hash<void *>()(xRoot.get());
         }
 
-} } } }
+}
 
 namespace slideshow
 {
