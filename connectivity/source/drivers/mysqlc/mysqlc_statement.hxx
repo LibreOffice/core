@@ -65,7 +65,6 @@ protected:
     rtl::Reference<OConnection> m_xConnection; // The owning Connection object
 
     css::uno::Reference<css::sdbc::XResultSet> m_xResultSet;
-    MYSQL_RES* m_pMysqlResult = nullptr;
 
     // number of rows affected by an UPDATE, DELETE or INSERT statement.
     sal_Int32 m_nAffectedRows = 0;
