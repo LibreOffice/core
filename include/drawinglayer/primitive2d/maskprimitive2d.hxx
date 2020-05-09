@@ -25,10 +25,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** MaskPrimitive2D class
 
             This is the central masking primitive. It's a grouping
@@ -67,8 +65,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

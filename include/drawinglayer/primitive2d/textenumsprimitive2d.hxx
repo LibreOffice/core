@@ -24,10 +24,8 @@
 #include <tools/fontenum.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** TextLine definition
 
             This is used for both underline and overline
@@ -91,8 +89,7 @@ namespace drawinglayer
             TEXT_RELIEF_ENGRAVED
         };
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

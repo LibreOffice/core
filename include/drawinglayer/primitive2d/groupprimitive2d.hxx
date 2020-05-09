@@ -26,10 +26,8 @@
 
 // GroupPrimitive2D class
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** GroupPrimitive2D class
 
             Baseclass for all grouping 2D primitives
@@ -89,8 +87,7 @@ namespace drawinglayer
             // XAccounting
             virtual sal_Int64 SAL_CALL estimateUsage() override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,10 +23,8 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <rtl/ustring.hxx>
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** ObjectInfoPrimitive2D class
 
             Info hierarchy helper class to hold contents like Name, Title and
@@ -61,8 +59,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,10 +25,8 @@
 #include <rtl/ustring.hxx>
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** TextHierarchyLinePrimitive2D class
 
             Text format hierarchy helper class. It decomposes to its
@@ -48,14 +46,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** TextHierarchyBulletPrimitive2D class
 
             This primitive encapsulates text bullets.
@@ -70,14 +61,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** TextHierarchyParagraphPrimitive2D class
 
             This primitive encapsulates text paragraphs.
@@ -104,14 +88,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** TextHierarchyBlockPrimitive2D class
 
             This primitive encapsulates text blocks.
@@ -126,14 +103,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** FieldType definition */
         enum FieldType
         {
@@ -182,14 +152,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** TextHierarchyEditPrimitive2D class
 
             #i97628#
@@ -210,8 +173,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

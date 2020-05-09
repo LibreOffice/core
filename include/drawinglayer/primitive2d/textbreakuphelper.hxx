@@ -27,10 +27,8 @@
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
 
 
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         enum class BreakupUnit
         {
             Character,
@@ -71,8 +69,7 @@ namespace drawinglayer
             const Primitive2DContainer& getResult(BreakupUnit aBreakupUnit = BreakupUnit::Character) const;
         };
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::primitive2d
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
