@@ -177,6 +177,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/mnuctrls/smarttagmenu \
     svx/source/sidebar/ContextChangeEventMultiplexer \
     svx/source/sidebar/EmptyPanel \
+    svx/source/sidebar/inspector/InspectorTextPanel \
     svx/source/sidebar/nbdtmg \
     svx/source/sidebar/nbdtmgfact	\
     svx/source/sidebar/PanelFactory \

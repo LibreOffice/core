@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include "text/TextPropertyPanel.hxx"
+#include "inspector/InspectorTextPanel.hxx"
 #include "styles/StylesPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
 #include "lists/ListsPropertyPanel.hxx"
@@ -123,6 +124,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     if (rsResourceURL.endsWith("/TextPropertyPanel"))
     {
         pControl = TextPropertyPanel::Create(pParentWindow, xFrame);
+    }
+    else if (rsResourceURL.endsWith("/InspectorTextPanel"))
+    {
+        pControl = InspectorTextPanel::Create(pParentWindow, xFrame);
     }
     else if (rsResourceURL.endsWith("/StylesPropertyPanel"))
     {
