@@ -3236,9 +3236,7 @@ void VBAConstantHelper::init()
     if ( isInited )
         return;
 
-    Sequence< TypeClass > types(1);
-    types[ 0 ] = TypeClass_CONSTANTS;
-    Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( "ooo.vba", types, TypeDescriptionSearchDepth_INFINITE  );
+    Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( "ooo.vba", {TypeClass_CONSTANTS}, TypeDescriptionSearchDepth_INFINITE  );
 
     if ( !xEnum.is())
     {
@@ -3922,9 +3920,7 @@ static Reference< XInterface > createAllListenerAdapter
         Reference< XInvocation > xInvocationToAllListenerMapper =
             new InvocationToAllListenerMapper(xListenerType, xListener, Helper);
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName() );
-        Sequence<Type> arg2(1);
-        arg2[0] = aListenerType;
-        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, arg2 );
+        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, {aListenerType} );
     }
     return xAdapter;
 }

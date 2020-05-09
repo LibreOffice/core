@@ -298,9 +298,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     if (bNotLocalized)
     {
         LanguageType eType(m_xLanguageLB->get_selected_id().toUInt32());
-        Sequence<Locale> aLocaleSeq(1);
-        aLocaleSeq[0] = LanguageTag(eType).getLocale();
-        return aLocaleSeq;
+        return {LanguageTag(eType).getLocale()};
     }
     std::vector<Locale> aLocaleSeq;
     const sal_Int32 nCount = m_xCheckLangLB->n_children();

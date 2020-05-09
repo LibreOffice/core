@@ -131,15 +131,14 @@ namespace basegfx::unotools
 
             if( rPoly.areControlPointsUsed() )
             {
-                uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( 1 );
-                outputSequence[0] = bezierSequenceFromB2DPolygon( rPoly );
+                uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ bezierSequenceFromB2DPolygon( rPoly )};
 
                 xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
             }
             else
             {
-                uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( 1 );
-                outputSequence[0] = pointSequenceFromB2DPolygon( rPoly );
+                uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence{
+                 pointSequenceFromB2DPolygon( rPoly )};
 
                 xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
             }
