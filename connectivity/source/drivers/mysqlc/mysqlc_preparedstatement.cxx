@@ -534,18 +534,20 @@ void SAL_CALL OPreparedStatement::clearParameters()
     }
 }
 
-void SAL_CALL OPreparedStatement::clearBatch()
-{
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearBatch",
-                                                            *this);
-}
+// void SAL_CALL OPreparedStatement::clearBatch()
+// {
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearBatch",
+//                                                             *this);
+// }
 
-void SAL_CALL OPreparedStatement::addBatch()
-{
-    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::addBatch", *this);
-}
+// void SAL_CALL OPreparedStatement::addBatch()
+// {
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::addBatch", *this);
+// }
 
-Sequence<sal_Int32> SAL_CALL OPreparedStatement::executeBatch() { return Sequence<sal_Int32>(); }
+// Sequence<sal_Int32> SAL_CALL OPreparedStatement::executeBatch() {
+//     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::executeBatch", *this);
+// }
 
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
