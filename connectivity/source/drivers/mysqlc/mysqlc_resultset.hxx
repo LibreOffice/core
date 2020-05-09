@@ -71,7 +71,6 @@ class OResultSet final : public OBase_Mutex,
     MYSQL_RES* m_pResult;
     rtl_TextEncoding m_encoding;
     bool m_bWasNull = false; // did the last getXXX result null?
-    bool m_bResultFetched = false;
 
     sal_Int32 getDataLength(sal_Int32 column)
     {
