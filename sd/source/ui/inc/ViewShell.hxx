@@ -43,7 +43,7 @@ namespace weld
     class Window;
 }
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawSubController; } } } }
+namespace com::sun::star::drawing { class XDrawSubController; }
 
 namespace sd {
 

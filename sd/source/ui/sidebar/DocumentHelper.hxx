@@ -27,7 +27,7 @@
 class SdDrawDocument;
 class SdPage;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** A collection of methods supporting the handling of master pages.
 */
@@ -101,7 +101,7 @@ private:
         SdPage* pPage);
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

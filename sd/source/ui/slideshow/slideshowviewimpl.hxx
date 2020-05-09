@@ -32,11 +32,11 @@
 
 #include <slideshow.hxx>
 
-namespace com { namespace sun { namespace star { namespace awt { class XPointer; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace awt { class XWindowPeer; } } } }
-namespace com { namespace sun { namespace star { namespace awt { struct WindowEvent; } } } }
-namespace com { namespace sun { namespace star { namespace rendering { class XSpriteCanvas; } } } }
+namespace com::sun::star::awt { class XPointer; }
+namespace com::sun::star::awt { class XWindow; }
+namespace com::sun::star::awt { class XWindowPeer; }
+namespace com::sun::star::awt { struct WindowEvent; }
+namespace com::sun::star::rendering { class XSpriteCanvas; }
 class SdDrawDocument;
 
 namespace sd

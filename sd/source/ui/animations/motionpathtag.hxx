@@ -25,7 +25,7 @@
 #include <smarttag.hxx>
 #include "CustomAnimationList.hxx"
 
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com::sun::star::drawing { class XShape; }
 class SdrPathObj;
 
 namespace sd {

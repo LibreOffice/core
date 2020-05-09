@@ -30,7 +30,7 @@ class TemplateScanner;
 class TemplateEntry;
 }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Fill a MasterPageContainer with information about the available master
     pages.  These are provided by one default page and from the existing
@@ -86,7 +86,7 @@ private:
     State AddTemplate();
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

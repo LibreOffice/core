@@ -27,11 +27,11 @@
 class SdPage;
 class SdrUndoAction;
 
-namespace com { namespace sun { namespace star { namespace office {
+namespace com::sun::star::office {
     class XAnnotation;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SfxViewShell;
 

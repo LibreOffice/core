@@ -30,9 +30,9 @@
 
 class SdDrawDocument;
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace sd { namespace tools { class EventMultiplexerEvent; } }
+namespace com::sun::star::drawing { class XDrawView; }
+namespace com::sun::star::frame { class XModel; }
+namespace sd::tools { class EventMultiplexerEvent; }
 
 namespace sd
 {

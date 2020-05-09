@@ -28,14 +28,12 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace ucb {
-class XContent;
-class XCommandEnvironment;
-} } } }
+namespace com::sun::star::ucb {
+    class XContent;
+    class XCommandEnvironment;
+}
 
-namespace com { namespace sun { namespace star { namespace sdbc {
-class XResultSet;
-} } } }
+namespace com::sun::star::sdbc { class XResultSet; }
 
 namespace sd {
 

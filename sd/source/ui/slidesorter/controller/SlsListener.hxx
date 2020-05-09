@@ -38,15 +38,10 @@ namespace sd {
 class ViewShellBase;
 }
 
-namespace sd { namespace tools {
-class EventMultiplexerEvent;
-} }
+namespace sd::tools { class EventMultiplexerEvent; }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
-
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 typedef cppu::WeakComponentImplHelper<
     css::document::XEventListener,
@@ -166,7 +161,7 @@ private:
     DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

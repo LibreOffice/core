@@ -28,20 +28,13 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
-
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XDrawView; }
 namespace weld { class ComboBox; }
+namespace com::sun::star::animations { class XAnimationNode; }
+namespace sd::tools { class EventMultiplexerEvent; }
 
 enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
-
-namespace com { namespace sun { namespace star { namespace animations {
-    class XAnimationNode;
-} } } }
-
-namespace sd { namespace tools {
-class EventMultiplexerEvent;
-} }
 
 namespace sd {
 

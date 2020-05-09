@@ -26,7 +26,7 @@
 
 class Size;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class GenericPageCache;
 
@@ -146,7 +146,7 @@ private:
     std::unique_ptr<GenericPageCache> mpImplementation;
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

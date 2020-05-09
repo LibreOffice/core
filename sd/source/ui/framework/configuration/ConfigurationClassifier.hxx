@@ -25,10 +25,10 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** A ConfigurationClassifier object compares two configurations of
     resources and gives access to the differences.  It is used mainly when
@@ -158,7 +158,7 @@ private:
         ResourceIdVector& rTarget);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

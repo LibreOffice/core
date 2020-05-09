@@ -12,7 +12,7 @@
 #include <vcl/timer.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
+namespace com::sun::star::presentation { class XSlideShowController; }
 namespace sd { class Transmitter; }
 
 namespace sd

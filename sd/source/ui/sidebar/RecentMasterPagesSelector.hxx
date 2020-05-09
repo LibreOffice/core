@@ -22,7 +22,7 @@
 
 #include "MasterPagesSelector.hxx"
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Show the recently used master pages (that are not currently used).
 */
@@ -70,7 +70,7 @@ private:
     virtual void LateInit() override;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

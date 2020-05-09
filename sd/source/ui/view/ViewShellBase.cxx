@@ -1406,7 +1406,8 @@ void CurrentPageSetter::operator() (bool)
 
 //===== FocusForwardingWindow =================================================
 
-namespace sd { namespace {
+namespace sd {
+namespace {
 
 FocusForwardingWindow::FocusForwardingWindow (
     vcl::Window& rParentWindow,

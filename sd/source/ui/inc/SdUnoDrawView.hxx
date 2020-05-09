@@ -24,10 +24,7 @@
 #include <cppuhelper/basemutex.hxx>
 
 class SdXImpressDocument;
-
-namespace com { namespace sun { namespace star { namespace drawing {
-class XLayer;
-} } } }
+namespace com::sun::star::drawing { class XLayer; }
 
 namespace sd {
 

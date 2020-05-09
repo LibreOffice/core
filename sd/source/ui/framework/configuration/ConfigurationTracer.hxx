@@ -22,11 +22,11 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com::sun::star::drawing::framework { class XConfiguration; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::uno { template <typename > class Reference; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** Print debug information about configurations to the standard error
     output channel.
@@ -45,7 +45,7 @@ public:
 #endif
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

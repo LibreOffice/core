@@ -28,12 +28,12 @@
 #include <vector>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
-namespace awt { struct FontDescriptor; }
-namespace beans { class XPropertyState; }
-namespace text { class XTextRange; class XTextContent; class XSimpleText; }
-namespace style { struct TabStop; }
-}}}
+namespace com::sun::star {
+    namespace awt { struct FontDescriptor; }
+    namespace beans { class XPropertyState; }
+    namespace text { class XTextRange; class XTextContent; class XSimpleText; }
+    namespace style { struct TabStop; }
+}
 
 struct SOParagraph
 {

@@ -21,7 +21,7 @@
 
 #include "PanelBase.hxx"
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class TableDesignPanel
     : public PanelBase
@@ -41,7 +41,7 @@ protected:
         ViewShellBase& rViewShellBase) override;
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

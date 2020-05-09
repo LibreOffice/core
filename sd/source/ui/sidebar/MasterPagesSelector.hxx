@@ -30,7 +30,7 @@
 
 #include <osl/mutex.hxx>
 
-namespace com { namespace sun { namespace star { namespace ui { class XSidebar; } } } }
+namespace com::sun::star::ui { class XSidebar; }
 class MouseEvent;
 class SdDrawDocument;
 class SdPage;
@@ -39,7 +39,7 @@ namespace sd {
 class ViewShellBase;
 }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Base class of a menu that lets the user select from a list of
     templates or designs that are loaded from files.
@@ -179,7 +179,7 @@ private:
         MasterPageContainer::Token aToken);
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

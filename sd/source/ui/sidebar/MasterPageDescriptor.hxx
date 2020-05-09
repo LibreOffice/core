@@ -26,7 +26,7 @@
 namespace sd { class PreviewRenderer; }
 class SdDrawDocument;
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 class PageObjectProvider;
 class PreviewProvider;
@@ -227,7 +227,7 @@ public:
 
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 

@@ -31,18 +31,11 @@
 #include <vcl/region.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace cache {
-class PageCache;
-} } }
-
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
-
+namespace sd::slidesorter::cache { class PageCache; }
+namespace sd::slidesorter::model { class SlideSorterModel; }
 namespace sd { class Window; }
-namespace sd { namespace slidesorter { class SlideSorter; } }
-
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter { class SlideSorter; }
+namespace sd::slidesorter::view {
 
 class LayeredDevice;
 class PageObjectPainter;
@@ -228,7 +221,7 @@ private:
     void Rearrange();
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

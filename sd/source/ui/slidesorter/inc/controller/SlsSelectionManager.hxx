@@ -27,11 +27,9 @@
 
 class SdPage;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class SlideSorterController;
 class SelectionObserver;
@@ -131,7 +129,7 @@ private:
     void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

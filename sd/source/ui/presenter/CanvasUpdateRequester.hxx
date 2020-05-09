@@ -24,11 +24,11 @@
 #include <tools/link.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace rendering { class XSpriteCanvas; } } } }
+namespace com::sun::star::rendering { class XSpriteCanvas; }
 
 struct ImplSVEvent;
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 /** Each UpdateRequester handles update requests (calls to
     XCanvas::updateScreen()) for one shared canvas (a canvas that has one or
@@ -64,7 +64,7 @@ private:
     DECL_LINK(Callback, void*, void);
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

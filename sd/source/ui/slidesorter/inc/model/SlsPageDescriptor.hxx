@@ -26,12 +26,12 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com::sun::star::drawing { class XDrawPage; }
 
 class SdPage;
 class SdrPage;
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 /** Each PageDescriptor object represents the preview of one draw page,
     slide, or master page of a Draw or Impress document as they are displayed
@@ -140,7 +140,7 @@ private:
     PageDescriptor& operator= (const PageDescriptor& rDescriptor) = delete;
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

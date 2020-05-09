@@ -23,7 +23,7 @@
 #include <smarttag.hxx>
 #include "annotationwindow.hxx"
 
-namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
+namespace com::sun::star::office { class XAnnotation; }
 
 namespace sd {
 

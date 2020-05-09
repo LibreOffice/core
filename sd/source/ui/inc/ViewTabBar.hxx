@@ -31,10 +31,10 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { struct ConfigurationChangeEvent; } } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com::sun::star::drawing::framework { class XConfigurationController; }
+namespace com::sun::star::drawing::framework { class XResourceId; }
+namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
+namespace com::sun::star::frame { class XController; }
 namespace vcl { class Window; }
 
 namespace sd {

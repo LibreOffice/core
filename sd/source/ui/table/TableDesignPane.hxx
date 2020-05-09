@@ -24,9 +24,9 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::drawing { class XDrawView; }
 
 namespace sd
 {

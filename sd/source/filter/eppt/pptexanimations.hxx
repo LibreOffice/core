@@ -31,11 +31,11 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace animations { class XAnimate; } } } }
-namespace com { namespace sun { namespace star { namespace animations { class XAnimationNode; } } } }
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com::sun::star::animations { class XAnimate; }
+namespace com::sun::star::animations { class XAnimationNode; }
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::drawing { class XDrawPage; }
+namespace com::sun::star::drawing { class XShape; }
 namespace ppt { class ExSoundCollection; }
 
 class SvStream;

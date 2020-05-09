@@ -28,10 +28,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace util { class XCloneable; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationControllerBroadcaster; } } } } }
+namespace com::sun::star::util { class XCloneable; }
+namespace com::sun::star::drawing::framework { class XConfigurationControllerBroadcaster; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfiguration,
@@ -179,7 +179,7 @@ bool AreConfigurationsEquivalent (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration1,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

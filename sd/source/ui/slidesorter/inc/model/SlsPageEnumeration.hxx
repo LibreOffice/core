@@ -26,7 +26,7 @@
 #include <functional>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace model {
+namespace sd::slidesorter::model {
 
 class SlideSorterModel;
 
@@ -95,7 +95,7 @@ private:
 
 };
 
-} } } // end of namespace ::sd::slidesorter::model
+} // end of namespace ::sd::slidesorter::model
 
 #endif
 

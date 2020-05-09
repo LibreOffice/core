@@ -25,9 +25,9 @@
 #include "MasterPagesSelector.hxx"
 
 
-namespace sd { namespace tools { class EventMultiplexerEvent; } }
+namespace sd::tools { class EventMultiplexerEvent; }
 
-namespace sd { namespace sidebar {
+namespace sd::sidebar {
 
 /** Show the master pages currently used by a SdDrawDocument.
 */
@@ -75,7 +75,7 @@ private:
     DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent&, void);
 };
 
-} } // end of namespace sd::sidebar
+} // end of namespace sd::sidebar
 
 #endif
 
