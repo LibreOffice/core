@@ -50,11 +50,12 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection)
 
 OCommonStatement::~OCommonStatement() {}
 
-void OCommonStatement::disposeResultSet()
+void OCommonStatement::closeResultSet()
 {
-    // free the cursor if alive
     if (m_xResultSet.is())
     {
+        css::uno::Reference<css::sdbc::XCloseable> xClose(m_xResultSet, UNO_QUERY_THROW);
+        xClose->close();
         m_xResultSet.clear();
         m_pMysqlResult = nullptr; // it is freed by XResultSet
     }
@@ -105,7 +106,7 @@ void SAL_CALL OCommonStatement::close()
         checkDisposed(rBHelper.bDisposed);
     }
     dispose();
-    disposeResultSet();
+    closeResultSet();
 }
 
 // void SAL_CALL OStatement::clearBatch()
