@@ -20,7 +20,7 @@
 
 #include <vcl/button.hxx>
 
-namespace sfx2 { namespace sidebar {
+namespace sfx2::sidebar {
 
 class MenuButton final
     : public CheckBox
@@ -40,6 +40,6 @@ private:
     bool mbIsLeftButtonDown;
 };
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

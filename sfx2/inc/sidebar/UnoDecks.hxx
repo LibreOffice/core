@@ -15,7 +15,7 @@
 #include <cppuhelper/implbase.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace sfx2 { namespace sidebar { class SidebarController; } }
+namespace sfx2::sidebar { class SidebarController; }
 
 /** get the decks
 */
