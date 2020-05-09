@@ -26,7 +26,7 @@
 #include <tablemodel.hxx>
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 class CellRange : public ::cppu::WeakAggImplHelper1< css::table::XCellRange >, public ICellRange
 {
@@ -54,7 +54,7 @@ protected:
     sal_Int32 mnBottom;
 };
 
-} }
+}
 
 #endif
 

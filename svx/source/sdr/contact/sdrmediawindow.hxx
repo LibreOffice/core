@@ -22,7 +22,7 @@
 
 #include <avmedia/mediawindow.hxx>
 
-namespace sdr { namespace contact {
+namespace sdr::contact {
 
 
 class ViewObjectContactOfSdrMediaObj;
@@ -53,7 +53,7 @@ private:
     ViewObjectContactOfSdrMediaObj& mrViewObjectContactOfSdrMediaObj;
 };
 
-} }
+}
 
 #endif // INCLUDED_SVX_SOURCE_SDR_CONTACT_SDRMEDIAWINDOW_HXX
 

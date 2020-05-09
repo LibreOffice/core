@@ -24,7 +24,7 @@
 #include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx::sidebar {
 
 class TextPropertyPanel
     : public PanelLayout,
@@ -70,7 +70,7 @@ private:
     vcl::EnumContext maContext;
 };
 
-} } // end of namespace svx::sidebar
+} // end of namespace svx::sidebar
 
 #endif
 

@@ -23,7 +23,7 @@
 
 #include <vector>
 
-namespace svxform { namespace charset_helper
+namespace svxform::charset_helper
 {
 
     /** enumerates all supported charsets
@@ -32,7 +32,5 @@ namespace svxform { namespace charset_helper
     sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
 
 }
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

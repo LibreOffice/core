@@ -29,9 +29,7 @@
 
 #include <set>
 
-namespace com { namespace sun { namespace star { namespace form { namespace validation {
-    class XValidatableFormComponent;
-} } } } }
+namespace com::sun::star::form::validation { class XValidatableFormComponent; }
 
 enum class ControlStatus {
     NONE        = 0x00,

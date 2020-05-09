@@ -24,7 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
 
 class OverlayStaticRectanglePrimitive final : public DiscreteMetricDependentPrimitive2D
 {
@@ -57,7 +57,7 @@ public:
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
 
-}} // end of namespace drawinglayer::primitive2d
+} // end of namespace drawinglayer::primitive2d
 
 // Overlay helper class which holds a BotmapEx which is to be visualized
 // at the given logic position with the Bitmap's pixel size, unscaled and

@@ -30,9 +30,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 
-namespace sdr { namespace table {
-    class SvxTableController;
-} }
+namespace sdr::table { class SvxTableController; }
 
 namespace accessibility
 {

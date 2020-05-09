@@ -24,9 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
+namespace com::sun::star::uno { class XInterface; }
 class SdrObject;
 
 css::uno::Reference<css::uno::XInterface>

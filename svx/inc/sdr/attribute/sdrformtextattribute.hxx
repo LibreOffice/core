@@ -28,10 +28,10 @@
 
 class SfxItemSet;
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpSdrFormTextAttribute;
     class SdrFormTextOutlineAttribute;
-}}
+}
 
 
 namespace drawinglayer

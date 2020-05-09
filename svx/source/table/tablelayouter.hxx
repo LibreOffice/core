@@ -35,7 +35,7 @@ namespace editeng {
     class SvxBorderLine;
 }
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 /** returns true if the cell(nMergedCol,nMergedRow) is merged with other cells.
     the returned cell( rOriginCol, rOriginRow ) is the origin( top left cell ) of the merge.
@@ -164,7 +164,7 @@ private:
     BorderLineMap maVerticalBorders;
 };
 
-} }
+}
 
 #endif
 

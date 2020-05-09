@@ -21,7 +21,7 @@
 #include <map>
 #include <rtl/ustring.hxx>
 
-namespace svx{ namespace sidebar {
+namespace svx::sidebar {
 
 class SvxShapeCommandsMap
 {
@@ -32,7 +32,8 @@ public:
                     mpBlockArrowShapes, mpFlowchartShapes,
                     mpCalloutShapes, mpStarShapes, mp3DShapes;
 };
-}}
+
+}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
