@@ -117,10 +117,8 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
-    OString toExec
-        = OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding);
+    OString toExec = OUStringToOString(sql, m_xConnection->getConnectionSettings().encoding);
 
     MYSQL* pMySql = m_xConnection->getMysqlConnection();
 
