@@ -144,9 +144,7 @@ private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-class OStatement final : public OCommonStatement,
-                         public css::sdbc::XBatchExecution,
-                         public css::lang::XServiceInfo
+class OStatement final : public OCommonStatement, public css::lang::XServiceInfo
 
 {
     virtual ~OStatement() override = default;
@@ -170,11 +168,11 @@ public:
     void SAL_CALL release() throw() override;
 
     // XBatchExecution
-    void SAL_CALL addBatch(const OUString& sql) override;
+    // void SAL_CALL addBatch(const OUString& sql) override;
 
-    void SAL_CALL clearBatch() override;
+    // void SAL_CALL clearBatch() override;
 
-    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
+    // css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 };
 }
 }

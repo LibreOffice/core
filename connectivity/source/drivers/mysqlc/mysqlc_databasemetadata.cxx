@@ -540,7 +540,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected(sal_Int32 /*setType*/) {
 
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected(sal_Int32 /*setType*/) { return false; }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates() { return true; }
+sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates() { return false; }
 
 Reference<XConnection> SAL_CALL ODatabaseMetaData::getConnection() { return &m_rConnection; }
 
