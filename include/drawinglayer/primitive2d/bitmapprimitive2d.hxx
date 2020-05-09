@@ -24,18 +24,9 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace awt
+namespace com::sun::star::awt
 {
 class XBitmap;
-}
-}
-}
 }
 
 namespace drawinglayer::primitive2d
