@@ -61,7 +61,7 @@ public:
     typedef tools::SvRef< ListLevel > Pointer;
 
     ListLevel() :
-        m_nIStartAt(-1)
+        m_nIStartAt(0)
         ,m_nStartOverride(-1)
         ,m_nNFC(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
