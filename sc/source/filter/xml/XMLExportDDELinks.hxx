@@ -22,8 +22,8 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 
 class ScXMLExport;
 struct ScMatrixValue;

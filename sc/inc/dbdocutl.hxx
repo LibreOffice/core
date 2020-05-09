@@ -24,12 +24,8 @@
 #include <sal/types.h>
 
 class ScDocument;
-
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
-
-namespace com { namespace sun { namespace star { namespace sdbc {
-    class XRow;
-} } } }
+namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::sdbc { class XRow; }
 
 class ScDatabaseDocUtil
 {

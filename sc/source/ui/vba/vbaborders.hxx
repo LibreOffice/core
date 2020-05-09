@@ -23,9 +23,9 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::table { class XCellRange; }
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
 class ScVbaPalette;

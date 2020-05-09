@@ -29,7 +29,7 @@
 struct ScDataBarFormatData;
 class ScDocument;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt { struct Point; }
     namespace awt { struct Rectangle; }
     namespace awt { struct Size; }
@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
     namespace table { class XCellRange; }
-} } }
+}
 
 namespace oox {
 namespace xls {

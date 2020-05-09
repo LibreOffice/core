@@ -28,11 +28,11 @@
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { class XDataPilotField; }
-} } }
+}
 
-namespace oox { namespace core { class Relations; } }
+namespace oox::core { class Relations; }
 
 class ScDPSaveDimension;
 class ScDPObject;

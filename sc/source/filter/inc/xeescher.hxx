@@ -32,11 +32,9 @@
 class ScPostIt;
 
 namespace utl { class TempFile; }
-namespace com { namespace sun { namespace star { namespace chart { class XChartDocument; } } } }
+namespace com::sun::star::chart { class XChartDocument; }
+namespace com::sun::star::script { struct ScriptEventDescriptor; }
 
-namespace com { namespace sun { namespace star {
-    namespace script { struct ScriptEventDescriptor; }
-} } }
 
 // DFF client anchor ==========================================================
 

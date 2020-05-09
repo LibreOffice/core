@@ -22,13 +22,11 @@
 #include <map>
 #include <set>
 
-namespace com { namespace sun { namespace star {
-
+namespace com::sun::star {
     namespace accessibility {
         class XAccessible;
     }
-
-}}}
+}
 
 class ScDocument;
 class ScAccessibleFilterMenu;

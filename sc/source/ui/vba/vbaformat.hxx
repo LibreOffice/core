@@ -22,14 +22,14 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace util { class XNumberFormatTypes; } } } }
-namespace ooo { namespace vba { namespace excel { class XFont; } } }
-namespace ooo { namespace vba { namespace excel { class XInterior; } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { class XPropertyState; }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::util { class XNumberFormats; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::util { class XNumberFormatTypes; }
+namespace ooo::vba::excel { class XFont; }
+namespace ooo::vba::excel { class XInterior; }
 
 class ScCellRangesBase;
 class SfxItemSet;

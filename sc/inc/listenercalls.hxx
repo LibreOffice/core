@@ -24,11 +24,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace util {
         class XModifyListener;
     }
-} } }
+}
 
 struct ScUnoListenerEntry
 {

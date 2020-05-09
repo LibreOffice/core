@@ -22,8 +22,8 @@
 
 #include "rangelst.hxx"
 
-namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+namespace com::sun::star::chart2 { class XChartDocument; }
+namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class SdrObject;
 class SdrPage;

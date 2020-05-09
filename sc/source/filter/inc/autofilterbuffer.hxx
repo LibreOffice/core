@@ -25,10 +25,10 @@
 #include "workbookhelper.hxx"
 #include <com/sun/star/sheet/TableFilterField3.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSheetFilterDescriptor3; }
-} } }
+}
 
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }

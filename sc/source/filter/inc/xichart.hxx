@@ -32,7 +32,7 @@
 #include "xiescher.hxx"
 #include "xistring.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt
     {
         struct Rectangle;
@@ -65,7 +65,7 @@ namespace com { namespace sun { namespace star {
             class XLabeledDataSequence;
         }
     }
-} } }
+}
 
 struct XclObjLineData;
 struct XclObjFillData;

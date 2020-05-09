@@ -37,15 +37,7 @@ class ScCondDateFormatEntry;
 
 using namespace com::sun::star;
 
-namespace com { namespace sun { namespace star {
-
-namespace sheet {
-
-class XSheetCellRanges;
-
-}
-
-} } }
+namespace com::sun::star::sheet { class XSheetCellRanges; }
 
 class ScCondFormatsObj : public cppu::WeakImplHelper<css::sheet::XConditionalFormats>,
                             public SfxListener

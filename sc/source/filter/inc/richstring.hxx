@@ -27,9 +27,9 @@ class EditTextObject;
 struct ESelection;
 class ScEditEngineDefaulter;
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XText; }
-} } }
+}
 
 namespace oox { class SequenceInputStream; }
 

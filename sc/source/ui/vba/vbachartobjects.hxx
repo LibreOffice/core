@@ -23,10 +23,10 @@
 #include <ooo/vba/excel/XChartObjects.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XEnumeration; } } } }
-namespace com { namespace sun { namespace star { namespace drawing { class XDrawPageSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace table { class XTableCharts; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::container { class XEnumeration; }
+namespace com::sun::star::drawing { class XDrawPageSupplier; }
+namespace com::sun::star::table { class XTableCharts; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 

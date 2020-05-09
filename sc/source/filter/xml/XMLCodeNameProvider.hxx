@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
+namespace com::sun::star::container { class XNameAccess; }
 
 class ScDocument;
 

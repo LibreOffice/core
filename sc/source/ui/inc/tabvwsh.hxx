@@ -64,9 +64,7 @@ struct ScHeaderFieldData;
 
 namespace editeng { class SvxBorderLine; }
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XDispatchProviderInterceptor;
-} } } }
+namespace com::sun::star::frame { class XDispatchProviderInterceptor; }
 
 namespace svx {
     class ExtrusionBar;

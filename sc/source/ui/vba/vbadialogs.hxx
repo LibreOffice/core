@@ -23,8 +23,8 @@
 #include <vbahelper/vbadialogsbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-namespace ooo { namespace vba { class XHelperInterface; } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo::vba { class XHelperInterface; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::excel::XDialogs > ScVbaDialogs_BASE;
 
