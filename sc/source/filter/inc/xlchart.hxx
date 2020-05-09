@@ -25,13 +25,13 @@
 #include <map>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace lang      { class XMultiServiceFactory; }
     namespace chart     { class XChartDocument; }
     namespace chart2    { class XChartDocument; }
     namespace drawing   { class XShape; }
-} } }
+}
 
 class XclRoot;
 

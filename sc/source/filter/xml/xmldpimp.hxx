@@ -28,10 +28,10 @@
 
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldAutoShowInfo; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldLayoutInfo; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldReference; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataPilotFieldSortInfo; } } } }
+namespace com::sun::star::sheet { struct DataPilotFieldAutoShowInfo; }
+namespace com::sun::star::sheet { struct DataPilotFieldLayoutInfo; }
+namespace com::sun::star::sheet { struct DataPilotFieldReference; }
+namespace com::sun::star::sheet { struct DataPilotFieldSortInfo; }
 namespace sax_fastparser { class FastAttributeList; }
 
 class ScDPSaveNumGroupDimension;

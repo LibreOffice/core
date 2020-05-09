@@ -25,11 +25,11 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XEnumeration; }
     namespace frame { class XModel; }
     namespace sheet { class XSpreadsheet; }
-} } }
+}
 
 class ScVbaObjectContainer;
 typedef ::rtl::Reference< ScVbaObjectContainer > ScVbaObjectContainerRef;

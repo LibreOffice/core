@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class XInterface; }
 
 class ScDocShell;
 

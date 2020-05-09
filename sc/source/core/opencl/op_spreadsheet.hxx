@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class OpVLookup: public CheckVariables
 {
@@ -23,7 +23,7 @@ public:
     virtual bool canHandleMultiVector() const override { return true; }
 };
 
-}}
+}
 
 #endif
 

@@ -27,16 +27,16 @@
 #include "defnamesbuffer.hxx"
 #include "formulabase.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace sheet { struct DDEItemInfo; }
     namespace sheet { class XDDELink; }
     namespace sheet { class XExternalDocLink; }
     namespace sheet { class XExternalSheetCache; }
-} } }
+}
 
-namespace oox { namespace core {
+namespace oox::core {
     class Relations;
-} }
+}
 
 namespace oox {
 namespace xls {

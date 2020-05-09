@@ -23,9 +23,9 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include "workbookhelper.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace util { class XNumberFormats; }
-} } }
+}
 
 class SfxItemSet;
 

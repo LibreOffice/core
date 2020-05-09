@@ -31,15 +31,13 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace sheet {
+namespace com::sun::star::sheet {
     struct DataPilotFieldFilter;
     struct DataPilotTablePositionData;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace sheet { class XDimensionsSupplier; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct DataResult; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { struct MemberResult; } } } }
-
+    struct DataResult;
+    struct MemberResult;
+    class XDimensionsSupplier;
+}
 namespace tools { class Rectangle; }
 class ScDocument;
 struct ScDPOutLevelData;

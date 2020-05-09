@@ -31,9 +31,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
-namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
+namespace com::sun::star::table { class XCell; }
+namespace com::sun::star::sheet { class XSpreadsheetDocument; }
+namespace com::sun::star::text { class XTextRange; }
 
 namespace calc
 {

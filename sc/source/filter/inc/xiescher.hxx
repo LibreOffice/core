@@ -31,12 +31,12 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace drawing { class XShape; }
     namespace form { class XForm; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com::sun::star::container { class XNameContainer; }
 
 class SdrObjList;
 class ScfProgressBar;

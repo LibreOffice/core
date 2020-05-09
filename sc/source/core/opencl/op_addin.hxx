@@ -12,7 +12,7 @@
 
 #include "opbase.hxx"
 
-namespace sc { namespace opencl {
+namespace sc::opencl {
 
 class OpBesselj: public Normal
 {
@@ -29,7 +29,7 @@ public:
     virtual std::string BinFuncName() const override { return "Gestep"; }
 };
 
-}}
+}
 
 #endif
 

@@ -44,7 +44,7 @@
 
 #include "types.hxx"
 
-namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
+namespace com::sun::star::view { class XSelectionChangeListener; }
 
 class ScTabViewShell;
 class ScPreviewShell;

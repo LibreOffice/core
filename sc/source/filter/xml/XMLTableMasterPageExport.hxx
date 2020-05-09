@@ -23,11 +23,11 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageExport.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text { class XText; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace sheet { class XHeaderFooterContent; } } } }
+namespace com::sun::star::sheet { class XHeaderFooterContent; }
 
 class ScXMLExport;
 

@@ -27,13 +27,13 @@
 #include <tools/color.hxx>
 #include "ftools.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace lang { class XMultiServiceFactory; }
-} } }
+}
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace beans { class XMultiPropertySet; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::beans { class XMultiPropertySet; }
 
 namespace comphelper { class IDocPasswordVerifier; }
 

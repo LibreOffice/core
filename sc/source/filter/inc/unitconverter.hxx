@@ -25,9 +25,9 @@
 #include <o3tl/enumarray.hxx>
 #include "workbookhelper.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace util { struct Date; struct DateTime; }
-} } }
+}
 
 namespace oox {
 namespace xls {

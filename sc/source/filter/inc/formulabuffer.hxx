@@ -14,7 +14,7 @@
 #include "workbookhelper.hxx"
 #include <vector>
 
-namespace oox { namespace xls {
+namespace oox::xls {
 
 class FormulaBuffer : public WorkbookHelper
 {
@@ -122,7 +122,7 @@ public:
     void SetSheetCount( SCTAB nSheets );
 };
 
-}}
+}
 
 #endif
 

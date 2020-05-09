@@ -25,7 +25,7 @@
 #include <memory>
 #include <tools/solar.h>
 
-namespace com { namespace sun { namespace star { namespace text { class XText; } } } }
+namespace com::sun::star::text { class XText; }
 
 class ScChangeAction;
 class ScChangeTrack;

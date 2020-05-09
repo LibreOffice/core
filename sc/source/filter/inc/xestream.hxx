@@ -34,7 +34,7 @@
 #include <filter/msfilter/mscodec.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com::sun::star::beans { struct NamedValue; }
 
 /* ============================================================================
 Output stream class for Excel export

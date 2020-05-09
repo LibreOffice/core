@@ -26,7 +26,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com::sun::star::lang { struct Locale; }
 
 struct TransItem;
 

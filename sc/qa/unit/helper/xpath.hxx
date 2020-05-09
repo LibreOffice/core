@@ -19,8 +19,8 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace utl { class TempFile; }
 class ScDocShell;
 class SvStream;

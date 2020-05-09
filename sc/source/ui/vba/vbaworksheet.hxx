@@ -25,17 +25,17 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <types.hxx>
 
-namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
-namespace ooo { namespace vba { namespace excel { class XOutline; } } }
-namespace ooo { namespace vba { namespace excel { class XPageSetup; } } }
-namespace ooo { namespace vba { namespace excel { class XRange; } } }
+namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::sheet { class XSpreadsheet; }
+namespace com::sun::star::uno { class XComponentContext; }
+namespace ooo::vba::excel { class XOutline; }
+namespace ooo::vba::excel { class XPageSetup; }
+namespace ooo::vba::excel { class XRange; }
 
-namespace ooo { namespace vba { namespace excel {
+namespace ooo::vba::excel {
     class XChartObjects;
     class XHyperlinks;
-} } }
+}
 
 class ScVbaSheetObjectsBase;
 

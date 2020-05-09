@@ -35,9 +35,7 @@ class SdrObject;
 
 namespace weld { class Window; }
 
-namespace svx { namespace sidebar {
-class SelectionChangeHandler;
-} }
+namespace svx::sidebar { class SelectionChangeHandler; }
 
 class ScDrawShell : public SfxShell
 {

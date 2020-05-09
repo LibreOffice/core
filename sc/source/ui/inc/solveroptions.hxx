@@ -23,9 +23,9 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-} } }
+}
 
 class ScSolverOptionsString
 {

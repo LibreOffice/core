@@ -29,9 +29,7 @@
 #include <vcl/customweld.hxx>
 #include "AccessibleCsvControl.hxx"
 
-namespace com { namespace sun { namespace star { namespace accessibility {
-    class XAccessible;
-} } } }
+namespace com::sun::star::accessibility { class XAccessible; }
 
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;

@@ -25,10 +25,10 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataSource; } } } } }
-namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XLabeledDataSequence; } } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::chart2::data { class XDataSequence; }
+namespace com::sun::star::chart2::data { class XDataSource; }
+namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 class ScDocument;
 

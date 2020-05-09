@@ -22,9 +22,9 @@
 
 #include <oox/ole/vbaproject.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
         namespace sheet { class XSpreadsheetDocument; }
-} } }
+}
 
 namespace oox {
 namespace xls {
