@@ -189,8 +189,10 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
 {
     std::vector<beans::PropertyValue> aNumberingProperties;
 
-    if( m_nIStartAt >= 0)
+    if (m_nIStartAt >= 0)
         aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_START_WITH, m_nIStartAt) );
+    else if (bDefaults)
+        aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_START_WITH, 0));
 
     sal_Int16 nNumberFormat = -1;
     if (m_nNFC == NS_ooxml::LN_Value_ST_NumberFormat_custom)
