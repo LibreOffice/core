@@ -12124,9 +12124,9 @@ public:
     virtual void set_message_type(weld::EntryMessageType eType) override
     {
         if (eType == weld::EntryMessageType::Error)
-            set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+            set_text_color(COL_ERROR_BACKGROUND);
         else if (eType == weld::EntryMessageType::Warning)
-            set_text_color(COL_YELLOW);
+            set_text_color(COL_WARNING_BACKGROUND);
         else
             gtk_label_set_attributes(m_pLabel, nullptr);
     }

@@ -5285,10 +5285,9 @@ void SalInstanceLabel::set_mnemonic_widget(Widget* pTarget)
 void SalInstanceLabel::set_message_type(weld::EntryMessageType eType)
 {
     if (eType == weld::EntryMessageType::Error)
-        m_xLabel->SetControlBackground(
-            m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+        m_xLabel->SetControlBackground(COL_ERROR_BACKGROUND);
     else if (eType == weld::EntryMessageType::Warning)
-        m_xLabel->SetControlBackground(COL_YELLOW);
+        m_xLabel->SetControlBackground(COL_WARNING_BACKGROUND);
     else
         m_xLabel->SetControlBackground();
 }
