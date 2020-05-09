@@ -29,7 +29,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
       css::drawing::framework::XPane,
@@ -138,7 +138,7 @@ protected:
     void ThrowIfDisposed() const;
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

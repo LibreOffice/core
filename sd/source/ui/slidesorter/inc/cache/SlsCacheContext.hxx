@@ -25,11 +25,11 @@
 #include <memory>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace com::sun::star::uno { class XInterface; }
 
 class SdrPage;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 typedef const SdrPage* CacheKey;
 
@@ -91,7 +91,7 @@ public:
 
 typedef std::shared_ptr<CacheContext> SharedCacheContext;
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

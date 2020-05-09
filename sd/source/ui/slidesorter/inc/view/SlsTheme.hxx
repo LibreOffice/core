@@ -27,11 +27,9 @@
 
 namespace vcl { class Font; }
 
-namespace sd { namespace slidesorter { namespace controller {
-class Properties;
-} } }
+namespace sd::slidesorter::controller { class Properties; }
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd::slidesorter::view {
 
 const int Theme_FocusIndicatorWidth = 3;
 
@@ -133,7 +131,7 @@ private:
     void InitializeIcon(const IconType eType, const OUString& rResourceId);
 };
 
-} } } // end of namespace ::sd::slidesorter::view
+} // end of namespace ::sd::slidesorter::view
 
 #endif
 

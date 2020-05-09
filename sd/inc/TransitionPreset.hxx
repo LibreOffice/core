@@ -27,10 +27,10 @@
 #include <memory>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace animations { class XAnimationNode; }
     namespace uno { template<class X> class Reference; }
-} } }
+}
 
 namespace sd {
 

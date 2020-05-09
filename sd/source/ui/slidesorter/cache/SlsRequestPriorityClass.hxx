@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSREQUESTPRIORITYCLASS_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSREQUESTPRIORITYCLASS_HXX
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 /** Each request for a preview creation has a priority.  This enum defines
     the available priorities.  The special values MIN_CLASS and MAX_CLASS
@@ -40,7 +40,7 @@ enum RequestPriorityClass
     MAX_CLASS = NOT_VISIBLE
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

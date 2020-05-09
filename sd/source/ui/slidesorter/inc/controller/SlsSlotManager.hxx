@@ -27,11 +27,9 @@ class AbstractSvxNameDialog;
 class SfxItemSet;
 class SfxRequest;
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 /** This manager takes over the work of handling slot calls from the
     controller of the slide sorter.
@@ -96,7 +94,7 @@ private:
     sal_Int32 GetInsertionPosition() const;
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

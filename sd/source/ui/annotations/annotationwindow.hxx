@@ -27,7 +27,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
+namespace com::sun::star::office { class XAnnotation; }
 
 class OutlinerView;
 class Outliner;

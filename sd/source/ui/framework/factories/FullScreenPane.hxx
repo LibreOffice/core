@@ -27,9 +27,9 @@
 class VclWindowEvent;
 
 namespace vcl { class Window; }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** The full screen pane creates a pane that covers the complete application
     window, i.e. that hides menu bar, tool bars, status bars.
@@ -81,7 +81,7 @@ private:
         sal_Int32& rnScreenNumberReturnValue);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

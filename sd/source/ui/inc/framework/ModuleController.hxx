@@ -28,10 +28,10 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::frame { class XController; }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XModuleController,
@@ -114,7 +114,7 @@ private:
     void ProcessStartupService (const ::std::vector<css::uno::Any>& rValues);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

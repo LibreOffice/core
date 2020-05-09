@@ -26,7 +26,7 @@
 #define SDPAGE_WIDE_VALUE3     1590
 #define SDPAGE_UNIT_THRESHOLD  5
 
-namespace sd { namespace sidebar{
+namespace sd::sidebar{
 
 bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
                const long nPageTopMargin, const long nPageBottomMargin )
@@ -153,6 +153,6 @@ void SetWide( long& nPageLeftMargin, long& nPageRightMargin,
     nPageTopMargin = SDPAGE_WIDE_VALUE1;
     nPageBottomMargin = SDPAGE_WIDE_VALUE1;
 }
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

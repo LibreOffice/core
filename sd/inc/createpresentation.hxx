@@ -24,9 +24,9 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star { namespace presentation {
+namespace com::sun::star::presentation {
     class XPresentation2;
-} } } }
+}
 class SdDrawDocument;
 
 css::uno::Reference<css::presentation::XPresentation2> CreatePresentation(

@@ -34,16 +34,14 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star {
-
+namespace com::sun::star {
     namespace drawing {
         class XDrawPage;
     }
     namespace animations {
         class XAnimationNode;
     }
-} } }
-
+}
 class SdDrawDocument;
 class KeyEvent;
 class OutputDevice;

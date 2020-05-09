@@ -27,9 +27,9 @@
 class SdDrawDocument;
 class SfxRequest;
 
-namespace sd { namespace tools {
+namespace sd::tools {
 class EventMultiplexer;
-} }
+}
 
 namespace sd {
 

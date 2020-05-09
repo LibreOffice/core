@@ -30,11 +30,11 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XControllerManager; } } } } }
-namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceFactory; } } } } }
-namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
+namespace com::sun::star::drawing::framework { class XControllerManager; }
+namespace com::sun::star::drawing::framework { class XResourceFactory; }
+namespace com::sun::star::util { class XURLTransformer; }
 
-namespace sd { namespace framework {
+namespace sd::framework {
 
 /** Container of resource factories of the drawing framework.
 */
@@ -116,7 +116,7 @@ private:
         const OUString& rsURLBase);
 };
 
-} } // end of namespace sd::framework
+} // end of namespace sd::framework
 
 #endif
 

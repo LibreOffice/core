@@ -26,12 +26,12 @@
 #include <vector>
 #include <functional>
 
-namespace com { namespace sun { namespace star { namespace container { class XHierarchicalNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
-namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::container { class XHierarchicalNameAccess; }
+namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
 
-namespace sd { namespace tools {
+namespace sd::tools {
 
 /** This class gives access to the configuration.  Create an object of this
     class for one node of the configuration.  This will be the root node.
@@ -140,7 +140,7 @@ private:
         const WriteMode eMode);
 };
 
-} } // end of namespace sd::tools
+} // end of namespace sd::tools
 
 #endif
 

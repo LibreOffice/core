@@ -44,11 +44,9 @@ namespace sd {
 class Window;
 }
 
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
+namespace sd::slidesorter { class SlideSorter; }
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd::slidesorter::controller {
 
 class SlideSorterController;
 
@@ -207,7 +205,7 @@ private:
     DECL_LINK(ProcessDragFinished, void*, void);
 };
 
-} } } // end of namespace ::sd::slidesorter::controller
+} // end of namespace ::sd::slidesorter::controller
 
 #endif
 

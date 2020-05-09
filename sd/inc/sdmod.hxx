@@ -45,9 +45,9 @@ struct SfxItemPropertyMapEntry;
 class VclSimpleEvent;
 namespace svtools { class ColorConfig; }
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XFrame;
-} } } }
+}
 
 enum class SdOptionStreamMode
 {

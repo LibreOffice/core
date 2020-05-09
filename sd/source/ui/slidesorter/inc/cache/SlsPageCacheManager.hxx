@@ -28,7 +28,7 @@
 class Size;
 class SdrPage;
 
-namespace sd { namespace slidesorter { namespace cache {
+namespace sd::slidesorter::cache {
 
 class BitmapCache;
 
@@ -151,7 +151,7 @@ private:
         const Size& rPreviewSize);
 };
 
-} } } // end of namespace ::sd::slidesorter::cache
+} // end of namespace ::sd::slidesorter::cache
 
 #endif
 

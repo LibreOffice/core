@@ -30,7 +30,7 @@ class ViewShell;
 
 }
 
-namespace sd { namespace ui { namespace table {
+namespace sd::ui::table {
 
 class TableObjectBar final : public SfxShell
 {
@@ -52,7 +52,7 @@ private:
     ::sd::ViewShell* mpViewSh;
 };
 
-} } }
+}
 
 #endif
 

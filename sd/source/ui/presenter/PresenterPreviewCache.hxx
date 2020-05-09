@@ -27,9 +27,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <memory>
 
-namespace sd { namespace slidesorter { namespace cache { class PageCache; } } }
+namespace sd::slidesorter::cache { class PageCache; }
 
-namespace sd { namespace presenter {
+namespace sd::presenter {
 
 typedef ::cppu::WeakComponentImplHelper<
     css::lang::XInitialization,
@@ -95,7 +95,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 
