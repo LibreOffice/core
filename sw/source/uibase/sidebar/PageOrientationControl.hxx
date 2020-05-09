@@ -27,7 +27,7 @@
 
 class PageOrientationPopup;
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageOrientationControl final : public WeldToolbarPopup
 {
@@ -53,7 +53,7 @@ private:
     DECL_LINK(ImplOrientationHdl, weld::Button&, void);
 };
 
-} } // end of namespace sw::sidebar
+} // end of namespace sw::sidebar
 
 #endif
 

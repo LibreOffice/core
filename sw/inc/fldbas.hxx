@@ -36,8 +36,8 @@ class SwRootFrame;
 class SvNumberFormatter;
 class IDocumentRedlineAccess;
 class SwGetRefField;
-namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::uno { class Any; }
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 

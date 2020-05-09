@@ -28,9 +28,7 @@
 class SwXMLExport;
 class SvXMLAutoStylePoolP;
 class SwNoTextNode;
-
-namespace com { namespace sun { namespace star { namespace style {
-                class XStyle; } } } }
+namespace com::sun::star::style { class XStyle; }
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {

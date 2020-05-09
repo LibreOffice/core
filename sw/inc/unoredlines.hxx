@@ -28,11 +28,8 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 class SwRangeRedline;
-namespace com{ namespace sun{ namespace star{
-        namespace beans{
-            class XPropertySet;
-        }
-}}}
+namespace com::sun::star::beans { class XPropertySet; }
+
 typedef
 cppu::WeakImplHelper
 <

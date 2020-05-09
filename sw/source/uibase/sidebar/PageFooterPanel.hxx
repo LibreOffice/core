@@ -34,7 +34,7 @@
 #include <svx/spacinglistbox.hxx>
 #include <svx/samecontentlistbox.hxx>
 
-namespace sw { namespace sidebar {
+namespace sw::sidebar {
 
 class PageFooterPanel:
     public PanelLayout,
@@ -103,7 +103,7 @@ private:
     DECL_LINK( FooterLayoutHdl, weld::ComboBox&, void);
 };
 
-} } //end of namespace sw::sidebar
+} //end of namespace sw::sidebar
 
 #endif
 

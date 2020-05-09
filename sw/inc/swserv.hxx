@@ -26,7 +26,7 @@ class SwBaseLink;
 class SwTableNode;
 struct SwPosition;
 class SwPaM;
-namespace sw { namespace mark { class IMark; } }
+namespace sw::mark { class IMark; }
 
 class SwServerObject final : public ::sfx2::SvLinkSource
 {

@@ -211,9 +211,7 @@ public:
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
 };
 
-namespace sw { namespace mark {
-    class IFieldmark;
-} }
+namespace sw::mark { class IFieldmark; }
 
 class SwFieldFormDropDownPortion : public SwFieldPortion
 {

@@ -29,14 +29,8 @@
 
 #include <map>
 
-namespace com { namespace sun { namespace star { namespace container {
-    class XStringKeyMap;
-} } } }
-
-namespace com { namespace sun { namespace star { namespace text {
-    class XTextRange;
-} } } }
-
+namespace com::sun::star::container { class XStringKeyMap; }
+namespace com::sun::star::text { class XTextRange; }
 class SwTextNode;
 class ModelToViewHelper;
 

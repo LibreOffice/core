@@ -26,11 +26,9 @@ class OutlinerView;
 class SwView;
 class SwPostItMgr;
 struct SpellCallbackInfo;
-namespace sw { namespace annotation {
-    class SwAnnotationWin;
-} }
+namespace sw::annotation { class SwAnnotationWin; }
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 class SidebarTextControl : public Control
 {
@@ -72,7 +70,7 @@ class SidebarTextControl : public Control
         virtual void Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
 };
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 #endif
 

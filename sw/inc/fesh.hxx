@@ -55,7 +55,7 @@ namespace svx
 {
     class ISdrObjectFilter;
 }
-namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
 
 // return values for GetFrameType() and GetSelFrameType().
 //! values can be combined via logical or

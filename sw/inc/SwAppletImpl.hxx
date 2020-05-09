@@ -25,7 +25,7 @@
 #include <svl/itemset.hxx>
 #include <svl/ownlist.hxx>
 
-namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
+namespace com::sun::star::embed { class XEmbeddedObject; }
 
 enum class SwHtmlOptType {
     IGNORE = 0,

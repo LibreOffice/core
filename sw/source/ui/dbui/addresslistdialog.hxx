@@ -23,7 +23,7 @@
 #include <swdbdata.hxx>
 #include <sharedconnection.hxx>
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace container{
         class XNameAccess;
     }
@@ -36,7 +36,7 @@ namespace com{namespace sun{namespace star{
     namespace sdbcx{
         class XColumnsSupplier;
     }
-}}}
+}
 class SwMailMergeAddressBlockPage;
 
 struct AddressUserData_Impl;

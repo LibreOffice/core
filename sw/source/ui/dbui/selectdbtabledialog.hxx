@@ -21,11 +21,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace com{namespace sun{namespace star{
-    namespace sdbc{
-        class XConnection;
-    }
-}}}
+namespace com::sun::star::sdbc { class XConnection; }
 
 class SwSelectDBTableDialog : public SfxDialogController
 {

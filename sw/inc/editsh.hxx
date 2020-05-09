@@ -90,11 +90,9 @@ enum class RedlineFlags;
 enum class TransliterationFlags;
 enum class GraphicType;
 
-namespace com { namespace sun { namespace star { namespace uno {
-    template < class > class Sequence;
-}}}}
-namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellAlternatives; } } } }
-namespace com { namespace sun { namespace star { namespace linguistic2 { struct ProofreadingResult; } } } }
+namespace com::sun::star::uno { template < class > class Sequence; }
+namespace com::sun::star::linguistic2 { class XSpellAlternatives; }
+namespace com::sun::star::linguistic2 { struct ProofreadingResult; }
 
 namespace svx{
     struct SpellPortion;

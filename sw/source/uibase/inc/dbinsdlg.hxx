@@ -32,16 +32,16 @@
 #include <memory>
 #include <vector>
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace sdbcx{
-    class XColumnsSupplier;
+        class XColumnsSupplier;
     }
     namespace sdbc{
-    class XDataSource;
-    class XConnection;
-    class XResultSet;
+        class XDataSource;
+        class XConnection;
+        class XResultSet;
     }
-}}}
+}
 
 class SwTableAutoFormat;
 class SwView;

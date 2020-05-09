@@ -26,10 +26,10 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 
-namespace com { namespace sun { namespace star { namespace text {
+namespace com::sun::star::text {
     class XFootnote;
     class XTextRange;
-} } } }
+}
 
 class SwDoc;
 class SwTextFootnote;

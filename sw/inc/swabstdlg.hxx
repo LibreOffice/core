@@ -61,7 +61,7 @@ enum class SwBorderModes;
 enum class SwCharDlgMode;
 enum class SfxStyleFamily;
 
-namespace com{namespace sun{namespace star{
+namespace com::sun::star{
     namespace frame{
         class XModel;
     }
@@ -75,10 +75,10 @@ namespace com{namespace sun{namespace star{
     }
     namespace container { class XNameAccess; }
     namespace container { class XNamed; }
-}}}
+}
 
 
-namespace sw { namespace mark { class IFieldmark; class IDateFieldmark; } }
+namespace sw::mark { class IFieldmark; class IDateFieldmark; }
 
 typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
 

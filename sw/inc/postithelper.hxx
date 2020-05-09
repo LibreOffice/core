@@ -32,9 +32,7 @@ class SwPostItMgr;
 class SwEditWin;
 class SwFrame;
 class IDocumentRedlineAccess;
-namespace sw { namespace annotation {
-    class SwAnnotationWin;
-} }
+namespace sw::annotation { class SwAnnotationWin; }
 namespace sw::mark { class IMark; }
 
 struct SwPosition;

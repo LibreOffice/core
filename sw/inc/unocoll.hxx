@@ -29,12 +29,12 @@
 
 class SwDoc;
 class SwFrameFormat;
-namespace com{namespace sun {namespace star {namespace text
+namespace com::sun::star::text
 {
     class XTextTable;
     class XTextSection;
     class XFootnote;
-}}}}
+}
 class SwFormatFootnote;
 class SwSectionFormat;
 struct SvEventDescription;

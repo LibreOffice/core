@@ -25,11 +25,7 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class Any;
-    }
-}}}
+namespace com::sun::star::uno { class Any; }
 class DateTime;
 class SfxItemSet;
 

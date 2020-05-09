@@ -22,7 +22,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-namespace sw { namespace sidebarwindows {
+namespace sw::sidebarwindows {
 
 class SidebarTextControl;
 
@@ -39,7 +39,7 @@ class SidebarTextControlAccessible : public VCLXWindow
         SidebarTextControl& mrSidebarTextControl;
 };
 
-} } // end of namespace sw::sidebarwindows
+} // end of namespace sw::sidebarwindows
 
 #endif
 
