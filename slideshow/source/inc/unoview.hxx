@@ -25,10 +25,7 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace presentation
-{
-    class XSlideShowView;
-} } } }
+namespace com::sun::star::presentation { class XSlideShowView; }
 
 
 /* Definition of UnoView interface */
