@@ -71,7 +71,7 @@ protected:
     sal_Int32 m_nAffectedRows = 0;
 
 protected:
-    void disposeResultSet();
+    void closeResultSet();
 
     // OPropertyArrayUsageHelper
     ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
