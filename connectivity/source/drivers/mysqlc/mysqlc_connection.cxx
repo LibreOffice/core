@@ -176,8 +176,9 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     // flags can also be passed as last parameter
     if (!mysql_real_connect(&m_mysql, host_str.getStr(), user_str.getStr(), pass_str.getStr(),
                             schema_str.getStr(), nPort, socket_str.getStr(), 0))
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql),
-                                                     *this, getConnectionEncoding());
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
+            mysql_error(&m_mysql), mysql_sqlstate(&m_mysql), mysql_errno(&m_mysql), *this,
+            getConnectionEncoding());
 
     // Check if the server is 4.1 or above
     if (getMysqlVersion() < 40100)
@@ -231,7 +232,8 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const OUStr
 
     unsigned int nErrorNum = mysql_errno(&m_mysql);
     if (nErrorNum != 0)
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), nErrorNum, *this,
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql),
+                                                     mysql_sqlstate(&m_mysql), nErrorNum, *this,
                                                      getConnectionEncoding());
 
     Reference<XPreparedStatement> xStatement = new OPreparedStatement(this, pStmt);
@@ -262,8 +264,9 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     if (!mysql_autocommit(&m_mysql, autoCommit))
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql),
-                                                     *this, getConnectionEncoding());
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
+            mysql_error(&m_mysql), mysql_sqlstate(&m_mysql), mysql_errno(&m_mysql), *this,
+            getConnectionEncoding());
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit()
@@ -284,8 +287,9 @@ void SAL_CALL OConnection::commit()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     if (!mysql_commit(&m_mysql))
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql),
-                                                     *this, getConnectionEncoding());
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
+            mysql_error(&m_mysql), mysql_sqlstate(&m_mysql), mysql_errno(&m_mysql), *this,
+            getConnectionEncoding());
 }
 
 void SAL_CALL OConnection::rollback()
@@ -294,8 +298,9 @@ void SAL_CALL OConnection::rollback()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     if (!mysql_rollback(&m_mysql))
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(&m_mysql), mysql_errno(&m_mysql),
-                                                     *this, getConnectionEncoding());
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
+            mysql_error(&m_mysql), mysql_sqlstate(&m_mysql), mysql_errno(&m_mysql), *this,
+            getConnectionEncoding());
 }
 
 sal_Bool SAL_CALL OConnection::isClosed()
