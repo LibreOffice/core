@@ -175,7 +175,8 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
 
     // flags can also be passed as last parameter
     if (!mysql_real_connect(&m_mysql, host_str.getStr(), user_str.getStr(), pass_str.getStr(),
-                            schema_str.getStr(), nPort, socket_str.getStr(), 0))
+                            schema_str.getStr(), nPort, socket_str.getStr(),
+                            CLIENT_MULTI_STATEMENTS))
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
             mysql_error(&m_mysql), mysql_sqlstate(&m_mysql), mysql_errno(&m_mysql), *this,
             getConnectionEncoding());
