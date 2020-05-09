@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 class PresenterButton;
 
@@ -114,7 +114,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sdext::presenter
+} // end of namespace ::sdext::presenter
 
 #endif
 

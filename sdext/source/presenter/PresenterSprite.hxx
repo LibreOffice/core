@@ -23,7 +23,7 @@
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** A wrapper around a css::rendering::XCustomSprite that allows
     not only setting values like size, location, and transformation but also
@@ -68,7 +68,7 @@ private:
     void DisposeSprite();
 };
 
-} }
+}
 
 #endif
 

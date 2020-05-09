@@ -28,7 +28,7 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 /** Use a sprite to display the contents and the border of a pane.  Windows
     are still used to define the locations and sizes of both the border and
@@ -76,7 +76,7 @@ private:
     void UpdateCanvases();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 

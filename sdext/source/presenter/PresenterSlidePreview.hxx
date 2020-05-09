@@ -34,7 +34,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace sdext { namespace presenter {
+namespace sdext::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XView,
@@ -138,7 +138,7 @@ private:
     void ThrowIfDisposed();
 };
 
-} } // end of namespace ::sd::presenter
+} // end of namespace ::sd::presenter
 
 #endif
 
