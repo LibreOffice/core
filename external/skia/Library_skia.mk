@@ -774,6 +774,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
+))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
