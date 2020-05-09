@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include "diagram.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class DiagramDefinitionContext : public ::oox::core::ContextHandler2
 {
@@ -37,7 +37,7 @@ private:
     DiagramLayoutPtr mpLayout;
 };
 
-} }
+}
 
 #endif
 

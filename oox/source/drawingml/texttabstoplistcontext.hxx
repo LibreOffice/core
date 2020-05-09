@@ -26,7 +26,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class TextTabStopListContext final : public ::oox::core::ContextHandler2
 {
@@ -41,7 +41,7 @@ private:
     ::std::vector< css::style::TabStop >  & maTabList;
 };
 
-} }
+}
 
 #endif
 

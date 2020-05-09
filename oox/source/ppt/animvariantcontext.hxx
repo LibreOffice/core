@@ -25,7 +25,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/color.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** context CT_TLAnimVariant */
     class AnimVariantContext
@@ -43,7 +43,7 @@ namespace oox { namespace ppt {
         ::oox::drawingml::Color     maColor;
     };
 
-} }
+}
 
 #endif
 

@@ -28,11 +28,11 @@
 #include "datamodel.hxx"
 #include <oox/drawingml/shape.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace dom { class XDocument; } }
-} } }
+namespace com::sun::star {
+    namespace xml::dom { class XDocument; }
+}
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class Diagram;
 class LayoutNode;
@@ -153,7 +153,7 @@ private:
 
 typedef std::shared_ptr< Diagram > DiagramPtr;
 
-} }
+}
 
 #endif
 

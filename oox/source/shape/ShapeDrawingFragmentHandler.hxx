@@ -13,7 +13,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
-namespace oox { namespace shape {
+namespace oox::shape {
 
 /// Generic (i.e. not specific to PPTX) handler for the prerendered diagram parsing.
 class ShapeDrawingFragmentHandler : public oox::core::FragmentHandler2
@@ -28,7 +28,7 @@ private:
         oox::drawingml::ShapePtr        mpGroupShapePtr;
 };
 
-} }
+}
 
 #endif
 

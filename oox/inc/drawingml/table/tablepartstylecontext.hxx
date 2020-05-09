@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <drawingml/table/tablestylepart.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TablePartStyleContext final : public ::oox::core::ContextHandler2
 {
@@ -38,7 +38,7 @@ private:
     TableStylePart& mrTableStylePart;
 };
 
-} } }
+}
 
 #endif
 

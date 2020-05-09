@@ -22,9 +22,9 @@
 
 #include <drawingml/chart/converterbase.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 { class XDiagram; }
-} } }
+}
 
 namespace oox {
 namespace drawingml {

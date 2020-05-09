@@ -22,7 +22,7 @@
 
 #include <oox/core/fragmenthandler2.hxx>
 
-namespace oox { namespace drawingml { class Shape; } }
+namespace oox::drawingml { class Shape; }
 
 namespace oox {
 namespace drawingml {

@@ -23,7 +23,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/animationspersist.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** context CT_TLTimeTargetElement */
     class TimeTargetElementContext
@@ -38,7 +38,7 @@ namespace oox { namespace ppt {
         AnimTargetElementPtr mpTarget;
     };
 
-} }
+}
 
 #endif
 

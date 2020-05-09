@@ -23,7 +23,7 @@
 #include <drawingml/textrun.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 struct TextCharacterProperties;
 
@@ -54,7 +54,7 @@ private:
     OUString msUuid;
 };
 
-} }
+}
 
 #endif
 
