@@ -2750,6 +2750,9 @@ public:
     }
 
 private:
+    virtual void dumpHdlFile(
+        FileStream & out, codemaker::cppumaker::Includes & includes) override;
+
     virtual void dumpHppFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) override;
 
@@ -2776,6 +2779,18 @@ private:
 
     rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
+
+void ExceptionType::dumpHdlFile(
+        FileStream & out, codemaker::cppumaker::Includes & includes)
+{
+    includes.addCustom("#if defined LIBO_INTERNAL_ONLY && (__GNUC__ >= 7 || __clang_major__ >= 8) && __has_include(<experimental/source_location>)");
+    includes.addCustom("#define LIBO_USE_SOURCE_LOCATION 1");
+    includes.addCustom("#endif");
+    includes.addCustom("#if defined LIBO_USE_SOURCE_LOCATION");
+    includes.addCustom("#include <experimental/source_location>");
+    includes.addCustom("#endif");
+    dumpHFileContent(out, includes);
+}
 
 void ExceptionType::addComprehensiveGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
@@ -2806,13 +2821,23 @@ void ExceptionType::dumpHppFile(
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
     }
-    out << "\ninline " << id_ << "::" << id_ << "()\n";
+
+    // default constructor
+    out << "\ninline " << id_ << "::" << id_ << "(\n";
+    out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
+    out << "    const std::experimental::source_location& location\n";
+    out << "#endif\n";
+    out << "    )\n";
     inc();
     OUString base(entity_->getDirectBase());
     bool bFirst = true;
     if (!base.isEmpty()) {
         out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
-            << "()\n";
+            << "(\n";
+        out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
+        out << "    location\n";
+        out << "#endif\n";
+        out << ")\n";
         bFirst = false;
     }
     for (const unoidl::ExceptionTypeEntity::Member& member : entity_->getDirectMembers()) {
@@ -2832,7 +2857,16 @@ void ExceptionType::dumpHppFile(
     } else {
         out << " ";
     }
+    if (name_ == "com.sun.star.uno.Exception")
+    {
+        out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
+        out << "    auto p = location.file_name();\n";
+        out << "    Message += OUString(p, strlen(p), RTL_TEXTENCODING_UTF8) + \":\" + OUString::number(location.line());\n";
+        out << "#endif\n";
+    }
     out << "}\n\n";
+
+    // fields constructor
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
         bFirst = !dumpBaseMembers(out, base, true, false);
@@ -2851,6 +2885,9 @@ void ExceptionType::dumpHppFile(
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
             dumpBaseMembers(out, base, false, false);
+            out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
+            out << "    , location\n";
+            out << "#endif\n";
             out << ")\n";
             bFirst = false;
         }
@@ -2868,6 +2905,13 @@ void ExceptionType::dumpHppFile(
             dec();
         } else {
             out << " ";
+        }
+        if (name_ == "com.sun.star.uno.Exception")
+        {
+            out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
+            out << "    auto p = location.file_name();\n";
+            out << "    Message += OUString(p, strlen(p), RTL_TEXTENCODING_UTF8) + \":\" + OUString::number(location.line());\n";
+            out << "#endif\n";
         }
         out << "}\n\n";
     }
@@ -3088,8 +3132,15 @@ void ExceptionType::dumpDeclaration(FileStream & out)
     }
     out << "\n{\npublic:\n";
     inc();
-    out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_
-        << "();\n\n";
+
+    // default constructor
+    out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(\n";
+    out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
+    out << "    const std::experimental::source_location& location = std::experimental::source_location::current()\n";
+    out << "#endif\n\n";
+    out << "    );\n";
+
+    // fields constructor
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
         bool eligibleForDefaults = entity_->getDirectMembers().empty();
@@ -3102,7 +3153,10 @@ void ExceptionType::dumpDeclaration(FileStream & out)
             out << " " << member.name << "_";
             bFirst = false;
         }
-        out << ");\n\n";
+        out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
+        out << ", const std::experimental::source_location& location = std::experimental::source_location::current()\n";
+        out << "#endif\n";
+        out << "    );\n\n";
     }
     out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent()
         << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
