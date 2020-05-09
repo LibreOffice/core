@@ -1007,9 +1007,7 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
                         }
                     }
 
-                    Sequence< lang::Locale > aFirstLocaleSeq( 1 );
-                    aFirstLocaleSeq[0] = aFirstLocale;
-                    pCurMgr->handleAddLocales( aFirstLocaleSeq );
+                    pCurMgr->handleAddLocales( {aFirstLocale} );
 
                     if( nOnlyInImportLanguageCount > 1 )
                     {
