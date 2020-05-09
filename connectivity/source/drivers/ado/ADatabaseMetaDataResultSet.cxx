@@ -1157,13 +1157,13 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
 
     // now adjust the column mapping
     // OJ 24.01.2002  96860
-    ::std::map<sal_Int32,sal_Int32> aSerachMapping;
-    aSerachMapping[DB_UNSEARCHABLE]     = ColumnSearch::NONE;
-    aSerachMapping[DB_LIKE_ONLY]        = ColumnSearch::CHAR;
-    aSerachMapping[DB_ALL_EXCEPT_LIKE]  = ColumnSearch::BASIC;
-    aSerachMapping[DB_SEARCHABLE]       = ColumnSearch::FULL;
+    ::std::map<sal_Int32,sal_Int32> aSearchMapping;
+    aSearchMapping[DB_UNSEARCHABLE]     = ColumnSearch::NONE;
+    aSearchMapping[DB_LIKE_ONLY]        = ColumnSearch::CHAR;
+    aSearchMapping[DB_ALL_EXCEPT_LIKE]  = ColumnSearch::BASIC;
+    aSearchMapping[DB_SEARCHABLE]       = ColumnSearch::FULL;
 
-    m_aValueRange[9] = aSerachMapping;
+    m_aValueRange[9] = aSearchMapping;
 
     ::std::map<sal_Int32,sal_Int32> aCurrencyMapping;
     m_aValueRange[11] = aCurrencyMapping;
