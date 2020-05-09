@@ -12124,7 +12124,7 @@ public:
     virtual void set_message_type(weld::EntryMessageType eType) override
     {
         if (eType == weld::EntryMessageType::Error)
-            set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+            set_text_color(COL_LIGHTRED);
         else if (eType == weld::EntryMessageType::Warning)
             set_text_color(COL_YELLOW);
         else
