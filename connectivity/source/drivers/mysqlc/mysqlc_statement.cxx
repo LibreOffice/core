@@ -57,7 +57,6 @@ void OCommonStatement::closeResultSet()
         css::uno::Reference<css::sdbc::XCloseable> xClose(m_xResultSet, UNO_QUERY_THROW);
         xClose->close();
         m_xResultSet.clear();
-        m_pMysqlResult = nullptr; // it is freed by XResultSet
     }
 }
 
@@ -155,15 +154,15 @@ Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const OUString& sq
                                                      mysql_errno(pMySql), *this,
                                                      m_xConnection->getConnectionEncoding());
 
-    m_pMysqlResult = mysql_store_result(pMySql);
-    if (m_pMysqlResult == nullptr)
+    MYSQL_RES* pMysqlResult = mysql_store_result(pMySql);
+    if (pMysqlResult == nullptr)
     {
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(pMySql), mysql_sqlstate(pMySql),
                                                      mysql_errno(pMySql), *this,
                                                      m_xConnection->getConnectionEncoding());
     }
 
-    m_xResultSet = new OResultSet(*getOwnConnection(), this, m_pMysqlResult,
+    m_xResultSet = new OResultSet(*getOwnConnection(), this, pMysqlResult,
                                   m_xConnection->getConnectionEncoding());
     return m_xResultSet;
 }
