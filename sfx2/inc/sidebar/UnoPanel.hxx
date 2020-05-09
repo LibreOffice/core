@@ -21,7 +21,7 @@
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XFrame; }
-namespace sfx2 { namespace sidebar { class SidebarController; } }
+namespace sfx2::sidebar { class SidebarController; }
 
 
 /** get the Panel
