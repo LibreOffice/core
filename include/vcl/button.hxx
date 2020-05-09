@@ -247,12 +247,6 @@ public:
     virtual void    Click() override;
 };
 
-class CloseButton final : public CancelButton
-{
-public:
-    explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
-};
-
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:

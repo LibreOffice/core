@@ -24,6 +24,12 @@
 
 #include <vcl/button.hxx>
 
+class CloseButton final : public CancelButton
+{
+public:
+    explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
+};
+
 class VCL_DLLPUBLIC HelpButton : public PushButton
 {
 protected:
