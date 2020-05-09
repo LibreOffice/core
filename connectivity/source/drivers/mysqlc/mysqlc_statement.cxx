@@ -88,6 +88,11 @@ Sequence<Type> SAL_CALL OCommonStatement::getTypes()
     return concatSequences(aTypes.getTypes(), OCommonStatement_IBase::getTypes());
 }
 
+Sequence<Type> SAL_CALL OStatement::getTypes()
+{
+    return concatSequences(OStatement_BASE::getTypes(), OCommonStatement::getTypes());
+}
+
 void SAL_CALL OCommonStatement::cancel()
 {
     MutexGuard aGuard(m_aMutex);
@@ -114,7 +119,7 @@ void SAL_CALL OCommonStatement::close()
 //     mysqlc_sdbc_driver::throwFeatureNotImplementedException("com:sun:star:sdbc:XBatchExecution");
 // }
 
-sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
+sal_Bool SAL_CALL OStatement::execute(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -139,7 +144,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     return getResult();
 }
 
-Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const OUString& sql)
+Reference<XResultSet> SAL_CALL OStatement::executeQuery(const OUString& sql)
 {
     bool isRS(execute(sql));
     // if a MySQL error occurred, it was already thrown and the below is not executed
@@ -156,7 +161,7 @@ Reference<XResultSet> SAL_CALL OCommonStatement::executeQuery(const OUString& sq
     return m_xResultSet;
 }
 
-Reference<XConnection> SAL_CALL OCommonStatement::getConnection()
+Reference<XConnection> SAL_CALL OStatement::getConnection()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -165,14 +170,14 @@ Reference<XConnection> SAL_CALL OCommonStatement::getConnection()
     return m_xConnection.get();
 }
 
-sal_Int32 SAL_CALL OCommonStatement::getUpdateCount() { return m_nAffectedRows; }
+sal_Int32 SAL_CALL OStatement::getUpdateCount() { return m_nAffectedRows; }
 
 Any SAL_CALL OStatement::queryInterface(const Type& rType)
 {
-    Any aRet = ::cppu::queryInterface(rType, static_cast<XServiceInfo*>(this));
+    Any aRet = OCommonStatement::queryInterface(rType);
     if (!aRet.hasValue())
     {
-        aRet = OCommonStatement::queryInterface(rType);
+        aRet = OStatement_BASE::queryInterface(rType);
     }
     return aRet;
 }
@@ -193,7 +198,7 @@ Any SAL_CALL OStatement::queryInterface(const Type& rType)
 //     mysqlc_sdbc_driver::throwFeatureNotImplementedException("com:sun:star:sdbc:XBatchExecution");
 // }
 
-sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
+sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -202,7 +207,7 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
     return m_nAffectedRows;
 }
 
-Reference<XResultSet> SAL_CALL OCommonStatement::getResultSet()
+Reference<XResultSet> SAL_CALL OStatement::getResultSet()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
@@ -210,7 +215,7 @@ Reference<XResultSet> SAL_CALL OCommonStatement::getResultSet()
     return m_xResultSet;
 }
 
-sal_Bool OCommonStatement::getResult()
+bool OStatement::getResult()
 {
     // all callers already reset that
     assert(!m_xResultSet.is());
@@ -245,7 +250,7 @@ sal_Bool OCommonStatement::getResult()
     return false;
 }
 
-sal_Bool SAL_CALL OCommonStatement::getMoreResults()
+sal_Bool SAL_CALL OStatement::getMoreResults()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
