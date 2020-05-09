@@ -687,7 +687,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
                 case CopyTableOperation::CopyDefinitionAndData:
                 case CopyTableOperation::AppendData:
                     {
-                        m_xTable = aWizard.createTable();
+                        m_xTable = aWizard.returnTable();
                         bError = !m_xTable.is();
                         if(m_xTable.is())
                         {
