@@ -26,7 +26,7 @@
 #include "cellrange.hxx"
 
 
-namespace sdr { namespace table {
+namespace sdr::table {
 
 struct CellPos;
 
@@ -64,7 +64,7 @@ private:
     void split_vertical( sal_Int32 nRows );
 };
 
-} }
+}
 
 #endif
 

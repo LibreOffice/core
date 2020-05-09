@@ -27,7 +27,7 @@
 class SfxItemSet;
 class SdrText;
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class SdrLineAttribute;
     class SdrLineStartEndAttribute;
     class SdrShadowAttribute;
@@ -43,7 +43,7 @@ namespace drawinglayer { namespace attribute {
     class SdrSceneAttribute;
     class SdrLightingAttribute;
     class SdrFillTextAttribute;
-}}
+}
 
 namespace basegfx {
     class B2DRange;

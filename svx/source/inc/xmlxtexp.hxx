@@ -22,14 +22,14 @@
 
 #include <xmloff/xmlexp.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace frame { class XModel; }
     namespace uno { template<class X> class Reference; }
     namespace uno { class XInterface; }
     namespace container { class XNameContainer; }
     namespace document { class XGraphicStorageHandler; }
-    namespace xml { namespace sax { class XDocumentHandler; } }
-} } }
+    namespace xml::sax { class XDocumentHandler; }
+}
 
 class SvxXMLXTableExportComponent : public SvXMLExport
 {
