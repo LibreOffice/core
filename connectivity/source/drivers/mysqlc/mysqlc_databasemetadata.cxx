@@ -390,8 +390,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
 {
-    return m_rConnection.getMysqlVersion() >= 32336 ? TransactionIsolation::READ_COMMITTED
-                                                    : TransactionIsolation::NONE;
+    return TransactionIsolation::REPEATABLE_READ;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
