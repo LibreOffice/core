@@ -104,14 +104,19 @@ void throwInvalidArgumentException(const char* _pAsciiFeatureName,
     throw SQLException(sMessage, _rxContext, "HYC00", 0, Any());
 }
 
-void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
+void throwSQLExceptionWithMsg(const char* msg, const char* SQLSTATE, unsigned int errorNum,
                               const css::uno::Reference<css::uno::XInterface>& _context,
                               const rtl_TextEncoding encoding)
 {
     OString errorMsg{ msg };
-    // TODO error code?
-    throw SQLException(OStringToOUString(errorMsg, encoding), _context, OUString(), errorNum,
-                       Any());
+    throwSQLExceptionWithMsg(OStringToOUString(errorMsg, encoding), SQLSTATE, errorNum, _context);
+}
+
+void throwSQLExceptionWithMsg(const OUString& msg, const char* SQLSTATE, unsigned int errorNum,
+                              const css::uno::Reference<css::uno::XInterface>& _context)
+{
+    throw SQLException(msg, _context, OStringToOUString(SQLSTATE, RTL_TEXTENCODING_ASCII_US),
+                       errorNum, Any());
 }
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept

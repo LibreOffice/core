@@ -163,8 +163,8 @@ void OResultSet::fetchResult()
     }
     unsigned errorNum = mysql_errno(m_pMysql);
     if (errorNum)
-        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_error(m_pMysql), errorNum, *this,
-                                                     m_encoding);
+        mysqlc_sdbc_driver::throwSQLExceptionWithMsg(
+            mysql_error(m_pMysql), mysql_sqlstate(m_pMysql), errorNum, *this, m_encoding);
     m_bResultFetched = true;
     mysql_free_result(m_pResult);
 }
