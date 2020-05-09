@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
+#pragma once
 
 #include <svtools/toolbarmenu.hxx>
 
@@ -76,7 +75,5 @@ private:
     DECL_LINK(PredefinedValuesHandler, weld::Button&, void);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
