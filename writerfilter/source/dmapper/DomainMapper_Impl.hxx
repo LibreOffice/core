@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <queue>
 #include <stack>
+#include <set>
 #include <unordered_map>
 #include <vector>
 #include <optional>
@@ -484,6 +485,8 @@ private:
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< tools::SvRef< DomainMapperTableManager > > m_aTableManagers;
     tools::SvRef<DomainMapperTableHandler> m_pTableHandler;
+    // List of document lists overrides. They are applied only once on first occurrence in document
+    std::set<sal_Int32> m_aListOverrideApplied;
 
     //each context needs a stack of currently used attributes
     std::stack<PropertyMapPtr>  m_aPropertyStacks[NUMBER_OF_CONTEXTS];

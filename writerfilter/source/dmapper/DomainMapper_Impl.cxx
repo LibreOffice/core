@@ -1717,11 +1717,17 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             if (pList->GetCurrentLevel())
                             {
                                 sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
-                                if (nOverrideLevel != -1)
+                                if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId2) == m_aListOverrideApplied.end())
                                 {
-                                    // Restart list, it is overridden
+                                    // Apply override: we have override instruction for this level
+                                    // And this was not done for this list before: we can do this only once on first occurrence
+                                    // of list with override
+                                    // TODO: Not tested variant with differen levels override in diffent lists.
+                                    // Probably m_aListOverrideApplied as a set of overriden listids is not sufficient
+                                    // and we need to register level overrides separately.
                                     m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
                                     m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
+                                    m_aListOverrideApplied.insert(nListId2);
                                 }
                             }
                         }
