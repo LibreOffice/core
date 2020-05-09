@@ -71,6 +71,7 @@ protected:
 
 protected:
     void closeResultSet();
+    sal_Bool getResult();
 
     // OPropertyArrayUsageHelper
     ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
