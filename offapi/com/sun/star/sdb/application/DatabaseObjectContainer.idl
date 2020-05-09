@@ -73,7 +73,7 @@ constants DatabaseObjectContainer
     */
     const long CATALOG = 1005;
 
-    /** denotes a schema in a database which supports catalogs
+    /** denotes a schema in a database which supports schemas
     */
     const long SCHEMA = 1006;
 
