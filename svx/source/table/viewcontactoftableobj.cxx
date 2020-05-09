@@ -255,6 +255,7 @@ namespace sdr::contact
                                 aArray.SetCellStyleTop(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow, true, nColCount, nRowCount, bIsRTL));
                                 aArray.SetCellStyleBottom(aCellPos.mnCol, aCellPos.mnRow, impGetLineStyle(rTableLayouter, aCellPos.mnCol, aCellPos.mnRow + 1, true, nColCount, nRowCount, bIsRTL));
 
+                                /* cause problem tdf#115753, needs rework
                                 // ignore merged cells (all except the top-left of a merged cell)
                                 if(!xCurrentCell->isMerged())
                                 {
@@ -267,7 +268,7 @@ namespace sdr::contact
                                         // if merged, set so at CellBorderArray for primitive creation
                                         aArray.SetMergedRange(aCellPos.mnCol, aCellPos.mnRow, aCellPos.mnCol + nXSpan - 1, aCellPos.mnRow + nYSpan - 1);
                                     }
-                                }
+                                }*/
                             }
 
                             if(xCurrentCell.is() && !xCurrentCell->isMerged())
