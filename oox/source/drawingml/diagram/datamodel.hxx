@@ -30,7 +30,7 @@
 #include <oox/token/tokens.hxx>
 #include <svx/DiagramDataInterface.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 namespace dgm {
 
@@ -198,7 +198,7 @@ private:
 
 typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 
-} }
+}
 
 #endif
 

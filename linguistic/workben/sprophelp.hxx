@@ -26,11 +26,11 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
-namespace com { namespace sun { namespace star { namespace beans {
+namespace com::sun::star::beans {
     class   XPropertySet;
 }}}};
 
-namespace com { namespace sun { namespace star { namespace linguistic2 {
+namespace com::sun::star::linguistic2 {
     struct  LinguServiceEvent;
 }}}};
 

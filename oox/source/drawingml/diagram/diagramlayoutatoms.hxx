@@ -27,7 +27,7 @@
 
 #include "diagram.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class DiagramLayout;
 typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;
@@ -290,7 +290,7 @@ private:
 
 typedef std::shared_ptr< ShapeAtom > ShapeAtomPtr;
 
-} }
+}
 
 #endif
 

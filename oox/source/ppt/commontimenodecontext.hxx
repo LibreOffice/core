@@ -23,7 +23,7 @@
 #include <oox/ppt/timenode.hxx>
 #include <oox/ppt/timenodelistcontext.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
     /** CT_TLCommonTimeNodeData */
     class CommonTimeNodeContext
@@ -41,7 +41,7 @@ namespace oox { namespace ppt {
         bool mbIterate;
     };
 
-} }
+}
 
 #endif
 

@@ -25,7 +25,7 @@
 #include <oox/drawingml/color.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class clrMapContext final : public oox::core::ContextHandler2
 {
@@ -55,7 +55,7 @@ private:
     ClrScheme&      mrClrScheme;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 

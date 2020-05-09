@@ -27,7 +27,7 @@
 
 #include <map>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableStylePart
 {
@@ -63,7 +63,7 @@ private:
     ::oox::drawingml::ShapeStyleRefMap  maStyleRefs;
 };
 
-} } }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
 

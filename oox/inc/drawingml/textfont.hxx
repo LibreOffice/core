@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 
 namespace oox { class AttributeList; }
-namespace oox { namespace core { class XmlFilterBase; } }
+namespace oox::core { class XmlFilterBase; }
 
 namespace oox {
 namespace drawingml {

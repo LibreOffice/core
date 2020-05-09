@@ -25,7 +25,7 @@
 
 namespace oox { class PropertyMap; }
 namespace oox { class PropertySet; }
-namespace oox { namespace core { class ModelObjectContainer; } }
+namespace oox::core { class ModelObjectContainer; }
 
 namespace oox {
 namespace drawingml {

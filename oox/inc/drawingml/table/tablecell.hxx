@@ -27,7 +27,7 @@
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>
 
-namespace oox { namespace drawingml { namespace table {
+namespace oox::drawingml::table {
 
 class TableCellContext;
 class TableProperties;
@@ -102,7 +102,7 @@ private:
     sal_Int32 mnHorzOverflowToken;
 };
 
-} } }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLECELL_HXX
 

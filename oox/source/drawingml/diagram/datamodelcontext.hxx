@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include "datamodel.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 // CT_DataModel
 class DataModelContext final : public ::oox::core::ContextHandler2
@@ -38,7 +38,7 @@ private:
     DiagramDataPtr mpDataModel;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 

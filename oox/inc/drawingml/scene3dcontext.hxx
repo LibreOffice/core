@@ -23,7 +23,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <drawingml/shape3dproperties.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 struct Shape3DProperties;
 
@@ -60,7 +60,7 @@ private:
     Shape3DProperties& mr3DProperties;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_SCENE3DCONTEXT_HXX
 

@@ -22,7 +22,7 @@
 
 #include <oox/core/contexthandler2.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 
 struct LineProperties;
@@ -42,7 +42,7 @@ private:
     LineProperties& mrLineProperties;
 };
 
-} }
+}
 
 #endif // INCLUDED_OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 

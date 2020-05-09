@@ -25,7 +25,7 @@
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitorbase.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox::drawingml {
 
 class ShapeCreationVisitor : public LayoutAtomVisitorBase
 {
@@ -85,7 +85,7 @@ private:
     std::vector<Constraint> maConstraints;
 };
 
-} }
+}
 
 #endif
 

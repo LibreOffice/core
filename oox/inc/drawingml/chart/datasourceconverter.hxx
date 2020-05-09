@@ -22,9 +22,9 @@
 
 #include <drawingml/chart/converterbase.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace chart2 { namespace data { class XDataSequence; } }
-} } }
+namespace com::sun::star {
+    namespace chart2::data { class XDataSequence; }
+}
 
 namespace oox {
 namespace drawingml {

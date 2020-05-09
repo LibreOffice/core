@@ -13,7 +13,7 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/slidepersist.hxx>
 
-namespace oox { namespace ppt {
+namespace oox::ppt {
 
 class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler2
 {
@@ -34,7 +34,7 @@ private:
         oox::drawingml::ShapePtr        mpShapePtr;
 };
 
-} }
+}
 
 #endif
 
