@@ -126,19 +126,8 @@ namespace connectivity
                 case css::sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED:
                     return STR_DATA_CANNOT_SELECT_UNFILTERED;
             }
+            assert(false);
             return nullptr;
-        }
-
-        OUString lcl_getResourceState(const ErrorCondition _eCondition)
-        {
-            switch (_eCondition)
-            {
-                case css::sdb::ErrorCondition::DB_NOT_CONNECTED:
-                    return STR_DB_NOT_CONNECTED_STATE;
-                case css::sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED:
-                    return STR_DATA_CANNOT_SELECT_UNFILTERED_STATE;
-            }
-            return OUString();
         }
     }
 
@@ -233,10 +222,7 @@ namespace connectivity
 
     OUString SQLError_Impl::impl_getSQLState( ErrorCondition _eCondition )
     {
-        OUString sState = lcl_getResourceState(_eCondition);
-        if (sState.isEmpty())
-            sState = OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
-        return sState;
+        return OStringToOUString(lcl_getResourceErrorID(_eCondition), RTL_TEXTENCODING_UTF8);
     }
 
     SQLError::SQLError()
