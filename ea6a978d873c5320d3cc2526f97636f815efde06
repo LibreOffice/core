@@ -22,6 +22,30 @@
       "revId": "ea6a978d873c5320d3cc2526f97636f815efde06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b80b72cc_52ab95ca",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-09T17:00:02Z",
+      "side": 1,
+      "message": "which must mean that\u0027s gtk 3.18 seeing as the docs mentions since gtk 3.20\n\nhttps://gerrit.libreoffice.org/c/core/+/93869 probably make it build under gtk 3.18",
+      "parentUuid": "8f8ab569_df8097a4",
+      "range": {
+        "startLine": 3079,
+        "startChar": 0,
+        "endLine": 3079,
+        "endChar": 78
+      },
+      "revId": "ea6a978d873c5320d3cc2526f97636f815efde06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
