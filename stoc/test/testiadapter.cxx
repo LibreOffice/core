@@ -892,7 +892,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-                             aExc.Message == "dum dum dum I dance around the circle...",
+                             aExc.Message.startsWith("dum dum dum I dance around the circle..."),
                              "### unexpected exception content!" );
 
                 Reference<XLanguageBindingTest > xLBT2(
@@ -907,7 +907,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSURE( rExc.Message == "dum dum dum I dance around the circle...",
+            OSL_ENSURE( rExc.Message.startsWith("dum dum dum I dance around the circle..."),
                         "### unexpected exception content!" );
 
             Reference<XLanguageBindingTest > xLBT2(
@@ -922,9 +922,9 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (const Exception & aExc)
     {
-        OSL_ENSURE( aExc.Message == "dum dum dum I dance around the circle...",
+        OSL_ENSURE( aExc.Message.startsWith("dum dum dum I dance around the circle..."),
                      "### unexpected exception content!" );
-        return aExc.Message == "dum dum dum I dance around the circle...";
+        return aExc.Messag.startsWith("dum dum dum I dance around the circle...");
     }
     return sal_False;
 }
