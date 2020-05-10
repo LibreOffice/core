@@ -1654,6 +1654,7 @@ void SvmTest::testTransparent()
 
     pVirtualDev->DrawTransparent(aPolygon, 50);
 
+    CPPUNIT_ASSERT(aGDIMetaFile.HasTransparentActions());
     checkTransparent(writeAndReadStream(aGDIMetaFile));
     checkTransparent(readFile("transparent.svm"));
 }
