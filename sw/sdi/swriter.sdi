@@ -4819,6 +4819,23 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem ToggleOutlineContentVisibility FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxVoidItem RefreshView FN_REFRESH_VIEW
 ()
 [

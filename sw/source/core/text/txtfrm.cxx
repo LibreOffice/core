@@ -1248,7 +1248,6 @@ TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int
     }
     else
     {
-        assert(static_cast<SwTextNode*>(const_cast<SwModify*>(SwFrame::GetDep())) == pNode);
         return TextFrameIndex(nIndex);
     }
 }
