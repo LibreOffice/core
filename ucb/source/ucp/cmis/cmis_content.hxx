@@ -36,7 +36,7 @@
 
 #include <list>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans {
         struct Property;
         struct PropertyValue;
@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
     namespace sdbc {
         class XRow;
     }
-}}}
+}
 namespace ucbhelper
 {
     class Content;

@@ -21,7 +21,7 @@
 
 typedef void * yyscan_t;
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 struct SourceProviderEntity;
 
@@ -133,7 +133,7 @@ struct SourceProviderType {
     OUString typedefName;
 };
 
-} }
+}
 
 #endif
 
