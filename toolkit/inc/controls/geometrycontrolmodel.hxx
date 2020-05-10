@@ -28,13 +28,13 @@
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 
-namespace com { namespace sun { namespace star { namespace resource { class XStringResourceResolver; } } } }
+namespace com::sun::star::resource { class XStringResourceResolver; }
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno {
         class XComponentContext;
     }
-}}}
+}
 
 
 // namespace toolkit

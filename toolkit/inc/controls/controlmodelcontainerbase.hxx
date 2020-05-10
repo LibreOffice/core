@@ -39,8 +39,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace resource { class XStringResourceResolver; } } } }
-namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com::sun::star::resource { class XStringResourceResolver; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 
 typedef UnoControlModel     ControlModel_Base;

@@ -30,7 +30,7 @@
 
 #include "dllapi.hxx"
 
-namespace testtools { namespace bridgetest {
+namespace testtools::bridgetest {
 
 class LO_DLLPUBLIC_TESTTOOLS CurrentContextChecker :
     public ::osl::DebugBase< CurrentContextChecker >,
@@ -55,7 +55,7 @@ private:
         ::sal_Int32 setSteps, ::sal_Int32 checkSteps);
 };
 
-} }
+}
 
 #endif
 
