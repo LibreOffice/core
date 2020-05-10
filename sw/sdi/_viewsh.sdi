@@ -18,6 +18,11 @@
 
 interface BaseTextEditView
 {
+    FN_FOLD_OR_UNFOLD_OUTLINE_CONTENT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_REFRESH_VIEW // status(final|play)
     [
         ExecMethod = Execute ;
