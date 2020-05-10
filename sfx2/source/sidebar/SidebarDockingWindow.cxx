@@ -58,13 +58,12 @@ public:
 
     void Invoke() override
     {
-        auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-        auto pMobileNotifier = SfxViewShell::Current();
-        if (!pNotifier || (!pMobileNotifier && !comphelper::LibreOfficeKit::isActive()))
+        if (!comphelper::LibreOfficeKit::isActive())
             return;
 
         try
         {
+            auto pMobileNotifier = SfxViewShell::Current();
             if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
             {
                 // Mobile.
@@ -81,7 +80,11 @@ public:
             }
 
             // Notify the sidebar is created, and its LOKWindowId, which
-            // is needed on both Mobile and Desktop.
+            // is needed on mobile phones, tablets, and desktop.
+            auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
+            if (!pNotifier)
+                return;
+
             const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
                             m_rSidebarDockingWin.GetOutOffYPixel());
             const OString posMessage = pos.toString();
