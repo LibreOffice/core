@@ -199,6 +199,8 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                     if (sTypeName.indexOf(s_sAutoIncrement) == -1)
                     {
                         sTypeName += OUStringLiteral(" ") + s_sAutoIncrement;
+                        descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),
+                                                     makeAny(sTypeName));
                     }
                 }
                 else
