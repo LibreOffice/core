@@ -45,13 +45,22 @@
     <style:style style:name="pr6" style:family="presentation" style:parent-style-name="Standard_20_1-notes">
       <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
     </style:style>
-    <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Standard_20_2-title">
-      <style:graphic-properties draw:auto-grow-height="true" fo:min-height="2.65cm"/>
+    <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Standard-title">
+      <style:graphic-properties draw:auto-grow-height="true" fo:min-height="3.507cm"/>
     </style:style>
-    <style:style style:name="pr8" style:family="presentation" style:parent-style-name="Standard_20_2-outline1">
+    <style:style style:name="pr8" style:family="presentation" style:parent-style-name="Standard-outline1">
       <style:graphic-properties fo:min-height="11.93cm"/>
     </style:style>
-    <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Standard_20_2-notes">
+    <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Standard-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
+    </style:style>
+    <style:style style:name="pr10" style:family="presentation" style:parent-style-name="Standard_20_2-title">
+      <style:graphic-properties draw:auto-grow-height="true" fo:min-height="2.65cm"/>
+    </style:style>
+    <style:style style:name="pr11" style:family="presentation" style:parent-style-name="Standard_20_2-outline1">
+      <style:graphic-properties fo:min-height="11.93cm"/>
+    </style:style>
+    <style:style style:name="pr12" style:family="presentation" style:parent-style-name="Standard_20_2-notes">
       <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
@@ -62,13 +71,10 @@
     <style:style style:name="P3" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:writing-mode="lr-tb"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="P4" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
-    </style:style>
-    <style:style style:name="T1" style:family="text">
-      <style:text-properties fo:font-size="24pt"/>
     </style:style>
     <text:list-style style:name="L1">
       <text:list-level-style-bullet text:level="1" text:bullet-char="●">
@@ -115,7 +121,6 @@
   </office:automatic-styles>
   <office:body>
     <office:presentation>
-      <presentation:footer-decl presentation:name="ftr1">Your footer here.</presentation:footer-decl>
       <presentation:date-time-decl presentation:name="dtd1" presentation:source="current-date" style:data-style-name="D3"/>
       <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Progress_5f_2" presentation:presentation-page-layout-name="AL1T0" presentation:use-footer-name="ftr1" presentation:use-date-time-name="dtd1" xml:id="id1" draw:id="id1">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
@@ -127,9 +132,7 @@
             <text:list text:style-name="L1">
               <text:list-header>
                 <text:p text:style-name="P2">
-                  <text:span text:style-name="T1">
-                    <text:author-name text:fixed="false"> </text:author-name>
-                  </text:span>
+                    <text:author-name text:fixed="false"/>
                 </text:p>
               </text:list-header>
             </text:list>
@@ -150,7 +153,7 @@
       </draw:page>
       <draw:page draw:name="page2" draw:style-name="dp3" draw:master-page-name="Standard_20_1" presentation:presentation-page-layout-name="AL2T1" presentation:use-date-time-name="dtd1" xml:id="id2" draw:id="id2">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="layout" svg:width="25.005cm" svg:height="2.65cm" draw:transform="skewX (-2.80980493648851E-017) rotate (0.142244334037538) translate (0.286cm 1.414cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr4" draw:text-style-name="P1" draw:layer="layout" svg:width="25.005cm" svg:height="2.65cm" draw:transform="rotate (0.142244334037538) translate (0.286cm 1.414cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
         <draw:frame presentation:style-name="pr5" draw:text-style-name="P1" draw:layer="layout" svg:width="24.639cm" svg:height="9.135cm" svg:x="1.398cm" svg:y="4.209cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
@@ -169,12 +172,12 @@
           </draw:frame>
         </presentation:notes>
       </draw:page>
-      <draw:page draw:name="page3" draw:style-name="dp3" draw:master-page-name="Standard_20_2" presentation:presentation-page-layout-name="AL2T1" presentation:use-date-time-name="dtd1" xml:id="id3" draw:id="id3">
+      <draw:page draw:name="page3" draw:style-name="dp3" draw:master-page-name="Standard" presentation:presentation-page-layout-name="AL2T1" presentation:use-date-time-name="dtd1" xml:id="id3" draw:id="id3">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:frame presentation:style-name="pr7" draw:text-style-name="P1" draw:layer="layout" svg:width="25.005cm" svg:height="2.65cm" draw:transform="skewX (-2.80980493648851E-017) rotate (0.142244334037538) translate (0.286cm 3.916cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr7" draw:layer="layout" svg:width="25.005cm" svg:height="2.65cm" draw:transform="rotate (0.142244334037538) translate (0.195cm 1.973cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr8" draw:text-style-name="P1" draw:layer="layout" svg:width="24.639cm" svg:height="5.988cm" svg:x="1.68cm" svg:y="7.358cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr8" draw:layer="layout" svg:width="24.639cm" svg:height="9.135cm" svg:x="1.399cm" svg:y="4.959cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
         <anim:par presentation:node-type="timing-root">
@@ -184,8 +187,30 @@
           <anim:seq smil:dur="0s" presentation:node-type="main-sequence"/>
         </anim:par>
         <presentation:notes draw:style-name="dp2">
+          <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+          <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="14.85cm" svg:height="11.14cm" svg:x="3.08cm" svg:y="2.26cm" draw:page-number="3" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr9" draw:text-style-name="P3" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page4" draw:style-name="dp3" draw:master-page-name="Standard_20_2" presentation:presentation-page-layout-name="AL2T1" presentation:use-date-time-name="dtd1" xml:id="id4" draw:id="id4">
+        <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
+        <draw:frame presentation:style-name="pr10" draw:text-style-name="P1" draw:layer="layout" svg:width="25.005cm" svg:height="2.65cm" draw:transform="rotate (0.142244334037538) translate (0.286cm 3.916cm)" presentation:class="title" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr11" draw:text-style-name="P1" draw:layer="layout" svg:width="24.639cm" svg:height="5.988cm" svg:x="1.68cm" svg:y="7.358cm" presentation:class="outline" presentation:placeholder="true" presentation:user-transformed="true">
+          <draw:text-box/>
+        </draw:frame>
+        <anim:par presentation:node-type="timing-root">
+          <anim:par smil:begin="id4.begin">
+            <anim:transitionFilter smil:dur="2s" smil:type="fade" smil:subtype="crossfade"/>
+          </anim:par>
+          <anim:seq smil:dur="0s" presentation:node-type="main-sequence"/>
+        </anim:par>
+        <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="14.848cm" svg:height="11.136cm" svg:x="3.075cm" svg:y="2.257cm" draw:page-number="3" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr9" draw:text-style-name="P4" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="pr12" draw:text-style-name="P4" draw:layer="layout" svg:width="16.799cm" svg:height="13.364cm" svg:x="2.1cm" svg:y="14.107cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
