@@ -63,34 +63,6 @@ struct ConnectedComponents
 
 namespace {
 
-/** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
-    if given action requires special transparency handling
-*/
-bool IsTransparentAction( const MetaAction& rAct )
-{
-    switch( rAct.GetType() )
-    {
-        case MetaActionType::Transparent:
-            return true;
-
-        case MetaActionType::FLOATTRANSPARENT:
-            return true;
-
-        case MetaActionType::BMPEX:
-            return static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().IsTransparent();
-
-        case MetaActionType::BMPEXSCALE:
-            return static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsTransparent();
-
-        case MetaActionType::BMPEXSCALEPART:
-            return static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsTransparent();
-
-        default:
-            return false;
-    }
-}
-
-
 /** Determines whether the action can handle transparency correctly
   (i.e. when painted on white background, does the action still look
   correct)?
@@ -657,28 +629,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
     rOutMtf.Clear();
 
-    if( ! bReduceTransparency || bTransparencyAutoMode )
-    {
-        // watch for transparent drawing actions
-        for( pCurrAct = const_cast<GDIMetaFile&>(rInMtf).FirstAction();
-             pCurrAct && !bTransparent;
-             pCurrAct = const_cast<GDIMetaFile&>(rInMtf).NextAction() )
-        {
-            // #i10613# determine if the action is transparency capable
-
-            // #107169# Also examine metafiles with masked bitmaps in
-            // detail. Further down, this is optimized in such a way
-            // that there's no unnecessary painting of masked bitmaps
-            // (which are _always_ subdivided into rectangular regions
-            // of uniform opacity): if a masked bitmap is printed over
-            // empty background, we convert to a plain bitmap with
-            // white background.
-            if( IsTransparentAction( *pCurrAct ) )
-            {
-                bTransparent = true;
-            }
-        }
-    }
+    if(!bReduceTransparency || bTransparencyAutoMode)
+        bTransparent = rInMtf.HasTransparentActions();
 
     // #i10613# Determine set of connected components containing transparent objects. These are
     // then processed as bitmaps, the original actions are removed from the metafile.
@@ -991,7 +943,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 // prev component(s) special -> this one, too
                 aTotalComponents.bIsSpecial = true;
             }
-            else if( !IsTransparentAction( *pCurrAct ) )
+            else if(!pCurrAct->IsTransparent())
             {
                 // added action and none of prev components special ->
                 // this one normal, too
