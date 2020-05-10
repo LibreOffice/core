@@ -162,7 +162,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
             if ( eLang == primary(LANGUAGE_CHINESE) )
                 nNatNum = 4;
             else if ( eLang == primary(LANGUAGE_JAPANESE) )
-                nNatNum = 1;
+                nNatNum = 4;
             else if ( eLang == primary(LANGUAGE_KOREAN) )
                 nNatNum = 1;
             break;
