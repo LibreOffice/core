@@ -514,7 +514,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  )
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  )
 {
-    return false;
+    return true;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  )
