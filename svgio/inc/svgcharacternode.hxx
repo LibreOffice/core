@@ -22,7 +22,7 @@
 
 #include "svgnode.hxx"
 
-namespace drawinglayer { namespace primitive2d { class TextSimplePortionPrimitive2D; }}
+namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
 
 namespace svgio
 {

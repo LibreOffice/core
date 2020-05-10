@@ -26,12 +26,12 @@
 class SfxMedium;
 class SmNode;
 class SmVerticalBraceNode;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io {
         class XOutputStream; }
     namespace beans {
         class XPropertySet; }
-} } }
+}
 
 
 class SmXMLExportWrapper
