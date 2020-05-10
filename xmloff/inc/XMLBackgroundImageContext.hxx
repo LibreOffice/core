@@ -23,9 +23,9 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include "XMLElementPropertyContext.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace io { class XOutputStream; }
-} } }
+}
 
 class XMLBackgroundImageContext final : public XMLElementPropertyContext
 {

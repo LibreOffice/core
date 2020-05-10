@@ -27,13 +27,14 @@
 
 #include "transporttypes.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax {
+namespace com::sun::star {
+    namespace xml::sax {
         class XAttributeList;
-    }}
+    }
     namespace chart {
         class XChartDocument;
-}}}}
+    }
+}
 
 class SchXMLTableContext : public SvXMLImportContext
 {

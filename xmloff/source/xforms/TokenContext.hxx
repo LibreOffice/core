@@ -23,10 +23,10 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltkmap.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
     namespace uno { template<typename T> class Reference; }
-} } }
+}
 
 class SvXMLImport;
 
