@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ee294be_538f9587",
+        "filename": "sw/qa/extras/ww8export/ww8export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-10T18:55:44Z",
+      "side": 1,
+      "message": "here I think the plugin is confused. For now, just move the code to below the comment block and it should be fine",
+      "revId": "6e2766d4539c9a200f391a4373e8d9a44e370a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27c2ebb8_2e1896d8",
+        "filename": "sw/qa/extras/ww8export/ww8export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-10T18:55:44Z",
+      "side": 1,
+      "message": "here, your new code is not lined up with the existing code",
+      "revId": "6e2766d4539c9a200f391a4373e8d9a44e370a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
