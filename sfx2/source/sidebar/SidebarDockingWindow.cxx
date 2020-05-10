@@ -58,13 +58,15 @@ public:
 
     void Invoke() override
     {
-        auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-        auto pMobileNotifier = SfxViewShell::Current();
-        if (!pNotifier || (!pMobileNotifier && !comphelper::LibreOfficeKit::isActive()))
+        if (!comphelper::LibreOfficeKit::isActive())
             return;
 
         try
         {
+<<<<<<< HEAD   (0777ab filter,writerperfect: adapt XHTML,EPUB to draw:mime-type in )
+=======
+            auto pMobileNotifier = SfxViewShell::Current();
+>>>>>>> CHANGE (1467a3 sfx2: lok: separate sidebar notifications to mobile and desk)
             if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
             {
                 // Mobile phone.
@@ -82,8 +84,17 @@ public:
 
             // Notify the sidebar is created, and its LOKWindowId, which
             // is needed on mobile phones, tablets, and desktop.
+<<<<<<< HEAD   (0777ab filter,writerperfect: adapt XHTML,EPUB to draw:mime-type in )
             const Point pos(m_rSidebarDockingWin.GetOutOffXPixel(),
                             m_rSidebarDockingWin.GetOutOffYPixel());
+=======
+            auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
+            if (!pNotifier)
+                return;
+
+            const Point pos = Point(m_rSidebarDockingWin.GetOutOffXPixel(),
+                                    m_rSidebarDockingWin.GetOutOffYPixel());
+>>>>>>> CHANGE (1467a3 sfx2: lok: separate sidebar notifications to mobile and desk)
             const OString posMessage = pos.toString();
             const OString sizeMessage = m_rSidebarDockingWin.GetSizePixel().toString();
 
