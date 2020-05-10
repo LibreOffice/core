@@ -12,6 +12,9 @@ parameter:
 ;
 
 data:
-     ','? key=STRING ':' value= INT|ID
+     ','? key=STRING ':' value= value_type
 ;
 
+value_type:
+    INT|ID
+;
