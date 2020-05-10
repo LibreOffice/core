@@ -23,10 +23,10 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 class XMLSectionSourceImportContext : public SvXMLImportContext
 {

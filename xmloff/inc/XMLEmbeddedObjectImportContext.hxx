@@ -23,8 +23,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XComponent; } } } }
+namespace com::sun::star::lang { class XComponent; }
 
 class XMLEmbeddedObjectImportContext final : public SvXMLImportContext
 {

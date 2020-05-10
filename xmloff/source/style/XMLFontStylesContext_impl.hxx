@@ -22,9 +22,9 @@
 
 #include <xmloff/xmlstyle.hxx>
 
-namespace com { namespace sun { namespace star { namespace io {
+namespace com::sun::star::io {
     class XOutputStream;
-} } } }
+}
 
 /// Handles <style:font-face>
 class XMLFontStyleContextFontFace : public SvXMLStyleContext

@@ -27,11 +27,11 @@
 #include <map>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace rdf { class XBlankNode; }
     namespace rdf { class XMetadatable; }
     namespace rdf { class XDocumentRepository; }
-} } }
+}
 
 class SvXMLExport;
 

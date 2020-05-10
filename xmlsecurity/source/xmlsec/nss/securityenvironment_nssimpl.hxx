@@ -39,7 +39,7 @@
 
 #include <xmlsec-wrapper.h>
 
-namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
+namespace com::sun::star::security { class XCertificate; }
 class X509Certificate_NssImpl;
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<

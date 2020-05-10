@@ -23,7 +23,7 @@
 #include <xmloff/xmlexp.hxx>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XNameAccess; }
     namespace frame { class XModel; }
     namespace lang { class XMultiServiceFactory; }
@@ -31,8 +31,8 @@ namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Sequence; }
     namespace uno { class XInterface; }
     namespace uno { class Exception; }
-    namespace xml { namespace sax { class XDocumentHandler; } }
-} } }
+    namespace xml::sax { class XDocumentHandler; }
+}
 
 
 /**

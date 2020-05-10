@@ -23,8 +23,7 @@
 #include <rtl/ustring.hxx>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any; } } } }
+namespace com::sun::star::uno { class Any; }
 
 class XMLTextDropCapExport
 {

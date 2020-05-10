@@ -23,11 +23,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 class SvXMLExport;
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
-    namespace xml { namespace dom { class XDocument; } }
-    namespace xml { namespace dom { class XNode; } }
-} } }
+    namespace xml::dom { class XDocument; }
+    namespace xml::dom { class XNode; }
+}
 
 void exportDom( SvXMLExport&, const css::uno::Reference<css::xml::dom::XDocument>& );
 

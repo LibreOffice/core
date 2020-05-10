@@ -25,15 +25,15 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace text {
         class XTextRange;
         class XTextContent;
     }
-    namespace xml { namespace sax {
+    namespace xml::sax {
         class XAttributeList;
-    } }
-} } }
+    }
+}
 class XMLTextImportHelper;
 
 class XMLFieldParamImportContext : public SvXMLImportContext

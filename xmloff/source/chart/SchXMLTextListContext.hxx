@@ -23,9 +23,9 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax {
+namespace com::sun::star::xml::sax {
         class XAttributeList;
-}}}}}
+}
 
 class SchXMLTextListContext : public SvXMLImportContext
 {

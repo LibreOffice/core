@@ -26,15 +26,15 @@
 // forward declarations
 
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace dom {
+namespace com::sun::star {
+    namespace xml::dom {
         class XNode;
         class XDocument;
-    } }
-    namespace xml { namespace sax {
+    }
+    namespace xml::sax {
         class XAttributeList;
-    } }
-} } }
+    }
+}
 class SvXMLImport;
 class SvXMLImportContext;
 

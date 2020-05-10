@@ -23,9 +23,9 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class Any;
-} } } }
+}
 
 class SvXMLExport;
 

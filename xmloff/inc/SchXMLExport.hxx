@@ -24,11 +24,11 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlprmap.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace task {
         class XStatusIndicator;
     }
-}}}
+}
 
 // export class for a complete chart document
 

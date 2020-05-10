@@ -24,10 +24,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
     class XComponentContext;
     class XInterface;
-} } } }
+}
 
 namespace xmlscript {
 

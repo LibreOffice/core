@@ -24,9 +24,9 @@
 
 #include <xmloff/xmlmetai.hxx>
 
-namespace com { namespace sun { namespace star { namespace xml { namespace sax {
+namespace com::sun::star::xml::sax {
         class XAttributeList;
-}}}}}
+}
 
 /*
    These contexts are only needed by

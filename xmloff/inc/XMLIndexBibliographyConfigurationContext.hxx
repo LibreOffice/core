@@ -30,9 +30,9 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+namespace com::sun::star {
+    namespace xml::sax { class XAttributeList; }
+}
 
 
 /**

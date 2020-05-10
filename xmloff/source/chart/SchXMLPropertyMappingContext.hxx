@@ -14,12 +14,12 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace chart2 {
         class XChartDocument;
         class XDataSeries;
     }
-}}}
+}
 
 class SchXMLPropertyMappingContext : public SvXMLImportContext
 {

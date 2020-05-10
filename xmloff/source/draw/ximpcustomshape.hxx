@@ -29,11 +29,11 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container { class XIndexContainer; }
     namespace beans { class XPropertySet; }
-    namespace xml { namespace sax { class XAttributeList; } }
-} } }
+    namespace xml::sax { class XAttributeList; }
+}
 
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
