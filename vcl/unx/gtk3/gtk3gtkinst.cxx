@@ -3348,8 +3348,11 @@ public:
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
         OString id(pStr, pStr ? strlen(pStr) : 0);
         auto iter = m_aMap.find(id);
-        g_signal_handlers_disconnect_by_data(pMenuItem, this);
-        m_aMap.erase(iter);
+        if (iter != m_aMap.end())
+        {
+            g_signal_handlers_disconnect_by_data(pMenuItem, this);
+            m_aMap.erase(iter);
+        }
     }
 
     void disable_item_notify_events()
