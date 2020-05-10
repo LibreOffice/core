@@ -1147,6 +1147,119 @@ static bool lcl_InsertExpandCollapseAllItem(weld::TreeView& rContentTree, weld::
     return true;
 }
 
+static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, weld::TreeView& rContentTree, weld::TreeIter& rEntry, weld::Menu& rPop)
+{
+    rPop.set_sensitive(OString::number(1512), false);
+    rPop.set_sensitive(OString::number(1513), false);
+    rPop.set_sensitive(OString::number(1514), false);
+
+    // todo: multi selection
+    if (rContentTree.count_selected_rows() > 1)
+        return;
+
+    const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    size_t nOutlinePos = weld::GetAbsPos(rContentTree, rEntry);
+
+    bool bIsRoot = lcl_IsContentType(rEntry, rContentTree);
+
+    if (!bIsRoot)
+        --nOutlinePos;
+
+    if (nOutlinePos >= rOutlineNodes.size())
+         return;
+
+    int nFirstLevel = pThis->GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos);
+    {
+        // determine if any concerned outline node has content
+        bool bHasContent(false);
+        size_t nPos = nOutlinePos;
+        SwNode* pSttNd = rOutlineNodes[nPos];
+        SwNode* pEndNd = &rNodes.GetEndOfContent();
+        if (rOutlineNodes.size() > nPos + 1)
+            pEndNd = rOutlineNodes[nPos + 1];
+
+        // selected
+        SwNodeIndex aIdx(*pSttNd);
+        if (rNodes.GoNext(&aIdx) != pEndNd)
+            bHasContent = true;
+
+        // decendants
+        if (!bHasContent && (rContentTree.iter_has_child(rEntry) || rContentTree.get_children_on_demand(rEntry)))
+        {
+            while (++nPos < rOutlineNodes.size() &&
+                  (bIsRoot || pThis->GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nFirstLevel))
+            {
+                pSttNd = rOutlineNodes[nPos];
+                pEndNd = &rNodes.GetEndOfContent();
+                if (rOutlineNodes.size() > nPos + 1)
+                    pEndNd = rOutlineNodes[nPos + 1];
+
+                // test for content in outline node
+                aIdx.Assign(*pSttNd);
+                if (rNodes.GoNext(&aIdx) != pEndNd)
+                {
+                    bHasContent = true;
+                    break;
+                }
+            }
+        }
+
+        if (!bHasContent)
+            return; // no content in any of the concerned outline nodes
+    }
+
+    // determine for subs if all are folded or unfolded or if they are mixed
+    if (rContentTree.iter_has_child(rEntry) || rContentTree.get_children_on_demand(rEntry))
+    {
+        // skip no content nodes
+        // we know there is content from results above so this is presumably safe
+        size_t nPos = nOutlinePos;
+        while (true)
+        {
+            SwNode* pSttNd = rOutlineNodes[nPos];
+            SwNode* pEndNd = rOutlineNodes.back();
+            if (!bIsRoot && rOutlineNodes.size() > nPos + 1)
+                pEndNd = rOutlineNodes[nPos + 1];
+
+            SwNodeIndex aIdx(*pSttNd);
+            if (rNodes.GoNext(&aIdx) != pEndNd)
+                break;
+            nPos++;
+        }
+
+        bool bHasFolded(pThis->GetWrtShell()->IsOutlineContentFolded(nPos));
+        bool bHasUnfolded(!bHasFolded);
+
+        while ((++nPos < pThis->GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount()) &&
+               (bIsRoot || pThis->GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nFirstLevel))
+        {
+
+            SwNode* pSttNd = rOutlineNodes[nPos];
+            SwNode* pEndNd = &rNodes.GetEndOfContent();
+            if (rOutlineNodes.size() > nPos + 1)
+                pEndNd = rOutlineNodes[nPos + 1];
+
+            SwNodeIndex aIdx(*pSttNd);
+            if (rNodes.GoNext(&aIdx) == pEndNd)
+                continue; // skip if no content
+
+            if (pThis->GetWrtShell()->IsOutlineContentFolded(nPos))
+                bHasFolded = true;
+            else
+                bHasUnfolded = true;
+
+            if (bHasFolded && bHasUnfolded)
+                break; // mixed so no need to continue
+        }
+
+        rPop.set_sensitive(OString::number(1513), bHasUnfolded);
+        rPop.set_sensitive(OString::number(1514), bHasFolded);
+    }
+
+    bIsRoot ? rPop.remove(OString::number(1512)) : rPop.set_sensitive(OString::number(1512), true);
+}
+
 IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
@@ -1160,6 +1273,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     std::unique_ptr<weld::Menu> xSubPop2 = xBuilder->weld_menu("dragmodemenu");
     std::unique_ptr<weld::Menu> xSubPop3 = xBuilder->weld_menu("displaymenu");
     std::unique_ptr<weld::Menu> xSubPopOutlineTracking = xBuilder->weld_menu("outlinetracking");
+    std::unique_ptr<weld::Menu> xSubPopOutlineContent = xBuilder->weld_menu("outlinecontent");
+
+    xSubPopOutlineContent->append(OUString::number(1512), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE));
+    xSubPopOutlineContent->append(OUString::number(1513), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_HIDE_ALL));
+    xSubPopOutlineContent->append(OUString::number(1514), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_SHOW_ALL));
 
     for(int i = 1; i <= 3; ++i)
         xSubPopOutlineTracking->append_radio(OUString::number(i + 10), m_aContextStrings[IDX_STR_OUTLINE_TRACKING + i]);
@@ -1279,6 +1397,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             else if(ContentTypeId::OUTLINE == nContentType)
             {
                 bOutline = true;
+                lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
                 bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
                 bRemoveSelectEntry = false;
                 bRemoveChapterEntries = false;
@@ -1318,6 +1437,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         if (ContentTypeId::OUTLINE == pType->GetType())
         {
             bOutline = true;
+            lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
             bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
             bRemoveSendOutlineEntry = false;
         }
@@ -1393,6 +1513,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove(OString::number(1)); // outline level menu
         xSubPopOutlineTracking.reset();
         xPop->remove(OString::number(4)); // outline tracking menu
+        xSubPopOutlineContent.reset();
+    }
+    if (!bOutline || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() == 0)
+    {
+        xPop->remove(OString::number(5)); // outline content menu
+        xPop->remove("separator1511");
     }
 
     OString sCommand = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1)));
@@ -2026,7 +2152,7 @@ void SwContentTree::Display( bool bActive )
         }
     }
 
-    if (!m_bIsInPromoteDemote && GetEntryCount() == nOldEntryCount)
+    if (!m_bIgnoreViewChange && GetEntryCount() == nOldEntryCount)
     {
         m_xTreeView->vadjustment_set_value(nOldScrollPos);
     }
@@ -2535,7 +2661,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     switch (rHint.GetId())
     {
         case SfxHintId::DocChanged:
-            if (!m_bIsInPromoteDemote)
+            if (!m_bIgnoreViewChange)
             {
                 m_bViewHasChanged = true;
                 TimerUpdate(&m_aUpdTimer);
@@ -2580,7 +2706,7 @@ void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
         return;
     }
 
-    m_bIsInPromoteDemote = true;
+    m_bIgnoreViewChange = true;
 
     SwWrtShell *const pShell = GetWrtShell();
     sal_Int8 nActOutlineLevel = m_nOutlineLevel;
@@ -2869,7 +2995,7 @@ void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
             }
         }
     }
-    m_bIsInPromoteDemote = false;
+    m_bIgnoreViewChange = false;
 }
 
 void SwContentTree::ShowTree()
@@ -3343,6 +3469,38 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
     return sEntry;
 }
 
+static void lcl_ToggleOutlineContentVisibility(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rFirst, bool bHide)
+{
+    SwWrtShell* pSh = pThis->GetWrtShell();
+    SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(rContentTree.get_id(rFirst).toInt64());
+    // selected entry
+    if (!lcl_IsContentType(rFirst, rContentTree)) // not root
+    {
+        if(bHide ? !pSh->IsOutlineContentFolded(pCntFirst->GetOutlinePos()) :
+                    pSh->IsOutlineContentFolded(pCntFirst->GetOutlinePos()))
+        {
+            pSh->ToggleOutlineContentVisibility(pCntFirst->GetOutlinePos());
+        }
+    }
+    // decendents
+    if (rContentTree.iter_has_child(rFirst) || rContentTree.get_children_on_demand(rFirst))
+    {
+        int nDepthFirst = rContentTree.get_iter_depth(rFirst);
+        std::unique_ptr<weld::TreeIter> xEntry(rContentTree.make_iterator());
+        rContentTree.copy_iterator(rFirst, *xEntry);
+        pThis->RequestingChildren(*xEntry);
+        while (rContentTree.iter_next(*xEntry) && rContentTree.get_iter_depth(*xEntry) > nDepthFirst)
+        {
+            SwOutlineContent* pCnt = reinterpret_cast<SwOutlineContent*>(rContentTree.get_id(*xEntry).toInt64());
+            if (bHide ? !pSh->IsOutlineContentFolded(pCnt->GetOutlinePos()) :
+                         pSh->IsOutlineContentFolded(pCnt->GetOutlinePos()))
+            {
+                pSh->ToggleOutlineContentVisibility(pCnt->GetOutlinePos());
+            }
+        }
+    }
+}
+
 void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 {
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
@@ -3352,6 +3510,29 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
     {
+        case 1512: // fold or unfold outline content of selected entry
+        case 1513: // fold outline content of selected entry and decendents
+        case 1514: // unfold outline content of selected entry and decendents
+        {
+            m_pActiveShell->EnterStdMode();
+            m_bIgnoreViewChange = true;
+            SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            if (nSelectedPopupEntry == 1512)
+            {
+                m_pActiveShell->ToggleOutlineContentVisibility(pCntFirst->GetOutlinePos());
+            }
+            else
+            {
+                lcl_ToggleOutlineContentVisibility(this, *m_xTreeView, *xFirst, nSelectedPopupEntry == 1513);
+            }
+            if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
+                m_pActiveShell->GotoPage(1, true);
+            else
+                GotoContent(pCntFirst);
+            grab_focus();
+            m_bIgnoreViewChange = false;
+        }
+        break;
         case 11:
         case 12:
         case 13:
