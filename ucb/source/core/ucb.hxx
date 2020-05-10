@@ -43,10 +43,10 @@
 
 namespace comphelper { class OInterfaceContainerHelper2; }
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     class XCommandInfo;
     struct GlobalTransferCommandArgument2;
-} } } }
+}
 
 class UniversalContentBroker :
                 public cppu::WeakImplHelper<

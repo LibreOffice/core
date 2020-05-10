@@ -14,7 +14,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace unotools { namespace misc {
+namespace unotools::misc {
 
 class ServiceDocumenter : public ::cppu::WeakImplHelper<
     css::script::XServiceDocumenter>
@@ -46,6 +46,6 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
         OUString m_sServiceBaseUrl;
 };
 
-}}
+}
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,14 +26,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container {
         class XHierarchicalNameAccess;
     }
     namespace util {
         class XOfficeInstallationDirectories;
     }
-} } }
+}
 
 namespace hierarchy_ucp
 {

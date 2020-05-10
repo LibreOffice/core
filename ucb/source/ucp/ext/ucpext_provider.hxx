@@ -23,7 +23,7 @@
 #include <ucbhelper/providerhelper.hxx>
 
 
-namespace ucb { namespace ucp { namespace ext
+namespace ucb::ucp::ext
 {
 
 
@@ -56,7 +56,7 @@ namespace ucb { namespace ucp { namespace ext
     };
 
 
-} } }   // namespace ucb::ucp::ext
+} // namespace ucb::ucp::ext
 
 
 #endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_PROVIDER_HXX

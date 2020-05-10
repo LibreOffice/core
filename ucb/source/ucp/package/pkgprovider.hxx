@@ -26,9 +26,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "pkguri.hxx"
 
-namespace com { namespace sun { namespace star { namespace container {
+namespace com::sun::star::container {
     class XHierarchicalNameAccess;
-} } } }
+}
 
 namespace package_ucp {
 

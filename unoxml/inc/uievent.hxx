@@ -30,7 +30,7 @@
 
 #include "event.hxx"
 
-namespace DOM { namespace events {
+namespace DOM::events {
 
 typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XUIEvent > CUIEvent_Base;
 
@@ -66,7 +66,7 @@ public:
         sal_Bool canBubbleArg,
         sal_Bool cancelableArg) override;
 };
-}}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

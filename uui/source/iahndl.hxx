@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace awt {
         class XWindow;
     }
@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star {
     namespace ucb {
         class NameClashResolveRequest;
     }
-} } }
+}
 
 namespace vcl { class Window; }
 

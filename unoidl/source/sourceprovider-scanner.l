@@ -43,7 +43,7 @@
 #include <sourceprovider-parser.hxx>
 #include "sourceprovider-scanner.hxx"
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 static std::size_t sourceProviderScannerInput(
     SourceProviderScannerData * data, char * buffer, std::size_t size)
@@ -59,7 +59,7 @@ static std::size_t sourceProviderScannerInput(
     return size;
 }
 
-} }
+}
 
 #define YY_INPUT(buf, result, max_size) ((result) = \
     ::unoidl::detail::sourceProviderScannerInput(yyextra, (buf), (max_size)))

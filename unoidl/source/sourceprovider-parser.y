@@ -3980,7 +3980,7 @@ deprecated_opt:
 
 %%
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 OUString SourceProviderType::getName() const {
     if (!typedefName.isEmpty()) {
@@ -4473,6 +4473,6 @@ bool parse(OUString const & uri, SourceProviderScannerData * data) {
     return true;
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

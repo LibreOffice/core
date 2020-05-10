@@ -29,7 +29,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-namespace DOM {namespace events
+namespace DOM::events
 {
 class CEvent : public cppu::WeakImplHelper< css::xml::dom::events::XEvent >
 {
@@ -65,7 +65,7 @@ public:
         sal_Bool canBubbleArg,
         sal_Bool cancelableArg) override;
 };
-}}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

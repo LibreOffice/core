@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <regexpmap.hxx>
 
-namespace com { namespace sun { namespace star { namespace ucb {
+namespace com::sun::star::ucb {
     class XContentProvider;
-} } } }
+}
 
 
 class ProviderListEntry_Impl

@@ -23,11 +23,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace task {
         class XInteractionContinuation;
     }
-} } }
+}
 
 template< class t1 >
 bool setContinuation(

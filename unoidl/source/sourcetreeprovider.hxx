@@ -17,7 +17,7 @@
 #include <rtl/ref.hxx>
 #include <unoidl/unoidl.hxx>
 
-namespace unoidl { namespace detail {
+namespace unoidl::detail {
 
 class SourceTreeProvider: public Provider {
 public:
@@ -38,7 +38,7 @@ private:
     mutable std::map< OUString, rtl::Reference<Entity> > cache_; //TODO: at manager
 };
 
-} }
+}
 
 #endif
 

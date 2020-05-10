@@ -26,14 +26,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace container {
         class XHierarchicalNameAccess;
     }
     namespace util {
         class XOfficeInstallationDirectories;
     }
-} } }
+}
 
 namespace hierarchy_ucp {
 

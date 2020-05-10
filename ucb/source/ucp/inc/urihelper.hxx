@@ -25,7 +25,7 @@
 #include <rtl/uri.hxx>
 
 
-namespace ucb_impl { namespace urihelper {
+namespace ucb_impl::urihelper {
 
     inline OUString encodeSegment( const OUString & rSegment )
     {
@@ -109,7 +109,7 @@ namespace ucb_impl { namespace urihelper {
         return aResult.makeStringAndClear();
     }
 
-} } // namespace
+} // namespace
 
 #endif // INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 

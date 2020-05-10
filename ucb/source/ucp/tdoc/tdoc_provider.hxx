@@ -30,13 +30,13 @@
 #include "tdoc_docmgr.hxx"
 #include "tdoc_storage.hxx"
 
-namespace com { namespace sun { namespace star { namespace embed {
+namespace com::sun::star::embed {
     class XStorage;
-} } } }
+}
 
-namespace com { namespace sun { namespace star { namespace frame {
+namespace com::sun::star::frame {
     class XModel;
-} } } }
+}
 
 namespace tdoc_ucp {
 
