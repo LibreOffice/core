@@ -116,6 +116,7 @@ protected:
 
 DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The internal margin was larger than 0.28cm
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -132,6 +133,7 @@ DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")
 
 DECLARE_WW8EXPORT_TEST(testN760294, "n760294.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
@@ -143,6 +145,7 @@ DECLARE_WW8EXPORT_TEST(testN760294, "n760294.doc")
 
 DECLARE_WW8EXPORT_TEST(testN750255, "n750255.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 /*
 Column break without columns on the page is a page break, so check those paragraphs
 are on page 2 (page style 'Convert 1') and page 3 (page style 'Convert 2')
@@ -180,6 +183,7 @@ xray para2.PageStyleName
 
 DECLARE_WW8EXPORT_TEST(testN652364, "n652364.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 /*
 Related to 750255 above, column break with columns on the page however should be a column break.
 enum = ThisComponent.Text.createEnumeration
@@ -217,6 +221,7 @@ xray para2.PageStyleName
 
 DECLARE_WW8EXPORT_TEST(testN757118, "n757118.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 /*
 Two pairs of horizontal rules (one absolute width, one relative width)
 have the same width (full page width, half page width).
@@ -239,6 +244,7 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 
 DECLARE_WW8EXPORT_TEST(testTdf75539_relativeWidth, "tdf75539_relativeWidth.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //divide everything by 10 to give a margin of error for rounding etc.
     sal_Int32 pageWidth = parseDump("/root/page[1]/body/infos/bounds", "width").toInt32()/10;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page width", sal_Int32(9354/10), pageWidth);
@@ -250,6 +256,7 @@ DECLARE_WW8EXPORT_TEST(testTdf75539_relativeWidth, "tdf75539_relativeWidth.doc")
 
 DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the paragraph had only a single fly
     // (as-character-anchored), and the height of that was smaller than the
     // paragraph height. When in Word-compat mode, we should take the max of
@@ -261,12 +268,14 @@ DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
 
 DECLARE_WW8EXPORT_TEST(testAllGapsWord, "all_gaps_word.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     BorderTest borderTest;
     BorderTest::testTheBorders(mxComponent, true);
 }
 
 DECLARE_WW8EXPORT_TEST(testI120158, "i120158.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // See https://bz.apache.org/ooo/show_bug.cgi?id=120158
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
@@ -289,6 +298,7 @@ DECLARE_WW8EXPORT_TEST(testN816603, "n816603.doc")
 
 DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName("Standard"), "TopBorder");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(convertTwipToMm100(6 * 20)), aBorder.LineWidth);
@@ -296,6 +306,7 @@ DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 
 DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Character height was 10pt instead of 7.5pt in the header.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
@@ -304,6 +315,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='PortionType::Number']", "rText");
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
@@ -311,6 +323,7 @@ DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 
 DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Similar to fdo#36868, numbering portions had wrong values.
     OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='PortionType::Number']", "rText");
     // PortionType::Number was completely missing.
@@ -319,6 +332,7 @@ DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
 
 DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // the problem was that a table anchored in the header was split across
     // 3 text frames and quite messed up
 
@@ -343,6 +357,7 @@ DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
 
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
     uno::Reference<beans::XPropertyState> xPropertyState(getStyles("CharacterStyles")->getByName("WW8Num1z0"), uno::UNO_QUERY);
     beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
@@ -355,6 +370,7 @@ DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 
 DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     // It wasn't possible to fill out this form.
     CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
@@ -376,6 +392,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
 
 DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The following 6 colours can only be represented with WW9 (Word 2000)
     // BRC (BoRder Control) structures.  We can tell that they have been
     // exported/imported using a WW8 (Word '97) BRC if they instead come
@@ -491,6 +508,7 @@ DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
 
 DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
@@ -509,6 +527,7 @@ DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that there should be content in the second cell
     // but there wasn't.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -519,6 +538,7 @@ DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
 
     // get a page cursor
@@ -566,6 +586,7 @@ DECLARE_WW8EXPORT_TEST(testFdo77844, "fdo77844.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdp80333, "fdo80333.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Despite there is no character border, border shadow was imported
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
@@ -574,6 +595,7 @@ DECLARE_WW8EXPORT_TEST(testFdp80333, "fdo80333.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // get page style at beginning of document
     uno::Reference<text::XTextDocument> textDocument(
         mxComponent, uno::UNO_QUERY);
@@ -590,6 +612,7 @@ DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
 
 DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // The frame ended up on the second page instead of first.
 
     // this is on page 1 in Word
@@ -598,12 +621,14 @@ DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 
 DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // This must not hang in layout
 }
 
 #if HAVE_MORE_FONTS
 DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the text was not displayed.
     CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText").isEmpty() );
     CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText") );
@@ -614,6 +639,7 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     auto xField = getProperty< uno::Reference<lang::XServiceInfo> >(getRun(getParagraphOfText(1, xHeaderText), 2), "TextField");
     // This failed: the second text portion wasn't a field.
@@ -623,6 +649,7 @@ DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf74328, "tdf74328.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
 /*
 reading page numbers at sections > 255, in this case 256
 */
@@ -637,6 +664,7 @@ reading page numbers at sections > 255, in this case 256
 
 DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The first three paragraphs in this document (which are headings)
     // should have zero indent and first line indent
     for (int nPara = 1; nPara <= 3; ++nPara) {
@@ -677,24 +705,28 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf59896, "tdf59896.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf102334, "tdf102334.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was false, i.e. the first run wasn't hidden, when it should have been
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(10.0f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /*
      * The problem was that the transparent background of the drawing in the
      * header was exported as non-transparent.
@@ -708,6 +740,7 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 
 DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, "urn:bails");
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
@@ -747,6 +780,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
@@ -756,6 +790,7 @@ DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The footnote in that document wasn't exported, check that it is actually exported
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -764,6 +799,7 @@ DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 
 DECLARE_WW8EXPORT_TEST(testFirstHeaderFooter, "first-header-footer.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     // Test import and export of a section's headerf/footerf properties.
 
     // The document has 6 pages. Note that we don't test if 4 or just 2 page
@@ -784,6 +820,7 @@ DECLARE_WW8EXPORT_TEST(testFirstHeaderFooter, "first-header-footer.doc")
 
 DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
@@ -794,6 +831,7 @@ DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
 
 DECLARE_WW8EXPORT_TEST(testZoomType, "zoomtype.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
@@ -804,6 +842,7 @@ DECLARE_WW8EXPORT_TEST(testZoomType, "zoomtype.doc")
 
 DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     CPPUNIT_ASSERT_EQUAL(OUString("This is the header of the first section"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header of the second section"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header of the second section"),  parseDump("/root/page[3]/header/txt/text()"));
@@ -811,6 +850,7 @@ DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
 
 DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"));
@@ -818,6 +858,7 @@ DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Footer wasn't disabled -- instead empty footer was exported.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, "FooterIsOn"));
@@ -825,6 +866,7 @@ DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 
 DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // WW8 has just one border attribute (sprmCBrc) for text border so all side has
     // the same border
@@ -861,6 +903,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
     text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
     CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
@@ -874,6 +917,7 @@ DECLARE_WW8EXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     {
         // check negative crops round-trip  (with border/padding of 1)
         text::GraphicCrop const crop =
@@ -897,6 +941,7 @@ DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // See ooxmlexport's testFdo38244().
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -935,6 +980,7 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 
 DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
 
@@ -944,6 +990,7 @@ DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 
 DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This is very close to testBorderColours in ww8import.cxx, but for export
 
     // The following 6 colours can only be represented with WW9 (Word 2000)
@@ -1069,6 +1116,7 @@ DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
 
 DECLARE_WW8EXPORT_TEST(testRedlineExport1, "redline-export-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -1082,12 +1130,14 @@ DECLARE_WW8EXPORT_TEST(testRedlineExport1, "redline-export-1.odt")
 
 DECLARE_WW8EXPORT_TEST(testRedlineExport2, "redline-export-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information on the first portion of the third paragraph before and after reloading
     CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
 }
 
 DECLARE_WW8EXPORT_TEST(testRedlineExport3, "redline-export-3.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //there must be redline information just on the para-break boundary between para one and two
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(1), 1), "RedlineType"));
     CPPUNIT_ASSERT_EQUAL(true, hasProperty(getRun(getParagraph(1), 2), "RedlineType"));
@@ -1097,6 +1147,7 @@ DECLARE_WW8EXPORT_TEST(testRedlineExport3, "redline-export-3.odt")
 
 DECLARE_WW8EXPORT_TEST(testCellBgColor, "cell-bg-color.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -1105,6 +1156,7 @@ DECLARE_WW8EXPORT_TEST(testCellBgColor, "cell-bg-color.odt")
 
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Import / export of FFData.cch was missing.
     uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
@@ -1115,54 +1167,61 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
 
 DECLARE_WW8EXPORT_TEST(testWw8Cjklist30, "cjklist30.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
 }
 
 DECLARE_WW8EXPORT_TEST(testWw8Cjklist31, "cjklist31.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
 }
 
 DECLARE_WW8EXPORT_TEST(testWw8Cjklist34, "cjklist34.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
 DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf118564, "tdf118564.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int16   numFormat = getNumberingTypeOfParagraph(3);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
 {
-        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
 
-        uno::Reference<text::XText> xXText = getParagraph(1)->getText();
-        uno::Reference<text::XTextCursor> xCursor = xXText->createTextCursor();
+    uno::Reference<text::XText> xXText = getParagraph(1)->getText();
+    uno::Reference<text::XTextCursor> xCursor = xXText->createTextCursor();
 
-        xCursor->goRight( 5 , false );
-        uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
-        const sal_Unicode aFontname[14] = { 26032, 32048, 26126, 39636, ';' , 'P' , 'M', 'i', 'n', 'g', 'L', 'i', 'U' , 0 };
-        CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xPropSet, "CharFontName"));
-        CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, "CharFontNameAsian"));
-        CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xPropSet, "CharFontNameComplex"));
+    xCursor->goRight( 5 , false );
+    uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
+    const sal_Unicode aFontname[14] = { 26032, 32048, 26126, 39636, ';' , 'P' , 'M', 'i', 'n', 'g', 'L', 'i', 'U' , 0 };
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xPropSet, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(aFontname), getProperty<OUString>(xPropSet, "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xPropSet, "CharFontNameComplex"));
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has a non-trivial commented text range, as the range contains a table.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1175,6 +1234,7 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
 
 DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     //Preserve the page vertical alignment setting for .doc
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1200,6 +1260,7 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
 
 DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -1218,6 +1279,7 @@ DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
 
 DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     struct TextPortionInfo {
         OUString sKind;
         OUString sText;
@@ -1284,6 +1346,7 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 #if HAVE_MORE_FONTS
 DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
     //emulate table "keep with next" -do not split table
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[3]/body/tab[1]/row[2]/cell[1]/txt[1]") );
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[6]/body/tab[1]/row[2]/cell[1]/txt[1]") );
@@ -1292,6 +1355,7 @@ DECLARE_WW8EXPORT_TEST(testTableKeep, "tdf91083.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // textboxes without borders were losing their spacing items in round-tripping
     CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32() );
 
@@ -1306,6 +1370,7 @@ DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
 
 DECLARE_WW8EXPORT_TEST(testClearFramePams, "tdf46441-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //the save must survive without asserting
 }
 
@@ -1337,6 +1402,7 @@ DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The bullet colour of paragraph #3 should be COL_AUTO
     auto xPara = getParagraph(3);
     uno::Reference<container::XIndexReplace> xNumRules =
