@@ -718,7 +718,7 @@ namespace sw::mark
 
     void DropDownFieldmark::SendLOKMessage(const OString& sAction)
     {
-        if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+        if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isLOKMobilePhone(SfxLokHelper::getView()))
         {
             if (!m_pButton)
               return;
