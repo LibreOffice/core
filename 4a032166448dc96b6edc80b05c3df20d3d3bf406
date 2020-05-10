@@ -16,6 +16,24 @@
       "revId": "4a032166448dc96b6edc80b05c3df20d3d3bf406",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b54b6c3_101a4a33",
+        "filename": "sd/source/ui/view/drtxtob1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2020-05-10T19:57:29Z",
+      "side": 1,
+      "message": "I think it\u0027s OK for now. If someone files a bug, or a customer complains, we can change this.",
+      "parentUuid": "cf9df2b1_163318a7",
+      "revId": "4a032166448dc96b6edc80b05c3df20d3d3bf406",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
