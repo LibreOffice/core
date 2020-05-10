@@ -713,7 +713,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "mis";   // Hanb - Han with Bopomofo, zh-Hanb ?
             break;
         case USCRIPT_JAMO:
-            sRet = "mis";   // Jamo - Jamo subset of Hangul, ko-Jamo ?
+            sRet = "ko";   // Jamo - elements of Hangul Syllables
             break;
         case USCRIPT_SYMBOLS_EMOJI:
             sRet = "mis";   // Zsye - Emoji variant
