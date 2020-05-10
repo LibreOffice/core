@@ -596,7 +596,7 @@ void SbiParser::Set()
     if( eTok == NEW )
     {
         Next();
-        SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
+        auto pTypeDef = std::make_unique<SbiSymDef>( OUString() );
         TypeDecl( *pTypeDef, true );
 
         aLvalue.Gen();
