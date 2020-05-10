@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "428aeccc_a8f5e88a",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-05-10T01:41:38Z",
+      "side": 1,
+      "message": "Per elementary.io/brand, it is always lowercase.",
+      "revId": "6adbdf6b41d3f77e1c64e91c76e1dd0cf915c6af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
