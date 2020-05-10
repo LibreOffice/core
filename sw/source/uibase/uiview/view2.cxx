@@ -1081,6 +1081,13 @@ void SwView::Execute(SfxRequest &rReq)
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
         }
         break;
+        case FN_FOLD_OR_UNFOLD_OUTLINE_CONTENT:
+        {
+            size_t nPos(m_pWrtShell->GetOutlinePos());
+            m_pWrtShell->FoldOrUnfoldOutlineContent(nPos);
+            m_pWrtShell->GotoOutline(nPos);
+        }
+        break;
         case FN_NAV_ELEMENT:
         {
             // nothing here on purpose - if removed only the listbox that changed is changed

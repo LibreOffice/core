@@ -120,7 +120,7 @@ class SwContentTree final : public SfxListener
     // outline root mode drag & drop
     std::vector<std::unique_ptr<weld::TreeIter>> m_aDndOutlinesSelected;
 
-    bool m_bIsInPromoteDemote = false;
+    bool m_bIgnoreViewChange = false;
 
     /**
      * Before any data will be deleted, the last active entry has to be found.

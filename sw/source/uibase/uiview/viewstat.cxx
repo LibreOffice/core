@@ -70,6 +70,10 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case FN_FOLD_OR_UNFOLD_OUTLINE_CONTENT:
+                if (m_pWrtShell->GetOutlinePos() == SwOutlineNodes::npos)
+                    rSet.DisableItem(nWhich);
+            break;
             case FN_NAV_ELEMENT:
                 // used to update all instances of this control
                 rSet.InvalidateItem( nWhich );
