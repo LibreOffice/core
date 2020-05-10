@@ -1065,7 +1065,9 @@ DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")
 
 DECLARE_OOXMLEXPORT_TEST(tdf123705, "tdf123705.docx")
 {
+#if !defined(MACOSX)
     CPPUNIT_ASSERT_EQUAL(4, getPages());
+#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-size.docx")
