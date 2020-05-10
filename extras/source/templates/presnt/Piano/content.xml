@@ -34,7 +34,7 @@
     </style:style>
     <style:style style:name="P1" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
-      <style:text-properties fo:font-size="24pt"/>
+      <style:text-properties fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
     </style:style>
     <style:style style:name="P2" style:family="paragraph">
       <loext:graphic-properties draw:fill-color="#ffffff"/>
