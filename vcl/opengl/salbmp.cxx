@@ -91,10 +91,6 @@ sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
     }
     return 0;
 }
-
-typedef std::vector<std::unique_ptr< FixedTextureAtlasManager > > TextureAtlasVector;
-static vcl::DeleteOnDeinit< TextureAtlasVector > gTextureAtlases(new TextureAtlasVector);
-
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
@@ -313,15 +309,18 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
 {
     if (nWidth == nHeight)
     {
-        TextureAtlasVector &sTextureAtlases = *gTextureAtlases.get();
-        if (sTextureAtlases.empty())
-        {
-            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 16));
-            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 24));
-            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 32));
-            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 48));
-            sTextureAtlases.push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 64));
-        }
+        typedef std::vector<std::unique_ptr<FixedTextureAtlasManager>> TextureAtlasVector;
+        static vcl::DeleteOnDeinit<TextureAtlasVector> aTextureAtlases([]() {
+            TextureAtlasVector* p = new TextureAtlasVector();
+            p->reserve(5);
+            p->push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 16));
+            p->push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 24));
+            p->push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 32));
+            p->push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 48));
+            p->push_back(std::make_unique<FixedTextureAtlasManager>(8, 8, 64));
+            return p;
+        }());
+        TextureAtlasVector& sTextureAtlases = *aTextureAtlases.get();
         for (std::unique_ptr<FixedTextureAtlasManager> & pTextureAtlas : sTextureAtlases)
         {
             if (nWidth == pTextureAtlas->GetSubtextureSize())
