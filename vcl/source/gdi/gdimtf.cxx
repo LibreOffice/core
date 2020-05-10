@@ -154,6 +154,31 @@ GDIMetaFile::~GDIMetaFile()
     Clear();
 }
 
+bool GDIMetaFile::HasTransparentActions() const
+{
+    MetaAction* pCurrAct;
+
+    // watch for transparent drawing actions
+    for(pCurrAct = const_cast<GDIMetaFile*>(this)->FirstAction();
+        pCurrAct;
+        pCurrAct = const_cast<GDIMetaFile*>(this)->NextAction())
+    {
+        // #i10613# determine if the action is transparency capable
+
+        // #107169# Also examine metafiles with masked bitmaps in
+        // detail. Further down, this is optimized in such a way
+        // that there's no unnecessary painting of masked bitmaps
+        // (which are _always_ subdivided into rectangular regions
+        // of uniform opacity): if a masked bitmap is printed over
+        // empty background, we convert to a plain bitmap with
+        // white background.
+        if (pCurrAct->IsTransparent())
+            return true;
+    }
+
+    return false;
+}
+
 size_t GDIMetaFile::GetActionSize() const
 {
     return m_aList.size();
