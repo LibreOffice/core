@@ -88,6 +88,10 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
     MetaActionType      GetType() const { return mnType; }
+    /** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
+        if given action requires special transparency handling
+    */
+    virtual bool        IsTransparent() const { return false; }
 
 public:
     static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
@@ -768,6 +772,7 @@ public:
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
+    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
 };
 
 class VCL_DLLPUBLIC MetaBmpExScaleAction final : public MetaAction
@@ -801,6 +806,7 @@ public:
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
+    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpExScalePartAction final : public MetaAction
@@ -839,6 +845,7 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
+    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskAction final : public MetaAction
@@ -1523,6 +1530,8 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
+
+    bool                IsTransparent() const override { return true; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaFloatTransparentAction final : public MetaAction
@@ -1558,6 +1567,7 @@ public:
     const Point&        GetPoint() const { return maPoint; }
     const Size&         GetSize() const { return maSize; }
     const Gradient&     GetGradient() const { return maGradient; }
+    bool                IsTransparent() const override { return true; }
 };
 
 class VCL_DLLPUBLIC MetaEPSAction final : public MetaAction
