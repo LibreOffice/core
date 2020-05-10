@@ -29,13 +29,13 @@
 
 // predefines
 
-namespace svgio { namespace svgreader {
+namespace svgio::svgreader {
     class SvgGradientNode;
     class SvgPatternNode;
     class SvgMarkerNode;
     class SvgClipPathNode;
     class SvgMaskNode;
-}}
+}
 
 
 namespace svgio

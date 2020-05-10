@@ -31,7 +31,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter2; }
 
-namespace sca { namespace analysis {
+namespace sca::analysis {
 
 class ScaAnyConverter;
 
@@ -904,7 +904,7 @@ public:
                                     sal_Int32 nDefault );
 };
 
-} }
+}
 
 #endif
 

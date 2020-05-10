@@ -26,9 +26,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com { namespace sun { namespace star { namespace task {
+namespace com::sun::star::task {
     class XInteractionContinuation;
-} } } }
+}
 
 namespace stoc_javavm {
 

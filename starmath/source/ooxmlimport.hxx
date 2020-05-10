@@ -12,7 +12,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace oox { namespace formulaimport { class XmlStream; } }
+namespace oox::formulaimport { class XmlStream; }
 /**
  Class implementing reading of formulas from OOXML. The toplevel element is expected
  to be oMath (handle oMathPara outside of this code).
