@@ -31,7 +31,7 @@
 
 #include "dllapi.hxx"
 
-namespace testtools { namespace bridgetest {
+namespace testtools::bridgetest {
 
 class Multi: public cppu::WeakImplHelper< test::testtools::bridgetest::XMulti >
 {
@@ -97,7 +97,7 @@ private:
 LO_DLLPUBLIC_TESTTOOLS
 OUString testMulti( css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi);
 
-} }
+}
 
 #endif
 
