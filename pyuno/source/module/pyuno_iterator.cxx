@@ -110,10 +110,6 @@ static PyObject* PyUNO_iterator_next( PyObject *self )
     return nullptr;
 }
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 static PyTypeObject PyUNO_iterator_Type =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
@@ -172,14 +168,18 @@ static PyTypeObject PyUNO_iterator_Type =
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
 #if PY_VERSION_HEX >= 0x03080200
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
     , nullptr //Py_ssize_t tp_print
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #endif
 #endif
 #endif
 };
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 PyObject* PyUNO_iterator_new( const Reference< XEnumeration >& xEnumeration )
 {
@@ -256,10 +256,6 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
     return nullptr;
 }
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 static PyTypeObject PyUNO_list_iterator_Type =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
@@ -318,14 +314,18 @@ static PyTypeObject PyUNO_list_iterator_Type =
 #if PY_VERSION_HEX >= 0x03080000
     , nullptr // vectorcallfunc tp_vectorcall
 #if PY_VERSION_HEX >= 0x03080200
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
     , nullptr //Py_ssize_t tp_print
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #endif
 #endif
 #endif
 };
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 PyObject* PyUNO_list_iterator_new( const Reference<XIndexAccess> &xIndexAccess )
 {
