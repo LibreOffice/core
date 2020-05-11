@@ -2884,11 +2884,6 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC_URL:
-        {
-            SAL_INFO("editeng.items", "Getting GraphicURL property is not supported");
-            return false;
-        }
-        break;
         case MID_GRAPHIC:
         {
             uno::Reference<graphic::XGraphic> xGraphic;
