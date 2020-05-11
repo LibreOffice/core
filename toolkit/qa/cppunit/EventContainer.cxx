@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
 
     Sequence<OUString> aEventNames(xEvents->getElementNames());
     sal_Int32 nEventCount = aEventNames.getLength();
-    CPPUNIT_ASSERT_EQUAL(4, nEventCount);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nEventCount);
 
     CPPUNIT_ASSERT_EQUAL(OUString("b"), aEventNames[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), aEventNames[1]);
