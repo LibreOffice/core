@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+#include <config_oox.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -25,12 +27,20 @@
 
 #include <impgraph.hxx>
 
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
+
 using namespace css;
 
 namespace
 {
 class GraphicTest : public CppUnit::TestFixture
 {
+public:
+    ~GraphicTest();
+
+private:
     void testUnloadedGraphic();
     void testUnloadedGraphicLoading();
     void testUnloadedGraphicWmf();
@@ -49,6 +59,13 @@ class GraphicTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testSwappingVectorGraphic);
     CPPUNIT_TEST_SUITE_END();
 };
+
+GraphicTest::~GraphicTest()
+{
+#if USE_TLS_NSS
+    NSS_Shutdown();
+#endif
+}
 
 BitmapEx createBitmap(bool alpha = false)
 {

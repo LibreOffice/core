@@ -14,6 +14,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_type_serializer_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,vcl_type_serializer_test,boost_headers))
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,vcl_type_serializer_test,\
+       plc4 \
+       nss3 \
+))
+endif
 
 $(eval $(call gb_CppunitTest_set_include,vcl_type_serializer_test,\
     $$(INCLUDE) \
