@@ -102,7 +102,6 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
@@ -127,7 +126,6 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69548, "fdo69548.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported)
         return;
 
@@ -137,7 +135,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69548, "fdo69548.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Document has wp:anchor, not wp:inline, so handle it accordingly.
     uno::Reference<drawing::XShape> xShape = getShape(1);
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(xShape, "AnchorType");
@@ -161,7 +158,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(548005), xShape->getPosition().X);
@@ -169,7 +165,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to lack of handling of groupshapes inside groupshapes.
@@ -192,7 +187,6 @@ DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")
 
 DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // The relativeFrom attribute was ignored for groupshapes, i.e. these were text::RelOrientation::FRAME.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "HoriOrientRelation"));
@@ -212,7 +206,6 @@ DECLARE_OOXMLEXPORT_TEST(textboxWpgOnly, "textbox-wpg-only.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400PercentSubscript.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     // The word "Base" should not be subscripted.
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
@@ -222,7 +215,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400Percen
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontEsc, "test_tdf120412.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc =parseExport("word/document.xml");
     // don't lose the run with superscript formatting
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 2);
@@ -234,7 +226,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontEsc, "test_tdf120412.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure that we read the primary branch, if wpg is requested as a feature.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(0), uno::UNO_QUERY_THROW)->getText();
@@ -244,7 +235,6 @@ DECLARE_OOXMLEXPORT_TEST(testMceWpg, "mce-wpg.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Vertical position of the shape was incorrect due to incorrect nested mce handling.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     // positionV's posOffset from the bugdoc, was 0.
@@ -268,7 +258,6 @@ DECLARE_OOXMLEXPORT_TEST(testMceNested, "mce-nested.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMissingPath, "missing-path.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty<beans::PropertyValues>(getShape(1), "CustomShapeGeometry"));
     comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry["Path"].get<beans::PropertyValues>());
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates = aPath["Coordinates"].get< uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
@@ -278,7 +267,6 @@ DECLARE_OOXMLEXPORT_TEST(testMissingPath, "missing-path.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo70457, "fdo70457.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The document contains a rotated bitmap
     // It must be imported as a XShape object with the proper rotation value
 
@@ -293,14 +281,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70457, "fdo70457.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testLOCrash,"file_crash.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
     //The problem was libreoffice crash while opening the file.
     getParagraph(1,"Contents");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was libreoffice confuse when there RTL default style for paragraph
     uno::Reference<uno::XInterface> xParaLeftRTL(getParagraph( 1, "RTL LEFT"));
     uno::Reference<uno::XInterface> xParaRightLTR(getParagraph( 2, "LTR RIGHT"));
@@ -315,7 +301,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was libreoffice confuse when RTL was specified in non-default style
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, "RTL END"));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, "WritingMode" ));
@@ -324,7 +309,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was libreoffice confuse when RTL was specified in DocDefaults
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, "RTL END"));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, "WritingMode" ));
@@ -333,7 +317,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560d, "fdo72560d.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was libreoffice confuse when RTL was specified in "Normal" when not using Normal at all
     CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(1), "ParaAdjust" ));
     CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(2), "ParaAdjust" ));
@@ -341,7 +324,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560d, "fdo72560d.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was libreoffice confuse when *locale* is RTL, but w:bidi / w:jc are never defined.
     // This unit test would only be noticed if the testing environment is set to something like an Arabic locale.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), "WritingMode" ));
@@ -353,7 +335,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Redline defined by rPrChanged wasn't removed.
     // First paragraph has an rPrChange element, make sure it doesn't appear in the second paragraph.
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
@@ -361,7 +342,6 @@ DECLARE_OOXMLEXPORT_TEST(testRPrChangeClosed, "rprchange_closed.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65090, "fdo65090.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -372,7 +352,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65090, "fdo65090.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(15, getPages());
     // The DOCX containing the Table of Contents was not imported with correct page nos
     uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes( );
@@ -391,7 +370,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The width of the inner table was too large. The first fix still converted
     // the "auto" table width to a fixed one. The second fix used variable width.
     // The recent fix uses fixed width again, according to the fixed width cells.
@@ -403,7 +381,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Table with "auto" table width and incomplete grid: 11 columns, but only 4 gridCol elements.
     xmlDocUniquePtr pXmlDoc = parseExport();
 
@@ -418,7 +395,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     // The text in the groupshape was missing due to the w:sdt and w:sdtContent wrapper around it.
     CPPUNIT_ASSERT_EQUAL(OUString("sdt and sdtContent inside groupshape"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW)->getString());
@@ -426,7 +402,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // This was 16: the first run of the second para incorrectly inherited the char height of the first para.
@@ -435,7 +410,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Capitalization inside a group shape was not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
@@ -451,7 +425,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capita
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // At the start of the document, a picture which has a color specified with a color scheme, lost
     // it's color during import.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
@@ -468,7 +441,6 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8153), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
@@ -476,7 +448,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was one of the two text frames was anchored to the other text frame
     // Both frames should be anchored to the paragraph with the text "Anchor point"
     uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
@@ -492,7 +463,6 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(2), 2), "TextField");
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
     // Make sure we test the right annotation.
@@ -503,7 +473,6 @@ DECLARE_OOXMLEXPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Fonts defined by w:rFonts was not imported and so the font specified by a:fontRef was used.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText    = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
@@ -515,7 +484,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
 
 DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
@@ -547,7 +515,6 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testSmartartStrict, "strict-smartart.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     // This was 0, SmartArt was visually missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xGroup->getCount()); // background, 3 ellipses + 3 arrows
@@ -555,7 +522,6 @@ DECLARE_OOXMLEXPORT_TEST(testSmartartStrict, "strict-smartart.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // fdo#72775
     // This was text::WrapTextMode_NONE.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_DYNAMIC, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
@@ -569,7 +535,6 @@ DECLARE_OOXMLEXPORT_TEST(testI124106, "i124106.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // cp#1000043: MSO seems to ignore large twips values, we didn't, which resulted in different
     // layout of broken documents (text not visible in this specific document).
     OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
@@ -578,7 +543,6 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
     OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
@@ -602,7 +566,6 @@ DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // fdo#74652 Check there is no shape added to the doc during import
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
@@ -611,7 +574,6 @@ DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74401, "fdo74401.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // The triangle (second child) was a TextShape before, so it was shown as a rectangle.
@@ -628,7 +590,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74401, "fdo74401.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // w:gridBefore is faked by inserting two cells without border (because Writer can't do non-rectangular tables).
     // So check the first cell in the first row is in fact 3rd and that it's more to the right than the second
     // cell on the second row.
@@ -646,7 +607,6 @@ DECLARE_OOXMLEXPORT_TEST(testGridBefore, "gridbefore.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the importer lost consecutive tables with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 2);
@@ -654,7 +614,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf116194, "tdf116194.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
@@ -669,7 +628,6 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // When chart was in a TextFrame, its size was too large.
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
@@ -683,7 +641,6 @@ DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inline groupshape was in the background, so it was hidden sometimes by other shapes.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
 }
@@ -706,7 +663,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo79535, "fdo79535.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The frame in the footer must not accidentally end up in the document body.
     // The easiest way for this to test I've found is checking that
     // xray ThisComponent.TextFrames.GetByIndex( index ).Anchor.Text.ImplementationName
@@ -730,7 +686,6 @@ DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Caption"), uno::UNO_QUERY);
     // This was awt::FontSlant_ITALIC: Writer default was used instead of what is in the document.
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
@@ -738,7 +693,6 @@ DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Shape text was completely missing, ensure inserted text is available.
@@ -747,7 +701,6 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchange
 
 DECLARE_OOXMLEXPORT_TEST(testFdo78939, "fdo78939.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // fdo#78939 : LO hanged while opening issue document
 
     // Whenever a para-style was applied to a Numbering format level,
@@ -760,7 +713,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78939, "fdo78939.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFootnote, "footnote.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xFootnote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
@@ -771,7 +723,6 @@ DECLARE_OOXMLEXPORT_TEST(testFootnote, "footnote.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Note that this is btLr text, so layout and doc model horizontal/vertical is the opposite of
     // each other.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -789,7 +740,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Shape was wrongly placed at X=0, Y=0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3318), xShape->getPosition().X);
@@ -798,7 +748,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testHidemark, "hidemark.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was that <w:hideMark> cell property was ignored.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -815,7 +764,6 @@ DECLARE_OOXMLEXPORT_TEST(testHidemark, "hidemark.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testHidemarkb, "tdf99616_hidemarkb.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was that the smallest possible height was forced, not the min specified size.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -829,7 +777,6 @@ DECLARE_OOXMLEXPORT_TEST(testHidemarkb, "tdf99616_hidemarkb.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The image should be inside a cell, so the text in the following cell should be below it.
     int imageTop = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "top").toInt32();
     int imageHeight = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "height").toInt32();
@@ -839,7 +786,6 @@ DECLARE_OOXMLEXPORT_TEST(testBnc891663, "bnc891663.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123104, "tdf123104.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -852,7 +798,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123104, "tdf123104.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xBookmarksByIdx->getCount());
@@ -882,7 +827,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
@@ -901,7 +845,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
@@ -915,7 +858,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     const sal_Unicode aExpectedNumbering[] = { 0x7b2c, ' ', '1', ' ', 0x7ae0 };
 
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
@@ -925,7 +867,6 @@ DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 
 DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
     // This failed as the Model property was empty.
@@ -935,7 +876,6 @@ DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf8255, "tdf8255.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -945,7 +885,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf8255, "tdf8255.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87460, "tdf87460.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(xTextDocument, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
@@ -955,7 +894,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87460, "tdf87460.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90611, "tdf90611.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XText> xFootnoteText;
@@ -966,7 +904,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90611, "tdf90611.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89702, "tdf89702.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Get the first paragraph's numbering style's 2nd level's character style name.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
@@ -981,7 +918,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89702, "tdf89702.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf86374, "tdf86374.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -992,7 +928,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf86374, "tdf86374.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87924, "tdf87924.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // This was -270, the text rotation angle was set when it should not be rotated.
@@ -1001,7 +936,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87924, "tdf87924.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testIndents, "indents.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //expected left margin and first line indent values
     static const sal_Int32 indents[] =
     {
@@ -1035,7 +969,6 @@ DECLARE_OOXMLEXPORT_TEST(testIndents, "indents.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92454, "tdf92454.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The first paragraph had a large indentation / left margin as inheritance
     // in Word and Writer works differently, and no direct value was set to be
     // explicit.
@@ -1046,7 +979,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92454, "tdf92454.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xParagraph, "ParaRightMargin"));
 
@@ -1071,7 +1003,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95377, "tdf95377.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertyState> xParagraph(getParagraph(2), uno::UNO_QUERY);
     // This was beans::PropertyState_DIRECT_VALUE: indentation-from-numbering
     // did not have priority over indentation-from-paragraph-style, due to a
@@ -1085,7 +1016,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Get the second paragraph's numbering style's 1st level's suffix.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
@@ -1098,21 +1028,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90153, "tdf90153.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was at-para, so the line-level VertOrientRelation was lost, resulting in an incorrect vertical position.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf93919, "tdf93919.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 0, left margin was not inherited from the list style.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf91417, "tdf91417.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The first paragraph should contain a link to "http://www.google.com/"
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextCursor> xTextCursor = xTextDocument->getText()->createTextCursor( );
@@ -1124,7 +1051,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91417, "tdf91417.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XFootnotesSupplier> xFootnoteSupp(xTextDocument, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnoteIdxAcc = xFootnoteSupp->getFootnotes();
@@ -1136,13 +1062,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89165, "tdf89165.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This must not hang in layout
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95777, "tdf95777.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This must not fail on open
 }
 
@@ -1158,7 +1082,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94374)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83300, "tdf83300.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was 'Contents Heading', which (in the original document) implied 'keep with next' on unexpected paragraphs.
     CPPUNIT_ASSERT_EQUAL(OUString("TOC Heading"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
@@ -1171,13 +1094,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78902, "tdf78902.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95775, "tdf95775.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This must not fail in layout
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92157, "tdf92157.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(7, getPages());
     // A graphic with dimensions 0,0 should not fail on load
 }
 
@@ -1199,7 +1120,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97417, "section_break_numbering.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf94043, "tdf94043.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
     auto xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
     // This was 0, the separator line was not visible due to 0 width.
@@ -1208,7 +1128,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94043, "tdf94043.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Get the second paragraph's numbering style's 2nd level's character style name.
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
@@ -1223,7 +1142,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -1237,7 +1155,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -1253,7 +1170,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Writer, (new) Word: margin 0 means table border starts at 0
     // (old) Word: margin 0 means paragraph in table starts at 0
 
@@ -1273,7 +1189,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInTablePosition.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if ( mbExported )
     {
         xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -1292,7 +1207,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInT
 
 DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int32 const cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
@@ -1334,7 +1248,6 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 // tdf#106742 for DOCX with compatibility level <= 14 (MS Word up to and incl. ver.2010), we should use cell margins when calculating table left border position
 DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int32 const aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
@@ -1360,7 +1273,6 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
 // we should NOT use cell margins when calculating table left border position. But we do need to use border width.
 DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     sal_Int32 const aXCoordsFromOffice[] = { 2751, -899, 1, 212 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
@@ -1384,7 +1296,6 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
 
 DECLARE_OOXMLEXPORT_TEST( testTdf107359, "tdf107359-char-pitch.docx" )
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
 
     bool bGridSnapToChars;

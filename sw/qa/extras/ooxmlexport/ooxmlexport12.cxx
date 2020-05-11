@@ -38,7 +38,6 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
     if (!mbExported)
@@ -212,7 +211,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
 DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
                          "table_cross_reference_custom_format.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
     if (!mbExported)
@@ -346,7 +344,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
 
 DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
     if (!mbExported)
@@ -679,7 +676,6 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(6, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // page 1 header: 1 paragraph, 2 flys, 1 draw object
@@ -725,7 +721,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.doc")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //using .doc input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField
         = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 3), "Bookmark");
@@ -784,7 +779,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFi
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -822,7 +816,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
 
 DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingIndent.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     OUString sName = getProperty<OUString>(getParagraph(1), "NumberingStyleName");
     CPPUNIT_ASSERT_MESSAGE("Paragraph has numbering style", !sName.isEmpty());
 
@@ -835,7 +828,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
 
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
 
     sal_Int32 nHeight = xShape->getSize().Height;
@@ -850,7 +842,6 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
 
     // Rounding errors
@@ -864,7 +855,6 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf73547, "tdf73547-dash.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
@@ -874,7 +864,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf73547, "tdf73547-dash.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The runs inside <w:dir> were ignored
     const OUString sParaText = getParagraph(1)->getString();
     CPPUNIT_ASSERT_EQUAL(
@@ -895,7 +884,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
     if (!pXmlComm)
         return;
@@ -905,7 +893,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraphs were not part of a numbering anymore after roundtrip.
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPara1.is());
@@ -922,7 +909,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "//w:object", 2);
@@ -937,7 +923,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99631, "tdf99631.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
@@ -967,7 +952,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // test import/export of ActiveTable (visible sheet) of embedded XLSX OLE objects
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xEmbeddedObjectsSupplier(mxComponent,
                                                                                 uno::UNO_QUERY);
@@ -1026,7 +1010,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupShape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#131922: Check if good language is used in shape group texts
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     if (!pXml)
@@ -1040,7 +1023,6 @@ DECLARE_OOXMLEXPORT_TEST(testLanguageInGroupShape, "tdf131922_LanguageInGroupSha
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116883, "tdf116883.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     {
         uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("1>1>"), getProperty<OUString>(xPara, "ListLabelString"));
