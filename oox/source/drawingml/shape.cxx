@@ -1251,6 +1251,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
             std::vector<beans::PropertyValue> aProperties;
+            aProperties.push_back(comphelper::makePropertyValue("PreciseLineWidth", aLineProperties.getPreciseLineWidth()));
             aProperties.push_back(comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)));
             aProperties.push_back(comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor)));
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();

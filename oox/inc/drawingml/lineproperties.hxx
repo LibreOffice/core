@@ -80,6 +80,8 @@ struct LineProperties
     css::drawing::LineJoint  getLineJoint() const;
     /** Calculates the line width attribute from the internal state of the object */
     sal_Int32           getLineWidth() const;
+    /** Calculates the precise line width attribute from the internal state of the object */
+    double           getPreciseLineWidth() const;
 };
 
 } // namespace drawingml
