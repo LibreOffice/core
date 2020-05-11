@@ -159,7 +159,6 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAPV( "GlowEffectTransparency",           XML_NAMESPACE_LO_EXT, XML_GLOW_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // soft edge attributes
-    GMAPV( "SoftEdge",                      XML_NAMESPACE_LO_EXT, XML_SOFTEDGE,             XML_SD_TYPE_VISIBLE_HIDDEN, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "SoftEdgeRad",                   XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // graphic attributes

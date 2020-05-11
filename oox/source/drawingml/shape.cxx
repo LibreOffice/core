@@ -1479,7 +1479,6 @@ Reference< XShape > const & Shape::createAndInsert(
         if (aEffectProperties.maSoftEdge.moRad.has())
         {
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue("SoftEdge", makeAny(true));
             propertySet->setPropertyValue(
                 "SoftEdgeRad", makeAny(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
         }
