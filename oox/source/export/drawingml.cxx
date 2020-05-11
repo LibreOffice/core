@@ -866,7 +866,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
-                          XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
+                          XML_w, nLineWidth == 0 || (nStyleLineWidth != nLineWidth) ?
                               OString::number(oox::drawingml::convertHmmToEmu(nLineWidth)).getStr() : nullptr );
 
     if( bColorSet )
