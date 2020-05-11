@@ -212,6 +212,21 @@ namespace drawinglayer
 
             return aRetval;
         }
+
+        attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
+        {
+            const bool bGlow(rSet.Get(SDRATTR_GLOW).GetValue());
+            if (!bGlow)
+                return attribute::SdrGlowAttribute();
+            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
+            Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
+            sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
+            if (nTransparency)
+                aColor.SetTransparency(std::round(nTransparency / 100.0 * 255.0));
+
+            attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
+            return glowAttr;
+        }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
 
@@ -333,21 +348,6 @@ namespace drawinglayer::primitive2d
             }
 
             return attribute::SdrLineStartEndAttribute();
-        }
-
-        attribute::SdrGlowAttribute createNewSdrGlowAttribute( const SfxItemSet& rSet)
-        {
-            const bool bGlow(rSet.Get(SDRATTR_GLOW).GetValue());
-            if(!bGlow)
-                return attribute::SdrGlowAttribute();
-            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
-            Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
-            sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
-            if (nTransparency)
-                aColor.SetTransparency(std::round(nTransparency / 100.0 * 255.0));
-
-            attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
-            return glowAttr;
         }
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)

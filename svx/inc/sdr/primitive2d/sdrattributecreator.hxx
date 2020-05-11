@@ -68,9 +68,6 @@ namespace drawinglayer
         attribute::SdrFillAttribute SVXCORE_DLLPUBLIC createNewSdrFillAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrGlowAttribute createNewSdrGlowAttribute(
-            const SfxItemSet& rSet);
-
         // #i101508# Support handing over given text-to-border distances
         attribute::SdrTextAttribute createNewSdrTextAttribute(
             const SfxItemSet& rSet,
