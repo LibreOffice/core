@@ -27,10 +27,8 @@
 
 namespace basegfx { class B2DPolyPolygon; }
 
-namespace basegfx
+namespace basegfx::triangulator
 {
-    namespace triangulator
-    {
         // Simple B2D-based triangle. Main reason is to
         // keep the data types separated (before a B2DPolygon
         // was used with the convention that three points in
@@ -68,7 +66,6 @@ namespace basegfx
         // triangulate given PolyPolygon
         BASEGFX_DLLPUBLIC B2DTriangleVector triangulate(const ::basegfx::B2DPolyPolygon& rCandidate);
 
-    } // end of namespace triangulator
-} // end of namespace basegfx
+} // end of namespace basegfx::triangulator
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

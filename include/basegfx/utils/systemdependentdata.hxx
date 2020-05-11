@@ -20,10 +20,7 @@ namespace basegfx
     class SystemDependentData;
     typedef std::shared_ptr<SystemDependentData> SystemDependentData_SharedPtr;
     typedef std::weak_ptr<SystemDependentData> SystemDependentData_WeakPtr;
-} // end of namespace basegfx
 
-namespace basegfx
-{
     class BASEGFX_DLLPUBLIC SystemDependentDataManager
     {
     private:
@@ -44,10 +41,7 @@ namespace basegfx
         // flush all buffered data (e.g. cleanup/shutdown)
         virtual void flushAll() = 0;
     };
-} // end of namespace basegfx
 
-namespace basegfx
-{
     class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager final : public SystemDependentDataManager
     {
     private:
@@ -73,10 +67,7 @@ namespace basegfx
         virtual void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override;
         virtual void flushAll() override;
     };
-} // end of namespace basegfx
 
-namespace basegfx
-{
     class BASEGFX_DLLPUBLIC SystemDependentData
     {
     private:
@@ -120,10 +111,7 @@ namespace basegfx
         // offer useful data if you want to have better caching.
         virtual sal_Int64 estimateUsageInBytes() const;
     };
-} // end of namespace basegfx
 
-namespace basegfx
-{
     class BASEGFX_DLLPUBLIC SystemDependentDataHolder
     {
     private:

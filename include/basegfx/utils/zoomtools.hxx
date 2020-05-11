@@ -11,16 +11,14 @@
 
 #include <basegfx/basegfxdllapi.h>
 
-
-namespace basegfx
+namespace basegfx::zoomtools
 {
-    /** This namespace provides functions for optimized geometric zooming
-    */
-    namespace zoomtools
-    {
-        BASEGFX_DLLPUBLIC long zoomOut(long nCurrent);
-        BASEGFX_DLLPUBLIC long zoomIn(long nCurrent);
-    }
+
+/** This namespace provides functions for optimized geometric zooming
+*/
+BASEGFX_DLLPUBLIC long zoomOut(long nCurrent);
+BASEGFX_DLLPUBLIC long zoomIn(long nCurrent);
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

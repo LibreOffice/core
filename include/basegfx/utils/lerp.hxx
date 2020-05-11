@@ -19,27 +19,24 @@
 
 #pragma once
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
+    /** Generic linear interpolator
+
+        @tpl ValueType
+        Must have operator+ and operator* defined, and should
+        have value semantics.
+
+        @param t
+        As usual, t must be in the [0,1] range
+    */
+    template< typename ValueType > ValueType lerp( const ValueType&     rFrom,
+                                                   const ValueType&     rTo,
+                                                   double               t )
     {
-        /** Generic linear interpolator
-
-            @tpl ValueType
-            Must have operator+ and operator* defined, and should
-            have value semantics.
-
-            @param t
-            As usual, t must be in the [0,1] range
-        */
-        template< typename ValueType > ValueType lerp( const ValueType&     rFrom,
-                                                       const ValueType&     rTo,
-                                                       double               t )
-        {
-            // This is only to suppress a double->int warning. All other
-            // types should be okay here.
-            return static_cast<ValueType>( (1.0-t)*rFrom + t*rTo );
-        }
+        // This is only to suppress a double->int warning. All other
+        // types should be okay here.
+        return static_cast<ValueType>( (1.0-t)*rFrom + t*rTo );
     }
 }
 

@@ -29,9 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-namespace basegfx
-{
-namespace unotools
+namespace basegfx::unotools
 {
     typedef cppu::WeakComponentImplHelper<
             css::rendering::XLinePolyPolygon2D,
@@ -102,7 +100,6 @@ namespace unotools
         B2DPolyPolygon                        maPolyPoly;
         css::rendering::FillRule              meFillRule;
     };
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

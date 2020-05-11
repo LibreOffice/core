@@ -23,29 +23,26 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
-        // look for self-intersections and self-touches (points on an edge) in given polygon and add
-        // extra points there. Result will have no touches or intersections on an edge, only on points
-        BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate);
 
-        // look for polypolygon-intersections and polypolygon-touches (point of poly A on an edge of poly B) in given tools::PolyPolygon and add
-        // extra points there. Result will have no touches or intersections between contained polygons on an edge, only on points. For
-        // convenience, the correction for self-intersections for each member polygon will be used, too.
-        BASEGFX_DLLPUBLIC B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate);
+// look for self-intersections and self-touches (points on an edge) in given polygon and add
+// extra points there. Result will have no touches or intersections on an edge, only on points
+BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate);
 
-        // look for intersections of rCandidate with the edge from rStart to rEnd and add extra points there.
-        // Points are only added in the range of the edge, not on the endless vector.
-        BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
+// look for polypolygon-intersections and polypolygon-touches (point of poly A on an edge of poly B) in given tools::PolyPolygon and add
+// extra points there. Result will have no touches or intersections between contained polygons on an edge, only on points. For
+// convenience, the correction for self-intersections for each member polygon will be used, too.
+BASEGFX_DLLPUBLIC B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate);
 
-        // look for intersections of rCandidate with the mask Polygon and add extra points there.
-        // The mask polygon is assumed to be closed, even when it's not explicitly.
-        BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
+// look for intersections of rCandidate with the edge from rStart to rEnd and add extra points there.
+// Points are only added in the range of the edge, not on the endless vector.
+BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPoint& rStart, const B2DPoint& rEnd);
 
-    } // end of namespace utils
+// look for intersections of rCandidate with the mask Polygon and add extra points there.
+// The mask polygon is assumed to be closed, even when it's not explicitly.
+BASEGFX_DLLPUBLIC B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
+
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

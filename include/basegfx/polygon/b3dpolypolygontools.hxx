@@ -23,17 +23,16 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace basegfx
 {
-    // predefinitions
     class B3DPolyPolygon;
     class B3DRange;
+}
 
-    namespace utils
-    {
+namespace basegfx::utils
+{
         // B3DPolyPolygon tools
 
         // get size of PolyPolygon. Control vectors are included in that ranges.
@@ -129,7 +128,6 @@ namespace basegfx
             const B3DPolyPolygon& rPolyPolygonSource,
             css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval);
 
-    } // end of namespace utils
-} // end of namespace basegfx
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

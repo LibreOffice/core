@@ -75,38 +75,34 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
-        // convert SourcePolyPolygon to trapezoids. The trapezoids will be appended to
-        // ro_Result. ro_Result will not be cleared. If SourcePolyPolygon contains curves,
-        // it's default AdaptiveSubdivision will be used.
-        // CAUTION: Trapezoids are orientation-dependent in the sense that the upper and lower
-        // lines have to be parallel to the X-Axis, thus this subdivision is NOT simply usable
-        // for primitive decompositions. To use it, the shear and rotate parts of the
-        // involved transformations HAVE to be taken into account.
-        BASEGFX_DLLPUBLIC void trapezoidSubdivide(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPolyPolygon& rSourcePolyPolygon);
+    // convert SourcePolyPolygon to trapezoids. The trapezoids will be appended to
+    // ro_Result. ro_Result will not be cleared. If SourcePolyPolygon contains curves,
+    // it's default AdaptiveSubdivision will be used.
+    // CAUTION: Trapezoids are orientation-dependent in the sense that the upper and lower
+    // lines have to be parallel to the X-Axis, thus this subdivision is NOT simply usable
+    // for primitive decompositions. To use it, the shear and rotate parts of the
+    // involved transformations HAVE to be taken into account.
+    BASEGFX_DLLPUBLIC void trapezoidSubdivide(
+        B2DTrapezoidVector& ro_Result,
+        const B2DPolyPolygon& rSourcePolyPolygon);
 
-        // directly create trapezoids from given edge. Depending on the given geometry,
-        // none up to three trapezoids will be created
-        BASEGFX_DLLPUBLIC void createLineTrapezoidFromEdge(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPoint& rPointA,
-            const B2DPoint& rPointB,
-            double fLineWidth);
+    // directly create trapezoids from given edge. Depending on the given geometry,
+    // none up to three trapezoids will be created
+    BASEGFX_DLLPUBLIC void createLineTrapezoidFromEdge(
+        B2DTrapezoidVector& ro_Result,
+        const B2DPoint& rPointA,
+        const B2DPoint& rPointB,
+        double fLineWidth);
 
-        // create trapezoids for all edges of the given polygon. The closed state of
-        // the polygon is taken into account. If curves are contained, the default
-        // AdaptiveSubdivision will be used.
-        BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolygon(
-            B2DTrapezoidVector& ro_Result,
-            const B2DPolygon& rPolygon,
-            double fLineWidth);
-
-    } // end of namespace utils
-} // end of namespace basegfx
+    // create trapezoids for all edges of the given polygon. The closed state of
+    // the polygon is taken into account. If curves are contained, the default
+    // AdaptiveSubdivision will be used.
+    BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolygon(
+        B2DTrapezoidVector& ro_Result,
+        const B2DPolygon& rPolygon,
+        double fLineWidth);
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

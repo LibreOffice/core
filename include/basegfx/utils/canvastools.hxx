@@ -60,9 +60,10 @@ namespace basegfx
     class B2IRange;
     class B2DPolygon;
     class B2DPolyPolygon;
+}
 
-    namespace unotools
-    {
+namespace basegfx::unotools
+{
         // Polygon conversions
 
 
@@ -159,8 +160,6 @@ namespace basegfx
             which completely contains rRange.
          */
         BASEGFX_DLLPUBLIC ::basegfx::B2DRange   b2DSurroundingIntegerRangeFromB2DRange( const ::basegfx::B2DRange& rRange );
-
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

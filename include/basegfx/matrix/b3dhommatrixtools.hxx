@@ -22,23 +22,12 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace drawing
+namespace com::sun::star::drawing
 {
 struct HomogenMatrix;
 }
-}
-}
-}
 
-namespace basegfx
-{
-namespace utils
+namespace basegfx::utils
 {
 /* tooling methods for converting API matrices (drawing::HomogenMatrix) to
     B3DHomMatrix. drawing::HomogenMatrix4 is not used by OOo
@@ -50,7 +39,6 @@ BASEGFX_DLLPUBLIC void
 B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
                                com::sun::star::drawing::HomogenMatrix& rMatrixOut);
 
-} // end of namespace tools
-} // end of namespace basegfx
+} // end of namespace basegfx::tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
