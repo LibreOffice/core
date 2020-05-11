@@ -928,15 +928,6 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 {
     bool bCopyFirstToFollow = bFirstPage && m_bTitlePage && m_aFollowPageStyle.is();
-    if (bCopyFirstToFollow)
-    {
-        // This is a first page and has a follow style, then enable the
-        // header/footer there as well to be consistent.
-        if (HasHeader(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(true));
-        if (HasFooter(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(true));
-    }
 
     sal_Int32 nTopMargin = m_nTopMargin;
     sal_Int32 nHeaderTop = m_nHeaderTop;

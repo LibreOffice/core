@@ -271,6 +271,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
                                  getProperty<sal_Int32>(xText, "CharColor"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf127778)
+{
+    load(mpTestDocumentPath, "tdf127778.docx");
+    xmlDocPtr pLayout = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the 2nd page had an unexpected header.
+    assertXPath(pLayout, "//page[2]/header", 0);
+}
+
 // related tdf#43017
 DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
 {
