@@ -126,6 +126,12 @@ public:
         , m_xContext(::comphelper::getProcessComponentContext())
     {}
 
+    bool IsWebProtocol() const
+    {
+        INetProtocol eProtocol = m_aURLObj.GetProtocol();
+        return eProtocol == INetProtocol::Http || eProtocol == INetProtocol::Https;
+    }
+
     virtual ~CSubmission() {}
 
     virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
