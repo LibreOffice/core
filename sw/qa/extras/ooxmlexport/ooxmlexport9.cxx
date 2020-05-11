@@ -200,6 +200,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122342, "tdf122342.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132802, "tdf132802.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "after", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after", "0");
+    // This was 0 (list auto spacing is not zero before tables)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "0");
+    // This was 0 (list auto spacing is not zero at the end of table cells)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:p[2]/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "280");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p[1]/w:pPr/w:spacing", "after", "280");
+    // This was 0 (list auto spacing is not zero at list end)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "280");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129575_directBefore, "tdf129575-directBefore.docx")
 {
     CPPUNIT_ASSERT_EQUAL(3, getPages());
