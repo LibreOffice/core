@@ -127,6 +127,12 @@ public:
         , m_xContext(::comphelper::getProcessComponentContext())
     {}
 
+    bool IsWebProtocol() const
+    {
+        INetProtocol eProtocol = m_aURLObj.GetProtocol();
+        return eProtocol == INetProtocol::Http || eProtocol == INetProtocol::Https;
+    }
+
     virtual ~CSubmission() {}
 
     void setEncoding(const OUString& aEncoding)
