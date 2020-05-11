@@ -89,6 +89,17 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
     }
 }
 
+bool doesRectCoverWithUniformColor(
+        tools::Rectangle const & rPrevRect,
+        tools::Rectangle const & rCurrRect,
+        OutputDevice const & rMapModeVDev)
+{
+    // shape needs to fully cover previous content, and have uniform
+    // color
+    return (rMapModeVDev.LogicToPixel(rCurrRect).IsInside(rPrevRect) &&
+        rMapModeVDev.IsFillColor());
+}
+
 /** Check whether rCurrRect rectangle fully covers io_rPrevRect - if
     yes, return true and update o_rBgColor
  */
@@ -97,11 +108,7 @@ bool checkRect( tools::Rectangle&       io_rPrevRect,
                        const tools::Rectangle& rCurrRect,
                        OutputDevice const &    rMapModeVDev )
 {
-    // shape needs to fully cover previous content, and have uniform
-    // color
-    const bool bRet(
-        rMapModeVDev.LogicToPixel(rCurrRect).IsInside(io_rPrevRect) &&
-        rMapModeVDev.IsFillColor() );
+    bool bRet = doesRectCoverWithUniformColor(io_rPrevRect, rCurrRect, rMapModeVDev);
 
     if( bRet )
     {
