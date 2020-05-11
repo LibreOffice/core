@@ -58,6 +58,11 @@
 
 using namespace vcl;
 
+// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do its own caching (tested on Windows10).
+// TODO include the font as part of the cache key, then we won't need to clear it on font change
+// The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
+static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(3000);
+
 static const int MAXFONTHEIGHT = 2048;
 
 inline FIXED FixedFromDouble( double d )
@@ -848,6 +853,8 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
                                     float& o_rFontScale,
                                     HFONT& o_rOldFont)
 {
+    // clear the cache on font change - tdf#119829
+    g_BoundRectCache.clear();
     HFONT hNewFont = nullptr;
 
     LOGFONTW aLogFont;
@@ -909,6 +916,9 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont,
 
 void WinSalGraphics::SetFont( const FontSelectPattern* pFont, int nFallbackLevel )
 {
+    // clear the cache on font change - tdf#119829
+    g_BoundRectCache.clear();
+
     // return early if there is no new font
     if( !pFont )
     {
@@ -1380,6 +1390,13 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
+    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
+    if (it != g_BoundRectCache.end())
+    {
+        rRect = it->second;
+        return true;
+    }
+
     WinFontInstance* pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
     HFONT hNewFont = pFont ? pFont->GetHFONT() : mhFonts[rGlyph.mnFallbackLevel];
     float fFontScale = pFont ? pFont->GetScale() : mfFontScale[rGlyph.mnFallbackLevel];
@@ -1412,6 +1429,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetRight(static_cast<int>( fFontScale * rRect.Right() ) + 1);
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
+
+    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
 
     return true;
 }
