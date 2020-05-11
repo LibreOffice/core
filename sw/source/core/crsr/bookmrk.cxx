@@ -45,6 +45,7 @@
 #include <wrtsh.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <strings.hrc>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -766,7 +767,10 @@ namespace sw::mark
                 {
                     pSelectedItemIter->second >>= nSelection;
                 }
-                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\"}}");
+                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
+
+                // Placeholder text
+                sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
             }
             else
             {
