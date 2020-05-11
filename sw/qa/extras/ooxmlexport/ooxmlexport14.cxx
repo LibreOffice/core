@@ -868,7 +868,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
     CPPUNIT_ASSERT(p_XmlDoc);
     OUString aXmlVal = getXPath(p_XmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:object/v:shape", "style");
     // This data was missing
-    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
+    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95") > -1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.docx")
+{
+    // tdf#126363: check if line with stays the same after export
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    if (!pXml)
+        return;
+
+    assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "57150");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
