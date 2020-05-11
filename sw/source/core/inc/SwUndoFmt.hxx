@@ -32,13 +32,13 @@ class SwRewriter;
 class SwUndoFormatCreate : public SwUndo
 {
 protected:
-    SwFormat * pNew;
-    OUString sDerivedFrom;
-    SwDoc * pDoc;
-    mutable OUString sNewName;
-    SfxItemSet * pNewSet;
-    sal_uInt16 nId;     // FormatId related
-    bool bAuto;
+    SwFormat * m_pNew;
+    OUString m_sDerivedFrom;
+    SwDoc * m_pDoc;
+    mutable OUString m_sNewName;
+    SfxItemSet * m_pNewSet;
+    sal_uInt16 m_nId;     // FormatId related
+    bool m_bAuto;
 
 public:
     SwUndoFormatCreate(SwUndoId nUndoId, SwFormat * pNew, SwFormat const * pDerivedFrom,
@@ -58,12 +58,12 @@ public:
 class SwUndoFormatDelete : public SwUndo
 {
 protected:
-    OUString sDerivedFrom;
-    SwDoc * pDoc;
-    OUString sOldName;
-    SfxItemSet aOldSet;
-    sal_uInt16 nId;     // FormatId related
-    bool bAuto;
+    OUString m_sDerivedFrom;
+    SwDoc * m_pDoc;
+    OUString m_sOldName;
+    SfxItemSet m_aOldSet;
+    sal_uInt16 m_nId;     // FormatId related
+    bool m_bAuto;
 
 public:
     SwUndoFormatDelete(SwUndoId nUndoId, SwFormat const * pOld, SwDoc * pDoc);
@@ -208,10 +208,10 @@ public:
 
 class SwUndoNumruleCreate : public SwUndo
 {
-    const SwNumRule * pNew;
-    mutable SwNumRule aNew;
-    SwDoc * pDoc;
-    mutable bool bInitialized;
+    const SwNumRule * m_pNew;
+    mutable SwNumRule m_aNew;
+    SwDoc * m_pDoc;
+    mutable bool m_bInitialized;
 
 public:
     SwUndoNumruleCreate(const SwNumRule * pNew, SwDoc * pDoc);
@@ -224,8 +224,8 @@ public:
 
 class SwUndoNumruleDelete : public SwUndo
 {
-    SwNumRule aOld;
-    SwDoc * pDoc;
+    SwNumRule m_aOld;
+    SwDoc * m_pDoc;
 
 public:
     SwUndoNumruleDelete(const SwNumRule  & aRule, SwDoc * pDoc);
