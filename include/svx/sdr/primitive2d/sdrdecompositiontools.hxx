@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDR_PRIMITIVE2D_SDRDECOMPOSITIONTOOLS_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <svx/svxdllapi.h>
 
@@ -72,8 +73,7 @@ namespace drawinglayer
         Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow,
-            sal_Int32 nGraphicTranslateX = 0,
-            sal_Int32 nGraphicTranslateY = 0);
+            const basegfx::B2DHomMatrix& rObjectMatrix = basegfx::B2DHomMatrix());
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
