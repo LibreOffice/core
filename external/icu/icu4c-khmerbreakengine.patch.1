@@ -1,7 +1,7 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2018-10-02 00:39:56.000000000 +0200
-+++ icu/source/common/dictbe.cpp	2018-10-20 00:14:46.462039038 +0200
-@@ -29,7 +29,19 @@
+--- icu.org/source/common/dictbe.cpp	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/common/dictbe.cpp	2020-05-11 18:55:07.702282061 +0200
+@@ -32,7 +32,19 @@
   ******************************************************************
   */
  
@@ -22,7 +22,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  }
  
  DictionaryBreakEngine::~DictionaryBreakEngine() {
-@@ -76,6 +88,169 @@
+@@ -79,6 +91,169 @@
      fSet.compact();
  }
  
@@ -192,7 +192,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  /*
   ******************************************************************
   * PossibleWord
-@@ -282,7 +282,7 @@
+@@ -108,7 +283,7 @@
      ~PossibleWord() {}
    
      // Fill the list of candidates if needed, select the longest, and return the number found
@@ -201,7 +201,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
    
      // Select the currently marked candidate, point after it in the text, and invalidate self
      int32_t   acceptMarked( UText *text );
-@@ -303,12 +303,12 @@
+@@ -129,12 +304,12 @@
  };
  
  
@@ -216,7 +216,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -803,51 +978,28 @@
+@@ -815,53 +990,30 @@
   * KhmerBreakEngine
   */
  
@@ -241,6 +241,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +    : DictionaryBreakEngine((1 << UBRK_WORD) | (1 << UBRK_LINE)),
        fDictionary(adoptDictionary)
  {
+     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
+     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Khmr");
 -    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
 +
 +    clusterLimit = 3;
@@ -277,10 +279,10 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +    fIgnoreSet.compact();
 +    fBaseSet.compact();
 +    fPuncSet.compact();
+     UTRACE_EXIT_STATUS(status);
  }
  
- KhmerBreakEngine::~KhmerBreakEngine() {
-@@ -859,180 +1011,204 @@
+@@ -874,180 +1026,204 @@
                                                  int32_t rangeStart,
                                                  int32_t rangeEnd,
                                                  UVector32 &foundBreaks ) const {
@@ -637,8 +639,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2018-09-29 02:34:41.000000000 +0200
-+++ icu/source/common/dictbe.h	2018-10-19 14:21:00.339942804 +0200
+--- icu.org/source/common/dictbe.h	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/common/dictbe.h	2020-05-11 19:08:24.754634732 +0200
 @@ -34,7 +34,8 @@
   * threads without synchronization.</p>
   */
@@ -735,206 +737,15 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
     * <p>Virtual destructor.</p>
     */
    virtual ~DictionaryBreakEngine();
-@@ -68,7 +139,7 @@
-    * <p>Find any breaks within a run in the supplied text.</p>
-    *
-    * @param text A UText representing the text. The iterator is left at
--   * the end of the run of characters which the engine is capable of handling 
-+   * the end of the run of characters which the engine is capable of handling
-    * that starts from the first character in the range.
-    * @param startPos The start of the run within the supplied text.
-    * @param endPos The end of the run within the supplied text.
-@@ -218,118 +289,120 @@
- 
- };
- 
--/******************************************************************* 
-- * BurmeseBreakEngine 
-- */ 
-- 
--/** 
-- * <p>BurmeseBreakEngine is a kind of DictionaryBreakEngine that uses a 
-- * DictionaryMatcher and heuristics to determine Burmese-specific breaks.</p> 
-- * 
-- * <p>After it is constructed a BurmeseBreakEngine may be shared between 
-- * threads without synchronization.</p> 
-- */ 
--class BurmeseBreakEngine : public DictionaryBreakEngine { 
-- private: 
--    /** 
--     * The set of characters handled by this engine 
--     * @internal 
--     */ 
-- 
--  UnicodeSet                fBurmeseWordSet; 
+@@ -293,11 +364,13 @@
+      */ 
+  
+   UnicodeSet                fKhmerWordSet; 
 -  UnicodeSet                fEndWordSet; 
 -  UnicodeSet                fBeginWordSet; 
 -  UnicodeSet                fMarkSet; 
 -  DictionaryMatcher  *fDictionary; 
 - 
-- public: 
-- 
--  /** 
--   * <p>Default constructor.</p> 
--   * 
--   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the 
--   * engine is deleted. 
--   */ 
--  BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status); 
-- 
--  /** 
--   * <p>Virtual destructor.</p> 
--   */ 
--  virtual ~BurmeseBreakEngine(); 
-- 
-- protected: 
-- /** 
--  * <p>Divide up a range of known dictionary characters.</p> 
--  * 
--  * @param text A UText representing the text 
--  * @param rangeStart The start of the range of dictionary characters 
--  * @param rangeEnd The end of the range of dictionary characters 
--  * @param foundBreaks Output of C array of int32_t break positions, or 0 
--  * @return The number of breaks found 
--  */ 
--  virtual int32_t divideUpDictionaryRange( UText *text, 
--                                           int32_t rangeStart, 
--                                           int32_t rangeEnd, 
--                                           UVector32 &foundBreaks ) const; 
-- 
--}; 
-- 
--/******************************************************************* 
-- * KhmerBreakEngine 
-- */ 
-- 
--/** 
-- * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a 
-- * DictionaryMatcher and heuristics to determine Khmer-specific breaks.</p> 
-- * 
-- * <p>After it is constructed a KhmerBreakEngine may be shared between 
-- * threads without synchronization.</p> 
-- */ 
--class KhmerBreakEngine : public DictionaryBreakEngine { 
-- private: 
--    /** 
--     * The set of characters handled by this engine 
--     * @internal 
--     */ 
-- 
--  UnicodeSet                fKhmerWordSet; 
--  UnicodeSet                fEndWordSet; 
--  UnicodeSet                fBeginWordSet; 
--  UnicodeSet                fMarkSet; 
--  DictionaryMatcher  *fDictionary; 
-- 
-- public: 
-- 
--  /** 
--   * <p>Default constructor.</p> 
--   * 
--   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the 
--   * engine is deleted. 
--   */ 
--  KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status); 
-- 
--  /** 
--   * <p>Virtual destructor.</p> 
--   */ 
--  virtual ~KhmerBreakEngine(); 
-- 
-- protected: 
-- /** 
--  * <p>Divide up a range of known dictionary characters.</p> 
--  * 
--  * @param text A UText representing the text 
--  * @param rangeStart The start of the range of dictionary characters 
--  * @param rangeEnd The end of the range of dictionary characters 
--  * @param foundBreaks Output of C array of int32_t break positions, or 0 
--  * @return The number of breaks found 
--  */ 
--  virtual int32_t divideUpDictionaryRange( UText *text, 
--                                           int32_t rangeStart, 
--                                           int32_t rangeEnd, 
--                                           UVector32 &foundBreaks ) const; 
-- 
--}; 
-- 
-+/*******************************************************************
-+ * BurmeseBreakEngine
-+ */
-+
-+/**
-+ * <p>BurmeseBreakEngine is a kind of DictionaryBreakEngine that uses a
-+ * DictionaryMatcher and heuristics to determine Burmese-specific breaks.</p>
-+ *
-+ * <p>After it is constructed a BurmeseBreakEngine may be shared between
-+ * threads without synchronization.</p>
-+ */
-+class BurmeseBreakEngine : public DictionaryBreakEngine {
-+ private:
-+    /**
-+     * The set of characters handled by this engine
-+     * @internal
-+     */
-+
-+  UnicodeSet                fBurmeseWordSet;
-+  UnicodeSet                fEndWordSet;
-+  UnicodeSet                fBeginWordSet;
-+  UnicodeSet                fMarkSet;
-+  DictionaryMatcher  *fDictionary;
-+
-+ public:
-+
-+  /**
-+   * <p>Default constructor.</p>
-+   *
-+   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the
-+   * engine is deleted.
-+   */
-+  BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status);
-+
-+  /**
-+   * <p>Virtual destructor.</p>
-+   */
-+  virtual ~BurmeseBreakEngine();
-+
-+ protected:
-+ /**
-+  * <p>Divide up a range of known dictionary characters.</p>
-+  *
-+  * @param text A UText representing the text
-+  * @param rangeStart The start of the range of dictionary characters
-+  * @param rangeEnd The end of the range of dictionary characters
-+  * @param foundBreaks Output of C array of int32_t break positions, or 0
-+  * @return The number of breaks found
-+  */
-+  virtual int32_t divideUpDictionaryRange( UText *text,
-+                                           int32_t rangeStart,
-+                                           int32_t rangeEnd,
-+                                           UVector32 &foundBreaks ) const;
-+
-+};
-+
-+/*******************************************************************
-+ * KhmerBreakEngine
-+ */
-+
-+/**
-+ * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a
-+ * DictionaryMatcher and heuristics to determine Khmer-specific breaks.</p>
-+ *
-+ * <p>After it is constructed a KhmerBreakEngine may be shared between
-+ * threads without synchronization.</p>
-+ */
-+class KhmerBreakEngine : public DictionaryBreakEngine {
-+ private:
-+    /**
-+     * The set of characters handled by this engine
-+     * @internal
-+     */
-+
-+  UnicodeSet                fKhmerWordSet;
 +  UnicodeSet                fBeginWordSet;
 +  UnicodeSet                fPuncSet;
 +  DictionaryMatcher        *fDictionary;
@@ -942,44 +753,12 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
 +  const uint32_t BADSNLP = 256 * 20;
 +  const uint32_t kuint32max = 0x7FFFFFFF;
 +
-+ public:
-+
-+  /**
-+   * <p>Default constructor.</p>
-+   *
-+   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the
-+   * engine is deleted.
-+   */
-+  KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status);
-+
-+  /**
-+   * <p>Virtual destructor.</p>
-+   */
-+  virtual ~KhmerBreakEngine();
-+
-+ protected:
-+ /**
-+  * <p>Divide up a range of known dictionary characters.</p>
-+  *
-+  * @param text A UText representing the text
-+  * @param rangeStart The start of the range of dictionary characters
-+  * @param rangeEnd The end of the range of dictionary characters
-+  * @param foundBreaks Output of C array of int32_t break positions, or 0
-+  * @return The number of breaks found
-+  */
-+  virtual int32_t divideUpDictionaryRange( UText *text,
-+                                           int32_t rangeStart,
-+                                           int32_t rangeEnd,
-+                                           UVector32 &foundBreaks ) const;
-+
-+};
-+
- #if !UCONFIG_NO_NORMALIZATION
- 
- /*******************************************************************
+  public: 
+  
+   /** 
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2018-09-29 02:34:41.000000000 +0200
-+++ icu/source/common/dictionarydata.cpp	2018-10-19 14:21:00.339942804 +0200
+--- icu.org/source/common/dictionarydata.cpp	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2020-05-11 18:50:43.703113749 +0200
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -1027,8 +806,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2018-09-29 02:34:41.000000000 +0200
-+++ icu/source/common/dictionarydata.h	2018-10-19 14:21:00.339942804 +0200
+--- icu.org/source/common/dictionarydata.h	2020-04-22 22:04:20.000000000 +0200
++++ icu/source/common/dictionarydata.h	2020-05-11 18:50:43.704113746 +0200
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
