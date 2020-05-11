@@ -767,6 +767,20 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "nnp-Wcho";
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 66)
+        case USCRIPT_CHORASMIAN:
+            sRet = "xco-Chrs";
+            break;
+        case USCRIPT_DIVES_AKURU:
+            sRet = "dv-Diak";
+            break;
+        case USCRIPT_KHITAN_SMALL_SCRIPT:
+            sRet = "zkt-Kits";
+            break;
+        case USCRIPT_YEZIDI:
+            sRet = "kmr-Yezi";
+            break;
+#endif
     }
     return sRet;
 }
