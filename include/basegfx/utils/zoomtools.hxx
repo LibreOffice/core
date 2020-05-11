@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
-#define INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
+#pragma once
 
 #include <basegfx/basegfxdllapi.h>
 
@@ -23,7 +22,5 @@ namespace basegfx
         BASEGFX_DLLPUBLIC long zoomIn(long nCurrent);
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

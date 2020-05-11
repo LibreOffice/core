@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASEGFX_SYSTEMDEPENDENTDATA_HXX
-#define INCLUDED_BASEGFX_SYSTEMDEPENDENTDATA_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
@@ -143,7 +142,5 @@ namespace basegfx
         SystemDependentData_SharedPtr getSystemDependentData(size_t hash_code) const;
     };
 } // end of namespace basegfx
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

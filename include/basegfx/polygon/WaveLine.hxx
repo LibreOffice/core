@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_BASEGFX_POLYGON_WAVELINE_HXX
-#define INCLUDED_BASEGFX_POLYGON_WAVELINE_HXX
+#pragma once
 
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -35,7 +34,5 @@ namespace basegfx
 BASEGFX_DLLPUBLIC B2DPolygon createWaveLinePolygon(basegfx::B2DRectangle const& rRectangle);
 
 } // end of namespace basegfx
-
-#endif // INCLUDED_BASEGFX_POLYGON_WAVELINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
