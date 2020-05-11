@@ -77,6 +77,7 @@ bool FeatureCollector::collectGraphite()
                 nFeatureCode, sLabel, eFeatureParameterType, aParameters, sal_uInt32(nValue));
         }
     }
+    gr_featureval_destroy(pfeatureValues);
     return true;
 }
 

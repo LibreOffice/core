@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+#include <config_oox.h>
 #include <config_features.h>
 
 #include <cppunit/TestAssert.h>
@@ -24,6 +26,10 @@
 #include <comphelper/fileformat.h>
 
 #include <TypeSerializer.hxx>
+
+#if USE_TLS_NSS
+#include <nss.h>
+#endif
 
 namespace
 {
@@ -52,6 +58,10 @@ std::string toHexString(const std::vector<unsigned char>& a)
 
 class TypeSerializerTest : public CppUnit::TestFixture
 {
+public:
+    ~TypeSerializerTest();
+
+private:
     void testGradient();
     void testGraphic_Vector();
     void testGraphic_Bitmap_NoGfxLink();
@@ -66,6 +76,13 @@ class TypeSerializerTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testGraphic_GDIMetaFile);
     CPPUNIT_TEST_SUITE_END();
 };
+
+TypeSerializerTest::~TypeSerializerTest()
+{
+#if USE_TLS_NSS
+    NSS_Shutdown();
+#endif
+}
 
 void TypeSerializerTest::testGradient()
 {

@@ -20,6 +20,12 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test,\
 	boost_headers \
 	glm_headers \
 ))
+ifeq ($(TLS),NSS)
+$(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test,\
+       plc4 \
+       nss3 \
+))
+endif
 
 $(eval $(call gb_CppunitTest_set_include,vcl_graphic_test,\
     $$(INCLUDE) \

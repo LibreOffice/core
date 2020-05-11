@@ -76,6 +76,8 @@ void LifecycleTest::testVirtualDevice()
     VclPtrInstance<VirtualDevice> pVDev3;
     VclPtrInstance<VirtualDevice> pVDev4(DeviceFormat::BITMASK);
     CPPUNIT_ASSERT(!!pVDev && !!pVDev2 && !!pVDev3 && !!pVDev4);
+    pVDev.disposeAndClear();
+    pVDev4.disposeAndClear();
 }
 
 void LifecycleTest::testMultiDispose()

@@ -120,6 +120,8 @@ void FontFeatureTest::testGetFontFeatures()
         CPPUNIT_ASSERT_EQUAL(uint32_t(2), rParameter3.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
     }
+
+    aVDev.disposeAndClear();
 #endif // HAVE_MORE_FONTS
 }
 
