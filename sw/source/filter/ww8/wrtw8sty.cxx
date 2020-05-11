@@ -1700,7 +1700,19 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
         m_pISet = &pPdFormat->GetAttrSet();
         if (!bOutputStyleItemSet)
+        {
+            if (titlePage)
+            {
+                m_pFirstPageFormat = pPdFirstPgFormat;
+            }
+
             AttrOutput().OutputStyleItemSet( pPdFormat->GetAttrSet(), false );
+
+            if (titlePage)
+            {
+                m_pFirstPageFormat = nullptr;
+            }
+        }
         AttrOutput().SectionPageBorders( pPdFormat, pPdFirstPgFormat );
         m_pISet = pOldI;
 
