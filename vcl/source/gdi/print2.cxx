@@ -92,12 +92,12 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
 bool doesRectCoverWithUniformColor(
         tools::Rectangle const & rPrevRect,
         tools::Rectangle const & rCurrRect,
-        OutputDevice const & rMapModeVDev)
+        VirtualDevice const * pMapModeVDev)
 {
     // shape needs to fully cover previous content, and have uniform
     // color
-    return (rMapModeVDev.LogicToPixel(rCurrRect).IsInside(rPrevRect) &&
-        rMapModeVDev.IsFillColor());
+    return (pMapModeVDev->LogicToPixel(rCurrRect).IsInside(rPrevRect) &&
+        pMapModeVDev->IsFillColor());
 }
 
 void setComponentsSizeAndColor(ConnectedComponents &rBackgroundComponent, tools::Rectangle const & rRect, Color const& rColor)
@@ -609,6 +609,108 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         return tools::Rectangle();
 }
 
+int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent, GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev)
+{
+    MetaAction* pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
+
+    int nActionNum = 0;
+    int nLastBgAction = -1;
+    bool bStillBackground=true; // true until first non-bg action
+
+    while( pCurrAct && bStillBackground )
+    {
+        switch( pCurrAct->GetType() )
+        {
+            case MetaActionType::RECT:
+            {
+                const tools::Rectangle aRect(
+                    static_cast<const MetaRectAction*>(pCurrAct)->GetRect());
+
+                if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
+                {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::POLYGON:
+            {
+                const tools::Polygon aPoly(
+                    static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
+                const tools::Rectangle aRect(aPoly.GetBoundRect());
+
+                if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
+                    !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
+                {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::POLYPOLYGON:
+            {
+                const tools::PolyPolygon aPoly(
+                    static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
+                const tools::Rectangle aRect(aPoly.GetBoundRect());
+
+                if (aPoly.Count() != 1 ||
+                    !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
+                    !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
+                {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::WALLPAPER:
+            {
+                const tools::Rectangle aRect(
+                    static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect());
+
+                if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
+                {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            default:
+            {
+                if (ImplIsNotTransparent( *pCurrAct, *pMapModeVDev))
+                    bStillBackground=false; // non-transparent action, possibly not uniform
+                else
+                    // extend current bounds (next uniform action needs to fully cover this area)
+                    rBackgroundComponent.aBounds.Union(ImplCalcActionBounds(*pCurrAct, *pMapModeVDev));
+                break;
+            }
+        }
+
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+
+        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
+        ++nActionNum;
+    }
+
+    return nLastBgAction;
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -680,110 +782,17 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         aMapModeVDev->mnDPIY = mnDPIY;
         aMapModeVDev->EnableOutput(false);
 
-        int nLastBgAction, nActionNum;
-
         // weed out page-filling background objects (if they are
         // uniformly coloured). Keeping them outside the other
         // connected components often prevents whole-page bitmap
         // generation.
-        bool bStillBackground=true; // true until first non-bg action
-        nActionNum=0; nLastBgAction=-1;
-        pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
         if( rBackground != COL_TRANSPARENT )
         {
             aBackgroundComponent.aBgColor = rBackground;
             aBackgroundComponent.aBounds = SetBackgroundComponentBounds();
         }
-        while( pCurrAct && bStillBackground )
-        {
-            switch( pCurrAct->GetType() )
-            {
-                case MetaActionType::RECT:
-                {
-                    const tools::Rectangle aRect(
-                        static_cast<const MetaRectAction*>(pCurrAct)->GetRect());
 
-                    if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
-                        bStillBackground=false; // incomplete occlusion of background
-                    }
-                    else
-                    {
-                        nLastBgAction=nActionNum; // this _is_ background
-                    }
-                    break;
-                }
-                case MetaActionType::POLYGON:
-                {
-                    const tools::Polygon aPoly(
-                        static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
-                    const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                    if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
-                        !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
-                        bStillBackground=false; // incomplete occlusion of background
-                    }
-                    else
-                    {
-                        nLastBgAction=nActionNum; // this _is_ background
-                    }
-                    break;
-                }
-                case MetaActionType::POLYPOLYGON:
-                {
-                    const tools::PolyPolygon aPoly(
-                        static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
-                    const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                    if (aPoly.Count() != 1 ||
-                        !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
-                        !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
-                        bStillBackground=false; // incomplete occlusion of background
-                    }
-                    else
-                    {
-                        nLastBgAction=nActionNum; // this _is_ background
-                    }
-                    break;
-                }
-                case MetaActionType::WALLPAPER:
-                {
-                    const tools::Rectangle aRect(
-                        static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect());
-
-                    if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
-                        bStillBackground=false; // incomplete occlusion of background
-                    }
-                    else
-                    {
-                        nLastBgAction=nActionNum; // this _is_ background
-                    }
-                    break;
-                }
-                default:
-                {
-                    if (ImplIsNotTransparent( *pCurrAct, *aMapModeVDev))
-                        bStillBackground=false; // non-transparent action, possibly not uniform
-                    else
-                        // extend current bounds (next uniform action needs to fully cover this area)
-                        aBackgroundComponent.aBounds.Union(ImplCalcActionBounds(*pCurrAct, *aMapModeVDev));
-                    break;
-                }
-            }
-
-            // execute action to get correct MapModes etc.
-            pCurrAct->Execute( aMapModeVDev.get() );
-
-            pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction();
-            ++nActionNum;
-        }
+        int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
 
         // clean up aMapModeVDev
         sal_uInt32 nCount = aMapModeVDev->GetGCStackDepth();
@@ -794,7 +803,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         // fast-forward until one after the last background action
         // (need to reconstruct map mode vdev state)
-        nActionNum=0;
+        int nActionNum=0;
         pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
         while( pCurrAct && nActionNum<=nLastBgAction )
         {
