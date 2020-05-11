@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46ea0f78_abf82880",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5288,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-05-11T06:59:54Z",
+      "side": 1,
+      "message": "Infobar has similar states and the colors are adjusted for use on the UI \nwarning: #704300/112,67,0; #FEEFB3/254,239,179\nerror: #7A0006/122,0,6; #FFBABA/255,186,186\n(background/foreground; see https://opengrok.libreoffice.org/xref/core/sfx2/source/dialog/infobar.cxx?r\u003d29575dc6)\n\nApplies also to the next COL_YELLOW. Would introduce COL_WARNING and COL_ERROR in colorcfg.cxx and use it for the infobar too.",
+      "range": {
+        "startLine": 5288,
+        "startChar": 39,
+        "endLine": 5288,
+        "endChar": 51
+      },
+      "revId": "02b4fbcc77a253016e678819cb287f13927bc3da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
