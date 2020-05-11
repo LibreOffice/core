@@ -18,12 +18,12 @@
  */
 
 
-#include <sdr/attribute/sdrshadowtextattribute.hxx>
+#include <sdr/attribute/sdreffectstextattribute.hxx>
 
 
 namespace drawinglayer::attribute
 {
-        SdrShadowTextAttribute::SdrShadowTextAttribute(
+        SdrEffectsTextAttribute::SdrEffectsTextAttribute(
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow)
@@ -33,20 +33,20 @@ namespace drawinglayer::attribute
         {
         }
 
-        SdrShadowTextAttribute::SdrShadowTextAttribute()
+        SdrEffectsTextAttribute::SdrEffectsTextAttribute()
         :   maShadow(),
             maTextAttribute()
         {
         }
 
-        SdrShadowTextAttribute::SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate)
+        SdrEffectsTextAttribute::SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate)
         :   maShadow(rCandidate.getShadow()),
             maTextAttribute(rCandidate.getText()),
             maGlow(rCandidate.maGlow)
         {
         }
 
-        SdrShadowTextAttribute& SdrShadowTextAttribute::operator=(const SdrShadowTextAttribute& rCandidate)
+        SdrEffectsTextAttribute& SdrEffectsTextAttribute::operator=(const SdrEffectsTextAttribute& rCandidate)
         {
             maShadow = rCandidate.getShadow();
             maTextAttribute = rCandidate.getText();
@@ -55,13 +55,13 @@ namespace drawinglayer::attribute
             return *this;
         }
 
-        bool SdrShadowTextAttribute::isDefault() const
+        bool SdrEffectsTextAttribute::isDefault() const
         {
             return (getShadow().isDefault()
                 && getText().isDefault() && maGlow.isDefault());
         }
 
-        bool SdrShadowTextAttribute::operator==(const SdrShadowTextAttribute& rCandidate) const
+        bool SdrEffectsTextAttribute::operator==(const SdrEffectsTextAttribute& rCandidate) const
         {
             return (getShadow() == rCandidate.getShadow()
                 && getText() == rCandidate.getText()

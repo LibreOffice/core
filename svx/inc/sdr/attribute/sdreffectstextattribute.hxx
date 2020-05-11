@@ -19,42 +19,43 @@
 
 #pragma once
 
-#include <sdr/attribute/sdrshadowtextattribute.hxx>
+#include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <sdr/attribute/sdrtextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
-#include <drawinglayer/attribute/sdrlineattribute.hxx>
-#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 
 
 namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineShadowTextAttribute : public SdrShadowTextAttribute
+        class SdrEffectsTextAttribute
         {
-            // line, shadow, lineStartEnd and text attributes
-            SdrLineAttribute                maLine;                     // line attributes (if used)
-            SdrLineStartEndAttribute        maLineStartEnd;             // line start end (if used)
+            // shadow and text attributes
+            SdrShadowAttribute          maShadow;                   // shadow attributes (if used)
+            SdrTextAttribute            maTextAttribute;            // text and text attributes (if used)
+
+            // glow effect
+            SdrGlowAttribute            maGlow;
 
         public:
-            SdrLineShadowTextAttribute(
-                const SdrLineAttribute& rLine,
-                const SdrLineStartEndAttribute& rLineStartEnd,
+            SdrEffectsTextAttribute(
                 const SdrShadowAttribute& rShadow,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow);
-            SdrLineShadowTextAttribute();
-            SdrLineShadowTextAttribute(const SdrLineShadowTextAttribute& rCandidate);
-            SdrLineShadowTextAttribute& operator=(const SdrLineShadowTextAttribute& rCandidate);
+            SdrEffectsTextAttribute();
+            SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate);
+            SdrEffectsTextAttribute& operator=(const SdrEffectsTextAttribute& rCandidate);
 
             // checks if the incarnation is default constructed
             bool isDefault() const;
 
             // compare operator
-            bool operator==(const SdrLineShadowTextAttribute& rCandidate) const;
+            bool operator==(const SdrEffectsTextAttribute& rCandidate) const;
 
             // data access
-            const SdrLineAttribute& getLine() const { return maLine; }
-            const SdrLineStartEndAttribute& getLineStartEnd() const { return maLineStartEnd; }
+            const SdrShadowAttribute& getShadow() const { return maShadow; }
+            const SdrTextAttribute& getText() const { return maTextAttribute; }
+            const SdrGlowAttribute& getGlow() const { return maGlow; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

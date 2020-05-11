@@ -73,7 +73,7 @@ namespace sdr::contact
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForPresObj(
             const basegfx::B2DHomMatrix& rObjectMatrix,
-            const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
+            const drawinglayer::attribute::SdrLineFillEffectsTextAttribute& rAttribute) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             GraphicObject aEmptyGraphicObject;
@@ -125,7 +125,7 @@ namespace sdr::contact
                 const GraphicAttr aLocalGrafInfo;
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
-                    drawinglayer::attribute::SdrLineFillShadowTextAttribute(),
+                    drawinglayer::attribute::SdrLineFillEffectsTextAttribute(),
                     rGraphicObject,
                     aLocalGrafInfo));
 
@@ -137,7 +137,7 @@ namespace sdr::contact
 
         drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGraphic::createVIP2DSForDraft(
             const basegfx::B2DHomMatrix& rObjectMatrix,
-            const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
+            const drawinglayer::attribute::SdrLineFillEffectsTextAttribute& rAttribute) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             GraphicObject aEmptyGraphicObject;
@@ -303,8 +303,8 @@ namespace sdr::contact
 
             // we have content if graphic is not completely transparent
             const bool bHasContent(255L != aLocalGrafInfo.GetTransparency());
-            drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+            drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,
                     GetGrafObject().getText(0),
                     bHasContent));

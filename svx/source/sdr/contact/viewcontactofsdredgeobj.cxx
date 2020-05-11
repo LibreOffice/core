@@ -44,8 +44,8 @@ namespace sdr::contact
 
             // ckeck attributes
             const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
-            const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(
+            const drawinglayer::attribute::SdrLineEffectsTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineEffectsTextAttribute(
                     rItemSet,
                     GetEdgeObj().getText(0)));
 

@@ -120,7 +120,7 @@ namespace drawinglayer::primitive2d
 
         SdrPathPrimitive2D::SdrPathPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B2DPolyPolygon& rUnitDefinitionPolyPolygon)
         :   BufferedDecompositionPrimitive2D(),

@@ -41,8 +41,8 @@ ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
 {
     const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
-    const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-        drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+    const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
+        drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
             rItemSet,
             GetRectObj().getText(0),
             false));

@@ -59,8 +59,8 @@ namespace sdr::contact
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrCaptionObj& rCaptionObj(static_cast<const SdrCaptionObj&>(GetSdrObject()));
             const SfxItemSet& rItemSet = rCaptionObj.GetMergedItemSet();
-            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+            const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
                     rItemSet,
                     rCaptionObj.getText(0),
                     false));

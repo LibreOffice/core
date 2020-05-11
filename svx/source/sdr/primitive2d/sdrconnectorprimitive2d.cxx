@@ -76,7 +76,7 @@ namespace drawinglayer::primitive2d
         }
 
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
-            const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
+            const attribute::SdrLineEffectsTextAttribute& rSdrLSTAttribute,
             const ::basegfx::B2DPolygon& rUnitPolygon)
         :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),

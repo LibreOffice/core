@@ -71,10 +71,10 @@
 #include <editeng/editstat.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <sdr/attribute/sdrshadowtextattribute.hxx>
-#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdreffectstextattribute.hxx>
+#include <sdr/attribute/sdrlineeffectstextattribute.hxx>
 #include <sdr/attribute/sdrformtextattribute.hxx>
-#include <sdr/attribute/sdrlinefillshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
@@ -731,7 +731,7 @@ namespace drawinglayer::primitive2d
                 rSet.Get(XATTR_FILLBMP_SIZELOG).GetValue());
         }
 
-        attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
+        attribute::SdrEffectsTextAttribute createNewSdrEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
             bool bSuppressText)
@@ -749,10 +749,10 @@ namespace drawinglayer::primitive2d
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
             const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
 
-            return attribute::SdrShadowTextAttribute(aShadow, aText, aGlow);
+            return attribute::SdrEffectsTextAttribute(aShadow, aText, aGlow);
         }
 
-        attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
+        attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText)
         {
@@ -794,13 +794,13 @@ namespace drawinglayer::primitive2d
                 const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
                 attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
-                return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText, aGlow);
+                return attribute::SdrLineEffectsTextAttribute(aLine, aLineStartEnd, aShadow, aText, aGlow);
             }
 
-            return attribute::SdrLineShadowTextAttribute();
+            return attribute::SdrLineEffectsTextAttribute();
         }
 
-        attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
+        attribute::SdrLineFillEffectsTextAttribute createNewSdrLineFillEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
             bool bHasContent)
@@ -858,11 +858,11 @@ namespace drawinglayer::primitive2d
                 // glow
                 attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
-                return attribute::SdrLineFillShadowTextAttribute(
+                return attribute::SdrLineFillEffectsTextAttribute(
                     aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText, aGlow);
             }
 
-            return attribute::SdrLineFillShadowTextAttribute();
+            return attribute::SdrLineFillEffectsTextAttribute();
         }
 
         attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill)
