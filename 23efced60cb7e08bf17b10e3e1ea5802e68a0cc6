@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01601b76_7f86c593",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-11T09:19:08Z",
+      "side": 1,
+      "message": "Wouldn\u0027t a more specific rtl::isHighSurrogate or rtl::isLowSurrogate be better here?",
+      "range": {
+        "startLine": 3838,
+        "startChar": 28,
+        "endLine": 3838,
+        "endChar": 44
+      },
+      "revId": "23efced60cb7e08bf17b10e3e1ea5802e68a0cc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
