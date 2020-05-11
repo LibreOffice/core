@@ -19,8 +19,10 @@
 
 #include <unotools/streamwrap.hxx>
 
+#include <sfx2/docfile.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <math.h>
+#include <sfx2/objsh.hxx>
 #include <tools/helpers.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -108,8 +110,13 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
     {
         sfx2::LinkManager::GetDisplayNames( this, nullptr, &rGrafObj.aFileName, nullptr, &rGrafObj.aFilterName );
 
+        OUString sReferer(getReferer());
+        SfxObjectShell * sh = pLinkManager->GetPersist();
+        if (sh != nullptr && sh->HasName())
+            sReferer = sh->GetMedium()->GetName();
+
         Graphic aGraphic;
-        if (sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, getReferer(), aGraphic, nullptr))
+        if (sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, sReferer, aGraphic, nullptr))
         {
             rGrafObj.ImpSetLinkedGraphic(aGraphic);
         }
