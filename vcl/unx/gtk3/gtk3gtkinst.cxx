@@ -14304,6 +14304,23 @@ public:
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(m_pToggleButton, m_nPopupShownSignalId);
 
+        gtk_combo_box_set_model(m_pComboBox, m_pTreeModel);
+        gtk_tree_view_set_model(m_pTreeView, nullptr);
+
+        // restore original hierarchy in dtor so a new GtkInstanceComboBox will
+        // result in the same layout each time
+        {
+            g_object_ref(m_pComboBox);
+
+            GtkContainer* pContainer = getContainer();
+
+            gtk_container_remove(pContainer, GTK_WIDGET(m_pComboBox));
+
+            replaceWidget(GTK_WIDGET(pContainer), GTK_WIDGET(m_pComboBox));
+
+            g_object_unref(m_pComboBox);
+        }
+
         g_object_unref(m_pComboBuilder);
     }
 };
