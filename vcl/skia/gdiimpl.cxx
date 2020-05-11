@@ -902,14 +902,16 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
 }
 
 static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, long nDestY,
-                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight)
+                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, bool srcIsRaster)
 {
     // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
     // because it may detect copying to itself and avoid some needless copies.
-    // It cannot do a subrectangle though, so clip.
-    if (canvas == surface->getCanvas())
+    // But it has problems with drawing to iself
+    // (https://groups.google.com/forum/#!topic/skia-discuss/6yiuw24jv0I) and also
+    // raster surfaces do not avoid a copy of the source
+    // (https://groups.google.com/forum/#!topic/skia-discuss/S3FMpCi82k0).
+    if (canvas == surface->getCanvas() || srcIsRaster)
     {
-        // TODO: Currently copy-to-self is buggy with SkSurface::draw().
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
         canvas->drawImageRect(surface->makeImageSnapshot(),
@@ -917,6 +919,7 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
                               SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
         return;
     }
+    // SkCanvas::draw() cannot do a subrectangle, so clip.
     canvas->save();
     canvas->clipRect(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     SkPaint paint;
@@ -935,7 +938,8 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
                                    << this << "): " << Point(nSrcX, nSrcY) << "->"
                                    << SkIRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     assert(!mXorMode);
-    ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight);
+    ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight,
+               !isGPU());
     addXorRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     postDraw();
 }
@@ -971,7 +975,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         SAL_INFO("vcl.skia.trace",
                  "copybits(" << this << "): " << srcDebug() << " copy area: " << rPosAry);
         ::copyArea(getDrawCanvas(), src->mSurface, rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX,
-                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight, !src->isGPU());
     }
     else
     {

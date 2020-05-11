@@ -1,0 +1,39 @@
+diff --git a/tools/sk_app/win/RasterWindowContext_win.cpp b/tools/sk_app/win/RasterWindowContext_win.cpp
+index 9548220ce6..49f1f9ed17 100644
+--- a/tools/sk_app/win/RasterWindowContext_win.cpp
++++ b/tools/sk_app/win/RasterWindowContext_win.cpp
+@@ -55,7 +55,7 @@ void RasterWindowContext_win::resize(int w, int h) {
+     fWidth = w;
+     fHeight = h;
+     fBackbufferSurface.reset();
+-    const size_t bmpSize = sizeof(BITMAPINFOHEADER) + w * h * sizeof(uint32_t);
++    const size_t bmpSize = sizeof(BITMAPINFO);
+     fSurfaceMemory.reset(bmpSize);
+     BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(fSurfaceMemory.get());
+     ZeroMemory(bmpInfo, sizeof(BITMAPINFO));
+@@ -65,11 +65,12 @@ void RasterWindowContext_win::resize(int w, int h) {
+     bmpInfo->bmiHeader.biPlanes = 1;
+     bmpInfo->bmiHeader.biBitCount = 32;
+     bmpInfo->bmiHeader.biCompression = BI_RGB;
+-    void* pixels = bmpInfo->bmiColors;
++    // Do not use a packed DIB bitmap, SkSurface_Raster::onNewImageSnapshot() does
++    // a deep copy if it does not own the pixels.
+ 
+     SkImageInfo info = SkImageInfo::Make(w, h, fDisplayParams.fColorType, kPremul_SkAlphaType,
+                                          fDisplayParams.fColorSpace);
+-    fBackbufferSurface = SkSurface::MakeRasterDirect(info, pixels, sizeof(uint32_t) * w);
++    fBackbufferSurface = SkSurface::MakeRaster(info);
+ }
+ 
+ sk_sp<SkSurface> RasterWindowContext_win::getBackbufferSurface() { return fBackbufferSurface; }
+@@ -77,7 +78,9 @@ sk_sp<SkSurface> RasterWindowContext_win::getBackbufferSurface() { return fBackb
+ void RasterWindowContext_win::swapBuffers() {
+     BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(fSurfaceMemory.get());
+     HDC dc = GetDC(fWnd);
+-    StretchDIBits(dc, 0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight, bmpInfo->bmiColors, bmpInfo,
++    SkPixmap pixmap;
++    fBackbufferSurface->peekPixels(&pixmap);
++    StretchDIBits(dc, 0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight, pixmap.addr(), bmpInfo,
+                   DIB_RGB_COLORS, SRCCOPY);
+     ReleaseDC(fWnd, dc);
+ }
