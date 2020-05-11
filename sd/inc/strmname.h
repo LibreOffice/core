@@ -29,7 +29,6 @@ static const OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" )
 
 // XML content stream
 static const OUString pStarDrawXMLContent( "content.xml" );
-static const OUString pStarDrawOldXMLContent( "Content.xml" );
 
 #endif // INCLUDED_SD_INC_STRMNAME_H
 

@@ -180,7 +180,6 @@ static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const char* pStreamName,
-    const char* pCompatibilityStreamName,
     const uno::Reference<XComponentContext> & rxContext,
     const Reference<document::XGraphicStorageHandler> & rxGraphicStorageHandler,
     const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
@@ -200,17 +199,8 @@ static ErrCode ReadThroughComponent(
             OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
-                // stream name not found! Then try the compatibility name.
-                // if no stream can be opened, return immediately with OK signal
-
-                // do we even have an alternative name?
-                if ( nullptr == pCompatibilityStreamName )
-                    return ERRCODE_NONE;
-
-                // if so, does the stream exist?
-                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-                if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-                    return ERRCODE_NONE;
+                // stream name not found! return immediately with OK signal
+                return ERRCODE_NONE;
             }
 
             // get input stream
@@ -488,7 +478,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"meta.xml"
-                                    ,"Meta.xml"
                                     ,GetComponentContext()
                                     ,xGraphicStorageHandler
                                     ,xEmbeddedObjectResolver
@@ -512,7 +501,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
-                                    ,"Settings.xml"
                                     ,GetComponentContext()
                                     ,xGraphicStorageHandler
                                     ,xEmbeddedObjectResolver
@@ -526,7 +514,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
                                     ,"styles.xml"
-                                    ,"Styles.xml"
                                     ,GetComponentContext()
                                     ,xGraphicStorageHandler
                                     ,xEmbeddedObjectResolver
@@ -540,7 +527,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
-                                    ,"Content.xml"
                                     ,GetComponentContext()
                                     ,xGraphicStorageHandler
                                     ,xEmbeddedObjectResolver

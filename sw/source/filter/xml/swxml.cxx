@@ -262,7 +262,6 @@ ErrCode ReadThroughComponent(
     uno::Reference<embed::XStorage> const & xStorage,
     uno::Reference<XComponent> const & xModelComponent,
     const char* pStreamName,
-    const char* pCompatibilityStreamName,
     uno::Reference<uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
@@ -285,25 +284,8 @@ ErrCode ReadThroughComponent(
 
     if (!bContainsStream )
     {
-        // stream name not found! Then try the compatibility name.
-        // if no stream can be opened, return immediately with OK signal
-
-        // do we even have an alternative name?
-        if ( nullptr == pCompatibilityStreamName )
-            return ERRCODE_NONE;
-
-        // if so, does the stream exist?
-        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        try
-        {
-            bContainsStream = xStorage->isStreamElement(sStreamName);
-        }
-        catch( container::NoSuchElementException& )
-        {
-        }
-
-        if (! bContainsStream )
-            return ERRCODE_NONE;
+        // stream name not found! return immediately with OK signal
+        return ERRCODE_NONE;
     }
 
     // set Base URL
@@ -823,7 +805,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     // #i103539#: always read meta.xml for generator
     ErrCode const nWarn = ReadThroughComponent(
-        xStorage, xModelComp, "meta.xml", "Meta.xml", xContext,
+        xStorage, xModelComp, "meta.xml", xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                 : "com.sun.star.comp.Writer.XMLMetaImporter"),
         aEmptyArgs, rName, false );
@@ -833,21 +815,21 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
           m_bInsertMode) )
     {
         nWarn2 = ReadThroughComponent(
-            xStorage, xModelComp, "settings.xml", nullptr, xContext,
+            xStorage, xModelComp, "settings.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
             aFilterArgs, rName, false );
     }
 
     nRet = ReadThroughComponent(
-        xStorage, xModelComp, "styles.xml", nullptr, xContext,
+        xStorage, xModelComp, "styles.xml", xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, true );
 
     if( !nRet && !(IsOrganizerMode() || m_aOption.IsFormatsOnly()) )
         nRet = ReadThroughComponent(
-           xStorage, xModelComp, "content.xml", "Content.xml", xContext,
+           xStorage, xModelComp, "content.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, true );

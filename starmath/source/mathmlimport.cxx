@@ -195,7 +195,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         auto nWarn = ReadThroughComponent(
-            rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
+            rMedium.GetStorage(), xModelComp, "meta.xml",
             xContext, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
                         : "com.sun.star.comp.Math.XMLMetaImporter") );
@@ -206,7 +206,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             nWarn = ReadThroughComponent(
-                rMedium.GetStorage(), xModelComp, "settings.xml", nullptr,
+                rMedium.GetStorage(), xModelComp, "settings.xml",
                 xContext, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsImporter"
                         : "com.sun.star.comp.Math.XMLSettingsImporter" ) );
@@ -217,7 +217,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
                     xStatusIndicator->setValue(nSteps++);
 
                 nError = ReadThroughComponent(
-                    rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml",
+                    rMedium.GetStorage(), xModelComp, "content.xml",
                     xContext, xInfoSet, "com.sun.star.comp.Math.XMLImporter" );
             }
             else
@@ -351,7 +351,6 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const char* pStreamName,
-    const char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> const & rxContext,
     Reference<beans::XPropertySet> const & rPropSet,
     const char* pFilterName )
@@ -361,13 +360,6 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    if ( !xStorage->hasByName(sStreamName) || !xStorage->isStreamElement(sStreamName) )
-    {
-        // stream name not found! Then try the compatibility name.
-        // do we even have an alternative name?
-        if ( pCompatibilityStreamName )
-            sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-    }
 
     // get input stream
     try

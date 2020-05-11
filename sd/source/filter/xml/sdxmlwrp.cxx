@@ -312,7 +312,6 @@ ErrCode ReadThroughComponent(
     const uno::Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const char* pStreamName,
-    const char* pCompatibilityStreamName,
     Reference<uno::XComponentContext> const & rxContext,
     const char* pFilterName,
     const Sequence<Any>& rFilterArguments,
@@ -335,25 +334,8 @@ ErrCode ReadThroughComponent(
 
     if (!bContainsStream )
     {
-        // stream name not found! Then try the compatibility name.
-        // if no stream can be opened, return immediately with OK signal
-
-        // do we even have an alternative name?
-        if ( nullptr == pCompatibilityStreamName )
-            return ERRCODE_NONE;
-
-        // if so, does the stream exist?
-        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        try
-        {
-            bContainsStream = xStorage->isStreamElement(sStreamName);
-        }
-        catch (const container::NoSuchElementException&)
-        {
-        }
-
-        if (! bContainsStream )
-            return ERRCODE_NONE;
+        // stream name not found! return immediately with OK signal
+        return ERRCODE_NONE;
     }
 
     // set Base URL
@@ -626,26 +608,26 @@ bool SdXMLFilter::Import( ErrCode& nError )
         // read storage streams
         // #i103539#: always read meta.xml for generator
         nWarn = ReadThroughComponent(
-            xStorage, xModelComp, "meta.xml", "Meta.xml", rxContext,
+            xStorage, xModelComp, "meta.xml", rxContext,
             pServices->mpMeta,
             aEmptyArgs, aName, false );
 
         if( meFilterMode != SdXMLFilterMode::Organizer )
         {
             nWarn2 = ReadThroughComponent(
-                xStorage, xModelComp, "settings.xml", nullptr, rxContext,
+                xStorage, xModelComp, "settings.xml", rxContext,
                 pServices->mpSettings,
                 aFilterArgs, aName, false );
         }
 
         nRet = ReadThroughComponent(
-            xStorage, xModelComp, "styles.xml", nullptr, rxContext,
+            xStorage, xModelComp, "styles.xml", rxContext,
             pServices->mpStyles,
             aFilterArgs, aName, true );
 
         if( !nRet && (meFilterMode != SdXMLFilterMode::Organizer) )
             nRet = ReadThroughComponent(
-               xStorage, xModelComp, "content.xml", "Content.xml", rxContext,
+               xStorage, xModelComp, "content.xml", rxContext,
                pServices->mpContent,
                aFilterArgs, aName, true );
 

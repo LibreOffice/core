@@ -717,16 +717,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         uno::Reference < embed::XStorage > xStorage = GetMedium()->GetStorage();
-        if (
-            (
-             xStorage->hasByName( "content.xml" ) &&
-             xStorage->isStreamElement( "content.xml" )
-            ) ||
-            (
-             xStorage->hasByName( "Content.xml" ) &&
-             xStorage->isStreamElement( "Content.xml" )
-            )
-           )
+        if (xStorage->hasByName("content.xml") && xStorage->isStreamElement("content.xml"))
         {
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(GetModel());

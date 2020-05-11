@@ -107,7 +107,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
-    const OUString& sOldDocName, const uno::Sequence<uno::Any>& aArgs,
+    const uno::Sequence<uno::Any>& aArgs,
     bool bMustBeSuccessfull)
 {
     uno::Reference < io::XStream > xDocStream;
@@ -122,11 +122,6 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
         {
             if ( xStorage->hasByName(sDocName) && xStorage->isStreamElement( sDocName) )
                 xDocStream = xStorage->openStreamElement( sDocName, embed::ElementModes::READ );
-            else if (!sOldDocName.isEmpty() && xStorage->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
-            {
-                xDocStream = xStorage->openStreamElement( sOldDocName, embed::ElementModes::READ );
-                sStream = sOldDocName;
-            }
             else
                 return ERRCODE_NONE;
 
@@ -433,7 +428,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
                                 xContext, xModel, xXMLParser, aParserInput,
                                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
                                 : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
-                                "meta.xml", "Meta.xml", aMetaArgs, false);
+                                "meta.xml", aMetaArgs, false);
 
         SAL_INFO( "sc.filter", "meta import end" );
     }
@@ -475,7 +470,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
                             xContext, xModel, xXMLParser, aParserInput,
                             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
                                    : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
-                            "settings.xml", "", aSettingsArgs, false);
+                            "settings.xml", aSettingsArgs, false);
 
         SAL_INFO( "sc.filter", "settings import end" );
     }
@@ -489,7 +484,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                    : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
             "styles.xml",
-            "", aStylesArgs, true);
+            aStylesArgs, true);
 
         SAL_INFO( "sc.filter", "styles import end" );
     }
@@ -514,7 +509,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
                    : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
             "content.xml",
-            "Content.xml", aDocArgs,
+            aDocArgs,
             true);
 
         SAL_INFO( "sc.filter", "content import end" );
