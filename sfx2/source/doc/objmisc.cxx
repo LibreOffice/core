@@ -1327,27 +1327,24 @@ ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
     return nRet;
 }
 
-namespace
+bool SfxObjectShell::isScriptAccessAllowed( const Reference< XInterface >& _rxScriptContext )
 {
-    bool lcl_isScriptAccessAllowed_nothrow( const Reference< XInterface >& _rxScriptContext )
+    try
     {
-        try
+        Reference< XEmbeddedScripts > xScripts( _rxScriptContext, UNO_QUERY );
+        if ( !xScripts.is() )
         {
-            Reference< XEmbeddedScripts > xScripts( _rxScriptContext, UNO_QUERY );
-            if ( !xScripts.is() )
-            {
-                Reference< XScriptInvocationContext > xContext( _rxScriptContext, UNO_QUERY_THROW );
-                xScripts.set( xContext->getScriptContainer(), UNO_SET_THROW );
-            }
+            Reference< XScriptInvocationContext > xContext( _rxScriptContext, UNO_QUERY_THROW );
+            xScripts.set( xContext->getScriptContainer(), UNO_SET_THROW );
+        }
 
-            return xScripts->getAllowMacroExecution();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("sfx.doc");
-        }
-        return false;
+        return xScripts->getAllowMacroExecution();
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("sfx.doc");
+    }
+    return false;
 }
 
 // don't allow LibreLogo to be used with our mouseover/etc dom-alike events
@@ -1392,7 +1389,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     Any aException;
     try
     {
-        if ( !lcl_isScriptAccessAllowed_nothrow( _rxScriptContext ) )
+        if (!isScriptAccessAllowed(_rxScriptContext))
             return ERRCODE_IO_ACCESSDENIED;
 
         if ( UnTrustedScript(_rScriptURL) )
