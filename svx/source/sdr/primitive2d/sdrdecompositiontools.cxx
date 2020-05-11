@@ -500,9 +500,19 @@ namespace drawinglayer::primitive2d
                         double fShearX = 0;
                         rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
                         // Scale the shadow
-                        aShadowOffset.translate(-aTranslate.getX(), -aTranslate.getY());
+                        double nTranslateX = aTranslate.getX();
+                        double nTranslateY = aTranslate.getY();
+
+                        // The origin for scaling is the top left corner by default. A negative
+                        // shadow offset changes the origin.
+                        if (rShadow.getOffset().getX() < 0)
+                            nTranslateX += aScale.getX();
+                        if (rShadow.getOffset().getY() < 0)
+                            nTranslateY += aScale.getY();
+
+                        aShadowOffset.translate(-nTranslateX, -nTranslateY);
                         aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
-                        aShadowOffset.translate(aTranslate.getX(), aTranslate.getY());
+                        aShadowOffset.translate(nTranslateX, nTranslateY);
                     }
 
                     aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());

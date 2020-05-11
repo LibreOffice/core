@@ -423,9 +423,27 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 break;
             }
 
+            case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
+            {
+                // ShadowPrimitive2D.
+                rWriter.startElement("shadow");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
             default:
             {
-                rWriter.element(OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
+                rWriter.startElement("unhandled");
+                rWriter.attribute("id", OUStringToOString(sCurrentElementTag, RTL_TEXTENCODING_UTF8));
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                                   drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
             }
             break;
         }
