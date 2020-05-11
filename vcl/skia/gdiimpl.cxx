@@ -906,7 +906,7 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
 {
     // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
     // because it may detect copying to itself and avoid some needless copies.
-    // But it has problems with drawing to iself
+    // But it has problems with drawing to itself
     // (https://groups.google.com/forum/#!topic/skia-discuss/6yiuw24jv0I) and also
     // raster surfaces do not avoid a copy of the source
     // (https://groups.google.com/forum/#!topic/skia-discuss/S3FMpCi82k0).
