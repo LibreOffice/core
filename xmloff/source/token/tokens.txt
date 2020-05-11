@@ -1611,7 +1611,6 @@ slant-x
 slant-y
 slide
 slow
-softedge
 softedge-radius
 solid
 solid-type

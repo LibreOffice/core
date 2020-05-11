@@ -1316,10 +1316,7 @@ void SdExportTest::testSoftEdges()
     xDocShRef = saveAndReload(xDocShRef.get(), ODG, &tempFile);
     auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
 
-    // Check glow properties
-    bool bEffect = false;
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdge") >>= bEffect);
-    CPPUNIT_ASSERT(bEffect);
+    // Check property
     sal_Int32 nRad = 0;
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRad); // 18 pt
@@ -1330,11 +1327,7 @@ void SdExportTest::testSoftEdges()
     // check that we actually test graphic style
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
                 "family", "graphic");
-    // check loext graphic attributes
-    assertXPath(
-        pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
-        "softedge", "visible");
+    // check loext graphic attribute
     assertXPath(
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",

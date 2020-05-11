@@ -423,8 +423,7 @@ constexpr TypedWhichId<SdrPercentItem> SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FI
 constexpr sal_uInt16                  SDRATTR_GLOW_LAST  (SDRATTR_GLOW_TRANSPARENCY);
 
 constexpr sal_uInt16                  SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST + 1);
-constexpr TypedWhichId<SdrOnOffItem>  SDRATTR_SOFTEDGE(SDRATTR_SOFTEDGE_FIRST + 0);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RAD(SDRATTR_SOFTEDGE_FIRST + 1);
+constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RAD(SDRATTR_SOFTEDGE_FIRST + 0);
 constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RAD);
 
 constexpr sal_uInt16 SDRATTR_END (SDRATTR_SOFTEDGE_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */

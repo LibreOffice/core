@@ -2923,9 +2923,6 @@ void SdOOXMLExportTest2::testShapeSoftEdgeEffect()
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-soft-edges.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
     auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
-    bool bHasSoftEdges = false;
-    xShapeProps->getPropertyValue("SoftEdge") >>= bHasSoftEdges;
-    CPPUNIT_ASSERT(bHasSoftEdges);
     sal_Int32 nRadius = -1;
     xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt

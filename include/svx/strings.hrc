@@ -516,7 +516,6 @@
 #define SIP_SA_GLOW_RAD                                     NC_("SIP_SA_GLOW_RAD", "Radius of glow effect")
 #define SIP_SA_GLOW_COLOR                                   NC_("SIP_SA_GLOW_COLOR", "Color of glow effect")
 #define SIP_SA_GLOW_TRANSPARENCY                            NC_("SIP_SA_GLOW_TRANSPARENCY", "Transparency of glow effect")
-#define SIP_SA_SOFTEDGE                                     NC_("SIP_SA_SOFTEDGE", "Soft edge effect")
 #define SIP_SA_SOFTEDGE_RAD                                 NC_("SIP_SA_SOFTEDGE_RAD", "Radius of soft edge effect")
 #define STR_ObjNameSingulMEDIA                              NC_("STR_ObjNameSingulMEDIA", "Media object")
 #define STR_ObjNamePluralMEDIA                              NC_("STR_ObjNamePluralMEDIA", "Media objects")
