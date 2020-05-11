@@ -450,6 +450,7 @@ public:
     OUString m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
+    const SwFrameFormat* m_pFirstPageFormat = nullptr;
     WW8_WrPct*  m_pPiece;         // Pointer to Piece-Table
     std::unique_ptr<SwNumRuleTable> m_pUsedNumTable;  // all used NumRules
     /// overriding numdef index -> (existing numdef index, abstractnumdef index)
