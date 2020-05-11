@@ -26,10 +26,8 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
         /** Create line start/end geometry element, mostly arrows and things like that.
 
             @param rCandidate
@@ -144,7 +142,6 @@ namespace basegfx
             double fMiterMinimumAngle = basegfx::deg2rad(15.0),
             basegfx::triangulator::B2DTriangleVector* pTriangles = nullptr);
 
-    } // end of namespace utils
-} // end of namespace basegfx
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

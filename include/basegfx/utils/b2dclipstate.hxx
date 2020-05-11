@@ -28,9 +28,10 @@ namespace basegfx
     class B2DRange;
     class B2DPolyPolygon;
     class B2DHomMatrix;
+}
 
-    namespace utils
-    {
+namespace basegfx::utils
+{
         class ImplB2DClipState;
 
         /** This class provides an optimized, symbolic clip state for graphical output
@@ -86,7 +87,6 @@ namespace basegfx
 
             B2DPolyPolygon const & getClipPoly() const;
         };
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

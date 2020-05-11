@@ -28,10 +28,8 @@
 
 namespace basegfx { class B2DRange; }
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
         /** If the rotation angle is an approximate multiple of pi/2,
             force fSin/fCos to -1/0/1, to maintain orthogonality (which
             might also be advantageous for the other cases, but: for
@@ -148,14 +146,7 @@ namespace basegfx
         /// get column vector from B2dHomMatrix, e.g. to extract coordinate system origin and x/yaxis
         BASEGFX_DLLPUBLIC B2DTuple getColumn(const B2DHomMatrix& rMatrix, sal_uInt16 nCol);
 
-    } // end of namespace utils
-} // end of namespace basegfx
 
-
-namespace basegfx
-{
-    namespace utils
-    {
         class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedDecompose
         {
         private:
@@ -186,14 +177,7 @@ namespace basegfx
             double getRotate() const { return mfRotate; }
             double getShearX() const { return mfShearX; }
         };
-    } // end of namespace utils
-} // end of namespace basegfx
 
-
-namespace basegfx
-{
-    namespace utils
-    {
         class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedOnDemandDecompose
         {
         private:
@@ -232,8 +216,6 @@ namespace basegfx
             double getRotate() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfRotate; }
             double getShearX() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfShearX; }
         };
-    } // end of namespace utils
-
-} // end of namespace basegfx
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

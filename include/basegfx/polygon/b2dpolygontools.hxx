@@ -54,12 +54,12 @@ namespace o3tl
 
 namespace basegfx
 {
-    // predefinitions
     class B2DPolygon;
     class B2DRange;
+}
 
-    namespace utils
-    {
+namespace basegfx::utils
+{
         // B2DPolygon tools
 
         // open/close with point add/remove and control point corrections
@@ -524,7 +524,6 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC OUString exportToSvgPoints( const B2DPolygon& rPoly );
 
-    } // end of namespace utils
-} // end of namespace basegfx
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

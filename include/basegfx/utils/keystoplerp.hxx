@@ -26,10 +26,8 @@ namespace com::sun::star::uno {
     template<typename T> class Sequence;
 }
 
-namespace basegfx
+namespace basegfx::utils
 {
-    namespace utils
-    {
         /** Lerp in a vector of key stops
 
             This class holds a key stop vector and provides the
@@ -82,7 +80,6 @@ namespace basegfx
             std::vector<double>    maKeyStops;
             mutable std::ptrdiff_t mnLastIndex;
         };
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
