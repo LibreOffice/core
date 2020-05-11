@@ -222,6 +222,7 @@ public:
     void WriteSrcRectXGraphic(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
+    double GetLineWidth(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                               css::uno::Reference< css::frame::XModel> const & xModel = nullptr );
 

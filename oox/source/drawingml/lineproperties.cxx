@@ -515,6 +515,11 @@ sal_Int32 LineProperties::getLineWidth() const
     return convertEmuToHmm( moLineWidth.get( 0 ) );
 }
 
+double LineProperties::getPreciseLineWidth() const
+{
+    return convertEmuToHmm<double>(moLineWidth.get(0), false);
+}
+
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
