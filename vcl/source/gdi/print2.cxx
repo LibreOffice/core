@@ -100,6 +100,12 @@ bool doesRectCoverWithUniformColor(
         rMapModeVDev.IsFillColor());
 }
 
+void setComponentsSizeAndColor(ConnectedComponents &rBackgroundComponent, tools::Rectangle const & rRect, Color const& rColor)
+{
+    rBackgroundComponent.aBounds = rRect;
+    rBackgroundComponent.aBgColor = rColor;
+}
+
 /** #107169# Convert BitmapEx to Bitmap with appropriately blended
     color. Convert MetaTransparentAction to plain polygon,
     appropriately colored
@@ -699,8 +705,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                     if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
                     {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
                         bStillBackground=false; // incomplete occlusion of background
                     }
                     else
@@ -718,8 +723,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
                         !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
                     {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
                         bStillBackground=false; // incomplete occlusion of background
                     }
                     else
@@ -738,8 +742,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
                         !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
                     {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
                         bStillBackground=false; // incomplete occlusion of background
                     }
                     else
@@ -755,8 +758,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                     if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
                     {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                        setComponentsSizeAndColor(aBackgroundComponent, aRect, aMapModeVDev->GetFillColor());
                         bStillBackground=false; // incomplete occlusion of background
                     }
                     else
