@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bdf5f979_5a8f891d",
+        "filename": "chart2/source/view/main/PropertyMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-05-11T03:47:42Z",
+      "side": 1,
+      "message": "According to some comment above, rPropNames should have all the necessary \"drawinglayer\" property-names by the end of this method. But lets just ensure that \"FillHatch\" is there and the corresponding drawing::Hatch value (matching the document and not some default value) is in rPropValues. If these are not correct then you may need to revisit the import part of the patch. On the other hand if the hatch info is present and correct here, then the hatch property gets filtered out somehow (maybe just for the chart labels) before calling drawinglayer routines. Try tracing in a debugger where theses properties are consumed.",
+      "range": {
+        "startLine": 443,
+        "startChar": 6,
+        "endLine": 443,
+        "endChar": 58
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b1b1386_26024ebd",
         "filename": "oox/source/drawingml/chart/seriesconverter.cxx",
         "patchSetId": 1
@@ -59,6 +82,30 @@
       "writtenOn": "2020-05-08T10:59:15Z",
       "side": 1,
       "message": "Here I need to use a type id for Hatch, I saw that usage https://opengrok.libreoffice.org/xref/core/sw/source/core/unocore/unomapproperties.hxx?r\u003dc48790b5#519 but i couldn\u0027t find how should i use it here.",
+      "range": {
+        "startLine": 159,
+        "startChar": 71,
+        "endLine": 159,
+        "endChar": 86
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f3380ae_167c89bc",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-05-11T03:47:42Z",
+      "side": 1,
+      "message": "From a quick grep, hatch info is always imported/exported (for odf) as a part of styles, see the classes XMLHatchStyleImport, XMLHatchStyleExport and its usages. But you could try creating a new type like say XML_SCH_TYPE_LABEL_FILL_HATCH and add its handler(see XMLOpacityPropertyHdl as an example) in XMLChartPropHdlFactory::GetPropertyHandler() for that. In the new handler import/export methods, you can mimic the stuff in XMLHatchStyleImport/XMLHatchStyleExport I mentioned before. Ideally we should try to factor out the common stuff from the  XMLHatchStyleImport/XMLHatchStyleExport methods and just reuse them in the new handler.",
+      "parentUuid": "50a3d072_3b9dc7b8",
       "range": {
         "startLine": 159,
         "startChar": 71,
