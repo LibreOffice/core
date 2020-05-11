@@ -116,6 +116,7 @@ void TextPropertyPanel::HandleContextChange (
 
     bool bWriterText = false;
     bool bDrawText = false;
+    bool bCalcText = false;
 
     switch (maContext.GetCombinedContext_DI())
     {
@@ -137,6 +138,14 @@ void TextPropertyPanel::HandleContextChange (
             bWriterText = true;
             break;
 
+        case CombinedEnumContext(Application::Calc, Context::Text):
+        case CombinedEnumContext(Application::Calc, Context::Table):
+        case CombinedEnumContext(Application::Calc, Context::Cell):
+        case CombinedEnumContext(Application::Calc, Context::EditCell):
+        case CombinedEnumContext(Application::Calc, Context::Grid):
+            bCalcText = true;
+            break;
+
         default:
             break;
     }
@@ -144,7 +153,7 @@ void TextPropertyPanel::HandleContextChange (
     mxToolBoxFontColor->set_visible(!bWriterText);
     mxToolBoxFontColorSw->set_visible(bWriterText);
     mxToolBoxBackgroundColor->set_visible(bDrawText);
-    mxResetBar->set_visible(bWriterText);
+    mxResetBar->set_visible(bWriterText || bCalcText);
     mxDefaultBar->set_visible(bDrawText);
 }
 
