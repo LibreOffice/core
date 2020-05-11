@@ -1801,6 +1801,32 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x1E2C0, 0x1E2FF, SvxResId(RID_SUBSETSTR_WANCHO) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 66)
+                case UBLOCK_CHORASMIAN:
+                    aAllSubsets.emplace_back( 0x10FB0, 0x10FDF, SvxResId(RID_SUBSETSTR_CHORASMIAN) );
+                    break;
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G:
+                    aAllSubsets.emplace_back( 0x30000, 0x3134F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G) );
+                    break;
+                case UBLOCK_DIVES_AKURU:
+                    aAllSubsets.emplace_back( 0x11900, 0x1195F, SvxResId(RID_SUBSETSTR_DIVES_AKURU) );
+                    break;
+                case UBLOCK_KHITAN_SMALL_SCRIPT:
+                    aAllSubsets.emplace_back( 0x18B00, 0x18CFF, SvxResId(RID_SUBSETSTR_KHITAN_SMALL_SCRIPT) );
+                    break;
+                case UBLOCK_LISU_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x11FB0, 0x11FBF, SvxResId(RID_SUBSETSTR_LISU_SUPPLEMENT) );
+                    break;
+                case UBLOCK_SYMBOLS_FOR_LEGACY_COMPUTING:
+                    aAllSubsets.emplace_back( 0x1FB00, 0x1FBFF, SvxResId(RID_SUBSETSTR_SYMBOLS_FOR_LEGACY_COMPUTING) );
+                    break;
+                case UBLOCK_TANGUT_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x18D00, 0x18D8F, SvxResId(RID_SUBSETSTR_TANGUT_SUPPLEMENT) );
+                    break;
+                case UBLOCK_YEZIDI:
+                    aAllSubsets.emplace_back( 0x10E80, 0x10EBF, SvxResId(RID_SUBSETSTR_YEZIDI) );
+                    break;
+#endif
 
             }
 
