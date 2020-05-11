@@ -8311,6 +8311,17 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
+        else if (m_rExport.m_pFirstPageFormat)
+        {
+            HdFtDistanceGlue aFirstPageDistances(m_rExport.m_pFirstPageFormat->GetAttrSet());
+            if (aFirstPageDistances.HasHeader())
+            {
+                // The follow page style has no header, but the first page style has. In Word terms,
+                // this means that the header margin of "the" section is coming from the first page
+                // style.
+                nHeader = sal_Int32(aFirstPageDistances.dyaHdrTop);
+            }
+        }
 
         // Page top
         m_pageMargins.nTop = aDistances.dyaTop;
