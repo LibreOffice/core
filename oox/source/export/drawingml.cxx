@@ -740,6 +740,32 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
                            XML_w, width );
 }
 
+double DrawingML::GetLineWidth(const Reference<XPropertySet>& rXPropSet)
+{
+    // get actual linewidth
+    double nLineWidth = 0;
+    if (GetProperty(rXPropSet, "LineWidth"))
+        mAny >>= nLineWidth;
+    // get precise, original linewidth if docx was used
+    if (GetProperty(rXPropSet, "InteropGrabBag"))
+    {
+        Sequence<PropertyValue> aGrabBag;
+        mAny >>= aGrabBag;
+        auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
+            [](const PropertyValue& rProp) { return rProp.Name == "PreciseLineWidth"; });
+        if (pProp != std::cend(aGrabBag))
+        {
+            double nPreciseLineWidth = 0;
+            pProp->Value >>= nPreciseLineWidth;
+            // calculate rounded width with the same process like docx importing
+            sal_Int64 nRoundedLineWidth = oox::drawingml::convertEmuToHmm(oox::drawingml::convertHmmToEmu(nPreciseLineWidth));
+            if (nRoundedLineWidth == nLineWidth)
+                return nPreciseLineWidth;
+        }
+    }
+    return nLineWidth;
+}
+
 void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
@@ -747,7 +773,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     if (GetProperty(rXPropSet, "LineStyle"))
         mAny >>= aLineStyle;
 
-    sal_uInt32 nLineWidth = 0;
     ::Color nColor;
     sal_Int32 nColorAlpha = MAX_PERCENT;
     bool bColorSet = false;
@@ -798,8 +823,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         }
     }
 
-    if (GetProperty(rXPropSet, "LineWidth"))
-        mAny >>= nLineWidth;
+    double nLineWidth = GetLineWidth(rXPropSet);
 
     switch (aLineStyle)
     {
