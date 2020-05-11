@@ -217,6 +217,11 @@ namespace frm
             xSet->getPropertyValue(PROPERTY_BUTTONTYPE) >>= eButtonType;
         }
 
+        // treat a form interaction equivalently to a script execution
+        SfxObjectShell* pObjectShell = OClickableImageBaseModel::GetObjectShell(xModelsParent);
+        if (pObjectShell && !SfxObjectShell::isScriptAccessAllowed(pObjectShell->GetModel()))
+            return;
+
         switch (eButtonType)
         {
             case FormButtonType_RESET:
@@ -684,7 +689,7 @@ namespace frm
         }
     }
 
-    SfxObjectShell* OClickableImageBaseModel::GetObjectShell()
+    SfxObjectShell* OClickableImageBaseModel::GetObjectShell(css::uno::Reference<css::uno::XInterface>& rIfc)
     {
         // Find the XModel to get to the Object shell or at least the
         // Referer.
@@ -692,7 +697,7 @@ namespace frm
         // changed in a document that is already loaded. There's no way
         // we can get to the Model during loading.
         Reference< XModel >  xModel;
-        css::uno::Reference<css::uno::XInterface>  xIfc( *this );
+        css::uno::Reference<css::uno::XInterface> xIfc(rIfc);
         while( !xModel.is() && xIfc.is() )
         {
             Reference<XChild>  xChild( xIfc, UNO_QUERY );
@@ -750,7 +755,8 @@ namespace frm
         {
             m_pMedium.reset(new SfxMedium(rURL, StreamMode::STD_READ));
 
-            SfxObjectShell *pObjSh = GetObjectShell();
+            css::uno::Reference<css::uno::XInterface> xIfc(*this);
+            SfxObjectShell *pObjSh = GetObjectShell(xIfc);
 
             if( pObjSh )
             {

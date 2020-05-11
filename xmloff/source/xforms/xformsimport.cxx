@@ -21,6 +21,7 @@
 #include "XFormsModelContext.hxx"
 #include <utility>
 #include <xmloff/xformsimport.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -59,6 +60,7 @@ SvXMLImportContext* createXFormsModelContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName )
 {
+    rImport.NotifyMacroEventRead();
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
 

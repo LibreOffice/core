@@ -1893,6 +1893,7 @@ namespace xmloff
             const Reference< XNameContainer >& _rxParentContainer)
         :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
+        GetImport().NotifyMacroEventRead();
         enableTrackAttributes();
     }
 

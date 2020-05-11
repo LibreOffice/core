@@ -139,6 +139,8 @@ namespace frm
         ::osl::Mutex&   getMutex( GuardAccess ) { return m_aMutex; }
         ImageProducer*  getImageProducer( GuardAccess ) { return m_xProducer.get(); }
 
+        static SfxObjectShell* GetObjectShell(css::uno::Reference<css::uno::XInterface>& rIfc);
+
     protected:
         using OControlModel::getMutex;
 
@@ -146,8 +148,6 @@ namespace frm
 
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
-
-        SfxObjectShell* GetObjectShell();
 
         DECL_LINK( OnImageImportDone, ::Graphic*, void );
     };
