@@ -748,6 +748,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         mAny >>= aLineStyle;
 
     sal_uInt32 nLineWidth = 0;
+    sal_uInt32 nEmuLineWidth = 0;
     ::Color nColor;
     sal_Int32 nColorAlpha = MAX_PERCENT;
     bool bColorSet = false;
@@ -784,6 +785,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 rProp.Value >>= aStyleProperties;
             else if( rProp.Name == "SpPrLnSolidFillSchemeClrTransformations" )
                 rProp.Value >>= aTransformations;
+            else if( rProp.Name == "EmuLineWidth" )
+                rProp.Value >>= nEmuLineWidth;
         }
         for (const auto& rStyleProp : std::as_const(aStyleProperties))
         {
@@ -864,10 +867,13 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             break;
     }
 
+    // if the line-width was not modified after importing then the original EMU value will be exported to avoid unexpected conversion (rounding) error
+    if (nEmuLineWidth == 0 || static_cast<sal_uInt32>(oox::drawingml::convertEmuToHmm(nEmuLineWidth)) != nLineWidth)
+        nEmuLineWidth = oox::drawingml::convertHmmToEmu(nLineWidth);
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
                           XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
-                              OString::number(oox::drawingml::convertHmmToEmu(nLineWidth)).getStr() : nullptr );
+                              OString::number(nEmuLineWidth).getStr() : nullptr );
 
     if( bColorSet )
     {
