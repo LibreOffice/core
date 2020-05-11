@@ -684,6 +684,52 @@ namespace frm
         }
     }
 
+    SfxObjectShell* OClickableImageBaseModel::GetObjectShell()
+    {
+        // Find the XModel to get to the Object shell or at least the
+        // Referer.
+        // There's only a Model if we load HTML documents and the URL is
+        // changed in a document that is already loaded. There's no way
+        // we can get to the Model during loading.
+        Reference< XModel >  xModel;
+        css::uno::Reference<css::uno::XInterface>  xIfc( *this );
+        while( !xModel.is() && xIfc.is() )
+        {
+            Reference<XChild>  xChild( xIfc, UNO_QUERY );
+            xIfc = xChild->getParent();
+            xModel.set(xIfc, css::uno::UNO_QUERY);
+        }
+
+        // Search for the Object shell by iterating over all Object shells
+        // and comparing their XModel to ours.
+        // As an optimization, we try the current Object shell first.
+        SfxObjectShell *pObjSh = nullptr;
+
+        if( xModel.is() )
+        {
+            SfxObjectShell *pTestObjSh = SfxObjectShell::Current();
+            if( pTestObjSh )
+            {
+                Reference< XModel >  xTestModel = pTestObjSh->GetModel();
+                if( xTestModel == xModel )
+                    pObjSh = pTestObjSh;
+            }
+            if( !pObjSh )
+            {
+                pTestObjSh = SfxObjectShell::GetFirst();
+                while( !pObjSh && pTestObjSh )
+                {
+                    Reference< XModel > xTestModel = pTestObjSh->GetModel();
+                    if( xTestModel == xModel )
+                        pObjSh = pTestObjSh;
+                    else
+                        pTestObjSh = SfxObjectShell::GetNext( *pTestObjSh );
+                }
+            }
+        }
+
+        return pObjSh;
+    }
 
     void OClickableImageBaseModel::SetURL( const OUString& rURL )
     {
@@ -701,50 +747,10 @@ namespace frm
             return;
 
         if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
-       {
+        {
             m_pMedium.reset(new SfxMedium(rURL, StreamMode::STD_READ));
 
-            // Find the XModel to get to the Object shell or at least the
-            // Referer.
-            // There's only a Model if we load HTML documents and the URL is
-            // changed in a document that is already loaded. There's no way
-            // we can get to the Model during loading.
-            Reference< XModel >  xModel;
-            css::uno::Reference<css::uno::XInterface>  xIfc( *this );
-            while( !xModel.is() && xIfc.is() )
-            {
-                Reference<XChild>  xChild( xIfc, UNO_QUERY );
-                xIfc = xChild->getParent();
-                xModel.set(xIfc, css::uno::UNO_QUERY);
-            }
-
-            // Search for the Object shell by iterating over all Object shells
-            // and comparing their XModel to ours.
-            // As an optimization, we try the current Object shell first.
-            SfxObjectShell *pObjSh = nullptr;
-
-            if( xModel.is() )
-            {
-                SfxObjectShell *pTestObjSh = SfxObjectShell::Current();
-                if( pTestObjSh )
-                {
-                    Reference< XModel >  xTestModel = pTestObjSh->GetModel();
-                    if( xTestModel == xModel )
-                        pObjSh = pTestObjSh;
-                }
-                if( !pObjSh )
-                {
-                    pTestObjSh = SfxObjectShell::GetFirst();
-                    while( !pObjSh && pTestObjSh )
-                    {
-                        Reference< XModel > xTestModel = pTestObjSh->GetModel();
-                        if( xTestModel == xModel )
-                            pObjSh = pTestObjSh;
-                        else
-                            pTestObjSh = SfxObjectShell::GetNext( *pTestObjSh );
-                    }
-                }
-            }
+            SfxObjectShell *pObjSh = GetObjectShell();
 
     #ifdef USE_REGISTER_TRANSFER
             if( pObjSh )

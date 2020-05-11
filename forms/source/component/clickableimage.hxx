@@ -35,9 +35,8 @@
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <cppuhelper/implbase3.hxx>
 
-
 class SfxMedium;
-
+class SfxObjectShell;
 
 namespace frm
 {
@@ -147,6 +146,8 @@ namespace frm
 
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
+
+        SfxObjectShell* GetObjectShell();
 
         DECL_LINK( OnImageImportDone, ::Graphic*, void );
     };
