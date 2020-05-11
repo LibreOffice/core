@@ -48,6 +48,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <wrtsh.hxx>
 #include <rtl/strbuf.hxx>
+#include <strings.hrc>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -622,7 +623,10 @@ namespace sw { namespace mark
                 {
                     pSelectedItemIter->second >>= nSelection;
                 }
-                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\"}}");
+                sPayload.append("\"selected\": \"" + OString::number(nSelection) + "\", ");
+
+                // Placeholder text
+                sPayload.append("\"placeholderText\": \"" + OUStringToOString(SwResId(STR_DROP_DOWN_EMPTY_LIST), RTL_TEXTENCODING_UTF8) + "\"}}");
             }
             else
             {
