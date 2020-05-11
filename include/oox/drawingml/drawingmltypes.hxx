@@ -175,16 +175,28 @@ const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
 const sal_Int32 EMU_PER_PT = 12700;
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
-inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
+template <typename value_type>
+inline sal_Int64 convertHmmToEmu( const value_type nValue )
 {
-    return static_cast< sal_Int64 >( nValue ) * EMU_PER_HMM;
+    return static_cast<sal_Int64>(nValue) * EMU_PER_HMM;
+}
+
+/** Specializes for double to avoid rounding errors. */
+template<>
+inline sal_Int64 convertHmmToEmu<double>(const double nValue)
+{
+    return static_cast<sal_Int64>(nValue * EMU_PER_HMM);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
-inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
+template <typename ret_type = sal_Int32>
+inline ret_type convertEmuToHmm(const sal_Int64 nValue, const bool bNeedCorrection = true)
 {
-    sal_Int32 nCorrection = (nValue > 0 ? 1 : -1) * EMU_PER_HMM / 2; // So that the implicit floor will round.
-    return getLimitedValue<sal_Int32, sal_Int64>(o3tl::saturating_add<sal_Int64>(nValue, nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32);
+    sal_Int32 nCorrection = 0;
+    if (bNeedCorrection)
+        nCorrection = (nValue > 0 ? 1 : -1) * EMU_PER_HMM / 2; // So that the implicit floor will round.
+    auto value = o3tl::saturating_add<ret_type>(nValue, nCorrection) / static_cast<ret_type>(EMU_PER_HMM);
+    return getLimitedValue<ret_type, ret_type>(value, SAL_MIN_INT32, SAL_MAX_INT32);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to Points. */
