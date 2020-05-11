@@ -508,7 +508,6 @@ SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 
 bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
                                     const css::uno::Any & rValue,
-                                    const OUString& rReferer,
                                     Graphic& rGraphic,
                                     weld::Window* pParentWin)
 {
@@ -519,8 +518,13 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
 
     if (rValue.has<OUString>())
     {
+        OUString sReferer;
+        SfxObjectShell* sh = GetPersist();
+        if (sh && sh->HasName())
+            sReferer = sh->GetMedium()->GetName();
+
         OUString sURL = rValue.get<OUString>();
-        if (!SvtSecurityOptions().isUntrustedReferer(rReferer))
+        if (!SvtSecurityOptions().isUntrustedReferer(sReferer))
             rGraphic = vcl::graphic::loadFromURL(sURL, pParentWin);
         if (rGraphic.IsNone())
             rGraphic.SetDefaultType();

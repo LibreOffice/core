@@ -155,11 +155,10 @@ public:
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
-    static bool GetGraphicFromAny(const OUString& rMimeType,
-                                  const css::uno::Any & rValue,
-                                  const OUString& rReferer,
-                                  Graphic& rGrf,
-                                  weld::Window* pParentWin);
+    bool GetGraphicFromAny(const OUString& rMimeType,
+                           const css::uno::Any & rValue,
+                           Graphic& rGrf,
+                           weld::Window* pParentWin);
 
 private:
                 LinkManager( const LinkManager& ) = delete;
