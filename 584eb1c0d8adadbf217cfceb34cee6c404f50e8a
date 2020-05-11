@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6bbdd76_60eda7a3",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3348,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-11T13:49:12Z",
+      "side": 1,
+      "message": "with GDK_DEBUG\u003dfatal-warnings I get an assert on this line, i.e. the pMenuItem is already destroyed when we attempt to get its buildable name",
+      "revId": "584eb1c0d8adadbf217cfceb34cee6c404f50e8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
