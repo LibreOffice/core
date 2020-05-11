@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_RANGE_B2DRANGECLIPPER_HXX
-#define INCLUDED_BASEGFX_RANGE_B2DRANGECLIPPER_HXX
+#pragma once
 
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <vector>
@@ -39,7 +38,5 @@ namespace basegfx
                                        const std::vector<B2VectorOrientation>& rOrientations);
     }
 }
-
-#endif // INCLUDED_BASEGFX_RANGE_B2DRANGECLIPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
-#define INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
+#pragma once
 
 #include <config_options.h>
 #include <sal/types.h>
@@ -441,7 +440,5 @@ namespace basegfx
         void rasterconvertB3DPolygon(const B3DPolygon& rLine, sal_Int32 nStartLine, sal_Int32 nStopLine, sal_uInt16 nLineWidth);
     };
 } // end of namespace basegfx
-
-#endif // INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
