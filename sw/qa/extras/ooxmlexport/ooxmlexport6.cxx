@@ -43,14 +43,12 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), getProperty<OUString>(getShape(1), "Title"));
     CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlZorder, "dml-zorder.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was "0": causing that in Word, the second shape was on top, while in the original odt the first shape is on top.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "relativeHeight", "2");
@@ -58,7 +56,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlZorder, "dml-zorder.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Relative size wasn't exported all, then relativeFrom was "page", not "margin".
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
@@ -66,7 +63,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlShapeRelsize, "dml-shape-relsize.docx
 
 DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported)
         return;
 
@@ -78,7 +74,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlPictureInTextframe, "dml-picture-in-textframe.do
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlGroupshapeRelsize, "dml-groupshape-relsize.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Relative size wasn't imported.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", "margin");
@@ -86,7 +81,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlGroupshapeRelsize, "dml-groupshape-re
 
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xGroup, "VertOrient"));
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
@@ -115,7 +109,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
@@ -133,7 +126,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was that the transparency was not exported (a:alpha).
     // RGB color (a:srgbClr)
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
@@ -146,7 +138,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // The problem was that a custom shape was not exported.
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(getShape(1), "CustomShapeGeometry");
@@ -208,7 +199,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.
 
 DECLARE_OOXMLEXPORT_TEST(testDmlRectangleRelsize, "dml-rectangle-relsize.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was around 19560, as we did not read wp14:pctHeight for
     // drawinglayer shapes and the fallback data was invalid.
     OString aMessage("Height is only " + OString::number(getShape(1)->getSize().Height));
@@ -220,7 +210,6 @@ DECLARE_OOXMLEXPORT_TEST(testDmlRectangleRelsize, "dml-rectangle-relsize.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // DOCX textboxes with text are imported as text frames but in Writer text frames did not have
     // TextVerticalAdjust attribute so far.
 
@@ -237,7 +226,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameVertAdjust, "dml-textframe-vertadjust.d
 
 DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test the new GraphicCrop property which is introduced to define
     // cropping of shapes filled with a picture in stretch mode.
 
@@ -259,7 +247,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
 DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
     // Hatching was ignored by the export.
 
     // 1st shape: light horizontal pattern (ltHorz)
@@ -338,7 +325,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childposition.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was parent transformation was ignored fully, but translate component
     // which specify the position must be also applied for children of the group.
 
@@ -359,7 +345,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Problem was when a fill gradient was imported from a theme, (fillRef in ooxml)
     // not just the theme was written out but the explicit values too
     // Besides the duplication of values it causes problems with writing out
@@ -382,7 +367,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDMLGradientFillTheme, "dml-gradientfill-
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspacing.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraph spacing (top/bottom margin and line spacing) inside a group shape was not imported
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY_THROW)->getText();
@@ -443,7 +427,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
 
 DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     sal_Int32 nHoriOrientPosition = getProperty<sal_Int32>(xFrame, "HoriOrientPosition");
@@ -461,7 +444,6 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127814, "tdf127814.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // Paragraph top margin was 0 in a table started on a new page
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "before", "0");
@@ -469,7 +451,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127814, "tdf127814.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128752, "tdf128752.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraph bottom margin was 200, docDefault instead of table style setting
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", "0");
@@ -488,7 +469,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119054, "tdf119054.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131258, "tdf131258.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport();
     // Use table style based bottom margin instead of the docDefaults in empty tables, too
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
@@ -496,7 +476,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131258, "tdf131258.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132514, "tdf132514.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport();
     // Keep table style setting, when the footer also contain a table
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing", "before", "0");
@@ -505,7 +484,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132514, "tdf132514.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69636, "fdo69636.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /*
      * The problem was that the exporter didn't mirror the workaround of the
      * importer, regarding the btLr text frame direction: the
@@ -520,7 +498,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69636, "fdo69636.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLData, "TestVMLData.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
     xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
@@ -529,7 +506,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLData, "TestVMLData.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageData, "image_data.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
@@ -538,7 +514,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageData, "image_data.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that VMLExport::Commit didn't save the correct width and height,
     // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
 
@@ -665,7 +640,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73215, "fdo73215.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // 'rect' was 'pictureFrame', which isn't valid.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:prstGeom",
@@ -677,7 +651,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73215, "fdo73215.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBehinddoc, "behinddoc.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was "0", shape was in the foreground.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
@@ -685,7 +658,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBehinddoc, "behinddoc.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /* Given file contains 3 DrawingML objects as 1Picture,1SmartArt and 1Shape.
      * Check for SmartArt.
     *  SmartArt should get written as "Floating Object" i.e. inside <wp:anchor> tag.
@@ -706,7 +678,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSmartArtAnchoredInline, "fdo73227.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo65833, "fdo65833.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The "editas" attribute for vml group shape was not preserved.
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", "canvas");
@@ -714,7 +685,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo65833, "fdo65833.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73247, "fdo73247.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
@@ -723,7 +693,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73247, "fdo73247.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70942, "fdo70942.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
                 "prst", "ellipse");
@@ -731,7 +700,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo70942, "fdo70942.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
@@ -746,7 +714,6 @@ DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
@@ -858,14 +825,12 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO73546, "FDO73546.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
     assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69616, "fdo69616.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport();
     // VML
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
@@ -873,7 +838,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69616, "fdo69616.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignForShape,"Shape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //fdo73545:Shape Horizontal and vertical orientation is wrong
     //The wp:align tag is missing after roundtrip
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -883,7 +847,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignForShape,"Shape.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType, "LineStyle_DashType.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /* DOCX contatining Shape with LineStyle as Dash Type should get preserved inside
      * an XML tag <a:prstDash> with value "dash", "sysDot", "lgDot", etc.
      */
@@ -900,7 +863,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType, "LineStyle_DashType.
 
 DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservation.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
@@ -940,7 +902,6 @@ DECLARE_OOXMLEXPORT_TEST(testGradientFillPreservation, "gradient-fill-preservati
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /* DOCX contatining "Shape with text inside" having Line Style as "Dash Type" should get
      * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
      */
@@ -950,7 +911,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLineStyle_DashType_VML, "LineStyle_DashT
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     /*
     The File contains word art which is being exported as shape and the mapping is defaulted to
     shape type rect since the actual shape type(s) is/are commented out for some reason.
@@ -965,7 +925,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74110,"fdo74110.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOuterShdw,"testOuterShdw.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(12, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", "1041400");
 }
@@ -986,7 +945,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExtentValue, "fdo74605.docx")
 // other dimension.
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // check no explicit pctHeight has been exported, all we care
