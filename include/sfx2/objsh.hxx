@@ -398,6 +398,8 @@ public:
 
     static bool                 UnTrustedScript(const OUString& rScriptURL);
 
+    static bool                 isScriptAccessAllowed(const css::uno::Reference<css::uno::XInterface>& rScriptContext);
+
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
