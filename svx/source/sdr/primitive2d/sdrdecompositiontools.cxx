@@ -48,6 +48,7 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
+#include <sal/log.hxx>
 
 
 using namespace com::sun::star;
@@ -483,8 +484,7 @@ namespace drawinglayer::primitive2d
         Primitive2DContainer createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow,
-            sal_Int32 nGraphicTranslateX,
-            sal_Int32 nGraphicTranslateY)
+            const basegfx::B2DHomMatrix& rObjectMatrix)
         {
             if(!rContent.empty())
             {
@@ -494,10 +494,15 @@ namespace drawinglayer::primitive2d
                 {
                     if(rShadow.getSize().getX() != 100000)
                     {
+                        basegfx::B2DTuple aScale;
+                        basegfx::B2DTuple aTranslate;
+                        double fRotate = 0;
+                        double fShearX = 0;
+                        rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
                         // Scale the shadow
-                        aShadowOffset.translate(-nGraphicTranslateX, -nGraphicTranslateY);
+                        aShadowOffset.translate(-aTranslate.getX(), -aTranslate.getY());
                         aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
-                        aShadowOffset.translate(nGraphicTranslateX, nGraphicTranslateY);
+                        aShadowOffset.translate(aTranslate.getX(), aTranslate.getY());
                     }
 
                     aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());

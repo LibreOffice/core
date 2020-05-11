@@ -74,13 +74,8 @@ namespace drawinglayer::primitive2d
                 // shadow will be correct (using ColorModifierStack), but expensive.
                 if(!get3DShape())
                 {
-                    basegfx::B2DTuple aScale;
-                    basegfx::B2DTuple aTranslate;
-                    double fRotate = 0;
-                    double fShearX = 0;
-                    maTransform.decompose(aScale, aTranslate, fRotate, fShearX);
                     aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrSTAttribute().getShadow(),
-                                                            aTranslate.getX(), aTranslate.getY());
+                                                            maTransform);
                 }
             }
 
