@@ -32,6 +32,7 @@
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <DocumentLinksAdministrationManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -134,17 +135,10 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         Graphic aGrf;
 
-        OUString sReferer;
-        SfxObjectShell * sh = pDoc->GetPersist();
-        if (sh != nullptr && sh->HasName())
-        {
-            sReferer = sh->GetMedium()->GetName();
-        }
-
         // tdf#124698 if any auth dialog is needed, find what the parent window should be
         weld::Window* pDlgParent = GetFrameWeld(pDoc);
 
-        if( sfx2::LinkManager::GetGraphicFromAny(rMimeType, rValue, sReferer, aGrf, pDlgParent) &&
+        if (pDoc->getIDocumentLinksAdministration().GetLinkManager().GetGraphicFromAny(rMimeType, rValue, aGrf, pDlgParent) &&
             ( GraphicType::Default != aGrf.GetType() ||
               GraphicType::Default != rGrfObj.GetType() ) )
         {
