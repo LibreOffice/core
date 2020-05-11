@@ -2586,6 +2586,9 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
 
         OString sSelected = aTree.get_child("params").get_child("selected").get_value<std::string>().c_str();
         CPPUNIT_ASSERT_EQUAL(OString("1"), sSelected);
+
+        OString sPlaceholder = aTree.get_child("params").get_child("placeholderText").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("No Item specified"), sPlaceholder);
     }
 
     // Move the cursor back so the button becomes hidden.
