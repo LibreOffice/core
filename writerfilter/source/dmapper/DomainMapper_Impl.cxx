@@ -1625,23 +1625,36 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     {
                         return rValue.Name == "NumberingRules";
                     });
-                    if (itNumberingRules != aProperties.end())
+
+                    bool isNumberingViaRule = (itNumberingRules != aProperties.end());
+                    if (m_xPreviousParagraph.is() && (isNumberingViaRule || isNumberingViaStyle))
                     {
                         // This textnode has numbering. Look up the numbering style name of the current and previous paragraph.
-                        OUString aCurrentNumberingRuleName;
-                        uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
-                        if (xCurrentNumberingRules.is())
-                            aCurrentNumberingRuleName = xCurrentNumberingRules->getName();
-                        OUString aPreviousNumberingRuleName;
-                        if (m_xPreviousParagraph.is())
+                        OUString aCurrentNumberingName;
+                        OUString aPreviousNumberingName;
+                        if (isNumberingViaRule)
                         {
-                            uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-                            if (xPreviousNumberingRules.is())
-                                aPreviousNumberingRuleName = xPreviousNumberingRules->getName();
+                            uno::Reference<container::XNamed> xCurrentNumberingRules(itNumberingRules->Value, uno::UNO_QUERY);
+                            if (xCurrentNumberingRules.is())
+                                aCurrentNumberingName = xCurrentNumberingRules->getName();
+                            if (m_xPreviousParagraph.is())
+                            {
+                                uno::Reference<container::XNamed> xPreviousNumberingRules(m_xPreviousParagraph->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+                                if (xPreviousNumberingRules.is())
+                                    aPreviousNumberingName = xPreviousNumberingRules->getName();
+                            }
+                        }
+                        else if ( m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName") &&
+                                // don't update before tables
+                                (m_nTableDepth == 0 || !m_bFirstParagraphInCell))
+                        {
+                            aCurrentNumberingName = GetListStyleName(nListId);
+                            m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
                         }
 
-                        if (!aPreviousNumberingRuleName.isEmpty() && aCurrentNumberingRuleName == aPreviousNumberingRuleName)
+                        if (!aPreviousNumberingName.isEmpty() && aCurrentNumberingName == aPreviousNumberingName)
                         {
+
                             // There was a previous textnode and it had the same numbering.
                             if (m_bParaAutoBefore)
                             {
@@ -1655,6 +1668,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 else
                                     aProperties.push_back(comphelper::makePropertyValue("ParaTopMargin", static_cast<sal_Int32>(0)));
                             }
+
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
                             auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
@@ -1674,7 +1688,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
                     if (m_xPreviousParagraph.is() && // null for SvxUnoTextBase
-                        (isNumberingViaStyle || itNumberingRules != aProperties.end()))
+                        (isNumberingViaStyle || isNumberingViaRule))
                     {
                         assert(dynamic_cast<ParagraphPropertyMap*>(pPropertyMap.get()));
                         // Use lcl_getListId(), so we find the list ID in parent styles as well.
@@ -1697,21 +1711,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 if (listId != paraId)
                                 {
                                     m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
-                                }
-                                else if (isNumberingViaStyle)
-                                {
-                                    uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
-                                    m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
-                                    auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                                    bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
-                                    {
-                                        return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
-                                    });
-                                    if (bPrevParaAutoAfter)
-                                    {
-                                        // Previous after spacing is set to auto, set previous after space to 0.
-                                        m_xPreviousParagraph->setPropertyValue("ParaBottomMargin", uno::makeAny(static_cast<sal_Int32>(0)));
-                                    }
                                 }
                             }
                             if (pList->GetCurrentLevel())
