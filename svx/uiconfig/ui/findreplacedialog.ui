@@ -990,7 +990,7 @@
                                         <items>
                                           <item translatable="yes" context="findreplacedialog|calcsearchin">Formulas</item>
                                           <item translatable="yes" context="findreplacedialog|calcsearchin">Values</item>
-                                          <item translatable="yes" context="findreplacedialog|calcsearchin">Notes</item>
+                                          <item translatable="yes" context="findreplacedialog|calcsearchin">Comments</item>
                                         </items>
                                       </object>
                                       <packing>
