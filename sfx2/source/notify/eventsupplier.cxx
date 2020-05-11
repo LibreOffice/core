@@ -161,29 +161,6 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
     return maEventNames.hasElements();
 }
 
-namespace
-{
-    bool lcl_isScriptAccessAllowed_nothrow(const uno::Reference<uno::XInterface>& rxScriptContext)
-    {
-        try
-        {
-            uno::Reference<document::XEmbeddedScripts> xScripts(rxScriptContext, uno::UNO_QUERY);
-            if (!xScripts.is())
-            {
-                uno::Reference<document::XScriptInvocationContext> xContext(rxScriptContext, uno::UNO_QUERY_THROW);
-                xScripts.set(xContext->getScriptContainer(), uno::UNO_SET_THROW);
-            }
-
-            return xScripts->getAllowMacroExecution();
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("sfx.doc");
-        }
-        return false;
-    }
-}
-
 bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
 {
     boost::optional<css::uno::Sequence<OUString>> allowedEvents(
@@ -253,7 +230,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
     if (!pDoc)
         pDoc = SfxObjectShell::Current();
 
-    if (pDoc && !lcl_isScriptAccessAllowed_nothrow(pDoc->GetModel()))
+    if (pDoc && !SfxObjectShell::isScriptAccessAllowed(pDoc->GetModel()))
         return;
 
     if (aType == STAR_BASIC)
