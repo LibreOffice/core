@@ -18,12 +18,12 @@
  */
 
 
-#include <sdr/attribute/sdrlinefillshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
 
 
 namespace drawinglayer::attribute
 {
-        SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
+        SdrLineFillEffectsTextAttribute::SdrLineFillEffectsTextAttribute(
             const SdrLineAttribute& rLine,
             const SdrFillAttribute& rFill,
             const SdrLineStartEndAttribute& rLineStartEnd,
@@ -31,45 +31,45 @@ namespace drawinglayer::attribute
             const FillGradientAttribute& rFillFloatTransGradient,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow)
-        :   SdrLineShadowTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow),
+        :   SdrLineEffectsTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow),
             maFill(rFill),
             maFillFloatTransGradient(rFillFloatTransGradient)
         {
         }
 
-        SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute()
-        :   SdrLineShadowTextAttribute(),
+        SdrLineFillEffectsTextAttribute::SdrLineFillEffectsTextAttribute()
+        :   SdrLineEffectsTextAttribute(),
             maFill(),
             maFillFloatTransGradient()
         {
         }
 
-        SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(const SdrLineFillShadowTextAttribute& rCandidate)
-        :   SdrLineShadowTextAttribute(rCandidate),
+        SdrLineFillEffectsTextAttribute::SdrLineFillEffectsTextAttribute(const SdrLineFillEffectsTextAttribute& rCandidate)
+        :   SdrLineEffectsTextAttribute(rCandidate),
             maFill(rCandidate.getFill()),
             maFillFloatTransGradient(rCandidate.getFillFloatTransGradient())
         {
         }
 
-        SdrLineFillShadowTextAttribute& SdrLineFillShadowTextAttribute::operator=(const SdrLineFillShadowTextAttribute& rCandidate)
+        SdrLineFillEffectsTextAttribute& SdrLineFillEffectsTextAttribute::operator=(const SdrLineFillEffectsTextAttribute& rCandidate)
         {
-            SdrLineShadowTextAttribute::operator=(rCandidate);
+            SdrLineEffectsTextAttribute::operator=(rCandidate);
             maFill = rCandidate.getFill();
             maFillFloatTransGradient = rCandidate.getFillFloatTransGradient();
 
             return *this;
         }
 
-        bool SdrLineFillShadowTextAttribute::isDefault() const
+        bool SdrLineFillEffectsTextAttribute::isDefault() const
         {
-            return (SdrLineShadowTextAttribute::isDefault()
+            return (SdrLineEffectsTextAttribute::isDefault()
                 && getFill().isDefault()
                 && getFillFloatTransGradient().isDefault());
         }
 
-        bool SdrLineFillShadowTextAttribute::operator==(const SdrLineFillShadowTextAttribute& rCandidate) const
+        bool SdrLineFillEffectsTextAttribute::operator==(const SdrLineFillEffectsTextAttribute& rCandidate) const
         {
-            return(SdrLineShadowTextAttribute::operator==(rCandidate)
+            return(SdrLineEffectsTextAttribute::operator==(rCandidate)
                 && getFill() == rCandidate.getFill()
                 && getFillFloatTransGradient() == rCandidate.getFillFloatTransGradient());
         }

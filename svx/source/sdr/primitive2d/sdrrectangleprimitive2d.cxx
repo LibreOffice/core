@@ -113,7 +113,7 @@ namespace drawinglayer::primitive2d
 
         SdrRectanglePrimitive2D::SdrRectanglePrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
             double fCornerRadiusY,
             bool bForceFillForHitTest)

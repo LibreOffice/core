@@ -13211,9 +13211,9 @@ svx/inc/sdgtritm.hxx
 svx/inc/sdr/attribute/sdrfilltextattribute.hxx
 svx/inc/sdr/attribute/sdrformtextattribute.hxx
 svx/inc/sdr/attribute/sdrformtextoutlineattribute.hxx
-svx/inc/sdr/attribute/sdrlinefillshadowtextattribute.hxx
-svx/inc/sdr/attribute/sdrlineshadowtextattribute.hxx
-svx/inc/sdr/attribute/sdrshadowtextattribute.hxx
+svx/inc/sdr/attribute/sdrlinefilleffectstextattribute.hxx
+svx/inc/sdr/attribute/sdrlineeffectstextattribute.hxx
+svx/inc/sdr/attribute/sdreffectstextattribute.hxx
 svx/inc/sdr/attribute/sdrtextattribute.hxx
 svx/inc/sdr/contact/objectcontactofobjlistpainter.hxx
 svx/inc/sdr/contact/viewcontactofe3d.hxx
@@ -13601,9 +13601,9 @@ svx/source/sdr/attribute/sdrallfillattributeshelper.cxx
 svx/source/sdr/attribute/sdrfilltextattribute.cxx
 svx/source/sdr/attribute/sdrformtextattribute.cxx
 svx/source/sdr/attribute/sdrformtextoutlineattribute.cxx
-svx/source/sdr/attribute/sdrlinefillshadowtextattribute.cxx
-svx/source/sdr/attribute/sdrlineshadowtextattribute.cxx
-svx/source/sdr/attribute/sdrshadowtextattribute.cxx
+svx/source/sdr/attribute/sdrlinefilleffectstextattribute.cxx
+svx/source/sdr/attribute/sdrlineeffectstextattribute.cxx
+svx/source/sdr/attribute/sdreffectstextattribute.cxx
 svx/source/sdr/attribute/sdrtextattribute.cxx
 svx/source/sdr/contact/displayinfo.cxx
 svx/source/sdr/contact/objectcontact.cxx

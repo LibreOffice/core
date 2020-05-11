@@ -81,8 +81,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
     const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
 
     // this may be refined more granular; if no content, attributes may get simpler
-    const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-        drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+    const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute(
+        drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
             rItemSet,
             GetOle2Obj().getText(0),
             true));
@@ -162,8 +162,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
 basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const
 {
     // this may be refined more granular; if no content, attributes may get simpler
-    const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute =
-        drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+    const drawinglayer::attribute::SdrLineFillEffectsTextAttribute aAttribute =
+        drawinglayer::primitive2d::createNewSdrLineFillEffectsTextAttribute(
             GetOle2Obj().GetMergedItemSet(),
             GetOle2Obj().getText(0),
             true);

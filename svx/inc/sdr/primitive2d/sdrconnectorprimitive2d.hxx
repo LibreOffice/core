@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRCONNECTORPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlineeffectstextattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 
@@ -35,7 +35,7 @@ namespace drawinglayer
         class SdrConnectorPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
-            attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
+            attribute::SdrLineEffectsTextAttribute       maSdrLSTAttribute;
             ::basegfx::B2DPolygon                       maUnitPolygon;
 
             // local decomposition.
@@ -43,11 +43,11 @@ namespace drawinglayer
 
         public:
             SdrConnectorPrimitive2D(
-                const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
+                const attribute::SdrLineEffectsTextAttribute& rSdrLSTAttribute,
                 const ::basegfx::B2DPolygon& rUnitPolygon);
 
             // data access
-            const attribute::SdrLineShadowTextAttribute& getSdrLSTAttribute() const { return maSdrLSTAttribute; }
+            const attribute::SdrLineEffectsTextAttribute& getSdrLSTAttribute() const { return maSdrLSTAttribute; }
             const ::basegfx::B2DPolygon& getUnitPolygon() const { return maUnitPolygon; }
 
             // compare operator

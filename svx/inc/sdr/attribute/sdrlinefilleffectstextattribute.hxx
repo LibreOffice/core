@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlineeffectstextattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 
@@ -28,14 +28,14 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineFillShadowTextAttribute : public SdrLineShadowTextAttribute
+        class SdrLineFillEffectsTextAttribute : public SdrLineEffectsTextAttribute
         {
             // add fill and transGradient attributes
             SdrFillAttribute            maFill;                     // fill attributes (if used)
             FillGradientAttribute       maFillFloatTransGradient;   // fill float transparence gradient (if used)
 
         public:
-            SdrLineFillShadowTextAttribute(
+            SdrLineFillEffectsTextAttribute(
                 const SdrLineAttribute& rLine,
                 const SdrFillAttribute& rFill,
                 const SdrLineStartEndAttribute& rLineStartEnd,
@@ -43,15 +43,15 @@ namespace drawinglayer
                 const FillGradientAttribute& rFillFloatTransGradient,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow);
-            SdrLineFillShadowTextAttribute();
-            SdrLineFillShadowTextAttribute(const SdrLineFillShadowTextAttribute& rCandidate);
-            SdrLineFillShadowTextAttribute& operator=(const SdrLineFillShadowTextAttribute& rCandidate);
+            SdrLineFillEffectsTextAttribute();
+            SdrLineFillEffectsTextAttribute(const SdrLineFillEffectsTextAttribute& rCandidate);
+            SdrLineFillEffectsTextAttribute& operator=(const SdrLineFillEffectsTextAttribute& rCandidate);
 
             // checks if the incarnation is default constructed
             bool isDefault() const;
 
             // compare operator
-            bool operator==(const SdrLineFillShadowTextAttribute& rCandidate) const;
+            bool operator==(const SdrLineFillEffectsTextAttribute& rCandidate) const;
 
             // data access
             const SdrFillAttribute& getFill() const { return maFill; }

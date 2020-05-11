@@ -110,7 +110,7 @@ namespace drawinglayer::primitive2d
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
@@ -222,7 +222,7 @@ namespace drawinglayer::primitive2d
 
         SdrEllipseSegmentPrimitive2D::SdrEllipseSegmentPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             double fStartAngle,
             double fEndAngle,
             bool bCloseSegment,

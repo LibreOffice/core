@@ -36,9 +36,9 @@ namespace drawinglayer::attribute {
     class SdrTextAttribute;
     class FillGradientAttribute;
     class SdrFillGraphicAttribute;
-    class SdrShadowTextAttribute;
-    class SdrLineShadowTextAttribute;
-    class SdrLineFillShadowTextAttribute;
+    class SdrEffectsTextAttribute;
+    class SdrLineEffectsTextAttribute;
+    class SdrLineFillEffectsTextAttribute;
     class SdrLineFillShadowAttribute3D;
     class SdrSceneAttribute;
     class SdrLightingAttribute;
@@ -83,16 +83,16 @@ namespace drawinglayer
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
+        attribute::SdrEffectsTextAttribute createNewSdrEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
             bool bSuppressText); // #i98072# added option to suppress text on demand
 
-        attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
+        attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText);
 
-        attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
+        attribute::SdrLineFillEffectsTextAttribute createNewSdrLineFillEffectsTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
             bool bHasContent); // used from OLE and graphic

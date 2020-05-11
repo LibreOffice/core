@@ -34,7 +34,7 @@ namespace drawinglayer::primitive2d
         SdrOle2Primitive2D::SdrOle2Primitive2D(
             const Primitive2DContainer& rOLEContent,
             const basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
         :   BasePrimitive2D(),
             maOLEContent(rOLEContent),
             maTransform(rTransform),
