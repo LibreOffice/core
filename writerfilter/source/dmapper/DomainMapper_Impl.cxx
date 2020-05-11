@@ -1729,8 +1729,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     // Apply override: we have override instruction for this level
                                     // And this was not done for this list before: we can do this only once on first occurrence
                                     // of list with override
-                                    // TODO: Not tested variant with differen levels override in diffent lists.
-                                    // Probably m_aListOverrideApplied as a set of overriden listids is not sufficient
+                                    // TODO: Not tested variant with different levels override in different lists.
+                                    // Probably m_aListOverrideApplied as a set of overridden listids is not sufficient
                                     // and we need to register level overrides separately.
                                     m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
                                     m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
