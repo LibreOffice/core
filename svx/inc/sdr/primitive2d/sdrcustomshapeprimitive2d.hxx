@@ -22,7 +22,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <sdr/attribute/sdrshadowtextattribute.hxx>
+#include <sdr/attribute/sdreffectstextattribute.hxx>
 
 
 // predefines
@@ -35,7 +35,7 @@ namespace drawinglayer
         class SdrCustomShapePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            attribute::SdrShadowTextAttribute           maSdrSTAttribute;
+            attribute::SdrEffectsTextAttribute           maSdrSTAttribute;
             Primitive2DContainer                         maSubPrimitives;
             basegfx::B2DHomMatrix                       maTextBox;
 
@@ -55,7 +55,7 @@ namespace drawinglayer
 
         public:
             SdrCustomShapePrimitive2D(
-                const attribute::SdrShadowTextAttribute& rSdrSTAttribute,
+                const attribute::SdrEffectsTextAttribute& rSdrSTAttribute,
                 const Primitive2DContainer& rSubPrimitives,
                 const basegfx::B2DHomMatrix& rTextBox,
                 bool bWordWrap,
@@ -63,7 +63,7 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rObjectMatrix);
 
             // data access
-            const attribute::SdrShadowTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
+            const attribute::SdrEffectsTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }
             const Primitive2DContainer& getSubPrimitives() const { return maSubPrimitives; }
             const basegfx::B2DHomMatrix& getTextBox() const { return maTextBox; }
             bool getWordWrap() const { return mbWordWrap; }

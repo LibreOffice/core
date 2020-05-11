@@ -163,11 +163,11 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/animation/objectanimator \
     svx/source/sdr/animation/animationstate \
     svx/source/sdr/attribute/sdrallfillattributeshelper \
-    svx/source/sdr/attribute/sdrlinefillshadowtextattribute \
+    svx/source/sdr/attribute/sdrlinefilleffectstextattribute \
     svx/source/sdr/attribute/sdrfilltextattribute \
-    svx/source/sdr/attribute/sdrshadowtextattribute \
+    svx/source/sdr/attribute/sdreffectstextattribute \
     svx/source/sdr/attribute/sdrtextattribute \
-    svx/source/sdr/attribute/sdrlineshadowtextattribute \
+    svx/source/sdr/attribute/sdrlineeffectstextattribute \
     svx/source/sdr/attribute/sdrformtextattribute \
     svx/source/sdr/attribute/sdrformtextoutlineattribute \
     svx/source/sdr/contact/viewobjectcontactofgroup \

@@ -433,7 +433,7 @@ namespace drawinglayer::primitive2d
         }
 
         SdrMeasurePrimitive2D::SdrMeasurePrimitive2D(
-            const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
+            const attribute::SdrLineEffectsTextAttribute& rSdrLSTAttribute,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
             MeasureTextPosition eHorizontal,

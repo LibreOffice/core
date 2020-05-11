@@ -109,8 +109,8 @@ namespace sdr::contact
 
             // #i98072# Get shadow and text; eventually suppress the text if it's
             // a TextPath FontworkGallery object
-            const drawinglayer::attribute::SdrShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrShadowTextAttribute(
+            const drawinglayer::attribute::SdrEffectsTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrEffectsTextAttribute(
                     rItemSet,
                     GetCustomShapeObj().getText(0),
                     GetCustomShapeObj().IsTextPath()));

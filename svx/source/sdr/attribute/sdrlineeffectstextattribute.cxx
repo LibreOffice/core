@@ -18,56 +18,56 @@
  */
 
 
-#include <sdr/attribute/sdrlineshadowtextattribute.hxx>
+#include <sdr/attribute/sdrlineeffectstextattribute.hxx>
 
 
 namespace drawinglayer::attribute
 {
-        SdrLineShadowTextAttribute::SdrLineShadowTextAttribute(
+        SdrLineEffectsTextAttribute::SdrLineEffectsTextAttribute(
             const SdrLineAttribute& rLine,
             const SdrLineStartEndAttribute& rLineStartEnd,
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow)
-        :   SdrShadowTextAttribute(rShadow, rTextAttribute, rGlow),
+        :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow),
             maLine(rLine),
             maLineStartEnd(rLineStartEnd)
         {
         }
 
-        SdrLineShadowTextAttribute::SdrLineShadowTextAttribute()
-        :   SdrShadowTextAttribute(),
+        SdrLineEffectsTextAttribute::SdrLineEffectsTextAttribute()
+        :   SdrEffectsTextAttribute(),
             maLine(),
             maLineStartEnd()
         {
         }
 
-        SdrLineShadowTextAttribute::SdrLineShadowTextAttribute(const SdrLineShadowTextAttribute& rCandidate)
-        :   SdrShadowTextAttribute(rCandidate),
+        SdrLineEffectsTextAttribute::SdrLineEffectsTextAttribute(const SdrLineEffectsTextAttribute& rCandidate)
+        :   SdrEffectsTextAttribute(rCandidate),
             maLine(rCandidate.getLine()),
             maLineStartEnd(rCandidate.getLineStartEnd())
         {
         }
 
-        SdrLineShadowTextAttribute& SdrLineShadowTextAttribute::operator=(const SdrLineShadowTextAttribute& rCandidate)
+        SdrLineEffectsTextAttribute& SdrLineEffectsTextAttribute::operator=(const SdrLineEffectsTextAttribute& rCandidate)
         {
-            SdrShadowTextAttribute::operator=(rCandidate);
+            SdrEffectsTextAttribute::operator=(rCandidate);
             maLine = rCandidate.getLine();
             maLineStartEnd = rCandidate.getLineStartEnd();
 
             return *this;
         }
 
-        bool SdrLineShadowTextAttribute::isDefault() const
+        bool SdrLineEffectsTextAttribute::isDefault() const
         {
-            return(SdrShadowTextAttribute::isDefault()
+            return(SdrEffectsTextAttribute::isDefault()
                 && getLine().isDefault()
                 && getLineStartEnd().isDefault());
         }
 
-        bool SdrLineShadowTextAttribute::operator==(const SdrLineShadowTextAttribute& rCandidate) const
+        bool SdrLineEffectsTextAttribute::operator==(const SdrLineEffectsTextAttribute& rCandidate) const
         {
-            return(SdrShadowTextAttribute::operator==(rCandidate)
+            return(SdrEffectsTextAttribute::operator==(rCandidate)
                 && getLine() == rCandidate.getLine()
                 && getLineStartEnd() == rCandidate.getLineStartEnd());
         }
