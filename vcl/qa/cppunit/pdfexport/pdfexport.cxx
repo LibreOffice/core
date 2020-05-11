@@ -1180,6 +1180,8 @@ void PdfExportTest::testTdf115117_1a()
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+
+    FPDFText_ClosePage(pPdfTextPage);
 #endif
 }
 
@@ -1222,6 +1224,8 @@ void PdfExportTest::testTdf115117_2a()
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+
+    FPDFText_ClosePage(pPdfTextPage);
 #endif
 }
 
@@ -1759,6 +1763,7 @@ void PdfExportTest::testTdf121962()
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
 
+    FPDFText_ClosePage(pTextPage);
 }
 
 void PdfExportTest::testTdf115967()
@@ -1790,6 +1795,8 @@ void PdfExportTest::testTdf115967()
         sText += sChar.trim();
     }
     CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
+
+    FPDFText_ClosePage(pTextPage);
 }
 
 void PdfExportTest::testTdf121615()
