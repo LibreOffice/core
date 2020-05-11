@@ -752,7 +752,6 @@ namespace frm
 
             SfxObjectShell *pObjSh = GetObjectShell();
 
-    #ifdef USE_REGISTER_TRANSFER
             if( pObjSh )
             {
                 // Transfer target frame, so that javascript: URLs
@@ -761,16 +760,6 @@ namespace frm
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
             }
-    #else
-            if( pObjSh )
-            {
-                // Transfer target frame, so that javascript: URLs
-                // can also be "loaded"
-                const SfxMedium *pShMedium = pObjSh->GetMedium();
-                if( pShMedium )
-                    m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
-            }
-    #endif
 
             m_bProdStarted = false;
 
