@@ -740,6 +740,33 @@ void DrawingML::WriteLineArrow( const Reference< XPropertySet >& rXPropSet, bool
                            XML_w, width );
 }
 
+std::pair<sal_uInt32, sal_uInt32> DrawingML::GetLineWidths(const Reference<XPropertySet>& rXPropSet)
+{
+    // get actual linewidth
+    sal_uInt32 nLineWidth = 0;
+    if (GetProperty(rXPropSet, "LineWidth"))
+        mAny >>= nLineWidth;
+    // get original EMU linewidth if docx was used
+    if (GetProperty(rXPropSet, "InteropGrabBag"))
+    {
+        Sequence<PropertyValue> aGrabBag;
+        mAny >>= aGrabBag;
+        auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
+            [](const PropertyValue& rProp) { return rProp.Name == "EmuLineWidth"; });
+        if (pProp != std::cend(aGrabBag))
+        {
+            sal_uInt32 nEmuLineWidth = 0;
+            pProp->Value >>= nEmuLineWidth;
+            // calculate width again with the same process like docx importing to check whether the linewidth was modified
+            sal_uInt32 nRoundedLineWidth = oox::drawingml::convertEmuToHmm(nEmuLineWidth);
+            if (nRoundedLineWidth == nLineWidth)
+                // linewidth was not modified, so we use the original EMU value to avoid rounding error
+                return std::make_pair(nLineWidth, nEmuLineWidth);
+        }
+    }
+    return std::make_pair(nLineWidth, oox::drawingml::convertHmmToEmu(nLineWidth));
+}
+
 void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Reference< frame::XModel > const & xModel )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
@@ -747,7 +774,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     if (GetProperty(rXPropSet, "LineStyle"))
         mAny >>= aLineStyle;
 
-    sal_uInt32 nLineWidth = 0;
     ::Color nColor;
     sal_Int32 nColorAlpha = MAX_PERCENT;
     bool bColorSet = false;
@@ -797,9 +823,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                 rStyleProp.Value >>= nStyleLineWidth;
         }
     }
-
-    if (GetProperty(rXPropSet, "LineWidth"))
-        mAny >>= nLineWidth;
 
     switch (aLineStyle)
     {
@@ -864,10 +887,13 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             break;
     }
 
+    auto aLineWidths = GetLineWidths(rXPropSet);
+    auto nLineWidth = aLineWidths.first;
+    auto nEmuLineWidth = aLineWidths.second;
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
                           XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
-                              OString::number(oox::drawingml::convertHmmToEmu(nLineWidth)).getStr() : nullptr );
+                              OString::number(nEmuLineWidth).getStr() : nullptr );
 
     if( bColorSet )
     {
