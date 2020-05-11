@@ -1710,12 +1710,12 @@ namespace
     }
 #endif
 
-    void insertParent(GtkWidget* pWidget, GtkWidget* pReplacement)
+    void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
+        g_object_ref(pWidget);
+
         // remove the widget and replace it with pReplacement
         GtkWidget* pParent = gtk_widget_get_parent(pWidget);
-
-        g_object_ref(pWidget);
 
         gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
         if (GTK_IS_GRID(pParent))
@@ -1794,6 +1794,15 @@ namespace
         gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
         gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
+        g_object_unref(pWidget);
+    }
+
+    void insertAsParent(GtkWidget* pWidget, GtkWidget* pReplacement)
+    {
+        g_object_ref(pWidget);
+
+        replaceWidget(pWidget, pReplacement);
+
         gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
 
         g_object_unref(pWidget);
@@ -1817,7 +1826,7 @@ namespace
             pMouseEventBox = gtk_event_box_new();
             gtk_event_box_set_above_child(GTK_EVENT_BOX(pMouseEventBox), false);
             gtk_event_box_set_visible_window(GTK_EVENT_BOX(pMouseEventBox), false);
-            insertParent(pWidget, pMouseEventBox);
+            insertAsParent(pWidget, pMouseEventBox);
         }
 
         return pMouseEventBox;
@@ -13687,7 +13696,7 @@ public:
         , m_nMRUCount(0)
         , m_nMaxMRUCount(0)
     {
-        insertParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
+        insertAsParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
         gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);
 
