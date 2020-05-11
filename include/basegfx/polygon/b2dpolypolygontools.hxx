@@ -31,12 +31,12 @@ namespace com::sun::star::drawing { struct PolyPolygonBezierCoords; }
 
 namespace basegfx
 {
-    // predefinitions
     class B2DPolyPolygon;
     class B2DRange;
+}
 
-    namespace utils
-    {
+namespace basegfx::utils
+{
         // B2DPolyPolygon tools
 
         // Check and evtl. correct orientations of all contained Polygons so that
@@ -293,7 +293,6 @@ namespace basegfx
             const B2DPolyPolygon& rPolyPolygon,
             css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval);
 
-    } // end of namespace utils
-} // end of namespace basegfx
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

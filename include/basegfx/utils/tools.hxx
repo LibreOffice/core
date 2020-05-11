@@ -27,9 +27,10 @@ namespace basegfx
     class B2DPoint;
     class B2DRange;
     class B2DPolyPolygon;
+}
 
-    namespace utils
-    {
+namespace basegfx::utils
+{
         /** Expand given parallelogram, such that it extends beyond
             bound rect in a given direction.
 
@@ -118,7 +119,6 @@ namespace basegfx
                                                             sal_Int32 nTotalDigits,
                                                             sal_Int32 nDecPlaces,
                                                             bool      bLitSegments=true);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
