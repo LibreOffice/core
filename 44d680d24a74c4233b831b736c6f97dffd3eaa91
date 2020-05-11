@@ -115,6 +115,30 @@
       "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca15b9a1_4a9ee744",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-05-11T11:10:19Z",
+      "side": 1,
+      "message": "That is the main question",
+      "parentUuid": "50a3d072_3b9dc7b8",
+      "range": {
+        "startLine": 159,
+        "startChar": 71,
+        "endLine": 159,
+        "endChar": 86
+      },
+      "revId": "44d680d24a74c4233b831b736c6f97dffd3eaa91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
