@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adb23721_10b65c67",
+        "filename": "sw/source/core/view/pagepreviewlayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-05-11T13:11:27Z",
+      "side": 1,
+      "message": "You can enter the color directly, no variable needed.",
+      "revId": "6a8ee5ec3705c22f3f2133fff58c0994b9cae853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
