@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
-#define INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
+#pragma once
 
 #include <config_options.h>
 #include <basegfx/point/b2dpoint.hxx>
@@ -398,7 +397,5 @@ namespace basegfx
             const ODFGradientInfo& rGradInfo);
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
