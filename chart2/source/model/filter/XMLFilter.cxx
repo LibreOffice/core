@@ -382,15 +382,6 @@ ErrCode XMLFilter::impl_Import(
             : OUString("com.sun.star.comp.Chart.XMLContentImporter"),
             xStorage, xFactory, xGraphicStorageHandler, xImportInfo );
         nWarning = nWarning != ERRCODE_NONE ? nWarning : nContentWarning;
-
-        // import of "content.xml" didn't work - try old "Content.xml" stream
-        if( nContentWarning != ERRCODE_NONE )
-        {
-            nWarning = impl_ImportStream(
-                "Content.xml", // old content stream name
-                "com.sun.star.office.sax.importer.Chart",
-                xStorage, xFactory, xGraphicStorageHandler, xImportInfo );
-        }
     }
     catch (const uno::Exception&)
     {

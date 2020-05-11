@@ -1329,7 +1329,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     uno::Reference <embed::XStorage> xStorage = rMedium.GetStorage();
     if (xStorage.is() && xStorage->getElementNames().hasElements())
     {
-        if (xStorage->hasByName("content.xml") || xStorage->hasByName("Content.xml"))
+        if (xStorage->hasByName("content.xml"))
         {
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(pDoc->GetModel());

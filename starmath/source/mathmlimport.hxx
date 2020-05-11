@@ -58,7 +58,6 @@ public:
         const css::uno::Reference< css::embed::XStorage >& xStorage,
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
         const char* pStreamName,
-        const char* pCompatibilityStreamName,
         css::uno::Reference< css::uno::XComponentContext > const & rxContext,
         css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
         const char* pFilterName );

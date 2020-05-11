@@ -127,7 +127,6 @@ static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const char* pStreamName,
-    const char* pCompatibilityStreamName,
     const uno::Reference<XComponentContext> & rxContext,
     ODBFilter& _rFilter)
 {
@@ -144,17 +143,8 @@ static ErrCode ReadThroughComponent(
             OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
-                // stream name not found! Then try the compatibility name.
-                // if no stream can be opened, return immediately with OK signal
-
-                // do we even have an alternative name?
-                if ( nullptr == pCompatibilityStreamName )
-                    return ERRCODE_NONE;
-
-                // if so, does the stream exist?
-                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-                if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-                    return ERRCODE_NONE;
+                // stream name not found! return immediately with OK signal
+                return ERRCODE_NONE;
             }
 
             // get input stream
@@ -349,7 +339,6 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
-                                    ,"Settings.xml"
                                     ,GetComponentContext()
                                     ,*this
                                     );
@@ -358,7 +347,6 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
-                                    ,"Content.xml"
                                     ,GetComponentContext()
                                     ,*this
                                     );

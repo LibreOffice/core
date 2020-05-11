@@ -636,8 +636,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, weld::Widget&, void)
             {
                 try
                 {
-                    if (xStorage->hasByName(pStarDrawXMLContent) ||
-                        xStorage->hasByName(pStarDrawOldXMLContent))
+                    if (xStorage->hasByName(pStarDrawXMLContent))
                     {
                         if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
                         {
