@@ -50,7 +50,8 @@ public:
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
 
     void createShapes( const css::awt::Size & rAvailableSpace,
-                       const css::awt::Size & rPageSize );
+                       const css::awt::Size & rPageSize,
+                       css::awt::Size & rDefaultLegendSize );
 
     /** Sets the position according to its internal anchor.
 
@@ -63,7 +64,8 @@ public:
      */
     void changePosition(
         css::awt::Rectangle & rOutAvailableSpace,
-        const css::awt::Size & rReferenceSize );
+        const css::awt::Size & rReferenceSize,
+        const css::awt::Size & rDefaultLegendSize );
 
     static bool isVisible(
         const css::uno::Reference< css::chart2::XLegend > & xLegend );
