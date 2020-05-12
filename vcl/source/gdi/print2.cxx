@@ -831,6 +831,149 @@ bool GenerateIntersectingConnectedComponents(::std::vector<ConnectedComponents>&
     return bTreatSpecial;
 }
 
+int GenerateConnectedComponents(::std::vector<ConnectedComponents>& rConnectedComponents, ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct, int nActionNum, GDIMetaFile const & rMtf, VirtualDevice *pMapModeVDev)
+{
+    // iterate over all actions (start where background action search left off)
+    for( ;
+         pCurrAct;
+         pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction(), ++nActionNum )
+    {
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+
+        // cache bounds of current action
+        const tools::Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, *pMapModeVDev) );
+
+        // accumulate collected bounds here, initialize with current action
+        tools::Rectangle aTotalBounds( aBBCurrAct ); // thus, aTotalComponents.aBounds is empty for
+                                                     // non-output-generating actions
+        bool bTreatSpecial( false );
+        ConnectedComponents aTotalComponents;
+
+        //  STAGE 2.1: Search for intersecting cc entries
+
+        // if aBBCurrAct is empty, it will intersect with no
+        // rConnectedComponentst member. Thus, we can save the check.
+        // Furthermore, this ensures that non-output-generating
+        // actions get their own rConnectedComponents entry, which is necessary
+        // when copying them to the output metafile (see stage 4
+        // below).
+
+        // #107169# Wholly transparent objects need
+        // not be considered for connected components,
+        // too. Just put each of them into a separate
+        // component.
+        aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, *pMapModeVDev);
+
+        if( !aBBCurrAct.IsEmpty() &&
+            !aTotalComponents.bIsFullyTransparent )
+        {
+            if( !rBackgroundComponent.aComponentList.empty() &&
+                !rBackgroundComponent.aBounds.IsInside(aTotalBounds) )
+            {
+                // it seems the background is not large enough. to
+                // be on the safe side, combine with this component.
+                aTotalBounds.Union(rBackgroundComponent.aBounds);
+
+                // extract all aCurr actions to aTotalComponents
+                aTotalComponents.aComponentList.splice(aTotalComponents.aComponentList.end(),
+                                                       rBackgroundComponent.aComponentList);
+
+                if (rBackgroundComponent.bIsSpecial)
+                    bTreatSpecial = true;
+            }
+
+            bTreatSpecial = GenerateIntersectingConnectedComponents(rConnectedComponents, aTotalComponents, aTotalBounds, bTreatSpecial);
+        }
+
+        //  STAGE 2.2: Determine special state for cc element
+
+        // now test whether the whole connected component must be
+        // treated specially (i.e. rendered as a bitmap): if the
+        // added action is the very first action, or all actions
+        // before it are completely transparent, the connected
+        // component need not be treated specially, not even if
+        // the added action contains transparency. This is because
+        // painting of transparent objects on _white background_
+        // works without alpha compositing (you just calculate the
+        // color). Note that for the test "all objects before me
+        // are transparent" no sorting is necessary, since the
+        // added metaaction pCurrAct is always in the order the
+        // metafile is painted. Generally, the order of the
+        // metaactions in the ConnectedComponents are not
+        // guaranteed to be the same as in the metafile.
+        if( bTreatSpecial )
+        {
+            // prev component(s) special -> this one, too
+            aTotalComponents.bIsSpecial = true;
+        }
+        else if(!pCurrAct->IsTransparent())
+        {
+            // added action and none of prev components special ->
+            // this one normal, too
+            aTotalComponents.bIsSpecial = false;
+        }
+        else
+        {
+            // added action is special and none of prev components
+            // special -> do the detailed tests
+
+            // can the action handle transparency correctly
+            // (i.e. when painted on white background, does the
+            // action still look correct)?
+            if( !DoesActionHandleTransparency( *pCurrAct ) )
+            {
+                // no, action cannot handle its transparency on
+                // a printer device, render to bitmap
+                aTotalComponents.bIsSpecial = true;
+            }
+            else
+            {
+                // yes, action can handle its transparency, so
+                // check whether we're on white background
+                if( aTotalComponents.aComponentList.empty() )
+                {
+                    // nothing between pCurrAct and page
+                    // background -> don't be special
+                    aTotalComponents.bIsSpecial = false;
+                }
+                else
+                {
+                    // #107169# Fixes above now ensure that _no_
+                    // object in the list is fully transparent. Thus,
+                    // if the component list is not empty above, we
+                    // must assume that we have to treat this
+                    // component special.
+
+                    // there are non-transparent objects between
+                    // pCurrAct and the empty sheet of paper -> be
+                    // special, then
+                    aTotalComponents.bIsSpecial = true;
+                }
+            }
+        }
+
+        //  STAGE 2.3: Add newly generated CC list element
+
+        // set new bounds and add action to list
+        aTotalComponents.aBounds = aTotalBounds;
+        aTotalComponents.aComponentList.emplace_back(
+                pCurrAct, nActionNum );
+
+        // add aTotalComponents as a new entry to rConnectedComponents
+        rConnectedComponents.push_back( aTotalComponents );
+
+        SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
+                    "Printer::GetPreparedMetaFile empty component" );
+        SAL_WARN_IF( aTotalComponents.aBounds.IsEmpty() && (aTotalComponents.aComponentList.size() != 1), "vcl",
+                    "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
+        SAL_WARN_IF( aTotalComponents.bIsFullyTransparent && (aTotalComponents.aComponentList.size() != 1), "vcl",
+                    "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
+    }
+
+    return nActionNum;
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -898,146 +1041,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         //  STAGE 2: Generate connected components list
 
-        ::std::vector<ConnectedComponents> aCCList; // contains distinct sets of connected components as elements.
-
-        // iterate over all actions (start where background action
-        // search left off)
-        for( ;
-             pCurrAct;
-             pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
-        {
-            // execute action to get correct MapModes etc.
-            pCurrAct->Execute( aMapModeVDev.get() );
-
-            // cache bounds of current action
-            const tools::Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, *aMapModeVDev) );
-
-            // accumulate collected bounds here, initialize with current action
-            tools::Rectangle aTotalBounds( aBBCurrAct ); // thus, aTotalComponents.aBounds is empty
-                                                         // for non-output-generating actions
-            bool bTreatSpecial( false );
-            ConnectedComponents aTotalComponents;
-
-            //  STAGE 2.1: Search for intersecting cc entries
-
-            // if aBBCurrAct is empty, it will intersect with no
-            // aCCList member. Thus, we can save the check.
-            // Furthermore, this ensures that non-output-generating
-            // actions get their own aCCList entry, which is necessary
-            // when copying them to the output metafile (see stage 4
-            // below).
-
-            // #107169# Wholly transparent objects need
-            // not be considered for connected components,
-            // too. Just put each of them into a separate
-            // component.
-            aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, *aMapModeVDev);
-
-            if( !aBBCurrAct.IsEmpty() &&
-                !aTotalComponents.bIsFullyTransparent )
-            {
-                if( !aBackgroundComponent.aComponentList.empty() &&
-                    !aBackgroundComponent.aBounds.IsInside(aTotalBounds) )
-                {
-                    // it seems the background is not large enough. to
-                    // be on the safe side, combine with this component.
-                    aTotalBounds.Union( aBackgroundComponent.aBounds );
-
-                    // extract all aCurr actions to aTotalComponents
-                    aTotalComponents.aComponentList.splice( aTotalComponents.aComponentList.end(),
-                                                            aBackgroundComponent.aComponentList );
-
-                    if( aBackgroundComponent.bIsSpecial )
-                        bTreatSpecial = true;
-                }
-
-                bTreatSpecial = GenerateIntersectingConnectedComponents(aCCList, aTotalComponents, aTotalBounds, bTreatSpecial);
-            }
-
-            //  STAGE 2.2: Determine special state for cc element
-
-            // now test whether the whole connected component must be
-            // treated specially (i.e. rendered as a bitmap): if the
-            // added action is the very first action, or all actions
-            // before it are completely transparent, the connected
-            // component need not be treated specially, not even if
-            // the added action contains transparency. This is because
-            // painting of transparent objects on _white background_
-            // works without alpha compositing (you just calculate the
-            // color). Note that for the test "all objects before me
-            // are transparent" no sorting is necessary, since the
-            // added metaaction pCurrAct is always in the order the
-            // metafile is painted. Generally, the order of the
-            // metaactions in the ConnectedComponents are not
-            // guaranteed to be the same as in the metafile.
-            if( bTreatSpecial )
-            {
-                // prev component(s) special -> this one, too
-                aTotalComponents.bIsSpecial = true;
-            }
-            else if(!pCurrAct->IsTransparent())
-            {
-                // added action and none of prev components special ->
-                // this one normal, too
-                aTotalComponents.bIsSpecial = false;
-            }
-            else
-            {
-                // added action is special and none of prev components
-                // special -> do the detailed tests
-
-                // can the action handle transparency correctly
-                // (i.e. when painted on white background, does the
-                // action still look correct)?
-                if( !DoesActionHandleTransparency( *pCurrAct ) )
-                {
-                    // no, action cannot handle its transparency on
-                    // a printer device, render to bitmap
-                    aTotalComponents.bIsSpecial = true;
-                }
-                else
-                {
-                    // yes, action can handle its transparency, so
-                    // check whether we're on white background
-                    if( aTotalComponents.aComponentList.empty() )
-                    {
-                        // nothing between pCurrAct and page
-                        // background -> don't be special
-                        aTotalComponents.bIsSpecial = false;
-                    }
-                    else
-                    {
-                        // #107169# Fixes above now ensure that _no_
-                        // object in the list is fully transparent. Thus,
-                        // if the component list is not empty above, we
-                        // must assume that we have to treat this
-                        // component special.
-
-                        // there are non-transparent objects between
-                        // pCurrAct and the empty sheet of paper -> be
-                        // special, then
-                        aTotalComponents.bIsSpecial = true;
-                    }
-                }
-            }
-
-            //  STAGE 2.3: Add newly generated CC list element
-
-            // set new bounds and add action to list
-            aTotalComponents.aBounds = aTotalBounds;
-            aTotalComponents.aComponentList.emplace_back(
-                    pCurrAct, nActionNum );
-
-            // add aTotalComponents as a new entry to aCCList
-            aCCList.push_back( aTotalComponents );
-
-            SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
-                        "Printer::GetPreparedMetaFile empty component" );
-            SAL_WARN_IF( aTotalComponents.aBounds.IsEmpty() && (aTotalComponents.aComponentList.size() != 1), "vcl",
-                        "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
-            SAL_WARN_IF( aTotalComponents.bIsFullyTransparent && (aTotalComponents.aComponentList.size() != 1), "vcl",
-                        "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
-        }
+        ::std::vector<ConnectedComponents> aCCList; // contains sets of connected components as elements.
+        nActionNum = GenerateConnectedComponents(aCCList, aBackgroundComponent, pCurrAct, nActionNum, rInMtf, aMapModeVDev.get());
 
         // well now, we've got the list of disjunct connected
         // components. Now we've got to create a map, which contains
