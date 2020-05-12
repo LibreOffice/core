@@ -46,13 +46,9 @@ namespace com::sun::star::graphic { class XGraphic; }
 using namespace css;
 using namespace css::uno;
 using namespace css::beans;
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxs = com::sun::star::xml::sax;
 
 /* protected: for signature verify */
-cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
+css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
     sal_Int32 nSecurityId)
 {
     if ( m_eStatusOfSecurityComponents != InitializationState::INITIALIZED )
@@ -61,10 +57,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     }
 
     sal_Int32 nIdOfSignatureElementCollector;
-    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     nIdOfSignatureElementCollector =
-        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_BEFOREMODIFY, false);
+        m_xSAXEventKeeper->addSecurityElementCollector( css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false);
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
@@ -73,9 +69,9 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
          */
     xReferenceResolvedListener = new SignatureVerifierImpl;
 
-    cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
+    css::uno::Reference<css::lang::XInitialization> xInitialization(xReferenceResolvedListener, css::uno::UNO_QUERY);
 
-    cssu::Sequence<cssu::Any> args(5);
+    css::uno::Sequence<css::uno::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
     args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
@@ -83,8 +79,8 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[4] <<= m_xXMLSignature;
     xInitialization->initialize(args);
 
-    cssu::Reference< cssxc::sax::XSignatureVerifyResultBroadcaster >
-        signatureVerifyResultBroadcaster(xReferenceResolvedListener, cssu::UNO_QUERY);
+    css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultBroadcaster >
+        signatureVerifyResultBroadcaster(xReferenceResolvedListener, css::uno::UNO_QUERY);
 
     signatureVerifyResultBroadcaster->addSignatureVerifyResultListener( this );
 
@@ -92,7 +88,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         nIdOfSignatureElementCollector,
         xReferenceResolvedListener);
 
-    cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
+    css::uno::Reference<css::xml::crypto::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, css::uno::UNO_QUERY);
     keyCollector->setKeyId(0);
 
     return xReferenceResolvedListener;
@@ -100,7 +96,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
 void XSecController::addSignature()
 {
-    cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
     sal_Int32 nSignatureId = 0;
 
 
@@ -177,13 +173,13 @@ void XSecController::addStreamReference(
             /*
              * get the input stream
              */
-        cssu::Reference< css::io::XInputStream > xObjectInputStream
+        css::uno::Reference< css::io::XInputStream > xObjectInputStream
                 = getObjectInputStream( ouUri );
 
         if ( xObjectInputStream.is() )
         {
-            cssu::Reference<cssxc::XUriBinding> xUriBinding
-                (isi.xReferenceResolvedListener, cssu::UNO_QUERY);
+            css::uno::Reference<css::xml::crypto::XUriBinding> xUriBinding
+                (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
             xUriBinding->setUriBinding(ouUri, xObjectInputStream);
         }
     }
@@ -219,8 +215,8 @@ void XSecController::setReferenceCount() const
             }
         }
 
-        cssu::Reference<cssxc::sax::XReferenceCollector> xReferenceCollector
-            (isi.xReferenceResolvedListener, cssu::UNO_QUERY);
+        css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+            (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
         xReferenceCollector->setReferenceCount( referenceCount );
     }
 }
@@ -465,7 +461,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
      */
     {
         bool bJustChainingOn = false;
-        cssu::Reference< cssxs::XDocumentHandler > xHandler;
+        css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
 
         int i,j;
         int sigNum = m_vInternalSignatureInformations.size();
@@ -489,10 +485,10 @@ void XSecController::collectToVerify( const OUString& referenceId )
                     }
 
                     sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-                        cssxc::sax::ElementMarkPriority_BEFOREMODIFY, false );
+                        css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false );
 
-                    cssu::Reference<cssxc::sax::XReferenceCollector> xReferenceCollector
-                        ( isi.xReferenceResolvedListener, cssu::UNO_QUERY );
+                    css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+                        ( isi.xReferenceResolvedListener, css::uno::UNO_QUERY );
 
                     m_xSAXEventKeeper->setSecurityId(nKeeperId, isi.signatureInfor.nSecurityId);
                     m_xSAXEventKeeper->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
@@ -506,7 +502,6 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
         if ( bJustChainingOn )
         {
-            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
             m_xSAXEventKeeper->setNextHandler(xHandler);
         }
     }
@@ -520,13 +515,13 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
     m_bVerifyCurrentSignature = true;
 }
 
-cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType)
+css::uno::Reference< css::xml::sax::XDocumentHandler > const & XSecController::createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType)
 {
     if (nType == embed::StorageFormats::OFOPXML)
         m_xSecParser = new OOXMLSecParser(rXMLSignatureHelper, this);
     else
         m_xSecParser = new XSecParser(rXMLSignatureHelper, this);
-    cssu::Reference< cssl::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
     setSAXChainConnector(xInitialization);
 
