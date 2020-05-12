@@ -46,10 +46,6 @@
 #include "ooxmlsecexporter.hxx"
 #include <xmlsignaturehelper2.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxs = com::sun::star::xml::sax;
 using namespace com::sun::star;
 
 namespace
@@ -58,11 +54,11 @@ OUString getDigestURI(sal_Int32 nID)
 {
     switch( nID )
     {
-        case cssxc::DigestID::SHA1:
+        case css::xml::crypto::DigestID::SHA1:
             return OUString(ALGO_XMLDSIGSHA1);
-        case cssxc::DigestID::SHA256:
+        case css::xml::crypto::DigestID::SHA256:
             return OUString(ALGO_XMLDSIGSHA256);
-        case cssxc::DigestID::SHA512:
+        case css::xml::crypto::DigestID::SHA512:
             return OUString(ALGO_XMLDSIGSHA512);
         default:
             return OUString(ALGO_XMLDSIGSHA1);
@@ -72,11 +68,11 @@ OUString getSignatureURI(sal_Int32 nID)
 {
     switch( nID )
     {
-        case cssxc::DigestID::SHA1:
+        case css::xml::crypto::DigestID::SHA1:
             return OUString(ALGO_RSASHA1);
-        case cssxc::DigestID::SHA256:
+        case css::xml::crypto::DigestID::SHA256:
             return OUString(ALGO_RSASHA256);
-        case cssxc::DigestID::SHA512:
+        case css::xml::crypto::DigestID::SHA512:
             return OUString(ALGO_RSASHA512);
         default:
             return OUString(ALGO_RSASHA1);
@@ -84,7 +80,7 @@ OUString getSignatureURI(sal_Int32 nID)
 }
 }
 
-XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
+XSecController::XSecController( const css::uno::Reference<css::uno::XComponentContext>& rxCtx )
     : mxCtx(rxCtx)
     , m_nNextSecurityId(1)
     , m_bIsPreviousNodeInitializable(false)
@@ -159,15 +155,15 @@ void XSecController::createXSecComponent( )
     m_xXMLDocumentWrapper = nullptr;
     m_xSAXEventKeeper = nullptr;
 
-    cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
+    css::uno::Reference< css::lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
 #if HAVE_FEATURE_GPGME
-    uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, cssu::UNO_QUERY );
+    uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, css::uno::UNO_QUERY );
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
         m_xXMLSignature.set(new XMLSignature_GpgImpl());
     else // xmlsec or mscrypt
 #endif
-        m_xXMLSignature.set(xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx), cssu::UNO_QUERY);
+        m_xXMLSignature.set(xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx), css::uno::UNO_QUERY);
 
     bool bSuccess = m_xXMLSignature.is();
     if ( bSuccess )
@@ -187,11 +183,11 @@ void XSecController::createXSecComponent( )
      * SAXEventKeeper created successfully.
      */
     {
-        cssu::Sequence <cssu::Any> arg(1);
+        css::uno::Sequence <css::uno::Any> arg(1);
         arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
         m_xSAXEventKeeper->initialize(arg);
 
-        cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >
+        css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >
             xStatusChangeListener = this;
 
         m_xSAXEventKeeper->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
@@ -254,7 +250,7 @@ bool XSecController::chainOn()
              */
             m_xSAXEventKeeper->setNextHandler( nullptr );
 
-            cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
+            css::uno::Reference< css::xml::sax::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), css::uno::UNO_QUERY);
 
             /*
              * connects the previous document handler on the SAX chain
@@ -263,17 +259,17 @@ bool XSecController::chainOn()
             {
                 if ( m_bIsPreviousNodeInitializable )
                 {
-                    cssu::Reference< cssl::XInitialization > xInitialization
-                        (m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
+                    css::uno::Reference< css::lang::XInitialization > xInitialization
+                        (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-                    cssu::Sequence<cssu::Any> aArgs( 1 );
+                    css::uno::Sequence<css::uno::Any> aArgs( 1 );
                     aArgs[0] <<= xSEKHandler;
                     xInitialization->initialize(aArgs);
                 }
                 else
                 {
-                    cssu::Reference< cssxs::XParser > xParser
-                        (m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
+                    css::uno::Reference< css::xml::sax::XParser > xParser
+                        (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
                     xParser->setDocumentHandler( xSEKHandler );
                 }
             }
@@ -309,16 +305,16 @@ void XSecController::chainOff()
             {
                 if ( m_bIsPreviousNodeInitializable )
                 {
-                    cssu::Reference< cssl::XInitialization > xInitialization
-                        (m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
+                    css::uno::Reference< css::lang::XInitialization > xInitialization
+                        (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-                    cssu::Sequence<cssu::Any> aArgs( 1 );
+                    css::uno::Sequence<css::uno::Any> aArgs( 1 );
                     aArgs[0] <<= uno::Reference<xml::sax::XDocumentHandler>();
                     xInitialization->initialize(aArgs);
                 }
                 else
                 {
-                    cssu::Reference< cssxs::XParser > xParser(m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
+                    css::uno::Reference< css::xml::sax::XParser > xParser(m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
                     xParser->setDocumentHandler(uno::Reference<xml::sax::XDocumentHandler>());
                 }
             }
@@ -375,7 +371,7 @@ void XSecController::initializeSAXChain()
     chainOff();
 }
 
-cssu::Reference< css::io::XInputStream >
+css::uno::Reference< css::io::XInputStream >
     XSecController::getObjectInputStream( const OUString& objectURL )
 /****** XSecController/getObjectInputStream ************************************
  *
@@ -392,7 +388,7 @@ cssu::Reference< css::io::XInputStream >
  *  xInputStream - the XInputStream interface
  ******************************************************************************/
 {
-        cssu::Reference< css::io::XInputStream > xObjectInputStream;
+    css::uno::Reference< css::io::XInputStream > xObjectInputStream;
 
     SAL_WARN_IF( !m_xUriBinding.is(), "xmlsecurity.helper", "Need XUriBinding!" );
 
@@ -412,7 +408,7 @@ sal_Int32 XSecController::getNewSecurityId(  )
     return nId;
 }
 
-void XSecController::startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const cssu::Reference< cssxc::XXMLSecurityContext >& xSecurityContext )
+void XSecController::startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xSecurityContext )
 /****** XSecController/startMission *******************************************
  *
  *   NAME
@@ -438,7 +434,7 @@ void XSecController::startMission(const rtl::Reference<UriBindingHelper>& xUriBi
     m_bVerifyCurrentSignature = false;
 }
 
-void XSecController::setSAXChainConnector(const cssu::Reference< cssl::XInitialization >& xInitialization)
+void XSecController::setSAXChainConnector(const css::uno::Reference< css::lang::XInitialization >& xInitialization)
 /****** XSecController/setSAXChainConnector ***********************************
  *
  *   NAME
@@ -489,8 +485,8 @@ void XSecController::endMission()
          * ResolvedListener only exist when the security components are created.
          */
         {
-            cssu::Reference< cssxc::sax::XMissionTaker > xMissionTaker
-                ( m_vInternalSignatureInformations[i].xReferenceResolvedListener, cssu::UNO_QUERY );
+            css::uno::Reference< css::xml::crypto::sax::XMissionTaker > xMissionTaker
+                ( m_vInternalSignatureInformations[i].xReferenceResolvedListener, css::uno::UNO_QUERY );
 
             /*
              * asks the SignatureCreator/SignatureVerifier to release
@@ -549,7 +545,7 @@ void writeUnsignedProperties(
 }
 
 void XSecController::exportSignature(
-    const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
+    const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
     const SignatureInformation& signatureInfo,
     bool bXAdESCompliantIfODF )
 /****** XSecController/exportSignature ****************************************
@@ -583,19 +579,19 @@ void XSecController::exportSignature(
             signatureInfo.ouSignatureId);
     }
 
-    xDocumentHandler->startElement( "Signature", cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+    xDocumentHandler->startElement( "Signature", css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
     {
         /* Write SignedInfo element */
         xDocumentHandler->startElement(
             "SignedInfo",
-            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
         {
             /* Write CanonicalizationMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
                 "Algorithm",
                 ALGO_C14N);
-            xDocumentHandler->startElement( "CanonicalizationMethod", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+            xDocumentHandler->startElement( "CanonicalizationMethod", css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( "CanonicalizationMethod" );
 
             /* Write SignatureMethod element */
@@ -609,7 +605,7 @@ void XSecController::exportSignature(
             pAttributeList->AddAttribute(
                 "Algorithm",
                 getSignatureURI(vReferenceInfors[0].nDigestID));
-            xDocumentHandler->startElement( "SignatureMethod", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+            xDocumentHandler->startElement( "SignatureMethod", css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( "SignatureMethod" );
 
             /* Write Reference element */
@@ -640,7 +636,7 @@ void XSecController::exportSignature(
                         "#" + refInfor.ouURI);
                 }
 
-                xDocumentHandler->startElement( "Reference", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+                xDocumentHandler->startElement( "Reference", css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList) );
                 {
                     /* Write Transforms element */
                     if (refInfor.nType == SignatureReferenceType::XMLSTREAM)
@@ -650,7 +646,7 @@ void XSecController::exportSignature(
                     {
                         xDocumentHandler->startElement(
                             "Transforms",
-                            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                         {
                             pAttributeList = new SvXMLAttributeList();
                             pAttributeList->AddAttribute(
@@ -658,7 +654,7 @@ void XSecController::exportSignature(
                                 ALGO_C14N);
                             xDocumentHandler->startElement(
                                 "Transform",
-                                cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+                                css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList) );
                             xDocumentHandler->endElement( "Transform" );
                         }
                         xDocumentHandler->endElement( "Transforms" );
@@ -671,13 +667,13 @@ void XSecController::exportSignature(
                         getDigestURI(refInfor.nDigestID));
                     xDocumentHandler->startElement(
                         "DigestMethod",
-                        cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
+                        css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList) );
                     xDocumentHandler->endElement( "DigestMethod" );
 
                     /* Write DigestValue element */
                     xDocumentHandler->startElement(
                         "DigestValue",
-                        cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                        css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( refInfor.ouDigestValue );
                     xDocumentHandler->endElement( "DigestValue" );
                 }
@@ -689,14 +685,14 @@ void XSecController::exportSignature(
         /* Write SignatureValue element */
         xDocumentHandler->startElement(
             "SignatureValue",
-            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
         xDocumentHandler->characters( signatureInfo.ouSignatureValue );
         xDocumentHandler->endElement( "SignatureValue" );
 
         /* Write KeyInfo element */
         xDocumentHandler->startElement(
             "KeyInfo",
-            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
         {
             // GPG or X509 key?
             if (!signatureInfo.ouGpgCertificate.isEmpty())
@@ -706,12 +702,12 @@ void XSecController::exportSignature(
                 /* Write PGPData element */
                 xDocumentHandler->startElement(
                     "PGPData",
-                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+                    css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
                 {
                     /* Write keyid element */
                     xDocumentHandler->startElement(
                         "PGPKeyID",
-                        cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                        css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouCertDigest );
                     xDocumentHandler->endElement( "PGPKeyID" );
 
@@ -720,7 +716,7 @@ void XSecController::exportSignature(
                     {
                         xDocumentHandler->startElement(
                             "PGPKeyPacket",
-                            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                         xDocumentHandler->characters( signatureInfo.ouGpgCertificate );
                         xDocumentHandler->endElement( "PGPKeyPacket" );
                     }
@@ -728,7 +724,7 @@ void XSecController::exportSignature(
                     /* Write PGPOwner element */
                     xDocumentHandler->startElement(
                         "loext:PGPOwner",
-                        cssu::Reference< cssxs::XAttributeList >(new SvXMLAttributeList()));
+                        css::uno::Reference< css::xml::sax::XAttributeList >(new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouGpgOwner );
                     xDocumentHandler->endElement( "loext:PGPOwner" );
                 }
@@ -739,24 +735,24 @@ void XSecController::exportSignature(
                 /* Write X509Data element */
                 xDocumentHandler->startElement(
                     "X509Data",
-                    cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                    css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                 {
                     /* Write X509IssuerSerial element */
                     xDocumentHandler->startElement(
                         "X509IssuerSerial",
-                        cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                        css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                     {
                         /* Write X509IssuerName element */
                         xDocumentHandler->startElement(
                             "X509IssuerName",
-                            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                         xDocumentHandler->characters( signatureInfo.ouX509IssuerName );
                         xDocumentHandler->endElement( "X509IssuerName" );
 
                         /* Write X509SerialNumber element */
                         xDocumentHandler->startElement(
                             "X509SerialNumber",
-                            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                         xDocumentHandler->characters( signatureInfo.ouX509SerialNumber );
                         xDocumentHandler->endElement( "X509SerialNumber" );
                     }
@@ -767,7 +763,7 @@ void XSecController::exportSignature(
                     {
                         xDocumentHandler->startElement(
                             "X509Certificate",
-                            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                         xDocumentHandler->characters( signatureInfo.ouX509Certificate );
                         xDocumentHandler->endElement( "X509Certificate" );
                     }
@@ -782,12 +778,12 @@ void XSecController::exportSignature(
         /* Write Object element */
         xDocumentHandler->startElement(
             "Object",
-            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
         {
             /* Write SignatureProperties element */
             xDocumentHandler->startElement(
                 "SignatureProperties",
-                cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
             {
                 /* Write SignatureProperty element */
                 pAttributeList = new SvXMLAttributeList();
@@ -799,7 +795,7 @@ void XSecController::exportSignature(
                     "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     "SignatureProperty",
-                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+                    css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
                 {
                     /* Write timestamp element */
 
@@ -810,7 +806,7 @@ void XSecController::exportSignature(
 
                     xDocumentHandler->startElement(
                         "dc:date",
-                        cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+                        css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
 
                     OUStringBuffer buffer;
                     //If the xml signature was already contained in the document,
@@ -868,13 +864,13 @@ void XSecController::exportSignature(
             pAttributeList->AddAttribute("xmlns:xd", NS_XD);
             xDocumentHandler->startElement(
                 "Object",
-                cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+                css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
             {
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute("Target", "#" + signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     "xd:QualifyingProperties",
-                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+                    css::uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
                 DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate);
                 writeUnsignedProperties(xDocumentHandler, signatureInfo);
                 xDocumentHandler->endElement( "xd:QualifyingProperties" );
