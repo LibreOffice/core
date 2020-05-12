@@ -640,7 +640,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
     case XML_STYLE_FAMILY_SCH_CHART_ID:
         if( ! mxChartImpPropMapper.is() )
         {
-            XMLPropertySetMapper *pPropMapper = new XMLChartPropertySetMapper( false );
+            XMLPropertySetMapper *const pPropMapper = new XMLChartPropertySetMapper(nullptr);
             mxChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper, GetImport() );
         }
         xMapper = mxChartImpPropMapper;
