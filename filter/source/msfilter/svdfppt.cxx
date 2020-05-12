@@ -105,6 +105,7 @@
 #include <svx/sxekitm.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/UnitConversion.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/brushitem.hxx>
@@ -6316,13 +6317,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     sal_uInt32 nLatestManTab = 0;
     GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs2, nDestinationInstance );
     GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
-    GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
     GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
+
     SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
     if ( GetTabCount() )
     {
-        //paragraph offset = MIN(first_line_offset, hanging_offset)
-        sal_uInt32 nParaOffset = std::min(nTextOfs2, nTab);
         for ( i = 0; i < GetTabCount(); i++ )
         {
             SvxTabAdjust eTabAdjust;
@@ -6334,8 +6333,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                 case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
                 default :   eTabAdjust = SvxTabAdjust::Left;
             }
-            if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
-                aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );
+            aTabItem.Insert(SvxTabStop(convertMasterUnitToTwip(nTab), eTabAdjust));
         }
         nLatestManTab = nTab;
     }
@@ -6348,7 +6346,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         nTab = nDefaultTab * ( 1 + nTab );
         for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
         {
-            aTabItem.Insert( SvxTabStop( static_cast<sal_uInt16>( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
+            aTabItem.Insert( SvxTabStop( convertMasterUnitToTwip(nTab)));
             nTab += nDefaultTab;
         }
     }

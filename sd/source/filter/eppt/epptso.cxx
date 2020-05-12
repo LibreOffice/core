@@ -29,6 +29,7 @@
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/UnitConversion.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <editeng/svxenum.hxx>
@@ -1180,7 +1181,6 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         pPara = aTextObj.GetParagraph(0);
         sal_uInt32  nParaFlags = 0x1f;
         sal_Int16   nMask, nNumberingRule[ 10 ];
-        const sal_uInt32  nTextOfs = pPara->nTextOfs;
         const sal_uInt32  nTabs = pPara->maTabStop.getLength();
         const auto& rTabStops = pPara->maTabStop;
 
@@ -1219,7 +1219,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
         sal_uInt32  nDefaultTabs = std::abs( maRect.GetWidth() ) / nDefaultTabSize;
         if ( nTabs )
-            nDefaultTabs -= static_cast<sal_Int32>( ( ( rTabStops[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
+            nDefaultTabs -= static_cast<sal_Int32>( convertTwipToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
         if ( static_cast<sal_Int32>(nDefaultTabs) < 0 )
             nDefaultTabs = 0;
 
@@ -1248,7 +1248,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 pRuleOut->WriteUInt16( nTabCount );
                 for ( const css::style::TabStop& rTabStop : rTabStops )
                 {
-                    sal_uInt16 nPosition = static_cast<sal_uInt16>( ( rTabStop.Position / 4.40972 ) + nTextOfs );
+                    sal_uInt16 nPosition = static_cast<sal_uInt16>( convertTwipToMasterUnit(rTabStop.Position) );
                     sal_uInt16 nType;
                     switch ( rTabStop.Alignment )
                     {
@@ -1265,7 +1265,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
                 sal_uInt32 nWidth = 1;
                 if ( nTabs )
-                    nWidth += static_cast<sal_Int32>( ( rTabStops[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
+                    nWidth += static_cast<sal_Int32>( convertTwipToMasterUnit(rTabStops[ nTabs - 1 ].Position) / nDefaultTabSize );
                 nWidth *= nDefaultTabSize;
                 for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                     pRuleOut->WriteUInt32( nWidth );
