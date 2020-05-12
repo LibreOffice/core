@@ -552,8 +552,6 @@ namespace drawinglayer::primitive2d
             if(rContent.empty())
                 return rContent;
             Primitive2DContainer aRetval(2);
-            const uno::Sequence< beans::PropertyValue > xViewParameters;
-            geometry::ViewInformation2D aViewInformation2D(xViewParameters);
             aRetval[0] = Primitive2DReference(
                 new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), rContent));
             aRetval[1] = Primitive2DReference(new GroupPrimitive2D(rContent));
