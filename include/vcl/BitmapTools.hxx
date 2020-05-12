@@ -20,6 +20,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <o3tl/safeint.hxx>
 #include <array>
+#include <vcl/RawBitmap.hxx>
 
 class SvStream;
 namespace basegfx { class B2DHomMatrix; }
@@ -34,54 +35,6 @@ lookup_table VCL_DLLPUBLIC get_unpremultiply_table();
 
 sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
-
-/**
- * Intended to be used to feed into CreateFromData to create a BitmapEx. RGB data format.
- */
-class VCL_DLLPUBLIC RawBitmap
-{
-friend BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap&& rawBitmap );
-    std::unique_ptr<sal_uInt8[]> mpData;
-    Size maSize;
-    sal_uInt8 mnBitCount;
-public:
-    RawBitmap(Size const & rSize, sal_uInt8 nBitCount)
-        : maSize(rSize),
-          mnBitCount(nBitCount)
-    {
-        assert(nBitCount == 24 || nBitCount == 32);
-        sal_Int32 nRowSize, nDataSize;
-        if (o3tl::checked_multiply<sal_Int32>(rSize.getWidth(), nBitCount/8, nRowSize) ||
-            o3tl::checked_multiply<sal_Int32>(nRowSize, rSize.getHeight(), nDataSize) ||
-            nDataSize < 0)
-        {
-            throw std::bad_alloc();
-        }
-        mpData.reset(new sal_uInt8[nDataSize]);
-    }
-    void SetPixel(long nY, long nX, Color nColor)
-    {
-        long p = (nY * maSize.getWidth() + nX) * (mnBitCount/8);
-        mpData[ p++ ] = nColor.GetRed();
-        mpData[ p++ ] = nColor.GetGreen();
-        mpData[ p++ ] = nColor.GetBlue();
-        if (mnBitCount == 32)
-            mpData[ p ] = nColor.GetTransparency();
-    }
-    Color GetPixel(long nY, long nX) const
-    {
-        long p = (nY * maSize.getWidth() + nX) * mnBitCount/8;
-        if (mnBitCount == 24)
-            return Color( mpData[p], mpData[p+1], mpData[p+2]);
-        else
-            return Color( mpData[p+3], mpData[p], mpData[p+1], mpData[p+2]);
-    }
-    // so we don't accidentally leave any code in that uses palette color indexes
-    void SetPixel(long nY, long nX, BitmapColor nColor) = delete;
-    long Height() { return maSize.Height(); }
-    long Width() { return maSize.Width(); }
-    sal_uInt8 GetBitCount() const { return mnBitCount; }
-};
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
