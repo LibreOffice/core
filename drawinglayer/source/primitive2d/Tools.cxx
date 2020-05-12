@@ -230,6 +230,8 @@ OUString idToString(sal_uInt32 nId)
             return "PAGEHIERARCHY";
         case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
             return "GLOWPRIMITIVE";
+        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+            return "SOFTEDGEPRIMITIVE";
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

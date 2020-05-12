@@ -115,6 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/sceneprimitive2d \
     drawinglayer/source/primitive2d/sdrdecompositiontools2d \
     drawinglayer/source/primitive2d/shadowprimitive2d \
+    drawinglayer/source/primitive2d/softedgeprimitive2d \
     drawinglayer/source/primitive2d/structuretagprimitive2d \
     drawinglayer/source/primitive2d/svggradientprimitive2d \
     drawinglayer/source/primitive2d/textbreakuphelper \
