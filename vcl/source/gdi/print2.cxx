@@ -761,7 +761,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                                      const Color& rBackground
                                                      )
 {
-    MetaAction*             pCurrAct = nullptr;;
+    MetaAction*             pCurrAct = nullptr;
     bool                    bTransparent( false );
 
     rOutMtf.Clear();
