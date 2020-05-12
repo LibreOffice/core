@@ -5089,6 +5089,28 @@ public:
     virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
+class GtkInstancePaned : public GtkInstanceContainer, public virtual weld::Paned
+{
+private:
+    GtkPaned* m_pPaned;
+public:
+    GtkInstancePaned(GtkPaned* pPaned, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pPaned), pBuilder, bTakeOwnership)
+        , m_pPaned(pPaned)
+    {
+    }
+
+    virtual void set_position(int nPos) override
+    {
+        gtk_paned_set_position(m_pPaned, nPos);
+    }
+
+    virtual int get_position() const override
+    {
+        return gtk_paned_get_position(m_pPaned);
+    }
+};
+
 }
 
 static GType crippled_viewport_get_type();
@@ -15241,6 +15263,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pBox));
         return std::make_unique<GtkInstanceBox>(pBox, this, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Paned> weld_paned(const OString &id, bool bTakeOwnership) override
+    {
+        GtkPaned* pPaned = GTK_PANED(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pPaned)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pPaned));
+        return std::make_unique<GtkInstancePaned>(pPaned, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString &id, bool bTakeOwnership) override

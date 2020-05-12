@@ -42,6 +42,9 @@ public:
     virtual std::unique_ptr<weld::Box> weld_box(const OString& id,
                                                 bool bTakeOwnership = false) override;
 
+    virtual std::unique_ptr<weld::Paned> weld_paned(const OString& id,
+                                                    bool bTakeOwnership = false) override;
+
     virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id,
                                                     bool bTakeOwnership = false) override;
 

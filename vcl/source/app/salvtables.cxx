@@ -1869,6 +1869,29 @@ public:
     virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
+class SalInstancePaned : public SalInstanceContainer, public virtual weld::Paned
+{
+private:
+    VclPtr<VclPaned> m_xPaned;
+
+public:
+    SalInstancePaned(VclPaned* pPaned, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pPaned, pBuilder, bTakeOwnership)
+        , m_xPaned(pPaned)
+    {
+    }
+
+    virtual void set_position(int nPos) override
+    {
+        m_xPaned->set_position(nPos);
+    }
+
+    virtual int get_position() const override
+    {
+        return m_xPaned->get_position();
+    }
+};
+
 class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow
 {
 private:
@@ -6509,6 +6532,14 @@ std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id, bool 
     vcl::Window* pContainer = m_xBuilder->get(id);
     return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership)
                       : nullptr;
+}
+
+std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OString& id,
+                                                            bool bTakeOwnership)
+{
+    VclPaned* pPaned = m_xBuilder->get<VclPaned>(id);
+    return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, bTakeOwnership)
+                  : nullptr;
 }
 
 std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id, bool bTakeOwnership)
