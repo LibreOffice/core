@@ -752,6 +752,23 @@ void SetBackgroundColorAndBounds(ConnectedComponents& rBackgroundComponent, Colo
     }
 }
 
+int DetectBackground(ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct,
+        Color const & rBackgroundColor, tools::Rectangle const& rRectBounds,
+        GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev,
+        sal_uInt32 nDPIX, sal_uInt32 nDPIY)
+{
+    RecordMapModeChanges(pMapModeVDev, nDPIX, nDPIY);
+
+    // weed out page-filling background objects (if they are
+    // uniformly coloured). Keeping them outside the other
+    // connected components often prevents whole-page bitmap
+    // generation.
+    SetBackgroundColorAndBounds(rBackgroundComponent, rBackgroundColor, rRectBounds);
+    int nLastBgAction = FindIncompletelyOccludedBackground(rBackgroundComponent, rMtf, pMapModeVDev);
+    int nActionNum = GetActionAfterBackgroundAction(rBackgroundComponent, pCurrAct, rMtf, nLastBgAction, pMapModeVDev);
+    return nActionNum;
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -807,19 +824,15 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         // create an OutputDevice to record mapmode changes and the like
         ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
-        RecordMapModeChanges(aMapModeVDev.get(), mnDPIX, mnDPIY);
 
         // Receives uniform background content, and is _not_ merged
         // nor checked for intersection against other aCCList elements
         ConnectedComponents aBackgroundComponent;
 
-        // weed out page-filling background objects (if they are
-        // uniformly coloured). Keeping them outside the other
-        // connected components often prevents whole-page bitmap
-        // generation.
-        SetBackgroundColorAndBounds(aBackgroundComponent, rBackground, GetBackgroundComponentBounds());
-        int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
-        int nActionNum = GetActionAfterBackgroundAction(aBackgroundComponent, pCurrAct, rInMtf, nLastBgAction, aMapModeVDev.get());
+        int nActionNum = DetectBackground(aBackgroundComponent, pCurrAct,
+                                rBackground, GetBackgroundComponentBounds(),
+                                rInMtf, aMapModeVDev.get(),
+                                mnDPIX, mnDPIY);
 
         //  STAGE 2: Generate connected components list
 
