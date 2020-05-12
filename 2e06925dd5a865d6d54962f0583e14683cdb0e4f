@@ -196,6 +196,24 @@
       "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b1799d8_90c76733",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-05-12T14:42:51Z",
+      "side": 1,
+      "message": "\u003e Which leaves the question how --with-lang\u003d... builds should locate the langpacks when executing LO during the build\n\nJust like now, those langpacks will continue to be in instdir (and in the installation directory, when such a build is installed).",
+      "parentUuid": "0cc2ed99_4e20f613",
+      "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
