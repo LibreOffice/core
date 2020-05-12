@@ -52,12 +52,403 @@ struct ConnectedComponents
         bIsFullyTransparent(false)
     {}
 
+    int DetectBackground(MetaAction* pCurrAct, Color const & rBackgroundColor, tools::Rectangle const& rRectBounds,
+                          GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uInt32 nDPIY);
+    int GenerateConnectedComponents(::std::vector< ConnectedComponents >& rConnectedComponents,
+                          MetaAction* pCurrAct, GDIMetaFile const & rMtf, VirtualDevice *pMapModeVDev);
+    bool GenerateIntersectingConnectedComponents(::std::vector< ConnectedComponents >& rConnectedComponents,
+                          tools::Rectangle & rTotalBounds, bool bTreatSpecial);
+    void SetComponentsSizeAndColor(tools::Rectangle const & rRect, Color const& rColor);
+    bool DoesRectCoverWithUniformColor(tools::Rectangle const & rCurrRect, VirtualDevice const * pMapModeVDev);
+    int FindIncompletelyOccludedBackground(GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev);
+    int GetActionAfterBackgroundAction(MetaAction* pCurrAct, GDIMetaFile const & rMtf, int nLastBgAction,
+                                        VirtualDevice* const pMapModeVDev);
+    void SetBackgroundColorAndBounds(Color const & rBackground, tools::Rectangle const& rBounds);
+
     ::std::list< Component > aComponentList;
-    tools::Rectangle       aBounds;
-    Color           aBgColor;
-    bool            bIsSpecial;
-    bool            bIsFullyTransparent;
+    tools::Rectangle aBounds;
+    Color aBgColor;
+    bool bIsSpecial;
+    bool bIsFullyTransparent;
 };
+
+void RecordMapModeChanges(VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uInt32 nDPIY);
+tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice& rOut);
+bool ImplIsNotTransparent(const MetaAction& rAct, const OutputDevice& rOut);
+bool DoesActionHandleTransparency(const MetaAction& rAct);
+
+int ConnectedComponents::DetectBackground(MetaAction* pCurrAct,
+                                           Color const & rBackgroundColor, tools::Rectangle const& rRectBounds,
+                                           GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev,
+                                           sal_uInt32 nDPIX, sal_uInt32 nDPIY)
+{
+    RecordMapModeChanges(pMapModeVDev, nDPIX, nDPIY);
+
+    // weed out page-filling background objects (if they are
+    // uniformly coloured). Keeping them outside the other
+    // connected components often prevents whole-page bitmap
+    // generation.
+    SetBackgroundColorAndBounds(rBackgroundColor, rRectBounds);
+    int nLastBgAction = FindIncompletelyOccludedBackground(rMtf, pMapModeVDev);
+    return GetActionAfterBackgroundAction(pCurrAct, rMtf, nLastBgAction, pMapModeVDev);
+}
+
+int ConnectedComponents::GenerateConnectedComponents(::std::vector< ConnectedComponents >& rConnectedComponents,
+        MetaAction* pCurrAct, GDIMetaFile const & rMtf, VirtualDevice *pMapModeVDev)
+{
+    int nActionNum = 0;
+
+    // iterate over all actions (start where background action search left off)
+    for( ;
+         pCurrAct;
+         pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction(), ++nActionNum )
+    {
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+
+        // cache bounds of current action
+        const tools::Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, *pMapModeVDev) );
+
+        // accumulate collected bounds here, initialize with current action
+        tools::Rectangle aTotalBounds( aBBCurrAct ); // thus, aTotalComponents.aBounds is empty for
+                                                     // non-output-generating actions
+        bool bTreatSpecial( false );
+        ConnectedComponents aTotalComponents;
+
+        //  STAGE 2.1: Search for intersecting cc entries
+
+        // if aBBCurrAct is empty, it will intersect with no
+        // rConnectedComponentst member. Thus, we can save the check.
+        // Furthermore, this ensures that non-output-generating
+        // actions get their own rConnectedComponents entry, which is necessary
+        // when copying them to the output metafile (see stage 4
+        // below).
+
+        // #107169# Wholly transparent objects need
+        // not be considered for connected components,
+        // too. Just put each of them into a separate
+        // component.
+        aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, *pMapModeVDev);
+
+        if( !aBBCurrAct.IsEmpty() &&
+            !aTotalComponents.bIsFullyTransparent )
+        {
+            if( !aComponentList.empty() && !aBounds.IsInside(aTotalBounds) )
+            {
+                // it seems the background is not large enough. to
+                // be on the safe side, combine with this component.
+                aTotalBounds.Union(aBounds);
+
+                // extract all aCurr actions to aTotalComponents
+                aTotalComponents.aComponentList.splice(aTotalComponents.aComponentList.end(),
+                                                       aComponentList);
+
+                if (bIsSpecial)
+                    bTreatSpecial = true;
+            }
+
+            bTreatSpecial = aTotalComponents.GenerateIntersectingConnectedComponents(rConnectedComponents, aTotalBounds, bTreatSpecial);
+        }
+
+        //  STAGE 2.2: Determine special state for cc element
+
+        // now test whether the whole connected component must be
+        // treated specially (i.e. rendered as a bitmap): if the
+        // added action is the very first action, or all actions
+        // before it are completely transparent, the connected
+        // component need not be treated specially, not even if
+        // the added action contains transparency. This is because
+        // painting of transparent objects on _white background_
+        // works without alpha compositing (you just calculate the
+        // color). Note that for the test "all objects before me
+        // are transparent" no sorting is necessary, since the
+        // added metaaction pCurrAct is always in the order the
+        // metafile is painted. Generally, the order of the
+        // metaactions in the ConnectedComponents are not
+        // guaranteed to be the same as in the metafile.
+        if( bTreatSpecial )
+        {
+            // prev component(s) special -> this one, too
+            aTotalComponents.bIsSpecial = true;
+        }
+        else if(!pCurrAct->IsTransparent())
+        {
+            // added action and none of prev components special ->
+            // this one normal, too
+            aTotalComponents.bIsSpecial = false;
+        }
+        else
+        {
+            // added action is special and none of prev components
+            // special -> do the detailed tests
+
+            // can the action handle transparency correctly
+            // (i.e. when painted on white background, does the
+            // action still look correct)?
+            if( !DoesActionHandleTransparency( *pCurrAct ) )
+            {
+                // no, action cannot handle its transparency on
+                // a printer device, render to bitmap
+                aTotalComponents.bIsSpecial = true;
+            }
+            else
+            {
+                // yes, action can handle its transparency, so
+                // check whether we're on white background
+                if( aTotalComponents.aComponentList.empty() )
+                {
+                    // nothing between pCurrAct and page
+                    // background -> don't be special
+                    aTotalComponents.bIsSpecial = false;
+                }
+                else
+                {
+                    // #107169# Fixes above now ensure that _no_
+                    // object in the list is fully transparent. Thus,
+                    // if the component list is not empty above, we
+                    // must assume that we have to treat this
+                    // component special.
+
+                    // there are non-transparent objects between
+                    // pCurrAct and the empty sheet of paper -> be
+                    // special, then
+                    aTotalComponents.bIsSpecial = true;
+                }
+            }
+        }
+
+        //  STAGE 2.3: Add newly generated CC list element
+
+        // set new bounds and add action to list
+        aTotalComponents.aBounds = aTotalBounds;
+        aTotalComponents.aComponentList.emplace_back(
+                pCurrAct, nActionNum );
+
+        // add aTotalComponents as a new entry to rConnectedComponents
+        rConnectedComponents.push_back( aTotalComponents );
+
+        SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
+                    "Printer::GetPreparedMetaFile empty component" );
+        SAL_WARN_IF( aTotalComponents.aBounds.IsEmpty() && (aTotalComponents.aComponentList.size() != 1), "vcl",
+                    "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
+        SAL_WARN_IF( aTotalComponents.bIsFullyTransparent && (aTotalComponents.aComponentList.size() != 1), "vcl",
+                    "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
+    }
+
+    return nActionNum;
+}
+
+bool ConnectedComponents::GenerateIntersectingConnectedComponents(::std::vector< ConnectedComponents >& rConnectedComponents,
+                                                     tools::Rectangle & rTotalBounds, bool bTreatSpecial)
+{
+    bool bSomeComponentsChanged;
+    // now, this is unfortunate: since changing anyone of
+    // the aConnectedComponents elements (e.g. by merging or addition
+    // of an action) might generate new intersection with
+    // other aConnectedComponents elements, have to repeat the whole
+    // element scanning, until nothing changes anymore.
+    // Thus, this loop here makes us O(n^3) in the worst
+    // case.
+    do
+    {
+        // only loop here if 'intersects' branch below was hit
+        bSomeComponentsChanged = false;
+
+        // iterate over all current members of aConnectedComponents
+        for( auto aCurrCC=rConnectedComponents.begin(); aCurrCC != rConnectedComponents.end(); )
+        {
+            // first check if current element's bounds are
+            // empty. This ensures that empty actions are not
+            // merged into one component, as a matter of fact,
+            // they have no position.
+
+            // #107169# Wholly transparent objects need
+            // not be considered for connected components,
+            // too. Just put each of them into a separate
+            // component.
+            if( !aCurrCC->aBounds.IsEmpty() &&
+                !aCurrCC->bIsFullyTransparent &&
+                aCurrCC->aBounds.IsOver(rTotalBounds))
+            {
+                // union the intersecting aConnectedComponents element into aTotalComponents
+
+                // calc union bounding box
+                rTotalBounds.Union( aCurrCC->aBounds );
+
+                // extract all aCurr actions to aTotalComponents
+                aComponentList.splice(aComponentList.end(),
+                                                       aCurrCC->aComponentList);
+
+                if (aCurrCC->bIsSpecial)
+                    bTreatSpecial = true;
+
+                // remove and delete aCurrCC element from list (we've now merged its content)
+                aCurrCC = rConnectedComponents.erase(aCurrCC);
+
+                // at least one component changed, need to rescan everything
+                bSomeComponentsChanged = true;
+            }
+            else
+            {
+                ++aCurrCC;
+            }
+        }
+    }
+    while(bSomeComponentsChanged);
+
+    return bTreatSpecial;
+}
+
+void ConnectedComponents::SetComponentsSizeAndColor(tools::Rectangle const & rRect, Color const& rColor)
+{
+    aBounds = rRect;
+    aBgColor = rColor;
+}
+
+bool ConnectedComponents::DoesRectCoverWithUniformColor(
+        tools::Rectangle const & rCurrRect,
+        VirtualDevice const * pMapModeVDev)
+{
+    // shape needs to fully cover previous content, and have uniform
+    // color
+    return (pMapModeVDev->LogicToPixel(rCurrRect).IsInside(aBounds) &&
+        pMapModeVDev->IsFillColor());
+}
+
+int ConnectedComponents::FindIncompletelyOccludedBackground(GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev)
+{
+    MetaAction* pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
+
+    int nActionNum = 0;
+    int nLastBgAction = -1;
+    bool bStillBackground=true; // true until first non-bg action
+
+    while( pCurrAct && bStillBackground )
+    {
+        switch( pCurrAct->GetType() )
+        {
+            case MetaActionType::RECT:
+            {
+                const tools::Rectangle aRect(
+                    static_cast<const MetaRectAction*>(pCurrAct)->GetRect());
+
+                if (!DoesRectCoverWithUniformColor(aRect, pMapModeVDev))
+                {
+                    SetComponentsSizeAndColor(aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::POLYGON:
+            {
+                const tools::Polygon aPoly(
+                    static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
+                const tools::Rectangle aRect(aPoly.GetBoundRect());
+
+                if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
+                    !DoesRectCoverWithUniformColor(aRect, pMapModeVDev))
+                {
+                    SetComponentsSizeAndColor(aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::POLYPOLYGON:
+            {
+                const tools::PolyPolygon aPoly(
+                    static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
+                const tools::Rectangle aRect(aPoly.GetBoundRect());
+
+                if (aPoly.Count() != 1 ||
+                    !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
+                    !DoesRectCoverWithUniformColor(aRect, pMapModeVDev))
+                {
+                    SetComponentsSizeAndColor(aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            case MetaActionType::WALLPAPER:
+            {
+                const tools::Rectangle aRect(
+                    static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect());
+
+                if (!DoesRectCoverWithUniformColor(aRect, pMapModeVDev))
+                {
+                    SetComponentsSizeAndColor(aRect, pMapModeVDev->GetFillColor());
+                    bStillBackground=false; // incomplete occlusion of background
+                }
+                else
+                {
+                    nLastBgAction=nActionNum; // this _is_ background
+                }
+                break;
+            }
+            default:
+            {
+                if (ImplIsNotTransparent( *pCurrAct, *pMapModeVDev))
+                    bStillBackground=false; // non-transparent action, possibly not uniform
+                else
+                    // extend current bounds (next uniform action needs to fully cover this area)
+                    aBounds.Union(ImplCalcActionBounds(*pCurrAct, *pMapModeVDev));
+                break;
+            }
+        }
+
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+
+        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
+        ++nActionNum;
+    }
+
+    return nLastBgAction;
+}
+
+int ConnectedComponents::GetActionAfterBackgroundAction(MetaAction* pCurrAct, GDIMetaFile const & rMtf, int nLastBgAction,
+                                                        VirtualDevice* const pMapModeVDev)
+{
+    pMapModeVDev->ClearStack(); // clean up pMapModeVDev
+
+    // fast-forward until one after the last background action
+    // (need to reconstruct map mode vdev state)
+    int nActionNum=0;
+    pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
+    while(pCurrAct && nActionNum <= nLastBgAction)
+    {
+        // up to and including last ink-generating background
+        // action go to background component
+        aComponentList.emplace_back(pCurrAct, nActionNum);
+
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
+        ++nActionNum;
+    }
+    
+    return nActionNum;
+}
+
+void ConnectedComponents::SetBackgroundColorAndBounds(Color const & rBackground, tools::Rectangle const& rBounds)
+{
+    if( rBackground != COL_TRANSPARENT )
+    {
+        aBgColor = rBackground;
+        aBounds = rBounds;
+    }
+}
 
 }
 
@@ -87,23 +478,6 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
         default:
             return false;
     }
-}
-
-bool doesRectCoverWithUniformColor(
-        tools::Rectangle const & rPrevRect,
-        tools::Rectangle const & rCurrRect,
-        VirtualDevice const * pMapModeVDev)
-{
-    // shape needs to fully cover previous content, and have uniform
-    // color
-    return (pMapModeVDev->LogicToPixel(rCurrRect).IsInside(rPrevRect) &&
-        pMapModeVDev->IsFillColor());
-}
-
-void setComponentsSizeAndColor(ConnectedComponents &rBackgroundComponent, tools::Rectangle const & rRect, Color const& rColor)
-{
-    rBackgroundComponent.aBounds = rRect;
-    rBackgroundComponent.aBgColor = rColor;
 }
 
 /** #107169# Convert BitmapEx to Bitmap with appropriately blended
@@ -609,369 +983,11 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         return tools::Rectangle();
 }
 
-int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent, GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev)
-{
-    MetaAction* pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
-
-    int nActionNum = 0;
-    int nLastBgAction = -1;
-    bool bStillBackground=true; // true until first non-bg action
-
-    while( pCurrAct && bStillBackground )
-    {
-        switch( pCurrAct->GetType() )
-        {
-            case MetaActionType::RECT:
-            {
-                const tools::Rectangle aRect(
-                    static_cast<const MetaRectAction*>(pCurrAct)->GetRect());
-
-                if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
-                {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
-                    bStillBackground=false; // incomplete occlusion of background
-                }
-                else
-                {
-                    nLastBgAction=nActionNum; // this _is_ background
-                }
-                break;
-            }
-            case MetaActionType::POLYGON:
-            {
-                const tools::Polygon aPoly(
-                    static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
-                const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
-                    !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
-                {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
-                    bStillBackground=false; // incomplete occlusion of background
-                }
-                else
-                {
-                    nLastBgAction=nActionNum; // this _is_ background
-                }
-                break;
-            }
-            case MetaActionType::POLYPOLYGON:
-            {
-                const tools::PolyPolygon aPoly(
-                    static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
-                const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                if (aPoly.Count() != 1 ||
-                    !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
-                    !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
-                {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
-                    bStillBackground=false; // incomplete occlusion of background
-                }
-                else
-                {
-                    nLastBgAction=nActionNum; // this _is_ background
-                }
-                break;
-            }
-            case MetaActionType::WALLPAPER:
-            {
-                const tools::Rectangle aRect(
-                    static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect());
-
-                if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
-                {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
-                    bStillBackground=false; // incomplete occlusion of background
-                }
-                else
-                {
-                    nLastBgAction=nActionNum; // this _is_ background
-                }
-                break;
-            }
-            default:
-            {
-                if (ImplIsNotTransparent( *pCurrAct, *pMapModeVDev))
-                    bStillBackground=false; // non-transparent action, possibly not uniform
-                else
-                    // extend current bounds (next uniform action needs to fully cover this area)
-                    rBackgroundComponent.aBounds.Union(ImplCalcActionBounds(*pCurrAct, *pMapModeVDev));
-                break;
-            }
-        }
-
-        // execute action to get correct MapModes etc.
-        pCurrAct->Execute(pMapModeVDev);
-
-        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
-        ++nActionNum;
-    }
-
-    return nLastBgAction;
-}
-
-int GetActionAfterBackgroundAction(ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct,
-                                   GDIMetaFile const & rMtf, int nLastBgAction,
-                                   VirtualDevice* const pMapModeVDev)
-{
-    pMapModeVDev->ClearStack(); // clean up pMapModeVDev
-
-    // fast-forward until one after the last background action
-    // (need to reconstruct map mode vdev state)
-    int nActionNum=0;
-    pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
-    while(pCurrAct && nActionNum <= nLastBgAction)
-    {
-        // up to and including last ink-generating background
-        // action go to background component
-        rBackgroundComponent.aComponentList.emplace_back(pCurrAct, nActionNum);
-
-        // execute action to get correct MapModes etc.
-        pCurrAct->Execute(pMapModeVDev);
-        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
-        ++nActionNum;
-    }
-
-    return nActionNum;
-}
-
 void RecordMapModeChanges(VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uInt32 nDPIY)
 {
     pMapModeVDev->SetDPIX(nDPIX);
     pMapModeVDev->SetDPIY(nDPIY);
     pMapModeVDev->EnableOutput(false);
-}
-
-void SetBackgroundColorAndBounds(ConnectedComponents& rBackgroundComponent, Color const & rBackground, tools::Rectangle const& rBounds)
-{
-    if( rBackground != COL_TRANSPARENT )
-    {
-        rBackgroundComponent.aBgColor = rBackground;
-        rBackgroundComponent.aBounds = rBounds;
-    }
-}
-
-int DetectBackground(ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct,
-        Color const & rBackgroundColor, tools::Rectangle const& rRectBounds,
-        GDIMetaFile const & rMtf, VirtualDevice* pMapModeVDev,
-        sal_uInt32 nDPIX, sal_uInt32 nDPIY)
-{
-    RecordMapModeChanges(pMapModeVDev, nDPIX, nDPIY);
-
-    // weed out page-filling background objects (if they are
-    // uniformly coloured). Keeping them outside the other
-    // connected components often prevents whole-page bitmap
-    // generation.
-    SetBackgroundColorAndBounds(rBackgroundComponent, rBackgroundColor, rRectBounds);
-    int nLastBgAction = FindIncompletelyOccludedBackground(rBackgroundComponent, rMtf, pMapModeVDev);
-    int nActionNum = GetActionAfterBackgroundAction(rBackgroundComponent, pCurrAct, rMtf, nLastBgAction, pMapModeVDev);
-    return nActionNum;
-}
-
-bool GenerateIntersectingConnectedComponents(::std::vector<ConnectedComponents>& rConnectedComponents,
-                                             ConnectedComponents& rTotalComponents,
-                                             tools::Rectangle & rTotalBounds, bool bTreatSpecial)
-{
-    bool bSomeComponentsChanged;
-    // now, this is unfortunate: since changing anyone of
-    // the aConnectedComponents elements (e.g. by merging or addition
-    // of an action) might generate new intersection with
-    // other aConnectedComponents elements, have to repeat the whole
-    // element scanning, until nothing changes anymore.
-    // Thus, this loop here makes us O(n^3) in the worst
-    // case.
-    do
-    {
-        // only loop here if 'intersects' branch below was hit
-        bSomeComponentsChanged = false;
-
-        // iterate over all current members of aConnectedComponents
-        for( auto aCurrCC=rConnectedComponents.begin(); aCurrCC != rConnectedComponents.end(); )
-        {
-            // first check if current element's bounds are
-            // empty. This ensures that empty actions are not
-            // merged into one component, as a matter of fact,
-            // they have no position.
-
-            // #107169# Wholly transparent objects need
-            // not be considered for connected components,
-            // too. Just put each of them into a separate
-            // component.
-            if( !aCurrCC->aBounds.IsEmpty() &&
-                !aCurrCC->bIsFullyTransparent &&
-                aCurrCC->aBounds.IsOver(rTotalBounds))
-            {
-                // union the intersecting aConnectedComponents element into aTotalComponents
-
-                // calc union bounding box
-                rTotalBounds.Union( aCurrCC->aBounds );
-
-                // extract all aCurr actions to aTotalComponents
-                rTotalComponents.aComponentList.splice(rTotalComponents.aComponentList.end(),
-                                                       aCurrCC->aComponentList);
-
-                if (aCurrCC->bIsSpecial)
-                    bTreatSpecial = true;
-
-                // remove and delete aCurrCC element from list (we've now merged its content)
-                aCurrCC = rConnectedComponents.erase(aCurrCC);
-
-                // at least one component changed, need to rescan everything
-                bSomeComponentsChanged = true;
-            }
-            else
-            {
-                ++aCurrCC;
-            }
-        }
-    }
-    while(bSomeComponentsChanged);
-
-    return bTreatSpecial;
-}
-
-int GenerateConnectedComponents(::std::vector<ConnectedComponents>& rConnectedComponents, ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct, int nActionNum, GDIMetaFile const & rMtf, VirtualDevice *pMapModeVDev)
-{
-    // iterate over all actions (start where background action search left off)
-    for( ;
-         pCurrAct;
-         pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction(), ++nActionNum )
-    {
-        // execute action to get correct MapModes etc.
-        pCurrAct->Execute(pMapModeVDev);
-
-        // cache bounds of current action
-        const tools::Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, *pMapModeVDev) );
-
-        // accumulate collected bounds here, initialize with current action
-        tools::Rectangle aTotalBounds( aBBCurrAct ); // thus, aTotalComponents.aBounds is empty for
-                                                     // non-output-generating actions
-        bool bTreatSpecial( false );
-        ConnectedComponents aTotalComponents;
-
-        //  STAGE 2.1: Search for intersecting cc entries
-
-        // if aBBCurrAct is empty, it will intersect with no
-        // rConnectedComponentst member. Thus, we can save the check.
-        // Furthermore, this ensures that non-output-generating
-        // actions get their own rConnectedComponents entry, which is necessary
-        // when copying them to the output metafile (see stage 4
-        // below).
-
-        // #107169# Wholly transparent objects need
-        // not be considered for connected components,
-        // too. Just put each of them into a separate
-        // component.
-        aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, *pMapModeVDev);
-
-        if( !aBBCurrAct.IsEmpty() &&
-            !aTotalComponents.bIsFullyTransparent )
-        {
-            if( !rBackgroundComponent.aComponentList.empty() &&
-                !rBackgroundComponent.aBounds.IsInside(aTotalBounds) )
-            {
-                // it seems the background is not large enough. to
-                // be on the safe side, combine with this component.
-                aTotalBounds.Union(rBackgroundComponent.aBounds);
-
-                // extract all aCurr actions to aTotalComponents
-                aTotalComponents.aComponentList.splice(aTotalComponents.aComponentList.end(),
-                                                       rBackgroundComponent.aComponentList);
-
-                if (rBackgroundComponent.bIsSpecial)
-                    bTreatSpecial = true;
-            }
-
-            bTreatSpecial = GenerateIntersectingConnectedComponents(rConnectedComponents, aTotalComponents, aTotalBounds, bTreatSpecial);
-        }
-
-        //  STAGE 2.2: Determine special state for cc element
-
-        // now test whether the whole connected component must be
-        // treated specially (i.e. rendered as a bitmap): if the
-        // added action is the very first action, or all actions
-        // before it are completely transparent, the connected
-        // component need not be treated specially, not even if
-        // the added action contains transparency. This is because
-        // painting of transparent objects on _white background_
-        // works without alpha compositing (you just calculate the
-        // color). Note that for the test "all objects before me
-        // are transparent" no sorting is necessary, since the
-        // added metaaction pCurrAct is always in the order the
-        // metafile is painted. Generally, the order of the
-        // metaactions in the ConnectedComponents are not
-        // guaranteed to be the same as in the metafile.
-        if( bTreatSpecial )
-        {
-            // prev component(s) special -> this one, too
-            aTotalComponents.bIsSpecial = true;
-        }
-        else if(!pCurrAct->IsTransparent())
-        {
-            // added action and none of prev components special ->
-            // this one normal, too
-            aTotalComponents.bIsSpecial = false;
-        }
-        else
-        {
-            // added action is special and none of prev components
-            // special -> do the detailed tests
-
-            // can the action handle transparency correctly
-            // (i.e. when painted on white background, does the
-            // action still look correct)?
-            if( !DoesActionHandleTransparency( *pCurrAct ) )
-            {
-                // no, action cannot handle its transparency on
-                // a printer device, render to bitmap
-                aTotalComponents.bIsSpecial = true;
-            }
-            else
-            {
-                // yes, action can handle its transparency, so
-                // check whether we're on white background
-                if( aTotalComponents.aComponentList.empty() )
-                {
-                    // nothing between pCurrAct and page
-                    // background -> don't be special
-                    aTotalComponents.bIsSpecial = false;
-                }
-                else
-                {
-                    // #107169# Fixes above now ensure that _no_
-                    // object in the list is fully transparent. Thus,
-                    // if the component list is not empty above, we
-                    // must assume that we have to treat this
-                    // component special.
-
-                    // there are non-transparent objects between
-                    // pCurrAct and the empty sheet of paper -> be
-                    // special, then
-                    aTotalComponents.bIsSpecial = true;
-                }
-            }
-        }
-
-        //  STAGE 2.3: Add newly generated CC list element
-
-        // set new bounds and add action to list
-        aTotalComponents.aBounds = aTotalBounds;
-        aTotalComponents.aComponentList.emplace_back(
-                pCurrAct, nActionNum );
-
-        // add aTotalComponents as a new entry to rConnectedComponents
-        rConnectedComponents.push_back( aTotalComponents );
-
-        SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
-                    "Printer::GetPreparedMetaFile empty component" );
-        SAL_WARN_IF( aTotalComponents.aBounds.IsEmpty() && (aTotalComponents.aComponentList.size() != 1), "vcl",
-                    "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
-        SAL_WARN_IF( aTotalComponents.bIsFullyTransparent && (aTotalComponents.aComponentList.size() != 1), "vcl",
-                    "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
-    }
-
-    return nActionNum;
 }
 
 } // end anon namespace
@@ -1033,16 +1049,13 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // Receives uniform background content, and is _not_ merged
         // nor checked for intersection against other aConnectedComponents elements
         ConnectedComponents aBackgroundComponent;
-
-        int nActionNum = DetectBackground(aBackgroundComponent, pCurrAct,
-                                rBackground, GetBackgroundComponentBounds(),
-                                rInMtf, aMapModeVDev.get(),
-                                mnDPIX, mnDPIY);
+        int nActionNum = aBackgroundComponent.DetectBackground(pCurrAct, rBackground, GetBackgroundComponentBounds(),
+                                              rInMtf, aMapModeVDev.get(), mnDPIX, mnDPIY);
 
         //  STAGE 2: Generate connected components list
 
-        ::std::vector<ConnectedComponents> aConnectedComponents; // contains distinct sets of connected components as elements.
-        nActionNum = GenerateConnectedComponents(aConnectedComponents, aBackgroundComponent, pCurrAct, nActionNum,rInMtf, aMapModeVDev.get());
+        ::std::vector< ConnectedComponents > aConnectedComponents; // list containing distinct sets of connected components as elements.
+        nActionNum = aBackgroundComponent.GenerateConnectedComponents(aConnectedComponents, pCurrAct, rInMtf, aMapModeVDev.get());
 
         // well now, we've got the list of disjunct connected
         // components. Now we've got to create a map, which contains
