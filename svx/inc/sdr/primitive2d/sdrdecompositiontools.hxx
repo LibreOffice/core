@@ -78,6 +78,10 @@ namespace drawinglayer
             const Primitive2DContainer& rContent,
             const attribute::SdrGlowAttribute& rGlow);
 
+        Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedSoftEdgePrimitive(
+            const Primitive2DContainer& rContent,
+            sal_Int32 nRadius);
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
