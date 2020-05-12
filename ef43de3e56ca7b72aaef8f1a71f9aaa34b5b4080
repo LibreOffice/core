@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10b22a97_4848f732",
+        "filename": "chart2/uiconfig/ui/tp_AxisPositions.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-12T15:56:56Z",
+      "side": 1,
+      "message": "RB_ON (ID of the first button)",
+      "range": {
+        "startLine": 192,
+        "startChar": 43,
+        "endLine": 192,
+        "endChar": 47
+      },
+      "revId": "ef43de3e56ca7b72aaef8f1a71f9aaa34b5b4080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
