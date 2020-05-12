@@ -366,7 +366,7 @@ public:
     virtual void                CopyArea( const Point& rDestPt, const Point& rSrcPt,
                                     const Size& rSrcSize, bool bWindowInvalidate = false ) override;
 
-    virtual tools::Rectangle    SetBackgroundComponentBounds() override;
+    virtual tools::Rectangle    GetBackgroundComponentBounds() const override;
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
     // by repeated calls to ExecutePrintJob(). Used by mailmerge.

@@ -559,7 +559,7 @@ protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
 
-    virtual tools::Rectangle    SetBackgroundComponentBounds();
+    virtual tools::Rectangle    GetBackgroundComponentBounds() const;
 
     virtual void                DrawOutDevDirectCheck( const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics );
 
