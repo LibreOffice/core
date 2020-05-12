@@ -351,7 +351,9 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
         nStart++; // Set behind found position
     }
 
-    return nStart;
+    // nStart > nStrLen can happen if there was an unclosed quote; instead of
+    // checking that in every loop iteration check it once here.
+    return std::min(nStart, nStrLen);
 }
 
 
