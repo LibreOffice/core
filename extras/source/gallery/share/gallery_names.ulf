@@ -10,26 +10,20 @@
 [arrows]
 en-US = "Arrows"
 
-[backgrounds]
-en-US = "Backgrounds"
+[bpmn]
+en-US = "BPMN"
 
-[computers]
-en-US = "Computers"
+[flowchart]
+en-US = "Flowchart"
 
 [diagrams]
 en-US = "Diagrams"
 
-[education]
-en-US = "School & University"
+[icons]
+en-US = "Icons"
 
-[environment]
-en-US = "Environment"
-
-[finance]
-en-US = "Finance"
-
-[people]
-en-US = "People"
+[network]
+en-US = "Network"
 
 [sounds]
 en-US = "Sounds"
@@ -37,10 +31,7 @@ en-US = "Sounds"
 [symbols]
 en-US = "Symbols"
 
-[txtshapes]
-en-US = "Text Shapes"
-
-[transportation]
-en-US = "Transportation"
+[shapes]
+en-US = "Shapes"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
