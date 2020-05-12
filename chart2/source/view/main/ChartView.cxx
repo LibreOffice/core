@@ -2233,12 +2233,13 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
     if (!VLegend::isVisible(xLegend))
         return false;
 
+    awt::Size rDefaultLegendSize;
     VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList,
             xPageShapes, xShapeFactory, rModel);
     aVLegend.setDefaultWritingMode( nDefaultWritingMode );
     aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
-                           rPageSize );
-    aVLegend.changePosition( rRemainingSpace, rPageSize );
+                           rPageSize, rDefaultLegendSize );
+    aVLegend.changePosition( rRemainingSpace, rPageSize, rDefaultLegendSize );
     return true;
 }
 
