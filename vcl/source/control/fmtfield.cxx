@@ -842,6 +842,11 @@ void FormattedField::SetValueFromString(const OUString& rStr)
         nEnd == rStr.getLength())
     {
         SetValue(fValue);
+        SetModifyFlag();
+        Modify();
+
+        // Notify the value has changed
+        SpinField::Up();
     }
     else
     {
