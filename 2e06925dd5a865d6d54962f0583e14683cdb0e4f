@@ -178,6 +178,24 @@
       "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc2ed99_4e20f613",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-12T10:42:05Z",
+      "side": 1,
+      "message": "For the various `make check` tests, UserInstallation (and thus $(userurl), IIUC) points into the workdir.\n\nWhich leaves the question how --with-lang\u003d... builds should locate the langpacks when executing LO during the build (which is important for e.g. `make screenshot`, which creates localized screenshots, but should presumably also affect other tests).\n\nI don\u0027t have a better solution for the root issue.  I just think that to meaningfully discuss changes like this (like whether an entry based on $(userurl) or $UserInstallation or $SYSUSERCONFIG, or no entry at all, is the best choice here), it is important to have a clear plan where exactly such langpacks will be installed on each platform, and which LO invocations are meant to see them.",
+      "parentUuid": "773730b8_a215558a",
+      "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
