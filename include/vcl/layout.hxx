@@ -386,7 +386,7 @@ public:
     virtual ~VclPaned() override;
     virtual void dispose() override;
     long get_position() const { return m_nPosition; }
-    void set_position(long nPosition) { m_nPosition = nPosition; }
+    virtual void set_position(long nPosition) { m_nPosition = nPosition; }
 };
 
 class VclVPaned final : public VclPaned
@@ -400,6 +400,7 @@ public:
     virtual ~VclVPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
+    virtual void set_position(long nPosition) override;
 };
 
 class VclHPaned final : public VclPaned
@@ -413,6 +414,7 @@ public:
     virtual ~VclHPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
+    virtual void set_position(long nPosition) override;
 };
 
 class VclFrame final : public VclBin

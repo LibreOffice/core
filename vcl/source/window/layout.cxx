@@ -2547,7 +2547,7 @@ void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecond
         {
             Point aSplitterPos(0, aFirstChildSize.Height());
             setLayoutAllocation(*m_pSplitter, aSplitterPos, aSplitterSize);
-            set_position(aSplitterPos.Y() + aSplitterSize.Height() / 2);
+            m_nPosition = aSplitterPos.Y() + aSplitterSize.Height() / 2;
         }
         else if (nElement == 1)
         {
@@ -2561,6 +2561,18 @@ void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecond
         }
         ++nElement;
     }
+}
+
+void VclVPaned::set_position(long nPosition)
+{
+    VclPaned::set_position(nPosition);
+
+    Size aAllocation(GetSizePixel());
+    Size aSplitterSize(m_pSplitter->GetSizePixel());
+
+    nPosition -= aSplitterSize.Height() / 2;
+
+    arrange(aAllocation, nPosition, aAllocation.Height() - nPosition - aSplitterSize.Height());
 }
 
 void VclVPaned::setAllocation(const Size& rAllocation)
@@ -2654,7 +2666,7 @@ void VclHPaned::arrange(const Size& rAllocation, long nFirstWidth, long nSecondW
         {
             Point aSplitterPos(aFirstChildSize.Width(), 0);
             setLayoutAllocation(*m_pSplitter, aSplitterPos, aSplitterSize);
-            set_position(aSplitterPos.X() + aSplitterSize.Width() / 2);
+            m_nPosition = aSplitterPos.X() + aSplitterSize.Width() / 2;
         }
         else if (nElement == 1)
         {
@@ -2668,6 +2680,18 @@ void VclHPaned::arrange(const Size& rAllocation, long nFirstWidth, long nSecondW
         }
         ++nElement;
     }
+}
+
+void VclHPaned::set_position(long nPosition)
+{
+    VclPaned::set_position(nPosition);
+
+    Size aAllocation(GetSizePixel());
+    Size aSplitterSize(m_pSplitter->GetSizePixel());
+
+    nPosition -= aSplitterSize.Width() / 2;
+
+    arrange(aAllocation, nPosition, aAllocation.Width() - nPosition - aSplitterSize.Width());
 }
 
 void VclHPaned::setAllocation(const Size& rAllocation)
