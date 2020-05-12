@@ -685,6 +685,7 @@ void SdExportTest::testTdf79082()
     xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "content.xml");
 
+
     // P1 should have 6 tab stops defined
     assertXPathChildren(
         pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops", 6);
