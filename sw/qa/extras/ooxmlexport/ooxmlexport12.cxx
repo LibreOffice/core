@@ -38,6 +38,7 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
     if (!mbExported)
@@ -211,6 +212,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReference, "table_cross_reference.odt")
 DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
                          "table_cross_reference_custom_format.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
     if (!mbExported)
@@ -344,6 +346,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
 
 DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
     if (!mbExported)

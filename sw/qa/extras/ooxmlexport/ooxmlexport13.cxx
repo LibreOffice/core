@@ -304,6 +304,7 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
     // In this case, a 24pt font, proportional at 65% becomes roughly a 16pt font.
@@ -345,6 +346,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSubscript2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
     // subscript custom: Proportional size is 80%, lower by 25%.
@@ -455,6 +457,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
 
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -479,6 +482,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf124600b, "tdf124600b.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
     if (!mbExported)
@@ -525,6 +529,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
     // Without the accompanying fix in place, this test would have failed with
@@ -554,6 +559,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -582,6 +588,7 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
@@ -623,6 +630,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextInput, "textinput.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -771,6 +779,7 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119037, "tdf119037.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDoc);
 
@@ -870,6 +879,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // Without the accompanying fix in place, this test would have failed with 'Expected:
@@ -880,6 +890,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125518, "tdf125518.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -1037,6 +1048,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127116, "tdf127116.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -1056,6 +1068,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
@@ -1069,6 +1082,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
@@ -1078,6 +1092,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:bookmarkStart", "name");
@@ -1087,6 +1102,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
 
@@ -1097,6 +1113,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127734, "internal_hyperlink_region.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart", "name");
@@ -1106,6 +1123,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127734, "internal_hyperlink_region.od
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127735, "internal_hyperlink_table.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:bookmarkStart", "name");
@@ -1115,6 +1133,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127735, "internal_hyperlink_table.odt
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123628, "tdf123628.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
@@ -1137,6 +1156,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
         return;
@@ -1146,12 +1166,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127579, "tdf127579.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;
     uno::Reference<beans::XPropertySet> xProps1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xProps1->getPropertyValue("TextWritingMode") >>= eMode);

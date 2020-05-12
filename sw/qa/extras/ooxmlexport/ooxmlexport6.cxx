@@ -49,6 +49,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlZorder, "dml-zorder.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was "0": causing that in Word, the second shape was on top, while in the original odt the first shape is on top.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "relativeHeight", "2");
@@ -945,6 +946,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExtentValue, "fdo74605.docx")
 // other dimension.
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // check no explicit pctHeight has been exported, all we care

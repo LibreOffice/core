@@ -112,6 +112,7 @@ DECLARE_OOXMLEXPORT_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNoDuplicateAttributeExport, "duplicate-east-asia.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File asserting while saving in LO.
     parseExport("word/document.xml");
 }
@@ -284,6 +285,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFloatingTable, "fdo77887.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:vMerge", "val", "restart");
@@ -294,6 +296,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeRight, "tdf90681-1.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:vMerge", "val", "restart");
@@ -480,6 +483,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78887, "fdo78887.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78887b, "missing_newline.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/w:br[1]", 1);
@@ -601,6 +605,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78907,"fdo78907.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf118702,"tdf118702.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:type", "val", "nextPage" );
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:sectPr/w:pgSz", "orient", "landscape" );
@@ -1072,6 +1077,7 @@ DECLARE_OOXMLEXPORT_TEST(testSectionProtection, "sectionprot.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSectionProtection2, "sectionprot2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml"))
     {
         assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", "true");
@@ -1145,6 +1151,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf89991_revisionView, "tdf89991.docx")
 
 DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotectedText.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // get the document
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -1167,6 +1174,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotect
 
 DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
         // this test must not be zero
@@ -1176,12 +1184,14 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testOO47778_1, "ooo47778-3.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[3]", "c");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[4]", "c");
 
@@ -1195,24 +1205,28 @@ DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testOO67471, "ooo67471-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[2]", "B");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//v:shape", "ID", "KoPathShape");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testKDE216114, "kde216114-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//w:pict", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOO72950, "ooo72950-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//w:tbl", 1);
 }

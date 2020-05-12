@@ -369,6 +369,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // in LO, it appears that styles based on the Chapter Numbering style explicitly set the
     // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
     // Adding this preventative unit test to ensure that any fix for tdf106541 doesn't make incorrect assumptions.
@@ -634,6 +635,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
         assertXPath(pXmlDoc, "//w:p/w:pPr/w:rPr/w:sz", "val", "20");
@@ -710,6 +712,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlSymbolChicagoList, "symbol_chicago_list.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
 
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","taiwaneseCountingThousand" );
@@ -717,6 +720,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
 
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","chineseCountingThousand" );
@@ -724,6 +728,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOOxmlOutlineNumberTypes, "outline-number-types.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
 
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:pStyle", "val", "Heading1");
@@ -811,6 +816,7 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
 }

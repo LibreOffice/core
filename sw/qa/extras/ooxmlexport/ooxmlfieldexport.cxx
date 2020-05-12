@@ -59,6 +59,7 @@ DECLARE_OOXMLEXPORT_TEST(testN789482, "n789482.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBnc834035, "bnc834035.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     // Illustration index had wrong hyperlinks: anchor was using Writer's
     // <seqname>!<index>|sequence syntax, not a bookmark name.
     xmlDocUniquePtr pXmlDoc = parseExport();
@@ -68,6 +69,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBnc834035, "bnc834035.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testCp1000015, "cp1000015.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Redline and hyperlink end got exported in an incorrect order.
     getParagraph(1, "Hello.");
     getParagraph(2, "http://www.google.com/");
@@ -574,12 +576,14 @@ DECLARE_OOXMLEXPORT_TEST(testToxmarkHyperlink, "toxmarkhyperlink.fodt")
 
 DECLARE_OOXMLEXPORT_TEST(testOO34469, "ooo34469-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "2.9.2.Creating_New_files|outline");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOO39845, "ooo39845-7.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport())
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
 }
@@ -637,6 +641,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_p
 
 DECLARE_OOXMLEXPORT_TEST(testDropDownFieldEntryLimit, "tdf126792.odt" )
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In MSO, there is a limit of 25 for the items in a drop-down form field.
     // So we truncate the list of items to not exceed this limit.
 

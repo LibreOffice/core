@@ -148,6 +148,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76979, "fdo76979.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
             "wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
@@ -815,6 +816,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDashedLine_CustDashPercentage, "dashed_l
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCommentInitials, "comment_initials.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/comments.xml");
 
     assertXPath(pXmlDoc,"/w:comments/w:comment[1]", "initials", "initials");
@@ -917,6 +919,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeGrayscale, "picture_colo
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeBlackWhite, "picture_colormode_black_white.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport ("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:biLevel", "thresh", "50000");
@@ -924,6 +927,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeBlackWhite, "picture_col
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeWatermark, "picture_colormode_watermark.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport ("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "bright", "70000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "contrast", "-70000");
@@ -932,6 +936,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureColormodeWatermark, "picture_colo
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testExportShadow, "bnc637947.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1040,6 +1045,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTDF93675, "no-numlevel-but-indented.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//w:ind", "start", "1418");
 }
@@ -1048,6 +1054,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTDF93675, "no-numlevel-but-indented.odt"
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // there should be no flipH and flipV attributes in this case
     assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipH");
