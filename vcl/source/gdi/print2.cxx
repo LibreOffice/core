@@ -796,8 +796,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         aMapModeVDev->ClearStack(); // clean up aMapModeVDev
 
-        ::std::vector<ConnectedComponents> aCCList; // contains distinct sets of connected components as elements.
-
         // fast-forward until one after the last background action
         // (need to reconstruct map mode vdev state)
         int nActionNum=0;
@@ -816,6 +814,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         }
 
         //  STAGE 2: Generate connected components list
+
+        ::std::vector<ConnectedComponents> aCCList; // contains distinct sets of connected components as elements.
 
         // iterate over all actions (start where background action
         // search left off)
