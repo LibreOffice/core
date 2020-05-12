@@ -1352,7 +1352,7 @@ void Chart2ExportTest::testColorGradientStopXLSX()
 void Chart2ExportTest::testRadialColorGradientDOCX()
 {
     load("/chart2/qa/extras/data/docx/", "tdf128794.docx");
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the gradeint style (if there is no 'a:path' attribute, it is a linear gradient)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", 0);
