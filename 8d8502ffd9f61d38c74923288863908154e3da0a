@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7a5af3d_9f1fbfec",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-12T13:46:53Z",
+      "side": 1,
+      "message": "If it\u0027s true, wouldn\u0027t be better to keep it?",
+      "range": {
+        "startLine": 387,
+        "startChar": 24,
+        "endLine": 387,
+        "endChar": 96
+      },
+      "revId": "8d8502ffd9f61d38c74923288863908154e3da0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
