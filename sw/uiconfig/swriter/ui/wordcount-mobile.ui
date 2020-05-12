@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="WordCountDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="wordcount-mobile|WordCountDialog">Word Count</property>
+    <property name="title" translatable="yes" context="wordcount|WordCountDialog">Word Count</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="destroy_with_parent">True</property>
@@ -78,7 +78,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label9">Selection</property>
+                    <property name="label" translatable="yes" context="wordcount|label9">Selection</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -105,7 +105,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label10">Document</property>
+                    <property name="label" translatable="yes" context="wordcount|label10">Document</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -131,7 +131,7 @@
                   <object class="GtkLabel" id="wordslabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label1">Words</property>
+                    <property name="label" translatable="yes" context="wordcount|label1">Words</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -155,7 +155,7 @@
                   <object class="GtkLabel" id="inclspaceslabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label2">Characters including spaces</property>
+                    <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -179,7 +179,7 @@
                   <object class="GtkLabel" id="exclspaceslabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label3">Characters excluding spaces</property>
+                    <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -203,7 +203,7 @@
                   <object class="GtkLabel" id="cjkcharsft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|cjkcharsft">Asian characters and Korean syllables</property>
+                    <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -227,7 +227,7 @@
                   <object class="GtkLabel" id="standardizedpages">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|standardizedpages">Standardized pages</property>
+                    <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -251,7 +251,7 @@
                   <object class="GtkLabel" id="standardizedpages2">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|standardizedpages">Standardized pages</property>
+                    <property name="label" translatable="yes" context="wordcount|standardizedpages">Standardized pages</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -275,7 +275,7 @@
                   <object class="GtkLabel" id="cjkcharsft2">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|cjkcharsft">Asian characters and Korean syllables</property>
+                    <property name="label" translatable="yes" context="wordcount|cjkcharsft">Asian characters and Korean syllables</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -299,7 +299,7 @@
                   <object class="GtkLabel" id="exclspaceslabel2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label3">Characters excluding spaces</property>
+                    <property name="label" translatable="yes" context="wordcount|label3">Characters excluding spaces</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -323,7 +323,7 @@
                   <object class="GtkLabel" id="wordslabel2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label1">Words</property>
+                    <property name="label" translatable="yes" context="wordcount|label1">Words</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -617,7 +617,7 @@
                   <object class="GtkLabel" id="inclspaceslabel2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="wordcount-mobile|label2">Characters including spaces</property>
+                    <property name="label" translatable="yes" context="wordcount|label2">Characters including spaces</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
