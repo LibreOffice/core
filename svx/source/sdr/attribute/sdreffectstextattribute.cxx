@@ -26,10 +26,12 @@ namespace drawinglayer::attribute
         SdrEffectsTextAttribute::SdrEffectsTextAttribute(
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
-            const SdrGlowAttribute& rGlow)
+            const SdrGlowAttribute& rGlow,
+            sal_Int32 nSoftEdgeRadius)
         :   maShadow(rShadow),
             maTextAttribute(rTextAttribute),
-            maGlow(rGlow)
+            maGlow(rGlow),
+            mnSoftEdgeRadius(nSoftEdgeRadius)
         {
         }
 
@@ -42,7 +44,8 @@ namespace drawinglayer::attribute
         SdrEffectsTextAttribute::SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate)
         :   maShadow(rCandidate.getShadow()),
             maTextAttribute(rCandidate.getText()),
-            maGlow(rCandidate.maGlow)
+            maGlow(rCandidate.maGlow),
+            mnSoftEdgeRadius(rCandidate.mnSoftEdgeRadius)
         {
         }
 
@@ -51,6 +54,7 @@ namespace drawinglayer::attribute
             maShadow = rCandidate.getShadow();
             maTextAttribute = rCandidate.getText();
             maGlow = rCandidate.maGlow;
+            mnSoftEdgeRadius = rCandidate.mnSoftEdgeRadius;
 
             return *this;
         }
@@ -58,14 +62,15 @@ namespace drawinglayer::attribute
         bool SdrEffectsTextAttribute::isDefault() const
         {
             return (getShadow().isDefault()
-                && getText().isDefault() && maGlow.isDefault());
+                && getText().isDefault() && maGlow.isDefault() && getSoftEdgeRadius() == 0);
         }
 
         bool SdrEffectsTextAttribute::operator==(const SdrEffectsTextAttribute& rCandidate) const
         {
             return (getShadow() == rCandidate.getShadow()
                 && getText() == rCandidate.getText()
-                && getGlow() == rCandidate.getGlow());
+                && getGlow() == rCandidate.getGlow()
+                && getSoftEdgeRadius() == rCandidate.getSoftEdgeRadius());
         }
 
 } // end of namespace

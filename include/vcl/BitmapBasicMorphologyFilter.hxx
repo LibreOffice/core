@@ -26,6 +26,7 @@ class VCL_DLLPUBLIC BitmapBasicMorphologyFilter : public BitmapFilter
 {
 public:
     BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius);
+    BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius, sal_uInt8 nValueOutside);
     virtual ~BitmapBasicMorphologyFilter();
 
     virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
@@ -35,6 +36,8 @@ private:
 
     BasicMorphologyOp m_eOp;
     sal_Int32 m_nRadius;
+    sal_uInt8 m_nValueOutside = 0;
+    bool m_bUseValueOutside = false;
 };
 
 class BitmapErodeFilter : public BitmapBasicMorphologyFilter
@@ -44,6 +47,10 @@ public:
         : BitmapBasicMorphologyFilter(BasicMorphologyOp::erode, nRadius)
     {
     }
+    BitmapErodeFilter(sal_Int32 nRadius, sal_uInt8 nValueOutside)
+        : BitmapBasicMorphologyFilter(BasicMorphologyOp::erode, nRadius, nValueOutside)
+    {
+    }
 };
 
 class BitmapDilateFilter : public BitmapBasicMorphologyFilter
@@ -51,6 +58,10 @@ class BitmapDilateFilter : public BitmapBasicMorphologyFilter
 public:
     BitmapDilateFilter(sal_Int32 nRadius)
         : BitmapBasicMorphologyFilter(BasicMorphologyOp::dilate, nRadius)
+    {
+    }
+    BitmapDilateFilter(sal_Int32 nRadius, sal_uInt8 nValueOutside)
+        : BitmapBasicMorphologyFilter(BasicMorphologyOp::dilate, nRadius, nValueOutside)
     {
     }
 };

@@ -24,9 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
-#include <vcl/BitmapColorReplaceFilter.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/hatch.hxx>
@@ -62,6 +60,7 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -385,6 +384,12 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processGlowPrimitive2D(
                 static_cast<const drawinglayer::primitive2d::GlowPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+        {
+            processSoftEdgePrimitive2D(
+                static_cast<const drawinglayer::primitive2d::SoftEdgePrimitive2D&>(rCandidate));
             break;
         }
         default:
@@ -911,6 +916,58 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
     }
 }
 
+namespace
+{
+/* Returns 8-bit alpha mask created from passed mask. The result may be scaled down; it's
+   expected that it will be automatically scaled up back when applied to the bitmap.
+
+   Negative fErodeDilateRadius values mean erode, positive - dilate.
+   nTransparency defines minimal transparency level.
+*/
+AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadius,
+                                  double fBlurRadius, sal_uInt8 nTransparency)
+{
+    // Only completely white pixels on the initial mask must be considered for transparency. Any
+    // other color must be treated as black. This creates 1-bit B&W bitmap.
+    BitmapEx mask(rBWMask.CreateMask(COL_WHITE));
+
+    // Scaling down increases performance without noticeable quality loss. Additionally,
+    // current blur implementation can only handle blur radius between 2 and 254.
+    Size aSize = mask.GetSizePixel();
+    double fScale = 1.0;
+    while (fBlurRadius > 254 || aSize.Height() > 1000 || aSize.Width() > 1000)
+    {
+        fScale /= 2;
+        fBlurRadius /= 2;
+        fErodeDilateRadius /= 2;
+        aSize.setHeight(aSize.Height() / 2);
+        aSize.setWidth(aSize.Width() / 2);
+    }
+
+    // BmpScaleFlag::Fast is important for following color replacement
+    mask.Scale(fScale, fScale, BmpScaleFlag::Fast);
+
+    if (fErodeDilateRadius > 0)
+        BitmapFilter::Filter(mask, BitmapDilateFilter(fErodeDilateRadius));
+    else if (fErodeDilateRadius < 0)
+        BitmapFilter::Filter(mask, BitmapErodeFilter(-fErodeDilateRadius, 0xFF));
+
+    if (nTransparency)
+    {
+        const Color aTransparency(nTransparency, nTransparency, nTransparency);
+        mask.Replace(COL_BLACK, aTransparency);
+    }
+
+    // We need 8-bit grey mask for blurring
+    mask.Convert(BmpConversion::N8BitGreys);
+
+    // calculate blurry effect
+    BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
+
+    return AlphaMask(mask.GetBitmap());
+}
+}
+
 void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate)
 {
     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
@@ -918,7 +975,14 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     basegfx::B2DVector aGlowRadiusVector(rCandidate.getGlowRadius(), 0);
     // Calculate the pixel size of glow radius in current transformation
     aGlowRadiusVector *= maCurrentTransformation;
-    const double fGlowRadius = aGlowRadiusVector.getLength();
+    // Glow radius is the size of the halo from each side of the object. The halo is the
+    // border of glow color that fades from glow transparency level to fully transparent
+    // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
+    // fades to both sides by the blur radius; thus blur radius is half of glow radius.
+    const double fBlurRadius = aGlowRadiusVector.getLength() / 2;
+    // Consider glow transparency (initial transparency near the object edge)
+    const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
+
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
     if (aBufferDevice.isVisible())
     {
@@ -933,53 +997,14 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
                                                   Size(aRange.getWidth(), aRange.getHeight()));
 
-        BitmapEx mask(bitmap); // copy the bitmap to mask
-        // Only completely transparent parts will be completely white; only those must be
-        // considered white on the initial B&W alpha mask. Any other color must be treated
-        // as black.
-        BitmapFilter::Filter(mask, BitmapMonochromeFilter(255));
-
-        // Scaling down increases performance without noticeable quality loss. Additionally,
-        // current blur implementation can only handle blur radius between 2 and 254.
-        Size aSize = mask.GetSizePixel();
-        double fScale = 1.0;
-        // Glow radius is the size of the halo from each side of the object. The halo is the
-        // border of glow color that fades from glow transparency level to fully transparent
-        // When blurring a sharp boundary (our case), it gets 50% of original intensity, and
-        // fades to both sides by the blur radius; thus blur radius is half of glow radius.
-        double fBlurRadius = fGlowRadius / 2;
-        while (fBlurRadius > 254 || aSize.Height() > 1000 || aSize.Width() > 1000)
-        {
-            fScale /= 2;
-            fBlurRadius /= 2;
-            aSize.setHeight(aSize.Height() / 2);
-            aSize.setWidth(aSize.Width() / 2);
-        }
-
-        // BmpScaleFlag::Fast is important for following color replacement
-        mask.Scale(fScale, fScale, BmpScaleFlag::Fast);
-
-        // Dilate the black pixels using blur radius, to make blur start at actual object margins.
-        // This differentiates glow from blurry shadow; so potentially extend this function to also
-        // handle blurry shadow, and conditionally skip this step
-        BitmapFilter::Filter(mask, BitmapDilateFilter(fBlurRadius));
-
-        // We need 8-bit grey mask for blurring
-        mask.Convert(BmpConversion::N8BitGreys);
-        // Consider glow transparency (initial transparency near the object edge)
-        const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
-        const Color aTransparency(nTransparency, nTransparency, nTransparency);
-        BitmapFilter::Filter(mask, BitmapColorReplaceFilter(COL_BLACK, aTransparency));
-
-        // calculate blurry effect
-        BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
 
         // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
         const basegfx::BColor aGlowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getGlowColor().getBColor()));
         bitmap.Erase(Color(aGlowColor));
         // alpha mask will be scaled up automatically to match bitmap
-        BitmapEx result(bitmap, AlphaMask(mask.GetBitmap()));
+        BitmapEx result(bitmap, mask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
@@ -988,6 +1013,53 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
 }
+
+void VclPixelProcessor2D::processSoftEdgePrimitive2D(
+    const primitive2d::SoftEdgePrimitive2D& rCandidate)
+{
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aRadiusVector(rCandidate.getRadius(), 0);
+    // Calculate the pixel size of soft edge radius in current transformation
+    aRadiusVector *= maCurrentTransformation;
+    // Blur radius is equal to soft edge radius
+    const double fBlurRadius = aRadiusVector.getLength();
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    if (aBufferDevice.isVisible())
+    {
+        // remember last OutDev and set to content
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+        // Processing will draw whatever geometry on white background, applying *black*
+        // replacement color
+        mpOutputDevice->Erase();
+        rCandidate.setMaskGeneration();
+        process(rCandidate);
+        rCandidate.setMaskGeneration(false);
+        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
+                                                  Size(aRange.getWidth(), aRange.getHeight()));
+
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, -fBlurRadius, fBlurRadius, 0);
+
+        // The end result is the original bitmap with blurred 8-bit alpha mask
+
+        mpOutputDevice->Erase();
+        process(rCandidate);
+        bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
+                                           Size(aRange.getWidth(), aRange.getHeight()));
+
+        // alpha mask will be scaled up automatically to match bitmap
+        BitmapEx result(bitmap, mask);
+
+        // back to old OutDev
+        mpOutputDevice = pLastOutputDevice;
+        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
