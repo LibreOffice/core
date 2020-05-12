@@ -427,6 +427,48 @@
 		BEBF3E7B246593C700415E87 /* docfnote.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = docfnote.cxx; path = ../sw/source/ui/misc/docfnote.cxx; sourceTree = "<group>"; };
 		BEBF3E7C246593C700415E87 /* swmodalredlineacceptdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = swmodalredlineacceptdlg.cxx; path = ../sw/source/ui/misc/swmodalredlineacceptdlg.cxx; sourceTree = "<group>"; };
 		BEBF3E7D246593C700415E87 /* pggrid.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pggrid.cxx; path = ../sw/source/ui/misc/pggrid.cxx; sourceTree = "<group>"; };
+		BEBF3E81246ACFCA00415E87 /* dp_extensionmanager.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_extensionmanager.hxx; path = ../desktop/source/deployment/manager/dp_extensionmanager.hxx; sourceTree = "<group>"; };
+		BEBF3E82246ACFCA00415E87 /* dp_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = dp_manager.h; path = ../desktop/source/deployment/manager/dp_manager.h; sourceTree = "<group>"; };
+		BEBF3E83246ACFCA00415E87 /* dp_managerfac.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_managerfac.cxx; path = ../desktop/source/deployment/manager/dp_managerfac.cxx; sourceTree = "<group>"; };
+		BEBF3E84246ACFCA00415E87 /* dp_manager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_manager.cxx; path = ../desktop/source/deployment/manager/dp_manager.cxx; sourceTree = "<group>"; };
+		BEBF3E85246ACFCA00415E87 /* dp_extensionmanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_extensionmanager.cxx; path = ../desktop/source/deployment/manager/dp_extensionmanager.cxx; sourceTree = "<group>"; };
+		BEBF3E86246ACFCA00415E87 /* dp_activepackages.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_activepackages.hxx; path = ../desktop/source/deployment/manager/dp_activepackages.hxx; sourceTree = "<group>"; };
+		BEBF3E87246ACFCA00415E87 /* dp_commandenvironments.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_commandenvironments.hxx; path = ../desktop/source/deployment/manager/dp_commandenvironments.hxx; sourceTree = "<group>"; };
+		BEBF3E88246ACFCA00415E87 /* dp_properties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_properties.cxx; path = ../desktop/source/deployment/manager/dp_properties.cxx; sourceTree = "<group>"; };
+		BEBF3E89246ACFCA00415E87 /* dp_properties.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_properties.hxx; path = ../desktop/source/deployment/manager/dp_properties.hxx; sourceTree = "<group>"; };
+		BEBF3E8A246ACFCA00415E87 /* dp_informationprovider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_informationprovider.cxx; path = ../desktop/source/deployment/manager/dp_informationprovider.cxx; sourceTree = "<group>"; };
+		BEBF3E8B246ACFCA00415E87 /* dp_activepackages.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_activepackages.cxx; path = ../desktop/source/deployment/manager/dp_activepackages.cxx; sourceTree = "<group>"; };
+		BEBF3E8C246ACFCA00415E87 /* dp_commandenvironments.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_commandenvironments.cxx; path = ../desktop/source/deployment/manager/dp_commandenvironments.cxx; sourceTree = "<group>"; };
+		BEBF3E90246AD75500415E87 /* filrow.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filrow.hxx; path = ../ucb/source/ucp/file/filrow.hxx; sourceTree = "<group>"; };
+		BEBF3E91246AD75500415E87 /* filrec.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filrec.hxx; path = ../ucb/source/ucp/file/filrec.hxx; sourceTree = "<group>"; };
+		BEBF3E92246AD75500415E87 /* filrset.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filrset.cxx; path = ../ucb/source/ucp/file/filrset.cxx; sourceTree = "<group>"; };
+		BEBF3E93246AD75500415E87 /* filprp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filprp.hxx; path = ../ucb/source/ucp/file/filprp.hxx; sourceTree = "<group>"; };
+		BEBF3E94246AD75500415E87 /* filnot.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filnot.hxx; path = ../ucb/source/ucp/file/filnot.hxx; sourceTree = "<group>"; };
+		BEBF3E95246AD75500415E87 /* filrset.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filrset.hxx; path = ../ucb/source/ucp/file/filrset.hxx; sourceTree = "<group>"; };
+		BEBF3E96246AD75500415E87 /* filtask.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filtask.cxx; path = ../ucb/source/ucp/file/filtask.cxx; sourceTree = "<group>"; };
+		BEBF3E97246AD75500415E87 /* prov.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prov.cxx; path = ../ucb/source/ucp/file/prov.cxx; sourceTree = "<group>"; };
+		BEBF3E98246AD75500415E87 /* filinsreq.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filinsreq.cxx; path = ../ucb/source/ucp/file/filinsreq.cxx; sourceTree = "<group>"; };
+		BEBF3E99246AD75500415E87 /* filid.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filid.hxx; path = ../ucb/source/ucp/file/filid.hxx; sourceTree = "<group>"; };
+		BEBF3E9A246AD75500415E87 /* filcmd.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filcmd.hxx; path = ../ucb/source/ucp/file/filcmd.hxx; sourceTree = "<group>"; };
+		BEBF3E9B246AD75500415E87 /* bc.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bc.hxx; path = ../ucb/source/ucp/file/bc.hxx; sourceTree = "<group>"; };
+		BEBF3E9C246AD75500415E87 /* filglob.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filglob.cxx; path = ../ucb/source/ucp/file/filglob.cxx; sourceTree = "<group>"; };
+		BEBF3E9D246AD75500415E87 /* filtask.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filtask.hxx; path = ../ucb/source/ucp/file/filtask.hxx; sourceTree = "<group>"; };
+		BEBF3E9E246AD75500415E87 /* bc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bc.cxx; path = ../ucb/source/ucp/file/bc.cxx; sourceTree = "<group>"; };
+		BEBF3E9F246AD75500415E87 /* filnot.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filnot.cxx; path = ../ucb/source/ucp/file/filnot.cxx; sourceTree = "<group>"; };
+		BEBF3EA0246AD75500415E87 /* filrow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filrow.cxx; path = ../ucb/source/ucp/file/filrow.cxx; sourceTree = "<group>"; };
+		BEBF3EA1246AD75500415E87 /* prov.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = prov.hxx; path = ../ucb/source/ucp/file/prov.hxx; sourceTree = "<group>"; };
+		BEBF3EA2246AD75500415E87 /* filrec.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filrec.cxx; path = ../ucb/source/ucp/file/filrec.cxx; sourceTree = "<group>"; };
+		BEBF3EA3246AD75500415E87 /* filinsreq.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filinsreq.hxx; path = ../ucb/source/ucp/file/filinsreq.hxx; sourceTree = "<group>"; };
+		BEBF3EA4246AD75500415E87 /* filstr.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filstr.hxx; path = ../ucb/source/ucp/file/filstr.hxx; sourceTree = "<group>"; };
+		BEBF3EA5246AD75500415E87 /* filinpstr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filinpstr.cxx; path = ../ucb/source/ucp/file/filinpstr.cxx; sourceTree = "<group>"; };
+		BEBF3EA6246AD75500415E87 /* filid.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filid.cxx; path = ../ucb/source/ucp/file/filid.cxx; sourceTree = "<group>"; };
+		BEBF3EA7246AD75500415E87 /* filprp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filprp.cxx; path = ../ucb/source/ucp/file/filprp.cxx; sourceTree = "<group>"; };
+		BEBF3EA8246AD75500415E87 /* filerror.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filerror.hxx; path = ../ucb/source/ucp/file/filerror.hxx; sourceTree = "<group>"; };
+		BEBF3EA9246AD75500415E87 /* filglob.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filglob.hxx; path = ../ucb/source/ucp/file/filglob.hxx; sourceTree = "<group>"; };
+		BEBF3EAA246AD75500415E87 /* filstr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filstr.cxx; path = ../ucb/source/ucp/file/filstr.cxx; sourceTree = "<group>"; };
+		BEBF3EAB246AD75500415E87 /* filcmd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filcmd.cxx; path = ../ucb/source/ucp/file/filcmd.cxx; sourceTree = "<group>"; };
+		BEBF3EAC246AD75500415E87 /* filinl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filinl.hxx; path = ../ucb/source/ucp/file/filinl.hxx; sourceTree = "<group>"; };
+		BEBF3EAD246AD75600415E87 /* filinpstr.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filinpstr.hxx; path = ../ucb/source/ucp/file/filinpstr.hxx; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
 		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
@@ -1123,17 +1165,107 @@
 			name = misc;
 			sourceTree = "<group>";
 		};
+		BEBF3E7E246ACF8900415E87 /* desktop */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E7F246ACF9B00415E87 /* deployment */,
+			);
+			name = desktop;
+			sourceTree = "<group>";
+		};
+		BEBF3E7F246ACF9B00415E87 /* deployment */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E80246ACFA700415E87 /* manager */,
+			);
+			name = deployment;
+			sourceTree = "<group>";
+		};
+		BEBF3E80246ACFA700415E87 /* manager */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E8B246ACFCA00415E87 /* dp_activepackages.cxx */,
+				BEBF3E86246ACFCA00415E87 /* dp_activepackages.hxx */,
+				BEBF3E8C246ACFCA00415E87 /* dp_commandenvironments.cxx */,
+				BEBF3E87246ACFCA00415E87 /* dp_commandenvironments.hxx */,
+				BEBF3E85246ACFCA00415E87 /* dp_extensionmanager.cxx */,
+				BEBF3E81246ACFCA00415E87 /* dp_extensionmanager.hxx */,
+				BEBF3E8A246ACFCA00415E87 /* dp_informationprovider.cxx */,
+				BEBF3E84246ACFCA00415E87 /* dp_manager.cxx */,
+				BEBF3E82246ACFCA00415E87 /* dp_manager.h */,
+				BEBF3E83246ACFCA00415E87 /* dp_managerfac.cxx */,
+				BEBF3E88246ACFCA00415E87 /* dp_properties.cxx */,
+				BEBF3E89246ACFCA00415E87 /* dp_properties.hxx */,
+			);
+			name = manager;
+			sourceTree = "<group>";
+		};
+		BEBF3E8D246AD70C00415E87 /* ucb */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E8E246AD71F00415E87 /* ucp */,
+			);
+			name = ucb;
+			sourceTree = "<group>";
+		};
+		BEBF3E8E246AD71F00415E87 /* ucp */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E8F246AD73100415E87 /* file */,
+			);
+			name = ucp;
+			sourceTree = "<group>";
+		};
+		BEBF3E8F246AD73100415E87 /* file */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E9E246AD75500415E87 /* bc.cxx */,
+				BEBF3E9B246AD75500415E87 /* bc.hxx */,
+				BEBF3EAB246AD75500415E87 /* filcmd.cxx */,
+				BEBF3E9A246AD75500415E87 /* filcmd.hxx */,
+				BEBF3EA8246AD75500415E87 /* filerror.hxx */,
+				BEBF3E9C246AD75500415E87 /* filglob.cxx */,
+				BEBF3EA9246AD75500415E87 /* filglob.hxx */,
+				BEBF3EA6246AD75500415E87 /* filid.cxx */,
+				BEBF3E99246AD75500415E87 /* filid.hxx */,
+				BEBF3EAC246AD75500415E87 /* filinl.hxx */,
+				BEBF3EA5246AD75500415E87 /* filinpstr.cxx */,
+				BEBF3EAD246AD75600415E87 /* filinpstr.hxx */,
+				BEBF3E98246AD75500415E87 /* filinsreq.cxx */,
+				BEBF3EA3246AD75500415E87 /* filinsreq.hxx */,
+				BEBF3E9F246AD75500415E87 /* filnot.cxx */,
+				BEBF3E94246AD75500415E87 /* filnot.hxx */,
+				BEBF3EA7246AD75500415E87 /* filprp.cxx */,
+				BEBF3E93246AD75500415E87 /* filprp.hxx */,
+				BEBF3EA2246AD75500415E87 /* filrec.cxx */,
+				BEBF3E91246AD75500415E87 /* filrec.hxx */,
+				BEBF3EA0246AD75500415E87 /* filrow.cxx */,
+				BEBF3E90246AD75500415E87 /* filrow.hxx */,
+				BEBF3E92246AD75500415E87 /* filrset.cxx */,
+				BEBF3E95246AD75500415E87 /* filrset.hxx */,
+				BEBF3EAA246AD75500415E87 /* filstr.cxx */,
+				BEBF3EA4246AD75500415E87 /* filstr.hxx */,
+				BEBF3E96246AD75500415E87 /* filtask.cxx */,
+				BEBF3E9D246AD75500415E87 /* filtask.hxx */,
+				BEBF3E97246AD75500415E87 /* prov.cxx */,
+				BEBF3EA1246AD75500415E87 /* prov.hxx */,
+			);
+			name = file;
+			sourceTree = "<group>";
+		};
 		BEC3D9171710B0390030AD56 = {
 			isa = PBXGroup;
 			children = (
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
 				BEDCC8FD246082D400FB02BD /* cui */,
+				BEBF3E7E246ACF8900415E87 /* desktop */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE82BE5918298DFB00A447B5 /* java */,
 				BEBF3E2A2465886A00415E87 /* sal */,
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
 				BEBF3E662465907000415E87 /* sw */,
+				BEBF3E8D246AD70C00415E87 /* ucb */,
 				BEDCC8F02460807C00FB02BD /* unotools */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
 			);
