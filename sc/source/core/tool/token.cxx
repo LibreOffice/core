@@ -1258,7 +1258,7 @@ bool ScTokenArray::AddFormulaToken(
                     if ( eOpCode != ocPush )
                         bError = true;      // not an inline array
                     else if (!rToken.Data.getValueType().equals( cppu::UnoType<
-                                    uno::Sequence< uno::Any >>::get()))
+                                uno::Sequence< uno::Sequence< uno::Any >>>::get()))
                         bError = true;      // unexpected sequence type
                     else
                     {
