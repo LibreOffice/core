@@ -743,6 +743,15 @@ void RecordMapModeChanges(VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uIn
     pMapModeVDev->EnableOutput(false);
 }
 
+void SetBackgroundColorAndBounds(ConnectedComponents& rBackgroundComponent, Color const & rBackground, tools::Rectangle const& rBounds)
+{
+    if( rBackground != COL_TRANSPARENT )
+    {
+        rBackgroundComponent.aBgColor = rBackground;
+        rBackgroundComponent.aBounds = rBounds;
+    }
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -796,32 +805,19 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         //  STAGE 1: Detect background
 
-        // Receives uniform background content, and is _not_ merged
-        // nor checked for intersection against other aCCList elements
-        ConnectedComponents aBackgroundComponent;
-
-        // Read the configuration value of minimal object area where transparency will be removed
-        double fReduceTransparencyMinArea = officecfg::Office::Common::VCL::ReduceTransparencyMinArea::get() / 100.0;
-        SAL_WARN_IF(fReduceTransparencyMinArea > 1.0, "vcl",
-            "Value of ReduceTransparencyMinArea config option is too high");
-        SAL_WARN_IF(fReduceTransparencyMinArea < 0.0, "vcl",
-            "Value of ReduceTransparencyMinArea config option is too low");
-        fReduceTransparencyMinArea = std::clamp(fReduceTransparencyMinArea, 0.0, 1.0);
-
         // create an OutputDevice to record mapmode changes and the like
         ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
         RecordMapModeChanges(aMapModeVDev.get(), mnDPIX, mnDPIY);
+
+        // Receives uniform background content, and is _not_ merged
+        // nor checked for intersection against other aCCList elements
+        ConnectedComponents aBackgroundComponent;
 
         // weed out page-filling background objects (if they are
         // uniformly coloured). Keeping them outside the other
         // connected components often prevents whole-page bitmap
         // generation.
-        if( rBackground != COL_TRANSPARENT )
-        {
-            aBackgroundComponent.aBgColor = rBackground;
-            aBackgroundComponent.aBounds = SetBackgroundComponentBounds();
-        }
-
+        SetBackgroundColorAndBounds(aBackgroundComponent, rBackground, SetBackgroundComponentBounds());
         int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
         int nActionNum = GetActionAfterBackgroundAction(aBackgroundComponent, pCurrAct, rInMtf, nLastBgAction, aMapModeVDev.get());
 
@@ -1080,6 +1076,14 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         }
         const tools::Rectangle aOutputRect( aPageOffset, aTmpSize );
         bool bTiling = dynamic_cast<Printer*>(this) != nullptr;
+
+        // Read the configuration value of minimal object area where transparency will be removed
+        double fReduceTransparencyMinArea = officecfg::Office::Common::VCL::ReduceTransparencyMinArea::get() / 100.0;
+        SAL_WARN_IF(fReduceTransparencyMinArea > 1.0, "vcl",
+            "Value of ReduceTransparencyMinArea config option is too high");
+        SAL_WARN_IF(fReduceTransparencyMinArea < 0.0, "vcl",
+            "Value of ReduceTransparencyMinArea config option is too low");
+        fReduceTransparencyMinArea = std::clamp(fReduceTransparencyMinArea, 0.0, 1.0);
 
         // iterate over all aCCList members and generate bitmaps for the special ones
         for (auto & currentItem : aCCList)
