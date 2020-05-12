@@ -2448,6 +2448,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuView-NewWindow">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:NewWindow</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuView-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
