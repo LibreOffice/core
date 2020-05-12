@@ -817,7 +817,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // uniformly coloured). Keeping them outside the other
         // connected components often prevents whole-page bitmap
         // generation.
-        SetBackgroundColorAndBounds(aBackgroundComponent, rBackground, SetBackgroundComponentBounds());
+        SetBackgroundColorAndBounds(aBackgroundComponent, rBackground, GetBackgroundComponentBounds());
         int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
         int nActionNum = GetActionAfterBackgroundAction(aBackgroundComponent, pCurrAct, rInMtf, nLastBgAction, aMapModeVDev.get());
 
