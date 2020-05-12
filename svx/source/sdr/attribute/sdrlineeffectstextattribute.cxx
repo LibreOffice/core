@@ -28,8 +28,9 @@ namespace drawinglayer::attribute
             const SdrLineStartEndAttribute& rLineStartEnd,
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
-            const SdrGlowAttribute& rGlow)
-        :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow),
+            const SdrGlowAttribute& rGlow,
+            sal_Int32 nSoftEdgeRadius)
+        :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow, nSoftEdgeRadius),
             maLine(rLine),
             maLineStartEnd(rLineStartEnd)
         {
