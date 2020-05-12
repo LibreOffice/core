@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a54df66_6dedd774",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5409,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-12T17:54:48Z",
+      "side": 1,
+      "message": "Nitpick: it wouldn\u0027t hurt to have two lines for this ;-)\n\n    if (!xDescriptor.is())\n        return;",
+      "range": {
+        "startLine": 5409,
+        "startChar": 4,
+        "endLine": 5409,
+        "endChar": 34
+      },
+      "revId": "aa3bf9d3daefcc755ef34b415324cbd53284fdfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
