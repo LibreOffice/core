@@ -88,6 +88,24 @@
       "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab33466_abc86206",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-05-12T08:25:37Z",
+      "side": 1,
+      "message": "\u003e So your plan is to store them at exactly that path, regardless of the value of the UserInstallation boostrap var?\n\nYes. I tend to see the bootstrap \"variables\" as constants, that are \"variables\" in name only. Do you have some example of a real-world end-user installation where they are actually intentionally modified? Note that modifying botstraprc on macOS will break the integrity of a signed (notarized) app bundle. (But sure, I assume they can be overridden with command-line options, environment variables, and whatnot, in countless elegant and versatile ways.)\n\nAnd sure, if you can convince me that that is something that is actually done for some good reason, I could use something that depends only on $SYSUSERCONFIG instead.",
+      "parentUuid": "69c8dc36_e4521c9f",
+      "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
