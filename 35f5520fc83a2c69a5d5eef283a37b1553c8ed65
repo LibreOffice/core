@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8534990d_21d446f8",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-12T11:34:13Z",
+      "side": 0,
+      "message": "This proved to be inaccurate - which the rename helped me to understand. If the result is AllowSplit, then this shouldn\u0027t tell it to try to not split. A unit test was added specifically to test this situation.",
+      "range": {
+        "startLine": 2390,
+        "startChar": 17,
+        "endLine": 2390,
+        "endChar": 49
+      },
+      "revId": "35f5520fc83a2c69a5d5eef283a37b1553c8ed65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

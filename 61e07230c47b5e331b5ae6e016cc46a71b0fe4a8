@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a3021d1_89d60b35",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-12T11:34:13Z",
+      "side": 1,
+      "message": "Adding bTableRowKeep is the only change here.",
+      "range": {
+        "startLine": 1927,
+        "startChar": 51,
+        "endLine": 1927,
+        "endChar": 64
+      },
+      "revId": "61e07230c47b5e331b5ae6e016cc46a71b0fe4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f07fd3_7ce8c949",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-12T11:34:13Z",
+      "side": 1,
+      "message": "These two items are the key to understanding this change.\n1.) This should only affect documents that have lived part of their life as MS formats. (i.e. - they will have a compat flag TABLE_KEEP_ROW). I don\u0027t think I understood that part of it in 2015 - that a resaved-to-ODT file could also have this flag [but that was a long time ago...].\n2.) That this is almost identical to bAllowSplitOfRow was a bit of a revelation to me as I reviewed the code, and renaming the variable to better illustrate the end purpose and avoid double negatives helps me a lot in code-reading. (The only difference that I can see is being NOT being affected by large tables - which was just added to EmulateTableKeep as a corner case work-around.)",
+      "range": {
+        "startLine": 2375,
+        "startChar": 20,
+        "endLine": 2375,
+        "endChar": 97
+      },
+      "revId": "61e07230c47b5e331b5ae6e016cc46a71b0fe4a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
