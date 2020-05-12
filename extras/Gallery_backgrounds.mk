@@ -25,7 +25,7 @@ $(eval $(call gb_Gallery_add_files,backgrounds,$(LIBO_SHARE_FOLDER)/gallery/back
 	extras/source/gallery/backgrounds/sand.jpg \
 	extras/source/gallery/backgrounds/surface.jpg \
 	extras/source/gallery/backgrounds/studio.jpg \
-	extras/source/gallery/backgrounds/invoiced-paper.jpg \
+	extras/source/gallery/backgrounds/invoice-paper.jpg \
 	extras/source/gallery/backgrounds/parchment-paper.jpg \
 	extras/source/gallery/backgrounds/cardboard.jpg \
 	extras/source/gallery/backgrounds/fence.jpg \

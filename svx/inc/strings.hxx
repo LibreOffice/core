@@ -238,7 +238,7 @@
 #define RID_SVXSTR_BMP19_DEF                        "Night Sky"
 #define RID_SVXSTR_BMP20_DEF                        "Pool"
 #define RID_SVXSTR_BMP21_DEF                        "Bitmap"
-#define RID_SVXSTR_BMP79_DEF                        "Invoiced Paper"
+#define RID_SVXSTR_BMP79_DEF                        "Invoice Paper"
 #define RID_SVXSTR_BMP80_DEF                        "Concrete"
 #define RID_SVXSTR_BMP81_DEF                        "Brick Wall"
 #define RID_SVXSTR_BMP82_DEF                        "Stone Wall"
