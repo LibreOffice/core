@@ -294,6 +294,15 @@ public:
     virtual void reorder_child(weld::Widget* pWidget, int position) = 0;
 };
 
+class VCL_DLLPUBLIC Paned : virtual public Container
+{
+public:
+    // set pixel position of divider
+    virtual void set_position(int nPos) = 0;
+    // get pixel position of divider
+    virtual int get_position() const = 0;
+};
+
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
 {
 protected:
@@ -2188,6 +2197,7 @@ public:
                                                       bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Box> weld_box(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual std::unique_ptr<Paned> weld_paned(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<Button> weld_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id,
                                                          bool bTakeOwnership = false)
