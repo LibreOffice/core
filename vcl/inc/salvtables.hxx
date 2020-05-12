@@ -16,6 +16,10 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/menubtn.hxx>
+#include <vcl/combobox.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -149,6 +153,36 @@ public:
     OString get_current_page_help_id() const;
 
     virtual ~SalInstanceBuilder() override;
+};
+
+class SalInstanceMenu : public weld::Menu
+{
+private:
+    VclPtr<PopupMenu> m_xMenu;
+
+    bool m_bTakeOwnership;
+    sal_uInt16 m_nLastId;
+
+    DECL_LINK(SelectMenuHdl, ::Menu*, bool);
+
+public:
+    SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership);
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
+    virtual void set_sensitive(const OString& rIdent, bool bSensitive) override;
+    virtual void set_active(const OString& rIdent, bool bActive) override;
+    virtual bool get_active(const OString& rIdent) const override;
+    virtual void set_label(const OString& rIdent, const OUString& rLabel) override;
+    virtual OUString get_label(const OString& rIdent) const override;
+    virtual void set_visible(const OString& rIdent, bool bShow) override;
+    virtual void clear() override;
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSurface,
+                        TriState eCheckRadioFalse) override;
+    virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void remove(const OString& rId) override;
+    virtual int n_children() const override;
+    PopupMenu* getMenu() const;
+    virtual ~SalInstanceMenu() override;
 };
 
 class SalInstanceWidget : public virtual weld::Widget
@@ -620,6 +654,329 @@ public:
     virtual unsigned int get_digits() const override;
 
     virtual ~SalInstanceSpinButton() override;
+};
+
+//ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
+//don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
+template <class vcl_type>
+class SalInstanceComboBox : public SalInstanceContainer, public virtual weld::ComboBox
+{
+protected:
+    // owner for ListBox/ComboBox UserData
+    std::vector<std::unique_ptr<OUString>> m_aUserData;
+    VclPtr<vcl_type> m_xComboBox;
+    ScopedVclPtr<MenuButton> m_xMenuButton;
+    OUString m_sMenuButtonRow;
+
+public:
+    SalInstanceComboBox(vcl_type* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pComboBox, pBuilder, bTakeOwnership)
+        , m_xComboBox(pComboBox)
+    {
+    }
+
+    virtual int get_active() const override
+    {
+        const sal_Int32 nRet = m_xComboBox->GetSelectedEntryPos();
+        if (nRet == LISTBOX_ENTRY_NOTFOUND)
+            return -1;
+        return nRet;
+    }
+
+    const OUString* getEntryData(int index) const
+    {
+        return static_cast<const OUString*>(m_xComboBox->GetEntryData(index));
+    }
+
+    // ComboBoxes are comprised of multiple subwidgets, consider the lot as
+    // one thing for focus
+    virtual bool has_focus() const override
+    {
+        return m_xWidget->HasChildPathFocus()
+               || (m_xMenuButton && (m_xMenuButton->HasFocus() || m_xMenuButton->InPopupMode()));
+    }
+
+    virtual OUString get_active_id() const override
+    {
+        sal_Int32 nPos = m_xComboBox->GetSelectedEntryPos();
+        const OUString* pRet;
+        if (nPos != LISTBOX_ENTRY_NOTFOUND)
+            pRet = getEntryData(m_xComboBox->GetSelectedEntryPos());
+        else
+            pRet = nullptr;
+        if (!pRet)
+            return OUString();
+        return *pRet;
+    }
+
+    virtual void set_active_id(const OUString& rStr) override
+    {
+        for (int i = 0; i < get_count(); ++i)
+        {
+            const OUString* pId = getEntryData(i);
+            if (!pId)
+                continue;
+            if (*pId == rStr)
+                m_xComboBox->SelectEntryPos(i);
+        }
+    }
+
+    virtual void set_active(int pos) override
+    {
+        if (pos == -1)
+        {
+            m_xComboBox->SetNoSelection();
+            return;
+        }
+        m_xComboBox->SelectEntryPos(pos);
+    }
+
+    virtual OUString get_text(int pos) const override { return m_xComboBox->GetEntry(pos); }
+
+    virtual OUString get_id(int pos) const override
+    {
+        const OUString* pRet = getEntryData(pos);
+        if (!pRet)
+            return OUString();
+        return *pRet;
+    }
+
+    virtual void set_id(int row, const OUString& rId) override
+    {
+        m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+        m_xComboBox->SetEntryData(row, m_aUserData.back().get());
+    }
+
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
+                               bool bKeepExisting) override
+    {
+        freeze();
+        if (!bKeepExisting)
+            clear();
+        for (const auto& rItem : rItems)
+        {
+            insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                   rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+        }
+        thaw();
+    }
+
+    virtual int get_count() const override { return m_xComboBox->GetEntryCount(); }
+
+    virtual int find_text(const OUString& rStr) const override
+    {
+        const sal_Int32 nRet = m_xComboBox->GetEntryPos(rStr);
+        if (nRet == LISTBOX_ENTRY_NOTFOUND)
+            return -1;
+        return nRet;
+    }
+
+    virtual int find_id(const OUString& rStr) const override
+    {
+        for (int i = 0; i < get_count(); ++i)
+        {
+            const OUString* pId = getEntryData(i);
+            if (!pId)
+                continue;
+            if (*pId == rStr)
+                return i;
+        }
+        return -1;
+    }
+
+    virtual void clear() override
+    {
+        m_xComboBox->Clear();
+        m_aUserData.clear();
+    }
+
+    virtual void make_sorted() override
+    {
+        m_xComboBox->SetStyle(m_xComboBox->GetStyle() | WB_SORT);
+    }
+
+    virtual bool get_popup_shown() const override { return m_xComboBox->IsInDropDown(); }
+
+    virtual void connect_popup_toggled(const Link<ComboBox&, void>& rLink) override
+    {
+        weld::ComboBox::connect_popup_toggled(rLink);
+        ensure_event_listener();
+    }
+
+    void call_signal_custom_render(UserDrawEvent* pEvent)
+    {
+        vcl::RenderContext* pRenderContext = pEvent->GetRenderContext();
+        auto nPos = pEvent->GetItemId();
+        const tools::Rectangle& rRect = pEvent->GetRect();
+        const OUString sId = get_id(nPos);
+        signal_custom_render(*pRenderContext, rRect, pEvent->IsSelected(), sId);
+        m_xComboBox->DrawEntry(*pEvent, false, false); // draw separator
+
+        if (m_xMenuButton && m_xMenuButton->IsVisible() && m_sMenuButtonRow == sId)
+        {
+            if (m_xMenuButton->GetParent() != pEvent->GetWindow())
+                m_xMenuButton->SetParent(pEvent->GetWindow());
+            int nButtonWidth = get_menu_button_width();
+            m_xMenuButton->SetSizePixel(Size(nButtonWidth, rRect.GetHeight()));
+            m_xMenuButton->SetPosPixel(Point(rRect.GetWidth() - nButtonWidth, rRect.getY()));
+        }
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return VclPtr<VirtualDevice>::Create();
+    }
+
+    virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
+    {
+        SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
+
+        PopupMenu* pPopup = pInstanceMenu ? pInstanceMenu->getMenu() : nullptr;
+
+        if (!m_xMenuButton)
+            m_xMenuButton
+                = VclPtr<MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+
+        m_xMenuButton->SetPopupMenu(pPopup);
+        m_xMenuButton->Show(pPopup != nullptr);
+        m_sMenuButtonRow = OUString::fromUtf8(rIdent);
+    }
+
+    int get_menu_button_width() const override
+    {
+        const int nButtonWidth = 20;
+        return nButtonWidth;
+    }
+
+    void CallHandleEventListener(VclWindowEvent& rEvent)
+    {
+        if (rEvent.GetId() == VclEventId::DropdownPreOpen
+            || rEvent.GetId() == VclEventId::DropdownClose)
+        {
+            signal_popup_toggled();
+            return;
+        }
+        SalInstanceContainer::HandleEventListener(rEvent);
+    }
+};
+
+class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
+{
+private:
+    DECL_LINK(SelectHdl, ListBox&, void);
+
+public:
+    SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder,
+                                   bool bTakeOwnership);
+
+    virtual OUString get_active_text() const override;
+
+    virtual void remove(int pos) override;
+
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override;
+
+    virtual bool has_entry() const override;
+
+    virtual bool changed_by_direct_pick() const override;
+
+    virtual void set_entry_message_type(weld::EntryMessageType /*eType*/) override;
+
+    virtual void set_entry_text(const OUString& /*rText*/) override;
+
+    virtual void select_entry_region(int /*nStartPos*/, int /*nEndPos*/) override;
+
+    virtual bool get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/) override;
+
+    virtual void set_entry_width_chars(int /*nChars*/) override;
+
+    virtual void set_entry_max_length(int /*nChars*/) override;
+
+    virtual void set_entry_completion(bool, bool bCaseSensitive = false) override;
+
+    virtual void set_entry_placeholder_text(const OUString&) override;
+
+    virtual void set_entry_font(const vcl::Font&) override;
+
+    virtual vcl::Font get_entry_font() override;
+
+    virtual void set_custom_renderer() override;
+
+    virtual int get_max_mru_count() const override;
+
+    virtual void set_max_mru_count(int) override;
+
+    virtual OUString get_mru_entries() const override;
+
+    virtual void set_mru_entries(const OUString&) override;
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+
+    virtual ~SalInstanceComboBoxWithoutEdit() override;
+};
+
+class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
+{
+private:
+    DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(EntryActivateHdl, Edit&, bool);
+    DECL_LINK(SelectHdl, ::ComboBox&, void);
+    DECL_LINK(UserDrawHdl, UserDrawEvent*, void);
+    WeldTextFilter m_aTextFilter;
+    bool m_bInSelect;
+
+public:
+    SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
+                                bool bTakeOwnership);
+
+    virtual bool has_entry() const override;
+
+    virtual bool changed_by_direct_pick() const override;
+
+    virtual void set_entry_message_type(weld::EntryMessageType eType) override;
+
+    virtual OUString get_active_text() const override;
+
+    virtual void remove(int pos) override;
+
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override;
+
+    virtual void set_entry_text(const OUString& rText) override;
+
+    virtual void set_entry_width_chars(int nChars) override;
+
+    virtual void set_entry_max_length(int nChars) override;
+
+    virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) override;
+
+    virtual void set_entry_placeholder_text(const OUString& rText) override;
+
+    virtual void select_entry_region(int nStartPos, int nEndPos) override;
+
+    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override;
+
+    virtual void set_entry_font(const vcl::Font& rFont) override;
+
+    virtual vcl::Font get_entry_font() override;
+
+    virtual void set_custom_renderer() override;
+
+    virtual int get_max_mru_count() const override;
+
+    virtual void set_max_mru_count(int nCount) override;
+
+    virtual OUString get_mru_entries() const override;
+
+    virtual void set_mru_entries(const OUString& rEntries) override;
+
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+
+    virtual ~SalInstanceComboBoxWithEdit() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
