@@ -37,6 +37,13 @@ namespace drawinglayer::primitive2d
         {
             Primitive2DContainer aRetval(getSubPrimitives());
 
+            // Soft edges should be before text, since text is not affected by soft edges
+            if (!aRetval.empty() && getSdrSTAttribute().getSoftEdgeRadius())
+            {
+                aRetval = createEmbeddedSoftEdgePrimitive(aRetval,
+                                                          getSdrSTAttribute().getSoftEdgeRadius());
+            }
+
             // add text
             if(!getSdrSTAttribute().getText().isDefault())
             {

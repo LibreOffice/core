@@ -30,8 +30,9 @@ namespace drawinglayer::attribute
             const SdrShadowAttribute& rShadow,
             const FillGradientAttribute& rFillFloatTransGradient,
             const SdrTextAttribute& rTextAttribute,
-            const SdrGlowAttribute& rGlow)
-        :   SdrLineEffectsTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow),
+            const SdrGlowAttribute& rGlow,
+            sal_Int32 nSoftEdgeRadius)
+        :   SdrLineEffectsTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow, nSoftEdgeRadius),
             maFill(rFill),
             maFillFloatTransGradient(rFillFloatTransGradient)
         {
