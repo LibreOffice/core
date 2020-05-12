@@ -23,15 +23,12 @@
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 
-namespace cssu = com::sun::star::uno;
-namespace cssxc = com::sun::star::xml::crypto;
-
 ElementCollector::ElementCollector(
     sal_Int32 nBufferId,
-    cssxc::sax::ElementMarkPriority nPriority,
+    css::xml::crypto::sax::ElementMarkPriority nPriority,
     bool bToModify,
     const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
-    :ElementMark(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nBufferId),
+    :ElementMark(css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),
      m_bAbleToNotify(false),
@@ -67,7 +64,7 @@ ElementCollector::ElementCollector(
  *            - the listener that this ElementCollector notifies to.
  ******************************************************************************/
 {
-    m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
+    m_type = css::xml::crypto::sax::ElementMarkType_ELEMENTCOLLECTOR;
 }
 
 
@@ -89,7 +86,7 @@ void ElementCollector::notifyListener()
 }
 
 void ElementCollector::setReferenceResolvedListener(
-    const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
+    const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
 /****** ElementCollector/setReferenceResolvedListener *************************
  *
  *   NAME
@@ -130,7 +127,7 @@ void ElementCollector::doNotify()
     if (!m_bNotified &&
         m_bAbleToNotify &&
         m_xReferenceResolvedListener.is() &&
-        m_nSecurityId != cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID)
+        m_nSecurityId != css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID)
     {
         m_bNotified = true;
         m_xReferenceResolvedListener->referenceResolved(m_nBufferId);

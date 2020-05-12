@@ -48,9 +48,6 @@
 #include <prerror.h>
 #include <prinit.h>
 
-namespace cssu = css::uno;
-namespace cssl = css::lang;
-
 using namespace com::sun::star;
 
 #define ROOT_CERTS "Root Certs for OpenOffice.org"
@@ -507,7 +504,7 @@ sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName
     return cppu::supportsService(this, rServiceName);
 }
 
-cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 {
     return { NSS_SERVICE_NAME };
 }

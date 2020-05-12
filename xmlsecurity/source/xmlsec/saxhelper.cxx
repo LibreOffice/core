@@ -30,9 +30,6 @@
 #include "libxslt/xslt.h"
 #endif
 
-namespace cssu = com::sun::star::uno;
-namespace cssxcsax = com::sun::star::xml::csax;
-
 /**
  * The return value is NULL terminated. The application has the responsibility to
  * deallocate the return value.
@@ -59,7 +56,7 @@ static xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibility to deallocate the return value.
  */
-static const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
+static const xmlChar** attrlist_to_nxmlstr( const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     xmlChar* attname = nullptr ;
     xmlChar* attvalue = nullptr ;
@@ -132,7 +129,7 @@ SAXHelper::SAXHelper( )
 //      in other parts of the office.
 //      xmlCleanupParser() ;
 //      and neither can we call xsltCleanupGlobals()
-        throw cssu::RuntimeException() ;
+        throw css::uno::RuntimeException() ;
     }
 
     xmlSAXVersion(m_pParserCtxt->sax, 1);
@@ -151,7 +148,7 @@ SAXHelper::SAXHelper( )
 //      xmlCleanupParser() ;
 //      and neither can we call xsltCleanupGlobals()
         m_pParserCtxt = nullptr ;
-        throw cssu::RuntimeException() ;
+        throw css::uno::RuntimeException() ;
     }
     else
     {
@@ -218,7 +215,7 @@ void SAXHelper::startDocument()
 {
     if( m_pParserCtxt == nullptr)
     {
-        throw cssu::RuntimeException() ;
+        throw css::uno::RuntimeException() ;
     }
     /*
      * Adjust inputTab
@@ -235,7 +232,7 @@ void SAXHelper::startDocument()
 
     if( m_pParserCtxt->myDoc == nullptr )
     {
-        throw cssu::RuntimeException() ;
+        throw css::uno::RuntimeException() ;
     }
 }
 
@@ -252,7 +249,7 @@ void SAXHelper::endDocument()
  */
 void SAXHelper::startElement(
     const OUString& aName,
-    const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
+    const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     const xmlChar* fullName = nullptr ;
     const xmlChar** attrs = nullptr ;
