@@ -1036,7 +1036,7 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     SvXMLAutoStylePoolP& rASPool ) :
         mrExport( rExport ),
         mrAutoStylePool( rASPool ),
-        mxPropertySetMapper( new XMLChartPropertySetMapper( true ) ),
+        mxPropertySetMapper( new XMLChartPropertySetMapper(&rExport) ),
         mxExpPropMapper( new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport ) ),
         mbHasCategoryLabels( false ),
         mbRowSourceColumns( true ),

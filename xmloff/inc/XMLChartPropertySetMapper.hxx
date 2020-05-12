@@ -31,7 +31,11 @@ class SvXMLExport;
 
 class XMLChartPropHdlFactory final : public XMLPropertyHandlerFactory
 {
+private:
+    SvXMLExport const*const m_pExport;
+
 public:
+    XMLChartPropHdlFactory(SvXMLExport const*);
     virtual ~XMLChartPropHdlFactory() override;
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
@@ -39,7 +43,7 @@ public:
 class XMLChartPropertySetMapper final : public XMLPropertySetMapper
 {
 public:
-    explicit XMLChartPropertySetMapper( bool bForExport );
+    explicit XMLChartPropertySetMapper(SvXMLExport const* pExport);
             virtual ~XMLChartPropertySetMapper() override;
 };
 
