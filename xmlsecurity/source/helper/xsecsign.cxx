@@ -37,10 +37,6 @@
 using namespace css;
 using namespace css::uno;
 using namespace css::graphic;
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxs = com::sun::star::xml::sax;
 
 /* protected: for signature generation */
 OUString XSecController::createId()
@@ -58,7 +54,7 @@ OUString XSecController::createId()
     return OUString::createFromAscii(str);
 }
 
-cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
+css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
     InternalSignatureInformation& internalSignatureInfor,
     sal_Int32 nStorageFormat,
     bool bXAdESCompliantIfODF)
@@ -69,13 +65,13 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     sal_Int32 nIdOfSignatureElementCollector;
 
     nIdOfSignatureElementCollector =
-        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_AFTERMODIFY, true );
+        m_xSAXEventKeeper->addSecurityElementCollector( css::xml::crypto::sax::ElementMarkPriority_AFTERMODIFY, true );
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
     rtl::Reference<SignatureCreatorImpl> xSignatureCreator(new SignatureCreatorImpl);
 
-    cssu::Sequence<cssu::Any> args(5);
+    css::uno::Sequence<css::uno::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
     args[1] <<= uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
     args[2] <<= OUString::number(nIdOfSignatureElementCollector);
@@ -120,7 +116,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     {
         const SignatureReferenceInformation& refInfor = vReferenceInfors[i];
 
-        cssu::Reference< css::io::XInputStream > xInputStream
+        css::uno::Reference< css::io::XInputStream > xInputStream
             = getObjectInputStream( refInfor.ouURI );
 
         if (xInputStream.is())
@@ -131,7 +127,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     // use sha512 for gpg signing unconditionally
     const sal_Int32 digestID = !internalSignatureInfor.signatureInfor.ouGpgCertificate.isEmpty()?
-        cssxc::DigestID::SHA512 : (bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1);
+        css::xml::crypto::DigestID::SHA512 : (bXAdESCompliantIfODF ? css::xml::crypto::DigestID::SHA256 : css::xml::crypto::DigestID::SHA1);
 
     if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
@@ -182,7 +178,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, bool isBinary, bool bXAdESCompliantIfODF)
 {
     const SignatureReferenceType type = isBinary ? SignatureReferenceType::BINARYSTREAM : SignatureReferenceType::XMLSTREAM;
-    sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
+    sal_Int32 digestID = bXAdESCompliantIfODF ? css::xml::crypto::DigestID::SHA256 : css::xml::crypto::DigestID::SHA1;
 
     int index = findSignatureInfor( securityId );
 
@@ -196,7 +192,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
     {
         // use sha512 for gpg signing unconditionally
         if (!m_vInternalSignatureInformations[index].signatureInfor.ouGpgCertificate.isEmpty())
-            digestID = cssxc::DigestID::SHA512;
+            digestID = css::xml::crypto::DigestID::SHA512;
         m_vInternalSignatureInformations[index].addReference(type, digestID, uri, -1, OUString());
     }
 }
@@ -351,7 +347,7 @@ void XSecController::setSignatureLineInvalidGraphic(
 }
 
 bool XSecController::WriteSignature(
-    const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler,
+    const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
     bool bXAdESCompliantIfODF )
 {
     bool rc = false;
@@ -377,7 +373,7 @@ bool XSecController::WriteSignature(
             /*
              * export the signature template
              */
-            cssu::Reference<cssxs::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()),cssu::UNO_QUERY);
+            css::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()),css::uno::UNO_QUERY);
 
             int i;
             int sigNum = m_vInternalSignatureInformations.size();
@@ -398,7 +394,7 @@ bool XSecController::WriteSignature(
 
             rc = true;
         }
-        catch( cssu::Exception& )
+        catch( css::uno::Exception& )
         {
         }
 
@@ -426,7 +422,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
         try
         {
             // Export the signature template.
-            cssu::Reference<xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
+            css::uno::Reference<xml::sax::XDocumentHandler> xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), uno::UNO_QUERY);
 
             for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {
