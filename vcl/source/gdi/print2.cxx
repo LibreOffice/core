@@ -851,15 +851,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             const tools::Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, *aMapModeVDev) );
 
             // accumulate collected bounds here, initialize with current action
-            tools::Rectangle                               aTotalBounds( aBBCurrAct ); // thus,
-                                                                                // aTotalComponents.aBounds
-                                                                                // is
-                                                                                // empty
-                                                                                // for
-                                                                                // non-output-generating
-                                                                                // actions
-            bool                                    bTreatSpecial( false );
-            ConnectedComponents                     aTotalComponents;
+            tools::Rectangle aTotalBounds( aBBCurrAct ); // thus, aTotalComponents.aBounds is empty for
+                                                         // non-output-generating actions
+            bool bTreatSpecial( false );
+            ConnectedComponents aTotalComponents;
 
             //  STAGE 2.1: Search for intersecting cc entries
 
