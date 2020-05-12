@@ -71,7 +71,7 @@ void Test::testAutoStylePool()
     rtl::Reference< SvXMLAutoStylePoolP > xPool(
         new SvXMLAutoStylePoolP( *pExport ) );
     rtl::Reference< XMLPropertySetMapper > xSetMapper(
-        new XMLChartPropertySetMapper( true) );
+        new XMLChartPropertySetMapper(pExport.get()) );
     rtl::Reference< XMLChartExportPropertyMapper > xExportPropMapper(
         new XMLChartExportPropertyMapper( xSetMapper, *pExport ) );
 

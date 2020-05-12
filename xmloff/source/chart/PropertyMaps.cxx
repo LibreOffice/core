@@ -88,6 +88,11 @@ SvXMLEnumMapEntry<drawing::FillStyle> const aFillStyleMap[] =
 // * XMLChartImportPropertyMapper
 // * SchXMLStyleExport
 
+XMLChartPropHdlFactory::XMLChartPropHdlFactory(SvXMLExport const*const pExport)
+    : m_pExport(pExport)
+{
+}
+
 XMLChartPropHdlFactory::~XMLChartPropHdlFactory()
 {
 }
@@ -146,7 +151,14 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_INTERPOLATION:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap );
+                if (m_pExport && m_pExport->getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_013)
+                {
+                    pHdl = new XMLEnumPropertyHdl(g_XMLChartInterpolationTypeEnumMap_ODF12);
+                }
+                else // ODF 1.3 OFFICE-3662
+                {
+                    pHdl = new XMLEnumPropertyHdl(g_XMLChartInterpolationTypeEnumMap);
+                }
                 break;
             case XML_SCH_TYPE_SYMBOL_TYPE:
                 pHdl = new XMLSymbolTypePropertyHdl( false );
@@ -178,8 +190,8 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
     return pHdl;
 }
 
-XMLChartPropertySetMapper::XMLChartPropertySetMapper( bool bForExport ) :
-        XMLPropertySetMapper( aXMLChartPropMap, new XMLChartPropHdlFactory, bForExport )
+XMLChartPropertySetMapper::XMLChartPropertySetMapper(SvXMLExport const*const pExport)
+    : XMLPropertySetMapper(aXMLChartPropMap, new XMLChartPropHdlFactory(pExport), pExport != nullptr)
 {
 }
 
@@ -488,10 +500,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                         sValueBuffer.append( GetXMLToken( XML_EXPONENTIAL ));
                     else if (aServiceName == "com.sun.star.chart2.PotentialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POWER ));
-                    else if (nCurrentVersion & SvtSaveOptions::ODFSVER_EXTENDED && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
+                    else if (nCurrentVersion >= SvtSaveOptions::ODFSVER_013 && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
+                    {   // ODF 1.3 OFFICE-3958
                         sValueBuffer.append( GetXMLToken( XML_POLYNOMIAL ));
-                    else if (nCurrentVersion & SvtSaveOptions::ODFSVER_EXTENDED && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
+                    }
+                    else if (nCurrentVersion >= SvtSaveOptions::ODFSVER_013 && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
+                    {   // ODF 1.3 OFFICE-3959
                         sValueBuffer.append( GetXMLToken( XML_MOVING_AVERAGE ));
+                    }
                 }
                 break;
 
