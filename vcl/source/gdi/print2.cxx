@@ -711,6 +711,31 @@ int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent
     return nLastBgAction;
 }
 
+int GetActionAfterBackgroundAction(ConnectedComponents& rBackgroundComponent, MetaAction* pCurrAct,
+                                   GDIMetaFile const & rMtf, int nLastBgAction,
+                                   VirtualDevice* const pMapModeVDev)
+{
+    pMapModeVDev->ClearStack(); // clean up pMapModeVDev
+
+    // fast-forward until one after the last background action
+    // (need to reconstruct map mode vdev state)
+    int nActionNum=0;
+    pCurrAct=const_cast<GDIMetaFile&>(rMtf).FirstAction();
+    while(pCurrAct && nActionNum <= nLastBgAction)
+    {
+        // up to and including last ink-generating background
+        // action go to background component
+        rBackgroundComponent.aComponentList.emplace_back(pCurrAct, nActionNum);
+
+        // execute action to get correct MapModes etc.
+        pCurrAct->Execute(pMapModeVDev);
+        pCurrAct=const_cast<GDIMetaFile&>(rMtf).NextAction();
+        ++nActionNum;
+    }
+
+    return nActionNum;
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -720,7 +745,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                                      const Color& rBackground
                                                      )
 {
-    MetaAction*             pCurrAct;
+    MetaAction*             pCurrAct = nullptr;;
     bool                    bTransparent( false );
 
     rOutMtf.Clear();
@@ -793,25 +818,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         }
 
         int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
-
-        aMapModeVDev->ClearStack(); // clean up aMapModeVDev
-
-        // fast-forward until one after the last background action
-        // (need to reconstruct map mode vdev state)
-        int nActionNum=0;
-        pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction();
-        while( pCurrAct && nActionNum<=nLastBgAction )
-        {
-            // up to and including last ink-generating background
-            // action go to background component
-            aBackgroundComponent.aComponentList.emplace_back(
-                    pCurrAct, nActionNum );
-
-            // execute action to get correct MapModes etc.
-            pCurrAct->Execute( aMapModeVDev.get() );
-            pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction();
-            ++nActionNum;
-        }
+        int nActionNum = GetActionAfterBackgroundAction(aBackgroundComponent, pCurrAct, rInMtf, nLastBgAction, aMapModeVDev.get());
 
         //  STAGE 2: Generate connected components list
 
