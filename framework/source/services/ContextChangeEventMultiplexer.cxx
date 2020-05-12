@@ -33,9 +33,6 @@
 #include <map>
 #include <vector>
 
-namespace cssl = css::lang;
-namespace cssu = css::uno;
-
 using namespace css;
 using namespace css::uno;
 
@@ -60,28 +57,28 @@ public:
 
     // XContextChangeEventMultiplexer
     virtual void SAL_CALL addContextChangeEventListener (
-        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
-        const cssu::Reference<cssu::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
+        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
     virtual void SAL_CALL removeContextChangeEventListener (
-        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
-        const cssu::Reference<cssu::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
+        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
     virtual void SAL_CALL removeAllContextChangeEventListeners (
-        const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener) override;
+        const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener) override;
     virtual void SAL_CALL broadcastContextChangeEvent (
         const css::ui::ContextChangeEventObject& rContextChangeEventObject,
-        const cssu::Reference<cssu::XInterface>& rxEventFocus) override;
+        const css::uno::Reference<css::uno::XInterface>& rxEventFocus) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService  (
         const OUString& rsServiceName) override;
-    virtual cssu::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XEventListener
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent) override;
 
-    typedef ::std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
+    typedef ::std::vector<css::uno::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
     class FocusDescriptor
     {
     public:
@@ -89,7 +86,7 @@ public:
         OUString msCurrentApplicationName;
         OUString msCurrentContextName;
     };
-    typedef ::std::map<cssu::Reference<cssu::XInterface>, FocusDescriptor> ListenerMap;
+    typedef ::std::map<css::uno::Reference<css::uno::XInterface>, FocusDescriptor> ListenerMap;
     ListenerMap maListeners;
 
     /** Notify all listeners in the container that is associated with
@@ -100,9 +97,9 @@ public:
     */
     void BroadcastEventToSingleContainer (
         const css::ui::ContextChangeEventObject& rEventObject,
-        const cssu::Reference<cssu::XInterface>& rxEventFocus);
+        const css::uno::Reference<css::uno::XInterface>& rxEventFocus);
     FocusDescriptor* GetFocusDescriptor (
-        const cssu::Reference<cssu::XInterface>& rxEventFocus,
+        const css::uno::Reference<css::uno::XInterface>& rxEventFocus,
         const bool bCreateWhenMissing);
 };
 
@@ -117,7 +114,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing()
     ListenerMap aListeners;
     aListeners.swap(maListeners);
 
-    cssu::Reference<cssu::XInterface> xThis (static_cast<XWeak*>(this));
+    css::uno::Reference<css::uno::XInterface> xThis (static_cast<XWeak*>(this));
     css::lang::EventObject aEvent (xThis);
     for (auto const& container : aListeners)
     {
@@ -137,8 +134,8 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing()
 
 // XContextChangeEventMultiplexer
 void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
-    const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
-    const cssu::Reference<cssu::XInterface>& rxEventFocus)
+    const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
+    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
     if ( ! rxListener.is())
         throw css::lang::IllegalArgumentException(
@@ -154,7 +151,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
         {
             // The listener was added for the same event focus
             // previously.  That is an error.
-            throw cssl::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
+            throw css::lang::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
         }
         rContainer.push_back(rxListener);
     }
@@ -189,11 +186,11 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
 }
 
 void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
-    const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener,
-    const cssu::Reference<cssu::XInterface>& rxEventFocus)
+    const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener,
+    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
     if ( ! rxListener.is())
-        throw cssl::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             "can not remove an empty reference",
             static_cast<XWeak*>(this), 0);
 
@@ -215,10 +212,10 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
 }
 
 void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListeners (
-    const cssu::Reference<css::ui::XContextChangeEventListener>& rxListener)
+    const css::uno::Reference<css::ui::XContextChangeEventListener>& rxListener)
 {
     if ( ! rxListener.is())
-        throw cssl::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             "can not remove an empty reference",
             static_cast<XWeak*>(this), 0);
 
@@ -238,7 +235,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
 
 void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
     const css::ui::ContextChangeEventObject& rEventObject,
-    const cssu::Reference<cssu::XInterface>& rxEventFocus)
+    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
     // Remember the current context.
     if (rxEventFocus.is())
@@ -258,7 +255,7 @@ void SAL_CALL ContextChangeEventMultiplexer::broadcastContextChangeEvent (
 
 void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
     const css::ui::ContextChangeEventObject& rEventObject,
-    const cssu::Reference<cssu::XInterface>& rxEventFocus)
+    const css::uno::Reference<css::uno::XInterface>& rxEventFocus)
 {
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
     if (pFocusDescriptor != nullptr)
@@ -274,7 +271,7 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
 }
 
 ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::GetFocusDescriptor (
-    const cssu::Reference<cssu::XInterface>& rxEventFocus,
+    const css::uno::Reference<css::uno::XInterface>& rxEventFocus,
     const bool bCreateWhenMissing)
 {
     ListenerMap::iterator iDescriptor (maListeners.find(rxEventFocus));

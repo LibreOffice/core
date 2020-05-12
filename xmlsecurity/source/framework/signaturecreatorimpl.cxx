@@ -28,10 +28,6 @@
 namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 using namespace com::sun::star::uno;
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxw = com::sun::star::xml::wrapper;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureCreatorImpl"
 
@@ -52,8 +48,8 @@ void SignatureCreatorImpl::notifyResultListener() const
  *  creation result.
  ******************************************************************************/
 {
-    cssu::Reference< cssxc::sax::XSignatureCreationResultListener >
-        xSignatureCreationResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
+    css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >
+        xSignatureCreationResultListener ( m_xResultListener , css::uno::UNO_QUERY ) ;
 
     xSignatureCreationResultListener->signatureCreated( m_nSecurityId, m_nStatus );
 }
@@ -74,20 +70,20 @@ void SignatureCreatorImpl::startEngine(const rtl::Reference<XMLSignatureTemplate
  *  elements) to be signed.
  ******************************************************************************/
 {
-    cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
+    css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > xResultTemplate;
     try
     {
         xResultTemplate = m_xXMLSignature->generate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()), m_xSecurityEnvironment);
         m_nStatus = xResultTemplate->getStatus();
     }
-    catch( cssu::Exception& )
+    catch( css::uno::Exception& )
     {
-        m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
+        m_nStatus = css::xml::crypto::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
 
-    if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
+    if (m_nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
-        cssu::Reference < cssxw::XXMLElementWrapper > xResultSignature = xResultTemplate->getTemplate();
+        css::uno::Reference < css::xml::wrapper::XXMLElementWrapper > xResultSignature = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xResultSignature);
     }
 }
@@ -124,19 +120,19 @@ void SAL_CALL SignatureCreatorImpl::setBlockerId( sal_Int32 id )
 
 /* XSignatureCreationResultBroadcaster */
 void SAL_CALL SignatureCreatorImpl::addSignatureCreationResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >& listener )
+    const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener )
 {
     m_xResultListener = listener;
     tryToPerform();
 }
 
 void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >&)
+    const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >&)
 {
 }
 
 /* XInitialization */
-void SAL_CALL SignatureCreatorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
+void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -157,9 +153,9 @@ OUString SignatureCreatorImpl_getImplementationName ()
     return IMPLEMENTATION_NAME;
 }
 
-cssu::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
 {
-    cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureCreator" };
+    css::uno::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureCreator" };
     return aRet;
 }
 
@@ -174,7 +170,7 @@ sal_Bool SAL_CALL SignatureCreatorImpl::supportsService( const OUString& rServic
     return cppu::supportsService(this, rServiceName);
 }
 
-cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl::getSupportedServiceNames(  )
+css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl::getSupportedServiceNames(  )
 {
     return SignatureCreatorImpl_getSupportedServiceNames();
 }

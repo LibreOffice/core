@@ -45,8 +45,6 @@ namespace basctl
     using ::com::sun::star::frame::theGlobalEventBroadcaster;
     using ::com::sun::star::uno::UNO_QUERY;
 
-    namespace csslang = ::com::sun::star::lang;
-
     // DocumentEventNotifier::Impl
 
     typedef ::cppu::WeakComponentImplHelper<   XDocumentEventListener
@@ -79,7 +77,7 @@ namespace basctl
         virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const csslang::EventObject& Event ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Event ) override;
 
         // ComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -171,7 +169,7 @@ namespace basctl
         }
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::disposing( const csslang::EventObject& /*Event*/ )
+    void SAL_CALL DocumentEventNotifier::Impl::disposing( const css::lang::EventObject& /*Event*/ )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
