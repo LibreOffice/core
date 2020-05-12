@@ -283,6 +283,17 @@ void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& 
     }
 }
 
+tools::Rectangle PDFWriterImpl::GetPageSizeForBanding()
+{
+    auto pPdfWriter = static_cast<vcl::PDFWriterImpl*>(this);
+    Size aCurPageSize(LogicToPixel(pPdfWriter->getCurPageSize(), MapMode(MapUnit::MapPoint)));
+
+    // also add error code to PDFWriter
+    pPdfWriter->insertError(vcl::PDFWriter::Warning_Transparency_Converted);
+
+    return tools::Rectangle(Point(), aCurPageSize);
+}
+
 void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWriter::AnyWidget& i_rControl )
 {
     /* #i80258# previously we use appendName here

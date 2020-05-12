@@ -1597,6 +1597,9 @@ public:
                                     bool bDownsampleBitmaps,
                                     const Color& rBackground = COL_TRANSPARENT );
 
+    virtual tools::Rectangle    GetPageSizeForBanding();
+    virtual bool                UseTilingForBands();
+
     SAL_DLLPRIVATE void         ImplPrintTransparent (
                                     const Bitmap& rBmp, const Bitmap& rMask,
                                     const Point& rDestPt, const Size& rDestSize,
