@@ -171,10 +171,33 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)
     }
 }
 
+ComboBoxControl::ComboBoxControl(vcl::Window* pParent)
+    : InterimItemWindow(pParent, "modules/sbibliography/ui/combobox.ui", "ComboBox")
+    , m_xFtSource(m_xBuilder->weld_label("label"))
+    , m_xLBSource(m_xBuilder->weld_combo_box("combobox"))
+{
+    m_xFtSource->set_toolbar_background();
+    m_xLBSource->set_toolbar_background();
+    m_xLBSource->set_size_request(100, -1);
+    SetSizePixel(get_preferred_size());
+}
+
+void ComboBoxControl::dispose()
+{
+    m_xLBSource.reset();
+    m_xFtSource.reset();
+    InterimItemWindow::dispose();
+}
+
+ComboBoxControl::~ComboBoxControl()
+{
+    disposeOnce();
+}
+
 BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
-    , aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER))
-    , aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN))
+    , xSource(VclPtr<ComboBoxControl>::Create(this))
+    , pLbSource(xSource->get_widget())
     , aFtQuery(VclPtr<FixedText>::Create(this,WB_VCENTER))
     , aEdQuery(VclPtr<Edit>::Create(this))
     , pPopupMenu(VclPtr<PopupMenu>::Create())
@@ -189,12 +212,8 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     nOutStyle  = aSvtMiscOptions.GetToolboxStyle();
 
     SetOutStyle(TOOLBOX_STYLE_FLAT);
-    Size a2Size(GetOutputSizePixel());
-    a2Size.setWidth(100 );
-    aLBSource->SetSizePixel(a2Size);
-    aLBSource->SetDropDownLineCount(9);
-    aLBSource->Show();
-    aLBSource->SetSelectHdl(LINK( this, BibToolBar, SelHdl));
+    xSource->Show();
+    pLbSource->connect_changed(LINK( this, BibToolBar, SelHdl));
 
     SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
@@ -204,11 +223,10 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
 
     SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
 
-    aEdQuery->SetSizePixel(aLBSource->GetSizePixel());
+    aEdQuery->SetSizePixel(pLbSource->get_preferred_size());
     aEdQuery->Show();
 
-    nTBC_FT_SOURCE = GetItemId("TBC_FT_SOURCE");
-    nTBC_LB_SOURCE = GetItemId(".uno:Bib/source");
+    nTBC_SOURCE = GetItemId(".uno:Bib/source");
     nTBC_FT_QUERY = GetItemId("TBC_FT_QUERY");
     nTBC_ED_QUERY = GetItemId(".uno:Bib/query");
     nTBC_BT_AUTOFILTER = GetItemId(".uno:Bib/autoFilter");
@@ -217,18 +235,12 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     nTBC_BT_FILTERCRIT = GetItemId(".uno:Bib/standardFilter");
     nTBC_BT_REMOVEFILTER = GetItemId(".uno:Bib/removeFilter");
 
-    OUString aStr = GetItemText(nTBC_FT_SOURCE);
-    aFtSource->SetText(aStr);
-    aFtSource->SetSizePixel(aFtSource->get_preferred_size());
-    aFtSource->SetBackground(Wallpaper( COL_TRANSPARENT ));
-
-    aStr=GetItemText(nTBC_FT_QUERY);
+    OUString aStr=GetItemText(nTBC_FT_QUERY);
     aFtQuery->SetText(aStr);
     aFtQuery->SetSizePixel(aFtQuery->get_preferred_size());
     aFtQuery->SetBackground(Wallpaper( COL_TRANSPARENT ));
 
-    SetItemWindow(nTBC_FT_SOURCE, aFtSource.get());
-    SetItemWindow(nTBC_LB_SOURCE, aLBSource.get());
+    SetItemWindow(nTBC_SOURCE, xSource.get());
     SetItemWindow(nTBC_FT_QUERY , aFtQuery.get());
     SetItemWindow(nTBC_ED_QUERY , aEdQuery.get());
 
@@ -247,10 +259,9 @@ void BibToolBar::dispose()
     SvtMiscOptions().RemoveListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::RemoveEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
     ::bib::RemoveFromTaskPaneList( this );
-    aFtSource.disposeAndClear();
     aFtQuery.disposeAndClear();
     aEdQuery.disposeAndClear();
-    aLBSource.disposeAndClear();
+    xSource.disposeAndClear();
     ToolBox::dispose();
 }
 
@@ -272,7 +283,7 @@ void BibToolBar::InitListener()
     for(ToolBox::ImplToolItems::size_type nPos=0;nPos<nCount;nPos++)
     {
         sal_uInt16 nId=GetItemId(nPos);
-        if(!nId || nId== nTBC_FT_SOURCE || nId == nTBC_FT_QUERY)
+        if(!nId || nId == nTBC_FT_QUERY)
             continue;
 
         util::URL aURL;
@@ -283,7 +294,7 @@ void BibToolBar::InitListener()
         xTrans->parseStrict( aURL );
 
         css::uno::Reference< css::frame::XStatusListener> xListener;
-        if (nId == nTBC_LB_SOURCE)
+        if (nId == nTBC_SOURCE)
         {
             xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
         }
@@ -401,28 +412,30 @@ void BibToolBar::SelectFilterItem(sal_uInt16    nId)
 
 void BibToolBar::EnableSourceList(bool bFlag)
 {
-    aFtSource->Enable(bFlag);
-    aLBSource->Enable(bFlag);
+    xSource->set_sensitive(bFlag);
 }
 
 void BibToolBar::ClearSourceList()
 {
-    aLBSource->Clear();
+    pLbSource->clear();
 }
 
 void BibToolBar::UpdateSourceList(bool bFlag)
 {
-    aLBSource->SetUpdateMode(bFlag);
+    if (bFlag)
+        pLbSource->thaw();
+    else
+        pLbSource->freeze();
 }
 
 void BibToolBar::InsertSourceEntry(const OUString& aEntry)
 {
-    aLBSource->InsertEntry(aEntry);
+    pLbSource->append_text(aEntry);
 }
 
 void BibToolBar::SelectSourceEntry(const OUString& aStr)
 {
-    aLBSource->SelectEntry(aStr);
+    pLbSource->set_active_text(aStr);
 }
 
 void BibToolBar::EnableQuery(bool bFlag)
@@ -466,7 +479,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
     return bResult;
 }
 
-IMPL_LINK_NOARG( BibToolBar, SelHdl, ListBox&, void )
+IMPL_LINK_NOARG( BibToolBar, SelHdl, weld::ComboBox&, void )
 {
     aIdle.Start();
 }
@@ -476,9 +489,9 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
     pPropertyVal[0].Name = "DataSourceName";
-    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectedEntry() ) );
+    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( pLbSource->get_active_text() ) );
     pPropertyVal[0].Value <<= aEntry;
-    SendDispatch(nTBC_LB_SOURCE, aPropVal);
+    SendDispatch(nTBC_SOURCE, aPropVal);
 }
 
 IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
