@@ -423,8 +423,8 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
     sal_Int16                                   nIndex = -1;
-    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rLabel, sHelpId, nIndex, rChildren);
-    if( xTmp.is() )
+    bool bSuccess = AddXControl(rColumnName, rLabel, sHelpId, nIndex, rChildren);
+    if (bSuccess)
     {
         DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
         DBG_ASSERT( nFT2CtrlMap[ nIndexInFTArray ] < 0, "+BibGeneralPage::AddControlWithError(): index already in use!" );
@@ -440,7 +440,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText
     }
 }
 
-uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
+bool  BibGeneralPage::AddXControl(
         const OUString& rName,
         FixedText& rLabel, const OString& sHelpId, sal_Int16& rIndex,
         std::vector<vcl::Window*>& rChildren)
@@ -520,7 +520,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     {
         OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
     }
-    return xCtrModel;
+    return xCtrModel.is();
 }
 
 void BibGeneralPage::InitFixedTexts()
