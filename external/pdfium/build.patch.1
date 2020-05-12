@@ -37,17 +37,3 @@ index 0fb627ba8..dda1fc8bc 100644
        : span(container.data(), container.size()) {}
    template <
        typename Container,
---- a/core/fxcrt/fx_memory_wrappers.h.orig	2020-01-15 11:16:03.848760100 +0100
-+++ b/core/fxcrt/fx_memory_wrappers.h	2020-01-15 11:16:44.050531200 +0100
-@@ -23,8 +23,11 @@
- template <class T>
- struct FxAllocAllocator {
-  public:
-+#ifndef _WIN32
-+  // MSVC thinks uint8_t is not an arithmetic type.
-   static_assert(std::is_arithmetic<T>::value,
-                 "Only numeric types allowed in this partition");
-+#endif
- 
-   using value_type = T;
-   using pointer = T*;
