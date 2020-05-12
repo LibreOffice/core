@@ -271,7 +271,8 @@ awt::Size lcl_placeLegendEntries(
     const awt::Size& rRemainingSpace,
     sal_Int32 nYStartPosition,
     const awt::Size& rPageSize,
-    bool bIsPivotChart)
+    bool bIsPivotChart,
+    awt::Size& rDefaultLegendSize)
 {
     bool bIsCustomSize = (eExpansion == css::chart::ChartLegendExpansion_CUSTOM);
     awt::Size aResultingLegendSize(0,0);
@@ -309,6 +310,9 @@ awt::Size lcl_placeLegendEntries(
     sal_Int32 nMaxEntryWidth = nXOffset + nSymbolPlusDistanceWidth + aMaxEntryExtent.Width;
     sal_Int32 nMaxEntryHeight = nYOffset + aMaxEntryExtent.Height;
     sal_Int32 nNumberOfEntries = rEntries.size();
+
+    rDefaultLegendSize.Width = nMaxEntryWidth;
+    rDefaultLegendSize.Height = nMaxEntryHeight + nYPadding;
 
     sal_Int32 nNumberOfColumns = 0, nNumberOfRows = 0;
     std::vector< sal_Int32 > aColumnWidths;
@@ -870,7 +874,8 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 
 void VLegend::createShapes(
     const awt::Size & rAvailableSpace,
-    const awt::Size & rPageSize )
+    const awt::Size & rPageSize,
+    awt::Size & rDefaultLegendSize )
 {
     if(! (m_xLegend.is() &&
           m_xShapeFactory.is() &&
@@ -980,7 +985,7 @@ void VLegend::createShapes(
                 // place the legend entries
                 aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize,
                                                      aMaxSymbolExtent, aTextProperties, xLegendContainer,
-                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight, rPageSize, bIsPivotChart);
+                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight, rPageSize, bIsPivotChart, rDefaultLegendSize);
 
                 uno::Reference<beans::XPropertySet> xModelPage(mrModel.getPageBackground());
 
@@ -1014,7 +1019,8 @@ void VLegend::createShapes(
 
 void VLegend::changePosition(
     awt::Rectangle & rOutAvailableSpace,
-    const awt::Size & rPageSize )
+    const awt::Size & rPageSize,
+    const css::awt::Size & rDefaultLegendSize )
 {
     if(! m_xShape.is())
         return;
@@ -1026,6 +1032,7 @@ void VLegend::changePosition(
         Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
         chart2::RelativePosition aRelativePosition;
 
+        bool bDefaultLegendSize = rDefaultLegendSize.Width != 0 || rDefaultLegendSize.Height != 0;
         bool bAutoPosition =
             ! (xLegendProp->getPropertyValue( "RelativePosition") >>= aRelativePosition);
 
@@ -1048,7 +1055,7 @@ void VLegend::changePosition(
             // manual position: relative to whole page
             awt::Rectangle aAvailableSpace( 0, 0, rPageSize.Width, rPageSize.Height );
             awt::Point aPos = lcl_calculatePositionAndRemainingSpace(
-                aAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize, bOverlay );
+                aAvailableSpace, rPageSize, aRelativePosition, ePos, bDefaultLegendSize ? rDefaultLegendSize : aLegendSize, bOverlay );
             m_xShape->setPosition( aPos );
 
             if (!bOverlay)
@@ -1056,7 +1063,7 @@ void VLegend::changePosition(
                 // calculate remaining space as if having autoposition:
                 aRelativePosition = lcl_getDefaultPosition( ePos, rOutAvailableSpace, rPageSize );
                 lcl_calculatePositionAndRemainingSpace(
-                    rOutAvailableSpace, rPageSize, aRelativePosition, ePos, aLegendSize, bOverlay );
+                    rOutAvailableSpace, rPageSize, aRelativePosition, ePos, bDefaultLegendSize ? rDefaultLegendSize : aLegendSize, bOverlay );
             }
         }
     }

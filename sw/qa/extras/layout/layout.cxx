@@ -2369,7 +2369,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
                    "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline[1]/point[2]",
                    "x")
               .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2886, nXRight - nXLeft, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2895, nXRight - nXLeft, 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
@@ -2695,7 +2695,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129095)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // check the inner chart area visibility with testing the X axis label
+    // check the inner chart area (relative size) visibility with testing the X axis label
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
+                       "Category 1");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
+{
+    SwDoc* pDoc = createDoc("tdf132956.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // check the inner chart area (default size) visibility with testing the X axis label
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
                        "Category 1");
 }
