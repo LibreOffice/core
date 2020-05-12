@@ -94,6 +94,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
 
 DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // OOXML has just one border attribute (<w:bdr>) for text border so all side has
     // the same border with the same padding
@@ -770,6 +771,7 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
     text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
     CPPUNIT_ASSERT( crop.Left != 0 && crop.Right != 0 );
@@ -942,6 +944,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testcantSplit, "2_table_doc.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDontSplitTable, "tdf101589_dontSplitTable.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     //single row tables need to prevent split by setting row to no split
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]") );
 

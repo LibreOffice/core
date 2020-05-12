@@ -70,6 +70,7 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
     // color shouldn't be black.
@@ -103,6 +104,7 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 
 DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles( "ParagraphStyles" );
@@ -179,6 +181,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testCommentsNested, "comments-nested.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
 
@@ -193,6 +196,7 @@ DECLARE_OOXMLEXPORT_TEST(testMathEscape, "math-escape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
     CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
@@ -323,6 +327,7 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we write qFormat for well-known style names.
     xmlDocUniquePtr pXmlDocCT = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlDocCT);
@@ -404,6 +409,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that we lacked the fallback to export the replacement
     // graphic for OLE objects.  But we can actually export the OLE itself now,
     // so check that instead.
@@ -442,6 +448,7 @@ DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The frames were simply missing, so let's check if all 3 frames were imported back.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
@@ -549,6 +556,7 @@ DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inner margins of the textframe wasn't exported.
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLeftDistance"));
@@ -784,6 +792,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(xFrame, "Surround"));
@@ -814,6 +823,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The second frame was simply missing, so let's check if both frames were imported back.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
@@ -919,6 +929,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "FillColor"));

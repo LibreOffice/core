@@ -350,6 +350,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // This was 2 (missing trailing cell in merged cell range)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc", 3);
@@ -476,6 +477,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_do
 
 DECLARE_OOXMLEXPORT_TEST(testTdf98700_keepWithNext, "tdf98700_keepWithNext.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading style keeps with next", true, getProperty<bool>(getParagraph(1), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default style doesn't keep with next", false, getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading 1 style inherits keeps with next", true, getProperty<bool>(getParagraph(3), "ParaKeepTogether"));
@@ -892,6 +894,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", sal_Int32(0xFF007F), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
     xPageStyle.set(getStyles("ParagraphStyles")->getByName("Endnote"), uno::UNO_QUERY);
@@ -985,6 +988,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106001, "tdf106001.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106001_2, "tdf106001-2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
     // Note: we disregard what's set in pPr / rPr and only care about r / rPr
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -1092,6 +1096,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was true, a balanced section from ODF turned into a non-balanced one after OOXML roundtrip.
@@ -1100,6 +1105,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml"))
         // This was 1, <w:outlineLvl> was duplicated for Heading1.
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
@@ -1150,6 +1156,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
@@ -1216,6 +1223,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xControlShape.is());
@@ -1317,6 +1325,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two issues were here:
     //  1) second shape was not export (it is anchored to the end of the run)
     //  2) inline property was inherited to the second shape by mistake
@@ -1368,6 +1377,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
     // LO crashed while export because of character background color handling
 
     //tdf76683 - Cannot be negative number - use firstLine instead of hanging
@@ -1378,6 +1388,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103090, "tdf103090.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Get bookmark name

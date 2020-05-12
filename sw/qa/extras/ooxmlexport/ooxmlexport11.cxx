@@ -84,6 +84,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92524_autoColor, "tdf92524_autoColor.doc")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116436_rowFill, "tdf116436_rowFill.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
@@ -99,6 +100,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121665_back2backColumnBreaks, "tdf121665_back2ba
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126795_TabsRelativeToIndent0, "tdf126795_TabsRelativeToIndent0.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), "ParaTabStops");
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
@@ -107,6 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126795_TabsRelativeToIndent0, "tdf126795_TabsRel
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126795_TabsRelativeToIndent1, "tdf126795_TabsRelativeToIndent1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), "ParaTabStops");
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
@@ -182,6 +185,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport();
 
     // get TOC node
@@ -361,6 +365,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf94801, "tdf94801.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // Test document has only two paragraphs. After splitting, it should contain
@@ -371,6 +376,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSplitOnSectionBorder, "paraspli
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf44832_testSectionWithDifferentHeader, "tdf44832_section_new_header.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:headerReference", 1);
 }
@@ -415,6 +421,7 @@ DECLARE_OOXMLEXPORT_TEST(testSignatureLineShape, "signature-line-all-props-set.d
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf117805, "tdf117805.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
@@ -688,6 +695,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119760_positionCellBorder, "tdf119760_positionCe
 
 DECLARE_OOXMLEXPORT_TEST(testTdf98620_environmentBiDi, "tdf98620_environmentBiDi.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( getParagraph(1), "WritingMode" ));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_RIGHT), getProperty<sal_Int32>( getParagraph(1), "ParaAdjust" ));
 
@@ -1205,6 +1213,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105215, "tdf105215.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // check paragraphs with removed paragraph mark

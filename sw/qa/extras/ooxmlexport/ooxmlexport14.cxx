@@ -311,6 +311,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // check character properties
     {
         uno::Reference<beans::XPropertySet> xStyle(
@@ -434,6 +435,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("Shadow"), uno::UNO_QUERY_THROW);
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xStyleProps, "ParaShadowFormat");
@@ -815,6 +817,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf77796, "tdf77796.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128290, "tdf128290.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
@@ -872,6 +875,7 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
 
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Explicitly set hyphenation=auto on document level
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     CPPUNIT_ASSERT(pXmlSettings);
@@ -930,6 +934,7 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     //The positions of OLE objects were not exported, check if now it is exported correctly
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);

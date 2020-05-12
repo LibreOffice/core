@@ -87,6 +87,7 @@ DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf48569, "tdf48569.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File crashing while saving in LO
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eValue);

@@ -67,6 +67,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Check that no shape got lost: a bezier, a line and a text shape.
@@ -415,6 +416,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First problem was LO crashed during export (crash test)
 
     // Second problem was LO made file corruption, writing out nested text boxes, which can't be handled by Word.
@@ -765,6 +767,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -986,6 +989,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         // There should be a section break that's in the middle of the document: right after the table.
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);

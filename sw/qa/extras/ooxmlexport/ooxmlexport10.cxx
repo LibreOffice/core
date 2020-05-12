@@ -827,6 +827,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
@@ -845,6 +846,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
