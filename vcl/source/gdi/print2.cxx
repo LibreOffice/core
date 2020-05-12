@@ -794,10 +794,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         int nLastBgAction = FindIncompletelyOccludedBackground(aBackgroundComponent, rInMtf, aMapModeVDev.get());
 
-        // clean up aMapModeVDev
-        sal_uInt32 nCount = aMapModeVDev->GetGCStackDepth();
-        while( nCount-- )
-            aMapModeVDev->Pop();
+        aMapModeVDev->ClearStack(); // clean up aMapModeVDev
 
         ::std::vector<ConnectedComponents> aCCList; // contains distinct sets of connected components as elements.
 
@@ -1218,10 +1215,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
         }
 
-        // clean up aMapModeVDev
-        nCount = aMapModeVDev->GetGCStackDepth();
-        while( nCount-- )
-            aMapModeVDev->Pop();
+        aMapModeVDev->ClearStack(); // clean up aMapModeVDev
 
         //  STAGE 4: Copy actions to output metafile
 
