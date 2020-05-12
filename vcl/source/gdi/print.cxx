@@ -180,6 +180,23 @@ void PrinterOptions::ReadFromConfig( bool i_bFile )
         *this = aOldValues;
 }
 
+bool Printer::UseTilingForBands()
+{
+    return true;
+}
+
+tools::Rectangle Printer::GetPageSizeForBanding()
+{
+    Point aPageOffset;
+    Size aTmpSize(GetOutputSizePixel());
+
+    aPageOffset = GetPageOffsetPixel();
+    aPageOffset = Point( 0, 0 ) - aPageOffset;
+    aTmpSize  = GetPaperSizePixel();
+
+    return tools::Rectangle(aPageOffset, aTmpSize);
+}
+
 bool Printer::DrawTransformBitmapExDirect(
     const basegfx::B2DHomMatrix& /*aFullTransform*/,
     const BitmapEx& /*rBitmapEx*/)

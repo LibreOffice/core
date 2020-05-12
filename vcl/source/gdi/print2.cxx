@@ -992,6 +992,16 @@ void RecordMapModeChanges(VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uIn
 
 } // end anon namespace
 
+bool OutputDevice::UseTilingForBands()
+{
+    return false;
+}
+
+tools::Rectangle OutputDevice::GetPageSizeForBanding()
+{
+    return tools::Rectangle(Point(0, 0), GetOutputSizePixel());
+}
+
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
@@ -1090,26 +1100,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         //  STAGE 3.2: Generate banded bitmaps for special regions
 
-        Point aPageOffset;
-        Size aTmpSize( GetOutputSizePixel() );
-        if( meOutDevType == OUTDEV_PDF )
-        {
-            auto pPdfWriter = static_cast<vcl::PDFWriterImpl*>(this);
-            aTmpSize = LogicToPixel(pPdfWriter->getCurPageSize(), MapMode(MapUnit::MapPoint));
-
-            // also add error code to PDFWriter
-            pPdfWriter->insertError(vcl::PDFWriter::Warning_Transparency_Converted);
-        }
-        else if( meOutDevType == OUTDEV_PRINTER )
-        {
-            Printer* pThis = dynamic_cast<Printer*>(this);
-            assert(pThis);
-            aPageOffset = pThis->GetPageOffsetPixel();
-            aPageOffset = Point( 0, 0 ) - aPageOffset;
-            aTmpSize  = pThis->GetPaperSizePixel();
-        }
-        const tools::Rectangle aOutputRect( aPageOffset, aTmpSize );
-        bool bTiling = dynamic_cast<Printer*>(this) != nullptr;
+        const tools::Rectangle aOutputRect(GetPageSizeForBanding());
 
         // Read the configuration value of minimal object area where transparency will be removed
         double fReduceTransparencyMinArea = officecfg::Office::Common::VCL::ReduceTransparencyMinArea::get() / 100.0;
@@ -1160,7 +1151,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         while( aDstPtPix.Y() <= aBoundRect.Bottom() )
                         {
                             aDstPtPix.setX( aBoundRect.Left() );
-                            aDstSzPix = bTiling ? Size( MAX_TILE_WIDTH, MAX_TILE_HEIGHT ) : aBoundRect.GetSize();
+                            aDstSzPix = UseTilingForBands() ? Size( MAX_TILE_WIDTH, MAX_TILE_HEIGHT ) : aBoundRect.GetSize();
 
                             if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1 ) > aBoundRect.Bottom() )
                                 aDstSzPix.setHeight( aBoundRect.Bottom() - aDstPtPix.Y() + 1 );

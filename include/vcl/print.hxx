@@ -321,6 +321,9 @@ public:
     /** @return Number of available paper formats */
     int                         GetPaperInfoCount() const;
 
+    virtual bool                UseTilingForBands() override;
+    virtual tools::Rectangle    GetPageSizeForBanding() override;
+
     /** @return Info about paper format nPaper */
     const PaperInfo&            GetPaperInfo( int nPaper ) const;
     sal_uInt16                  GetPaperBinCount() const;
