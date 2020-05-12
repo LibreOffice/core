@@ -625,6 +625,7 @@ public:
     static bool compressStream( SvMemoryStream* );
 
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
+    virtual tools::Rectangle GetPageSizeForBanding() override;
 
 protected:
     void ImplClearFontData(bool bNewFontLists) override;
