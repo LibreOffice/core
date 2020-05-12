@@ -52,6 +52,24 @@
       "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a732dd_0ef5c05a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-05-12T07:57:50Z",
+      "side": 1,
+      "message": "As the code to install them isn\u0027t written yet, it is rather irrelevant to ponder whether they are \"guaranteed\" to be stored where my plan is that they are stored. (I.e., on macOS, for LibreOffice 7.0, in ~/Library/Application Support/LibreOffice/4/packs/7.0) \n\nI naturally want to use existing functionality instead of adding stuff not directly related to the task at hand. If I would start \"improving\" \"fishy\" code that is somehow relatd whenever I see it this task would explode. And as the neighbouring lines here used the same $(userurl) it seemed natural to use that on the added line too. \"Use surrounding code conventions\" and all that.",
+      "parentUuid": "352e6d45_c2ac7611",
+      "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
