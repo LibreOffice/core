@@ -736,6 +736,13 @@ int GetActionAfterBackgroundAction(ConnectedComponents& rBackgroundComponent, Me
     return nActionNum;
 }
 
+void RecordMapModeChanges(VirtualDevice* pMapModeVDev, sal_uInt32 nDPIX, sal_uInt32 nDPIY)
+{
+    pMapModeVDev->SetDPIX(nDPIX);
+    pMapModeVDev->SetDPIY(nDPIY);
+    pMapModeVDev->EnableOutput(false);
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -803,9 +810,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         // create an OutputDevice to record mapmode changes and the like
         ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
-        aMapModeVDev->mnDPIX = mnDPIX;
-        aMapModeVDev->mnDPIY = mnDPIY;
-        aMapModeVDev->EnableOutput(false);
+        RecordMapModeChanges(aMapModeVDev.get(), mnDPIX, mnDPIY);
 
         // weed out page-filling background objects (if they are
         // uniformly coloured). Keeping them outside the other
