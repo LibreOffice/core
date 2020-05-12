@@ -25,11 +25,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace cssxw = com::sun::star::xml::wrapper;
-namespace cssxc = com::sun::star::xml::crypto;
-
-BufferNode::BufferNode( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
+BufferNode::BufferNode( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement )
     :m_pParent(nullptr),
      m_pBlocker(nullptr),
      m_bAllReceived(false),
@@ -65,9 +61,9 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
 {
     return std::any_of(m_vElementCollectors.cbegin(), m_vElementCollectors.cend(),
         [nIgnoredSecurityId](const ElementCollector* pElementCollector) {
-            return (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
+            return (nIgnoredSecurityId == css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
                     pElementCollector->getSecurityId() != nIgnoredSecurityId) &&
-                   (pElementCollector->getPriority() == cssxc::sax::ElementMarkPriority_BEFOREMODIFY);
+                   (pElementCollector->getPriority() == css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY);
         });
 }
 
@@ -215,10 +211,10 @@ OUString BufferNode::printChildren() const
 
         switch (ii->getPriority())
         {
-            case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
+            case css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY:
                 rc.append("BEFOREMODIFY");
                 break;
-            case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
+            case css::xml::crypto::sax::ElementMarkPriority_AFTERMODIFY:
                 rc.append("AFTERMODIFY");
                 break;
             default:
@@ -618,7 +614,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
 }
 
 
-void BufferNode::setXMLElement( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
+void BufferNode::setXMLElement( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement )
 {
     m_xXMLElement = xXMLElement;
 }
@@ -672,8 +668,8 @@ void BufferNode::elementCollectorNotify()
 {
     if (!m_vElementCollectors.empty())
     {
-        cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_MINIMUM;
-        cssxc::sax::ElementMarkPriority nPriority;
+        css::xml::crypto::sax::ElementMarkPriority nMaxPriority = css::xml::crypto::sax::ElementMarkPriority_MINIMUM;
+        css::xml::crypto::sax::ElementMarkPriority nPriority;
 
         /*
          * get the max priority among ElementCollectors on this BufferNode
@@ -703,7 +699,7 @@ void BufferNode::elementCollectorNotify()
              * unless its priority is BEFOREMODIFY.
              */
             if (nPriority == nMaxPriority &&
-                (nPriority == cssxc::sax::ElementMarkPriority_BEFOREMODIFY ||
+                (nPriority == css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY ||
                  !isBlockerInSubTreeIncluded(pElementCollector->getSecurityId())))
             {
                 /*
@@ -716,7 +712,7 @@ void BufferNode::elementCollectorNotify()
                  * will destroy the buffered element, in turn, ElementCollectors
                  * mentioned above can't perform their mission.
                  */
-                //if (!(nMaxPriority == cssxc::sax::ElementMarkPriority_PRI_MODIFY &&
+                //if (!(nMaxPriority == css::xml::crypto::sax::ElementMarkPriority_PRI_MODIFY &&
                 if (!(bToModify &&
                      (isECInSubTreeIncluded(pElementCollector->getSecurityId()) ||
                       isECOfBeforeModifyInAncestorIncluded(pElementCollector->getSecurityId()))
@@ -755,7 +751,7 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
 {
     bool rc = std::any_of(m_vElementCollectors.begin(), m_vElementCollectors.end(),
         [nIgnoredSecurityId](const ElementCollector* pElementCollector) {
-            return nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
+            return nIgnoredSecurityId == css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
                 pElementCollector->getSecurityId() != nIgnoredSecurityId;
     });
 
@@ -841,7 +837,7 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
         [nIgnoredSecurityId](const std::unique_ptr<BufferNode>& pBufferNode) {
             ElementMark* pBlocker = pBufferNode->getBlocker();
             return (pBlocker != nullptr &&
-                (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
+                (nIgnoredSecurityId == css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
                  pBlocker->getSecurityId() != nIgnoredSecurityId )) ||
                 pBufferNode->isBlockerInSubTreeIncluded(nIgnoredSecurityId);
     });

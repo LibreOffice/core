@@ -28,8 +28,6 @@
 #include <cert.h>
 
 
-namespace cssxc = css::xml::crypto;
-
 using namespace com::sun::star;
 
 
@@ -43,7 +41,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 }
 
 /* XSEInitializer */
-uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
+uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
     SEInitializer_NssImpl::createSecurityContext( const OUString& )
 {
     CERTCertDBHandle    *pCertHandle = nullptr ;
@@ -56,9 +54,9 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     try
     {
         /* Build XML Security Context */
-        uno::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( m_xContext );
+        uno::Reference< css::xml::crypto::XXMLSecurityContext > xSecCtx = css::xml::crypto::XMLSecurityContext::create( m_xContext );
 
-        uno::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( m_xContext );
+        uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = css::xml::crypto::SecurityEnvironment::create( m_xContext );
         uno::Reference< lang::XUnoTunnel > xSecEnvTunnel(xSecEnv, uno::UNO_QUERY_THROW);
         SecurityEnvironment_NssImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -78,7 +76,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 }
 
-void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< cssxc::XXMLSecurityContext >& )
+void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< css::xml::crypto::XXMLSecurityContext >& )
 {
     /*
      * because the security context will free all its content when it

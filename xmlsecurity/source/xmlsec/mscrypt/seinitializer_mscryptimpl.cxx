@@ -32,8 +32,8 @@
 #include <svl/cryptosign.hxx>
 
 using namespace com::sun::star;
-namespace cssl = com::sun::star::lang;
-namespace cssxc = com::sun::star::xml::crypto;
+namespace css::lang = com::sun::star::lang;
+namespace css::xml::crypto = com::sun::star::xml::crypto;
 
 SEInitializer_MSCryptImpl::SEInitializer_MSCryptImpl(
     const uno::Reference< uno::XComponentContext > &rxContext)
@@ -46,7 +46,7 @@ SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 }
 
 /* XSEInitializer */
-uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
+uno::Reference< css::xml::crypto::XXMLSecurityContext > SAL_CALL
     SEInitializer_MSCryptImpl::createSecurityContext(
     const OUString& sCertDB )
 {
@@ -75,10 +75,10 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     try {
         /* Build Security Environment */
-        uno::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( mxContext );
+        uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = css::xml::crypto::SecurityEnvironment::create( mxContext );
 
         /* Setup key slot and certDb */
-        uno::Reference< cssl::XUnoTunnel > xSecEnvTunnel( xSecEnv, uno::UNO_QUERY_THROW );
+        uno::Reference< css::lang::XUnoTunnel > xSecEnvTunnel( xSecEnv, uno::UNO_QUERY_THROW );
         SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
         if( pSecEnv == nullptr )
         {
@@ -102,7 +102,7 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         }
 
         /* Build XML Security Context */
-        uno::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( mxContext );
+        uno::Reference< css::xml::crypto::XXMLSecurityContext > xSecCtx = css::xml::crypto::XMLSecurityContext::create( mxContext );
 
         xSecCtx->setDefaultSecurityEnvironmentIndex(xSecCtx->addSecurityEnvironment( xSecEnv )) ;
         return xSecCtx;
@@ -119,15 +119,15 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 }
 
-void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Reference< cssxc::XXMLSecurityContext >&)
+void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const uno::Reference< css::xml::crypto::XXMLSecurityContext >&)
 {
     /*
-    uno::Reference< cssxc::XSecurityEnvironment > xSecEnv
+    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv
         = securityContext->getSecurityEnvironment();
 
     if( xSecEnv.is() )
     {
-        uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
+        uno::Reference< css::lang::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
         if( xEnvTunnel.is() )
         {
             SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
