@@ -747,7 +747,11 @@ OString ScOutlineArray::dumpAsString() const
     OString aOutput;
     const char* pLevelSep = " ";
     for (const auto& rCollection : aCollections)
+    {
+        if (rCollection.empty())
+            continue;
         aOutput += rCollection.dumpAsString() + pLevelSep;
+    }
 
     return aOutput;
 }
