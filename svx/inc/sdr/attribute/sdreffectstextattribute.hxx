@@ -37,11 +37,15 @@ namespace drawinglayer
             // glow effect
             SdrGlowAttribute            maGlow;
 
+            // soft edge
+            sal_Int32 mnSoftEdgeRadius = 0;
+
         public:
             SdrEffectsTextAttribute(
                 const SdrShadowAttribute& rShadow,
                 const SdrTextAttribute& rTextAttribute,
-                const SdrGlowAttribute& rGlow);
+                const SdrGlowAttribute& rGlow,
+                sal_Int32 nSoftEdgeRadius);
             SdrEffectsTextAttribute();
             SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate);
             SdrEffectsTextAttribute& operator=(const SdrEffectsTextAttribute& rCandidate);
@@ -56,6 +60,7 @@ namespace drawinglayer
             const SdrShadowAttribute& getShadow() const { return maShadow; }
             const SdrTextAttribute& getText() const { return maTextAttribute; }
             const SdrGlowAttribute& getGlow() const { return maGlow; }
+            sal_Int32 getSoftEdgeRadius() const { return mnSoftEdgeRadius; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
