@@ -9102,7 +9102,7 @@ private:
         GtkInstanceTreeIter aIter(nullptr);
         if (!get_cursor(&aIter))
             return;
-        if (iter_has_child(aIter))
+        if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(m_pTreeStore), &aIter.iter))
             get_row_expanded(aIter) ? collapse_row(aIter) : expand_row(aIter);
     }
 
@@ -9540,9 +9540,11 @@ private:
         if (!get_cursor(&aIter))
             return false;
 
+        bool bHasChild = gtk_tree_model_iter_has_child(GTK_TREE_MODEL(m_pTreeStore), &aIter.iter);
+
         if (pEvent->keyval == GDK_KEY_Right)
         {
-            if (iter_has_child(aIter) && !get_row_expanded(aIter))
+            if (bHasChild && !get_row_expanded(aIter))
             {
                 expand_row(aIter);
                 return true;
@@ -9550,7 +9552,7 @@ private:
             return false;
         }
 
-        if (iter_has_child(aIter) && get_row_expanded(aIter))
+        if (bHasChild && get_row_expanded(aIter))
         {
             collapse_row(aIter);
             return true;
