@@ -228,7 +228,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/fpdf_parser_utility \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_object_walker \
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_read_validator \
-    UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_charposlist \
+    UnpackedTarball/pdfium/core/fpdfapi/render/charposlist \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_devicebuffer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_docrenderdata \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_imagecacheentry \
@@ -414,6 +414,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_utf8encoder \
     UnpackedTarball/pdfium/core/fxcrt/cfx_readonlymemorystream \
     UnpackedTarball/pdfium/core/fxcrt/observed_ptr \
+    UnpackedTarball/pdfium/core/fxcrt/string_data_template \
 ))
 
 # fxge

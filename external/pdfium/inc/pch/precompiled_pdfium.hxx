@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-03-11 14:44:55 using:
+ Generated on 2020-05-06 11:57:12 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -178,7 +178,7 @@
 #include <core/fpdfapi/parser/cpdf_syntax_parser.h>
 #include <core/fpdfapi/parser/fpdf_parser_decode.h>
 #include <core/fpdfapi/parser/fpdf_parser_utility.h>
-#include <core/fpdfapi/render/cpdf_charposlist.h>
+#include <core/fpdfapi/render/charposlist.h>
 #include <core/fpdfapi/render/cpdf_devicebuffer.h>
 #include <core/fpdfapi/render/cpdf_docrenderdata.h>
 #include <core/fpdfapi/render/cpdf_imagecacheentry.h>
@@ -320,6 +320,7 @@
 #include <core/fxcrt/observed_ptr.h>
 #include <core/fxcrt/pauseindicator_iface.h>
 #include <core/fxcrt/retain_ptr.h>
+#include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/unowned_ptr.h>
 #include <core/fxcrt/widestring.h>
