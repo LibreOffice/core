@@ -639,7 +639,7 @@ void NumericFormatter::SetValueFromString(const OUString& rStr)
     if (ImplNumericGetValue(rStr, nValue, GetDecimalDigits(),
         Application::GetSettings().GetNeutralLocaleDataWrapper()))
     {
-        SetValue(nValue);
+        ImplNewFieldValue(nValue);
     }
     else
     {
