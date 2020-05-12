@@ -25,9 +25,6 @@
 
 #include <string.h>
 
-namespace cssu = com::sun::star::uno;
-namespace cssxc = com::sun::star::xml::crypto;
-namespace cssxs = com::sun::star::xml::sax;
 
 XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     XSecController* pXSecController)
@@ -49,12 +46,12 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     , m_bInSignatureLineInvalidImage(false)
     , m_pXSecController(pXSecController)
     , m_bReferenceUnresolved(false)
-    , m_nReferenceDigestID(cssxc::DigestID::SHA1)
+    , m_nReferenceDigestID(css::xml::crypto::DigestID::SHA1)
     , m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
 }
 
-OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& xAttribs )
+OUString XSecParser::getIdAttr(const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
 {
     OUString ouIdAttr = xAttribs->getValueByName("id");
 
@@ -98,7 +95,7 @@ void SAL_CALL XSecParser::endDocument(  )
 
 void SAL_CALL XSecParser::startElement(
     const OUString& aName,
-    const cssu::Reference< cssxs::XAttributeList >& xAttribs )
+    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
 {
     try
     {
@@ -158,11 +155,11 @@ void SAL_CALL XSecParser::startElement(
                              && ouAlgorithm != ALGO_XMLDSIGSHA512,
                              "xmlsecurity.helper", "Algorithm neither SHA1, SHA256 nor SHA512");
                 if (ouAlgorithm == ALGO_XMLDSIGSHA1)
-                    m_nReferenceDigestID = cssxc::DigestID::SHA1;
+                    m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
                 else if (ouAlgorithm == ALGO_XMLDSIGSHA256)
-                    m_nReferenceDigestID = cssxc::DigestID::SHA256;
+                    m_nReferenceDigestID = css::xml::crypto::DigestID::SHA256;
                 else if (ouAlgorithm == ALGO_XMLDSIGSHA512)
-                    m_nReferenceDigestID = cssxc::DigestID::SHA512;
+                    m_nReferenceDigestID = css::xml::crypto::DigestID::SHA512;
                 else
                     m_nReferenceDigestID = 0;
             }
@@ -285,18 +282,18 @@ void SAL_CALL XSecParser::startElement(
             m_xNextHandler->startElement(aName, xAttribs);
         }
     }
-    catch (cssu::Exception& )
+    catch (css::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
-        cssu::Any exc =  cppu::getCaughtException();
-        throw cssxs::SAXException(
+        css::uno::Any exc =  cppu::getCaughtException();
+        throw css::xml::sax::SAXException(
             "xmlsecurity: Exception in XSecParser::startElement",
             nullptr, exc);
     }
     catch (...)
     {
-        throw cssxs::SAXException(
+        throw css::xml::sax::SAXException(
             "xmlsecurity: unexpected exception in XSecParser::startElement", nullptr,
-            cssu::Any());
+            css::uno::Any());
     }
 }
 
@@ -409,18 +406,18 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_xNextHandler->endElement(aName);
         }
     }
-    catch (cssu::Exception& )
+    catch (css::uno::Exception& )
     {//getCaughtException MUST be the first line in the catch block
-        cssu::Any exc =  cppu::getCaughtException();
-        throw cssxs::SAXException(
+        css::uno::Any exc =  cppu::getCaughtException();
+        throw css::xml::sax::SAXException(
             "xmlsecurity: Exception in XSecParser::endElement",
             nullptr, exc);
     }
     catch (...)
     {
-        throw cssxs::SAXException(
+        throw css::xml::sax::SAXException(
             "xmlsecurity: unexpected exception in XSecParser::endElement", nullptr,
-            cssu::Any());
+            css::uno::Any());
     }
 }
 
@@ -513,7 +510,7 @@ void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const 
     }
 }
 
-void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
+void SAL_CALL XSecParser::setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
 {
     if (m_xNextHandler.is())
     {
@@ -525,7 +522,7 @@ void SAL_CALL XSecParser::setDocumentLocator( const cssu::Reference< cssxs::XLoc
  * XInitialization
  */
 void SAL_CALL XSecParser::initialize(
-    const cssu::Sequence< cssu::Any >& aArguments )
+    const css::uno::Sequence< css::uno::Any >& aArguments )
 {
     aArguments[0] >>= m_xNextHandler;
 }
