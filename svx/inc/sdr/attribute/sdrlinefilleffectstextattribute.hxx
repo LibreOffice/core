@@ -42,7 +42,8 @@ namespace drawinglayer
                 const SdrShadowAttribute& rShadow,
                 const FillGradientAttribute& rFillFloatTransGradient,
                 const SdrTextAttribute& rTextAttribute,
-                const SdrGlowAttribute& rGlow);
+                const SdrGlowAttribute& rGlow,
+                sal_Int32 nSoftEdgeRadius);
             SdrLineFillEffectsTextAttribute();
             SdrLineFillEffectsTextAttribute(const SdrLineFillEffectsTextAttribute& rCandidate);
             SdrLineFillEffectsTextAttribute& operator=(const SdrLineFillEffectsTextAttribute& rCandidate);

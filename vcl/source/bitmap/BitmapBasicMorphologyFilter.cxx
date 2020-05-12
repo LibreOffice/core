@@ -26,11 +26,16 @@ struct FilterSharedData
     BitmapReadAccess* mpReadAccess;
     BitmapWriteAccess* mpWriteAccess;
     long mnRadius;
+    sal_uInt8 mnOutsideVal;
+    Color maOutsideColor;
 
-    FilterSharedData(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess, long nRadius)
+    FilterSharedData(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess, long nRadius,
+                     sal_uInt8 nOutsideVal)
         : mpReadAccess(pReadAccess)
         , mpWriteAccess(pWriteAccess)
         , mnRadius(nRadius)
+        , mnOutsideVal(nOutsideVal)
+        , maOutsideColor(nOutsideVal, nOutsideVal, nOutsideVal, nOutsideVal)
     {
     }
 };
@@ -53,7 +58,7 @@ struct DilateOp
 
 template <typename MorphologyOp> struct OpHelper
 {
-    template <int n> static void apply(sal_uInt8 (&rResult)[n], Scanline pSource)
+    template <int n> static void apply(sal_uInt8 (&rResult)[n], sal_uInt8* pSource)
     {
         std::transform(pSource, pSource + n, rResult, rResult, MorphologyOp::apply);
     }
@@ -66,9 +71,14 @@ template <typename MorphologyOp> struct OpHelper
                         MorphologyOp::apply(rSource.GetBlue(), rResult.GetBlue()));
     }
 
+    template <int n> static void init(sal_uInt8 (&rResult)[n], sal_uInt8 val)
+    {
+        std::fill_n(rResult, n, val);
+    }
+
     template <int n> static void init(sal_uInt8 (&rResult)[n])
     {
-        std::fill_n(rResult, n, MorphologyOp::initVal);
+        init(rResult, MorphologyOp::initVal);
     }
 };
 
@@ -83,9 +93,10 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
         BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
         BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
-        const long nWidth = pReadAccess->Width();
-        const long nLastIndex = nWidth - 1;
+        sal_uInt8 aOutside[nWidthBytes];
+        OpHelper<MorphologyOp>::init(aOutside, rShared.mnOutsideVal);
 
+        const long nWidth = pReadAccess->Width();
         const long nRadius = rShared.mnRadius;
 
         for (long y = nStart; y <= nEnd; y++)
@@ -97,9 +108,13 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
                 // TODO: try to optimize this to not process same pixels repeatedly
                 sal_uInt8 aResult[nWidthBytes];
                 OpHelper<MorphologyOp>::init(aResult);
-                const long iMax = std::min(x + nRadius, nLastIndex);
-                for (long i = std::max(x - nRadius, 0L); i <= iMax; ++i)
-                    OpHelper<MorphologyOp>::apply(aResult, pScanline + nWidthBytes * i);
+                const long iMax = std::min(x + nRadius, nWidth);
+                for (long i = std::max(x - nRadius, -1L); i <= iMax; ++i)
+                {
+                    sal_uInt8* pApplyVal
+                        = (i < 0 || i == nWidth) ? aOutside : pScanline + nWidthBytes * i;
+                    OpHelper<MorphologyOp>::apply(aResult, pApplyVal);
+                }
 
                 Scanline pDestinationPointer = pWriteAccess->GetScanline(y) + nWidthBytes * x;
                 for (const auto& val : aResult)
@@ -113,9 +128,10 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
         BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
         BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
-        const long nHeight = pReadAccess->Height();
-        const long nLastIndex = nHeight - 1;
+        sal_uInt8 aOutside[nWidthBytes];
+        OpHelper<MorphologyOp>::init(aOutside, rShared.mnOutsideVal);
 
+        const long nHeight = pReadAccess->Height();
         const long nRadius = rShared.mnRadius;
 
         for (long x = nStart; x <= nEnd; x++)
@@ -126,10 +142,14 @@ template <typename MorphologyOp, int nComponentWidth> struct pass
                 // TODO: try to optimize this to not process same pixels repeatedly
                 sal_uInt8 aResult[nWidthBytes];
                 OpHelper<MorphologyOp>::init(aResult);
-                const long iMax = std::min(y + nRadius, nLastIndex);
-                for (long i = std::max(y - nRadius, 0L); i <= iMax; ++i)
-                    OpHelper<MorphologyOp>::apply(aResult,
-                                                  pReadAccess->GetScanline(i) + nWidthBytes * x);
+                const long iMax = std::min(y + nRadius, nHeight);
+                for (long i = std::max(y - nRadius, -1L); i <= iMax; ++i)
+                {
+                    sal_uInt8* pApplyVal = (i < 0 || i == nHeight)
+                                               ? aOutside
+                                               : pReadAccess->GetScanline(i) + nWidthBytes * x;
+                    OpHelper<MorphologyOp>::apply(aResult, pApplyVal);
+                }
 
                 Scanline pDestinationPointer = pWriteAccess->GetScanline(y) + nWidthBytes * x;
                 for (auto& val : aResult)
@@ -149,8 +169,6 @@ template <typename MorphologyOp> struct pass<MorphologyOp, 0>
         BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
         const long nWidth = pReadAccess->Width();
-        const long nLastIndex = nWidth - 1;
-
         const long nRadius = rShared.mnRadius;
 
         for (long y = nStart; y <= nEnd; y++)
@@ -160,9 +178,13 @@ template <typename MorphologyOp> struct pass<MorphologyOp, 0>
                 // This processes [nRadius * 2 + 1] pixels of source per resulting pixel
                 // TODO: try to optimize this to not process same pixels repeatedly
                 Color aResult = MorphologyOp::initColor;
-                const long iMax = std::min(x + nRadius, nLastIndex);
-                for (long i = std::max(x - nRadius, 0L); i <= iMax; ++i)
-                    OpHelper<MorphologyOp>::apply(aResult, pReadAccess->GetColor(y, i));
+                const long iMax = std::min(x + nRadius, nWidth);
+                for (long i = std::max(x - nRadius, -1L); i <= iMax; ++i)
+                {
+                    const Color& aColor = (i < 0 || i == nWidth) ? rShared.maOutsideColor
+                                                                 : pReadAccess->GetColor(y, i);
+                    OpHelper<MorphologyOp>::apply(aResult, aColor);
+                }
 
                 pWriteAccess->SetPixel(y, x, aResult);
             }
@@ -175,8 +197,6 @@ template <typename MorphologyOp> struct pass<MorphologyOp, 0>
         BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
         const long nHeight = pReadAccess->Height();
-        const long nLastIndex = nHeight - 1;
-
         const long nRadius = rShared.mnRadius;
 
         for (long x = nStart; x <= nEnd; x++)
@@ -186,9 +206,13 @@ template <typename MorphologyOp> struct pass<MorphologyOp, 0>
                 // This processes [nRadius * 2 + 1] pixels of source per resulting pixel
                 // TODO: try to optimize this to not process same pixels repeatedly
                 Color aResult = MorphologyOp::initColor;
-                const long iMax = std::min(y + nRadius, nLastIndex);
-                for (long i = std::max(y - nRadius, 0L); i <= iMax; ++i)
-                    OpHelper<MorphologyOp>::apply(aResult, pReadAccess->GetColor(i, x));
+                const long iMax = std::min(y + nRadius, nHeight);
+                for (long i = std::max(y - nRadius, -1L); i <= iMax; ++i)
+                {
+                    const Color& aColor = (i < 0 || i == nHeight) ? rShared.maOutsideColor
+                                                                  : pReadAccess->GetColor(i, x);
+                    OpHelper<MorphologyOp>::apply(aResult, aColor);
+                }
 
                 pWriteAccess->SetPixel(y, x, aResult);
             }
@@ -222,9 +246,11 @@ public:
 constexpr long nThreadStrip = 16;
 
 template <typename MorphologyOp, int nComponentWidth>
-void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
+void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel, bool bUseValueOutside,
+               sal_uInt8 nValueOutside)
 {
     using myPass = pass<MorphologyOp, nComponentWidth>;
+    const sal_uInt8 nOutsideVal = bUseValueOutside ? nValueOutside : MorphologyOp::initVal;
     if (bParallel)
     {
         try
@@ -235,7 +261,8 @@ void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
             {
                 Bitmap::ScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
-                FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius);
+                FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                             nOutsideVal);
 
                 const long nLastIndex = pReadAccess->Height() - 1;
                 long nStripStart = 0;
@@ -253,7 +280,8 @@ void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
             {
                 Bitmap::ScopedReadAccess pReadAccess(rBitmap);
                 BitmapScopedWriteAccess pWriteAccess(rBitmap);
-                FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius);
+                FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                             nOutsideVal);
 
                 const long nLastIndex = pReadAccess->Width() - 1;
                 long nStripStart = 0;
@@ -279,7 +307,8 @@ void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
         {
             Bitmap::ScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
-            FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius);
+            FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                         nOutsideVal);
             long nFirstIndex = 0;
             long nLastIndex = pReadAccess->Height() - 1;
             myPass::Horizontal(aSharedData, nFirstIndex, nLastIndex);
@@ -287,7 +316,8 @@ void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
         {
             Bitmap::ScopedReadAccess pReadAccess(rBitmap);
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
-            FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius);
+            FilterSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                         nOutsideVal);
             long nFirstIndex = 0;
             long nLastIndex = pReadAccess->Width() - 1;
             myPass::Vertical(aSharedData, nFirstIndex, nLastIndex);
@@ -296,14 +326,17 @@ void runFilter(Bitmap& rBitmap, const long nRadius, const bool bParallel)
 }
 
 template <int nComponentWidth>
-void runFilter(Bitmap& rBitmap, BasicMorphologyOp op, sal_Int32 nRadius)
+void runFilter(Bitmap& rBitmap, BasicMorphologyOp op, sal_Int32 nRadius, bool bUseValueOutside,
+               sal_uInt8 nValueOutside)
 {
     const bool bParallel = true;
 
     if (op == BasicMorphologyOp::erode)
-        runFilter<ErodeOp, nComponentWidth>(rBitmap, nRadius, bParallel);
+        runFilter<ErodeOp, nComponentWidth>(rBitmap, nRadius, bParallel, bUseValueOutside,
+                                            nValueOutside);
     else if (op == BasicMorphologyOp::dilate)
-        runFilter<DilateOp, nComponentWidth>(rBitmap, nRadius, bParallel);
+        runFilter<DilateOp, nComponentWidth>(rBitmap, nRadius, bParallel, bUseValueOutside,
+                                             nValueOutside);
 }
 
 } // end anonymous namespace
@@ -311,6 +344,15 @@ void runFilter(Bitmap& rBitmap, BasicMorphologyOp op, sal_Int32 nRadius)
 BitmapBasicMorphologyFilter::BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius)
     : m_eOp(op)
     , m_nRadius(nRadius)
+{
+}
+
+BitmapBasicMorphologyFilter::BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius,
+                                                         sal_uInt8 nValueOutside)
+    : m_eOp(op)
+    , m_nRadius(nRadius)
+    , m_nValueOutside(nValueOutside)
+    , m_bUseValueOutside(true)
 {
 }
 
@@ -336,19 +378,19 @@ Bitmap BitmapBasicMorphologyFilter::filter(Bitmap const& rBitmap) const
     {
         case ScanlineFormat::N24BitTcRgb:
         case ScanlineFormat::N24BitTcBgr:
-            runFilter<24>(bitmapCopy, m_eOp, m_nRadius);
+            runFilter<24>(bitmapCopy, m_eOp, m_nRadius, m_bUseValueOutside, m_nValueOutside);
             break;
         case ScanlineFormat::N32BitTcMask:
         case ScanlineFormat::N32BitTcBgra:
-            runFilter<32>(bitmapCopy, m_eOp, m_nRadius);
+            runFilter<32>(bitmapCopy, m_eOp, m_nRadius, m_bUseValueOutside, m_nValueOutside);
             break;
         case ScanlineFormat::N8BitPal:
-            runFilter<8>(bitmapCopy, m_eOp, m_nRadius);
+            runFilter<8>(bitmapCopy, m_eOp, m_nRadius, m_bUseValueOutside, m_nValueOutside);
             break;
         // TODO: handle 1-bit images
         default:
             // Use access' GetColor/SetPixel fallback
-            runFilter<0>(bitmapCopy, m_eOp, m_nRadius);
+            runFilter<0>(bitmapCopy, m_eOp, m_nRadius, m_bUseValueOutside, m_nValueOutside);
             break;
     }
 

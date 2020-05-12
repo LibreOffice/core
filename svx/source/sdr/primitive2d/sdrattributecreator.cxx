@@ -227,6 +227,11 @@ namespace drawinglayer
             attribute::SdrGlowAttribute glowAttr{ nRadius, aColor };
             return glowAttr;
         }
+
+        sal_Int32 getSoftEdgeRadius(const SfxItemSet& rSet)
+        {
+            return rSet.Get(SDRATTR_SOFTEDGE_RAD).GetValue();
+        }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
 
@@ -748,8 +753,9 @@ namespace drawinglayer::primitive2d
             // try shadow
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
             const attribute::SdrGlowAttribute aGlow(createNewSdrGlowAttribute(rSet));
+            const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
-            return attribute::SdrEffectsTextAttribute(aShadow, aText, aGlow);
+            return attribute::SdrEffectsTextAttribute(aShadow, aText, aGlow, nSoftEdgeRadius);
         }
 
         attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(
@@ -792,9 +798,11 @@ namespace drawinglayer::primitive2d
             {
                 // try shadow
                 const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
-                attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
+                const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
+                const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
-                return attribute::SdrLineEffectsTextAttribute(aLine, aLineStartEnd, aShadow, aText, aGlow);
+                return attribute::SdrLineEffectsTextAttribute(aLine, aLineStartEnd, aShadow, aText,
+                                                              aGlow, nSoftEdgeRadius);
             }
 
             return attribute::SdrLineEffectsTextAttribute();
@@ -853,13 +861,16 @@ namespace drawinglayer::primitive2d
             if(bHasContent || !aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
                 // try shadow
-                attribute::SdrShadowAttribute aShadow = createNewSdrShadowAttribute(rSet);
+                const attribute::SdrShadowAttribute aShadow = createNewSdrShadowAttribute(rSet);
 
                 // glow
-                attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
+                const attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
-                return attribute::SdrLineFillEffectsTextAttribute(
-                    aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText, aGlow);
+                const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
+
+                return attribute::SdrLineFillEffectsTextAttribute(aLine, aFill, aLineStartEnd,
+                                                                  aShadow, aFillFloatTransGradient,
+                                                                  aText, aGlow, nSoftEdgeRadius);
             }
 
             return attribute::SdrLineFillEffectsTextAttribute();

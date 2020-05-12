@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -555,6 +556,16 @@ namespace drawinglayer::primitive2d
             aRetval[0] = Primitive2DReference(
                 new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), rContent));
             aRetval[1] = Primitive2DReference(new GroupPrimitive2D(rContent));
+            return aRetval;
+        }
+
+        Primitive2DContainer createEmbeddedSoftEdgePrimitive(const Primitive2DContainer& rContent,
+                                                             sal_Int32 nRadius)
+        {
+            if (rContent.empty() || !nRadius)
+                return rContent;
+            Primitive2DContainer aRetval(1);
+            aRetval[0] = Primitive2DReference(new SoftEdgePrimitive2D(nRadius, rContent));
             return aRetval;
         }
 
