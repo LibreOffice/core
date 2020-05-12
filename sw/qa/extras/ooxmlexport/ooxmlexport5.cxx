@@ -1259,7 +1259,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112287, "tdf112287.docx")
 {
     // tdf#131775: Check if correct spaceing.
 
-    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
 
