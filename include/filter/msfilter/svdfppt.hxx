@@ -172,7 +172,7 @@ enum class TSS_Type : unsigned {
     Unknown        = 0xffffffff // or invalid
 };
 
-const int nMaxPPTLevels = 5;
+const int nMaxPPTLevels = 10;
 
 // Object IDs for StarDraw UserData
 #define PPT_OBJECTINFO_ID       (1)
