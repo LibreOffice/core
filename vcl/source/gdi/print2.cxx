@@ -769,6 +769,68 @@ int DetectBackground(ConnectedComponents& rBackgroundComponent, MetaAction* pCur
     return nActionNum;
 }
 
+bool GenerateIntersectingConnectedComponents(ConnectedComponentsList& rConnectedComponents,
+                                             ConnectedComponents& rTotalComponents,
+                                             tools::Rectangle & rTotalBounds, bool bTreatSpecial)
+{
+    bool bSomeComponentsChanged;
+    // now, this is unfortunate: since changing anyone of
+    // the aCCList elements (e.g. by merging or addition
+    // of an action) might generate new intersection with
+    // other aCCList elements, have to repeat the whole
+    // element scanning, until nothing changes anymore.
+    // Thus, this loop here makes us O(n^3) in the worst
+    // case.
+    do
+    {
+        // only loop here if 'intersects' branch below was hit
+        bSomeComponentsChanged = false;
+
+        // iterate over all current members of aCCList
+        for( auto aCurrCC=rConnectedComponents.begin(); aCurrCC != rConnectedComponents.end(); )
+        {
+            // first check if current element's bounds are
+            // empty. This ensures that empty actions are not
+            // merged into one component, as a matter of fact,
+            // they have no position.
+
+            // #107169# Wholly transparent objects need
+            // not be considered for connected components,
+            // too. Just put each of them into a separate
+            // component.
+            if( !aCurrCC->aBounds.IsEmpty() &&
+                !aCurrCC->bIsFullyTransparent &&
+                aCurrCC->aBounds.IsOver(rTotalBounds))
+            {
+                // union the intersecting aCCList element into aTotalComponents
+
+                // calc union bounding box
+                rTotalBounds.Union( aCurrCC->aBounds );
+
+                // extract all aCurr actions to aTotalComponents
+                rTotalComponents.aComponentList.splice(rTotalComponents.aComponentList.end(),
+                                                       aCurrCC->aComponentList);
+
+                if (aCurrCC->bIsSpecial)
+                    bTreatSpecial = true;
+
+                // remove and delete aCurrCC element from list (we've now merged its content)
+                aCurrCC = rConnectedComponents.erase(aCurrCC);
+
+                // at least one component changed, need to rescan everything
+                bSomeComponentsChanged = true;
+            }
+            else
+            {
+                ++aCurrCC;
+            }
+        }
+    }
+    while(bSomeComponentsChanged);
+
+    return bTreatSpecial;
+}
+
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
@@ -889,61 +951,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         bTreatSpecial = true;
                 }
 
-                bool                                    bSomeComponentsChanged;
-
-                // now, this is unfortunate: since changing anyone of
-                // the aCCList elements (e.g. by merging or addition
-                // of an action) might generate new intersection with
-                // other aCCList elements, have to repeat the whole
-                // element scanning, until nothing changes anymore.
-                // Thus, this loop here makes us O(n^3) in the worst
-                // case.
-                do
-                {
-                    // only loop here if 'intersects' branch below was hit
-                    bSomeComponentsChanged = false;
-
-                    // iterate over all current members of aCCList
-                    for( auto aCurrCC=aCCList.begin(); aCurrCC != aCCList.end(); )
-                    {
-                        // first check if current element's bounds are
-                        // empty. This ensures that empty actions are not
-                        // merged into one component, as a matter of fact,
-                        // they have no position.
-
-                        // #107169# Wholly transparent objects need
-                        // not be considered for connected components,
-                        // too. Just put each of them into a separate
-                        // component.
-                        if( !aCurrCC->aBounds.IsEmpty() &&
-                            !aCurrCC->bIsFullyTransparent &&
-                            aCurrCC->aBounds.IsOver( aTotalBounds ) )
-                        {
-                            // union the intersecting aCCList element into aTotalComponents
-
-                            // calc union bounding box
-                            aTotalBounds.Union( aCurrCC->aBounds );
-
-                            // extract all aCurr actions to aTotalComponents
-                            aTotalComponents.aComponentList.splice( aTotalComponents.aComponentList.end(),
-                                                                    aCurrCC->aComponentList );
-
-                            if( aCurrCC->bIsSpecial )
-                                bTreatSpecial = true;
-
-                            // remove and delete aCurrCC element from list (we've now merged its content)
-                            aCurrCC = aCCList.erase( aCurrCC );
-
-                            // at least one component changed, need to rescan everything
-                            bSomeComponentsChanged = true;
-                        }
-                        else
-                        {
-                            ++aCurrCC;
-                        }
-                    }
-                }
-                while( bSomeComponentsChanged );
+                bTreatSpecial = GenerateIntersectingConnectedComponents(aCCList, aTotalComponents, aTotalBounds, bTreatSpecial);
             }
 
             //  STAGE 2.2: Determine special state for cc element
