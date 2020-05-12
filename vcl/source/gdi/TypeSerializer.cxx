@@ -250,7 +250,6 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
         }
         else
         {
-            Graphic aGraphic;
             GDIMetaFile aMetaFile;
 
             mrStream.Seek(nInitialStreamPosition);

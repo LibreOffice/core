@@ -181,8 +181,6 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupsObj::init()
     aElements[1] = "otherName";
     xDPFG->createNameGroup(aElements);
 
-    uno::Reference<container::XNameAccess> xNA_GroupNames;
-
     uno::Reference<container::XIndexAccess> xIA_DPT1(xDPTS->getDataPilotTables(),
                                                      uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XDataPilotDescriptor> xDPD1(xIA_DPT1->getByIndex(0),

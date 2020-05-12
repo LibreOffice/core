@@ -142,7 +142,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     bool bNeedKeySet = !bBookmarkable || (xPropInfo->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
                             ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
-    Reference< XIndexAccess> xUpdateTableKeys;
     OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
     // first we need a connection
