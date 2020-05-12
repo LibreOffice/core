@@ -22,4 +22,10 @@ constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
     return (n >= 0) ? (n * 72 + 63) / 127 : (n * 72 - 63) / 127;
 }
 
+// Convert PPT's "master unit" (1/576 inch) to twips
+constexpr sal_Int64 convertMasterUnitToTwip(sal_Int64 n) { return n * 2540.0 / 576.0; }
+
+// Convert twips to PPT's "master unit"
+constexpr sal_Int64 convertTwipToMasterUnit(sal_Int64 n) { return n / (2540.0 / 576.0); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
