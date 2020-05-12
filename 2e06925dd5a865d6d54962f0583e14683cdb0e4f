@@ -124,6 +124,24 @@
       "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae9c48a4_c5d4e5d8",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-05-12T09:28:41Z",
+      "side": 1,
+      "message": "And those scenarios are relevant on macOS? For Linux, langpacks can still be installed as package management packages, into the installation folder, as now. I don\u0027t intend to force the use of this new location for all platforms.",
+      "parentUuid": "e728438a_b10776e7",
+      "revId": "2e06925dd5a865d6d54962f0583e14683cdb0e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
