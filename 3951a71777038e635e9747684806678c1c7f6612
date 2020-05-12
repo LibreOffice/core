@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72caa8f4_5d8e7398",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 7644,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-05-12T00:36:23Z",
+      "side": 1,
+      "message": "If I understand correctly, this will remove the item from the extra items list so it isn\u0027t tried to be removed from the map again when the submenu is destroyed. I had an idea that was what was happening. I think this solution is better than keeping the item around and checking if it is found in the remove_from_map function. \n\nI confirm this fixes the crash.",
+      "range": {
+        "startLine": 7635,
+        "startChar": 0,
+        "endLine": 7644,
+        "endChar": 9
+      },
+      "revId": "3951a71777038e635e9747684806678c1c7f6612",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
