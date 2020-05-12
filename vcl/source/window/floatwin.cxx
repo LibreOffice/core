@@ -265,6 +265,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
 
     FloatWinPopupFlags nArrangeAry[5];
+    sal_uInt16 nArrangeAttempts = 5;
     Point             e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FloatWinPopupFlags::Left )
@@ -287,23 +288,21 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
     {
         nArrangeAry[0]  = FloatWinPopupFlags::Up;
         nArrangeAry[1]  = FloatWinPopupFlags::Down;
-        nArrangeAry[2]  = FloatWinPopupFlags::Right;
-        nArrangeAry[3]  = FloatWinPopupFlags::Left;
-        nArrangeAry[4]  = FloatWinPopupFlags::Up;
+        nArrangeAry[2]  = FloatWinPopupFlags::Up;
+        nArrangeAttempts = 3;
     }
     else
     {
         nArrangeAry[0]  = FloatWinPopupFlags::Down;
         nArrangeAry[1]  = FloatWinPopupFlags::Up;
-        nArrangeAry[2]  = FloatWinPopupFlags::Right;
-        nArrangeAry[3]  = FloatWinPopupFlags::Left;
-        nArrangeAry[4]  = FloatWinPopupFlags::Down;
+        nArrangeAry[2]  = FloatWinPopupFlags::Down;
+        nArrangeAttempts = 3;
     }
 
     sal_uInt16 nArrangeIndex = 0;
     const bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
-    for ( ; nArrangeIndex < 5; nArrangeIndex++ )
+    for ( ; nArrangeIndex < nArrangeAttempts; nArrangeIndex++ )
     {
         bool bBreak = true;
         switch ( nArrangeAry[nArrangeIndex] )
@@ -428,8 +427,8 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
         if ( bBreak )
             break;
     }
-    if ( nArrangeIndex > 4 )
-        nArrangeIndex = 4;
+    if (nArrangeIndex >= nArrangeAttempts)
+        nArrangeIndex = nArrangeAttempts - 1;
 
     rArrangeIndex = nArrangeIndex;
 
