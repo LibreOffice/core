@@ -54,8 +54,6 @@
 
 #include <vector>
 
-namespace cssu = ::com::sun::star::uno;
-
 using dp_misc::StrTitle;
 
 namespace dp_gui {
@@ -63,7 +61,7 @@ namespace dp_gui {
 class UpdateInstallDialog::Thread: public salhelper::Thread {
     friend class UpdateCommandEnv;
 public:
-    Thread(cssu::Reference< cssu::XComponentContext > const & ctx,
+    Thread(css::uno::Reference< css::uno::XComponentContext > const & ctx,
         UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
 
     void stop();
@@ -80,8 +78,8 @@ private:
     UpdateInstallDialog & m_dialog;
 
     // guarded by Application::GetSolarMutex():
-    cssu::Reference< css::task::XAbortChannel > m_abort;
-    cssu::Reference< cssu::XComponentContext > m_xComponentContext;
+    css::uno::Reference< css::task::XAbortChannel > m_abort;
+    css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
     std::vector< dp_gui::UpdateData > & m_aVecUpdateData;
     ::rtl::Reference<UpdateCommandEnv> m_updateCmdEnv;
 
@@ -100,31 +98,31 @@ class UpdateCommandEnv
     friend class UpdateInstallDialog::Thread;
 
     ::rtl::Reference<UpdateInstallDialog::Thread> m_installThread;
-    cssu::Reference< cssu::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
+    UpdateCommandEnv( css::uno::Reference< css::uno::XComponentContext > const & xCtx,
         ::rtl::Reference<UpdateInstallDialog::Thread>const & thread);
 
     // XCommandEnvironment
-    virtual cssu::Reference<css::task::XInteractionHandler > SAL_CALL
+    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
     getInteractionHandler() override;
-    virtual cssu::Reference<css::ucb::XProgressHandler >
+    virtual css::uno::Reference<css::ucb::XProgressHandler >
     SAL_CALL getProgressHandler() override;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        cssu::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( cssu::Any const & Status ) override;
-    virtual void SAL_CALL update( cssu::Any const & Status ) override;
+    virtual void SAL_CALL push( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL update( css::uno::Any const & Status ) override;
     virtual void SAL_CALL pop() override;
 };
 
 
 UpdateInstallDialog::Thread::Thread(
-    cssu::Reference< cssu::XComponentContext> const & xCtx,
+    css::uno::Reference< css::uno::XComponentContext> const & xCtx,
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
     salhelper::Thread("dp_gui_updateinstalldialog"),
@@ -136,7 +134,7 @@ UpdateInstallDialog::Thread::Thread(
 {}
 
 void UpdateInstallDialog::Thread::stop() {
-    cssu::Reference< css::task::XAbortChannel > abort;
+    css::uno::Reference< css::task::XAbortChannel > abort;
     {
         SolarMutexGuard g;
         abort = m_abort;
@@ -178,7 +176,7 @@ void UpdateInstallDialog::Thread::execute()
 UpdateInstallDialog::UpdateInstallDialog(
     weld::Window* pParent,
     std::vector<dp_gui::UpdateData> & aVecUpdateData,
-    cssu::Reference< cssu::XComponentContext > const & xCtx)
+    css::uno::Reference< css::uno::XComponentContext > const & xCtx)
     : GenericDialogController(pParent, "desktop/ui/updateinstalldialog.ui",
                               "UpdateInstallDialog")
     , m_thread(new Thread(xCtx, *this, aVecUpdateData))
@@ -292,12 +290,12 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         //create the download directory in the temp folder
         OUString sTempDir;
         if (::osl::FileBase::getTempDirURL(sTempDir) != ::osl::FileBase::E_None)
-            throw cssu::Exception("Could not get URL for the temp directory. No extensions will be installed.", nullptr);
+            throw css::uno::Exception("Could not get URL for the temp directory. No extensions will be installed.", nullptr);
 
         //create a unique name for the directory
         OUString tempEntry, destFolder;
         if (::osl::File::createTempFile(&sTempDir, nullptr, &tempEntry ) != ::osl::File::E_None)
-            throw cssu::Exception("Could not create a temporary file in " + sTempDir +
+            throw css::uno::Exception("Could not create a temporary file in " + sTempDir +
              ". No extensions will be installed", nullptr );
 
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
@@ -307,7 +305,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
         try
         {
             dp_misc::create_folder(nullptr, destFolder, m_updateCmdEnv.get() );
-        } catch (const cssu::Exception & e)
+        } catch (const css::uno::Exception & e)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetException( e.Message + " No extensions will be installed",
@@ -337,8 +335,8 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             }
             dp_misc::DescriptionInfoset info(m_xComponentContext, updateData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
-            std::vector< std::pair<OUString, cssu::Exception> > vecExceptions;
-            cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
+            std::vector< std::pair<OUString, css::uno::Exception> > vecExceptions;
+            css::uno::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
             OSL_ENSURE(seqDownloadURLs.hasElements(), "No download URL provided!");
             for (sal_Int32 j = 0; j < seqDownloadURLs.getLength(); j++)
             {
@@ -349,7 +347,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                     if (bCancelled || !updateData.sLocalURL.isEmpty())
                         break;
                 }
-                catch ( cssu::Exception & e )
+                catch ( css::uno::Exception & e )
                 {
                     vecExceptions.emplace_back(seqDownloadURLs[j], e);
                     //There can be several different errors, for example, the URL is wrong, webserver cannot be reached,
@@ -386,7 +384,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         }
     }
-    catch (const cssu::Exception & e)
+    catch (const css::uno::Exception & e)
     {
         SolarMutexGuard g;
         if (m_stop) {
@@ -427,11 +425,11 @@ void UpdateInstallDialog::Thread::installExtensions()
         }
         bool bError = false;
         bool bLicenseDeclined = false;
-        cssu::Reference<css::deployment::XPackage> xExtension;
-        cssu::Exception exc;
+        css::uno::Reference<css::deployment::XPackage> xExtension;
+        css::uno::Exception exc;
         try
         {
-            cssu::Reference< css::task::XAbortChannel > xAbortChannel(
+            css::uno::Reference< css::task::XAbortChannel > xAbortChannel(
                 updateData.aInstalledPackage->createAbortChannel() );
             {
                 SolarMutexGuard g;
@@ -478,11 +476,11 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             else
             {
-                exc = de.Cause.get<cssu::Exception>();
+                exc = de.Cause.get<css::uno::Exception>();
                 bError = true;
             }
         }
-        catch (cssu::Exception& e)
+        catch (css::uno::Exception& e)
         {
             exc = e;
             bError = true;
@@ -524,10 +522,10 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
     if (!m_sDownloadFolder.isEmpty())
     {
         dp_misc::erase_path(m_sDownloadFolder,
-            cssu::Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );
+            css::uno::Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );
         //remove also the temp file which we have used to create the unique name
         OUString tempFile = m_sDownloadFolder.copy(0, m_sDownloadFolder.getLength() - 1);
-        dp_misc::erase_path(tempFile, cssu::Reference<css::ucb::XCommandEnvironment>(),false);
+        dp_misc::erase_path(tempFile, css::uno::Reference<css::ucb::XCommandEnvironment>(),false);
         m_sDownloadFolder.clear();
     }
 }
@@ -548,7 +546,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
         nullptr, &tempEntry ) != ::osl::File::E_None)
     {
         //ToDo feedback in window that download of this component failed
-        throw cssu::Exception("Could not create temporary file in folder " + destFolder + ".", nullptr);
+        throw css::uno::Exception("Could not create temporary file in folder " + destFolder + ".", nullptr);
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
@@ -579,7 +577,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     return m_stop;
 }
 
-UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
+UpdateCommandEnv::UpdateCommandEnv( css::uno::Reference< css::uno::XComponentContext > const & xCtx,
     ::rtl::Reference<UpdateInstallDialog::Thread>const & thread)
     : m_installThread(thread),
     m_xContext(xCtx)
@@ -587,22 +585,22 @@ UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > c
 }
 
 // XCommandEnvironment
-cssu::Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
+css::uno::Reference<css::task::XInteractionHandler> UpdateCommandEnv::getInteractionHandler()
 {
     return this;
 }
 
-cssu::Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
+css::uno::Reference<css::ucb::XProgressHandler> UpdateCommandEnv::getProgressHandler()
 {
     return this;
 }
 
 // XInteractionHandler
 void UpdateCommandEnv::handle(
-    cssu::Reference< css::task::XInteractionRequest> const & xRequest )
+    css::uno::Reference< css::task::XInteractionRequest> const & xRequest )
 {
-    cssu::Any request( xRequest->getRequest() );
-    OSL_ASSERT( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
+    css::uno::Any request( xRequest->getRequest() );
+    OSL_ASSERT( request.getValueTypeClass() == css::uno::TypeClass_EXCEPTION );
     dp_misc::TRACE("[dp_gui_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 
@@ -626,16 +624,16 @@ void UpdateCommandEnv::handle(
     else
     {
         // select:
-        cssu::Sequence< cssu::Reference< css::task::XInteractionContinuation > > conts(
+        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts(
             xRequest->getContinuations() );
-        cssu::Reference< css::task::XInteractionContinuation > const * pConts =
+        css::uno::Reference< css::task::XInteractionContinuation > const * pConts =
             conts.getConstArray();
         sal_Int32 len = conts.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
         {
             if (approve) {
-                cssu::Reference< css::task::XInteractionApprove > xInteractionApprove(
-                    pConts[ pos ], cssu::UNO_QUERY );
+                css::uno::Reference< css::task::XInteractionApprove > xInteractionApprove(
+                    pConts[ pos ], css::uno::UNO_QUERY );
                 if (xInteractionApprove.is()) {
                     xInteractionApprove->select();
                     // don't query again for ongoing continuations:
@@ -647,11 +645,11 @@ void UpdateCommandEnv::handle(
 }
 
 // XProgressHandler
-void UpdateCommandEnv::push( cssu::Any const & /*Status*/ )
+void UpdateCommandEnv::push( css::uno::Any const & /*Status*/ )
 {
 }
 
-void UpdateCommandEnv::update( cssu::Any const & /*Status */)
+void UpdateCommandEnv::update( css::uno::Any const & /*Status */)
 {
 }
 
