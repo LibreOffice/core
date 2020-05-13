@@ -42,20 +42,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="TBC_FT_QUERY">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">TBC_FT_QUERY</property>
-        <property name="label" translatable="yes" context="toolbar|TBC_FT_QUERY">Search Key</property>
-        <property name="use_underline">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolButton" id="TBC_ED_QUERY">
+      <object class="GtkToolButton" id="TBC_QUERY">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/query</property>
