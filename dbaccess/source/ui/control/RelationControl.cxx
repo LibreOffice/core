@@ -218,7 +218,8 @@ namespace dbaui
         long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
-            OUString sFieldName(m_pListCell->GetSelectedEntry());
+            weld::ComboBox& rListBox = m_pListCell->get_widget();
+            OUString sFieldName(rListBox.get_active_text());
             OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
             if ( rLines.size() <= o3tl::make_unsigned(nRow) )
             {
@@ -307,14 +308,15 @@ namespace dbaui
 
         fillListBox(xDef);
         OUString sName = GetCellText( nRow, nColumnId );
-        m_pListCell->SelectEntry( sName );
-        if ( m_pListCell->GetSelectedEntry() != sName )
+        weld::ComboBox& rList = m_pListCell->get_widget();
+        rList.set_active_text(sName);
+        if (rList.get_active_text() != sName)
         {
-            m_pListCell->InsertEntry( sName );
-            m_pListCell->SelectEntry( sName );
+            rList.append_text(sName);
+            rList.set_active_text(sName);
         }
 
-        m_pListCell->SetHelpId(sHelpId);
+        rList.set_help_id(sHelpId);
     }
 
     CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
@@ -348,7 +350,8 @@ namespace dbaui
     }
     void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest)
     {
-        m_pListCell->Clear();
+        weld::ComboBox& rList = m_pListCell->get_widget();
+        rList.clear();
         try
         {
             if ( _xDest.is() )
@@ -361,9 +364,9 @@ namespace dbaui
                 const OUString* pEnd = pIter + aNames.getLength();
                 for(;pIter != pEnd;++pIter)
                 {
-                    m_pListCell->InsertEntry( *pIter );
+                    rList.append_text(*pIter);
                 }
-                m_pListCell->InsertEntry(OUString(), 0);
+                rList.insert_text(0, OUString());
             }
         }
         catch( const Exception& )

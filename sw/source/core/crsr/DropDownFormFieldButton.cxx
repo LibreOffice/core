@@ -130,6 +130,7 @@ DropDownFormFieldButton::~DropDownFormFieldButton() { disposeOnce(); }
 
 void DropDownFormFieldButton::InitPopup()
 {
+    fprintf(stderr, "DropDownFormFieldButton init popup\n");
     m_pFieldPopup = VclPtr<SwFieldDialog>::Create(static_cast<SwEditWin*>(GetParent()),
                                                   &m_rFieldmark, GetSizePixel().Width());
 }

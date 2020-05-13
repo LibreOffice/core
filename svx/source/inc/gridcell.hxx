@@ -996,11 +996,12 @@ private:
     virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
     virtual ~FmXListBoxCell() override;
 
-    DECL_LINK( OnDoubleClick, ListBox&, void );
+    DECL_LINK( OnDoubleClick, weld::ComboBox&, void );
 
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    VclPtr<ListBox>                     m_pBox;
+    weld::ComboBox* m_pBox;
+    sal_uInt16 m_nLines;
 };
 
 
@@ -1012,7 +1013,7 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    weld::ComboBox& m_rComboBox;
+    weld::ComboBox* m_pComboBox;
     sal_uInt16 m_nLines;
 
 protected:
