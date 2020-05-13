@@ -38,7 +38,6 @@
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <iterator>
 #include <memory>
