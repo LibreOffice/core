@@ -962,12 +962,9 @@ void GtkSalFrame::InitCommon()
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
         m_aSystemData.platform = SystemEnvData::Platform::Xcb;
-        if (GTK_IS_WINDOW(m_pWindow))
-        {
-            GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
-            GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
-            m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
-        }
+        GdkScreen* pScreen = gtk_widget_get_screen(m_pWindow);
+        GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
+        m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
     }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
@@ -1062,7 +1059,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         {
             GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParent->m_pWindow);
             if (!isChild())
-                gtk_window_set_screen(GTK_WINDOW(m_pWindow), gtk_window_get_screen(GTK_WINDOW(pTopLevel)));
+                gtk_window_set_screen(GTK_WINDOW(m_pWindow), gtk_widget_get_screen(pTopLevel));
 
             if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
                 gtk_window_set_transient_for(GTK_WINDOW(m_pWindow), GTK_WINDOW(pTopLevel));
@@ -1539,7 +1536,7 @@ void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
 
 void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
-    GdkScreen  *pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
+    GdkScreen  *pScreen = gtk_widget_get_screen(m_pWindow);
     tools::Rectangle aRetRect;
     int max = gdk_screen_get_n_monitors (pScreen);
     for (int i = 0; i < max; ++i)
@@ -2031,7 +2028,7 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
     if( ! pFrame )
         return;
 
-    GdkScreen *pScreen = gtk_window_get_screen( GTK_WINDOW(pFrame->m_pWindow) );
+    GdkScreen *pScreen = gtk_widget_get_screen(pFrame->m_pWindow);
     GdkDisplay *pDisplay = gdk_screen_get_display( pScreen );
 
     /* when the application tries to center the mouse in the dialog the
