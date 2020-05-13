@@ -557,7 +557,7 @@ namespace accessibility
         EnsureIsAlive();
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
         if ( !pEntry )
-            throw RuntimeException();
+            throw RuntimeException("pEntry is null, 'const awt::Point& _aPoint' is not available");
 
         Reference< XAccessible > xAcc;
         uno::Reference<XAccessible> xListBox(m_wListBox);
@@ -881,7 +881,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("SvTreeListBox::GetEntryFromPath return null pointer!");
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -900,7 +900,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("SvTreeListBox::GetEntryFromPath return null pointer!");
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -921,7 +921,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("SvTreeListBox::GetEntryFromPath return null pointer!");
         nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
@@ -948,7 +948,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("SvTreeListBox::GetEntryFromPath return null pointer!");
         nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
