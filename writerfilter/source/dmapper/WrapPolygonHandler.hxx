@@ -26,6 +26,11 @@
 #include <tools/fract.hxx>
 #include <vector>
 
+namespace com::sun::star::text
+{
+struct GraphicCrop;
+}
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -51,6 +56,8 @@ public:
     WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
     WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size & rSrcSize);
+    WrapPolygon::Pointer_t correctCrop(const css::awt::Size& rGraphicSize,
+                                       const css::text::GraphicCrop& rGraphicCrop);
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };
 
