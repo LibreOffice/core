@@ -450,8 +450,7 @@ void NetChart::createShapes()
                         continue;
                     }
 
-                    if( aLogicYForNextSeriesMap.find(nAttachedAxisIndex) == aLogicYForNextSeriesMap.end() )
-                        aLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
+                    aLogicYForNextSeriesMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     double fLogicValueForLabeDisplay = fLogicY;
 

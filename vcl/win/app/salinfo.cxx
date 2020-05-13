@@ -112,10 +112,7 @@ bool WinSalSystem::initMonitors()
                 aDev.DeviceString[127] = 0;
                 OUString aDeviceName( o3tl::toU(aDev.DeviceName) );
                 OUString aDeviceString( o3tl::toU(aDev.DeviceString) );
-                if( aDeviceStringCount.find( aDeviceString ) == aDeviceStringCount.end() )
-                    aDeviceStringCount[ aDeviceString ] = 1;
-                else
-                    aDeviceStringCount[ aDeviceString ]++;
+                aDeviceStringCount[ aDeviceString ]++;
                 m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                 m_aMonitors.push_back( DisplayMonitor( aDeviceString,
                                                        tools::Rectangle() ) );

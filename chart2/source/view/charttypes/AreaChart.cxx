@@ -749,8 +749,7 @@ void AreaChart::createShapes()
                     }
 
                     std::map< sal_Int32, double >& rLogicYForNextSeriesMap = aLogicYForNextSeriesMapByX[nIndex];
-                    if( rLogicYForNextSeriesMap.find(nAttachedAxisIndex) == rLogicYForNextSeriesMap.end() )
-                        rLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
+                    rLogicYForNextSeriesMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     double fPreviousYValue = rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];
