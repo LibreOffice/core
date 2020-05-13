@@ -116,71 +116,66 @@ Bitmap::~Bitmap()
 
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 {
-    static BitmapPalette aGreyPalette2;
-    static BitmapPalette aGreyPalette4;
-    static BitmapPalette aGreyPalette16;
-    static BitmapPalette aGreyPalette256;
-
     // Create greyscale palette with 2, 4, 16 or 256 entries
-    if( 2 == nEntries || 4 == nEntries || 16 == nEntries || 256 == nEntries )
+    switch (nEntries)
     {
-        if( 2 == nEntries )
+        case 2:
         {
-            if( !aGreyPalette2.GetEntryCount() )
-            {
-                aGreyPalette2.SetEntryCount( 2 );
-                aGreyPalette2[ 0 ] = BitmapColor( 0, 0, 0 );
-                aGreyPalette2[ 1 ] = BitmapColor( 255, 255, 255 );
-            }
+            static const BitmapPalette aGreyPalette2 = [] {
+                BitmapPalette aPalette(2);
+                aPalette[0] = BitmapColor(0, 0, 0);
+                aPalette[1] = BitmapColor(255, 255, 255);
+                return aPalette;
+            }();
 
             return aGreyPalette2;
         }
-        else if( 4 == nEntries )
+        case 4:
         {
-            if( !aGreyPalette4.GetEntryCount() )
-            {
-                aGreyPalette4.SetEntryCount( 4 );
-                aGreyPalette4[ 0 ] = BitmapColor( 0, 0, 0 );
-                aGreyPalette4[ 1 ] = BitmapColor( 85, 85, 85 );
-                aGreyPalette4[ 2 ] = BitmapColor( 170, 170, 170 );
-                aGreyPalette4[ 3 ] = BitmapColor( 255, 255, 255 );
-            }
+            static const BitmapPalette aGreyPalette4 = [] {
+                BitmapPalette aPalette(4);
+                aPalette[0] = BitmapColor(0, 0, 0);
+                aPalette[1] = BitmapColor(85, 85, 85);
+                aPalette[2] = BitmapColor(170, 170, 170);
+                aPalette[3] = BitmapColor(255, 255, 255);
+                return aPalette;
+            }();
 
             return aGreyPalette4;
         }
-        else if( 16 == nEntries )
+        case 16:
         {
-            if( !aGreyPalette16.GetEntryCount() )
-            {
+            static const BitmapPalette aGreyPalette16 = [] {
                 sal_uInt8 cGrey = 0;
                 sal_uInt8 const cGreyInc = 17;
 
-                aGreyPalette16.SetEntryCount( 16 );
+                BitmapPalette aPalette(16);
 
-                for( sal_uInt16 i = 0; i < 16; i++, cGrey = sal::static_int_cast<sal_uInt8>(cGrey + cGreyInc) )
-                    aGreyPalette16[ i ] = BitmapColor( cGrey, cGrey, cGrey );
-            }
+                for (sal_uInt16 i = 0; i < 16; ++i, cGrey += cGreyInc)
+                    aPalette[i] = BitmapColor(cGrey, cGrey, cGrey);
+
+                return aPalette;
+            }();
 
             return aGreyPalette16;
         }
-        else
+        case 256:
         {
-            if( !aGreyPalette256.GetEntryCount() )
-            {
-                aGreyPalette256.SetEntryCount( 256 );
+            static const BitmapPalette aGreyPalette256 = [] {
+                BitmapPalette aPalette(256);
 
-                for( sal_uInt16 i = 0; i < 256; i++ )
-                    aGreyPalette256[ i ] = BitmapColor( static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i) );
-            }
+                for (sal_uInt16 i = 0; i < 256; ++i)
+                    aPalette[i] = BitmapColor(static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i),
+                                              static_cast<sal_uInt8>(i));
+
+                return aPalette;
+            }();
 
             return aGreyPalette256;
         }
     }
-    else
-    {
-        OSL_FAIL( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
-        return aGreyPalette2;
-    }
+    OSL_FAIL("Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)");
+    return GetGreyPalette(2);
 }
 
 bool BitmapPalette::IsGreyPalette() const
