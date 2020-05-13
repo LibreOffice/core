@@ -14077,6 +14077,30 @@ public:
         gtk_entry_set_placeholder_text(GTK_ENTRY(m_pEntry), rText.toUtf8().getStr());
     }
 
+    virtual void set_entry_editable(bool bEditable) override
+    {
+        assert(m_pEntry);
+        gtk_editable_set_editable(GTK_EDITABLE(m_pEntry), bEditable);
+    }
+
+    virtual void cut_entry_clipboard() override
+    {
+        assert(m_pEntry);
+        gtk_editable_cut_clipboard(GTK_EDITABLE(m_pEntry));
+    }
+
+    virtual void copy_entry_clipboard() override
+    {
+        assert(m_pEntry);
+        gtk_editable_copy_clipboard(GTK_EDITABLE(m_pEntry));
+    }
+
+    virtual void paste_entry_clipboard() override
+    {
+        assert(m_pEntry);
+        gtk_editable_paste_clipboard(GTK_EDITABLE(m_pEntry));
+    }
+
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
@@ -14631,6 +14655,26 @@ public:
     virtual void set_entry_placeholder_text(const OUString& rText) override
     {
         m_xEntry->set_placeholder_text(rText);
+    }
+
+    virtual void set_entry_editable(bool bEditable) override
+    {
+        m_xEntry->set_editable(bEditable);
+    }
+
+    virtual void cut_entry_clipboard() override
+    {
+        m_xEntry->cut_clipboard();
+    }
+
+    virtual void copy_entry_clipboard() override
+    {
+        m_xEntry->copy_clipboard();
+    }
+
+    virtual void paste_entry_clipboard() override
+    {
+        m_xEntry->paste_clipboard();
     }
 
     virtual void set_entry_font(const vcl::Font& rFont) override
