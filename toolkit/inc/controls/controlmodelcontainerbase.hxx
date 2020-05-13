@@ -213,9 +213,9 @@ typedef ::cppu::AggImplInheritanceHelper3   < UnoControlContainer
                             ,   css::container::XContainerListener
                             ,   css::util::XChangesListener
                             ,   css::util::XModifyListener
-                            >   ContainerControl_IBase;
+                            >   ControlContainer_IBase;
 
-class ControlContainerBase : public ContainerControl_IBase
+class ControlContainerBase : public ControlContainer_IBase
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
