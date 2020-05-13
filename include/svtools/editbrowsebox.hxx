@@ -26,7 +26,6 @@
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
 #include <vcl/window.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
@@ -327,6 +326,8 @@ namespace svt
 
         weld::ComboBox& get_widget() { return *m_xWidget; }
 
+        virtual void dispose() override;
+
     private:
         std::unique_ptr<weld::ComboBox> m_xWidget;
     };
@@ -348,30 +349,28 @@ namespace svt
         DECL_LINK(ModifyHdl, weld::ComboBox&, void);
     };
 
-
     //= ListBoxControl
-
-    class SVT_DLLPUBLIC ListBoxControl final : public ListBox
+    class SVT_DLLPUBLIC ListBoxControl final : public InterimItemWindow
     {
         friend class ListBoxCellController;
 
     public:
         ListBoxControl(vcl::Window* pParent);
 
+        weld::ComboBox& get_widget() { return *m_xWidget; }
+
+        virtual void dispose() override;
     private:
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        std::unique_ptr<weld::ComboBox> m_xWidget;
     };
 
-
     //= ListBoxCellController
-
     class SVT_DLLPUBLIC ListBoxCellController : public CellController
     {
     public:
 
         ListBoxCellController(ListBoxControl* pParent);
-        const ListBoxControl& GetListBox() const { return static_cast<const ListBoxControl &>(GetWindow()); }
-        ListBoxControl& GetListBox() { return static_cast<ListBoxControl &>(GetWindow()); }
+        weld::ComboBox& GetListBox() const { return static_cast<ListBoxControl&>(GetWindow()).get_widget(); }
 
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
@@ -379,12 +378,10 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK(ListBoxSelectHdl, ListBox&, void);
+        DECL_LINK(ListBoxSelectHdl, weld::ComboBox&, void);
     };
 
-
     //= FormattedFieldCellController
-
     class SVT_DLLPUBLIC FormattedFieldCellController final : public EditCellController
     {
     public:

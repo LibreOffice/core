@@ -5770,6 +5770,35 @@ void SalInstanceComboBoxWithoutEdit::set_mru_entries(const OUString&)
     assert(false && "not implemented");
 }
 
+void SalInstanceComboBoxWithoutEdit::set_selection_mode(SelectionMode eMode)
+{
+    m_xComboBox->EnableMultiSelection(eMode == SelectionMode::Multiple);
+}
+
+std::vector<int> SalInstanceComboBoxWithoutEdit::get_selected_rows() const
+{
+    std::vector<int> aRet;
+    const sal_Int32 nSelEntries = m_xComboBox->GetSelectedEntryCount();
+    for (sal_Int32 n = 0; n < nSelEntries; ++n)
+        aRet.push_back(m_xComboBox->GetSelectedEntryPos(n));
+    return aRet;
+}
+
+void SalInstanceComboBoxWithoutEdit::scroll_to_row(int nRow)
+{
+    m_xComboBox->SetTopEntry(nRow);
+}
+
+void SalInstanceComboBoxWithoutEdit::select(int nRow)
+{
+    m_xComboBox->SelectEntryPos(nRow, true);
+}
+
+void SalInstanceComboBoxWithoutEdit::unselect(int nRow)
+{
+    m_xComboBox->SelectEntryPos(nRow, false);
+}
+
 void SalInstanceComboBoxWithoutEdit::HandleEventListener(VclWindowEvent& rEvent)
 {
     CallHandleEventListener(rEvent);
@@ -5946,6 +5975,34 @@ void SalInstanceComboBoxWithEdit::set_mru_entries(const OUString& rEntries)
     m_xComboBox->SetMRUEntries(rEntries);
 }
 
+void SalInstanceComboBoxWithEdit::set_selection_mode(SelectionMode /*eMode*/)
+{
+}
+
+std::vector<int> SalInstanceComboBoxWithEdit::get_selected_rows() const
+{
+    std::vector<int> aRet;
+    int nActive = get_active();
+    if (nActive != -1)
+        aRet.push_back(nActive);
+    return aRet;
+}
+
+void SalInstanceComboBoxWithEdit::scroll_to_row(int /*nRow*/)
+{
+    assert(false && "not implemented");
+}
+
+void SalInstanceComboBoxWithEdit::select(int /*nRow*/)
+{
+    assert(false && "not implemented");
+}
+
+void SalInstanceComboBoxWithEdit::unselect(int /*nRow*/)
+{
+    assert(false && "not implemented");
+}
+
 void SalInstanceComboBoxWithEdit::HandleEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::DropdownPreOpen)
@@ -6111,6 +6168,31 @@ public:
     virtual void set_mru_entries(const OUString&) override
     {
         assert(false && "not implemented");
+    }
+
+    virtual void set_selection_mode(SelectionMode eMode) override
+    {
+        m_pTreeView->set_selection_mode(eMode);
+    }
+
+    virtual std::vector<int> get_selected_rows() const override
+    {
+        return m_pTreeView->get_selected_rows();
+    }
+
+    void scroll_to_row(int nRow) override
+    {
+        m_pTreeView->scroll_to_row(nRow);
+    }
+
+    virtual void select(int pos) override
+    {
+        m_pTreeView->select(pos);
+    }
+
+    virtual void unselect(int pos) override
+    {
+        m_pTreeView->unselect(pos);
     }
 
     virtual void set_item_menu(const OString&, weld::Menu*) override

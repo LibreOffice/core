@@ -121,14 +121,15 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
     m_pTextCell     = VclPtr<Edit>::Create(&GetDataWindow(), 0);
     m_pVisibleCell  = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
-    m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
+    m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
     m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());
     m_pOrderCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
-    m_pFunctionCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
+    m_pFunctionCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());
 
     m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
     m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
     m_pFieldCell->SetHelpId(HID_QRYDGN_ROW_FIELD);
+    weld::ComboBox& rOrderBox = m_pOrderCell->get_widget();
     m_pOrderCell->SetHelpId(HID_QRYDGN_ROW_ORDER);
     m_pFunctionCell->SetHelpId(HID_QRYDGN_ROW_FUNCTION);
 
@@ -141,7 +142,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
     const OUString aTxt(DBA_RES(STR_QUERY_SORTTEXT));
     for (sal_Int32 nIdx {0}; nIdx>=0;)
-        m_pOrderCell->InsertEntry(aTxt.getToken(0, ';', nIdx));
+        rOrderBox.append_text(aTxt.getToken(0, ';', nIdx));
 
     m_bVisibleRow.insert(m_bVisibleRow.end(), BROW_ROW_CNT, true);
 
@@ -202,13 +203,15 @@ void OSelectionBrowseBox::initialize()
         // We slip in a few optionals one, too.
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
+            weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
             for (sal_Int32 nIdx {0}; nIdx>=0;)
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
+                rComboBox.append_text(m_aFunctionStrings.getToken(0, ';', nIdx));
         }
         else // else only COUNT(*) and COUNT("table".*)
         {
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';'));
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
+            weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
+            rComboBox.append_text(m_aFunctionStrings.getToken(0, ';'));
+            rComboBox.append_text(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
         }
         try
         {
@@ -493,18 +496,19 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
         }   break;
         case BROW_TABLE_ROW:
         {
-            m_pTableCell->Clear();
-            enableControl(pEntry,m_pTableCell);
+            weld::ComboBox& rComboBox = m_pTableCell->get_widget();
+            rComboBox.clear();
+            enableControl(pEntry, m_pTableCell);
             if ( !pEntry->isCondition() )
             {
                 for (auto const& tabWin : getDesignView()->getTableView()->GetTabWinMap())
-                    m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(tabWin.second.get())->GetAliasName());
+                    rComboBox.append_text(static_cast<OQueryTableWindow*>(tabWin.second.get())->GetAliasName());
 
-                m_pTableCell->InsertEntry(DBA_RES(STR_QUERY_NOTABLE), 0);
+                rComboBox.insert_text(0, DBA_RES(STR_QUERY_NOTABLE));
                 if (!pEntry->GetAlias().isEmpty())
-                    m_pTableCell->SelectEntry(pEntry->GetAlias());
+                    rComboBox.set_active_text(pEntry->GetAlias());
                 else
-                    m_pTableCell->SelectEntry(DBA_RES(STR_QUERY_NOTABLE));
+                    rComboBox.set_active_text(DBA_RES(STR_QUERY_NOTABLE));
             }
         }   break;
         case BROW_VIS_ROW:
@@ -531,10 +535,13 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             }
         }   break;
         case BROW_ORDER_ROW:
-            m_pOrderCell->SelectEntryPos(
+        {
+            weld::ComboBox& rComboBox = m_pOrderCell->get_widget();
+            rComboBox.set_active(
                 sal::static_int_cast< sal_uInt16 >(pEntry->GetOrderDir()));
             enableControl(pEntry,m_pOrderCell);
             break;
+        }
         case BROW_COLUMNALIAS_ROW:
             setTextCellContext(pEntry,pEntry->GetFieldAlias(),HID_QRYDGN_ROW_ALIAS);
             break;
@@ -983,9 +990,10 @@ bool OSelectionBrowseBox::SaveModified()
 
             case BROW_TABLE_ROW:
             {
-                OUString aAliasName = m_pTableCell->GetSelectedEntry();
+                weld::ComboBox& rComboBox = m_pTableCell->get_widget();
+                OUString aAliasName = rComboBox.get_active_text();
                 strOldCellContents = pEntry->GetAlias();
-                if ( m_pTableCell->GetSelectedEntryPos() != 0 )
+                if (rComboBox.get_active() != 0)
                 {
                     pEntry->SetAlias(aAliasName);
                     // we have to set the table name as well as the table window
@@ -1014,8 +1022,9 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_ORDER_ROW:
             {
                 strOldCellContents = OUString::number(static_cast<sal_uInt16>(pEntry->GetOrderDir()));
-                sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
-                if (nIdx == LISTBOX_ENTRY_NOTFOUND)
+                weld::ComboBox& rComboBox = m_pOrderCell->get_widget();
+                sal_Int32 nIdx = rComboBox.get_active();
+                if (nIdx == -1)
                     nIdx = 0;
                 pEntry->SetOrderDir(EOrderDir(nIdx));
                 if(!m_bOrderByUnRelated)
@@ -1035,9 +1044,10 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_FUNCTION_ROW:
                 {
                     strOldCellContents = pEntry->GetFunction();
-                    sal_Int32 nPos = m_pFunctionCell->GetSelectedEntryPos();
+                    weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
+                    sal_Int32 nPos = rComboBox.get_active();
                     // these functions are only available in CORE
-                    OUString sFunctionName        = m_pFunctionCell->GetEntry(nPos);
+                    OUString sFunctionName        = rComboBox.get_text(nPos);
                     OUString sGroupFunctionName   = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
                     bool bGroupBy = false;
                     if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
@@ -1856,9 +1866,10 @@ void OSelectionBrowseBox::CellModified()
             {
                 OTableFieldDescRef  pEntry = getEntry(GetColumnPos(GetCurColumnId()) - 1);
 
-                sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
+                weld::ComboBox& rComboBox = m_pOrderCell->get_widget();
+                sal_Int32 nIdx = rComboBox.get_active();
                 if(!m_bOrderByUnRelated && nIdx > 0 &&
-                    nIdx != LISTBOX_ENTRY_NOTFOUND  &&
+                    nIdx != -1 &&
                     !pEntry->IsEmpty()              &&
                     pEntry->GetOrderDir() != ORDER_NONE)
                 {
@@ -2137,52 +2148,53 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
 
 bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt)
 {
+    weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
     switch(_nFunctionTokenId)
     {
         case SQL_TOKEN_COUNT:
-            rFkt = (m_pFunctionCell->GetEntryCount() < 3) ? m_pFunctionCell->GetEntry(1) : m_pFunctionCell->GetEntry(2);
+            rFkt = (rComboBox.get_count() < 3) ? rComboBox.get_text(1) : rComboBox.get_text(2);
             break;
         case SQL_TOKEN_AVG:
-            rFkt = m_pFunctionCell->GetEntry(1);
+            rFkt = rComboBox.get_text(1);
             break;
         case SQL_TOKEN_MAX:
-            rFkt = m_pFunctionCell->GetEntry(3);
+            rFkt = rComboBox.get_text(3);
             break;
         case SQL_TOKEN_MIN:
-            rFkt = m_pFunctionCell->GetEntry(4);
+            rFkt = rComboBox.get_text(4);
             break;
         case SQL_TOKEN_SUM:
-            rFkt = m_pFunctionCell->GetEntry(5);
+            rFkt = rComboBox.get_text(5);
             break;
         case SQL_TOKEN_EVERY:
-            rFkt = m_pFunctionCell->GetEntry(6);
+            rFkt = rComboBox.get_text(6);
             break;
         case SQL_TOKEN_ANY:
-            rFkt = m_pFunctionCell->GetEntry(7);
+            rFkt = rComboBox.get_text(7);
             break;
         case SQL_TOKEN_SOME:
-            rFkt = m_pFunctionCell->GetEntry(8);
+            rFkt = rComboBox.get_text(8);
             break;
         case SQL_TOKEN_STDDEV_POP:
-            rFkt = m_pFunctionCell->GetEntry(9);
+            rFkt = rComboBox.get_text(9);
             break;
         case SQL_TOKEN_STDDEV_SAMP:
-            rFkt = m_pFunctionCell->GetEntry(10);
+            rFkt = rComboBox.get_text(10);
             break;
         case SQL_TOKEN_VAR_SAMP:
-            rFkt = m_pFunctionCell->GetEntry(11);
+            rFkt = rComboBox.get_text(11);
             break;
         case SQL_TOKEN_VAR_POP:
-            rFkt = m_pFunctionCell->GetEntry(12);
+            rFkt = rComboBox.get_text(12);
             break;
         case SQL_TOKEN_COLLECT:
-            rFkt = m_pFunctionCell->GetEntry(13);
+            rFkt = rComboBox.get_text(13);
             break;
         case SQL_TOKEN_FUSION:
-            rFkt = m_pFunctionCell->GetEntry(14);
+            rFkt = rComboBox.get_text(14);
             break;
         case SQL_TOKEN_INTERSECTION:
-            rFkt = m_pFunctionCell->GetEntry(15);
+            rFkt = rComboBox.get_text(15);
             break;
         default:
             {
@@ -2218,8 +2230,8 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
             return pEntry->IsVisible() ? OUStringLiteral("1") : OUStringLiteral("0");
         case BROW_ORDER_ROW:
         {
-            sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
-            if (nIdx == LISTBOX_ENTRY_NOTFOUND)
+            sal_Int32 nIdx = m_pOrderCell->get_widget().get_active();
+            if (nIdx == -1)
                 nIdx = 0;
             return OUString::number(nIdx);
         }
@@ -2608,10 +2620,11 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
     {
         sal_Int32 nIdx {0};
         // if we have an asterisk, no other function than count is allowed
-        m_pFunctionCell->Clear();
-        m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
+        weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
+        rComboBox.clear();
+        rComboBox.append_text(m_aFunctionStrings.getToken(0, ';', nIdx));
         if ( isFieldNameAsterisk(_pEntry->GetField()) )
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
+            rComboBox.append_text(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
         else
         {
             const bool bSkipLastToken {_pEntry->isNumeric()};
@@ -2620,36 +2633,37 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
                 const OUString sTok {m_aFunctionStrings.getToken(0, ';', nIdx)};
                 if (bSkipLastToken && nIdx<0)
                     break;
-                m_pFunctionCell->InsertEntry(sTok);
+                rComboBox.append_text(sTok);
             }
         }
 
         if ( _pEntry->IsGroupBy() )
         {
             OSL_ENSURE(!_pEntry->isNumeric(),"Not allowed to combine group by and numeric values!");
-            m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount() - 1));
+            rComboBox.set_active_text(rComboBox.get_text(rComboBox.get_count() - 1));
         }
-        else if ( m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != LISTBOX_ENTRY_NOTFOUND )
-            m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
+        else if (rComboBox.find_text(_pEntry->GetFunction()) != -1)
+            rComboBox.set_active_text(_pEntry->GetFunction());
         else
-            m_pFunctionCell->SelectEntryPos(0);
+            rComboBox.set_active(0);
 
-        enableControl(_pEntry,m_pFunctionCell);
+        enableControl(_pEntry, m_pFunctionCell);
     }
     else
     {
         // only COUNT(*) and COUNT("table".*) allowed
         bool bCountRemoved = !isFieldNameAsterisk(_pEntry->GetField());
+        weld::ComboBox& rComboBox = m_pFunctionCell->get_widget();
         if ( bCountRemoved )
-            m_pFunctionCell->RemoveEntry(1);
+            rComboBox.remove(1);
 
-        if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
+        if ( !bCountRemoved && rComboBox.get_count() < 2)
+            rComboBox.append_text(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
 
-        if(m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != LISTBOX_ENTRY_NOTFOUND)
-            m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
+        if (rComboBox.find_text(_pEntry->GetFunction()) != -1)
+            rComboBox.set_active_text(_pEntry->GetFunction());
         else
-            m_pFunctionCell->SelectEntryPos(0);
+            rComboBox.set_active(0);
     }
 }
 
