@@ -4229,4 +4229,39 @@ $(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
 	$(if $(UCRT_REDISTDIR),ucrt) \
 ))
 
+ifneq ($(SYSTEM_BOX2D),)
+
+define gb_LinkTarget__use_box2d
+$(call gb_LinkTarget_set_include,$(1),\
+	-DSYSTEM_BOX2D \
+	$$(INCLUDE) \
+	$(BOX2D_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(BOX2D_LIBS))
+
+endef
+
+gb_ExternalProject__use_box2d :=
+
+else # !SYSTEM_BOX2D
+
+define gb_LinkTarget__use_box2d
+$(call gb_LinkTarget_use_unpacked,$(1),box2d)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,box2d/Box2D/)\
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	box2d \
+)
+
+endef
+
+define gb_ExternalProject__use_box2d
+$(call gb_ExternalProject_use_static_libraries,$(1),box2d)
+
+endef
+
+endif # SYSTEM_BOX2D
+
 # vim: set noet sw=4 ts=4:

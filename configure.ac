@@ -1964,6 +1964,11 @@ AC_ARG_WITH(system-qrcodegen,
         [Use libqrcodegen already on system.]),,
     [with_system_qrcodegen="$with_system_libs"])
 
+AC_ARG_WITH(system-box2d,
+    AS_HELP_STRING([--with-system-box2d],
+        [Use box2d already on system.]),,
+    [with_system_box2d="$with_system_libs"])
+
 AC_ARG_WITH(system-mythes,
     AS_HELP_STRING([--with-system-mythes],
         [Use mythes already on system.]),,
@@ -10262,6 +10267,32 @@ fi
 AC_SUBST(SYSTEM_QRCODEGEN)
 AC_SUBST(QRCODEGEN_CFLAGS)
 AC_SUBST(QRCODEGEN_LIBS)
+
+dnl ===================================================================
+dnl Check for system box2d
+dnl ===================================================================
+AC_MSG_CHECKING([which box2d to use])
+if test "$with_system_box2d" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_BOX2D=TRUE
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER(Box2D/Box2D.h, [],
+        [AC_MSG_ERROR(box2d headers not found.)], [])
+    AC_CHECK_LIB([Box2D], [main], [:],
+        [ AC_MSG_ERROR(box2d library not found.) ], [])
+    BOX2D_LIBS=-lBox2D
+    AC_LANG_POP([C++])
+    BOX2D_CFLAGS=$(printf '%s' "$BOX2D_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${BOX2D_LIBS}"
+    BOX2D_LIBS="${filteredlibs}"
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_BOX2D=
+    BUILD_TYPE="$BUILD_TYPE BOX2D"
+fi
+AC_SUBST(SYSTEM_BOX2D)
+AC_SUBST(BOX2D_CFLAGS)
+AC_SUBST(BOX2D_LIBS)
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
