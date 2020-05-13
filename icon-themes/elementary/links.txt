@@ -1913,8 +1913,7 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 
 # fpicker
 # ==============================================
-fpicker/res/fp014.png cmd/sc_open.png
-fpicker/res/fp015.png cmd/sc_starshapes.star5.png
+fpicker/res/fp014.png res/fp015.png
 fpicker/res/fp016.png desktop/res/shared_16.png
 
 # reportdesign
@@ -1936,7 +1935,7 @@ res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png formula/res/fapclose.png
 res/folderop.png cmd/sc_open.png
-res/fp010.png cmd/sc_open.png
+res/fp010.png cmd/sc_upsearch.png
 res/grafikei.png cmd/sc_graphic.png
 res/info.png cmd/lc_helpindex.png
 res/info_16.png cmd/sc_helpindex.png
