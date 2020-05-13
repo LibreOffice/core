@@ -294,7 +294,7 @@ sub create_package
             $localtempdir = "$tempdir/$packagename";
             my $srcfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
 
-            $volume_name             .= " Language Pack";
+            $volume_name             .= " " . $$languagestringref . " Language Pack";
             $volume_name_classic     .= " Language Pack";
             $volume_name_classic_app .= " Language Pack";
 
