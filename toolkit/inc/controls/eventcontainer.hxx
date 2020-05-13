@@ -49,7 +49,6 @@ class ScriptEventContainer final : public ::cppu::WeakImplHelper<
     NameContainerNameMap mHashMap;
     css::uno::Sequence< OUString > mNames;
     std::vector< css::uno::Any > mValues;
-    sal_Int32 mnElementCount;
     css::uno::Type mType;
 
     ContainerListenerMultiplexer maContainerListeners;
