@@ -456,6 +456,7 @@ XclExpControlHelper::~XclExpControlHelper()
 void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape )
 {
     mxCellLink.reset();
+    mxCellLinkAddress.SetInvalid();
     mxSrcRange.reset();
     mnEntryCount = 0;
 
@@ -476,10 +477,9 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape 
             CellAddress aApiAddress;
             if( aBindProp.GetProperty( aApiAddress, SC_UNONAME_BOUNDCELL ) )
             {
-                ScAddress aCellLink;
-                ScUnoConversion::FillScAddress( aCellLink, aApiAddress );
-                if( GetTabInfo().IsExportTab( aCellLink.Tab() ) )
-                    mxCellLink = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, aCellLink );
+                ScUnoConversion::FillScAddress( mxCellLinkAddress, aApiAddress );
+                if( GetTabInfo().IsExportTab( mxCellLinkAddress.Tab() ) )
+                    mxCellLink = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, mxCellLinkAddress );
             }
         }
     }
@@ -634,6 +634,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > const & xShape , const tools::Rectangle* pChildAnchor ) :
     XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
     XclMacroHelper( rRoot ),
+    mxShape( xShape ),
     meEventType( EXC_TBX_EVENT_ACTION ),
     mnHeight( 0 ),
     mnState( 0 ),
@@ -647,7 +648,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mbFlatButton( false ),
     mbFlatBorder( false ),
     mbMultiSel( false ),
-    mbScrollHor( false )
+    mbScrollHor( false ),
+    mbPrint( false )
 {
     namespace FormCompType = css::form::FormComponentType;
     namespace AwtVisualEffect = css::awt::VisualEffect;
@@ -683,7 +685,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // OBJ record flags
     SetLocked( true );
-    SetPrintable( aCtrlProp.GetBoolProperty( "Printable" ) );
+    mbPrint = aCtrlProp.GetBoolProperty( "Printable" );
+    SetPrintable( mbPrint );
     SetAutoFill( false );
     SetAutoLine( false );
 
@@ -702,9 +705,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
 
     // #i51348# name of the control, may overwrite shape name
-    OUString aCtrlName;
-    if( aCtrlProp.GetProperty( aCtrlName, "Name" ) && !aCtrlName.isEmpty() )
-        aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
+    if( aCtrlProp.GetProperty( msCtrlName, "Name" ) && !msCtrlName.isEmpty() )
+        aPropOpt.AddOpt( ESCHER_Prop_wzName, msCtrlName );
 
     //Export description as alt text
     if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
@@ -726,8 +728,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mrEscherEx.UpdateDffFragmentEnd();
 
     // control label
-    OUString aString;
-    if( aCtrlProp.GetProperty( aString, "Label" ) )
+    if( aCtrlProp.GetProperty( msLabel, "Label" ) )
     {
         /*  Be sure to construct the MSODRAWING record containing the
             ClientTextbox atom after the base OBJ's MSODRAWING record data is
@@ -737,7 +738,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         mrEscherEx.UpdateDffFragmentEnd();
 
         sal_uInt16 nXclFont = EXC_FONT_APP;
-        if( !aString.isEmpty() )
+        if( !msLabel.isEmpty() )
         {
             XclFontData aFontData;
             GetFontPropSetHelper().ReadFontProperties( aFontData, aCtrlProp, EXC_FONTPROPSET_CONTROL );
@@ -745,7 +746,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
                 nXclFont = GetFontBuffer().Insert( aFontData, EXC_COLOR_CTRLTEXT );
         }
 
-        pTxo.reset( new XclTxo( aString, nXclFont ) );
+        pTxo.reset( new XclTxo( msLabel, nXclFont ) );
         pTxo->SetHorAlign( (mnObjType == EXC_OBJTYPE_BUTTON) ? EXC_OBJ_HOR_CENTER : EXC_OBJ_HOR_LEFT );
         pTxo->SetVerAlign( EXC_OBJ_VER_CENTER );
     }
@@ -880,6 +881,29 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
                 mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
+    }
+
+    {
+        Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
+        if( xCtrlModel.is() )
+        {
+            Reference< XBindableValue > xBindable( xCtrlModel, UNO_QUERY );
+            if( xBindable.is() )
+            {
+                Reference< XServiceInfo > xServInfo( xBindable->getValueBinding(), UNO_QUERY );
+                if( xServInfo.is() && xServInfo->supportsService( SC_SERVICENAME_VALBIND ) )
+                {
+                    ScfPropertySet aBindProp( xServInfo );
+                    CellAddress aApiAddress;
+                    if( aBindProp.GetProperty( aApiAddress, SC_UNONAME_BOUNDCELL ) )
+                    {
+                        ScUnoConversion::FillScAddress( mxCellLinkAddress, aApiAddress );
+                        if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
+                            lcl_GetFromTo( rRoot, pSdrObj->GetLogicRect(), mxCellLinkAddress.Tab(), maAreaFrom, maAreaTo );
+                    }
+                }
+            }
+        }
     }
 
     // spreadsheet links
@@ -1051,6 +1075,199 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
             << sal_uInt16( 15 )             // thumb width
             << nStyle;                      // flags/style
     rStrm.EndRecord();
+}
+
+// save into xl\drawings\drawing1.xml
+void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
+{
+    switch (mnObjType)
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+        {
+            sax_fastparser::FSHelperPtr& pDrawing = rStrm.GetCurrentStream();
+
+            pDrawing->startElement(FSNS(XML_mc, XML_AlternateContent),
+                FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+            pDrawing->startElement(FSNS(XML_mc, XML_Choice),
+                FSNS(XML_xmlns, XML_a14), rStrm.getNamespaceURL(OOX_NS(a14)).toUtf8(),
+                XML_Requires, "x14");
+
+            pDrawing->startElement(FSNS(XML_xdr, XML_twoCellAnchor), XML_editAs, "oneCell");
+            {
+                pDrawing->startElement(XML_from);
+                lcl_WriteAnchorVertex(pDrawing, maAreaFrom);
+                pDrawing->endElement(XML_from);
+                pDrawing->startElement(XML_to);
+                lcl_WriteAnchorVertex(pDrawing, maAreaTo);
+                pDrawing->endElement(XML_to);
+
+                pDrawing->startElement(FSNS(XML_xdr, XML_sp));
+                {
+                    // xdr:nvSpPr
+                    pDrawing->startElement(FSNS(XML_xdr, XML_nvSpPr));
+                    {
+                        pDrawing->singleElement(FSNS(XML_xdr, XML_cNvPr),
+                            XML_id, "1027", // TODO
+                            XML_name, msCtrlName.toUtf8(), // control name
+                            XML_descr, msLabel.toUtf8(), // description as alt text
+                            XML_hidden, "1");
+                        pDrawing->singleElement(FSNS(XML_xdr, XML_cNvSpPr));
+                    }
+                    pDrawing->endElement(FSNS(XML_xdr, XML_nvSpPr));
+
+                    // xdr:spPr
+                    pDrawing->startElement(FSNS(XML_xdr, XML_spPr));
+                    {
+                        // a:xfrm
+                        pDrawing->startElement(FSNS(XML_a, XML_xfrm));
+                        {
+                            pDrawing->singleElement(FSNS(XML_a, XML_off),
+                                XML_x, "0",
+                                XML_y, "0");
+                            pDrawing->singleElement(FSNS(XML_a, XML_ext),
+                                XML_cx, "0",
+                                XML_cy, "0");
+                        }
+                        pDrawing->endElement(FSNS(XML_a, XML_xfrm));
+
+                        // a:prstGeom
+                        DrawingML aDML(pDrawing, &rStrm, drawingml::DOCUMENT_XLSX);
+                        aDML.WritePresetShape("rect");
+//                        pDrawing->startElement(FSNS(XML_a, XML_prstGeom), XML_prst, "rect");
+//                        {
+//                            pDrawing->singleElement(FSNS(XML_a, XML_avLst));
+//                        }
+//                        pDrawing->endElement(FSNS(XML_a, XML_prstGeom));
+                    }
+                    pDrawing->endElement(FSNS(XML_xdr, XML_spPr));
+
+                    // xdr:txBody
+                    {
+                        pDrawing->startElement(FSNS(XML_xdr, XML_txBody));
+                        DrawingML aDML(pDrawing, &rStrm, drawingml::DOCUMENT_XLSX);
+                        aDML.WriteText(mxShape, OUString(), true, true, XML_a);
+                        pDrawing->endElement(FSNS(XML_xdr, XML_txBody));
+                    }
+                }
+                pDrawing->endElement(FSNS(XML_xdr, XML_sp));
+            }
+            pDrawing->endElement(FSNS(XML_xdr, XML_twoCellAnchor));
+            pDrawing->endElement( FSNS( XML_mc, XML_Choice ) );
+            pDrawing->endElement( FSNS( XML_mc, XML_AlternateContent ) );
+
+            break;
+        }
+    }
+}
+
+// output into ctrlProp1.xml
+OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) const
+{
+    OUString sIdFormControlPr;
+
+    switch (mnObjType)
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+        {
+            const sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
+            sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
+                    XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProps", nDrawing ),
+                    XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProps", nDrawing ),
+                    rStrm.GetCurrentStream()->getOutputStream(),
+                    "application/vnd.ms-excel.controlproperties+xml",
+                    OUStringToOString(oox::getRelationship(Relationship::CTRLPROP), RTL_TEXTENCODING_UTF8).getStr(),
+                    &sIdFormControlPr );
+
+            rStrm.PushStream( pFormControl );
+            // checkbox
+            // <formControlPr
+            //      xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+            //      objectType="CheckBox" checked="Checked" lockText="1" noThreeD="1"/>
+            //
+            pFormControl->write("<formControlPr xmlns=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/main\" objectType=\"CheckBox\"");
+            if (mnState == EXC_OBJ_CHECKBOX_CHECKED)
+                pFormControl->write(" checked=\"Checked\"");
+
+            if (mxCellLinkAddress.IsValid())
+            {
+                OUString aCellLink = mxCellLinkAddress.Format(ScRefFlags::ADDR_ABS,
+                    &GetDoc(),
+                    ScAddress::Details(::formula::FormulaGrammar::CONV_XL_A1));
+
+                // "Sheet1!$C$5"
+                pFormControl->write(" fmlaLink=\"");
+                if (aCellLink.indexOf('!') < 0)
+                {
+                    pFormControl->write(GetTabInfo().GetScTabName( mxCellLinkAddress.Tab() ).toUtf8());
+                    pFormControl->write("!");
+                }
+                pFormControl->write(aCellLink);
+                pFormControl->write("\"");
+            }
+
+            pFormControl->write(" lockText=\"1\" noThreeD=\"1\"/>");
+            rStrm.PopStream();
+
+            break;
+        }
+    }
+
+    return sIdFormControlPr;
+}
+
+// output into sheet1.xml
+void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& aIdFormControlPr) const
+{
+    switch (mnObjType)
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+        {
+            sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+            rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
+                FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+            rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
+
+            rWorksheet->startElement(
+                XML_control,
+                XML_shapeId, "1027", // TODO: OUString::number(mnShapeId).toUtf8(),
+                FSNS(XML_r, XML_id), aIdFormControlPr.toUtf8(),
+                XML_name, msLabel.toUtf8()); // text to display with checkbox button
+
+            rWorksheet->write("<controlPr defaultSize=\"0\" autoFill=\"0\" autoLine=\"0\" autoPict=\"0\"");
+
+            if (mbPrint)
+                rWorksheet->write(" print=\"true\"");
+            else
+                rWorksheet->write(" print=\"false\"");
+
+            if (!msCtrlName.isEmpty())
+            {
+                rWorksheet->write(" altText=\"");
+                rWorksheet->write(msCtrlName.toUtf8()); // alt text
+                rWorksheet->write("\"");
+            }
+
+            rWorksheet->write(">");
+
+            rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells, "false");
+            rWorksheet->startElement(XML_from);
+            lcl_WriteAnchorVertex(rWorksheet, maAreaFrom);
+            rWorksheet->endElement(XML_from);
+            rWorksheet->startElement(XML_to);
+            lcl_WriteAnchorVertex(rWorksheet, maAreaTo);
+            rWorksheet->endElement(XML_to);
+            rWorksheet->endElement( XML_anchor );
+
+            rWorksheet->write("</controlPr>");
+
+            rWorksheet->endElement(XML_control);
+            rWorksheet->endElement( FSNS( XML_mc, XML_Choice ) );
+            rWorksheet->endElement( FSNS( XML_mc, XML_AlternateContent ) );
+
+            break;
+        }
+    }
 }
 
 //#endif
