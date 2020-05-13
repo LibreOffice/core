@@ -26,11 +26,11 @@
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
 #include <vcl/window.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <vcl/vclmedit.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -301,9 +301,7 @@ namespace svt
         DECL_LINK( OnClick, Button*, void );
     };
 
-
     //= CheckBoxCellController
-
     class SVT_DLLPUBLIC CheckBoxCellController final : public CellController
     {
     public:
@@ -319,29 +317,27 @@ namespace svt
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
-
     //= ComboBoxControl
-
-    class SVT_DLLPUBLIC ComboBoxControl final : public ComboBox
+    class SVT_DLLPUBLIC ComboBoxControl final : public InterimItemWindow
     {
         friend class ComboBoxCellController;
 
     public:
         ComboBoxControl(vcl::Window* pParent);
 
+        weld::ComboBox& get_widget() { return *m_xWidget; }
+
     private:
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+        std::unique_ptr<weld::ComboBox> m_xWidget;
     };
 
-
     //= ComboBoxCellController
-
     class SVT_DLLPUBLIC ComboBoxCellController : public CellController
     {
     public:
 
         ComboBoxCellController(ComboBoxControl* pParent);
-        ComboBoxControl& GetComboBox() const { return static_cast<ComboBoxControl &>(GetWindow()); }
+        weld::ComboBox& GetComboBox() const { return static_cast<ComboBoxControl&>(GetWindow()).get_widget(); }
 
         virtual bool IsModified() const override;
         virtual void ClearModified() override;
@@ -349,7 +345,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK(ModifyHdl, Edit&, void);
+        DECL_LINK(ModifyHdl, weld::ComboBox&, void);
     };
 
 
