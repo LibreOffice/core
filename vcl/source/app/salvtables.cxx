@@ -2118,128 +2118,112 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
         m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }
 
-namespace
+SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
+    , m_xNotebook(pNotebook)
 {
-class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
+    m_xNotebook->SetActivatePageHdl(LINK(this, SalInstanceNotebook, ActivatePageHdl));
+    m_xNotebook->SetDeactivatePageHdl(LINK(this, SalInstanceNotebook, DeactivatePageHdl));
+}
+
+int SalInstanceNotebook::get_current_page() const
 {
-private:
-    VclPtr<TabControl> m_xNotebook;
-    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
-    std::map<OString, std::pair<VclPtr<TabPage>, VclPtr<VclGrid>>> m_aAddedPages;
+    return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
+}
 
-    DECL_LINK(DeactivatePageHdl, TabControl*, bool);
-    DECL_LINK(ActivatePageHdl, TabControl*, void);
+OString SalInstanceNotebook::get_page_ident(int nPage) const
+{
+    return m_xNotebook->GetPageName(m_xNotebook->GetPageId(nPage));
+}
 
-public:
-    SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pNotebook, pBuilder, bTakeOwnership)
-        , m_xNotebook(pNotebook)
+OString SalInstanceNotebook::get_current_page_ident() const
+{
+    return m_xNotebook->GetPageName(m_xNotebook->GetCurPageId());
+}
+
+weld::Container* SalInstanceNotebook::get_page(const OString& rIdent) const
+{
+    sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
+    sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
+    if (nPageIndex == TAB_PAGE_NOTFOUND)
+        return nullptr;
+    TabPage* pPage = m_xNotebook->GetTabPage(nPageId);
+    vcl::Window* pChild = pPage->GetChild(0);
+    if (m_aPages.size() < nPageIndex + 1U)
+        m_aPages.resize(nPageIndex + 1U);
+    if (!m_aPages[nPageIndex])
+        m_aPages[nPageIndex].reset(new SalInstanceContainer(pChild, m_pBuilder, false));
+    return m_aPages[nPageIndex].get();
+}
+
+void SalInstanceNotebook::set_current_page(int nPage)
+{
+    m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(nPage));
+}
+
+void SalInstanceNotebook::set_current_page(const OString& rIdent)
+{
+    m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(rIdent));
+}
+
+void SalInstanceNotebook::remove_page(const OString& rIdent)
+{
+    sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
+    sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
+    if (nPageIndex == TAB_PAGE_NOTFOUND)
+        return;
+
+    m_xNotebook->RemovePage(nPageId);
+    if (nPageIndex < m_aPages.size())
+        m_aPages.erase(m_aPages.begin() + nPageIndex);
+
+    auto iter = m_aAddedPages.find(rIdent);
+    if (iter != m_aAddedPages.end())
     {
-        m_xNotebook->SetActivatePageHdl(LINK(this, SalInstanceNotebook, ActivatePageHdl));
-        m_xNotebook->SetDeactivatePageHdl(LINK(this, SalInstanceNotebook, DeactivatePageHdl));
+        iter->second.second.disposeAndClear();
+        iter->second.first.disposeAndClear();
+        m_aAddedPages.erase(iter);
     }
+}
 
-    virtual int get_current_page() const override
+void SalInstanceNotebook::insert_page(const OString& rIdent, const OUString& rLabel, int nPos)
+{
+    sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
+    sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
+    sal_uInt16 nNewPageId = nLastPageId + 1;
+    m_xNotebook->InsertPage(nNewPageId, rLabel, nPos == -1 ? TAB_APPEND : nPos);
+    VclPtrInstance<TabPage> xPage(m_xNotebook);
+    VclPtrInstance<VclGrid> xGrid(xPage);
+    xPage->Show();
+    xGrid->set_hexpand(true);
+    xGrid->set_vexpand(true);
+    xGrid->Show();
+    m_xNotebook->SetTabPage(nNewPageId, xPage);
+    m_xNotebook->SetPageName(nNewPageId, rIdent);
+    m_aAddedPages.try_emplace(rIdent, xPage, xGrid);
+}
+
+int SalInstanceNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }
+
+OUString SalInstanceNotebook::get_tab_label_text(const OString& rIdent) const
+{
+    return m_xNotebook->GetPageText(m_xNotebook->GetPageId(rIdent));
+}
+
+void SalInstanceNotebook::set_tab_label_text(const OString& rIdent, const OUString& rText)
+{
+    return m_xNotebook->SetPageText(m_xNotebook->GetPageId(rIdent), rText);
+}
+
+SalInstanceNotebook::~SalInstanceNotebook()
+{
+    for (auto& rItem : m_aAddedPages)
     {
-        return m_xNotebook->GetPagePos(m_xNotebook->GetCurPageId());
+        rItem.second.second.disposeAndClear();
+        rItem.second.first.disposeAndClear();
     }
-
-    virtual OString get_page_ident(int nPage) const override
-    {
-        return m_xNotebook->GetPageName(m_xNotebook->GetPageId(nPage));
-    }
-
-    virtual OString get_current_page_ident() const override
-    {
-        return m_xNotebook->GetPageName(m_xNotebook->GetCurPageId());
-    }
-
-    virtual weld::Container* get_page(const OString& rIdent) const override
-    {
-        sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
-        sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
-        if (nPageIndex == TAB_PAGE_NOTFOUND)
-            return nullptr;
-        TabPage* pPage = m_xNotebook->GetTabPage(nPageId);
-        vcl::Window* pChild = pPage->GetChild(0);
-        if (m_aPages.size() < nPageIndex + 1U)
-            m_aPages.resize(nPageIndex + 1U);
-        if (!m_aPages[nPageIndex])
-            m_aPages[nPageIndex].reset(new SalInstanceContainer(pChild, m_pBuilder, false));
-        return m_aPages[nPageIndex].get();
-    }
-
-    virtual void set_current_page(int nPage) override
-    {
-        m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(nPage));
-    }
-
-    virtual void set_current_page(const OString& rIdent) override
-    {
-        m_xNotebook->SetCurPageId(m_xNotebook->GetPageId(rIdent));
-    }
-
-    virtual void remove_page(const OString& rIdent) override
-    {
-        sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
-        sal_uInt16 nPageIndex = m_xNotebook->GetPagePos(nPageId);
-        if (nPageIndex == TAB_PAGE_NOTFOUND)
-            return;
-
-        m_xNotebook->RemovePage(nPageId);
-        if (nPageIndex < m_aPages.size())
-            m_aPages.erase(m_aPages.begin() + nPageIndex);
-
-        auto iter = m_aAddedPages.find(rIdent);
-        if (iter != m_aAddedPages.end())
-        {
-            iter->second.second.disposeAndClear();
-            iter->second.first.disposeAndClear();
-            m_aAddedPages.erase(iter);
-        }
-    }
-
-    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override
-    {
-        sal_uInt16 nPageCount = m_xNotebook->GetPageCount();
-        sal_uInt16 nLastPageId = nPageCount ? m_xNotebook->GetPageId(nPageCount - 1) : 0;
-        sal_uInt16 nNewPageId = nLastPageId + 1;
-        m_xNotebook->InsertPage(nNewPageId, rLabel, nPos == -1 ? TAB_APPEND : nPos);
-        VclPtrInstance<TabPage> xPage(m_xNotebook);
-        VclPtrInstance<VclGrid> xGrid(xPage);
-        xPage->Show();
-        xGrid->set_hexpand(true);
-        xGrid->set_vexpand(true);
-        xGrid->Show();
-        m_xNotebook->SetTabPage(nNewPageId, xPage);
-        m_xNotebook->SetPageName(nNewPageId, rIdent);
-        m_aAddedPages.try_emplace(rIdent, xPage, xGrid);
-    }
-
-    virtual int get_n_pages() const override { return m_xNotebook->GetPageCount(); }
-
-    virtual OUString get_tab_label_text(const OString& rIdent) const override
-    {
-        return m_xNotebook->GetPageText(m_xNotebook->GetPageId(rIdent));
-    }
-
-    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override
-    {
-        return m_xNotebook->SetPageText(m_xNotebook->GetPageId(rIdent), rText);
-    }
-
-    virtual ~SalInstanceNotebook() override
-    {
-        for (auto& rItem : m_aAddedPages)
-        {
-            rItem.second.second.disposeAndClear();
-            rItem.second.first.disposeAndClear();
-        }
-        m_xNotebook->SetActivatePageHdl(Link<TabControl*, void>());
-        m_xNotebook->SetDeactivatePageHdl(Link<TabControl*, bool>());
-    }
-};
-
+    m_xNotebook->SetActivatePageHdl(Link<TabControl*, void>());
+    m_xNotebook->SetDeactivatePageHdl(Link<TabControl*, bool>());
 }
 
 IMPL_LINK_NOARG(SalInstanceNotebook, DeactivatePageHdl, TabControl*, bool)
