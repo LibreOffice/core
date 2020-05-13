@@ -27,7 +27,6 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/weld.hxx>
 #include <browserids.hxx>
 #include "SelectionBrowseBox.hxx"
@@ -2647,10 +2646,9 @@ sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
     return nWidth;
 }
 
-void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFieldList)
+void OQueryDesignView::fillValidFields(const OUString& sAliasName, weld::ComboBox& rFieldList)
 {
-    OSL_ENSURE(pFieldList != nullptr, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
-    pFieldList->Clear();
+    rFieldList.clear();
 
     bool bAllTables = sAliasName.isEmpty();
 
@@ -2669,9 +2667,9 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
             for (auto const& field : aFields)
             {
                 if (bAllTables || field.toChar() == '*')
-                    pFieldList->InsertEntry(strCurrentPrefix + field);
+                    rFieldList.append_text(strCurrentPrefix + field);
                 else
-                    pFieldList->InsertEntry(field);
+                    rFieldList.append_text(field);
             }
 
             if (!bAllTables)
