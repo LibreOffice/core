@@ -664,7 +664,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                 if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > static_cast<sal_uInt16>( static_cast<double>(-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
                     nLineSpacing = nNormalSpacing;
                 else
-                    nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) / 4.40972 );
+                    nLineSpacing = static_cast<sal_Int16>( convertTwipToMasterUnit(nLineSpacing) );
             }
             if ( ( pPara->meLineSpacing == css::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
