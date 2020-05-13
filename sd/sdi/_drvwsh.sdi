@@ -2880,5 +2880,10 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_SOFTEDGE_RADIUS
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
 
 }
