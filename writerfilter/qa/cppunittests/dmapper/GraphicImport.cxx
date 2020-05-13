@@ -17,9 +17,15 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+<<<<<<< HEAD   (c68bfa Resolves: tdf#131536 TEXT() support empty format string mimi)
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <comphelper/processfactory.hxx>
+=======
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+>>>>>>> CHANGE (2abe98 DOCX import: fix interaction between the crop and the wrap p)
 
 using namespace ::com::sun::star;
 
@@ -92,6 +98,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelfromhInsidemargin)
     CPPUNIT_ASSERT(bPageToggle);
 }
 
+<<<<<<< HEAD   (c68bfa Resolves: tdf#131536 TEXT() support empty format string mimi)
 CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
 {
     // Load a document which has two shapes: an inline one and an anchored one. The inline has no
@@ -106,6 +113,33 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineAnchoredZOrder)
     // - Actual  :
     // i.e. the rectangle (with no name) was on top of the oval one, not the other way around.
     CPPUNIT_ASSERT_EQUAL(OUString("Oval 2"), xOval->getName());
+=======
+CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "wrap-poly-crop.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::PointSequenceSequence aContour;
+    xShape->getPropertyValue("ContourPolyPolygon") >>= aContour;
+    auto aPolyPolygon = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(aContour);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aPolyPolygon.count());
+    auto aPolygon = aPolyPolygon.getB2DPolygon(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
+
+    // Ideally this would be 2352, because the graphic size in mm100, using the graphic's DPI is
+    // 10582, the lower 33% of the graphic is cropped, and the wrap polygon covers the middle third
+    // of the area vertically. Which means 10582*2/3 = 7054.67 is the cropped height, and the top of
+    // the middle third is 2351.55.
+    //
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2361
+    // - Actual  : 3542
+    // i.e. the wrap polygon covered a larger-than-correct area, which end the end means 3 lines
+    // were wrapping around the image, not only 2 as Word does it.
+    CPPUNIT_ASSERT_EQUAL(2361., aPolygon.getB2DPoint(0).getY());
+>>>>>>> CHANGE (2abe98 DOCX import: fix interaction between the crop and the wrap p)
 }
 }
 
