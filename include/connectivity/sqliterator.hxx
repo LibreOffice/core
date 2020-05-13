@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -78,7 +79,7 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator final
     {
     private:
-        css::sdbc::SQLException                             m_aErrors;          // contains the error while iterating through the statement
+        std::optional<css::sdbc::SQLException>              m_xErrors;          // contains the error while iterating through the statement
         const OSQLParseNode*                                m_pParseTree;       // current ParseTree
         const OSQLParser&                                   m_rParser;          // if set used for general error messages from the context
         OSQLStatementType                                   m_eStatementType;
@@ -178,8 +179,8 @@ namespace connectivity
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
-        const css::sdbc::SQLException&   getErrors() const { return m_aErrors; }
-        bool hasErrors() const { return !m_aErrors.Message.isEmpty(); }
+        const css::sdbc::SQLException&   getErrors() const { return *m_xErrors; }
+        bool hasErrors() const { return bool(m_xErrors); }
 
         // statement type (already set in setParseTree):
         OSQLStatementType getStatementType() const { return m_eStatementType; }
