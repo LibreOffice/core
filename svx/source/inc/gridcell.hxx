@@ -1012,7 +1012,8 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    VclPtr<ComboBox>                    m_pComboBox;
+    weld::ComboBox& m_rComboBox;
+    sal_uInt16 m_nLines;
 
 protected:
     virtual ~FmXComboBoxCell() override;
