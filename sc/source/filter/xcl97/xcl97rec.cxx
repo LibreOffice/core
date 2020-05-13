@@ -153,6 +153,17 @@ void XclExpObjList::Save( XclExpStream& rStrm )
 
 namespace {
 
+bool IsFormControlObject( const XclObj *rObj )
+{
+    switch( rObj->GetObjType() )
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool IsVmlObject( const XclObj *rObj )
 {
     switch( rObj->GetObjType() )
@@ -211,13 +222,15 @@ bool IsValidObject( const XclObj& rObj )
     return true;
 }
 
-void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
+void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 {
     std::vector<XclObj*> aList;
     aList.reserve(rList.size());
     for (const auto& rxObj : rList)
     {
         if (IsVmlObject(rxObj.get()) || !IsValidObject(*rxObj))
+            continue;
+        if (IsFormControlObject(rxObj.get()))
             continue;
 
         aList.push_back(rxObj.get());
@@ -226,7 +239,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
     if (aList.empty())
         return;
 
-    sal_Int32 nDrawing = ++nDrawingMLCount;
+    sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/drawing", nDrawing ),
@@ -250,6 +263,29 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
 
     rStrm.PopStream();
+}
+
+void SaveFormControlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->write(
+        "<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">"
+        "<mc:Choice Requires=\"x14\">"
+        "<controls>");
+
+    for (const auto& rxObj : rList)
+    {
+        if ( IsFormControlObject( rxObj.get() ) )
+        {
+            rxObj->SaveXml(rStrm);
+        }
+    }
+
+    rWorksheet->write(
+        "</controls>"
+        "</mc:Choice>"
+        "</mc:AlternateContent>");
 }
 
 void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
@@ -298,7 +334,8 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
     if( maObjs.empty())
         return;
 
-    SaveDrawingMLObjects( *this, rStrm, mnDrawingMLCount );
+    SaveDrawingMLObjects( *this, rStrm );
+    SaveFormControlObjects( *this, rStrm );
     SaveVmlObjects( *this, rStrm, mnVmlCount );
 }
 

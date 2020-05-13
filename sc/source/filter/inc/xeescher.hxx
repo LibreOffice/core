@@ -190,6 +190,8 @@ private:
     XclTokenArrayRef    mxCellLink;     /// Formula for linked cell.
     XclTokenArrayRef    mxSrcRange;     /// Formula for source data range.
     sal_uInt16          mnEntryCount;   /// Number of entries in source range.
+protected:
+    ScAddress mxCellLinkAddress;
 };
 
 class XclMacroHelper : public XclExpControlHelper
@@ -257,6 +259,8 @@ public:
         @return  true = The passed event descriptor was valid, macro name has been found. */
     bool                SetMacroLink( const css::script::ScriptEventDescriptor& rEvent );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
+
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 
@@ -281,6 +285,7 @@ private:
     bool                mbFlatBorder;   /// False = 3D border style; True = Flat border style.
     bool                mbMultiSel;     /// true = Multi selection in listbox.
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
+    OUString            msCtrlName;
 };
 
 //#endif
