@@ -213,7 +213,6 @@ protected:
     SfxStyleFamily                  eStyleFamily;
     int                             m_nMaxUserDrawFontWidth;
     bool                            bRelease;
-    bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
@@ -833,7 +832,6 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     , eStyleFamily( eFamily )
     , m_nMaxUserDrawFontWidth(0)
     , bRelease( true )
-    , bVisible(false)
     , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
     , m_aCommand( rCommand )

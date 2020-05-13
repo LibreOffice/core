@@ -168,9 +168,6 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     , pColorList()
     , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin")))
     , xColorSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *xColorSet))
-    , nCols(20)
-    , nLines(1)
-    , nCount(0)
 {
     SetText(SvxResId(STR_COLORTABLE));
     SetQuickHelpText(SvxResId(RID_SVXSTR_COLORBAR));
@@ -208,7 +205,7 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
         }
     }
 
-    aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    Size aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
     aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setWidth( aItemSize.Width() / 2 );
     aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
@@ -250,7 +247,6 @@ void SvxColorDockingWindow::FillValueSet()
     if( !pColorList.is() )
         return;
 
-    nCount = pColorList->Count();
     xColorSet->Clear();
 
     xColorSet->addEntriesForXColorList(*pColorList, 2);

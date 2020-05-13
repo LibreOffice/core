@@ -126,7 +126,6 @@ protected:
     bool bHierarchical :1;
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
-    bool m_bNewHasMenu : 1;
 
     void FmtSelect(weld::TreeView* pTreeView, bool bIsCallback);
 

@@ -347,9 +347,8 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, r
 SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow)
     : PanelLayout(pParentWindow, "TemplatePanel", "sfx/ui/templatepanel.ui", nullptr)
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
-    , mpBindings(pBindings)
 {
-    OSL_ASSERT(mpBindings!=nullptr);
+    OSL_ASSERT(pBindings!=nullptr);
 }
 
 SfxTemplatePanelControl::~SfxTemplatePanelControl()
@@ -546,7 +545,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, vcl:
     , bHierarchical(false)
     , m_bWantHierarchical(false)
     , bBindingUpdate(true)
-    , m_bNewHasMenu(false)
 {
     mxFmtLb->set_help_id(HID_TEMPLATE_FMT);
     mxFilterLb->set_help_id(HID_TEMPLATE_FILTER);
@@ -2120,7 +2118,6 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     m_xActionTbR->set_item_visible("update", false);
     m_xActionTbR->set_item_visible("new", false);
     m_xActionTbR->set_item_visible("newmenu", true);
-    m_bNewHasMenu = true;
     FillToolMenu();
 }
 
