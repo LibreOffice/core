@@ -33,6 +33,12 @@ namespace svt
     {
     }
 
+    void ComboBoxControl::dispose()
+    {
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
+    }
+
     //= ComboBoxCellController
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
@@ -98,51 +104,27 @@ namespace svt
 
     //= ListBoxControl
     ListBoxControl::ListBoxControl(vcl::Window* pParent)
-                  :ListBox(pParent, WB_DROPDOWN|WB_NOBORDER)
+        : InterimItemWindow(pParent, "svt/ui/listcontrol.ui", "ListControl")
+        , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
     {
-        EnableAutoSize(false);
-        EnableMultiSelection(false);
-        SetDropDownLineCount(20);
     }
 
-    bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
+    void ListBoxControl::dispose()
     {
-        if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
-        {
-            const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-            const vcl::KeyCode rKey = pEvt->GetKeyCode();
-
-            if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
-                (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
-            {
-                // select next resp. previous entry
-                sal_Int32 nPos = GetSelectedEntryPos();
-                int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
-                {
-                    nPos += nDir;
-                    SelectEntryPos(nPos);
-                }
-                Select();   // for calling Modify
-                return true;
-            }
-            else if (GetParent()->PreNotify(rNEvt))
-                return true;
-        }
-        return ListBox::PreNotify(rNEvt);
+        m_xWidget.reset();
+        InterimItemWindow::dispose();
     }
 
     //= ListBoxCellController
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
     {
-        GetListBox().SetSelectHdl(LINK(this, ListBoxCellController, ListBoxSelectHdl));
+        GetListBox().connect_changed(LINK(this, ListBoxCellController, ListBoxSelectHdl));
     }
-
 
     bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
-        const ListBoxControl& rBox = GetListBox();
+        const weld::ComboBox& rBox = GetListBox();
         switch (rEvt.GetKeyCode().GetCode())
         {
             case KEY_UP:
@@ -157,7 +139,7 @@ namespace svt
                 [[fallthrough]];
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
-                if (rBox.IsTravelSelect())
+                if (rBox.get_popup_shown())
                     return false;
                 [[fallthrough]];
             default:
@@ -165,28 +147,22 @@ namespace svt
         }
     }
 
-
     bool ListBoxCellController::IsModified() const
     {
-        return GetListBox().IsValueChangedFromSaved();
+        return GetListBox().get_value_changed_from_saved();
     }
-
 
     void ListBoxCellController::ClearModified()
     {
-        GetListBox().SaveValue();
+        GetListBox().save_value();
     }
 
-
-    IMPL_LINK_NOARG(ListBoxCellController, ListBoxSelectHdl, ListBox&, void)
+    IMPL_LINK_NOARG(ListBoxCellController, ListBoxSelectHdl, weld::ComboBox&, void)
     {
         callModifyHdl();
     }
 
-
     //= CheckBoxControl
-
-
     CheckBoxControl::CheckBoxControl(vcl::Window* pParent)
                    :Control(pParent, 0)
     {
@@ -209,7 +185,6 @@ namespace svt
         pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
         pBox->Show();
     }
-
 
     CheckBoxControl::~CheckBoxControl()
     {
