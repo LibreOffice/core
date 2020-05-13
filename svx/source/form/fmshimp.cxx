@@ -3248,8 +3248,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                         // remember the controls source of the radio group
                         sControlSource = ::comphelper::getString(xCurrentModelSet->getPropertyValue(FM_PROP_CONTROLSOURCE));
-                        if (aRadioControlSources.find(aGroupName) == aRadioControlSources.end())
-                            aRadioControlSources[aGroupName] = sControlSource;
+                        aRadioControlSources.try_emplace(aGroupName, sControlSource);
 #ifdef DBG_UTIL
                         else
                             DBG_ASSERT(aRadioControlSources[aGroupName] == sControlSource,
@@ -3257,8 +3256,7 @@ void FmXFormShell::CreateExternalView_Lock()
                             // (radio buttons with the same name should have the same control source)
 #endif
                         // remember the position within the columns
-                        if (aRadioPositions.find(aGroupName) == aRadioPositions.end())
-                            aRadioPositions[aGroupName] = nAddedColumns;
+                        aRadioPositions.try_emplace(aGroupName, nAddedColumns);
 
                         // any further handling is done below
                     }

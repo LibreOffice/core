@@ -291,10 +291,8 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName)
             m_pCategory->m_nConfidentiality = m_aConfidentalityValue.toInt32(); // 0-based class sensitivity; 0 is lowest.
             // Set the two other type of levels as well, if they're not set
             // yet: they're optional in BAF, but not in BAILS.
-            if (rLabels.find("Impact:Level:Integrity") == rLabels.end())
-                rLabels["Impact:Level:Integrity"] = m_aConfidentalityValue;
-            if (rLabels.find("Impact:Level:Availability") == rLabels.end())
-                rLabels["Impact:Level:Availability"] = m_aConfidentalityValue;
+            rLabels.try_emplace("Impact:Level:Integrity", m_aConfidentalityValue);
+            rLabels.try_emplace("Impact:Level:Availability", m_aConfidentalityValue);
         }
     }
     else if (rName == "baf:Identifier")
