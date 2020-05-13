@@ -26,6 +26,10 @@ $(eval $(call gb_Executable_use_externals,vcldemo,\
 ))
 endif
 
+$(eval $(call gb_Executable_add_defs,vcldemo,\
+    -DVCL_INTERNALS \
+))
+
 $(eval $(call gb_Executable_set_include,vcldemo,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
