@@ -36,15 +36,6 @@ using ::com::sun::star::beans::Property;
 
 namespace
 {
-static const char lcl_aImplementationName_MeanValue[]   = "com.sun.star.comp.chart2.MeanValueRegressionCurve";
-static const char lcl_aImplementationName_Linear[]      = "com.sun.star.comp.chart2.LinearRegressionCurve";
-static const char lcl_aImplementationName_Logarithmic[] = "com.sun.star.comp.chart2.LogarithmicRegressionCurve";
-static const char lcl_aImplementationName_Exponential[] = "com.sun.star.comp.chart2.ExponentialRegressionCurve";
-static const char lcl_aImplementationName_Potential[]   = "com.sun.star.comp.chart2.PotentialRegressionCurve";
-static const char lcl_aImplementationName_Polynomial[]  = "com.sun.star.comp.chart2.PolynomialRegressionCurve";
-static const char lcl_aImplementationName_MovingAverage[] = "com.sun.star.comp.chart2.MovingAverageRegressionCurve";
-static const char lcl_aServiceName[] = "com.sun.star.chart2.RegressionCurve";
-
 enum
 {
     PROPERTY_DEGREE,
@@ -326,7 +317,7 @@ MeanValueRegressionCurve::~MeanValueRegressionCurve()
 
 OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_MeanValue;
+    return "com.sun.star.comp.chart2.MeanValueRegressionCurve";
 }
 
 sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
@@ -336,7 +327,7 @@ sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rSe
 
 css::uno::Sequence< OUString > SAL_CALL MeanValueRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.MeanValueRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.MeanValueRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
@@ -356,7 +347,7 @@ LinearRegressionCurve::~LinearRegressionCurve()
 
 OUString SAL_CALL LinearRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_Linear;
+    return "com.sun.star.comp.chart2.LinearRegressionCurve";
 }
 
 sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
@@ -366,7 +357,7 @@ sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServi
 
 css::uno::Sequence< OUString > SAL_CALL LinearRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.LinearRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.LinearRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
@@ -386,7 +377,7 @@ LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 
 OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_Logarithmic;
+    return "com.sun.star.comp.chart2.LogarithmicRegressionCurve";
 }
 
 sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
@@ -396,7 +387,7 @@ sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& r
 
 css::uno::Sequence< OUString > SAL_CALL LogarithmicRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.LogarithmicRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.LogarithmicRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
@@ -416,7 +407,7 @@ ExponentialRegressionCurve::~ExponentialRegressionCurve()
 
 OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_Exponential;
+    return "com.sun.star.comp.chart2.ExponentialRegressionCurve";
 }
 
 sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
@@ -426,7 +417,7 @@ sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& r
 
 css::uno::Sequence< OUString > SAL_CALL ExponentialRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.ExponentialRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.ExponentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
@@ -446,7 +437,7 @@ PotentialRegressionCurve::~PotentialRegressionCurve()
 
 OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_Potential;
+    return "com.sun.star.comp.chart2.PotentialRegressionCurve";
 }
 
 sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
@@ -456,7 +447,7 @@ sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rSe
 
 css::uno::Sequence< OUString > SAL_CALL PotentialRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.PotentialRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.PotentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
@@ -476,7 +467,7 @@ PolynomialRegressionCurve::~PolynomialRegressionCurve()
 
 OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_Polynomial;
+    return "com.sun.star.comp.chart2.PolynomialRegressionCurve";
 }
 
 sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
@@ -486,7 +477,7 @@ sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rS
 
 css::uno::Sequence< OUString > SAL_CALL PolynomialRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.PolynomialRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.PolynomialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
@@ -506,7 +497,7 @@ MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
 
 OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
 {
-    return lcl_aImplementationName_MovingAverage;
+    return "com.sun.star.comp.chart2.MovingAverageRegressionCurve";
 }
 
 sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
@@ -516,7 +507,7 @@ sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString&
 
 css::uno::Sequence< OUString > SAL_CALL MovingAverageRegressionCurve::getSupportedServiceNames()
 {
-    return { lcl_aServiceName, "com.sun.star.chart2.MovingAverageRegressionCurve" };
+    return { "com.sun.star.chart2.RegressionCurve", "com.sun.star.chart2.MovingAverageRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
