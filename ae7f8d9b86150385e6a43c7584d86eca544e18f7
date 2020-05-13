@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cc88d7b_0fd8bea9",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T06:25:18Z",
+      "side": 1,
+      "message": "note that this will conflict with \u003chttps://git.libreoffice.org/core/+/ec6eaa58addf0d8823f8c56d4ec168ff389da8c5%5E!/\u003e \"fix memory leak of xmlDoc objects\"",
+      "range": {
+        "startLine": 2711,
+        "startChar": 4,
+        "endLine": 2711,
+        "endChar": 13
+      },
+      "revId": "ae7f8d9b86150385e6a43c7584d86eca544e18f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
