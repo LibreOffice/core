@@ -32,7 +32,7 @@
 
 namespace com::sun::star::ucb {
     struct Lock;
-} } } }
+}
 
 namespace http_dav_ucp
 {

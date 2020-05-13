@@ -31,7 +31,7 @@
 
 namespace com::sun::star::beans {
     struct Property;
-} } } }
+}
 
 namespace http_dav_ucp
 {
