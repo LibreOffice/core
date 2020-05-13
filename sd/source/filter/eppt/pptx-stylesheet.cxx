@@ -257,7 +257,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
                     nLineSpacing = 100;
             }
             else
-                nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) / 4.40972 );
+                nLineSpacing = static_cast<sal_Int16>( convertTwipToMasterUnit(nLineSpacing) );
         }
         rLev.mnLineFeed = nLineSpacing;
     }
