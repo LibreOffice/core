@@ -22,6 +22,29 @@
       "revId": "ef43de3e56ca7b72aaef8f1a71f9aaa34b5b4080",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c795ea_629a7b9b",
+        "filename": "chart2/uiconfig/ui/tp_AxisPositions.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-13T06:47:35Z",
+      "side": 1,
+      "message": "Position Axis",
+      "range": {
+        "startLine": 207,
+        "startChar": 94,
+        "endLine": 207,
+        "endChar": 107
+      },
+      "revId": "ef43de3e56ca7b72aaef8f1a71f9aaa34b5b4080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
