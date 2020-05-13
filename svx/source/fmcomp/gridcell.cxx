@@ -2392,7 +2392,6 @@ DbComboBox::DbComboBox(DbGridColumn& _rColumn)
     doPropertyListening( FM_PROP_LINECOUNT );
 }
 
-
 void DbComboBox::_propertyChanged( const PropertyChangeEvent& _rEvent )
 {
     if ( _rEvent.PropertyName == FM_PROP_STRINGITEMLIST )
@@ -2405,35 +2404,27 @@ void DbComboBox::_propertyChanged( const PropertyChangeEvent& _rEvent )
     }
 }
 
-
 void DbComboBox::SetList(const Any& rItems)
 {
     ComboBoxControl* pField = static_cast<ComboBoxControl*>(m_pWindow.get());
-    pField->Clear();
+    weld::ComboBox& rComboBox = pField->get_widget();
+    rComboBox.clear();
 
     css::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
         for (const OUString& rString : std::as_const(aTest))
-             pField->InsertEntry(rString);
+             rComboBox.append_text(rString);
 
         // tell the grid control that this controller is invalid and has to be re-initialized
         invalidatedController();
     }
 }
 
-
-void DbComboBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >& _rxModel )
+void DbComboBox::implAdjustGenericFieldSetting(const Reference<XPropertySet>&)
 {
-    DBG_ASSERT( m_pWindow, "DbComboBox::implAdjustGenericFieldSetting: not to be called without window!" );
-    DBG_ASSERT( _rxModel.is(), "DbComboBox::implAdjustGenericFieldSetting: invalid model!" );
-    if ( m_pWindow && _rxModel.is() )
-    {
-        sal_Int16  nLines = getINT16( _rxModel->getPropertyValue( FM_PROP_LINECOUNT ) );
-        static_cast< ComboBoxControl* >( m_pWindow.get() )->SetDropDownLineCount( nLines );
-    }
+    // we no longer pay attention to FM_PROP_LINECOUNT
 }
-
 
 void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor )
 {
@@ -2472,12 +2463,11 @@ OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxFiel
     return fmter.getFormattedValue();
 }
 
-
 void DbComboBox::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
 {
-    m_pWindow->SetText(GetFormatText(_rxField, xFormatter));
+    ComboBoxControl* pControl = static_cast<ComboBoxControl*>(m_pWindow.get());
+    pControl->get_widget().set_entry_text(GetFormatText(_rxField, xFormatter));
 }
-
 
 void DbComboBox::updateFromModel( Reference< XPropertySet > _rxModel )
 {
@@ -2486,14 +2476,17 @@ void DbComboBox::updateFromModel( Reference< XPropertySet > _rxModel )
     OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
 
-    static_cast< ComboBox* >( m_pWindow.get() )->SetText( sText );
-    static_cast< ComboBox* >( m_pWindow.get() )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    ComboBoxControl* pControl = static_cast<ComboBoxControl*>(m_pWindow.get());
+    weld::ComboBox& rComboBox = pControl->get_widget();
+    rComboBox.set_entry_text(sText);
+    rComboBox.select_entry_region(0, -1);
 }
-
 
 bool DbComboBox::commitControl()
 {
-    OUString aText( m_pWindow->GetText());
+    ComboBoxControl* pControl = static_cast<ComboBoxControl*>(m_pWindow.get());
+    weld::ComboBox& rComboBox = pControl->get_widget();
+    OUString aText(rComboBox.get_active_text());
     m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(aText));
     return true;
 }

@@ -48,6 +48,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/combobox.hxx>
 
 class DbCellControl;
 class Edit;
