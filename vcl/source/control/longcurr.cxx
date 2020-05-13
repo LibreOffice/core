@@ -26,7 +26,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/longcurr.hxx>
+#include <vcl/toolkit/field.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
