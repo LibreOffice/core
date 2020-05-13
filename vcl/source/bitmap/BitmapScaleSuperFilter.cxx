@@ -100,35 +100,165 @@ constexpr long constScaleThreadStrip = 32;
 
 typedef void (*ScaleRangeFn)(ScaleContext &rContext, long nStartY, long nEndY);
 
-class ScaleTask : public comphelper::ThreadTask
-{
-    ScaleRangeFn mpScaleRangeFunction;
-    ScaleContext& mrContext;
-    long mnStartY;
-    long mnEndY;
+void runScaleDown(ScaleContext &rCtx, long nStartY, long nEndY, const int constColorComponents) {
+    const long nStartX = 0;
+    const long nEndX = rCtx.mnDestW - 1;
 
-public:
-    explicit ScaleTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
-                       ScaleRangeFn pScaleRangeFunction,
-                       ScaleContext& rContext,
-                       long nStartY, long nEndY)
-        : comphelper::ThreadTask(pTag)
-        , mpScaleRangeFunction(pScaleRangeFunction)
-        , mrContext(rContext)
-        , mnStartY(nStartY)
-        , mnEndY(nEndY)
-    {}
-
-    virtual void doWork() override
+    for (long nY = nStartY; nY <= nEndY; nY++)
     {
-        mpScaleRangeFunction(mrContext, mnStartY, mnEndY);
+        long nTop = rCtx.mbVMirr ? (nY + 1) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : (nY + 1);
+
+        long nLineStart;
+        long nLineRange;
+        if (nY == nEndY)
+        {
+            nLineStart = rCtx.maMapIY[nY];
+            nLineRange = 0;
+        }
+        else
+        {
+            nLineStart = rCtx.maMapIY[nTop];
+            nLineRange = (rCtx.maMapIY[nBottom] == rCtx.maMapIY[nTop]) ?
+                            1 : (rCtx.maMapIY[nBottom] - rCtx.maMapIY[nTop]);
+        }
+
+        Scanline pScanDest = rCtx.mpDest->GetScanline(nY);
+        for (long nX = nStartX; nX <= nEndX; nX++)
+        {
+            long nLeft = rCtx.mbHMirr ? (nX + 1) : nX;
+            long nRight = rCtx.mbHMirr ? nX : (nX + 1);
+
+            long nRowStart;
+            long nRowRange;
+            if (nX == nEndX)
+            {
+                nRowStart = rCtx.maMapIX[nX];
+                nRowRange = 0;
+            }
+            else
+            {
+                nRowStart = rCtx.maMapIX[nLeft];
+                nRowRange = (rCtx.maMapIX[nRight] == rCtx.maMapIX[nLeft]) ?
+                                1 : (rCtx.maMapIX[nRight] - rCtx.maMapIX[nLeft]);
+            }
+
+            int nSum1 = 0;
+            int nSum2 = 0;
+            int nSum3 = 0;
+            int nSum4 = 0;
+            BilinearWeightType nTotalWeightY = 0;
+
+            for (long i = 0; i<= nLineRange; i++)
+            {
+                Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
+                Scanline pTmpX = pTmpY + constColorComponents * nRowStart;
+
+                int nSumRow1 = 0;
+                int nSumRow2 = 0;
+                int nSumRow3 = 0;
+                int nSumRow4 = 0;
+                BilinearWeightType nTotalWeightX = 0;
+
+                for (long j = 0; j <= nRowRange; j++)
+                {
+                    if (nX == nEndX)
+                    {
+                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        if(constColorComponents == 4) {
+                            nSumRow4 += (*pTmpX) << MAP_PRECISION;
+                            pTmpX++;
+                        }
+                        nTotalWeightX += lclMaxWeight();
+                    }
+                    else if(j == 0)
+                    {
+                        BilinearWeightType nWeightX = lclMaxWeight() - rCtx.maMapFX[nLeft];
+                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
+                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
+                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
+                        if(constColorComponents == 4) {
+                            nSumRow4 += (nWeightX * (*pTmpX));
+                            pTmpX++;
+                        }
+                        nTotalWeightX += nWeightX;
+                    }
+                    else if ( nRowRange == j )
+                    {
+                        BilinearWeightType nWeightX = rCtx.maMapFX[ nRight ] ;
+                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
+                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
+                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
+                        if(constColorComponents == 4) {
+                            nSumRow4 += (nWeightX * (*pTmpX));
+                            pTmpX++;
+                        }
+                        nTotalWeightX += nWeightX;
+                    }
+                    else
+                    {
+                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
+                        if(constColorComponents == 4) {
+                            nSumRow4 += (*pTmpX) << MAP_PRECISION;
+                            pTmpX++;
+                        }
+                        nTotalWeightX += lclMaxWeight();
+                    }
+                }
+
+                BilinearWeightType nWeightY = lclMaxWeight();
+                if (nY == nEndY)
+                    nWeightY = lclMaxWeight();
+                else if (i == 0)
+                    nWeightY = lclMaxWeight() - rCtx.maMapFY[nTop];
+                else if (nLineRange == 1)
+                    nWeightY = rCtx.maMapFY[nTop];
+                else if (nLineRange == i)
+                    nWeightY = rCtx.maMapFY[nBottom];
+
+                if (nTotalWeightX)
+                {
+                    nSumRow1 /= nTotalWeightX;
+                    nSumRow2 /= nTotalWeightX;
+                    nSumRow3 /= nTotalWeightX;
+                    if(constColorComponents == 4)
+                        nSumRow4 /= nTotalWeightX;
+                }
+                nSum1 += nWeightY * nSumRow1;
+                nSum2 += nWeightY * nSumRow2;
+                nSum3 += nWeightY * nSumRow3;
+                if(constColorComponents == 4)
+                    nSum4 += nWeightY * nSumRow4;
+                nTotalWeightY += nWeightY;
+            }
+
+            if (nTotalWeightY)
+            {
+                nSum1 /= nTotalWeightY;
+                nSum2 /= nTotalWeightY;
+                nSum3 /= nTotalWeightY;
+                if(constColorComponents == 4)
+                    nSum4 /= nTotalWeightY;
+            }
+
+            // Write the calculated color components to the destination
+            *pScanDest = nSum1; pScanDest++;
+            *pScanDest = nSum2; pScanDest++;
+            *pScanDest = nSum3; pScanDest++;
+            if(constColorComponents == 4) {
+                *pScanDest = nSum4;
+                pScanDest++;
+            }
+        }
     }
-};
 
-void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
-{
-    const int nColorComponents = 4;
+}
 
+void runScaleUp(ScaleContext &rCtx, long nStartY, long nEndY, const int nColorComponents) {
     const long nStartX = 0;
     const long nEndX = rCtx.mnDestW - 1;
 
@@ -160,8 +290,11 @@ void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
             nComponent1[1] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
             pColorPtr0++; pColorPtr1++;
             nComponent1[2] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent1[3] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
+            if(nColorComponents == 4) {
+                pColorPtr0++;
+                pColorPtr1++;
+                nComponent1[3] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
+            }
 
             pColorPtr0 = pLine1 + nTempX * nColorComponents;
             pColorPtr1 = pColorPtr0 + nColorComponents;
@@ -171,8 +304,11 @@ void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
             nComponent2[1] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
             pColorPtr0++; pColorPtr1++;
             nComponent2[2] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent2[3] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
+            if(nColorComponents == 4) {
+                pColorPtr0++;
+                pColorPtr1++;
+                nComponent2[3] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
+            }
 
             *pScanDest = MAP(nComponent1[0], nComponent2[0], nTempFY);
             pScanDest++;
@@ -180,10 +316,47 @@ void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
             pScanDest++;
             *pScanDest = MAP(nComponent1[2], nComponent2[2], nTempFY);
             pScanDest++;
-            *pScanDest = MAP(nComponent1[3], nComponent2[3], nTempFY);
-            pScanDest++;
+            if(nColorComponents == 4) {
+                *pScanDest = MAP(nComponent1[3], nComponent2[3], nTempFY);
+                pScanDest++;
+            }
         }
     }
+}
+
+class ScaleTask : public comphelper::ThreadTask
+{
+    ScaleRangeFn mpScaleRangeFunction;
+    ScaleContext& mrContext;
+    long mnStartY;
+    long mnEndY;
+
+public:
+    explicit ScaleTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+                       ScaleRangeFn pScaleRangeFunction,
+                       ScaleContext& rContext,
+                       long nStartY, long nEndY)
+        : comphelper::ThreadTask(pTag)
+        , mpScaleRangeFunction(pScaleRangeFunction)
+        , mrContext(rContext)
+        , mnStartY(nStartY)
+        , mnEndY(nEndY)
+    {}
+
+    virtual void doWork() override
+    {
+        mpScaleRangeFunction(mrContext, mnStartY, mnEndY);
+    }
+};
+
+void scaleUp32bit(ScaleContext &rCtx, long nStartY, long nEndY)
+{
+    const int nColorComponents = 4;
+    ScaleContext &temp_rCtx = rCtx;
+    long temp_nStarY = nStartY;
+    long temp_nEndY  = nEndY;
+
+    runScaleUp(temp_rCtx, temp_nStarY, temp_nEndY,nColorComponents);
 }
 
 void scaleUpPalette8bit(ScaleContext &rCtx, long nStartY, long nEndY)
@@ -262,56 +435,11 @@ void scaleUpPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 void scaleUp24bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const int nColorComponents = 3;
+    ScaleContext &temp_rCtx = rCtx;
+    long temp_nStarY = nStartY;
+    long temp_nEndY  = nEndY;
 
-    const long nStartX = 0;
-    const long nEndX = rCtx.mnDestW - 1;
-
-    for (long nY = nStartY; nY <= nEndY; nY++)
-    {
-        long nTempY = rCtx.maMapIY[nY];
-        BilinearWeightType nTempFY = rCtx.maMapFY[nY];
-
-        Scanline pLine0 = rCtx.mpSrc->GetScanline(nTempY+0);
-        Scanline pLine1 = rCtx.mpSrc->GetScanline(nTempY+1);
-        Scanline pScanDest = rCtx.mpDest->GetScanline(nY);
-
-        sal_uInt8 nComponent1[nColorComponents];
-        sal_uInt8 nComponent2[nColorComponents];
-
-        Scanline pColorPtr0;
-        Scanline pColorPtr1;
-
-        for (long nX = nStartX; nX <= nEndX; nX++)
-        {
-            long nTempX = rCtx.maMapIX[nX];
-            BilinearWeightType nTempFX = rCtx.maMapFX[nX];
-
-            pColorPtr0 = pLine0 + nTempX * nColorComponents;
-            pColorPtr1 = pColorPtr0 + nColorComponents;
-
-            nComponent1[0] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent1[1] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent1[2] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-
-            pColorPtr0 = pLine1 + nTempX * nColorComponents;
-            pColorPtr1 = pColorPtr0 + nColorComponents;
-
-            nComponent2[0] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent2[1] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-            pColorPtr0++; pColorPtr1++;
-            nComponent2[2] = MAP(*pColorPtr0, *pColorPtr1, nTempFX);
-
-            *pScanDest = MAP(nComponent1[0], nComponent2[0], nTempFY);
-            pScanDest++;
-            *pScanDest = MAP(nComponent1[1], nComponent2[1], nTempFY);
-            pScanDest++;
-            *pScanDest = MAP(nComponent1[2], nComponent2[2], nTempFY);
-            pScanDest++;
-        }
-    }
+    runScaleUp(temp_rCtx, temp_nStarY, temp_nEndY,nColorComponents);
 }
 
 void scaleUpNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
@@ -352,143 +480,11 @@ void scaleUpNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 void scaleDown32bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const int constColorComponents = 4;
+    ScaleContext &temp_rCtx = rCtx;
+    long temp_nStarY = nStartY;
+    long temp_nEndY  = nEndY;
 
-    const long nStartX = 0;
-    const long nEndX = rCtx.mnDestW - 1;
-
-    for (long nY = nStartY; nY <= nEndY; nY++)
-    {
-        long nTop = rCtx.mbVMirr ? (nY + 1) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : (nY + 1);
-
-        long nLineStart;
-        long nLineRange;
-        if (nY == nEndY)
-        {
-            nLineStart = rCtx.maMapIY[nY];
-            nLineRange = 0;
-        }
-        else
-        {
-            nLineStart = rCtx.maMapIY[nTop];
-            nLineRange = (rCtx.maMapIY[nBottom] == rCtx.maMapIY[nTop]) ?
-                            1 : (rCtx.maMapIY[nBottom] - rCtx.maMapIY[nTop]);
-        }
-
-        Scanline pScanDest = rCtx.mpDest->GetScanline(nY);
-        for (long nX = nStartX; nX <= nEndX; nX++)
-        {
-            long nLeft = rCtx.mbHMirr ? (nX + 1) : nX;
-            long nRight = rCtx.mbHMirr ? nX : (nX + 1);
-
-            long nRowStart;
-            long nRowRange;
-            if (nX == nEndX)
-            {
-                nRowStart = rCtx.maMapIX[nX];
-                nRowRange = 0;
-            }
-            else
-            {
-                nRowStart = rCtx.maMapIX[nLeft];
-                nRowRange = (rCtx.maMapIX[nRight] == rCtx.maMapIX[nLeft]) ?
-                                1 : (rCtx.maMapIX[nRight] - rCtx.maMapIX[nLeft]);
-            }
-
-            int nSum1 = 0;
-            int nSum2 = 0;
-            int nSum3 = 0;
-            int nSum4 = 0;
-            BilinearWeightType nTotalWeightY = 0;
-
-            for (long i = 0; i<= nLineRange; i++)
-            {
-                Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
-                Scanline pTmpX = pTmpY + constColorComponents * nRowStart;
-
-                int nSumRow1 = 0;
-                int nSumRow2 = 0;
-                int nSumRow3 = 0;
-                int nSumRow4 = 0;
-                BilinearWeightType nTotalWeightX = 0;
-
-                for (long j = 0; j <= nRowRange; j++)
-                {
-                    if (nX == nEndX)
-                    {
-                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow4 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nTotalWeightX += lclMaxWeight();
-                    }
-                    else if(j == 0)
-                    {
-                        BilinearWeightType nWeightX = lclMaxWeight() - rCtx.maMapFX[nLeft];
-                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow4 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nTotalWeightX += nWeightX;
-                    }
-                    else if ( nRowRange == j )
-                    {
-                        BilinearWeightType nWeightX = rCtx.maMapFX[ nRight ] ;
-                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow4 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nTotalWeightX += nWeightX;
-                    }
-                    else
-                    {
-                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow4 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nTotalWeightX += lclMaxWeight();
-                    }
-                }
-
-                BilinearWeightType nWeightY = lclMaxWeight();
-                if (nY == nEndY)
-                    nWeightY = lclMaxWeight();
-                else if (i == 0)
-                    nWeightY = lclMaxWeight() - rCtx.maMapFY[nTop];
-                else if (nLineRange == 1)
-                    nWeightY = rCtx.maMapFY[nTop];
-                else if (nLineRange == i)
-                    nWeightY = rCtx.maMapFY[nBottom];
-
-                if (nTotalWeightX)
-                {
-                    nSumRow1 /= nTotalWeightX;
-                    nSumRow2 /= nTotalWeightX;
-                    nSumRow3 /= nTotalWeightX;
-                    nSumRow4 /= nTotalWeightX;
-                }
-                nSum1 += nWeightY * nSumRow1;
-                nSum2 += nWeightY * nSumRow2;
-                nSum3 += nWeightY * nSumRow3;
-                nSum4 += nWeightY * nSumRow4;
-                nTotalWeightY += nWeightY;
-            }
-
-            if (nTotalWeightY)
-            {
-                nSum1 /= nTotalWeightY;
-                nSum2 /= nTotalWeightY;
-                nSum3 /= nTotalWeightY;
-                nSum4 /= nTotalWeightY;
-            }
-
-            // Write the calculated color components to the destination
-            *pScanDest = nSum1; pScanDest++;
-            *pScanDest = nSum2; pScanDest++;
-            *pScanDest = nSum3; pScanDest++;
-            *pScanDest = nSum4; pScanDest++;
-        }
-    }
+    runScaleDown(temp_rCtx,temp_nStarY,temp_nEndY,constColorComponents);
 }
 
 void scaleDownPalette8bit(ScaleContext &rCtx, long nStartY, long nEndY)
@@ -747,133 +743,11 @@ void scaleDownPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 void scaleDown24bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const int constColorComponents = 3;
+    ScaleContext &temp_rCtx = rCtx;
+    long temp_nStarY = nStartY;
+    long temp_nEndY  = nEndY;
 
-    const long nStartX = 0;
-    const long nEndX = rCtx.mnDestW - 1;
-
-    for (long nY = nStartY; nY <= nEndY; nY++)
-    {
-        long nTop = rCtx.mbVMirr ? (nY + 1) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : (nY + 1);
-
-        long nLineStart;
-        long nLineRange;
-        if (nY == nEndY)
-        {
-            nLineStart = rCtx.maMapIY[nY];
-            nLineRange = 0;
-        }
-        else
-        {
-            nLineStart = rCtx.maMapIY[nTop];
-            nLineRange = (rCtx.maMapIY[nBottom] == rCtx.maMapIY[nTop]) ?
-                            1 : (rCtx.maMapIY[nBottom] - rCtx.maMapIY[nTop]);
-        }
-
-        Scanline pScanDest = rCtx.mpDest->GetScanline(nY);
-        for (long nX = nStartX; nX <= nEndX; nX++)
-        {
-            long nLeft = rCtx.mbHMirr ? (nX + 1) : nX;
-            long nRight = rCtx.mbHMirr ? nX : (nX + 1);
-
-            long nRowStart;
-            long nRowRange;
-            if (nX == nEndX)
-            {
-                nRowStart = rCtx.maMapIX[nX];
-                nRowRange = 0;
-            }
-            else
-            {
-                nRowStart = rCtx.maMapIX[nLeft];
-                nRowRange = (rCtx.maMapIX[nRight] == rCtx.maMapIX[nLeft]) ?
-                                1 : (rCtx.maMapIX[nRight] - rCtx.maMapIX[nLeft]);
-            }
-
-            int nSum1 = 0;
-            int nSum2 = 0;
-            int nSum3 = 0;
-            BilinearWeightType nTotalWeightY = 0;
-
-            for (long i = 0; i<= nLineRange; i++)
-            {
-                Scanline pTmpY = rCtx.mpSrc->GetScanline(nLineStart + i);
-                Scanline pTmpX = pTmpY + constColorComponents * nRowStart;
-
-                int nSumRow1 = 0;
-                int nSumRow2 = 0;
-                int nSumRow3 = 0;
-                BilinearWeightType nTotalWeightX = 0;
-
-                for (long j = 0; j <= nRowRange; j++)
-                {
-                    if (nX == nEndX)
-                    {
-                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nTotalWeightX += lclMaxWeight();
-                    }
-                    else if(j == 0)
-                    {
-                        BilinearWeightType nWeightX = lclMaxWeight() - rCtx.maMapFX[nLeft];
-                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nTotalWeightX += nWeightX;
-                    }
-                    else if ( nRowRange == j )
-                    {
-                        BilinearWeightType nWeightX = rCtx.maMapFX[ nRight ] ;
-                        nSumRow1 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow2 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nSumRow3 += (nWeightX * (*pTmpX)); pTmpX++;
-                        nTotalWeightX += nWeightX;
-                    }
-                    else
-                    {
-                        nSumRow1 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow2 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nSumRow3 += (*pTmpX) << MAP_PRECISION; pTmpX++;
-                        nTotalWeightX += lclMaxWeight();
-                    }
-                }
-
-                BilinearWeightType nWeightY = lclMaxWeight();
-                if (nY == nEndY)
-                    nWeightY = lclMaxWeight();
-                else if (i == 0)
-                    nWeightY = lclMaxWeight() - rCtx.maMapFY[nTop];
-                else if (nLineRange == 1)
-                    nWeightY = rCtx.maMapFY[nTop];
-                else if (nLineRange == i)
-                    nWeightY = rCtx.maMapFY[nBottom];
-
-                if (nTotalWeightX)
-                {
-                    nSumRow1 /= nTotalWeightX;
-                    nSumRow2 /= nTotalWeightX;
-                    nSumRow3 /= nTotalWeightX;
-                }
-                nSum1 += nWeightY * nSumRow1;
-                nSum2 += nWeightY * nSumRow2;
-                nSum3 += nWeightY * nSumRow3;
-                nTotalWeightY += nWeightY;
-            }
-
-            if (nTotalWeightY)
-            {
-                nSum1 /= nTotalWeightY;
-                nSum2 /= nTotalWeightY;
-                nSum3 /= nTotalWeightY;
-            }
-
-            // Write the calculated color components to the destination
-            *pScanDest = nSum1; pScanDest++;
-            *pScanDest = nSum2; pScanDest++;
-            *pScanDest = nSum3; pScanDest++;
-        }
-    }
+    runScaleDown(temp_rCtx,temp_nStarY,temp_nEndY,constColorComponents);
 }
 
 void scaleDownNonPaletteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
