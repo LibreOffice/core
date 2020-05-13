@@ -20,6 +20,8 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/layout.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -1003,6 +1005,44 @@ public:
     virtual OUString get_label() const override;
 
     virtual ~SalInstanceButton() override;
+};
+
+class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
+{
+private:
+    VclPtr<TabControl> m_xNotebook;
+    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::map<OString, std::pair<VclPtr<TabPage>, VclPtr<VclGrid>>> m_aAddedPages;
+
+    DECL_LINK(DeactivatePageHdl, TabControl*, bool);
+    DECL_LINK(ActivatePageHdl, TabControl*, void);
+
+public:
+    SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual int get_current_page() const override;
+
+    virtual OString get_page_ident(int nPage) const override;
+
+    virtual OString get_current_page_ident() const override;
+
+    virtual weld::Container* get_page(const OString& rIdent) const override;
+
+    virtual void set_current_page(int nPage) override;
+
+    virtual void set_current_page(const OString& rIdent) override;
+
+    virtual void remove_page(const OString& rIdent) override;
+
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
+
+    virtual int get_n_pages() const override;
+
+    virtual OUString get_tab_label_text(const OString& rIdent) const override;
+
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override;
+
+    virtual ~SalInstanceNotebook() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
