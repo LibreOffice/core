@@ -1551,8 +1551,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         for (const CallbackData& c : m_queue)
             oss << i++ << ": [" << c.Type << "] [" << c.PayloadString << "].\n";
         SAL_INFO("lok", "Current Queue: " << oss.str());
-        for (const CallbackData& c : m_queue)
-            assert(c.validate());
+        assert(
+            std::all_of(
+                m_queue.begin(), m_queue.end(),
+                [](const CallbackData& c) { return c.validate(); }));
     }
 #endif
 
