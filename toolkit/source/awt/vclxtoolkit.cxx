@@ -81,7 +81,7 @@
 #include <controls/filectrl.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dockingarea.hxx>
