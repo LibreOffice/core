@@ -1374,6 +1374,17 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                         pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygonPixel(aGraphicSize);
                     }
                 }
+
+                text::GraphicCrop aGraphicCrop;
+                xShapeProps->getPropertyValue("GraphicCrop") >>= aGraphicCrop;
+                if (aGraphicCrop.Top != 0 || aGraphicCrop.Bottom != 0 || aGraphicCrop.Left != 0
+                    || aGraphicCrop.Right != 0)
+                {
+                    // Word's wrap polygon deals with a canvas which has the size of the already
+                    // cropped graphic, correct our polygon to have the same render result.
+                    pCorrected = pCorrected->correctCrop(aGraphicSize, aGraphicCrop);
+                }
+
                 if (pCorrected)
                 {
                     aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
