@@ -23,6 +23,7 @@ enum class Relationship
     COMMENTS,
     COMMENTAUTHORS,
     CONTROL,
+    CTRLPROP,
     CUSTOMXML,
     CUSTOMXMLPROPS,
     DIAGRAMCOLORS,
