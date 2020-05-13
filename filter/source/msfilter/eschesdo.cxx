@@ -401,11 +401,16 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             const Reference< XPropertySet > xPropSet = rObj.mXPropSet;
             const Reference<XPropertySetInfo> xPropInfo = xPropSet.is() ? xPropSet->getPropertySetInfo() : Reference<XPropertySetInfo>();
             // This code is expected to be called only for DOCX format.
-            if (xPropInfo.is() && xPropInfo->hasPropertyByName("AnchorType") && bOOxmlExport)
+            if (xPropInfo.is())
             {
-                text::TextContentAnchorType eAnchorType;
-                xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
-                bool bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                bool bInline = false;
+                if (xPropInfo->hasPropertyByName("AnchorType"))
+                {
+                    text::TextContentAnchorType eAnchorType;
+                    xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
+                    bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                }
+
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 if(bInline)
                 {
@@ -812,20 +817,14 @@ void ImplEESdrWriter::ImplWritePage(
 {
     ImplInitPageValues();
 
-    sal_uInt32 nLastPer = 0, nShapes = mXShapes->getCount();
+    const sal_uInt32 nShapes = mXShapes->getCount();
     for( sal_uInt32 n = 0; n < nShapes; ++n )
     {
-        sal_uInt32 nPer = ( 5 * n ) / nShapes;
-        if( nPer != nLastPer )
-        {
-            nLastPer = nPer;
-        }
-
         ImplEESdrObject aObj( *this, *o3tl::doAccess<Reference<XShape>>(
                                     mXShapes->getByIndex( n )) );
         if( aObj.IsValid() )
         {
-            ImplWriteShape( aObj, rSolverContainer );
+            ImplWriteShape( aObj, rSolverContainer, true );
         }
     }
 }

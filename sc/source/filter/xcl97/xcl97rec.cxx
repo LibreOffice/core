@@ -153,6 +153,17 @@ void XclExpObjList::Save( XclExpStream& rStrm )
 
 namespace {
 
+bool IsFormControlObject( const XclObj *rObj )
+{
+    switch( rObj->GetObjType() )
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool IsVmlObject( const XclObj *rObj )
 {
     switch( rObj->GetObjType() )
@@ -211,7 +222,7 @@ bool IsValidObject( const XclObj& rObj )
     return true;
 }
 
-void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nDrawingMLCount )
+void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 {
     std::vector<XclObj*> aList;
     aList.reserve(rList.size());
@@ -226,7 +237,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
     if (aList.empty())
         return;
 
-    sal_Int32 nDrawing = ++nDrawingMLCount;
+    sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/drawing", nDrawing ),
@@ -244,12 +255,52 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
             FSNS(XML_xmlns, XML_a),   rStrm.getNamespaceURL(OOX_NS(dml)).toUtf8(),
             FSNS(XML_xmlns, XML_r),   rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8() );
 
+    sal_Int32 nShapeId = 1000; // unique id of the shape inside one worksheet (not the whole document)
     for (const auto& rpObj : aList)
+    {
+        // validate shapeId
+        if ( IsFormControlObject( rpObj ) )
+        {
+            XclExpTbxControlObj* pXclExpTbxControlObj = dynamic_cast<XclExpTbxControlObj*>(rpObj);
+            if (pXclExpTbxControlObj)
+            {
+                pXclExpTbxControlObj->setShapeId(++nShapeId);
+            }
+        }
+
         rpObj->SaveXml(rStrm);
+    }
 
     pDrawing->endElement( FSNS( XML_xdr, XML_wsDr ) );
 
     rStrm.PopStream();
+}
+
+void SaveFormControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
+        FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
+    rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
+    rWorksheet->startElement(XML_controls);
+
+    for (const auto& rxObj : rList)
+    {
+        if (IsFormControlObject(rxObj.get()))
+        {
+            XclExpTbxControlObj* pXclExpTbxControlObj = dynamic_cast<XclExpTbxControlObj*>(rxObj.get());
+            if (pXclExpTbxControlObj)
+            {
+                const OUString aIdFormControlPr = pXclExpTbxControlObj->SaveControlPropertiesXml(rStrm);
+                pXclExpTbxControlObj->SaveSheetXml(rStrm, aIdFormControlPr);
+            }
+        }
+    }
+
+    rWorksheet->endElement(XML_controls);
+    rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
+    rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
 }
 
 void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
@@ -298,7 +349,8 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
     if( maObjs.empty())
         return;
 
-    SaveDrawingMLObjects( *this, rStrm, mnDrawingMLCount );
+    SaveDrawingMLObjects( *this, rStrm );
+    SaveFormControlObjects( *this, rStrm );
     SaveVmlObjects( *this, rStrm, mnVmlCount );
 }
 
