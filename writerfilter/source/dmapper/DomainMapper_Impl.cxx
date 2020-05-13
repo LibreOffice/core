@@ -1653,9 +1653,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         if (!aPreviousNumberingName.isEmpty() && aCurrentNumberingName == aPreviousNumberingName)
                         {
-
+                            uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+                            m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
+                            auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
+                            bool bPrevParaAutoBefore;
+                            if (isNumberingViaRule)
+                                bPrevParaAutoBefore = false;
+                            else
+                            {
+                                bPrevParaAutoBefore = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                                {
+                                    return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
+                                });
+                            }
                             // There was a previous textnode and it had the same numbering.
-                            if (m_bParaAutoBefore)
+                            if (m_bParaAutoBefore || bPrevParaAutoBefore)
                             {
                                 // This before spacing is set to auto, set before space to 0.
                                 auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
@@ -1668,9 +1680,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     aProperties.push_back(comphelper::makePropertyValue("ParaTopMargin", static_cast<sal_Int32>(0)));
                             }
 
-                            uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
-                            m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
-                            auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
                             bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
                                 return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
