@@ -25,7 +25,7 @@
 #endif
 
 #include <config_options.h>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/longcurr.hxx>
 
