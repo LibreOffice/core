@@ -61,8 +61,6 @@ struct ConnectedComponents
 
 }
 
-typedef ::std::vector< ConnectedComponents > ConnectedComponentsList;
-
 namespace {
 
 /** \#i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
@@ -838,7 +836,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         while( nCount-- )
             aMapModeVDev->Pop();
 
-        ConnectedComponentsList aCCList; // list containing distinct sets of connected components as elements.
+        ::std::vector<ConnectedComponents> aCCList; // contains distinct sets of connected components as elements.
 
         // fast-forward until one after the last background action
         // (need to reconstruct map mode vdev state)
