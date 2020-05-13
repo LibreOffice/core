@@ -26,6 +26,7 @@
 #include "area/AreaPropertyPanel.hxx"
 #include "glow/GlowPropertyPanel.hxx"
 #include "shadow/ShadowPropertyPanel.hxx"
+#include "softedge/SoftEdgePropertyPanel.hxx"
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
@@ -146,6 +147,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/ShadowPropertyPanel"))
     {
         pControl = ShadowPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+    }
+    else if (rsResourceURL.endsWith("/SoftEdgePropertyPanel"))
+    {
+        pControl = SoftEdgePropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/GraphicPropertyPanel"))
     {
