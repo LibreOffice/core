@@ -3,6 +3,7 @@
 {Relationship::COMMENTS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"},
 {Relationship::COMMENTAUTHORS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors"},
 {Relationship::CONTROL, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control"},
+{Relationship::CTRLPROP, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"},
 {Relationship::CUSTOMXML, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml"},
 {Relationship::CUSTOMXMLPROPS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps"},
 {Relationship::DIAGRAMCOLORS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors"},
