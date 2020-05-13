@@ -56,8 +56,6 @@ class VCL_DLLPUBLIC SvViewDataEntry
     bool mbSelectable:1;
     bool mbDragTarget:1;
 
-    tools::Rectangle maPaintRectangle;
-
 public:
     SvViewDataEntry();
     SvViewDataEntry( const SvViewDataEntry& );
@@ -82,10 +80,6 @@ public:
 
     const SvViewDataItem& GetItem(size_t nPos) const;
     SvViewDataItem& GetItem(size_t nPos);
-
-    void SetPaintRectangle(tools::Rectangle aRectangle);
-    const tools::Rectangle& GetPaintRectangle() const;
-
 };
 
 #endif

@@ -2768,7 +2768,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         // draw item
         // center vertically
         aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
-        pViewDataEntry->SetPaintRectangle(aRect);
 
         rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
 

@@ -47,7 +47,6 @@ public:
     {}
 
     virtual bool recalculate() = 0;
-    virtual Size getRenderSize() = 0;
     virtual bool render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign = RenderAlign::CENTER) = 0;
 };
 

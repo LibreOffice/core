@@ -246,7 +246,6 @@ public:
 
     // Get/Set-methods for the current setting
     inline void SetBlink( const bool bBlink );
-    bool IsBlink() const { return m_bBlink; }
     sal_uInt8 &GetTox() { return m_nToxCount; }
     bool IsTox() const { return ( 0 != m_nToxCount ); }
     sal_uInt8 &GetRef() { return m_nRefCount; }

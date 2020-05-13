@@ -35,9 +35,6 @@ struct SwAccessibilityOptions
 
     bool IsStopAnimatedGraphics() const       { return bIsStopAnimatedGraphics;}
     void SetStopAnimatedGraphics( bool b )    { bIsStopAnimatedGraphics = b; }
-
-    bool IsStopAnimatedText() const       { return bIsStopAnimatedText; }
-    void SetStopAnimatedText( bool b )    { bIsStopAnimatedText = b;}
 };
 #endif
 

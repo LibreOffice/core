@@ -596,20 +596,6 @@ void ToolboxController::unbindListener()
     }
 }
 
-bool ToolboxController::isBound() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    if ( !m_bInitialized )
-        return false;
-
-    URLToDispatchMap::const_iterator pIter = m_aListenerMap.find( m_aCommandURL );
-    if ( pIter != m_aListenerMap.end() )
-        return pIter->second.is();
-
-    return false;
-}
-
 void ToolboxController::updateStatus()
 {
     bindListener();

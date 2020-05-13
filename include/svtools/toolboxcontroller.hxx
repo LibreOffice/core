@@ -167,7 +167,7 @@ class SVT_DLLPUBLIC ToolboxController :
         void removeStatusListener( const OUString& aCommandURL );
         void bindListener();
         void unbindListener();
-        bool isBound() const;
+
         // TODO remove
         const css::uno::Reference< css::util::XURLTransformer >& getURLTransformer() const { return m_xUrlTransformer;}
         // TODO remove
