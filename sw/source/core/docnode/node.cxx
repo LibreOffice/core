@@ -894,6 +894,43 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
+    switch (GetNodeType())
+    {
+        case SwNodeType::Grf:
+        {
+            auto pNoTextNode = static_cast<const SwNoTextNode*>(this);
+            const tools::PolyPolygon* pContour = pNoTextNode->HasContour();
+            if (pContour)
+            {
+                xmlTextWriterStartElement(pWriter, BAD_CAST("pContour"));
+                for (sal_uInt16 i = 0; i < pContour->Count(); ++i)
+                {
+                    xmlTextWriterStartElement(pWriter, BAD_CAST("polygon"));
+                    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                                BAD_CAST(OString::number(i).getStr()));
+                    const tools::Polygon& rPolygon = pContour->GetObject(i);
+                    for (sal_uInt16 j = 0; j < rPolygon.GetSize(); ++j)
+                    {
+                        xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
+                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                                                    BAD_CAST(OString::number(j).getStr()));
+                        const Point& rPoint = rPolygon.GetPoint(j);
+                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"),
+                                                    BAD_CAST(OString::number(rPoint.X()).getStr()));
+                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"),
+                                                    BAD_CAST(OString::number(rPoint.Y()).getStr()));
+                        xmlTextWriterEndElement(pWriter);
+                    }
+                    xmlTextWriterEndElement(pWriter);
+                }
+                xmlTextWriterEndElement(pWriter);
+            }
+        }
+        break;
+        default:
+            break;
+    }
+
     xmlTextWriterEndElement(pWriter);
     if (GetNodeType() == SwNodeType::End)
         xmlTextWriterEndElement(pWriter); // end start node
