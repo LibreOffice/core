@@ -84,6 +84,8 @@ public:
 
     static void        ResetCounters();
 
+    static sal_Int32    getNewDrawingUniqueId() { return ++mnDrawingMLCount;  }
+
 private:
     static  sal_Int32   mnDrawingMLCount, mnVmlCount;
     SCTAB               mnScTab;
