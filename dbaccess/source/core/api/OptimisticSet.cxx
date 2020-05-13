@@ -168,8 +168,7 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
     // here we build the condition part for the update statement
     for (auto const& columnName : *m_pColumnNames)
     {
-        if ( aResultSetChanged.find( columnName.second.sTableName ) == aResultSetChanged.end() )
-            aResultSetChanged[columnName.second.sTableName] = false;
+        aResultSetChanged.try_emplace(columnName.second.sTableName, false);
         const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,columnName.second.sRealName);
         if ( m_pKeyColumnNames->find(columnName.first) != m_pKeyColumnNames->end() )
         {
@@ -230,8 +229,7 @@ void OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity:
     // here we build the condition part for the update statement
     for (auto const& columnName : *m_pColumnNames)
     {
-        if ( aResultSetChanged.find( columnName.second.sTableName ) == aResultSetChanged.end() )
-            aResultSetChanged[columnName.second.sTableName] = false;
+        aResultSetChanged.try_emplace(columnName.second.sTableName, false);
 
         const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,columnName.second.sRealName);
         if ( (*_rInsertRow)[columnName.second.nPosition].isModified() )

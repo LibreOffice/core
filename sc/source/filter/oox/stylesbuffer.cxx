@@ -2614,8 +2614,7 @@ void CellStyleBuffer::finalizeImport()
         {
             aUnusedName = aStyleName + OUStringChar(' ') + OUString::number( ++nIndex );
         }
-        while( aCellStyles.find( aUnusedName ) != aCellStyles.end() );
-        aCellStyles[ aUnusedName ] = rxStyle;
+        while( !aCellStyles.try_emplace( aUnusedName, rxStyle ).second );
     }
 
     // set final names and create user-defined and modified built-in cell styles

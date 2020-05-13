@@ -781,8 +781,7 @@ void Chart2Positioner::createPositionMap()
     {
         FormulaTokenMap& rCol = aCols.begin()->second;
         if (mbDummyUpperLeft)
-            if (rCol.find(0) == rCol.end())
-                rCol[ 0 ] = nullptr;        // dummy for labeling
+            rCol.try_emplace( 0, nullptr );        // dummy for labeling
         nAllRowCount = static_cast<SCSIZE>(rCol.size());
     }
 
@@ -797,8 +796,7 @@ void Chart2Positioner::createPositionMap()
                 for (auto& rEntry : aCols)
                 {
                     FormulaTokenMap& rCol = rEntry.second;
-                    if (rCol.find(nKey) == rCol.end())
-                        rCol[ nKey ] = nullptr;
+                    rCol.try_emplace( nKey, nullptr );
                 }
             }
         }
