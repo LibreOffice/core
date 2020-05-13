@@ -31,6 +31,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <config_folders.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
+#include <list>
 
 #include <SkCanvas.h>
 #include <SkPaint.h>
@@ -439,10 +440,88 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
     return image;
 }
 
+namespace
+{
+// Image cache, for saving results of complex operations such as drawTransformedBitmap().
+struct ImageCacheItem
+{
+    OString key;
+    sk_sp<SkImage> image;
+    int size; // cost of the item
+};
+} //namespace
+
+// LRU cache, last item is the least recently used. Hopefully there won't be that many items
+// to require a hash/map. Using o3tl::lru_cache would be simpler, but it doesn't support
+// calculating cost of each item.
+static std::list<ImageCacheItem>* imageCache = nullptr;
+static int imageCacheSize = 0; // sum of all ImageCacheItem.size
+
+void addCachedImage(const OString& key, sk_sp<SkImage> image)
+{
+    static bool disabled = getenv("SAL_DISABLE_SKIA_CACHE") != nullptr;
+    if (disabled)
+        return;
+    if (imageCache == nullptr)
+        imageCache = new std::list<ImageCacheItem>;
+    int size = image->width() * image->height()
+               * SkColorTypeBytesPerPixel(image->imageInfo().colorType());
+    imageCache->push_front({ key, image, size });
+    imageCacheSize += size;
+    SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
+    const int MAX_CACHE_SIZE = 4 * 1000 * 1000 * 4; // 4x 1000px 32bpp images, 16MiB
+    while (imageCacheSize > MAX_CACHE_SIZE)
+    {
+        assert(!imageCache->empty());
+        imageCacheSize -= imageCache->back().size;
+        SAL_INFO("vcl.skia.trace",
+                 "least used removal " << image << ":" << imageCache->back().size);
+        imageCache->pop_back();
+    }
+}
+
+sk_sp<SkImage> findCachedImage(const OString& key)
+{
+    if (imageCache != nullptr)
+    {
+        for (auto it = imageCache->begin(); it != imageCache->end(); ++it)
+        {
+            if (it->key == key)
+            {
+                sk_sp<SkImage> ret = it->image;
+                SAL_INFO("vcl.skia.trace", "findcachedimage " << it->image);
+                imageCache->splice(imageCache->begin(), *imageCache, it);
+                return ret;
+            }
+        }
+    }
+    return nullptr;
+}
+
+void removeCachedImage(sk_sp<SkImage> image)
+{
+    if (imageCache == nullptr)
+        return;
+    for (auto it = imageCache->begin(); it != imageCache->end();)
+    {
+        if (it->image == image)
+        {
+            imageCacheSize -= it->size;
+            assert(imageCacheSize >= 0);
+            it = imageCache->erase(it);
+        }
+        else
+            ++it;
+    }
+}
+
 void cleanup()
 {
     delete sharedGrContext;
     sharedGrContext = nullptr;
+    delete imageCache;
+    imageCache = nullptr;
+    imageCacheSize = 0;
 }
 
 // Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.

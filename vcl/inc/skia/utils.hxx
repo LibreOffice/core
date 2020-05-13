@@ -52,6 +52,11 @@ VCL_DLLPUBLIC sk_sp<SkImage> createSkImage(const SkBitmap& bitmap);
 VCL_DLLPUBLIC void
     prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)(bool));
 
+// Shared cache of images.
+void addCachedImage(const OString& key, sk_sp<SkImage> image);
+sk_sp<SkImage> findCachedImage(const OString& key);
+void removeCachedImage(sk_sp<SkImage> image);
+
 #ifdef DBG_UTIL
 void prefillSurface(sk_sp<SkSurface>& surface);
 VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);
@@ -102,6 +107,22 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         stream << "[" << i << "] " << it.rect();
     stream << ")";
     return stream;
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SkImage& image)
+{
+    // G - on GPU
+    return stream << static_cast<const void*>(&image) << " " << Size(image.width(), image.height())
+                  << "/" << (SkColorTypeBytesPerPixel(image.imageInfo().colorType()) * 8)
+                  << (image.isTextureBacked() ? "G" : "");
+}
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const sk_sp<SkImage>& image)
+{
+    return stream << *image;
 }
 
 #endif // INCLUDED_VCL_INC_SKIA_UTILS_H
