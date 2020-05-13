@@ -2762,6 +2762,8 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
 {
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:SheetGeometryData");
+    aTree.put("maxtiledcolumn", MAXCOL);
+    aTree.put("maxtiledrow", MAXTILEDROW);
 
     auto getJSONString = [](const boost::property_tree::ptree& rTree) {
         std::stringstream aStream;
