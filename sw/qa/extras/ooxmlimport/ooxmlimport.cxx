@@ -904,17 +904,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
 
-    CPPUNIT_ASSERT_EQUAL(double(-163), aPolygon.getB2DPoint(0).getX());
-    CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(0).getY());
+    CPPUNIT_ASSERT_EQUAL(double(-162), aPolygon.getB2DPoint(0).getX());
+    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(0).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(-163), aPolygon.getB2DPoint(1).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3661), aPolygon.getB2DPoint(1).getY());
+    CPPUNIT_ASSERT_EQUAL(double(-162), aPolygon.getB2DPoint(1).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3510), aPolygon.getB2DPoint(1).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(16987), aPolygon.getB2DPoint(2).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3661), aPolygon.getB2DPoint(2).getY());
+    CPPUNIT_ASSERT_EQUAL(double(16892), aPolygon.getB2DPoint(2).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3510), aPolygon.getB2DPoint(2).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(16987), aPolygon.getB2DPoint(3).getX());
-    CPPUNIT_ASSERT_EQUAL(double(0), aPolygon.getB2DPoint(3).getY());
+    CPPUNIT_ASSERT_EQUAL(double(16892), aPolygon.getB2DPoint(3).getX());
+    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(3).getY());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.docx")
