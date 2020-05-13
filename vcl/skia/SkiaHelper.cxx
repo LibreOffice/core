@@ -489,12 +489,13 @@ sk_sp<SkImage> findCachedImage(const OString& key)
             if (it->key == key)
             {
                 sk_sp<SkImage> ret = it->image;
-                SAL_INFO("vcl.skia.trace", "findcachedimage " << it->image);
+                SAL_INFO("vcl.skia.trace", "findcachedimage " << it->image << " found");
                 imageCache->splice(imageCache->begin(), *imageCache, it);
                 return ret;
             }
         }
     }
+    SAL_INFO("vcl.skia.trace", "findcachedimage " << key << " not found");
     return nullptr;
 }
 
