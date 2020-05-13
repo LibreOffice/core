@@ -2019,9 +2019,7 @@ res/extension_plus_32.png cmd/32/insertplugin.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png cmd/sc_closedocs.png
 res/folderop.png cmd/sc_open.png
-res/fp010.png svtools/res/up_small.png
 res/grafikei.png cmd/sc_graphic.png
-res/harddisk_16.png cmd/sc_open.png
 res/hlinettp.png cmd/32/inserthyperlink.png
 res/hlmailtp.png cmd/32/insertenvelope.png
 res/im30820.png cmd/sc_scriptorganizer.png
@@ -2156,7 +2154,7 @@ res/sx03158.png res/sx03125.png
 res/sx03160.png res/odg_16_8.png
 res/sx03162.png res/odt_16_8.png
 res/sx03163.png res/ott_16_8.png
-res/sx03164.png cmd/sc_open.png
+res/sx03164.png res/harddisk_16.png
 res/sx03165.png cmd/sc_save.png
 res/sx03167.png cmd/sc_openremote.png
 res/sx03188.png cmd/sc_dbviewtables.png
