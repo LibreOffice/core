@@ -38,8 +38,6 @@
 
 using namespace ::com::sun::star::text;
 
-#define SwFPos SvxSwFramePosString
-
 namespace {
 
 enum class LB;
@@ -112,38 +110,38 @@ namespace o3tl {
 
 static RelationMap const aRelationMap[] =
 {
-    {SwFPos::FRAME,         SwFPos::FRAME,             LB::Frame,           RelOrientation::FRAME},
-    {SwFPos::PRTAREA,       SwFPos::PRTAREA,           LB::PrintArea,         RelOrientation::PRINT_AREA},
-    {SwFPos::REL_PG_LEFT,   SwFPos::MIR_REL_PG_LEFT,   LB::RelPageLeft,     RelOrientation::PAGE_LEFT},
-    {SwFPos::REL_PG_RIGHT,  SwFPos::MIR_REL_PG_RIGHT,  LB::RelPageRight,    RelOrientation::PAGE_RIGHT},
-    {SwFPos::REL_FRM_LEFT,  SwFPos::MIR_REL_FRM_LEFT,  LB::RelFrameLeft,    RelOrientation::FRAME_LEFT},
-    {SwFPos::REL_FRM_RIGHT, SwFPos::MIR_REL_FRM_RIGHT, LB::RelFrameRight,   RelOrientation::FRAME_RIGHT},
-    {SwFPos::REL_PG_FRAME,  SwFPos::REL_PG_FRAME,      LB::RelPageFrame,    RelOrientation::PAGE_FRAME},
-    {SwFPos::REL_PG_PRTAREA,SwFPos::REL_PG_PRTAREA,    LB::RelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
-    {SwFPos::REL_PG_PRTAREA_BOTTOM,SwFPos::REL_PG_PRTAREA_BOTTOM,    LB::RelPagePrintAreaBottom,  RelOrientation::PAGE_PRINT_AREA_BOTTOM},
-    {SwFPos::REL_CHAR,      SwFPos::REL_CHAR,          LB::RelChar,        RelOrientation::CHAR},
+    {SvxSwFramePosString::FRAME,         SvxSwFramePosString::FRAME,             LB::Frame,           RelOrientation::FRAME},
+    {SvxSwFramePosString::PRTAREA,       SvxSwFramePosString::PRTAREA,           LB::PrintArea,         RelOrientation::PRINT_AREA},
+    {SvxSwFramePosString::REL_PG_LEFT,   SvxSwFramePosString::MIR_REL_PG_LEFT,   LB::RelPageLeft,     RelOrientation::PAGE_LEFT},
+    {SvxSwFramePosString::REL_PG_RIGHT,  SvxSwFramePosString::MIR_REL_PG_RIGHT,  LB::RelPageRight,    RelOrientation::PAGE_RIGHT},
+    {SvxSwFramePosString::REL_FRM_LEFT,  SvxSwFramePosString::MIR_REL_FRM_LEFT,  LB::RelFrameLeft,    RelOrientation::FRAME_LEFT},
+    {SvxSwFramePosString::REL_FRM_RIGHT, SvxSwFramePosString::MIR_REL_FRM_RIGHT, LB::RelFrameRight,   RelOrientation::FRAME_RIGHT},
+    {SvxSwFramePosString::REL_PG_FRAME,  SvxSwFramePosString::REL_PG_FRAME,      LB::RelPageFrame,    RelOrientation::PAGE_FRAME},
+    {SvxSwFramePosString::REL_PG_PRTAREA,SvxSwFramePosString::REL_PG_PRTAREA,    LB::RelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
+    {SvxSwFramePosString::REL_PG_PRTAREA_BOTTOM,SvxSwFramePosString::REL_PG_PRTAREA_BOTTOM,    LB::RelPagePrintAreaBottom,  RelOrientation::PAGE_PRINT_AREA_BOTTOM},
+    {SvxSwFramePosString::REL_CHAR,      SvxSwFramePosString::REL_CHAR,          LB::RelChar,        RelOrientation::CHAR},
 
-    {SwFPos::FLY_REL_PG_LEFT,       SwFPos::FLY_MIR_REL_PG_LEFT,    LB::FlyRelPageLeft,     RelOrientation::PAGE_LEFT},
-    {SwFPos::FLY_REL_PG_RIGHT,      SwFPos::FLY_MIR_REL_PG_RIGHT,   LB::FlyRelPageRight,    RelOrientation::PAGE_RIGHT},
-    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB::FlyRelPageFrame,    RelOrientation::PAGE_FRAME},
-    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB::FlyRelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
+    {SvxSwFramePosString::FLY_REL_PG_LEFT,       SvxSwFramePosString::FLY_MIR_REL_PG_LEFT,    LB::FlyRelPageLeft,     RelOrientation::PAGE_LEFT},
+    {SvxSwFramePosString::FLY_REL_PG_RIGHT,      SvxSwFramePosString::FLY_MIR_REL_PG_RIGHT,   LB::FlyRelPageRight,    RelOrientation::PAGE_RIGHT},
+    {SvxSwFramePosString::FLY_REL_PG_FRAME,      SvxSwFramePosString::FLY_REL_PG_FRAME,       LB::FlyRelPageFrame,    RelOrientation::PAGE_FRAME},
+    {SvxSwFramePosString::FLY_REL_PG_PRTAREA,    SvxSwFramePosString::FLY_REL_PG_PRTAREA,     LB::FlyRelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
 
-    {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB::VertFrame,          RelOrientation::FRAME},
-    {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB::VertPrintArea,        RelOrientation::PRINT_AREA},
+    {SvxSwFramePosString::REL_BORDER,        SvxSwFramePosString::REL_BORDER,             LB::VertFrame,          RelOrientation::FRAME},
+    {SvxSwFramePosString::REL_PRTAREA,       SvxSwFramePosString::REL_PRTAREA,            LB::VertPrintArea,        RelOrientation::PRINT_AREA},
 
     // #i22305#
-    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB::FlyVertFrame,      RelOrientation::FRAME},
-    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB::FlyVertPrintArea,    RelOrientation::PRINT_AREA},
+    {SvxSwFramePosString::FLY_REL_PG_FRAME,      SvxSwFramePosString::FLY_REL_PG_FRAME,       LB::FlyVertFrame,      RelOrientation::FRAME},
+    {SvxSwFramePosString::FLY_REL_PG_PRTAREA,    SvxSwFramePosString::FLY_REL_PG_PRTAREA,     LB::FlyVertPrintArea,    RelOrientation::PRINT_AREA},
 
     // #i22341#
-    {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB::VertLine,   RelOrientation::TEXT_LINE}
+    {SvxSwFramePosString::REL_LINE,  SvxSwFramePosString::REL_LINE,   LB::VertLine,   RelOrientation::TEXT_LINE}
 };
 
 static RelationMap const aAsCharRelationMap[] =
 {
-    {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB::RelBase,   RelOrientation::FRAME},
-    {SwFPos::REL_CHAR,  SwFPos::REL_CHAR,   LB::RelChar,   RelOrientation::FRAME},
-    {SwFPos::REL_ROW,   SwFPos::REL_ROW,   LB::RelRow,     RelOrientation::FRAME}
+    {SvxSwFramePosString::REL_BASE,  SvxSwFramePosString::REL_BASE,   LB::RelBase,   RelOrientation::FRAME},
+    {SvxSwFramePosString::REL_CHAR,  SvxSwFramePosString::REL_CHAR,   LB::RelChar,   RelOrientation::FRAME},
+    {SvxSwFramePosString::REL_ROW,   SvxSwFramePosString::REL_ROW,   LB::RelRow,     RelOrientation::FRAME}
 };
 
 /*--------------------------------------------------------------------
@@ -155,30 +153,30 @@ static constexpr auto HORI_PAGE_REL = LB::RelPageFrame|LB::RelPagePrintArea|LB::
 
 static FrmMap const aHPageMap[] =
 {
-    {SwFPos::LEFT,       SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PAGE_REL},
-    {SwFPos::RIGHT,      SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PAGE_REL},
-    {SwFPos::CENTER_HORI,SwFPos::CENTER_HORI,    HoriOrientation::CENTER,    HORI_PAGE_REL},
-    {SwFPos::FROMLEFT,   SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PAGE_REL}
+    {SvxSwFramePosString::LEFT,       SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PAGE_REL},
+    {SvxSwFramePosString::RIGHT,      SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PAGE_REL},
+    {SvxSwFramePosString::CENTER_HORI,SvxSwFramePosString::CENTER_HORI,    HoriOrientation::CENTER,    HORI_PAGE_REL},
+    {SvxSwFramePosString::FROMLEFT,   SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
 static FrmMap const aHPageHtmlMap[] =
 {
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 #define VERT_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea)
 
 static FrmMap const aVPageMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PAGE_REL},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PAGE_REL},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,    VERT_PAGE_REL},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PAGE_REL}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PAGE_REL},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PAGE_REL},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,    VERT_PAGE_REL},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
 static FrmMap const aVPageHtmlMap[] =
 {
-    {SwFPos::FROMTOP, SwFPos::FROMTOP,        VertOrientation::NONE,      LB::RelPageFrame}
+    {SvxSwFramePosString::FROMTOP, SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::RelPageFrame}
 };
 
 /*--------------------------------------------------------------------
@@ -190,16 +188,16 @@ static constexpr auto HORI_FRAME_REL = LB::FlyRelPageFrame|LB::FlyRelPagePrintAr
 
 static FrmMap const aHFrameMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,  HORI_FRAME_REL},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_FRAME_REL},
-    {SwFPos::CENTER_HORI,   SwFPos::CENTER_HORI,    HoriOrientation::CENTER,    HORI_FRAME_REL},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_FRAME_REL}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,  HORI_FRAME_REL},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_FRAME_REL},
+    {SvxSwFramePosString::CENTER_HORI,   SvxSwFramePosString::CENTER_HORI,    HoriOrientation::CENTER,    HORI_FRAME_REL},
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
 static FrmMap const aHFlyHtmlMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      LB::FlyRelPageFrame},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::FlyRelPageFrame}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      LB::FlyRelPageFrame},
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::FlyRelPageFrame}
 };
 
 // #i18732# - own vertical alignment map for to frame anchored objects
@@ -208,25 +206,25 @@ static FrmMap const aHFlyHtmlMap[] =
 
 static FrmMap const aVFrameMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_FRAME_REL},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_FRAME_REL},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,    VERT_FRAME_REL},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_FRAME_REL}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_FRAME_REL},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_FRAME_REL},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,    VERT_FRAME_REL},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
 static FrmMap const aVFlyHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::FlyVertFrame},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::FlyVertFrame}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       LB::FlyVertFrame},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::FlyVertFrame}
 };
 
 static FrmMap const aVMultiSelectionMap[] =
 {
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::NONE}
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      LB::NONE}
 };
 static FrmMap const aHMultiSelectionMap[] =
 {
-    {SwFPos::FROMLEFT,      SwFPos::FROMLEFT,       HoriOrientation::NONE,      LB::NONE}
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::FROMLEFT,       HoriOrientation::NONE,      LB::NONE}
 };
 
 /*--------------------------------------------------------------------
@@ -239,24 +237,24 @@ static constexpr auto HORI_PARA_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB
 
 static FrmMap const aHParaMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PARA_REL},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PARA_REL},
-    {SwFPos::CENTER_HORI,   SwFPos::CENTER_HORI,    HoriOrientation::CENTER,    HORI_PARA_REL},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PARA_REL}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PARA_REL},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PARA_REL},
+    {SvxSwFramePosString::CENTER_HORI,   SvxSwFramePosString::CENTER_HORI,    HoriOrientation::CENTER,    HORI_PARA_REL},
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PARA_REL}
 };
 
 #define HTML_HORI_PARA_REL  (LB::Frame|LB::PrintArea)
 
 static FrmMap const aHParaHtmlMap[] =
 {
-    {SwFPos::LEFT,  SwFPos::LEFT,   HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
-    {SwFPos::RIGHT, SwFPos::RIGHT,  HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
+    {SvxSwFramePosString::LEFT,  SvxSwFramePosString::LEFT,   HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
+    {SvxSwFramePosString::RIGHT, SvxSwFramePosString::RIGHT,  HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
 static FrmMap const aHParaHtmlAbsMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
 
@@ -265,15 +263,15 @@ static constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
 
 static FrmMap const aVParaMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL|LB::RelPagePrintAreaBottom}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,    VERT_PARA_REL},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL|LB::RelPagePrintAreaBottom}
 };
 
 static FrmMap const aVParaHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::VertPrintArea}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,       LB::VertPrintArea}
 };
 
 /*--------------------------------------------------------------------
@@ -286,25 +284,25 @@ static constexpr auto HORI_CHAR_REL = LB::Frame|LB::PrintArea|LB::RelPageLeft|LB
 
 static FrmMap aHCharMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_CHAR_REL},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_CHAR_REL},
-    {SwFPos::CENTER_HORI,   SwFPos::CENTER_HORI,    HoriOrientation::CENTER,    HORI_CHAR_REL},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_CHAR_REL}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,      HORI_CHAR_REL},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_CHAR_REL},
+    {SvxSwFramePosString::CENTER_HORI,   SvxSwFramePosString::CENTER_HORI,    HoriOrientation::CENTER,    HORI_CHAR_REL},
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_CHAR_REL}
 };
 
 #define HTML_HORI_CHAR_REL  (LB::Frame|LB::PrintArea|LB::RelChar)
 
 static FrmMap aHCharHtmlMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::LEFT,           HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
-    {SwFPos::RIGHT,         SwFPos::RIGHT,          HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::LEFT,           HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::RIGHT,          HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
 };
 
 static FrmMap aHCharHtmlAbsMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,          LB::PrintArea|LB::RelChar},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     LB::PrintArea},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
+    {SvxSwFramePosString::LEFT,          SvxSwFramePosString::MIR_LEFT,       HoriOrientation::LEFT,          LB::PrintArea|LB::RelChar},
+    {SvxSwFramePosString::RIGHT,         SvxSwFramePosString::MIR_RIGHT,      HoriOrientation::RIGHT,     LB::PrintArea},
+    {SvxSwFramePosString::FROMLEFT,      SvxSwFramePosString::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 // #i18732# - allow vertical alignment at page areas
@@ -321,27 +319,27 @@ static FrmMap aVCharMap[] =
     //       <eStrId>/<eMirrorStrId> and <nAlign>. These ambiguities are considered
     //       in the methods <SwFrmPage::FillRelLB(..)>, <SwFrmPage::GetAlignment(..)>
     //       and <SwFrmPage::FillPosLB(..)>
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           VERT_CHAR_REL|LB::RelChar},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB::RelChar},
-    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB::RelChar},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL|LB::RelPagePrintAreaBottom},
-    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelChar|LB::VertLine},
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::VertLine},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::VertLine},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::VertLine}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,           VERT_CHAR_REL|LB::RelChar},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB::RelChar},
+    {SvxSwFramePosString::BELOW,         SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB::RelChar},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL|LB::RelPagePrintAreaBottom},
+    {SvxSwFramePosString::FROMBOTTOM,    SvxSwFramePosString::FROMBOTTOM,     VertOrientation::NONE,          LB::RelChar|LB::VertLine},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::LINE_TOP,      LB::VertLine},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::VertLine},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::VertLine}
 };
 
 
 static FrmMap const aVCharHtmlMap[] =
 {
-    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
+    {SvxSwFramePosString::BELOW,         SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
 static FrmMap const aVCharHtmlAbsMap[] =
 {
-    {SwFPos::TOP,    SwFPos::TOP,            VertOrientation::TOP,           LB::RelChar},
-    {SwFPos::BELOW,  SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
+    {SvxSwFramePosString::TOP,    SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelChar},
+    {SvxSwFramePosString::BELOW,  SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 /*--------------------------------------------------------------------
     anchored as character
@@ -349,31 +347,31 @@ static FrmMap const aVCharHtmlAbsMap[] =
 
 static FrmMap const aVAsCharMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        LB::RelBase},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelBase},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,        LB::RelBase},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::CHAR_BOTTOM,   LB::RelChar},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CHAR_CENTER,   LB::RelChar},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::CHAR_BOTTOM,   LB::RelChar},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CHAR_CENTER,   LB::RelChar},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow},
 
-    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelBase}
+    {SvxSwFramePosString::FROMBOTTOM,    SvxSwFramePosString::FROMBOTTOM,     VertOrientation::NONE,          LB::RelBase}
 };
 
 static FrmMap const aVAsCharHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::TOP,           LB::RelBase},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow}
+    {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
+    {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
+    {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow}
 };
 
 static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
@@ -433,11 +431,11 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             SvxSwFramePosString::StringId eStringId, bool bVertical, bool bRTL)
 {
     //special handling of STR_FROMLEFT
-    if(SwFPos::FROMLEFT == eStringId)
+    if(SvxSwFramePosString::FROMLEFT == eStringId)
     {
         eStringId = bVertical ?
-            bRTL ? SwFPos::FROMBOTTOM : SwFPos::FROMTOP :
-            bRTL ? SwFPos::FROMRIGHT : SwFPos::FROMLEFT;
+            bRTL ? SvxSwFramePosString::FROMBOTTOM : SvxSwFramePosString::FROMTOP :
+            bRTL ? SvxSwFramePosString::FROMRIGHT : SvxSwFramePosString::FROMLEFT;
         return eStringId;
     }
     if(bVertical)
@@ -445,25 +443,25 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
         //exchange horizontal strings with vertical strings and vice versa
         static const StringIdPair_Impl aHoriIds[] =
         {
-            {SwFPos::LEFT,           SwFPos::TOP},
-            {SwFPos::RIGHT,          SwFPos::BOTTOM},
-            {SwFPos::CENTER_HORI,    SwFPos::CENTER_VERT},
-            {SwFPos::FROMTOP,        SwFPos::FROMRIGHT},
-            {SwFPos::REL_PG_LEFT,    SwFPos::REL_PG_TOP},
-            {SwFPos::REL_PG_RIGHT,   SwFPos::REL_PG_BOTTOM} ,
-            {SwFPos::REL_FRM_LEFT,   SwFPos::REL_FRM_TOP},
-            {SwFPos::REL_FRM_RIGHT,  SwFPos::REL_FRM_BOTTOM}
+            {SvxSwFramePosString::LEFT,           SvxSwFramePosString::TOP},
+            {SvxSwFramePosString::RIGHT,          SvxSwFramePosString::BOTTOM},
+            {SvxSwFramePosString::CENTER_HORI,    SvxSwFramePosString::CENTER_VERT},
+            {SvxSwFramePosString::FROMTOP,        SvxSwFramePosString::FROMRIGHT},
+            {SvxSwFramePosString::REL_PG_LEFT,    SvxSwFramePosString::REL_PG_TOP},
+            {SvxSwFramePosString::REL_PG_RIGHT,   SvxSwFramePosString::REL_PG_BOTTOM} ,
+            {SvxSwFramePosString::REL_FRM_LEFT,   SvxSwFramePosString::REL_FRM_TOP},
+            {SvxSwFramePosString::REL_FRM_RIGHT,  SvxSwFramePosString::REL_FRM_BOTTOM}
         };
         static const StringIdPair_Impl aVertIds[] =
         {
-            {SwFPos::TOP,            SwFPos::RIGHT},
-            {SwFPos::BOTTOM,         SwFPos::LEFT },
-            {SwFPos::CENTER_VERT,    SwFPos::CENTER_HORI},
-            {SwFPos::FROMTOP,        SwFPos::FROMRIGHT },
-            {SwFPos::REL_PG_TOP,     SwFPos::REL_PG_LEFT },
-            {SwFPos::REL_PG_BOTTOM,  SwFPos::REL_PG_RIGHT } ,
-            {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
-            {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
+            {SvxSwFramePosString::TOP,            SvxSwFramePosString::RIGHT},
+            {SvxSwFramePosString::BOTTOM,         SvxSwFramePosString::LEFT },
+            {SvxSwFramePosString::CENTER_VERT,    SvxSwFramePosString::CENTER_HORI},
+            {SvxSwFramePosString::FROMTOP,        SvxSwFramePosString::FROMRIGHT },
+            {SvxSwFramePosString::REL_PG_TOP,     SvxSwFramePosString::REL_PG_LEFT },
+            {SvxSwFramePosString::REL_PG_BOTTOM,  SvxSwFramePosString::REL_PG_RIGHT } ,
+            {SvxSwFramePosString::REL_FRM_TOP,    SvxSwFramePosString::REL_FRM_LEFT },
+            {SvxSwFramePosString::REL_FRM_BOTTOM, SvxSwFramePosString::REL_FRM_RIGHT }
         };
         for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
         {
