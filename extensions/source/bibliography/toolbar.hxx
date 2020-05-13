@@ -25,8 +25,6 @@
 
 #include <svtools/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
@@ -118,6 +116,27 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLBSource;
 };
 
+class EditControl final : public InterimItemWindow
+{
+public:
+    EditControl(vcl::Window* pParent);
+    virtual ~EditControl() override;
+    virtual void dispose() override;
+
+    weld::Entry* get_widget() { return m_xEdQuery.get(); }
+
+    void set_sensitive(bool bSensitive)
+    {
+        m_xFtQuery->set_sensitive(bSensitive);
+        m_xEdQuery->set_sensitive(bSensitive);
+        Enable(bSensitive);
+    }
+
+private:
+    std::unique_ptr<weld::Label> m_xFtQuery;
+    std::unique_ptr<weld::Entry> m_xEdQuery;
+};
+
 class BibToolBar:   public ToolBox
 {
     private:
@@ -127,8 +146,8 @@ class BibToolBar:   public ToolBox
         Idle                    aIdle;
         VclPtr<ComboBoxControl> xSource;
         weld::ComboBox*         pLbSource;
-        VclPtr<FixedText>       aFtQuery;
-        VclPtr<Edit>            aEdQuery;
+        VclPtr<EditControl>     xQuery;
+        weld::Entry*            pEdQuery;
         ScopedVclPtr<PopupMenu> pPopupMenu;
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
@@ -138,8 +157,7 @@ class BibToolBar:   public ToolBox
         sal_Int16               nOutStyle;
 
         sal_uInt16              nTBC_SOURCE;
-        sal_uInt16              nTBC_FT_QUERY;
-        sal_uInt16              nTBC_ED_QUERY;
+        sal_uInt16              nTBC_QUERY;
         sal_uInt16              nTBC_BT_AUTOFILTER;
         sal_uInt16              nTBC_BT_COL_ASSIGN;
         sal_uInt16              nTBC_BT_CHANGESOURCE;
