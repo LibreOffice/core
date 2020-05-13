@@ -54,7 +54,7 @@
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <extended/AccessibleGridControl.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/popupmenuwindow.hxx>

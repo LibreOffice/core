@@ -45,7 +45,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/calendar.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
