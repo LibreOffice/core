@@ -2731,52 +2731,39 @@ IMPL_LINK(SalInstanceToggleButton, ToggleListener, VclWindowEvent&, rEvent, void
         signal_toggled();
 }
 
-namespace
+SalInstanceCheckButton::SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
+    , m_xCheckButton(pButton)
 {
-class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::CheckButton
+    m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
+}
+
+void SalInstanceCheckButton::set_active(bool active)
 {
-private:
-    VclPtr<CheckBox> m_xCheckButton;
+    disable_notify_events();
+    m_xCheckButton->EnableTriState(false);
+    m_xCheckButton->Check(active);
+    enable_notify_events();
+}
 
-    DECL_LINK(ToggleHdl, CheckBox&, void);
+bool SalInstanceCheckButton::get_active() const { return m_xCheckButton->IsChecked(); }
 
-public:
-    SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
-        , m_xCheckButton(pButton)
-    {
-        m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
-    }
+void SalInstanceCheckButton::set_inconsistent(bool inconsistent)
+{
+    disable_notify_events();
+    m_xCheckButton->EnableTriState(true);
+    m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+    enable_notify_events();
+}
 
-    virtual void set_active(bool active) override
-    {
-        disable_notify_events();
-        m_xCheckButton->EnableTriState(false);
-        m_xCheckButton->Check(active);
-        enable_notify_events();
-    }
+bool SalInstanceCheckButton::get_inconsistent() const
+{
+    return m_xCheckButton->GetState() == TRISTATE_INDET;
+}
 
-    virtual bool get_active() const override { return m_xCheckButton->IsChecked(); }
-
-    virtual void set_inconsistent(bool inconsistent) override
-    {
-        disable_notify_events();
-        m_xCheckButton->EnableTriState(true);
-        m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
-        enable_notify_events();
-    }
-
-    virtual bool get_inconsistent() const override
-    {
-        return m_xCheckButton->GetState() == TRISTATE_INDET;
-    }
-
-    virtual ~SalInstanceCheckButton() override
-    {
-        m_xCheckButton->SetToggleHdl(Link<CheckBox&, void>());
-    }
-};
-
+SalInstanceCheckButton::~SalInstanceCheckButton()
+{
+    m_xCheckButton->SetToggleHdl(Link<CheckBox&, void>());
 }
 
 IMPL_LINK_NOARG(SalInstanceCheckButton, ToggleHdl, CheckBox&, void)
