@@ -33,22 +33,22 @@
 namespace com::sun::star::beans {
     struct Property;
     struct PropertyValue;
-} } } }
+}
 
 namespace com::sun::star::io {
     class XInputStream;
-} } } }
+}
 
 namespace com::sun::star::sdbc {
     class XRow;
-} } } }
+}
 
 namespace com::sun::star::ucb {
     struct OpenCommandArgument2;
     struct PropertyCommandArgument;
     struct PostCommandArgument2;
     struct TransferInfo;
-} } } }
+}
 
 namespace http_dav_ucp
 {

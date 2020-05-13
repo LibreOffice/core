@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 namespace com::sun::star::lang {
     class XMultiServiceFactory;
-} } } }
+}
 
 namespace http_dav_ucp
 {
