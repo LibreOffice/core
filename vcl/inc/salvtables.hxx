@@ -900,6 +900,14 @@ public:
 
     virtual void set_entry_placeholder_text(const OUString&) override;
 
+    virtual void set_entry_editable(bool bEditable) override;
+
+    virtual void cut_entry_clipboard() override;
+
+    virtual void copy_entry_clipboard() override;
+
+    virtual void paste_entry_clipboard() override;
+
     virtual void set_entry_font(const vcl::Font&) override;
 
     virtual vcl::Font get_entry_font() override;
@@ -957,6 +965,14 @@ public:
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) override;
 
     virtual void set_entry_placeholder_text(const OUString& rText) override;
+
+    virtual void set_entry_editable(bool bEditable) override;
+
+    virtual void cut_entry_clipboard() override;
+
+    virtual void copy_entry_clipboard() override;
+
+    virtual void paste_entry_clipboard() override;
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override;
 

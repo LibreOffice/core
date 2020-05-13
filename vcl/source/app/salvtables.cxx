@@ -5739,6 +5739,14 @@ void SalInstanceComboBoxWithoutEdit::set_entry_completion(bool, bool) { assert(f
 
 void SalInstanceComboBoxWithoutEdit::set_entry_placeholder_text(const OUString&) { assert(false); }
 
+void SalInstanceComboBoxWithoutEdit::set_entry_editable(bool /*bEditable*/) { assert(false); }
+
+void SalInstanceComboBoxWithoutEdit::cut_entry_clipboard() { assert(false); }
+
+void SalInstanceComboBoxWithoutEdit::copy_entry_clipboard() { assert(false); }
+
+void SalInstanceComboBoxWithoutEdit::paste_entry_clipboard() { assert(false); }
+
 void SalInstanceComboBoxWithoutEdit::set_entry_font(const vcl::Font&) { assert(false); }
 
 vcl::Font SalInstanceComboBoxWithoutEdit::get_entry_font() { assert(false); return vcl::Font(); }
@@ -5861,6 +5869,26 @@ void SalInstanceComboBoxWithEdit::set_entry_completion(bool bEnable, bool bCaseS
 void SalInstanceComboBoxWithEdit::set_entry_placeholder_text(const OUString& rText)
 {
     m_xComboBox->SetPlaceholderText(rText);
+}
+
+void SalInstanceComboBoxWithEdit::set_entry_editable(bool bEditable)
+{
+    m_xComboBox->SetReadOnly(!bEditable);
+}
+
+void SalInstanceComboBoxWithEdit::cut_entry_clipboard()
+{
+    m_xComboBox->Cut();
+}
+
+void SalInstanceComboBoxWithEdit::copy_entry_clipboard()
+{
+    m_xComboBox->Copy();
+}
+
+void SalInstanceComboBoxWithEdit::paste_entry_clipboard()
+{
+    m_xComboBox->Paste();
 }
 
 void SalInstanceComboBoxWithEdit::select_entry_region(int nStartPos, int nEndPos)
@@ -6026,6 +6054,30 @@ public:
     {
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetPlaceholderText(rText);
+    }
+
+    virtual void set_entry_editable(bool bEditable) override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.SetReadOnly(!bEditable);
+    }
+
+    virtual void cut_entry_clipboard() override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.Cut();
+    }
+
+    virtual void copy_entry_clipboard() override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.Copy();
+    }
+
+    virtual void paste_entry_clipboard() override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        rEntry.Paste();
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }

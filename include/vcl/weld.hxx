@@ -706,6 +706,10 @@ public:
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) = 0;
     virtual void set_entry_placeholder_text(const OUString& rText) = 0;
+    virtual void set_entry_editable(bool bEditable) = 0;
+    virtual void cut_entry_clipboard() = 0;
+    virtual void copy_entry_clipboard() = 0;
+    virtual void paste_entry_clipboard() = 0;
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_entry_font(const vcl::Font& rFont) = 0;
