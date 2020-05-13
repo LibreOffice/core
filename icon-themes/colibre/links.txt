@@ -1892,7 +1892,7 @@ extensions/res/buttonplus.png extensions/res/scanner/plus.png
 
 # formula
 # ==============================================
-formula/res/fapclose.png cmd/sc_open.png
+formula/res/fapclose.png svtools/res/folder.png
 formula/res/faperror.png cmd/sc_cancel.png
 formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
@@ -1901,7 +1901,7 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 # fpicker
 # ==============================================
 fpicker/res/fp011.png cmd/sc_firstpage.png
-fpicker/res/fp014.png cmd/sc_open.png
+fpicker/res/fp014.png res/fp015.png
 fpicker/res/fp015.png cmd/sc_starshapes.png
 fpicker/res/fp016.png desktop/res/shared_16.png
 
@@ -1938,9 +1938,8 @@ res/dir-open.png cmd/sc_open.png
 res/extension_plus_26.png cmd/lc_insertplugin.png
 res/extension_plus_32.png cmd/32/insertplugin.png
 res/fileopen.png cmd/sc_open.png
-res/foldercl.png cmd/sc_open.png
+res/foldercl.png svtools/res/folder.png
 res/folderop.png cmd/sc_open.png
-res/fp010.png cmd/sc_open.png
 res/im30820.png cmd/sc_scriptorganizer.png
 res/im30821.png cmd/sc_choosemacro.png
 res/info.png cmd/lc_helpindex.png
@@ -1985,6 +1984,7 @@ res/sx03127.png res/sx03126.png
 res/sx03130.png res/sx03123.png
 res/sx03137.png res/sx03125.png
 res/sx03140.png res/sx03125.png
+res/sx03141.png svtools/res/folder.png
 res/sx03145.png res/sx03144.png
 res/sx03152.png res/sx03125.png
 res/sx03153.png res/sx03125.png
@@ -2100,7 +2100,6 @@ res/sx18002.png res/plus.png
 res/sx18003.png res/minus.png
 
 res/basbrk.png cmd/sc_addwatch.png
-res/fp015.png cmd/sc_starshapes.png
 
 # sc
 # ==============================================
