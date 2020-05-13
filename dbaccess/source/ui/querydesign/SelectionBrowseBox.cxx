@@ -122,7 +122,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     m_pTextCell     = VclPtr<Edit>::Create(&GetDataWindow(), 0);
     m_pVisibleCell  = VclPtr<CheckBoxControl>::Create(&GetDataWindow());
     m_pTableCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
-    m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
+    m_pFieldCell    = VclPtr<ComboBoxControl>::Create(&GetDataWindow());
     m_pOrderCell    = VclPtr<ListBoxControl>::Create(&GetDataWindow());
     m_pFunctionCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
 
@@ -475,20 +475,21 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
     {
         case BROW_FIELD_ROW:
         {
-            m_pFieldCell->Clear();
-            m_pFieldCell->SetText(OUString());
+            weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+            rComboBox.clear();
+            rComboBox.set_entry_text(OUString());
 
             OUString aField(pEntry->GetField());
             OUString aTable(pEntry->GetAlias());
 
-            getDesignView()->fillValidFields(aTable, m_pFieldCell);
+            getDesignView()->fillValidFields(aTable, rComboBox);
 
             // replace with alias.*
             if (aField.trim() == "*")
             {
                 aField = aTable + ".*";
             }
-            m_pFieldCell->SetText(aField);
+            rComboBox.set_entry_text(aField);
         }   break;
         case BROW_TABLE_ROW:
         {
@@ -943,9 +944,10 @@ bool OSelectionBrowseBox::SaveModified()
                         if ( !m_bInUndoMode )
                             rController.GetUndoManager().EnterListAction(OUString(),OUString(),0,ViewShellId(-1));
 
-                        sal_Int32 nPos = m_pFieldCell->GetEntryPos(aFieldName);
+                        weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+                        sal_Int32 nPos = rComboBox.find_text(aFieldName);
                         OUString aAliasName = pEntry->GetAlias();
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aAliasName.isEmpty() && aFieldName.indexOf('.') >= 0 )
+                        if ( nPos != -1 && aAliasName.isEmpty() && aFieldName.indexOf('.') >= 0 )
                         { // special case, we have a table field so we must cut the table name
                             OUString sTableAlias = aFieldName.getToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
@@ -2346,8 +2348,12 @@ bool OSelectionBrowseBox::isCutAllowed() const
         case BROW_FUNCTION_ROW:
             break;
         case BROW_FIELD_ROW:
-            bCutAllowed = !m_pFieldCell->GetSelected().isEmpty();
+        {
+            weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+            int nStartPos, nEndPos;
+            bCutAllowed = rComboBox.get_entry_selection_bounds(nStartPos, nEndPos);
             break;
+        }
         default:
             bCutAllowed = !m_pTextCell->GetSelected().isEmpty();
             break;
@@ -2361,9 +2367,12 @@ void OSelectionBrowseBox::cut()
     switch (nRow)
     {
         case BROW_FIELD_ROW:
-            m_pFieldCell->Cut();
-            m_pFieldCell->SetModifyFlag();
+        {
+            weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+            rComboBox.cut_entry_clipboard();
+            //TODO m_pFieldCell->SetModifyFlag();
             break;
+        }
         default:
             m_pTextCell->Cut();
             m_pTextCell->SetModifyFlag();
@@ -2380,9 +2389,12 @@ void OSelectionBrowseBox::paste()
     switch (nRow)
     {
         case BROW_FIELD_ROW:
-            m_pFieldCell->Paste();
-            m_pFieldCell->SetModifyFlag();
+        {
+            weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+            rComboBox.paste_entry_clipboard();
+//TODO            m_pFieldCell->SetModifyFlag();
             break;
+        }
         default:
             m_pTextCell->Paste();
             m_pTextCell->SetModifyFlag();
@@ -2418,8 +2430,11 @@ void OSelectionBrowseBox::copy()
     switch (nRow)
     {
         case BROW_FIELD_ROW:
-            m_pFieldCell->Copy();
+        {
+            weld::ComboBox& rComboBox = m_pFieldCell->get_widget();
+            rComboBox.copy_entry_clipboard();
             break;
+        }
         default:
             m_pTextCell->Copy();
     }
