@@ -1256,57 +1256,23 @@ bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32)
     return false;
 }
 
-bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                          const SalBitmap& rAlphaBitmap)
-{
-    assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
-    assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
-    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rSourceBitmap.GetSize());
-    if (!tmpSurface)
-        return false;
-    SkCanvas* canvas = tmpSurface->getCanvas();
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    canvas->drawImage(static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkImage(), 0, 0, &paint);
-    paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
-    canvas->drawImage(static_cast<const SkiaSalBitmap&>(rAlphaBitmap).GetAlphaSkImage(), 0, 0,
-                      &paint);
-    drawImage(rPosAry, tmpSurface->makeImageSnapshot());
-    return true;
-}
-
-void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
-                                    SkBlendMode eBlendMode)
-{
-    SkRect aSourceRect
-        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
-    SkRect aDestinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
-                                               rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-
-    SkPaint aPaint;
-    aPaint.setBlendMode(eBlendMode);
-
-    preDraw();
-    SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
-    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
-    addXorRegion(aDestinationRect);
-    postDraw();
-}
-
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
 static sk_sp<SkImage> mergeBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
-                                   const Size targetSize, bool blockCaching)
+                                   const Size targetSize, bool blockCaching = false)
 {
     sk_sp<SkImage> image;
     OString key;
-    if (targetSize == bitmap.GetSize())
-        blockCaching = true; // probably not much point in caching if no scaling is involved
+    if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
+        blockCaching = true; // probably not much point in caching of just doing a copy
     if (targetSize.Width() > bitmap.GetSize().Width()
         || targetSize.Height() > bitmap.GetSize().Height())
         blockCaching = true; // caching enlarging is probably wasteful and not worth it
     if (bitmap.GetSize().Width() < 100 && bitmap.GetSize().Height() < 100)
         blockCaching = true; // image too small to be worth caching
+    if (SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster
+        && targetSize == bitmap.GetSize())
+        blockCaching = true; // GPU-accelerated shouldn't need caching of applying alpha
     if (!blockCaching)
     {
         OStringBuffer keyBuf;
@@ -1377,6 +1343,36 @@ static sk_sp<SkImage> mergeBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBit
     return image;
 }
 
+bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
+                                          const SalBitmap& rAlphaBitmap)
+{
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
+    sk_sp<SkImage> image
+        = mergeBitmaps(static_cast<const SkiaSalBitmap&>(rSourceBitmap),
+                       static_cast<const SkiaSalBitmap*>(&rAlphaBitmap), rSourceBitmap.GetSize());
+    drawImage(rPosAry, image);
+    return true;
+}
+
+void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
+                                    SkBlendMode eBlendMode)
+{
+    SkRect aSourceRect
+        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    SkRect aDestinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
+                                               rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+
+    SkPaint aPaint;
+    aPaint.setBlendMode(eBlendMode);
+
+    preDraw();
+    SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
+    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
+    addXorRegion(aDestinationRect);
+    postDraw();
+}
+
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const basegfx::B2DPoint& rX,
                                                 const basegfx::B2DPoint& rY,
@@ -1389,10 +1385,12 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
     const SkiaSalBitmap* pSkiaAlphaBitmap = static_cast<const SkiaSalBitmap*>(pAlphaBitmap);
 
-    // setup the image transformation
-    // using the rNull, rX, rY points as destinations for the (0,0), (Width,0), (0,Height) source points
-    const basegfx::B2DVector aXRel = rX - rNull;
-    const basegfx::B2DVector aYRel = rY - rNull;
+    // Setup the image transformation,
+    // using the rNull, rX, rY points as destinations for the (0,0), (Width,0), (0,Height) source points.
+    // Round to pixels, otherwise kMScaleX/Y below could be slightly != 1, causing unnecessary uncached
+    // scaling.
+    const basegfx::B2IVector aXRel = basegfx::fround(rX - rNull);
+    const basegfx::B2IVector aYRel = basegfx::fround(rY - rNull);
 
     const Size aSize = rSourceBitmap.GetSize();
 
