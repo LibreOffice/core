@@ -1128,7 +1128,6 @@ public:
                         const PPTTextObj* pTextObj
                     );
     sal_uInt32      Count() const { return mpFieldItem ? 1 : maString.getLength(); };
-    bool            HasTabulator() const;
 };
 
 class MSFILTER_DLLPUBLIC PPTParagraphObj

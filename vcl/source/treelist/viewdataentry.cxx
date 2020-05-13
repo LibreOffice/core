@@ -26,8 +26,7 @@ SvViewDataEntry::SvViewDataEntry() :
     mbExpanded(false),
     mbFocused(false),
     mbSelectable(true),
-    mbDragTarget(false),
-    maPaintRectangle()
+    mbDragTarget(false)
 {
 }
 
@@ -38,8 +37,7 @@ SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     mbExpanded(rData.mbExpanded),
     mbFocused(false),
     mbSelectable(rData.mbSelectable),
-    mbDragTarget(false),
-    maPaintRectangle(rData.maPaintRectangle)
+    mbDragTarget(false)
 {
 }
 
@@ -84,16 +82,6 @@ const SvViewDataItem& SvViewDataEntry::GetItem(size_t nPos) const
 SvViewDataItem& SvViewDataEntry::GetItem(size_t nPos)
 {
     return maItems[nPos];
-}
-
-void SvViewDataEntry::SetPaintRectangle(tools::Rectangle aRectangle)
-{
-    maPaintRectangle = aRectangle;
-}
-
-const tools::Rectangle& SvViewDataEntry::GetPaintRectangle() const
-{
-    return maPaintRectangle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

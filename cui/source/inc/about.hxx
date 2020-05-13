@@ -48,7 +48,6 @@ private:
     static OUString GetUIString();
     static OUString GetLocaleString();
     static OUString GetMiscString();
-    static OUString GetExtraString();
 
     static OUString GetCopyrightString();
     static bool IsStringValidGitHash(const OUString& hash);

@@ -5437,23 +5437,6 @@ PPTPortionObj::~PPTPortionObj()
 {
 }
 
-bool PPTPortionObj::HasTabulator() const
-{
-    bool bRetValue =    false;
-    sal_Int32           nCount;
-    const sal_Unicode*  pPtr = maString.getStr();
-    for ( nCount = 0; nCount < maString.getLength(); nCount++ )
-    {
-        if ( pPtr[ nCount ] == 0x9 )
-        {
-            bRetValue = true;
-            break;
-        }
-
-    }
-    return bRetValue;
-}
-
 bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type nDestinationInstance ) const
 {
     sal_uInt32  nMask = 1 << nAttr;

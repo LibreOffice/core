@@ -171,15 +171,6 @@ bool CommonStylePreviewRenderer::recalculate()
     return true;
 }
 
-Size CommonStylePreviewRenderer::getRenderSize()
-{
-    assert(m_pFont);
-    maPixelSize = m_pFont->GetTextSize(&mrOutputDev, maStyleName);
-    if (maPixelSize.Height() > mnMaxHeight)
-        maPixelSize.setHeight( mnMaxHeight );
-    return maPixelSize;
-}
-
 bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign)
 {
     const OUString& rText = maStyleName;

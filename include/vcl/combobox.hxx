@@ -103,8 +103,6 @@ public:
     void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawText, bool bDrawTextAtImagePos );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );
 
-    void            SetSeparatorPos( sal_Int32  n );
-
     /**
      * Adds a new separator at the given position n.
      */

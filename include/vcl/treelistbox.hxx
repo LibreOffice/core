@@ -653,8 +653,6 @@ public:
     Size            GetOutputSizePixel() const;
     short           GetIndent() const { return nIndent; }
     void            SetIndent( short nIndent );
-    // Place the expander checkitem at the optimal indent for hierarchical lists
-    void            SetOptimalImageIndent() { SetIndent(12); }
     void            SetSpaceBetweenEntries( short nSpace );
     Point           GetEntryPosition(const SvTreeListEntry*) const;
     void            MakeVisible( SvTreeListEntry* pEntry );

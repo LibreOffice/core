@@ -2470,13 +2470,11 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
     {
         mpAccOptions->SetAlwaysAutoColor(false);
         mpAccOptions->SetStopAnimatedGraphics(false);
-        mpAccOptions->SetStopAnimatedText(false);
     }
     else
     {
         mpAccOptions->SetAlwaysAutoColor(rAccessibilityOptions.GetIsAutomaticFontColor());
         mpAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
-        mpAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
         // Form view
         // Always set this option, not only if document is read-only:

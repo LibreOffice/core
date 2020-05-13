@@ -182,9 +182,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
         // center vertically
         aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2 );
 
-        // draw item
-        pViewDataEntry->SetPaintRectangle(aRect);
-
         aEntryPos.AdjustY(15 );
 
         pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);

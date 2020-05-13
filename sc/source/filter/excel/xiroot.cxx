@@ -92,12 +92,6 @@ void XclImpRoot::SetCodePage( sal_uInt16 nCodePage )
     mrImpData.mbHasCodePage = true;
 }
 
-void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
-{
-    if( !mrImpData.mbHasCodePage )
-        SetTextEncoding( eAppFontEnc );
-}
-
 void XclImpRoot::InitializeTable( SCTAB nScTab )
 {
     if( GetBiff() <= EXC_BIFF4 )

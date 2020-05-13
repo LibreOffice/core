@@ -134,8 +134,6 @@ public:
 
     /** Sets a code page read from a CODEPAGE record for byte string import. */
     void                SetCodePage( sal_uInt16 nCodePage );
-    /** Sets text encoding from the default application font (in case of missing CODEPAGE record). */
-    void                SetAppFontEncoding( rtl_TextEncoding eAppFontEnc );
 
     /** Is called when import filter starts importing a single sheet (all BIFF versions). */
     void                InitializeTable( SCTAB nScTab );

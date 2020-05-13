@@ -1285,11 +1285,6 @@ void ComboBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawText, bool bDrawTe
     m_pImpl->m_pImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, bDrawText, bDrawTextAtImagePos);
 }
 
-void ComboBox::SetSeparatorPos( sal_Int32 n )
-{
-    m_pImpl->m_pImplLB->SetSeparatorPos( n );
-}
-
 void ComboBox::AddSeparator( sal_Int32 n )
 {
     m_pImpl->m_pImplLB->AddSeparator( n );
