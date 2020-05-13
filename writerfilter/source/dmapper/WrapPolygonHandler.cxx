@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/sequence.hxx>
 
 #include <ooxml/resourceids.hxx>
@@ -132,6 +133,23 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size 
     Fraction aScaleX(rSrcSize.Width, nWrap100Percent);
     Fraction aScaleY(rSrcSize.Height, nWrap100Percent);
     pResult = scale(aScaleX, aScaleY);
+
+    return pResult;
+}
+
+WrapPolygon::Pointer_t WrapPolygon::correctCrop(const awt::Size& rGraphicSize,
+                                                const text::GraphicCrop& rGraphicCrop)
+{
+    WrapPolygon::Pointer_t pResult;
+
+    Fraction aScaleX(rGraphicSize.Width - rGraphicCrop.Left - rGraphicCrop.Right,
+                     rGraphicSize.Width);
+    Fraction aScaleY(rGraphicSize.Height - rGraphicCrop.Top - rGraphicCrop.Bottom,
+                     rGraphicSize.Height);
+    pResult = scale(aScaleX, aScaleY);
+
+    awt::Point aMove(rGraphicCrop.Left, rGraphicCrop.Top);
+    pResult = pResult->move(aMove);
 
     return pResult;
 }
