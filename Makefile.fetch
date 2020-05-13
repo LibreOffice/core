@@ -105,6 +105,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,APR,APR_TARBALL) \
 		$(call fetch_Optional,APR,APR_UTIL_TARBALL) \
 		$(call fetch_Optional,BOOST,BOOST_TARBALL) \
+		$(call fetch_Optional,BOX2D,BOX2D_TARBALL) \
 		$(call fetch_Optional,BREAKPAD,BREAKPAD_TARBALL) \
 		$(call fetch_Optional,BSH,BSH_TARBALL) \
 		$(call fetch_Optional,BZIP2,BZIP2_TARBALL) \
