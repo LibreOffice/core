@@ -1017,7 +1017,7 @@ void ScColumn::DeleteArea(
     }
 
     // Delete attributes just now
-    if ((nDelFlag & InsertDeleteFlags::ATTRIB) == InsertDeleteFlags::ATTRIB)
+    if ((nDelFlag & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
         pAttrArray->DeleteArea( nStartRow, nEndRow );
     else if ((nDelFlag & InsertDeleteFlags::HARDATTR) == InsertDeleteFlags::HARDATTR)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );

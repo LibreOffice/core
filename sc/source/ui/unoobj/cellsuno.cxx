@@ -1763,7 +1763,7 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags )
     {
         // only for clearContents: EDITATTR is only used if no contents are deleted
         InsertDeleteFlags nDelFlags = static_cast<InsertDeleteFlags>(nContentFlags) & InsertDeleteFlags::ALL;
-        if ( ( nDelFlags & InsertDeleteFlags::EDITATTR ) && ( nDelFlags & InsertDeleteFlags::CONTENTS ) == InsertDeleteFlags::NONE )
+        if ( ( static_cast<InsertDeleteFlags>(nContentFlags) & InsertDeleteFlags::EDITATTR ) && ( nDelFlags & InsertDeleteFlags::CONTENTS ) == InsertDeleteFlags::NONE )
             nDelFlags |= InsertDeleteFlags::EDITATTR;
 
         pDocShell->GetDocFunc().DeleteContents( *GetMarkData(), nDelFlags, true, true );
