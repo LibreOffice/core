@@ -43,8 +43,7 @@ Type ScriptEventContainer::getElementType()
 
 sal_Bool ScriptEventContainer::hasElements()
 {
-    bool bRet = (mnElementCount > 0);
-    return bRet;
+    return !mHashMap.empty();
 }
 
 // Methods XNameAccess
@@ -171,8 +170,7 @@ void ScriptEventContainer::removeContainerListener( const css::uno::Reference< c
 
 
 ScriptEventContainer::ScriptEventContainer()
-    : mnElementCount( 0 ),
-      mType( cppu::UnoType<ScriptEventDescriptor>::get() ),
+    : mType( cppu::UnoType<ScriptEventDescriptor>::get() ),
       maContainerListeners( *this )
 {
 }
