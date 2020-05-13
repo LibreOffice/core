@@ -7,7 +7,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/builder.hxx>
 #include <salvtables.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 
 class JSDialogSender
 {

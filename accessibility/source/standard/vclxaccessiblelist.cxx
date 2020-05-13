@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <toolkit/helper/convert.hxx>
 
