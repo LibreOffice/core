@@ -1012,7 +1012,10 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    VclPtr<ComboBox>                    m_pComboBox;
+    weld::ComboBox& m_rComboBox;
+    sal_uInt16 m_nLines;
+
+    DECL_LINK(ChangedHdl, weld::ComboBox&, void);
 
 protected:
     virtual ~FmXComboBoxCell() override;
@@ -1041,11 +1044,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 Lines ) override;
-
-protected:
-    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 };
-
 
 typedef ::cppu::ImplHelper2 <   css::awt::XTextComponent
                             ,   css::lang::XUnoTunnel
