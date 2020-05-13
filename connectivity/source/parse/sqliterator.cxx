@@ -38,6 +38,7 @@
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <iterator>
 #include <memory>
@@ -209,7 +210,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
     if ( !m_pImpl->m_xTableContainer.is() )
         return;
 
-    m_aErrors = SQLException();
+    m_xErrors.reset();
 
 
     // Determine statement type ...
@@ -1468,7 +1469,7 @@ void OSQLParseTreeIterator::traverseAll()
 void OSQLParseTreeIterator::impl_traverse( TraversalParts _nIncludeMask )
 {
     // resets our errors
-    m_aErrors = css::sdbc::SQLException();
+    m_xErrors.reset();
 
     m_pImpl->m_nIncludeMask = _nIncludeMask;
 
@@ -2006,15 +2007,16 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 
 void OSQLParseTreeIterator::impl_appendError( const SQLException& _rError )
 {
-    if ( !m_aErrors.Message.isEmpty() )
+    SAL_WARN("connectivity.parse", "Adding error " << exceptionToString(Any(_rError)));
+    if ( m_xErrors )
     {
-        SQLException* pErrorChain = &m_aErrors;
+        SQLException* pErrorChain = &*m_xErrors;
         while ( pErrorChain->NextException.hasValue() )
             pErrorChain = static_cast< SQLException* >( pErrorChain->NextException.pData );
         pErrorChain->NextException <<= _rError;
     }
     else
-        m_aErrors = _rError;
+        m_xErrors = _rError;
 }
 
 sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNode )
