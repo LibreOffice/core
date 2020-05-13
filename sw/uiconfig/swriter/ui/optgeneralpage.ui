@@ -19,7 +19,6 @@
   <object class="GtkBox" id="OptGeneralPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="hexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
@@ -27,7 +26,6 @@
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -40,7 +38,7 @@
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
+                <property name="row_spacing">3</property>
                 <child>
                   <object class="GtkCheckButton" id="updatefields">
                     <property name="label" translatable="yes" context="optgeneralpage|updatefields">_Fields</property>
@@ -96,7 +94,6 @@
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -109,7 +106,7 @@
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
+                <property name="row_spacing">3</property>
                 <child>
                   <object class="GtkRadioButton" id="always">
                     <property name="label" translatable="yes" context="optgeneralpage|always">_Always</property>
@@ -209,7 +206,7 @@
                         <property name="label" translatable="yes" context="optgeneralpage|label5">_Measurement unit:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">metric</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -233,7 +230,7 @@
                         <property name="label" translatable="yes" context="optgeneralpage|tablabel">_Tab stops:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">tab</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -266,7 +263,7 @@
                   <object class="GtkGrid" id="grid8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="usecharunit">
                         <property name="label" translatable="yes" context="optgeneralpage|usecharunit">_Enable char unit</property>
@@ -295,8 +292,8 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
@@ -330,7 +327,6 @@
       <object class="GtkFrame" id="frame4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -344,7 +340,7 @@
               <object class="GtkGrid" id="grid6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
+                <property name="row_spacing">12</property>
                 <child>
                   <object class="GtkGrid" id="grid9">
                     <property name="visible">True</property>
@@ -359,7 +355,7 @@
                         <property name="label" translatable="yes" context="optgeneralpage|label7">_Additional separators:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">wordcount</property>
-                        <property name="xalign">1</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -407,7 +403,6 @@
                       <object class="GtkAlignment" id="alignment5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
                         <child>
                           <object class="GtkGrid" id="grid11">
                             <property name="visible">True</property>
@@ -483,12 +478,15 @@
       <widget name="label5"/>
       <widget name="tablabel"/>
       <widget name="label7"/>
+      <widget name="labelstandardpages"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
       <widget name="metric"/>
+      <widget name="tab"/>
       <widget name="wordcount"/>
+      <widget name="standardpagesize"/>
     </widgets>
   </object>
 </interface>
