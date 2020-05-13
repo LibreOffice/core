@@ -28,8 +28,10 @@ namespace connectivity
 {
     class OSQLParseNode;
 }
-
-class ComboBox;
+namespace weld
+{
+    class ComboBox;
+}
 namespace dbaui
 {
     enum SqlParseError
@@ -109,7 +111,7 @@ namespace dbaui
         void TableDeleted(const OUString& rAliasName);
 
         sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
-        void fillValidFields(const OUString& strTableName, ComboBox* pFieldList);
+        void fillValidFields(const OUString& strTableName, weld::ComboBox& rFieldList);
 
         void SaveUIConfig();
         void stopTimer();

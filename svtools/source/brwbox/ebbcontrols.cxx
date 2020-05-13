@@ -26,75 +26,47 @@
 namespace svt
 {
 
-
     //= ComboBoxControl
-
     ComboBoxControl::ComboBoxControl(vcl::Window* pParent)
-                   :ComboBox(pParent, WB_DROPDOWN|WB_NOBORDER)
+        : InterimItemWindow(pParent, "svt/ui/combocontrol.ui", "ComboControl")
+        , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     {
-        EnableAutoSize(false);
-        EnableAutocomplete(true);
-        SetDropDownLineCount(5);
-    }
-
-
-    bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
-    {
-        if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
-        {
-            const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-            const vcl::KeyCode rKey = pEvt->GetKeyCode();
-
-            if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
-                (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
-            {
-                // select next resp. previous entry
-                sal_Int32 nPos = GetEntryPos(GetText());
-                int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
-                {
-                    nPos += nDir;
-                    SetText(GetEntry(nPos));
-                }
-                return true;
-            }
-        }
-        return ComboBox::PreNotify(rNEvt);
     }
 
     //= ComboBoxCellController
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
     {
-        GetComboBox().SetModifyHdl( LINK(this, ComboBoxCellController, ModifyHdl) );
+        GetComboBox().connect_changed(LINK(this, ComboBoxCellController, ModifyHdl));
     }
 
-    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl, weld::ComboBox&, void)
     {
         callModifyHdl();
     }
 
-
     bool ComboBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
-        ComboBoxControl& rBox = GetComboBox();
+        weld::ComboBox& rBox = GetComboBox();
         switch (rEvt.GetKeyCode().GetCode())
         {
             case KEY_END:
             case KEY_RIGHT:
             {
-                Selection aSel = rBox.GetSelection();
-                return !aSel && aSel.Max() == rBox.GetText().getLength();
+                int nStartPos, nEndPos;
+                bool bNoSelection = rBox.get_entry_selection_bounds(nStartPos, nEndPos);
+                return bNoSelection && nEndPos == rBox.get_active_text().getLength();
             }
             case KEY_HOME:
             case KEY_LEFT:
             {
-                Selection aSel = rBox.GetSelection();
-                return !aSel && aSel.Min() == 0;
+                int nStartPos, nEndPos;
+                bool bNoSelection = rBox.get_entry_selection_bounds(nStartPos, nEndPos);
+                return bNoSelection && nStartPos == 0;
             }
             case KEY_UP:
             case KEY_DOWN:
-                if (rBox.IsInDropDown())
+                if (rBox.get_popup_shown())
                     return false;
                 if (!rEvt.GetKeyCode().IsShift() &&
                      rEvt.GetKeyCode().IsMod1())
@@ -106,7 +78,7 @@ namespace svt
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             case KEY_RETURN:
-                if (rBox.IsInDropDown())
+                if (rBox.get_popup_shown())
                     return false;
                 [[fallthrough]];
             default:
@@ -114,15 +86,14 @@ namespace svt
         }
     }
 
-
     bool ComboBoxCellController::IsModified() const
     {
-        return GetComboBox().IsValueChangedFromSaved();
+        return GetComboBox().get_value_changed_from_saved();
     }
 
     void ComboBoxCellController::ClearModified()
     {
-        GetComboBox().SaveValue();
+        GetComboBox().save_value();
     }
 
     //= ListBoxControl
