@@ -993,14 +993,17 @@ public:
     virtual void SAL_CALL makeVisible(sal_Int16 nEntry) override;
 
 private:
-    virtual void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
     virtual ~FmXListBoxCell() override;
 
-    DECL_LINK( OnDoubleClick, ListBox&, void );
+    DECL_LINK(ChangedHdl, weld::ComboBox&, void);
+
+    void OnDoubleClick();
 
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    VclPtr<ListBox>                     m_pBox;
+    weld::ComboBox* m_pBox;
+    sal_uInt16 m_nLines;
+    bool m_bMulti;
 };
 
 
@@ -1012,7 +1015,7 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::comphelper::OInterfaceContainerHelper2   m_aItemListeners,
                                         m_aActionListeners;
-    weld::ComboBox& m_rComboBox;
+    weld::ComboBox* m_pComboBox;
     sal_uInt16 m_nLines;
 
     DECL_LINK(ChangedHdl, weld::ComboBox&, void);

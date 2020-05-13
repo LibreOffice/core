@@ -9033,6 +9033,62 @@ tools::Rectangle get_row_area(GtkTreeView* pTreeView, GList* pColumns, GtkTreePa
     return aRet;
 }
 
+std::vector<int> get_selected_rows(GtkTreeView* pTreeView)
+{
+    std::vector<int> aRows;
+
+    GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(pTreeView), nullptr);
+    for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+    {
+        GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+
+        gint depth;
+        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
+        int nRow = indices[depth-1];
+
+        aRows.push_back(nRow);
+    }
+    g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+
+    return aRows;
+}
+
+void scroll_to_row(GtkTreeView* pTreeView, int pos)
+{
+    GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+    gtk_tree_view_scroll_to_cell(pTreeView, path, nullptr, false, 0, 0);
+    gtk_tree_path_free(path);
+}
+
+void select_tree(GtkTreeView* pTreeView, GtkTreeModel* pTreeModel, int pos)
+{
+    if (pos == -1 || (pos == 0 && gtk_tree_model_iter_n_children(pTreeModel, nullptr) == 0))
+    {
+        gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(pTreeView));
+    }
+    else
+    {
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_selection_select_path(gtk_tree_view_get_selection(pTreeView), path);
+        gtk_tree_view_scroll_to_cell(pTreeView, path, nullptr, false, 0, 0);
+        gtk_tree_path_free(path);
+    }
+}
+
+void unselect_tree(GtkTreeView* pTreeView, GtkTreeModel* pTreeModel, int pos)
+{
+    if (pos == -1 || (pos == 0 && gtk_tree_model_iter_n_children(pTreeModel, nullptr) == 0))
+    {
+        gtk_tree_selection_select_all(gtk_tree_view_get_selection(pTreeView));
+    }
+    else
+    {
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(pTreeView), path);
+        gtk_tree_path_free(path);
+    }
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -10125,17 +10181,7 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
-        }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_tree_selection_select_path(gtk_tree_view_get_selection(m_pTreeView), path);
-            gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
-            gtk_tree_path_free(path);
-        }
+        select_tree(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore), pos);
         enable_notify_events();
     }
 
@@ -10153,9 +10199,7 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
-        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
-        gtk_tree_path_free(path);
+        ::scroll_to_row(m_pTreeView, pos);
         enable_notify_events();
     }
 
@@ -10170,37 +10214,13 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
-        if (pos == -1 || (pos == 0 && n_children() == 0))
-        {
-            gtk_tree_selection_select_all(gtk_tree_view_get_selection(m_pTreeView));
-        }
-        else
-        {
-            GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_tree_selection_unselect_path(gtk_tree_view_get_selection(m_pTreeView), path);
-            gtk_tree_path_free(path);
-        }
+        unselect_tree(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore), pos);
         enable_notify_events();
     }
 
     virtual std::vector<int> get_selected_rows() const override
     {
-        std::vector<int> aRows;
-
-        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), nullptr);
-        for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
-        {
-            GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
-
-            gint depth;
-            gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-            int nRow = indices[depth-1];
-
-            aRows.push_back(nRow);
-        }
-        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
-
-        return aRows;
+        return ::get_selected_rows(m_pTreeView);
     }
 
     virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
@@ -14344,6 +14364,31 @@ public:
         return nWidth;
     }
 
+    virtual void set_selection_mode(SelectionMode eMode) override
+    {
+        gtk_tree_selection_set_mode(gtk_tree_view_get_selection(m_pTreeView), VclToGtk(eMode));
+    }
+
+    void scroll_to_row(int nRow) override
+    {
+        ::scroll_to_row(m_pTreeView, nRow);
+    }
+
+    virtual std::vector<int> get_selected_rows() const override
+    {
+        return ::get_selected_rows(m_pTreeView);
+    }
+
+    void select(int nRow) override
+    {
+        select_tree(m_pTreeView, m_pTreeModel, nRow);
+    }
+
+    void unselect(int nRow) override
+    {
+        unselect_tree(m_pTreeView, m_pTreeModel, nRow);
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         m_xCustomMenuButtonHelper.reset();
@@ -14769,6 +14814,31 @@ public:
     {
         assert(false && "not implemented");
         return 0;
+    }
+
+    virtual void set_selection_mode(SelectionMode eMode) override
+    {
+        m_pTreeView->set_selection_mode(eMode);
+    }
+
+    virtual std::vector<int> get_selected_rows() const override
+    {
+        return m_pTreeView->get_selected_rows();
+    }
+
+    void scroll_to_row(int nRow) override
+    {
+        m_pTreeView->scroll_to_row(nRow);
+    }
+
+    void select(int nRow) override
+    {
+        m_pTreeView->select(nRow);
+    }
+
+    void unselect(int nRow) override
+    {
+        m_pTreeView->unselect(nRow);
     }
 
     virtual ~GtkInstanceEntryTreeView() override

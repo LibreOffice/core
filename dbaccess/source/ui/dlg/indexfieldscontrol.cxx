@@ -208,9 +208,10 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
             InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HeaderBarItemBits::STDSTYLE, 1);
 
             m_pSortingCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());
-            m_pSortingCell->InsertEntry(m_sAscendingText);
-            m_pSortingCell->InsertEntry(m_sDescendingText);
-            m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
+            weld::ComboBox& rSortingListBox = m_pSortingCell->get_widget();
+            rSortingListBox.append_text(m_sAscendingText);
+            rSortingListBox.append_text(m_sDescendingText);
+            rSortingListBox.set_help_id(HID_DLGINDEX_INDEXDETAILS_SORTORDER);
 
             nFieldNameWidth -= nSortOrderColumnWidth;
         }
@@ -224,12 +225,13 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
         // create the cell controllers
         // for the field name cell
         m_pFieldNameCell = VclPtr<ListBoxControl>::Create(&GetDataWindow());
-        m_pFieldNameCell->InsertEntry(OUString());
-        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
+        weld::ComboBox& rNameListBox = m_pFieldNameCell->get_widget();
+        rNameListBox.append_text(OUString());
+        rNameListBox.set_help_id(HID_DLGINDEX_INDEXDETAILS_FIELD);
         const OUString* pFields = _rAvailableFields.getConstArray();
         const OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
-            m_pFieldNameCell->InsertEntry(*pFields);
+            rNameListBox.append_text(*pFields);
     }
 
     CellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
@@ -280,7 +282,8 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
         {
             case COLUMN_ID_FIELDNAME:
             {
-                OUString sFieldSelected = m_pFieldNameCell->GetSelectedEntry();
+                weld::ComboBox& rNameListBox = m_pFieldNameCell->get_widget();
+                OUString sFieldSelected = rNameListBox.get_active_text();
                 bool bEmptySelected = sFieldSelected.isEmpty();
                 if (isNewField())
                 {
@@ -326,8 +329,9 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
             {
                 OSL_ENSURE(!isNewField(), "IndexFieldsControl::SaveModified: why the hell ...!!!");
                 // selected entry
-                sal_Int32 nPos = m_pSortingCell->GetSelectedEntryPos();
-                OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nPos, "IndexFieldsControl::SaveModified: how did you get this selection??");
+                weld::ComboBox& rSortingListBox = m_pSortingCell->get_widget();
+                sal_Int32 nPos = rSortingListBox.get_active();
+                OSL_ENSURE(nPos != -1, "IndexFieldsControl::SaveModified: how did you get this selection??");
                 // adjust the sort flag in the index field description
                 OIndexField& rCurrentField = m_aFields[GetCurRow()];
                 rCurrentField.bSortAscending = (0 == nPos);
@@ -348,14 +352,20 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
         switch (_nColumnId)
         {
             case COLUMN_ID_FIELDNAME:
-                m_pFieldNameCell->SelectEntry(bNewField ? OUString() : aFieldDescription->sFieldName);
-                m_pFieldNameCell->SaveValue();
+            {
+                weld::ComboBox& rNameListBox = m_pFieldNameCell->get_widget();
+                rNameListBox.set_active_text(bNewField ? OUString() : aFieldDescription->sFieldName);
+                rNameListBox.save_value();
                 break;
+            }
 
             case COLUMN_ID_ORDER:
-                m_pSortingCell->SelectEntry(aFieldDescription->bSortAscending ? m_sAscendingText : m_sDescendingText);
-                m_pSortingCell->SaveValue();
+            {
+                weld::ComboBox& rSortingListBox = m_pSortingCell->get_widget();
+                rSortingListBox.set_active_text(aFieldDescription->bSortAscending ? m_sAscendingText : m_sDescendingText);
+                rSortingListBox.save_value();
                 break;
+            }
 
             default:
                 OSL_FAIL("IndexFieldsControl::InitController: invalid column id!");
@@ -364,17 +374,17 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
 
     IMPL_LINK( IndexFieldsControl, OnListEntrySelected, DbaMouseDownListBoxController&, rController, void )
     {
-        ListBoxControl& rListBox = rController.GetListBox();
-        if (!rListBox.IsTravelSelect())
+        weld::ComboBox& rListBox = rController.GetListBox();
+        if (!rListBox.get_popup_shown())
             m_aModifyHdl.Call(*this);
 
-        if (&rListBox != m_pFieldNameCell.get())
+        if (&rListBox != &m_pFieldNameCell->get_widget())
             return;
 
 // a field has been selected
         if (GetCurRow() >= GetRowCount() - 2)
         {   // and we're in one of the last two rows
-            OUString sSelectedEntry = m_pFieldNameCell->GetSelectedEntry();
+            OUString sSelectedEntry = rListBox.get_active_text();
             sal_Int32 nCurrentRow = GetCurRow();
             sal_Int32 rowCount = GetRowCount();
 
