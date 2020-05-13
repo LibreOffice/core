@@ -22,6 +22,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
+#include "messagedialog.hxx"
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -1059,6 +1060,26 @@ public:
     virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override;
 
     virtual ~SalInstanceNotebook() override;
+};
+
+class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog
+{
+private:
+    VclPtr<::MessageDialog> m_xMessageDialog;
+
+public:
+    SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
+                             bool bTakeOwnership);
+
+    virtual void set_primary_text(const OUString& rText) override;
+
+    virtual OUString get_primary_text() const override;
+
+    virtual void set_secondary_text(const OUString& rText) override;
+
+    virtual OUString get_secondary_text() const override;
+
+    virtual weld::Container* weld_message_area() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
