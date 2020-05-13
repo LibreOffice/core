@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 
 class LocaleDataWrapper;
@@ -96,18 +95,6 @@ public:
     const BigInt&   GetLast() const { return mnLast; }
     void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
     const BigInt&   GetSpinSize() const { return mnSpinSize; }
-};
-
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyBox final : public ComboBox, public LongCurrencyFormatter
-{
-public:
-                    LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-
-    void            Modify() override;
-    void            ReformatAll() override;
 };
 
 #endif // INCLUDED_VCL_LONGCURR_HXX
