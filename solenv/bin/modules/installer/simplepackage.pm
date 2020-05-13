@@ -342,7 +342,6 @@ sub create_package
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
             if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
             my $scripthelperfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/mac_install.script";
-            # my $scripthelperrealfilename = $volume_name;
             my $scripthelperrealfilename = $volume_name_classic_app;
 
             # Finding both files in source tree
@@ -362,7 +361,7 @@ sub create_package
             my $scriptfilecontent = installer::files::read_file($scriptfilename);
             my $translationfilecontent = installer::files::read_file($installer::globals::macinstallfilename);
             localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
-            # replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+
             replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
@@ -384,7 +383,7 @@ sub create_package
             $destfile = "$contentsfolder/Info.plist";
             # Replacing variables in Info.plist
             $scriptfilecontent = installer::files::read_file($infoplistfile);
-            # replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+
             replace_one_variable_in_shellscript($scriptfilecontent, $volume_name_classic_app, "FULLAPPPRODUCTNAME" ); # OpenOffice.org Language Pack
             replace_one_variable_in_shellscript($scriptfilecontent, $ENV{'MACOSX_BUNDLE_IDENTIFIER'}, "BUNDLEIDENTIFIER" );
             installer::files::save_file($destfile, $scriptfilecontent);
