@@ -308,7 +308,6 @@ namespace dbaui
                 aSQLException.Message = sMessage;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
-            return xRet;
         }
         catch(const css::io::WrongFormatException &e)
         {
