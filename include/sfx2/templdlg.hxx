@@ -39,7 +39,6 @@ public:
 
 private:
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
-    SfxBindings* mpBindings;
 };
 
 #endif

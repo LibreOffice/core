@@ -72,10 +72,6 @@ private:
     rtl::Reference<SvxColorValueSetData> m_xHelper;
     std::unique_ptr<SvxColorValueSet_docking> xColorSet;
     std::unique_ptr<weld::CustomWeld> xColorSetWin;
-    sal_uInt16          nCols;
-    sal_uInt16          nLines;
-    long                nCount;
-    Size                aItemSize;
 
     void                FillValueSet();
 
