@@ -12,7 +12,7 @@
 #include <vcl/uitest/formattedfielduiobject.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
+#include <vcl/toolkit/combobox.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/tabpage.hxx>
