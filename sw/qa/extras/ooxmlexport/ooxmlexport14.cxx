@@ -678,6 +678,20 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
                 "cs", "Symbol");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128245, "tdf128245.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "//w:num[@w:numId='1']/w:abstractNumId", "val", "1");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='2']/w:abstractNumId", "val", "2");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='3']/w:abstractNumId", "val", "3");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='4']/w:abstractNumId", "val", "1");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='4']/w:lvlOverride[@w:ilvl='0']", "ilvl", "0");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='4']/w:lvlOverride/w:startOverride", "val", "1");
+    assertXPath(pXmlDoc, "//w:num[@w:numId='4']/w:lvlOverride[@w:ilvl='1']", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
