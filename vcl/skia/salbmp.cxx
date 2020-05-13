@@ -841,8 +841,8 @@ void SkiaSalBitmap::verify() const
     if (!mBuffer)
         return;
     // Use mPixelsSize, that describes the size of the actual data.
-    size_t canary = mScanlineSize * mPixelsSize.Height();
-    assert(memcmp(mBuffer.get() + canary, CANARY, sizeof(CANARY)) == 0);
+    assert(memcmp(mBuffer.get() + mScanlineSize * mPixelsSize.Height(), CANARY, sizeof(CANARY))
+           == 0);
 }
 
 #endif
