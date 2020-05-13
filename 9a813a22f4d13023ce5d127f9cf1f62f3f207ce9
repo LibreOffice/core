@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8adb3070_53ae17c0",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:02:22Z",
+      "side": 1,
+      "message": "shouldn\u0027t this file have the appropriate boilerplate from TEMPLATE.SOURCECODE.HEADER (and end in a newline)?",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b489d2f_6c116b85",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:02:22Z",
+      "side": 1,
+      "message": "is org.libreoffice a good module name?  what if we ever need multiple modules controlled by libreoffice.org?  (chosing another name might also impact the choice of naming libreoffice.jar, I guess)",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7fe8db6_7717937f",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:02:22Z",
+      "side": 1,
+      "message": "does this recursviley export all the com.sun.star.* packages?",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 24
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b689827_769d87e2",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:02:22Z",
+      "side": 1,
+      "message": "instead of the duplication, parameterize gb_JavaClassSet_JAVACOMMAND on the --release argument?",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2651602_e4308aad",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:02:22Z",
+      "side": 1,
+      "message": "this compiles every java file twice now, once for 8 and once for 9?",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
