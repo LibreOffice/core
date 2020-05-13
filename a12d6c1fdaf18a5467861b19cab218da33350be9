@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ef6656ee_b155e6bb",
+        "filename": "chart2/source/view/charttypes/NetChart.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-13T16:58:15Z",
+      "side": 1,
+      "message": "implemented this idea here:\nhttps://gerrit.libreoffice.org/c/core/+/94151",
+      "parentUuid": "52f2cc3d_026ce862",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6254fc5d_b69b36c4",
         "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
         "patchSetId": 4
