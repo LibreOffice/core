@@ -7332,7 +7332,6 @@ include/vcl/cairo.hxx
 include/vcl/calendar.hxx
 include/vcl/canvastools.hxx
 include/vcl/checksum.hxx
-include/vcl/combobox.hxx
 include/vcl/commandevent.hxx
 include/vcl/commandinfoprovider.hxx
 include/vcl/ctrl.hxx
@@ -7451,6 +7450,7 @@ include/vcl/threadex.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
 include/vcl/toolkit/button.hxx
+include/vcl/toolkit/combobox.hxx
 include/vcl/toolkit/controllayout.hxx
 include/vcl/toolkit/dialog.hxx
 include/vcl/toolkit/field.hxx
