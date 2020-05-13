@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d90b8ffe_a780b264",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-13T13:06:21Z",
+      "side": 1,
+      "message": "is this paragraph still relevant?",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8adb3070_53ae17c0",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
