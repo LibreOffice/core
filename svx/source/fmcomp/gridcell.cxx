@@ -2730,7 +2730,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
             m_pWindow = VclPtr<ListBoxControl>::Create(pParent);
             sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
             Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
-            SetList(aItems, m_nControlClass == css::form::FormComponentType::COMBOBOX);
+            SetList(aItems, false);
             static_cast<ListBox*>(m_pWindow.get())->SetDropDownLineCount(nLines);
         }   break;
         case css::form::FormComponentType::COMBOBOX:
@@ -2748,7 +2748,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< css::be
             {
                 sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
                 Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
-                SetList(aItems, m_nControlClass == css::form::FormComponentType::COMBOBOX);
+                SetList(aItems, true);
                 static_cast<ComboBox*>(m_pWindow.get())->SetDropDownLineCount(nLines);
             }
             else
