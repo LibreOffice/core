@@ -1251,7 +1251,7 @@ void SAL_CALL ResourceListener::disposing(
 
 
 ControlContainerBase::ControlContainerBase( const Reference< XComponentContext >& rxContext )
-    :ContainerControl_IBase()
+    :ControlContainer_IBase()
     ,m_xContext(rxContext)
     ,mbSizeModified(false)
     ,mbPosModified(false)
