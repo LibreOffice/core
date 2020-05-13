@@ -104,7 +104,7 @@
 
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
-#define COMBO_WIDTH_IN_CHARS        15
+#define COMBO_WIDTH_IN_CHARS        18
 
 // namespaces
 using namespace ::editeng;
