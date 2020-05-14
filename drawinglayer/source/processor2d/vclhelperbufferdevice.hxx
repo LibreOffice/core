@@ -37,9 +37,11 @@ class impBufferDevice
     VclPtr<VirtualDevice> mpMask;
     VclPtr<VirtualDevice> mpAlpha;
     tools::Rectangle maDestPixel;
+    bool mbContentTransparent;
 
 public:
-    impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange);
+    impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange,
+                    bool bContentTransparent = false);
     ~impBufferDevice();
 
     void paint(double fTrans = 0.0);
