@@ -44,10 +44,17 @@ public:
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
     weld::DrawingArea* GetDrawingArea() const { return m_pDrawingArea; }
-    void Invalidate() { m_pDrawingArea->queue_draw(); }
+    void Invalidate()
+    {
+        if (!m_pDrawingArea)
+            return;
+        m_pDrawingArea->queue_draw();
+    }
     static bool IsUpdateMode() { return true; }
     void Invalidate(const tools::Rectangle& rRect)
     {
+        if (!m_pDrawingArea)
+            return;
         m_pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
                                         rRect.GetHeight());
     }
@@ -87,7 +94,12 @@ public:
     {
         m_pDrawingArea->set_size_request(nWidth, nHeight);
     }
-    void queue_resize() { m_pDrawingArea->queue_resize(); }
+    void queue_resize()
+    {
+        if (!m_pDrawingArea)
+            return;
+        m_pDrawingArea->queue_resize();
+    }
     CustomWidgetController()
         : m_pDrawingArea(nullptr)
     {
