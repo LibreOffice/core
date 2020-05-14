@@ -5597,6 +5597,31 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                     FSNS( XML_r, XML_id ), sImageId.toUtf8(),
                                     FSNS( XML_o, XML_title ), "" );
 
+    //export wrap settings
+    if(rFlyFrameFormat && rFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+    {
+        const SwFormatSurround aWrap = rFlyFrameFormat->GetSurround();
+        bool bIsCountur = aWrap.IsContour();
+
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_NONE)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "topAndBottom");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_PARALLEL && !bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_PARALLEL && bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_DYNAMIC && !bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "largest");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_LEFT && !bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "left");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_RIGHT && !bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "right");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_DYNAMIC && bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "largest");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_LEFT && bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "left");
+        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_RIGHT && bIsCountur)
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "right");
+    }
     m_pSerializer->endElementNS( XML_v, XML_shape );
 
     // OLE object definition
