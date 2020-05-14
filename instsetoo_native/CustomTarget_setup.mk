@@ -141,7 +141,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ProgressSize=385,8' \
 		&& echo 'ProgressPositionHigh=30,200' \
 		&& echo 'ProgressSizeHigh=650,12' \
-		&& echo 'ProgressTextBaseline=150' \
+		&& echo 'ProgressTextBaseline=160' \
 		&& echo 'ProgressTextColor=0,0,0' \
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
