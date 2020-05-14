@@ -414,10 +414,8 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf116486, "tdf116486.docx")
@@ -443,9 +441,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
 {
     // anchor of graphic has to be the text in the text frame
     // xray ThisComponent.DrawPage(1).Anchor.Text
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xShape(getShape(2), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText1 = xShape->getAnchor()->getText();
 
     // xray ThisComponent.TextTables(0).getCellByName("A1")

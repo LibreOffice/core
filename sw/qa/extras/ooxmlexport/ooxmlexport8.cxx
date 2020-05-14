@@ -179,9 +179,7 @@ xray graphic.Size
 xray image.AnchorType
 */
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), drawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> shapes(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image;
     shapes->getByIndex(0) >>= image;
@@ -511,10 +509,8 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
 {
     // Floating table wasn't converted to a textframe.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 0.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     // Bottom margin of the first paragraph was too large, causing a layout problem.
     // This was 494.
@@ -677,11 +673,9 @@ DECLARE_OOXMLEXPORT_TEST(testN792778, "n792778.docx")
      * xray ThisComponent.DrawPage(0).getByIndex(0).getByIndex(0).Position.Y ' 11684, the vertical position of the shapes were also wrong
      * xray ThisComponent.DrawPage(0).getByIndex(1).getByIndex(0).Position.Y ' 11684
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<drawing::XShapes> xGroupShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupShape->getCount());
 
     uno::Reference<drawing::XShapes> xInnerGroupShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
@@ -828,9 +822,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo61343, "fdo61343.docx")
 {
     // The problem was that there were a groupshape in the doc, followed by an
     // OLE object, and this lead to a crash.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testToolsLineNumbering, "tools-line-numbering.docx")
@@ -1143,9 +1135,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")
 {
     // The problem was that chart was not getting parsed in writer module.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15240), getProperty<sal_Int32>(xPropertySet, "Width"));

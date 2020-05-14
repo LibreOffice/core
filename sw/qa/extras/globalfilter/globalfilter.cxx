@@ -113,14 +113,11 @@ void Test::testEmbeddedGraphicRoundtrip()
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // Check whether graphic exported well after it was swapped out
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 2, getShapes());
 
         // First image
-        uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -136,7 +133,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         }
 
         // Second Image
-        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+        xImage.set(getShape(2), uno::UNO_QUERY);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -250,11 +247,8 @@ void Test::testImageWithSpecialID()
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // Check whether graphic exported well
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 2, getShapes());
 
         uno::Reference<drawing::XShape> xImage = getShape(1);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
@@ -272,7 +266,7 @@ void Test::testImageWithSpecialID()
         }
 
         // Second Image
-        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+        xImage.set(getShape(2), uno::UNO_QUERY);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
 
         // Check graphic, size
@@ -348,11 +342,8 @@ void Test::testGraphicShape()
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // Check whether graphic exported well
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 2, getShapes());
 
         uno::Reference<drawing::XShape> xImage = lcl_getShape(mxComponent, true);
         CPPUNIT_ASSERT_MESSAGE("Couldn't load the shape/image", xImage.is());
@@ -805,8 +796,6 @@ void Test::testSkipImages()
         }
 
         // Check shapes (images, textboxes, custom shapes)
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShape> xShape;
         uno::Reference<graphic::XGraphic> xGraphic;
         uno::Reference< beans::XPropertySet > XPropSet;
@@ -816,7 +805,7 @@ void Test::testSkipImages()
         bool bHasCustomShapeText = false;
         sal_Int32 nImageCount = 0;
 
-        for (int i = 1; i<= xDraws->getCount(); i++)
+        for (int i = 1; i<= getShapes(); i++)
         {
             xShape = getShape(i);
             XPropSet.set( xShape, uno::UNO_QUERY_THROW );

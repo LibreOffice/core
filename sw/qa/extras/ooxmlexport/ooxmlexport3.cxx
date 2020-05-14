@@ -432,9 +432,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     }
     CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+    CPPUNIT_ASSERT_EQUAL(1, getShapes()); // One groupshape in the doc
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xGroup->getCount()); // 1 rendered bitmap from the original shapes
@@ -634,54 +632,52 @@ DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
 
     // Angle of frame#1 is 135 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame1(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame1, "FillStyle"));
     awt::Gradient aGradient1 = getProperty<awt::Gradient>(xFrame1, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(135 * 10), aGradient1.Angle);
 
     // Angle of frame#2 is 180 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame2, "FillStyle"));
     awt::Gradient aGradient2 = getProperty<awt::Gradient>(xFrame2, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(180 * 10), aGradient2.Angle);
 
     // Angle of frame#3 is  90 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame3(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame3(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame3, "FillStyle"));
     awt::Gradient aGradient3 = getProperty<awt::Gradient>(xFrame3, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 90 * 10), aGradient3.Angle);
 
     // Angle of frame#4 is 225 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame4(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame4(getShape(4), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame4, "FillStyle"));
     awt::Gradient aGradient4 = getProperty<awt::Gradient>(xFrame4, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(225 * 10), aGradient4.Angle);
 
     // Angle of frame#5 is 270 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame5(xIndexAccess->getByIndex(4), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame5(getShape(5), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame5, "FillStyle"));
     awt::Gradient aGradient5 = getProperty<awt::Gradient>(xFrame5, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(270 * 10), aGradient5.Angle);
 
     // Angle of frame#6 is 315 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame6(xIndexAccess->getByIndex(5), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame6(getShape(6), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame6, "FillStyle"));
     awt::Gradient aGradient6 = getProperty<awt::Gradient>(xFrame6, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(315 * 10), aGradient6.Angle);
 
     // Angle of frame#7 is   0 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame7(xIndexAccess->getByIndex(6), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame7(getShape(7), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame7, "FillStyle"));
     awt::Gradient aGradient7 = getProperty<awt::Gradient>(xFrame7, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(  0 * 10), aGradient7.Angle);
 
     // Angle of frame#8 is  45 degrees, but 'aGradient.Angle' holds value in 1/10 of a degree
-    uno::Reference<beans::XPropertySet> xFrame8(xIndexAccess->getByIndex(7), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame8(getShape(8), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame8, "FillStyle"));
     awt::Gradient aGradient8 = getProperty<awt::Gradient>(xFrame8, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);

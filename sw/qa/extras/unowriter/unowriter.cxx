@@ -478,10 +478,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pWrtShell->GetCursor(), grf, &frameSet, &grfSet));
 
     // check fly
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
-    uno::Reference<text::XTextContent> const xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<text::XTextContent> const xShape(getShape(1), uno::UNO_QUERY);
     // anchored at start of body text?
     uno::Reference<text::XText> const xText(pTextDoc->getText());
     uno::Reference<text::XTextRangeCompare> const xTextRC(xText, uno::UNO_QUERY);
@@ -494,7 +492,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     xCursor->setString("");
 
     // there is exactly one fly
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     // select entire body text
     xCursor->gotoStart(true);
@@ -502,7 +500,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     xCursor->setString("");
 
     // there is no fly
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)

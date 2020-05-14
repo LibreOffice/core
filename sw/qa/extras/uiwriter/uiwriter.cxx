@@ -665,10 +665,8 @@ void SwUiWriterTest::testRedlineFrame(char const*const file)
     SwDoc * pDoc(createDoc(file));
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // there is exactly one frame
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     RedlineFlags nMode = pWrtShell->GetRedlineFlags();
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
@@ -677,12 +675,12 @@ void SwUiWriterTest::testRedlineFrame(char const*const file)
     pWrtShell->SetRedlineFlags(nMode & ~RedlineFlags::ShowDelete);
 
     // there is still exactly one frame
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     pWrtShell->SetRedlineFlags(nMode); // show again
 
     // there is still exactly one frame
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 void SwUiWriterTest::testRedlineFrameAtCharStartOutside0()
@@ -1573,10 +1571,8 @@ void SwUiWriterTest::testFdo85554()
     // Save it and load it back.
     reload("writer8", "fdo85554.odt");
 
-    xDrawPageSupplier.set(mxComponent, uno::UNO_QUERY);
-    xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, we lost a shape on export.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
 void SwUiWriterTest::testAutoCorr()

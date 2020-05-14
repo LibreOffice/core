@@ -130,21 +130,17 @@ DECLARE_RTFEXPORT_TEST(testFdo42465, "fdo42465.rtf") { CPPUNIT_ASSERT_EQUAL(3, g
 
 DECLARE_RTFEXPORT_TEST(testFdo45187, "fdo45187.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // There should be two shapes.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // They should be anchored to different paragraphs.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xTextDocument->getText(),
                                                               uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xAnchor0
-        = uno::Reference<text::XTextContent>(xDraws->getByIndex(0), uno::UNO_QUERY_THROW)
-              ->getAnchor();
+        = uno::Reference<text::XTextContent>(getShape(1), uno::UNO_QUERY_THROW)->getAnchor();
     uno::Reference<text::XTextRange> xAnchor1
-        = uno::Reference<text::XTextContent>(xDraws->getByIndex(1), uno::UNO_QUERY_THROW)
-              ->getAnchor();
+        = uno::Reference<text::XTextContent>(getShape(2), uno::UNO_QUERY_THROW)->getAnchor();
     // Was 0 ("starts at the same position"), should be 1 ("starts before")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xTextRangeCompare->compareRegionStarts(xAnchor0, xAnchor1));
 }
@@ -299,11 +295,11 @@ DECLARE_RTFEXPORT_TEST(testFdo44176, "fdo44176.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo39053, "fdo39053.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    int nShapes = getShapes();
+    CPPUNIT_ASSERT_EQUAL(1, nShapes);
     int nAsCharacter = 0;
-    for (int i = 0; i < xDraws->getCount(); ++i)
-        if (getProperty<text::TextContentAnchorType>(xDraws->getByIndex(i), "AnchorType")
+    for (int i = 0; i < nShapes; ++i)
+        if (getProperty<text::TextContentAnchorType>(getShape(i + 1), "AnchorType")
             == text::TextContentAnchorType_AS_CHARACTER)
             nAsCharacter++;
     // The image in binary format was ignored.
@@ -698,20 +694,17 @@ DECLARE_RTFEXPORT_TEST(testShptxtPard, "shptxt-pard.rtf")
 
 DECLARE_RTFEXPORT_TEST(testDoDhgt, "do-dhgt.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    for (int i = 0; i < xDraws->getCount(); ++i)
+    int nShapes = getShapes();
+    CPPUNIT_ASSERT_EQUAL(3, nShapes);
+    for (int i = 0; i < nShapes; ++i)
     {
-        sal_Int32 nFillColor = getProperty<sal_Int32>(xDraws->getByIndex(i), "FillColor");
+        sal_Int32 nFillColor = getProperty<sal_Int32>(getShape(i + 1), "FillColor");
         if (nFillColor == 0xc0504d) // red
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (nFillColor == 0x9bbb59) // green
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (nFillColor == 0x4f81bd) // blue
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
     }
 }
 
@@ -733,9 +726,7 @@ DECLARE_RTFEXPORT_TEST(testLeftmarginDefault, "leftmargin-default.rtf")
 DECLARE_RTFEXPORT_TEST(testDppolyline, "dppolyline.rtf")
 {
     // This was completely ignored, for now, just make sure we have all 4 lines.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo56512, "fdo56512.rtf")
@@ -805,9 +796,7 @@ DECLARE_RTFEXPORT_TEST(testFdo57678, "fdo57678.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo54612, "fdo54612.rtf")
 {
     // \dpptx without a \dppolycount caused a crash.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo58933, "fdo58933.rtf")

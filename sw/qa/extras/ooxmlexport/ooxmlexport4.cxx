@@ -68,10 +68,8 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Check that no shape got lost: a bezier, a line and a text shape.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTextbox, "groupshape-textbox.docx")
@@ -406,12 +404,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
         "rId1");
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    if (xDrawPageSupplier.is())
-    {
-        // If xDrawPage->getCount()==1, then document contains one shape.
-        uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount()); // One shape in the doc
-    }
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
@@ -461,9 +454,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAbi11739, "abi11739.docx")
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 {
     // check there are two objects and they are FrameShapes
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(1)->getShapeType());
     CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), getShape(2)->getShapeType());
 

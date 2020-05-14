@@ -503,10 +503,7 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
      * Another problem tested with this document is the unnecessary loading of the shapes
      * anchored to a discarded header or footer
      */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), drawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN779627b, "n779627b.docx")
@@ -566,12 +563,9 @@ DECLARE_OOXMLIMPORT_TEST(testWordArtResizing, "WordArt.docx")
     /* The Word-Arts and watermarks were getting resized automatically, It was as if they were
        getting glued to the fallback geometry(the sdrObj) and were getting bound to the font size.
        The test-case ensures the original height and width of the word-art is not changed while importing*/
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
-
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10105), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4755), xShape->getSize().Height);
 }
@@ -589,17 +583,15 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
      * xray ThisComponent.DrawPage(1).getByIndex(0).Position 'x: 1272, y: 2286
      * xray ThisComponent.DrawPage(1).getByIndex(0).Size 'width: 10160, height: 0
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2656), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(339), xShape->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3270), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1392), xShape->getSize().Height);
 
-    uno::Reference<drawing::XShapes> xGroupShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(2), uno::UNO_QUERY);
     xShape.set(xGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1272), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2286), xShape->getPosition().Y);
@@ -811,9 +803,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of tables", sal_Int32(1), xTables->getCount() );
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", sal_Int32(0), xDraws->getCount() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", 0, getShapes() );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
 }
