@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f1dcb7a6_b153e843",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "Yes, this still needs doing.",
+      "parentUuid": "d90b8ffe_a780b264",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8adb3070_53ae17c0",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "254fe248_600d715f",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8adb3070_53ae17c0",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b489d2f_6c116b85",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
@@ -47,6 +83,30 @@
       "writtenOn": "2020-05-13T13:02:22Z",
       "side": 1,
       "message": "is org.libreoffice a good module name?  what if we ever need multiple modules controlled by libreoffice.org?  (chosing another name might also impact the choice of naming libreoffice.jar, I guess)",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b3fdca5_5f61b753",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "Good question :)\n\nI can\u0027t think of a better module name, but I\u0027m open to suggestions.",
+      "parentUuid": "3b489d2f_6c116b85",
       "range": {
         "startLine": 1,
         "startChar": 7,
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "121a29d2_e25df44d",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "So I checked this, and no, it does not recursively export all the com.sun.star.* packages.\nEach package has to be mentioned explicitly here (see https://stackoverflow.com/a/46502683 )\n\nSo now I went through all the folders in libreoffice.jar and added a package name for each folder. Hope this covers all packages.",
+      "parentUuid": "d7fe8db6_7717937f",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 24
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b689827_769d87e2",
         "filename": "solenv/gbuild/JavaClassSet.mk",
         "patchSetId": 7
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "73bb5076_4e60fb00",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "Do you have an example how that could look like?\nI have a hard time understanding how these makefiles work.",
+      "parentUuid": "8b689827_769d87e2",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2651602_e4308aad",
         "filename": "solenv/gbuild/JavaClassSet.mk",
         "patchSetId": 7
@@ -110,6 +212,24 @@
       "writtenOn": "2020-05-13T13:02:22Z",
       "side": 1,
       "message": "this compiles every java file twice now, once for 8 and once for 9?",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6af2cb34_1a241275",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-14T07:12:16Z",
+      "side": 1,
+      "message": "Yes, this is just in a draft state.\nI\u0027m not sure if this is the way to go.\n\nMaybe there is a better solution?",
+      "parentUuid": "a2651602_e4308aad",
       "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
