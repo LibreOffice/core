@@ -44,6 +44,7 @@ protected:
     }
 };
 
+
 DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
 {
     uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
@@ -96,6 +97,34 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133065, "tdf133065.odt")
+{
+    auto pxmldoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pxmldoc);
+    OUString aVal;
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("left") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[4]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[4]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("right") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[6]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[6]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("largest") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[10]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("topAndBottom") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
