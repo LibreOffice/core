@@ -289,7 +289,8 @@ void GraphicTest::testSwapping()
 
     CPPUNIT_ASSERT_EQUAL(120L, aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(100L, aGraphic.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(BitmapChecksum(0xF5331397837B58EB), aGraphic.GetChecksum());
+
+    BitmapChecksum aChecksumBeforeSwapping = aGraphic.GetChecksum();
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(319), aGraphic.GetGfxLink().GetDataSize());
 
@@ -330,7 +331,7 @@ void GraphicTest::testSwapping()
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->ImplIsSwapOut());
 
-    CPPUNIT_ASSERT_EQUAL(BitmapChecksum(0xF5331397837B58EB), aGraphic.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(aChecksumBeforeSwapping, aGraphic.GetChecksum());
 
     // File shouldn't be available anymore
     CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
