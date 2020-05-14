@@ -18,7 +18,8 @@
  */
 
 #include <vcl/toolbox.hxx>
-
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/linectrl.hxx>
@@ -45,7 +46,6 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 {
 }
 
-
 void SvxLineWidthToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -71,10 +71,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
             {
                 DBG_ASSERT( dynamic_cast<const XLineWidthItem*>( pState) !=  nullptr, "wrong ItemType" );
 
-                // Core-Unit handed over to MetricField
-                // Should not happen in CreateItemWin ()!
-                // CD!!! GetCoreMetric();
-                pFld->SetCoreUnit( MapUnit::Map100thMM );
+                pFld->SetDestCoreUnit(GetCoreMetric());
 
                 pFld->Update( static_cast<const XLineWidthItem*>(pState) );
             }
@@ -82,6 +79,14 @@ void SvxLineWidthToolBoxControl::StateChanged(
                 pFld->Update( nullptr );
         }
     }
+}
+
+MapUnit SvxLineWidthToolBoxControl::GetCoreMetric()
+{
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    SfxItemPool& rPool = pSh ? pSh->GetPool() : SfxGetpApp()->GetPool();
+    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_LINE_WIDTH);
+    return rPool.GetMetric(nWhich);
 }
 
 VclPtr<InterimItemWindow> SvxLineWidthToolBoxControl::CreateItemWindow(vcl::Window *pParent)

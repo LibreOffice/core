@@ -52,7 +52,7 @@ class SvxMetricField final : public InterimItemWindow
 private:
     std::unique_ptr<weld::MetricSpinButton> m_xWidget;
     int             nCurValue;
-    MapUnit         ePoolUnit;
+    MapUnit         eDestPoolUnit;
     FieldUnit       eDlgUnit;
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
@@ -73,7 +73,7 @@ public:
     virtual ~SvxMetricField() override;
 
     void            Update( const XLineWidthItem* pItem );
-    void            SetCoreUnit( MapUnit eUnit );
+    void            SetDestCoreUnit( MapUnit eUnit );
     void            RefreshDlgUnit();
 
     void            set_sensitive(bool bSensitive);
