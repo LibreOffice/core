@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd21a6f_455adddc",
+        "filename": "sw/uiconfig/swriter/ui/optgeneralpage.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-05-14T06:43:11Z",
+      "side": 1,
+      "message": "Row spacing has nothing to do with size of controls.",
+      "range": {
+        "startLine": 41,
+        "startChar": 45,
+        "endLine": 41,
+        "endChar": 46
+      },
+      "revId": "cb9b3b7958de203d772bd75d9e03fadb0f643a58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
