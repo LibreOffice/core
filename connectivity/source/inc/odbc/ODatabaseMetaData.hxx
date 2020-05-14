@@ -35,7 +35,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaData final :
             public ODatabaseMetaDataBase
         {
-            SQLHANDLE       m_aConnectionHandle;
+            SQLHDBC m_aDatabaseMetadataDbcODBCHandle;
             OConnection*    m_pConnection;
             bool            m_bUseCatalog;
 

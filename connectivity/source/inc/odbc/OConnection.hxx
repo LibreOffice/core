@@ -58,7 +58,7 @@ namespace connectivity
                                             //  driver object
 
             SQLHANDLE       m_aConnectionHandle;
-            SQLHANDLE       m_pDriverHandleCopy;    // performance reason
+            SQLHANDLE       m_aEnvODBCHandleCopy;    // performance reason
             sal_Int32       m_nStatementCount;
             bool            m_bClosed;
             bool            m_bUseCatalog;  // should we use the catalog on filebased databases

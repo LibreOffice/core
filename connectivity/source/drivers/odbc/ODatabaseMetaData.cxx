@@ -37,7 +37,7 @@ using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)
                         : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
-                        ,m_aConnectionHandle(_pHandle)
+                        ,m_aDatabaseMetadataDbcODBCHandle(_pHandle)
                         ,m_pConnection(_pCon)
                         ,m_bUseCatalog(true)
 {
@@ -105,7 +105,7 @@ OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     OUString aVal;
     if ( m_bUseCatalog )
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
 
     return aVal;
 }
@@ -246,84 +246,84 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_BINARY_LITERAL_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_BINARY_LITERAL_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_ROW_SIZE,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CATALOG_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_CATALOG_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CHAR_LITERAL_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_CHAR_LITERAL_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMN_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMN_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_INDEX,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMNS_IN_INDEX,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CURSOR_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_CURSOR_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_DRIVER_CONNECTIONS/*SQL_ACTIVE_CONNECTIONS*/,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_DRIVER_CONNECTIONS/*SQL_ACTIVE_CONNECTIONS*/,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_TABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMNS_IN_TABLE,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_STATEMENT_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_STATEMENT_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLE_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_TABLE_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
     return nValue;
 }
 
@@ -450,63 +450,63 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 {
     OUString aVal;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_ROW_SIZE_INCLUDES_LONG,aVal,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_ROW_SIZE_INCLUDES_LONG,aVal,*this,m_pConnection->getTextEncoding());
     return aVal.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_LOWER;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_LOWER;
 }
 
 bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_UPPER;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_UPPER;
 }
 
 bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ALTER_TABLE,nValue,*this);
     return (nValue & SQL_AT_ADD_COLUMN) == SQL_AT_ADD_COLUMN;
 }
 
 bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ALTER_TABLE,nValue,*this);
     return  ((nValue & SQL_AT_DROP_COLUMN)          == SQL_AT_DROP_COLUMN)          ||
             ((nValue & SQL_AT_DROP_COLUMN_CASCADE)  == SQL_AT_DROP_COLUMN_CASCADE)  ||
             ((nValue & SQL_AT_DROP_COLUMN_RESTRICT) == SQL_AT_DROP_COLUMN_RESTRICT);
@@ -515,14 +515,14 @@ bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_INDEX_SIZE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_INDEX_SIZE,nValue,*this);
     return nValue;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NON_NULLABLE_COLUMNS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NON_NULLABLE_COLUMNS,nValue,*this);
     return nValue == SQL_NNC_NON_NULL;
 }
 
@@ -530,28 +530,28 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  )
 {
     OUString aVal;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     OUString aVal;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_QUOTE_CHAR,aVal,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_IDENTIFIER_QUOTE_CHAR,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  )
 {
     OUString aVal;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SPECIAL_CHARACTERS,aVal,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SPECIAL_CHARACTERS,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
     return nValue != SQL_CN_NONE;
 }
 
@@ -559,126 +559,126 @@ bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SQLUSMALLINT nValue=0;
     if ( m_bUseCatalog )
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_LOCATION,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_LOCATION,nValue,*this);
     return nValue == SQL_CL_START;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DDL_IGNORE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DDL_COMMIT;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_DML;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue == SQL_TC_ALL;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POS_DELETE) == SQL_CA1_POS_DELETE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POS_UPDATE) == SQL_CA1_POS_UPDATE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE || nValue == SQL_CB_CLOSE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CURSOR_COMMIT_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CURSOR_ROLLBACK_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_PRESERVE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_ISOLATION_OPTION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_ISOLATION_OPTION,nValue,*this);
     return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
 }
 
 bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_DML_STATEMENTS) == SQL_SU_DML_STATEMENTS;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return static_cast<bool>(nValue & SQL_SC_SQL92_FULL);
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return static_cast<bool>(nValue &SQL_SC_SQL92_ENTRY);
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 {
     OUString aStr;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_INTEGRITY,aStr,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_INTEGRITY,aStr,*this,m_pConnection->getTextEncoding());
     return aStr.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_INDEX_DEFINITION) == SQL_SU_INDEX_DEFINITION;
 }
 
 bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_TABLE_DEFINITION) == SQL_SU_TABLE_DEFINITION;
 }
 
@@ -686,7 +686,7 @@ bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_TABLE_DEFINITION) == SQL_CU_TABLE_DEFINITION;
 }
 
@@ -694,7 +694,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
 
@@ -702,14 +702,14 @@ bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_DML_STATEMENTS) == SQL_CU_DML_STATEMENTS;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_OJ_CAPABILITIES,nValue,*this);
     return ((nValue & (SQL_OJ_FULL|SQL_OJ_LEFT|SQL_OJ_RIGHT|SQL_OJ_NESTED|SQL_OJ_NOT_ORDERED|SQL_OJ_ALL_COMPARISON_OPS|SQL_OJ_INNER)) != 0);
 }
 
@@ -732,56 +732,56 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
 sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CONCURRENT_ACTIVITIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_CONCURRENT_ACTIVITIES,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_PROCEDURE_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_PROCEDURE_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_SCHEMA_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_SCHEMA_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_CAPABLE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TXN_CAPABLE,nValue,*this);
     return nValue != SQL_TC_NONE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ACCESSIBLE_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_PROCEDURES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nValue,*this);
     return (nValue & SQL_CA1_POSITIONED_UPDATE) == SQL_CA1_POSITIONED_UPDATE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ACCESSIBLE_TABLES,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ACCESSIBLE_TABLES,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
@@ -793,42 +793,42 @@ sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  )
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_FILE_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_FILE_USAGE,nValue,*this);
     return nValue == SQL_FILE_CATALOG;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_FILE_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_FILE_USAGE,nValue,*this);
     return nValue == SQL_FILE_TABLE;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_FUNCTIONS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_FUNCTIONS,nValue,*this);
     return (nValue & SQL_FN_CVT_CONVERT) == SQL_FN_CVT_CONVERT;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONCAT_NULL_BEHAVIOR,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONCAT_NULL_BEHAVIOR,nValue,*this);
     return nValue == SQL_CB_NULL;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_COLUMN_ALIAS,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_COLUMN_ALIAS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
     return nValue != SQL_CN_NONE;
 }
 
@@ -841,84 +841,84 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
     switch(fromType)
     {
         case DataType::BIT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BIT,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_BIT,nValue,*this);
             break;
         case DataType::TINYINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TINYINT,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_TINYINT,nValue,*this);
             break;
         case DataType::SMALLINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_SMALLINT,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_SMALLINT,nValue,*this);
             break;
         case DataType::INTEGER:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_INTEGER,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_INTEGER,nValue,*this);
             break;
         case DataType::BIGINT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BIGINT,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_BIGINT,nValue,*this);
             break;
         case DataType::FLOAT:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_FLOAT,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_FLOAT,nValue,*this);
             break;
         case DataType::REAL:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_REAL,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_REAL,nValue,*this);
             break;
         case DataType::DOUBLE:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DOUBLE,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_DOUBLE,nValue,*this);
             break;
         case DataType::NUMERIC:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_NUMERIC,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_NUMERIC,nValue,*this);
             break;
         case DataType::DECIMAL:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DECIMAL,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_DECIMAL,nValue,*this);
             break;
         case DataType::CHAR:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_CHAR,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_CHAR,nValue,*this);
             break;
         case DataType::VARCHAR:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARCHAR,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_VARCHAR,nValue,*this);
             break;
         case DataType::LONGVARCHAR:
         case DataType::CLOB:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARCHAR,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_LONGVARCHAR,nValue,*this);
             break;
         case DataType::DATE:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_DATE,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_DATE,nValue,*this);
             break;
         case DataType::TIME:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TIME,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_TIME,nValue,*this);
             break;
         case DataType::TIMESTAMP:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_TIMESTAMP,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_TIMESTAMP,nValue,*this);
             break;
         case DataType::BINARY:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_BINARY,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_BINARY,nValue,*this);
             break;
         case DataType::VARBINARY:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARBINARY,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_VARBINARY,nValue,*this);
             break;
         case DataType::LONGVARBINARY:
         case DataType::BLOB:
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARBINARY,nValue,*this);
+            OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CONVERT_LONGVARBINARY,nValue,*this);
             break;
         case DataType::SQLNULL:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::OTHER:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::OBJECT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::DISTINCT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::STRUCT:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::ARRAY:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::REF:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
     }
     bool bConvert = false;
@@ -991,126 +991,126 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_EXPRESSIONS_IN_ORDERBY,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_EXPRESSIONS_IN_ORDERBY,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_GROUP_BY,nValue,*this);
     return nValue != SQL_GB_NOT_SUPPORTED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_GROUP_BY,nValue,*this);
     return nValue != SQL_GB_GROUP_BY_CONTAINS_SELECT;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_GROUP_BY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_GROUP_BY,nValue,*this);
     return nValue == SQL_GB_NO_RELATION;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULTIPLE_ACTIVE_TXN,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MULTIPLE_ACTIVE_TXN,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MULT_RESULT_SETS,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MULT_RESULT_SETS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_LIKE_ESCAPE_CLAUSE,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_LIKE_ESCAPE_CLAUSE,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'Y';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ORDER_BY_COLUMNS_IN_SELECT,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ORDER_BY_COLUMNS_IN_SELECT,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.toChar() == 'N';
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_UNION,nValue,*this);
     return (nValue & SQL_U_UNION) == SQL_U_UNION;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_UNION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_UNION,nValue,*this);
     return (nValue & SQL_U_UNION_ALL) == SQL_U_UNION_ALL;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
 
 bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
     return nValue == SQL_IC_MIXED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_END;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_START;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_HIGH;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NULL_COLLATION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NULL_COLLATION,nValue,*this);
     return nValue == SQL_NC_LOW;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_PROCEDURE_INVOCATION) == SQL_SU_PROCEDURE_INVOCATION;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_PRIVILEGE_DEFINITION) == SQL_SU_PRIVILEGE_DEFINITION;
 }
 
@@ -1118,7 +1118,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PROCEDURE_INVOCATION) == SQL_CU_PROCEDURE_INVOCATION;
 }
 
@@ -1126,56 +1126,56 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
-        OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+        OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_CORRELATED_SUBQUERIES) == SQL_SQ_CORRELATED_SUBQUERIES;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_COMPARISON) == SQL_SQ_COMPARISON;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_EXISTS) == SQL_SQ_EXISTS;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_IN) == SQL_SQ_IN;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SUBQUERIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SUBQUERIES,nValue,*this);
     return (nValue & SQL_SQ_QUANTIFIED) == SQL_SQ_QUANTIFIED;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return static_cast<bool>(nValue & SQL_SC_SQL92_INTERMEDIATE);
 }
 
 OUString ODatabaseMetaData::getURLImpl()
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DATA_SOURCE_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
@@ -1192,56 +1192,56 @@ OUString SAL_CALL ODatabaseMetaData::getURL(  )
 OUString SAL_CALL ODatabaseMetaData::getUserName(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_USER_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_USER_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverName(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DRIVER_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DRIVER_ODBC_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DBMS_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DBMS_NAME,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_PROCEDURE_TERM,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_PROCEDURE_TERM,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_TERM,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SCHEMA_TERM,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) try
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.copy(0,aValue.indexOf('.')).toInt32();
 }
 catch (const SQLException &)
@@ -1253,7 +1253,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  )
 {
     SQLUINTEGER nValue;
     sal_Int32 nValueTranslated;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DEFAULT_TXN_ISOLATION,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DEFAULT_TXN_ISOLATION,nValue,*this);
     switch(nValue)
     {
         case SQL_TXN_READ_UNCOMMITTED:
@@ -1277,7 +1277,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  )
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) try
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.copy(0,aValue.lastIndexOf('.')).toInt32();
 }
 catch (const SQLException &)
@@ -1288,14 +1288,14 @@ catch (const SQLException &)
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_KEYWORDS,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_KEYWORDS,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  )
 {
     OUString aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SEARCH_PATTERN_ESCAPE,aValue,*this,m_pConnection->getTextEncoding());
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SEARCH_PATTERN_ESCAPE,aValue,*this,m_pConnection->getTextEncoding());
     return aValue;
 }
 
@@ -1303,7 +1303,7 @@ OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
 {
     SQLUINTEGER nValue;
     OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_STRING_FUNCTIONS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_STRING_FUNCTIONS,nValue,*this);
     if(nValue & SQL_FN_STR_ASCII)
         aValue.append("ASCII,");
     if(nValue & SQL_FN_STR_BIT_LENGTH)
@@ -1364,7 +1364,7 @@ OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
 {
     SQLUINTEGER nValue;
     OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TIMEDATE_FUNCTIONS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_TIMEDATE_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_TD_CURRENT_DATE)
         aValue.append("CURRENT_DATE,");
@@ -1419,7 +1419,7 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
 {
     SQLUINTEGER nValue;
     OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SYSTEM_FUNCTIONS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_SYSTEM_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_SYS_DBNAME)
         aValue.append("DBNAME,");
@@ -1438,7 +1438,7 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
 {
     SQLUINTEGER nValue;
     OUStringBuffer aValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NUMERIC_FUNCTIONS,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_NUMERIC_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_NUM_ABS)
         aValue.append("ABS,");
@@ -1499,7 +1499,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     SQLUINTEGER nValue;
     // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",
                 "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
@@ -1510,7 +1510,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     SQLUINTEGER nValue;
     // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",
                 "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
@@ -1521,7 +1521,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     SQLUINTEGER nValue;
     // SQL_ODBC_SQL_CONFORMANCE is deprecated in ODBC 3.x, but there does not seem te be any equivalent.
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
     SAL_WARN_IF(! (nValue == SQL_OSC_MINIMUM || nValue == SQL_OSC_CORE || nValue == SQL_OSC_EXTENDED),
                 "connectivity.odbc",
                 "SQL_ODBC_SQL_CONFORMANCE is neither MINIMAL nor CORE nor EXTENDED");
@@ -1531,7 +1531,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  )
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_OJ_CAPABILITIES,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_OJ_CAPABILITIES,nValue,*this);
     return (nValue & SQL_OJ_FULL) == SQL_OJ_FULL;
 }
 
@@ -1543,35 +1543,35 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  )
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_GROUP_BY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMNS_IN_GROUP_BY,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_ORDER_BY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMNS_IN_ORDER_BY,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_COLUMNS_IN_SELECT,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_COLUMNS_IN_SELECT,nValue,*this);
     return nValue;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  )
 {
     SQLUSMALLINT nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_USER_NAME_LEN,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_MAX_USER_NAME_LEN,nValue,*this);
     return nValue;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType )
 {
     SQLUINTEGER nValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_SENSITIVITY,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,SQL_CURSOR_SENSITIVITY,nValue,*this);
     return (nValue & static_cast<SQLUINTEGER>(setType)) == static_cast<SQLUINTEGER>(setType);
 }
 
@@ -1593,7 +1593,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 set
             break;
     }
 
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,nAskFor,nValue,*this);
     bool bRet = false;
     switch(concurrency)
     {
@@ -1625,7 +1625,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType )
             break;
     }
 
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_UPDATES) == SQL_CA2_SENSITIVITY_UPDATES;
 }
 
@@ -1647,7 +1647,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType )
             break;
     }
 
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS;
 }
 
@@ -1669,7 +1669,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType )
             break;
     }
 
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,nAskFor,nValue,*this);
+    OTools::GetInfo(m_pConnection,m_aDatabaseMetadataDbcODBCHandle,nAskFor,nValue,*this);
     return (nValue & SQL_CA2_SENSITIVITY_ADDITIONS) == SQL_CA2_SENSITIVITY_ADDITIONS;
 }
 

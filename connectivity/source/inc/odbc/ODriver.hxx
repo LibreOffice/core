@@ -46,7 +46,7 @@ namespace connectivity
                                                         //  for this Driver
 
             css::uno::Reference< css::lang::XMultiServiceFactory > m_xORB;
-            SQLHANDLE   m_pDriverHandle;
+            SQLHENV m_aEnvODBCHandle;
 
             virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) = 0;
 

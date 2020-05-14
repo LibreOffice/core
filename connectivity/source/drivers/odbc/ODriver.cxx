@@ -34,7 +34,7 @@ using namespace com::sun::star::sdbc;
 ODBCDriver::ODBCDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
     :ODriver_BASE(m_aMutex)
     ,m_xORB(_rxFactory)
-    ,m_pDriverHandle(SQL_NULL_HANDLE)
+    ,m_aEnvODBCHandle(SQL_NULL_HANDLE)
 {
 }
 
@@ -93,13 +93,13 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
     if ( ! acceptsURL(url) )
         return nullptr;
 
-    if(!m_pDriverHandle)
+    if(!m_aEnvODBCHandle)
     {
         OUString aPath;
         if(!EnvironmentHandle(aPath))
             throw SQLException(aPath,*this,OUString(),1000,Any());
     }
-    OConnection* pCon = new OConnection(m_pDriverHandle,this);
+    OConnection* pCon = new OConnection(m_aEnvODBCHandle,this);
     Reference< XConnection > xCon = pCon;
     pCon->Construct(url,info);
     m_xConnections.push_back(WeakReferenceHelper(*pCon));

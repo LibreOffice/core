@@ -268,7 +268,7 @@ css::uno::Reference< css::uno::XInterface > ODBCDriver_CreateInstance(const css:
 SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
 {
     // Is (for this instance) already an Environment made?
-    if (!m_pDriverHandle)
+    if (!m_aEnvODBCHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;
         // allocate Environment
@@ -278,12 +278,12 @@ SQLHANDLE ORealOdbcDriver::EnvironmentHandle(OUString &_rPath)
             return SQL_NULL_HANDLE;
 
         // Save in global Structure
-        m_pDriverHandle = h;
+        m_aEnvODBCHandle = h;
         N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), SQL_IS_UINTEGER);
         //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
     }
 
-    return m_pDriverHandle;
+    return m_aEnvODBCHandle;
 }
 
 

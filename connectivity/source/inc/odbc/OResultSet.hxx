@@ -133,7 +133,7 @@ namespace connectivity
             TDataRow                                    m_aRow;
             bool                                        m_bFetchDataInOrder;
             SQLHANDLE                                   m_aStatementHandle;
-            SQLHANDLE                                   m_aConnectionHandle;
+            SQLHDBC                                     m_aConnectionDbcODBCHandle;
             OStatement_Base*                            m_pStatement;
             std::unique_ptr<OSkipDeletedSet>            m_pSkipDeletedSet;
             css::uno::Reference< css::uno::XInterface>    m_xStatement;

@@ -82,7 +82,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
                         ,m_bFetchDataInOrder(true)
                         ,m_aStatementHandle(_pStatementHandle)
-                        ,m_aConnectionHandle(pStmt->getConnectionHandle())
+                        ,m_aConnectionDbcODBCHandle(pStmt->getConnectionHandle())
                         ,m_pStatement(pStmt)
                         ,m_xStatement(*pStmt)
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
@@ -129,7 +129,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         // If !SQL_GD_ANY_ORDER, cache the whole row so that callers can access columns in any order.
         // In other words, isolate them from ODBC restrictions.
         // TODO: we assume SQL_GD_BLOCK, unless fetchSize is 1
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,nullptr);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionDbcODBCHandle,SQL_GETDATA_EXTENSIONS,nValueLen,nullptr);
         m_bFetchDataInOrder = ((SQL_GD_ANY_ORDER & nValueLen) != SQL_GD_ANY_ORDER);
     }
     catch(const Exception&)
@@ -145,7 +145,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         if ( getOdbcFunction(ODBC3SQLFunctionId::GetFunctions) )
         {
             SQLUSMALLINT nSupported = 0;
-            m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
+            m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionDbcODBCHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
         }
     }
     catch(const Exception&)
@@ -1317,7 +1317,7 @@ OUString OResultSet::getCursorName() const
 
 bool  OResultSet::isBookmarkable() const
 {
-    if(!m_aConnectionHandle)
+    if(!m_aConnectionDbcODBCHandle)
         return false;
 
     const SQLULEN nCursorType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
@@ -1330,13 +1330,13 @@ bool  OResultSet::isBookmarkable() const
         case SQL_CURSOR_FORWARD_ONLY:
             return false;
         case SQL_CURSOR_STATIC:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionDbcODBCHandle,SQL_STATIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         case SQL_CURSOR_KEYSET_DRIVEN:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,nullptr);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionDbcODBCHandle,SQL_KEYSET_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         case SQL_CURSOR_DYNAMIC:
-            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
+            OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionDbcODBCHandle,SQL_DYNAMIC_CURSOR_ATTRIBUTES1,nAttr,nullptr);
             break;
         }
     }

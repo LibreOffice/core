@@ -44,7 +44,7 @@ using namespace com::sun::star::sdbc;
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          :m_xDriver(_pDriver)
                          ,m_aConnectionHandle(nullptr)
-                         ,m_pDriverHandleCopy(_pDriverHandle)
+                         ,m_aEnvODBCHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
                          ,m_bClosed(false)
                          ,m_bUseCatalog(false)
@@ -168,7 +168,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     m_sURL  = url;
     setConnectionInfo(info);
 
-    N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
+    N3SQLAllocHandle(SQL_HANDLE_DBC,m_aEnvODBCHandleCopy,&m_aConnectionHandle);
     if(m_aConnectionHandle == SQL_NULL_HANDLE)
         throw SQLException();
 
@@ -501,7 +501,7 @@ SQLHANDLE OConnection::createStatementHandle()
         sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
         if(nMaxStatements && nMaxStatements <= m_nStatementCount)
         {
-            rtl::Reference xConnection(new OConnection(m_pDriverHandleCopy,m_xDriver.get()));
+            rtl::Reference xConnection(new OConnection(m_aEnvODBCHandleCopy,m_xDriver.get()));
             xConnection->Construct(m_sURL,getConnectionInfo());
             xConnectionTemp = xConnection;
             bNew = true;
@@ -511,7 +511,7 @@ SQLHANDLE OConnection::createStatementHandle()
     {
     }
 
-    SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
+    SQLHSTMT aStatementHandle = SQL_NULL_HANDLE;
     N3SQLAllocHandle(SQL_HANDLE_STMT,xConnectionTemp->getConnection(),&aStatementHandle);
     ++m_nStatementCount;
     if(bNew)
