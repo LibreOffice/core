@@ -1599,12 +1599,12 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
     // size
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem)) {
-        nSizX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nSizX=static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
         bChgSiz=true;
         bChgWdh=true;
     }
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem)) {
-        nSizY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nSizY=static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
         bChgSiz=true;
         bChgHgt=true;
     }
