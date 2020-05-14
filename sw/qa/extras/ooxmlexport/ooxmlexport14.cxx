@@ -75,6 +75,79 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
 }
 
+<<<<<<< HEAD   (79e289 tdf#130802 SwTextBoxHelper::syncFlyFrameAttr: fix dragging)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133065, "tdf133065.odt")
+{
+    auto pxmldoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pxmldoc);
+    OUString aVal;
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[3]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("left") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[8]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("right") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[12]/w:r[2]/w:object/v:shape/w10:wrap", "side");
+    CPPUNIT_ASSERT(aVal.indexOf("largest") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[20]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("topAndBottom") > -1);
+
+    aVal = getXPath(pxmldoc, "/w:document/w:body/w:p[24]/w:r[2]/w:object/v:shape/w10:wrap", "type");
+    CPPUNIT_ASSERT(aVal.indexOf("square") > -1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), getProperty<sal_Int32>(getRun(getParagraph(2), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(double(16), getProperty<double>(getRun(getParagraph(2), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(getParagraph(2), 1), "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Candara"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontNameAsian"));
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
+{
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "l", "4910");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "t", "27183");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "r", "57638");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:srcRect", "b", "48360");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
+{
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "eastAsia", "Arial Unicode MS");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "ascii", "Candara");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "hAnsi", "Candara");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:color", "val", "1F497D");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:sz", "val", "32");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:szCs", "val", "32");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:u", "val", "single");
+}
+>>>>>>> CHANGE (e0ba88 tdf#133065 tdf#133602 DOCX export: fix OLE wrap regression)
 
 DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
 {
