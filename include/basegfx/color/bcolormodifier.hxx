@@ -56,7 +56,7 @@ namespace basegfx
         All usages should handle instances of BColorModifier encapsulated
         into these shared pointers.
     */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier
     {
     private:
         BColorModifier(const BColorModifier&) = delete;

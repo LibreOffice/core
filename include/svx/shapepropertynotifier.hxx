@@ -46,7 +46,7 @@ namespace svx
 
     /** a provider for a property value
     */
-    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) IPropertyValueProvider
+    class SVXCORE_DLLPUBLIC IPropertyValueProvider
     {
     public:
         /** returns the name of the property which this provider is responsible for
