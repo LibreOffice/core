@@ -873,10 +873,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf79639, "tdf79639.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 0, floating table in header wasn't converted to a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")

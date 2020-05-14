@@ -33,25 +33,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Cut", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
@@ -61,23 +58,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
     dispatchCommand(mxComponent, ".uno:Undo", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)

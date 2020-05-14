@@ -102,9 +102,7 @@ protected:
 
 DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xGroup->getCount()); // background, 3 rectangles and an arrow in the group
@@ -271,9 +269,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70457, "fdo70457.docx")
     // It must be imported as a XShape object with the proper rotation value
 
     // Check: there is one shape in the doc
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     // Check: the angle of the shape is 45º
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4500), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
@@ -567,9 +563,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
 DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx" )
 {
     // fdo#74652 Check there is no shape added to the doc during import
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74401, "fdo74401.docx")
@@ -878,11 +872,8 @@ DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf8255, "tdf8255.docx")
 {
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1: a full-page-wide multi-page floating table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87460, "tdf87460.docx")
@@ -1157,11 +1148,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
 {
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1: a multi-page floating table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);

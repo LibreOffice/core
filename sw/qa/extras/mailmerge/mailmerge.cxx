@@ -392,9 +392,7 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     executeMailMerge();
     // The document was created by LO version which didn't write out the default value for line color
     // (see XMLGraphicsDefaultStyle::SetDefaults()).
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());

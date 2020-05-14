@@ -309,10 +309,8 @@ DECLARE_WW8EXPORT_TEST(testTdf99197_defaultLTR, "tdf99197_defaultLTR.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf107773, "tdf107773.doc")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     // tdf#80635 - transfer the float orientation to the table.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
