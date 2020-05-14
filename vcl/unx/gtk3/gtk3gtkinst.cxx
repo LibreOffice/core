@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <deque>
 #include <stack>
 #include <string.h>
 #include <osl/process.h>
@@ -397,25 +400,24 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
         return true;
 
     bool bRet = false;
-    std::stack<GdkEvent*> aEvents;
+    std::deque<GdkEvent*> aEvents;
     GdkEvent *pEvent = nullptr;
     while ((pEvent = gdk_event_get()))
     {
-        aEvents.push(pEvent);
+        aEvents.push_back(pEvent);
         VclInputFlags nEventType = categorizeEvent(pEvent);
         if ( (nEventType & nType) || ( nEventType == VclInputFlags::NONE && (nType & VclInputFlags::OTHER) ) )
         {
             bRet = true;
-            break;
         }
     }
 
     while (!aEvents.empty())
     {
-        pEvent = aEvents.top();
+        pEvent = aEvents.front();
         gdk_event_put(pEvent);
         gdk_event_free(pEvent);
-        aEvents.pop();
+        aEvents.pop_front();
     }
     return bRet;
 }
