@@ -31,6 +31,11 @@
 #include <algorithm>
 #include <memory>
 
+#ifdef DBG_UTIL
+#include <tools/stream.hxx>
+#include <vcl/graphicfilter.hxx>
+#endif
+
 Bitmap::Bitmap()
 {
 }
@@ -110,8 +115,36 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     }
 }
 
+#ifdef DBG_UTIL
+
+namespace
+{
+void savePNG(const OUString& sWhere, const Bitmap& rBmp)
+{
+    SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    rFilter.compressAsPNG(rBmp, aStream);
+}
+}
+
+#endif
+
 Bitmap::~Bitmap()
 {
+#ifdef DBG_UTIL
+    static volatile bool save(false);
+    if (save)
+    {
+        save = false;
+        savePNG(
+#ifdef _WIN32
+            "c:/bmpDump.png",
+#else
+            "~/bmpDump.png",
+#endif
+            *this);
+    }
+#endif
 }
 
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
