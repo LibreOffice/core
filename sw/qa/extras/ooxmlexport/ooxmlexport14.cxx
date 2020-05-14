@@ -44,6 +44,14 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133035, "tdf133035.docx")
+{
+    auto pxml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pxml);
+    OUString aXmlVal = getXPath(pxml, "/w:document/w:body/w:p[1]/w:r[1]/w:object/v:shape", "style");
+    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:186.6pt") > -1);
+}
+
 DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
 {
     uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
