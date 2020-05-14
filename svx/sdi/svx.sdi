@@ -2648,6 +2648,7 @@ XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
     GroupId = SfxGroupId::Format;
 ]
 
+// FillGradientJSON is used by online: i.e. loleaflet/src/control/Control.JSDialogBuilder.js
 XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
 (SfxStringItem FillGradientJSON SID_FILL_GRADIENT_JSON)
 [
@@ -2666,6 +2667,7 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
     GroupId = SfxGroupId::Format;
 ]
 
+// FillPageGradientJSON is used by online: i.e. loleaflet/src/control/Control.JSDialogBuilder.js
 XFillGradientItem FillPageGradient SID_ATTR_PAGE_GRADIENT
 (SfxStringItem FillPageGradientJSON SID_FILL_GRADIENT_JSON)
 [
@@ -5631,7 +5633,7 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
     GroupId = SfxGroupId::Frame;
 ]
 
-
+// SID_ATTR_LINE_WIDTH_ARG is used by online: i.e. loleaflet/src/control/Control.JSDialogBuilder.js
 XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
 (SvxDoubleItem Width SID_ATTR_LINE_WIDTH_ARG, XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH)
 [
