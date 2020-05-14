@@ -7,9 +7,14 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#include <svx/gallery1.hxx>
+#include <tools/urlobj.hxx>
+#include <sfx2/app.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/DirectoryHelper.hxx>
+
+#include <svx/gallery1.hxx>
+#include <svx/galtheme.hxx>
+#include <galobj.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -23,6 +28,9 @@ public:
     void TestDeleteTheme();
     void TestSetThemeName();
     void TestThemeURLCase();
+    void TestThemeCount();
+    void TestGalleryThemeEntry();
+    void TestInsertGalleryObject();
 
     CPPUNIT_TEST_SUITE(GalleryObjTest);
 
@@ -30,6 +38,9 @@ public:
     CPPUNIT_TEST(TestDeleteTheme);
     CPPUNIT_TEST(TestSetThemeName);
     CPPUNIT_TEST(TestThemeURLCase);
+    CPPUNIT_TEST(TestThemeCount);
+    CPPUNIT_TEST(TestGalleryThemeEntry);
+    CPPUNIT_TEST(TestInsertGalleryObject);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -168,6 +179,136 @@ void GalleryObjTest::TestThemeURLCase()
         "[WINDOWS] Could not find .sdv in mixed case",
         comphelper::DirectoryHelper::fileExists(aGalleryURL + "/" + myThemeName + ".sdv"));
 #endif
+}
+
+void GalleryObjTest::TestThemeCount()
+{
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+
+    // Loop through and test theme count in each pass.
+    sal_uInt32 nLimit = 10;
+    for (sal_uInt32 i = 1; i <= nLimit; i++)
+    {
+        OUString myThemeName("addytesttheme");
+        myThemeName += OUString::number(i);
+        // Create theme
+        CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+        CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent theme count",
+                                     static_cast<sal_uInt32>(pGallery->GetThemeCount()), i);
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent theme count",
+                                 static_cast<sal_uInt32>(pGallery->GetThemeCount()), nLimit);
+    for (sal_uInt32 i = nLimit; i > 0; i--)
+    {
+        OUString myThemeName("addytesttheme");
+        myThemeName += OUString::number(i);
+        // Delete Theme
+        CPPUNIT_ASSERT_MESSAGE("Could not remove theme", pGallery->RemoveTheme(myThemeName));
+        CPPUNIT_ASSERT_MESSAGE("Could not remove theme, theme found even after trying to remove",
+                               !pGallery->HasTheme(myThemeName));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent theme count",
+                                     static_cast<sal_uInt32>(pGallery->GetThemeCount()), i - 1);
+    }
+}
+
+void GalleryObjTest::TestGalleryThemeEntry()
+{
+    // Create theme
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+    const OUString myThemeName = "addytesttheme";
+    CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+    CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+
+    // Get Theme Entry Object
+    const GalleryThemeEntry* mpThemeEntry = pGallery->GetThemeInfo(myThemeName);
+
+    // Check Theme Name
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme name doesn't match", mpThemeEntry->GetThemeName(),
+                                 myThemeName);
+
+    // Check URLs
+    INetURLObject aURL(aGalleryURL);
+    aURL.Append(myThemeName);
+    INetURLObject aThemeURL(aURL), aSdvURL(aURL), aSdgURL(aURL), aStrURL(aURL);
+    aThemeURL.setExtension("thm");
+    aSdvURL.setExtension("sdv");
+    aSdgURL.setExtension("sdg");
+    aStrURL.setExtension("str");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Theme URL doesn't match",
+        mpThemeEntry->GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
+        aThemeURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Sdv URL doesn't match",
+        mpThemeEntry->GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
+        aSdvURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Sdg URL doesn't match",
+        mpThemeEntry->GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
+        aSdgURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Str URL doesn't match",
+        mpThemeEntry->GetStrURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
+        aStrURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+}
+
+void GalleryObjTest::TestInsertGalleryObject()
+{
+    // Create theme
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+    const OUString myThemeName = "addytesttheme";
+    CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+    CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+
+    // Insert Objects Into Theme
+    SfxListener aListener;
+    SfxApplication::GetOrCreate();
+    GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT_EQUAL(pGalleryTheme->GetObjectCount(), static_cast<sal_uInt32>(0));
+    /*CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme", pGalleryTheme->InsertURL(INetURLObject("desert.jpg")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(), static_cast<sal_uInt32>(1));
+
+    CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme", pGalleryTheme->InsertURL(INetURLObject("mountain.jpg")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object count", pGalleryTheme->GetObjectCount(), static_cast<sal_uInt32>(2));
+
+    std::unique_ptr<SgaObject>  pObj = pGalleryTheme->AcquireObject(0);
+    CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid",pObj->IsValid());*/
+
+    pGallery->ReleaseTheme(pGalleryTheme, aListener);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GalleryObjTest);
