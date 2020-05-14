@@ -394,7 +394,7 @@ def __translate__(arg = None):
     text = selection.getString()
     # remove comments and strings
     text = re.sub(r"[ ]*;[^\n]*", "", re.sub(r"['„“‘«»「][^\n'”“‘’«»」]*['”“‘’«»」]", "", re.sub(r"^[ \t]*[;#][^\n]*", "", text)))
-    text = " ".join(set(re.findall("(?u)\w+", text)) - set(re.findall("(?u)\w*\d+\w*", text))).lower()  # only words
+    text = " ".join(set(re.findall(r"(?u)\w+", text)) - set(re.findall(r"(?u)\w*\d+\w*", text))).lower()  # only words
     ctx = uno.getComponentContext()
     guess = ctx.ServiceManager.createInstanceWithContext("com.sun.star.linguistic2.LanguageGuessing", ctx)
     guess.disableLanguages(guess.getEnabledLanguages())
@@ -417,7 +417,7 @@ def __translate__(arg = None):
 
     text = re.sub(r"^(([ \t]*[;#][^\n]*))", __encodecomment__, text)
     text = re.sub("(?u)([%s])((?:[^\n%s]|\\\\[%s])*)(?<!\\\\)[%s]" % (lq, rq, rq, rq), __encodestring__, selection.getString())
-    text = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, text)
+    text = re.sub(r'(?u)(?<![0-9])(")(~?\w*)', __encodestring__, text)
     text = re.sub(r";(([^\n]*))", __encodecomment__, text)
 
     # translate the program to the language of the document FIXME space/tab
@@ -426,12 +426,12 @@ def __translate__(arg = None):
     in2 = __l12n__(_.lng)['IN'].split("|")[0].upper()
     if in1[0] == '-' and in2[0] != '-': # "for x y-in" -> "for x in y"
         exception += ['IN']
-        text = re.sub(r"(?ui)\b((?:%s) +:?\w+) +([^\n]+)(?:%s) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 %s \\2 " % in2, text)
-        text = re.sub(r"(?ui)(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % in1, "%s \\1" % in2, text)
+        text = re.sub(r"(?ui)\b((?:%s) +:?\w+) +([^\n]+)(?:%s) +(?=[\[] |[\[]\n)" % (lang['FOR'], in1), "\\1 %s \\2 " % in2, text)
+        text = re.sub(r"(?ui)(:?\b\w+|[\[][^[\n]*])\b(?:%s)\b" % in1, "%s \\1" % in2, text)
     elif in1[0] != '-' and in2[0] == '-': # "for x in y" -> "for x y-in"
         exception += ['IN']
-        text = re.sub(r"(?ui)(?<=\n)((?:%s)\b +:?\w+) +(?:%s) +([^\n]+?) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 \\2%s " % in2, text)
-        text = re.sub(r"(?ui)(?<!:)\b(?:%s) +(:?\b\w+|[[][^[\n]*])\b" % in1, "\\1%s" % in2, text)
+        text = re.sub(r"(?ui)(?<=\n)((?:%s)\b +:?\w+) +(?:%s) +([^\n]+?) +(?=[\[] |[\[]\n)" % (lang['FOR'], in1), "\\1 \\2%s " % in2, text)
+        text = re.sub(r"(?ui)(?<!:)\b(?:%s) +(:?\b\w+|[\[][^[\n]*])\b" % in1, "\\1%s" % in2, text)
     for i in set(lang) - set(exception):
         text = re.sub(r'(?ui)(?<!:)\b(%s)\b' % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
     text = re.sub(r"(?<=\d)[%s](?=\d)" % lang['DECIMAL'], __l12n__(_.lng)['DECIMAL'], text)
@@ -547,9 +547,9 @@ class LogoProgram(threading.Thread):
                         MessageBox(parent, __l12n__(_.lng)['ERR_ARGUMENTS'] % (__locname__('REPEAT'), 1, 0), caption, "errorbox")
                     else:
                         MessageBox(parent, __l12n__(_.lng)['ERR_NAME'] % \
-                            to_unicode(re.search("(?<=name ')[\w_]*(?=')", message).group(0)), caption, "errorbox")
+                            to_unicode(re.search(r"(?<=name ')[\w_]*(?=')", message).group(0)), caption, "errorbox")
                 elif "TypeError" in message and "argument" in message and "given" in message:
-                    r = re.search("([\w_]*)[(][)][^\n]* (\w+) arguments? [(](\d+)", message) # XXX later: handle 'no arguments' + plural
+                    r = re.search(r"([\w_]*)[(][)][^\n]* (\w+) arguments? [(](\d+)", message) # XXX later: handle 'no arguments' + plural
                     MessageBox(parent, __l12n__(_.lng)['ERR_ARGUMENTS'] % (__locname__(r.group(1)), r.group(2), r.group(3)), caption, "errorbox")
                 else:
                     origline = __compiled__.split("\n")[line-1]
@@ -1534,7 +1534,7 @@ def create_svg_animation(m):
 def create_valid_svg_file(filename):
     with open(filename, "r") as f:
         s = f.read()
-    s = re.sub('(?s)(<g\\sid="[^"]*)\(([^"]*)\)', '\\1\\2', s) # bad "(", ")" in xml:id
+    s = re.sub(r'(?s)(<g\sid="[^"]*)\(([^"]*)\)', '\\1\\2', s) # bad "(", ")" in xml:id
     s = re.sub('(?s)<g\\sooo:[^>]*>', '', s) # remove non standard attributes
     s = re.sub('(?s)<defs class="EmbeddedBulletChars">.*(?=<defs class="TextEmbeddedBitmaps")', '', s) # remove unused parts
     s = re.sub('(?s)(<path stroke-width="[^"]*"[^<]*)stroke-width="[^"]*"', '\\1', s) # double stroke-width
@@ -1669,7 +1669,7 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b" % a['OUTPUT'], "\nreturn"],
     [r"\n(if|while|return) [^\n]*", lambda r: re.sub("(?<![=!<>])=(?!=)", "==", r.group(0))], # = -> ==, XXX x = y = 1?
     [r"(?<=\n)(for\b :?\w+) ([^\n]+)(?<=\w|]|}|\))(?=-|:)(?:%s)\b" % a['IN'], "\\1 in \\2"], # "for x y-in" -> "for x in y"
-    [r"(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % a['IN'], "in \\1"], # "x y-in" -> "x in y"
+    [r"(:?\b\w+|[\[][^[\n]*])\b(?:%s)\b" % a['IN'], "in \\1"], # "x y-in" -> "x in y"
     [r"(?<!:)\b(?:%s)\b" % a['IN'], "in"],
     [r"(?<!:)\b(?:%s)\b[ \t]+(:?\w+)\b(?! in\b)" % a['FOR'], "\nfor \\1 in"],
     [r"(?<=\n)__repeat__ :\n", "while True:\n"], # infinite loop
@@ -1748,7 +1748,7 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b ?\(" % a['RESUB'], "re.sub('(?u)'+"],
     [r"(?<!:)\b(?:%s)\b ?\(" % a['REFINDALL'], "re.findall('(?u)'+"],
     [r"(?<!:)\b(?:%s)\b" % a['ANY'], "u'any'"],
-    [r"(?<!:)\b(?:%s) (\w+|[[][^\]]*])\b" % a['INPUT'], " Input(\\1)"],
+    [r"(?<!:)\b(?:%s) (\w+|[\[][^\]]*])\b" % a['INPUT'], " Input(\\1)"],
     [r"(?<!:)\b(?:%s)\b" % a['PRINT'], "\nPrint"],
     [r"(?<!:)\b(?:%s)\b" % a['TURNLEFT'], "\n)turnleft("],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['PT'], "\\1"],
@@ -1897,7 +1897,7 @@ def __compil__(s):
     rq = '\'' + __l12n__(_.lng)['RIGHTSTRING'].replace("|", "")
     __strings__ = []
     s = re.sub("(?u)([%s])((?:[^\n%s]|\\\\[%s])*)(?<!\\\\)[%s]" % (lq, rq, rq, rq), __encodestring__, s)
-    s = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, s)
+    s = re.sub(r'(?u)(?<![0-9])(")(~?\w*)', __encodestring__, s)
 
     # remove extra spaces
     s = chsp.sub(" ", s)
@@ -1911,7 +1911,7 @@ def __compil__(s):
     # replace procedure names
     s = re.sub(r"(?i)^[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "__def__ ", s)
     s = re.sub(r"(?i)\n[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "\n__def__ ", s)
-    subnames = re.findall(u"(?iu)(?<=__def__ )\w+", s)
+    subnames = re.findall(r"(?iu)(?<=__def__ )\w+", s)
     globs = ""
     functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "log10", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
     defaultfunc = ["Print"] # TODO handle all default procedures
@@ -1923,7 +1923,7 @@ def __compil__(s):
         firstend = ends.split("|")[0]
         s = re.sub(r"(?<!:)\b(?:%s)\b" % ends, firstend, s)
         __l12n__(_.lng)["END"] = firstend
-        functions += [ re.findall("(?u)\w+",i[0])[0]  for i in re.findall(r"""(?iu)(?<=__def__ )([^\n]*)\n # beginning of a procedure
+        functions += [ re.findall(r"(?u)\w+",i[0])[0]  for i in re.findall(r"""(?iu)(?<=__def__ )([^\n]*)\n # beginning of a procedure
             (?:[^\n]*(?<!\b(%(END)s))\n)* # 0 or more lines (not END)
             [^\n]*\b(?:%(OUTPUT)s)\b[^\n]*\n # line with OUTPUT (functions = procedures with OUTPUT)
             (?:[^\n]*(?<!\b(?:%(END)s))\n)* # 0 or more lines (not END)
@@ -1932,7 +1932,7 @@ def __compil__(s):
         # add line breaks before procedure calls
         procedures = set(subnames) - set(functions)
         if len(procedures) > 0:
-            s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")(?!\w)", r"\n\1", s)
+            s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + r")(?!\w)", r"\n\1", s)
 
     # substitute LibreLogo functions and specifiers with their Python equivalents
     for i in __comp__[_.lng]:
@@ -1940,12 +1940,12 @@ def __compil__(s):
 
     indent = 0 # Python indentation level
     result = ""
-    func = re.compile("(?iu)(def (\w+))(\(.*\):)")
+    func = re.compile(r"(?iu)(def (\w+))(\(.*\):)")
 
     # compile to Python
     subroutines = re.compile(r"(?iu)(?<!def )(?<![_\w])\b(%s)\b(?![\w(])" % "|".join(subnames + functions + defaultfunc))
     operators = re.compile(r"(?iu)(%s)" % "(?:[ ]*([+*/<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|(?<! )-[ ]*|[ ]*[*][*][ ]*)") # operators, eg. " - ", "-", "- "
-    atoms = re.compile(r"(?iu)(%s)" % "[0-9]+([.,][0-9]+)?|:?\w+([.]\w)?")
+    atoms = re.compile(r"(?iu)(%s)" % r"[0-9]+([.,][0-9]+)?|:?\w+([.]\w)?")
 
     # store argument numbers of all subroutines in dictionary "names"
     names = {key: 1 for key in functions + defaultfunc}
