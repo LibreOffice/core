@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "809618a7_f920d445",
+        "filename": "config_host.mk.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-14T20:03:43Z",
+      "side": 1,
+      "message": "gb_SPACE is a tad unusual here - can we push that down into makefiles?",
+      "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
