@@ -1116,7 +1116,11 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "InsertIndexesEntry" ||
              aEvent.FeatureURL.Path == "TransformDialog" ||
              aEvent.FeatureURL.Path == "EditRegion" ||
-             aEvent.FeatureURL.Path == "ThesaurusDialog")
+             aEvent.FeatureURL.Path == "ThesaurusDialog" ||
+             aEvent.FeatureURL.Path == "OutlineRight" ||
+             aEvent.FeatureURL.Path == "OutlineLeft" ||
+             aEvent.FeatureURL.Path == "OutlineDown" ||
+             aEvent.FeatureURL.Path == "OutlineUp")
 
     {
         aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
