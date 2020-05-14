@@ -853,9 +853,12 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSimpleRuby)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testAbi11105)
 {
+// Disable the test on this branch, .abw is flagged as EXOTIC, so loading would fail.
+#if 0
     // This crashed because the paragraph style "P5" which had a master-page-name
     // appeared in a table cell messed up page spans.
     createDoc(u"abi11105.abw", {});
+#endif
 }
 }
 
