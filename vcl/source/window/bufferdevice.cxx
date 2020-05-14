@@ -23,11 +23,19 @@ BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContex
     m_pBuffer->EnableRTL(rRenderContext.IsRTLEnabled());
 }
 
-BufferDevice::~BufferDevice()
+void BufferDevice::Dispose()
 {
+    if (m_bDisposed)
+    {
+        return;
+    }
+
     m_rRenderContext.DrawOutDev(Point(0, 0), m_pWindow->GetOutputSizePixel(), Point(0, 0),
                                 m_pWindow->GetOutputSizePixel(), *m_pBuffer);
+    m_bDisposed = true;
 }
+
+BufferDevice::~BufferDevice() { Dispose(); }
 
 vcl::RenderContext* BufferDevice::operator->() { return m_pBuffer.get(); }
 
