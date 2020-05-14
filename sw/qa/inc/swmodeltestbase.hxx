@@ -980,6 +980,7 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a14"), BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("o"), BAD_CAST("urn:schemas-microsoft-com:office:office"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"), BAD_CAST("urn:schemas-microsoft-com:office:word"));
         // odt
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("style"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:style:1.0"));
