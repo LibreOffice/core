@@ -16,6 +16,24 @@
       "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c529a464_881baa83",
+        "filename": "config_host.mk.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-05-14T21:05:39Z",
+      "side": 1,
+      "message": "At line 7-8 of the this file it mentions that space prefix is desirable since spaces are usually eaten by make parser, but not if it is a variable which expands to space. Also, I was following the implementations for hunspell and qrcodegen as external libraries and both have their variables like this. Should I still remove it?",
+      "parentUuid": "809618a7_f920d445",
+      "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
