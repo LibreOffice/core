@@ -16,6 +16,24 @@
       "revId": "c4d6036899eba330f3a95cbfbc2fa1626021e1af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739ace52_550c5e93",
+        "filename": "sw/qa/inc/swmodeltestbase.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-05-14T16:39:20Z",
+      "side": 1,
+      "message": "Hi Noel,\nI just used getShapes because we already have getPages returning the number of pages, so just following the same naming. if you think getShapesCount is a better name I can change it though",
+      "parentUuid": "29f0b741_01d83382",
+      "revId": "c4d6036899eba330f3a95cbfbc2fa1626021e1af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
