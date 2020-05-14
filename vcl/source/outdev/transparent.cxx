@@ -292,6 +292,19 @@ void OutputDevice::DrawTransparent(
                         static_cast< sal_uInt16 >(fTransparency * 100.0)));
             }
 
+            if (mpAlphaVDev)
+            {
+                const Color aFillCol(mpAlphaVDev->GetFillColor());
+                mpAlphaVDev->SetFillColor(
+                    Color(sal::static_int_cast<sal_uInt8>(255 * fTransparency),
+                          sal::static_int_cast<sal_uInt8>(255 * fTransparency),
+                          sal::static_int_cast<sal_uInt8>(255 * fTransparency)));
+
+                mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
+
+                mpAlphaVDev->SetFillColor(aFillCol);
+            }
+
             return;
         }
     }

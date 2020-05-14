@@ -42,11 +42,22 @@ namespace
 class VDevBuffer : public Timer, protected cppu::BaseMutex
 {
 private:
+    struct Entry
+    {
+        VclPtr<VirtualDevice> buf;
+        bool isTransparent = false;
+        Entry(const VclPtr<VirtualDevice>& vdev, bool bTransparent)
+            : buf(vdev)
+            , isTransparent(bTransparent)
+        {
+        }
+    };
+
     // available buffers
-    std::vector<VclPtr<VirtualDevice>> maFreeBuffers;
+    std::vector<Entry> maFreeBuffers;
 
     // allocated/used buffers (remembered to allow deleting them in destructor)
-    std::vector<VclPtr<VirtualDevice>> maUsedBuffers;
+    std::vector<Entry> maUsedBuffers;
 
     // remember what outputdevice was the template passed to VirtualDevice::Create
     // so we can test if that OutputDevice was disposed before reusing a
@@ -58,7 +69,7 @@ public:
     virtual ~VDevBuffer() override;
 
     VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear,
-                                bool bMonoChrome);
+                                bool bMonoChrome, bool bTransparent);
     void free(VirtualDevice& rDevice);
 
     // Timer virtuals
@@ -81,24 +92,25 @@ VDevBuffer::~VDevBuffer()
 
     while (!maFreeBuffers.empty())
     {
-        maFreeBuffers.back().disposeAndClear();
+        maFreeBuffers.back().buf.disposeAndClear();
         maFreeBuffers.pop_back();
     }
 
     while (!maUsedBuffers.empty())
     {
-        maUsedBuffers.back().disposeAndClear();
+        maUsedBuffers.back().buf.disposeAndClear();
         maUsedBuffers.pop_back();
     }
 }
 
 VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear,
-                                        bool bMonoChrome)
+                                        bool bMonoChrome, bool bTransparent)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     VclPtr<VirtualDevice> pRetval;
 
     sal_Int32 nBits = bMonoChrome ? 1 : rOutDev.GetBitCount();
+    const DeviceFormat eAlphaFormat = bTransparent ? DeviceFormat::DEFAULT : DeviceFormat::NONE;
 
     bool bOkay(false);
     if (!maFreeBuffers.empty())
@@ -107,9 +119,9 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
 
         for (auto a = maFreeBuffers.begin(); a != maFreeBuffers.end(); ++a)
         {
-            assert(*a && "Empty pointer in VDevBuffer (!)");
+            assert(a->buf && "Empty pointer in VDevBuffer (!)");
 
-            if (nBits == (*a)->GetBitCount())
+            if (nBits == a->buf->GetBitCount() && bTransparent == a->isTransparent)
             {
                 // candidate is valid due to bit depth
                 if (aFound != maFreeBuffers.end())
@@ -119,16 +131,16 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                     {
                         // found is valid
                         const bool bCandidateOkay(
-                            (*a)->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                            && (*a)->GetOutputHeightPixel() >= rSizePixel.getHeight());
+                            a->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
+                            && a->buf->GetOutputHeightPixel() >= rSizePixel.getHeight());
 
                         if (bCandidateOkay)
                         {
                             // found and candidate are valid
-                            const sal_uLong aSquare((*aFound)->GetOutputWidthPixel()
-                                                    * (*aFound)->GetOutputHeightPixel());
-                            const sal_uLong aCandidateSquare((*a)->GetOutputWidthPixel()
-                                                             * (*a)->GetOutputHeightPixel());
+                            const sal_uLong aSquare(aFound->buf->GetOutputWidthPixel()
+                                                    * aFound->buf->GetOutputHeightPixel());
+                            const sal_uLong aCandidateSquare(a->buf->GetOutputWidthPixel()
+                                                             * a->buf->GetOutputHeightPixel());
 
                             if (aCandidateSquare < aSquare)
                             {
@@ -145,23 +157,23 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                     {
                         // found is invalid, use candidate
                         aFound = a;
-                        bOkay = (*aFound)->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                                && (*aFound)->GetOutputHeightPixel() >= rSizePixel.getHeight();
+                        bOkay = aFound->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
+                                && aFound->buf->GetOutputHeightPixel() >= rSizePixel.getHeight();
                     }
                 }
                 else
                 {
                     // none yet, use candidate
                     aFound = a;
-                    bOkay = (*aFound)->GetOutputWidthPixel() >= rSizePixel.getWidth()
-                            && (*aFound)->GetOutputHeightPixel() >= rSizePixel.getHeight();
+                    bOkay = aFound->buf->GetOutputWidthPixel() >= rSizePixel.getWidth()
+                            && aFound->buf->GetOutputHeightPixel() >= rSizePixel.getHeight();
                 }
             }
         }
 
         if (aFound != maFreeBuffers.end())
         {
-            pRetval = *aFound;
+            pRetval = aFound->buf;
             maFreeBuffers.erase(aFound);
         }
     }
@@ -197,8 +209,9 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     // no success yet, create new buffer
     if (!pRetval)
     {
-        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, bMonoChrome ? DeviceFormat::BITMASK
-                                                                     : DeviceFormat::DEFAULT);
+        pRetval = VclPtr<VirtualDevice>::Create(
+            rOutDev, bMonoChrome ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT,
+            bTransparent ? DeviceFormat::DEFAULT : DeviceFormat::NONE);
         maDeviceTemplates[pRetval] = &rOutDev;
         pRetval->SetOutputSizePixel(rSizePixel, bClear);
     }
@@ -210,7 +223,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
     }
 
     // remember allocated buffer
-    maUsedBuffers.push_back(pRetval);
+    maUsedBuffers.emplace_back(pRetval, bTransparent);
 
     return pRetval;
 }
@@ -218,14 +231,18 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
 void VDevBuffer::free(VirtualDevice& rDevice)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    const auto aUsedFound = std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice);
+    const auto aUsedFound
+        = std::find_if(maUsedBuffers.begin(), maUsedBuffers.end(),
+                       [&rDevice](const Entry& el) { return el.buf == &rDevice; });
     SAL_WARN_IF(aUsedFound == maUsedBuffers.end(), "drawinglayer",
                 "OOps, non-registered buffer freed (!)");
-
-    maUsedBuffers.erase(aUsedFound);
-    maFreeBuffers.emplace_back(&rDevice);
-    SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer",
-                "excessive cached buffers, " << maFreeBuffers.size() << " entries!");
+    if (aUsedFound != maUsedBuffers.end())
+    {
+        maFreeBuffers.emplace_back(*aUsedFound);
+        maUsedBuffers.erase(aUsedFound);
+        SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer",
+                    "excessive cached buffers, " << maFreeBuffers.size() << " entries!");
+    }
     Start();
 }
 
@@ -236,8 +253,8 @@ void VDevBuffer::Invoke()
     while (!maFreeBuffers.empty())
     {
         auto aLastOne = maFreeBuffers.back();
-        maDeviceTemplates.erase(aLastOne);
-        aLastOne.disposeAndClear();
+        maDeviceTemplates.erase(aLastOne.buf);
+        aLastOne.buf.disposeAndClear();
         maFreeBuffers.pop_back();
     }
 }
@@ -257,7 +274,8 @@ VDevBuffer& getVDevBuffer()
     return *aVDevBuffer.get();
 }
 
-impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
+impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange,
+                                 bool bContentTransparent)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
     , mpMask(nullptr)
@@ -283,7 +301,8 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
     // facto cleared when created on other platforms?
     mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
 #else
-    mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
+    mpContent
+        = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false, bContentTransparent);
 #endif
 
     // #i93485# assert when copying from window to VDev is used
@@ -436,7 +455,7 @@ VirtualDevice& impBufferDevice::getMask()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpMask)
     {
-        mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true);
+        mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true, false);
         mpMask->SetMapMode(mpContent->GetMapMode());
 
         // do NOT copy AA flag for mask!
@@ -451,7 +470,7 @@ VirtualDevice& impBufferDevice::getTransparence()
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     if (!mpAlpha)
     {
-        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
+        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false, false);
         mpAlpha->SetMapMode(mpContent->GetMapMode());
 
         // copy AA flag for new target; masking needs to be smooth
