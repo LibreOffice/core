@@ -33,6 +33,7 @@ SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow
 void SvxPresetListBox::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ValueSet::SetDrawingArea(pDrawingArea);
+    SetStyle(GetStyle() | WB_ITEMBORDER);
     SetExtraSpacing(4);
 }
 
