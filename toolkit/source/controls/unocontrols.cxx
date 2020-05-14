@@ -165,8 +165,6 @@ UnoEditControl::UnoEditControl()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
-    mnMaxTextLen = 0;
-    mbSetMaxTextLenInPeer = false;
 }
 
 uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType )
