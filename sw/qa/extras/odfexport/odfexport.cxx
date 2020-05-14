@@ -1547,9 +1547,7 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
 {
     // Export of this document failed with beans::UnknownPropertyException.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 // Check for correct header/footer with special first page with TOC inside:

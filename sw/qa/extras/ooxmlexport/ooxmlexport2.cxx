@@ -443,9 +443,7 @@ DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
     // The frames were simply missing, so let's check if all 3 frames were imported back.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
@@ -484,18 +482,16 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     awt::Gradient aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 
-    xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    xFrame.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
     aGradient = getProperty<awt::Gradient>(xFrame, "FillGradient");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
@@ -815,9 +811,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
 {
     // The second frame was simply missing, so let's check if both frames were imported back.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc581614, "bnc581614.doc")

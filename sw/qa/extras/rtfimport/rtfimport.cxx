@@ -73,12 +73,13 @@ CPPUNIT_TEST_FIXTURE(Test, testN695479)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(300)),
                          getProperty<sal_Int32>(xPropertySet, "Height"));
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    int nShapes = getShapes();
+    CPPUNIT_ASSERT_EQUAL(3, nShapes);
+
     bool bFrameFound = false, bDrawFound = false;
-    for (int i = 0; i < xDraws->getCount(); ++i)
+    for (int i = 0; i < nShapes; ++i)
     {
-        uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(i + 1), uno::UNO_QUERY);
         if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         {
             // Both frames should be anchored to the first paragraph.
@@ -231,12 +232,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108951)
 CPPUNIT_TEST_FIXTURE(Test, testFdo47036)
 {
     load(mpTestDocumentPath, "fdo47036.rtf");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+
+    int nShapes = getShapes();
+    CPPUNIT_ASSERT_EQUAL(3, nShapes);
     int nAtCharacter = 0;
-    for (int i = 0; i < xDraws->getCount(); ++i)
+    for (int i = 0; i < nShapes; ++i)
     {
-        if (getProperty<text::TextContentAnchorType>(xDraws->getByIndex(i), "AnchorType")
+        if (getProperty<text::TextContentAnchorType>(getShape(i + 1), "AnchorType")
             == text::TextContentAnchorType_AT_CHARACTER)
             nAtCharacter++;
     }
@@ -401,28 +403,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122430)
 CPPUNIT_TEST_FIXTURE(Test, testFdo49892)
 {
     load(mpTestDocumentPath, "fdo49892.rtf");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
-    for (int i = 0; i < xDraws->getCount(); ++i)
+    int nShapes = getShapes();
+    CPPUNIT_ASSERT_EQUAL(5, nShapes);
+    for (int i = 0; i < nShapes; ++i)
     {
-        OUString aDescription = getProperty<OUString>(xDraws->getByIndex(i), "Description");
+        OUString aDescription = getProperty<OUString>(getShape(i + 1), "Description");
         if (aDescription == "red")
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (aDescription == "green")
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (aDescription == "blue")
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                                 getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (aDescription == "rect")
         {
-            CPPUNIT_ASSERT_EQUAL(
-                text::RelOrientation::PAGE_FRAME,
-                getProperty<sal_Int16>(xDraws->getByIndex(i), "HoriOrientRelation"));
-            CPPUNIT_ASSERT_EQUAL(
-                text::RelOrientation::PAGE_FRAME,
-                getProperty<sal_Int16>(xDraws->getByIndex(i), "VertOrientRelation"));
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+                                 getProperty<sal_Int16>(getShape(i + 1), "HoriOrientRelation"));
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME,
+                                 getProperty<sal_Int16>(getShape(i + 1), "VertOrientRelation"));
         }
     }
 }
@@ -512,10 +509,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo57708)
     load(mpTestDocumentPath, "fdo57708.rtf");
     // There were two issues: the doc was of 2 pages and the picture was missing.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Two objects: a picture and a textframe.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo45183)
@@ -687,22 +682,18 @@ CPPUNIT_TEST_FIXTURE(Test, testN823675)
 CPPUNIT_TEST_FIXTURE(Test, testGroupshape)
 {
     load(mpTestDocumentPath, "groupshape.rtf");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // There should be a single groupshape with 2 children.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
-    uno::Reference<drawing::XShapes> xGroupshape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShapes> xGroupshape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupshape->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupshape_notext)
 {
     load(mpTestDocumentPath, "groupshape-notext.rtf");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // There should be a single groupshape with 2 children.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
-    uno::Reference<drawing::XShapes> xGroupshape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShapes> xGroupshape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xGroupshape->getCount());
 }
 
