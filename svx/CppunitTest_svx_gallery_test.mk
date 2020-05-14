@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_gallery_test, \
 	utl \
 	svxcore \
 	comphelper \
+	tl \
 ))
 
 $(eval $(call gb_CppunitTest_use_vcl,svx_gallery_test))
