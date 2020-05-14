@@ -2187,7 +2187,7 @@ libo_FUZZ_ARG_WITH(latest-c++,
     AS_HELP_STRING([--with-latest-c++],
         [Try to enable the latest features of the C++ compiler, even if they are not yet part of a
          published standard.]),,
-        [$with_latest_c__=no])
+        [with_latest_c__=no])
 
 dnl ===================================================================
 dnl Branding
