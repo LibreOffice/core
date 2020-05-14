@@ -42,6 +42,7 @@ public:
 
     virtual void Resize() override;
     virtual bool Command(const CommandEvent& rEvent) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     Size const & GetIconSize() const { return aIconSize; }
 
     void SetRenameHdl( const Link<SvxPresetListBox*,void>& rLink )
