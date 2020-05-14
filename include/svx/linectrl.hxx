@@ -62,6 +62,8 @@ public:
 
 class SVX_DLLPUBLIC SvxLineWidthToolBoxControl : public SfxToolBoxControl
 {
+    static MapUnit GetCoreMetric();
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
