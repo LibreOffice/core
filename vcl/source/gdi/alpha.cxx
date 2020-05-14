@@ -138,6 +138,29 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     }
 }
 
+void AlphaMask::BlendWith(const Bitmap& rOther)
+{
+    AlphaMask aOther(rOther); // to 8 bits
+    Bitmap::ScopedReadAccess pOtherAcc(aOther);
+    AlphaScopedWriteAccess pAcc(*this);
+    if (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8)
+    {
+        const long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
+        const long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
+        for (long x = 0; x < nWidth; ++x)
+        {
+            for (long y = 0; y < nHeight; ++y)
+            {
+                // Use sal_uInt16 for following multiplication
+                const sal_uInt16 nGrey1 = pOtherAcc->GetPixelIndex(y, x);
+                const sal_uInt16 nGrey2 = pAcc->GetPixelIndex(y, x);
+                const double fGrey = std::round(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255.0);
+                pAcc->SetPixelIndex(y, x, static_cast<sal_uInt8>(fGrey));
+            }
+        }
+    }
+}
+
 void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
 {
     if( pAccess )
