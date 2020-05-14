@@ -788,7 +788,10 @@ Reference< XShape > const & Shape::createAndInsert(
     {
         // if global position is used, add it to transformation
         if (mbWps && !bInGroup)
-            aTransformation.translate( maPosition.X * EMU_PER_HMM, maPosition.Y * EMU_PER_HMM);
+        {
+            if (mnRotation != 0)
+                aTransformation.translate( maPosition.X * EMU_PER_HMM, maPosition.Y * EMU_PER_HMM );
+        }
         else
             aTransformation.translate( maPosition.X, maPosition.Y );
     }
