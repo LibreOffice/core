@@ -993,8 +993,11 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // glow primitive.
         mpOutputDevice->Erase();
         process(rCandidate);
-        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                                  Size(aRange.getWidth(), aRange.getHeight()));
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+        Bitmap bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
 
         AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
 
@@ -1007,7 +1010,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
@@ -1036,8 +1039,11 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         rCandidate.setMaskGeneration();
         process(rCandidate);
         rCandidate.setMaskGeneration(false);
-        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                                  Size(aRange.getWidth(), aRange.getHeight()));
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+        Bitmap bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
 
         AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, -fBlurRadius, fBlurRadius, 0);
 
@@ -1045,15 +1051,14 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
 
         mpOutputDevice->Erase();
         process(rCandidate);
-        bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                           Size(aRange.getWidth(), aRange.getHeight()));
+        bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
 
         // alpha mask will be scaled up automatically to match bitmap
         BitmapEx result(bitmap, mask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
