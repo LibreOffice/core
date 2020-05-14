@@ -22,6 +22,30 @@
       "revId": "5f62deabb54fa5a7923a6af4e27f0a286aecad71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58d01620_b3bf2941",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-14T20:33:16Z",
+      "side": 1,
+      "message": "Worth debugging into GetBitmapEx then - does the vdev really contain an 8bit alpha mask",
+      "parentUuid": "581a17a2_f599c5d6",
+      "range": {
+        "startLine": 1039,
+        "startChar": 25,
+        "endLine": 1039,
+        "endChar": 43
+      },
+      "revId": "5f62deabb54fa5a7923a6af4e27f0a286aecad71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
