@@ -870,7 +870,7 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
 
     basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aRange.transform(maCurrentTransformation);
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
     if (!aBufferDevice.isVisible())
         return;
@@ -878,6 +878,7 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
     // remember last OutDev and set to content
     OutputDevice* pLastOutputDevice = mpOutputDevice;
     mpOutputDevice = &aBufferDevice.getContent();
+    mpOutputDevice->Erase();
 
     // paint content to it
     process(rTransCandidate.getChildren());
@@ -888,6 +889,8 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
     // when painting transparence masks, reset the color stack
     basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
     maBColorModifierStack = basegfx::BColorModifierStack();
+
+    mpOutputDevice->Erase();
 
     // paint mask to it (always with transparence intensities, evtl. with AA)
     process(rTransCandidate.getTransparence());
