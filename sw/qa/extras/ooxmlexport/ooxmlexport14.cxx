@@ -189,6 +189,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
     CPPUNIT_ASSERT_LESS(150, nWidth);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133035, "tdf133035.docx")
+{
+    auto pxml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pxml);
+    OUString aXmlVal = getXPath(pxml, "/w:document/w:body/w:p[1]/w:r[1]/w:object/v:shape", "style");
+    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:186.6pt") > -1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 {
     // tdf#120315 cells of the second column weren't vertically merged
