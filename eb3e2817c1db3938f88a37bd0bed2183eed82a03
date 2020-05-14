@@ -16,6 +16,24 @@
       "revId": "eb3e2817c1db3938f88a37bd0bed2183eed82a03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d8ec192_2bacc113",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2020-05-14T08:17:26Z",
+      "side": 1,
+      "message": "in this exact way MSO does the output ;)",
+      "parentUuid": "3d82e11b_fdf0fe78",
+      "revId": "eb3e2817c1db3938f88a37bd0bed2183eed82a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
