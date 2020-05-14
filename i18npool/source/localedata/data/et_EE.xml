@@ -47,8 +47,8 @@
       <DoubleQuotationStart>„</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>AM</TimeAM>
-    <TimePM>PM</TimePM>
+    <TimeAM>e.l.</TimeAM>
+    <TimePM>p.l.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT>
@@ -110,66 +110,102 @@
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD.MM.YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNNDD. MMMM YYYY. a</FormatCode>
+    <FormatElement msgid="DateFormatskey15" default="true" type="long" usage="DATE" formatindex="19">
+      <FormatCode>NNNND. MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>D.M.YY</FormatCode>
+    <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="20">
+      <FormatCode>D.M.YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
+    <FormatElement msgid="DateFormatskey7" default="true" type="medium" usage="DATE" formatindex="21">
       <FormatCode>DD.MM.YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>D. MMM YY</FormatCode>
+    <FormatElement msgid="DateFormatskey10" default="false" type="short" usage="DATE" formatindex="22">
+      <FormatCode>D. MMMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
+    <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="23">
+      <FormatCode>D. MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>D. MMM YYYY. a</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D. MMM. YYYY</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>NNNND. MMMM YYYY. a</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
+    <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN, D. MMM YY</FormatCode>
+    <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>D. MMMM YYYY. a</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>NN, DD. MMM YY</FormatCode>
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="27">
+      <FormatCode>NN, D. MMMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D. MMMM YYYY. a</FormatCode>
+    <FormatElement msgid="DateFormatskey13" default="false" type="medium" usage="DATE" formatindex="28">
+      <FormatCode>NN, D. MMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND. MMMM, YYYY. a</FormatCode>
+    <FormatElement msgid="DateFormatskey2" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>NN, D. MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>NNNND. MMMM YYYY. a</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-DD</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
+    <FormatElement msgid="DateFormatskey19" default="false" type="short" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
       <FormatCode>YYYY-MM-DD</FormatCode>
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM.YY</FormatCode>
+    <FormatElement msgid="DateFormatskey24" default="false" type="short" usage="DATE" formatindex="34">
+      <FormatCode>MMMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>DD. MMM</FormatCode>
+    <FormatElement msgid="DateFormatskey4" default="false" type="short" usage="DATE" formatindex="35">
+      <FormatCode>D. MMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
-      <FormatCode>QQ YY</FormatCode>
+      <FormatCode>QQ YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
+    <FormatElement msgid="DateFormatskey21" default="false" type="short" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="medium" usage="DATE" formatindex="66">
+      <FormatCode>WW. "nädal"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="67">
+      <FormatCode>WW. "nädal" YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="68">
+      <FormatCode>NN, D. MMMM YYYY. a</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey27" default="false" type="short" usage="DATE" formatindex="69">
+      <FormatCode>D.MM.YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="false" type="short" usage="DATE" formatindex="70">
+      <FormatCode>D.M.YY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="71">
+      <FormatCode>D. MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey29" default="false" type="short" usage="DATE" formatindex="72">
+      <FormatCode>DD.MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey30" default="false" type="short" usage="DATE" formatindex="73">
+      <FormatCode>D.MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="74">
+      <FormatCode>MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="short" usage="DATE" formatindex="75">
+      <FormatCode>MMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey32" default="false" type="short" usage="DATE" formatindex="76">
+      <FormatCode>YYYY Q</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey33" default="false" type="short" usage="DATE" formatindex="77">
+      <FormatCode>Q YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
       <FormatCode>HH:MM</FormatCode>
@@ -214,8 +250,8 @@
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
-    <FollowPageWord>p.</FollowPageWord>
-    <FollowPageWord>pp.</FollowPageWord>
+    <FollowPageWord> jj.</FollowPageWord>
+    <FollowPageWord> jj.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
@@ -261,79 +297,91 @@
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>jaan</DefaultAbbrvName>
           <DefaultFullName>jaanuar</DefaultFullName>
+          <DefaultNarrowName>I</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
           <DefaultAbbrvName>veebr</DefaultAbbrvName>
           <DefaultFullName>veebruar</DefaultFullName>
+          <DefaultNarrowName>II</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
           <DefaultAbbrvName>märts</DefaultAbbrvName>
           <DefaultFullName>märts</DefaultFullName>
+          <DefaultNarrowName>III</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
           <DefaultAbbrvName>apr</DefaultAbbrvName>
           <DefaultFullName>aprill</DefaultFullName>
+          <DefaultNarrowName>IV</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
           <DefaultAbbrvName>mai</DefaultAbbrvName>
           <DefaultFullName>mai</DefaultFullName>
+          <DefaultNarrowName>V</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
           <DefaultAbbrvName>juuni</DefaultAbbrvName>
           <DefaultFullName>juuni</DefaultFullName>
+          <DefaultNarrowName>VI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
           <DefaultAbbrvName>juuli</DefaultAbbrvName>
           <DefaultFullName>juuli</DefaultFullName>
+          <DefaultNarrowName>VII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
           <DefaultAbbrvName>aug</DefaultAbbrvName>
           <DefaultFullName>august</DefaultFullName>
+          <DefaultNarrowName>VIII</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>sept</DefaultAbbrvName>
           <DefaultFullName>september</DefaultFullName>
+          <DefaultNarrowName>IX</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
           <DefaultAbbrvName>okt</DefaultAbbrvName>
           <DefaultFullName>oktoober</DefaultFullName>
+          <DefaultNarrowName>X</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
           <DefaultAbbrvName>nov</DefaultAbbrvName>
           <DefaultFullName>november</DefaultFullName>
+          <DefaultNarrowName>XI</DefaultNarrowName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
           <DefaultAbbrvName>dets</DefaultAbbrvName>
           <DefaultFullName>detsember</DefaultFullName>
+          <DefaultNarrowName>XII</DefaultNarrowName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>e.m.a.</DefaultAbbrvName>
-          <DefaultFullName>enne meie aega</DefaultFullName>
+          <DefaultAbbrvName>e.m.a</DefaultAbbrvName>
+          <DefaultFullName>enne meie ajaarvamist</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>m.a.j.</DefaultAbbrvName>
-          <DefaultFullName>meie aja järgi</DefaultFullName>
+          <DefaultAbbrvName>m.a.j</DefaultAbbrvName>
+          <DefaultFullName>meie ajaarvamise järgi</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
         <DayID>mon</DayID>
       </StartDayOfWeek>
-      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
