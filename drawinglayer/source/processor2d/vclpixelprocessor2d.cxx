@@ -917,18 +917,17 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
 
 namespace
 {
-/* Returns 8-bit alpha mask created from passed mask. The result may be scaled down; it's
-   expected that it will be automatically scaled up back when applied to the bitmap.
+/* Returns 8-bit alpha mask created from passed mask.
 
    Negative fErodeDilateRadius values mean erode, positive - dilate.
    nTransparency defines minimal transparency level.
 */
-AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadius,
+AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius,
                                   double fBlurRadius, sal_uInt8 nTransparency)
 {
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(rBWMask.CreateMask(COL_WHITE));
+    BitmapEx mask(rMask.CreateMask(COL_WHITE));
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.
@@ -963,6 +962,8 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadi
     // calculate blurry effect
     BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
 
+    mask.Scale(rMask.GetSizePixel());
+
     return AlphaMask(mask.GetBitmap());
 }
 }
@@ -993,8 +994,11 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // glow primitive.
         mpOutputDevice->Erase();
         process(rCandidate);
-        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                                  Size(aRange.getWidth(), aRange.getHeight()));
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+        Bitmap bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
 
         AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
 
@@ -1002,12 +1006,11 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         const basegfx::BColor aGlowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getGlowColor().getBColor()));
         bitmap.Erase(Color(aGlowColor));
-        // alpha mask will be scaled up automatically to match bitmap
         BitmapEx result(bitmap, mask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
@@ -1024,36 +1027,32 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     // Blur radius is equal to soft edge radius
     const double fBlurRadius = aRadiusVector.getLength();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        // Processing will draw whatever geometry on white background, applying *black*
-        // replacement color
         mpOutputDevice->Erase();
-        rCandidate.setMaskGeneration();
         process(rCandidate);
-        rCandidate.setMaskGeneration(false);
-        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                                  Size(aRange.getWidth(), aRange.getHeight()));
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, -fBlurRadius, fBlurRadius, 0);
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+        BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+
+        AlphaMask aMask = bitmap.GetAlpha();
+        AlphaMask blurMask = ProcessAndBlurAlphaMask(aMask, -fBlurRadius, fBlurRadius, 0);
+
+        aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-
-        mpOutputDevice->Erase();
-        process(rCandidate);
-        bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                           Size(aRange.getWidth(), aRange.getHeight()));
-
-        // alpha mask will be scaled up automatically to match bitmap
-        BitmapEx result(bitmap, mask);
+        BitmapEx result(bitmap.GetBitmap(), aMask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
-        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");

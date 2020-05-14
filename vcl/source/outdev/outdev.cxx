@@ -415,8 +415,16 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( mpMetaFile )
     {
-        const Bitmap aBmp( rOutDev.GetBitmap( rSrcPt, rSrcSize ) );
-        mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
+        if (rOutDev.mpAlphaVDev)
+        {
+            const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
+            mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+        }
+        else
+        {
+            const Bitmap aBmp(rOutDev.GetBitmap(rSrcPt, rSrcSize));
+            mpMetaFile->AddAction(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
+        }
     }
 
     if ( !IsDeviceOutputNecessary() )
