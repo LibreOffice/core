@@ -128,10 +128,8 @@ DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf109063, "tdf109063.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, near-page-width table was imported as a TextFrame.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 
 DECLARE_SW_ROUNDTRIP_TEST(testTdf108269, "tdf108269.docm", nullptr, DocmTest)
@@ -726,9 +724,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf84678, "tdf84678.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf103544, "tdf103544.docx")
 {
     // We have two shapes: a frame and an image
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // Image was lost because of the frame export
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
@@ -1104,10 +1100,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
 #if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
 #endif
 

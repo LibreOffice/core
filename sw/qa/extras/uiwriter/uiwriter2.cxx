@@ -1596,9 +1596,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
 
     // get the table frame, set new values and dismiss the references
     {
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-        uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
 
         // change the properties
         // 8133 -> 8000
@@ -1613,9 +1611,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDocxAttributeTableExport)
     // save it to docx
     reload("Office Open XML Text", "floating-table-position.docx");
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
 
     // test the new values
     sal_Int32 nValue = getProperty<sal_Int32>(xShape, "VertOrientPosition");

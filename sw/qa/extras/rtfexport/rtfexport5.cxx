@@ -213,13 +213,11 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin2)
 
 DECLARE_RTFEXPORT_TEST(testFdo66040, "fdo66040.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // This was 0 (no shapes were imported), we want two textframes.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // The second paragraph of the first shape should be actually a table, with "A" in its A1 cell.
-    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextRange->getText();
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(
@@ -227,7 +225,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66040, "fdo66040.rtf")
                                             ->getString());
 
     // Make sure the second shape has the correct position and size.
-    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(14420), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1032), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(14000), xShape->getSize().Width);
@@ -262,10 +260,8 @@ DECLARE_RTFEXPORT_TEST(testFdo77996, "fdo77996.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo47802, "fdo47802.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // Shape inside table was ignored.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo39001, "fdo39001.rtf")
@@ -331,10 +327,8 @@ DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo70221, "fdo70221.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // The picture was imported twice.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
@@ -353,10 +347,8 @@ DECLARE_RTFEXPORT_TEST(testCp1000018, "cp1000018.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo94835, "fdo94835.rtf")
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
     // The picture was imported twice.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(19), xDraws->getCount());
+    CPPUNIT_ASSERT_EQUAL(19, getShapes());
 }
 DECLARE_RTFEXPORT_TEST(testNestedTable, "rhbz1065629.rtf")
 {
@@ -770,9 +762,7 @@ DECLARE_RTFEXPORT_TEST(testFdo86750, "fdo86750.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf88811, "tdf88811.rtf")
 {
     // The problem was that shapes anchored to the paragraph that is moved into a textframe were lost, so this was 2.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
@@ -1059,9 +1049,7 @@ DECLARE_RTFEXPORT_TEST(testTdf90697, "tdf90697.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf104317, "tdf104317.rtf")
 {
     // This failed to load, we tried to set CustomShapeGeometry on a line shape.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf104744, "tdf104744.rtf")
