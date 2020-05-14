@@ -97,10 +97,16 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
  #ifdef MACOSX
     _rPath = "libiodbc.dylib";
  #else
-    _rPath = "libodbc.so.1";
+    _rPath = "libodbc.so.2";
     pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if ( !pODBCso )
+    {
+        _rPath = "libodbc.so.1";
+        pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
+    }
+    if ( !pODBCso )
         _rPath = "libodbc.so";
+
  #endif   /* MACOSX */
 #endif
 
