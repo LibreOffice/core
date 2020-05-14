@@ -26,7 +26,12 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_gallery_test, \
 	utl \
 	svxcore \
 	comphelper \
+	tl \
+	svl \
+	sfx \
 ))
+
+$(eval $(call gb_CppunitTest_use_externals,svx_gallery_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_vcl,svx_gallery_test))
 
