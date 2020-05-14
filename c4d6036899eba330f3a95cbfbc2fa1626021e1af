@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29f0b741_01d83382",
+        "filename": "sw/qa/inc/swmodeltestbase.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-14T16:17:17Z",
+      "side": 1,
+      "message": "a better method name? getShapesCount ?",
+      "revId": "c4d6036899eba330f3a95cbfbc2fa1626021e1af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
