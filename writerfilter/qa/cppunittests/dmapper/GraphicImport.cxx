@@ -125,13 +125,14 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
     // 10582, the lower 33% of the graphic is cropped, and the wrap polygon covers the middle third
     // of the area vertically. Which means 10582*2/3 = 7054.67 is the cropped height, and the top of
     // the middle third is 2351.55.
+    // Then there is a 15 twips shift from the origo, so it's 2351.55 + 26.46 = 2378.01 in mm100.
     //
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2361
+    // - Expected: 2368
     // - Actual  : 3542
     // i.e. the wrap polygon covered a larger-than-correct area, which end the end means 3 lines
     // were wrapping around the image, not only 2 as Word does it.
-    CPPUNIT_ASSERT_EQUAL(2361., aPolygon.getB2DPoint(0).getY());
+    CPPUNIT_ASSERT_EQUAL(2368., aPolygon.getB2DPoint(0).getY());
 }
 }
 
