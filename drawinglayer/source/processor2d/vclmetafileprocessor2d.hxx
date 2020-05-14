@@ -144,6 +144,11 @@ private:
         const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
     void processStructureTagPrimitive2D(
         const primitive2d::StructureTagPrimitive2D& rStructureTagCandidate);
+    void processPrimitive2DOnPixelProcessor(const primitive2d::BasePrimitive2D& rCandidate);
+    VclPtr<VirtualDevice> CreateBufferDevice(const basegfx::B2DRange& rCandidateRange,
+                                             const double fMaxQuadratPixels,
+                                             geometry::ViewInformation2D& rViewInfo,
+                                             tools::Rectangle& rRectLogic, Size& rSizePixel);
 
     /// Convert the fWidth to the same space as its coordinates.
     double getTransformedLineWidth(double fWidth) const;
