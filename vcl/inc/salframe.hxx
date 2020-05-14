@@ -259,6 +259,10 @@ public:
         return false;
     }
 
+    /** only does anything on MACOSX where it indicates to the OS that this window is a modal-dialog
+     * and  should be displayed using the special sheet mode */
+    virtual void BeginSheet(SalFrame* /*pSheetWindow*/) const {}
+
     // return true to indicate tooltips are shown natively, false otherwise
     virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
     {

@@ -966,6 +966,14 @@ bool Dialog::ImplStartExecute()
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
 
+    // If we are on macOS, display modal dialogs as a sheet
+    if (bModal && mpDialogParent)
+    {
+        auto frame = ImplGetFrame();
+        if (frame)
+            mpDialogParent->ImplGetFrame()->BeginSheet(frame);
+    }
+
     css::uno::Reference< css::uno::XComponentContext > xContext(
         comphelper::getProcessComponentContext());
     bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));

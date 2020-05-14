@@ -1822,4 +1822,16 @@ void AquaSalFrame::EndSetClipRegion()
     // shadow is invalidated when view gets drawn again
 }
 
+void AquaSalFrame::BeginSheet(SalFrame* pSheetFrame) const
+{
+    NSWindow* pSheet = static_cast<AquaSalFrame*>(pSheetFrame)->mpNSWindow;
+
+//    [pSheet setStyleMask:NSBorderlessWindowMask];
+//    [pSheet setTitleVisibility: NSWindowTitleHidden];
+//    pSheet.titlebarAppearsTransparent = true;
+
+
+    [mpNSWindow beginSheet:pSheet completionHandler:nil ];
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
