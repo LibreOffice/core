@@ -338,6 +338,9 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
         if(bSuccess)
         {
+            if (mpAlphaVDev)
+                mpAlphaVDev->ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
+
             return;
         }
     }
