@@ -3820,19 +3820,13 @@ com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
 }
 
-Sequence< OUString > SchXMLExport_Content_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLContentExporter" };
-}
-
-OUString SchXMLExport_Content_getImplementationName() throw()
-{
-    return "SchXMLExport.Content";
-}
-
-Reference< uno::XInterface > SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS ));
+    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Content",
+                                          SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
+                                              | SvXMLExportFlags::FONTDECLS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
