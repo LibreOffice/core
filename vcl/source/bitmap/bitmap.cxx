@@ -19,8 +19,10 @@
 
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
+#include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>
@@ -110,8 +112,24 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     }
 }
 
+namespace
+{
+void savePNG(const OUString& sWhere, const Bitmap& rBmp)
+{
+    SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    rFilter.compressAsPNG(rBmp, aStream);
+}
+}
+
 Bitmap::~Bitmap()
 {
+    static volatile bool save(false);
+    if (save)
+    {
+        save = false;
+        savePNG("D:/Documents/bitmapDump.png", *this);
+    }
 }
 
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
