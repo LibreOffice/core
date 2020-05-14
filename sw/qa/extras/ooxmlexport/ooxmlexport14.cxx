@@ -203,6 +203,27 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[5]/w:rPr/w:szCs", "val", "20");
 }
 
+<<<<<<< HEAD   (ac6d3c tdf#127616 DOCX import: fix char style of empty paragraph)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Tdf133035, "tdf133035.docx")
+{
+    auto pxml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pxml);
+    OUString aXmlVal = getXPath(pxml, "/w:document/w:body/w:p[1]/w:r[1]/w:object/v:shape", "style");
+    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:186.6pt") > -1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf131260, "tdf131260.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+}
+>>>>>>> CHANGE (45fe51 tdf#133035 DOCX export: fix position of unnamed OLE)
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 {
     // tdf#120315 cells of the second column weren't vertically merged
