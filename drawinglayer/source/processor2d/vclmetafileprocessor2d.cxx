@@ -38,6 +38,8 @@
 #include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
 #include <toolkit/helper/formpdfexport.hxx> // for PDFExtOutDevData Graphic support
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/glowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
@@ -925,6 +927,12 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
         {
             RenderObjectInfoPrimitive2D(
                 static_cast<const primitive2d::ObjectInfoPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
+        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+        {
+            processPrimitive2DOnPixelProcessor(rCandidate);
             break;
         }
         default:
@@ -2309,6 +2317,95 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     {
         // write end tag
         mpPDFExtOutDevData->EndStructureElement();
+    }
+}
+
+VclPtr<VirtualDevice> VclMetafileProcessor2D::CreateBufferDevice(
+    const basegfx::B2DRange& rCandidateRange, const double fMaxQuadratPixels,
+    geometry::ViewInformation2D& rViewInfo, tools::Rectangle& rRectLogic, Size& rSizePixel)
+{
+    basegfx::B2DRange aViewRange(rCandidateRange);
+    aViewRange.transform(maCurrentTransformation);
+    rRectLogic = tools::Rectangle(static_cast<long>(std::floor(aViewRange.getMinX())),
+                                  static_cast<long>(std::floor(aViewRange.getMinY())),
+                                  static_cast<long>(std::ceil(aViewRange.getMaxX())),
+                                  static_cast<long>(std::ceil(aViewRange.getMaxY())));
+    const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(rRectLogic));
+    rSizePixel = aRectPixel.GetSize();
+    const double fViewVisibleArea(rSizePixel.getWidth() * rSizePixel.getHeight());
+    double fReduceFactor(1.0);
+
+    if (fViewVisibleArea > fMaxQuadratPixels)
+    {
+        // reduce render size
+        fReduceFactor = sqrt(fMaxQuadratPixels / fViewVisibleArea);
+        rSizePixel = Size(basegfx::fround(rSizePixel.getWidth() * fReduceFactor),
+                          basegfx::fround(rSizePixel.getHeight() * fReduceFactor));
+    }
+
+    VclPtrInstance<VirtualDevice> pBufferDevice(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    if (pBufferDevice->SetOutputSizePixel(rSizePixel))
+    {
+        // create and set MapModes for target devices
+        MapMode aNewMapMode(mpOutputDevice->GetMapMode());
+        aNewMapMode.SetOrigin(Point(-rRectLogic.Left(), -rRectLogic.Top()));
+        pBufferDevice->SetMapMode(aNewMapMode);
+
+        // prepare view transformation for target renderers
+        // ATTENTION! Need to apply another scaling because of the potential DPI differences
+        // between Printer and VDev (mpOutputDevice and pBufferDevice here).
+        // To get the DPI, LogicToPixel from (1,1) from MapUnit::MapInch needs to be used.
+        basegfx::B2DHomMatrix aViewTransform(pBufferDevice->GetViewTransformation());
+        const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+        const Size aDPINew(pBufferDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+        const double fDPIXChange(static_cast<double>(aDPIOld.getWidth())
+                                 / static_cast<double>(aDPINew.getWidth()));
+        const double fDPIYChange(static_cast<double>(aDPIOld.getHeight())
+                                 / static_cast<double>(aDPINew.getHeight()));
+
+        if (!basegfx::fTools::equal(fDPIXChange, 1.0) || !basegfx::fTools::equal(fDPIYChange, 1.0))
+        {
+            aViewTransform.scale(fDPIXChange, fDPIYChange);
+        }
+
+        // also take scaling from Size reduction into account
+        if (!basegfx::fTools::equal(fReduceFactor, 1.0))
+        {
+            aViewTransform.scale(fReduceFactor, fReduceFactor);
+        }
+
+        // create view information and pixel renderer. Reuse known ViewInformation
+        // except new transformation and range
+        rViewInfo = geometry::ViewInformation2D(
+            getViewInformation2D().getObjectTransformation(), aViewTransform, aViewRange,
+            getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
+            getViewInformation2D().getExtendedInformationSequence());
+    }
+    else
+        pBufferDevice.disposeAndClear();
+
+    return std::move(pBufferDevice);
+}
+
+void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
+    const primitive2d::BasePrimitive2D& rCandidate)
+{
+    basegfx::B2DRange aViewRange(rCandidate.getB2DRange(getViewInformation2D()));
+    geometry::ViewInformation2D aViewInfo;
+    tools::Rectangle aRectLogic;
+    Size aSizePixel;
+    auto pBufferDevice(CreateBufferDevice(aViewRange, 500000, aViewInfo, aRectLogic, aSizePixel));
+    if (pBufferDevice)
+    {
+        VclPixelProcessor2D aBufferProcessor(aViewInfo, *pBufferDevice);
+
+        // draw content using pixel renderer
+        primitive2d::Primitive2DReference aRef(
+            &const_cast<primitive2d::BasePrimitive2D&>(rCandidate));
+        aBufferProcessor.process({ aRef });
+        const BitmapEx aBmContent(pBufferDevice->GetBitmapEx(Point(), aSizePixel));
+        mpOutputDevice->DrawBitmapEx(aRectLogic.TopLeft(), aRectLogic.GetSize(), aBmContent);
+        pBufferDevice.disposeAndClear();
     }
 }
 
