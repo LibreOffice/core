@@ -283,7 +283,7 @@ SvxMetricField::SvxMetricField(
     vcl::Window* pParent, const Reference< XFrame >& rFrame )
     : MetricField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT)
     , aCurTxt()
-    , ePoolUnit(MapUnit::MapCM)
+    , eDestPoolUnit(MapUnit::Map100thMM)
     , mxFrame(rFrame)
 {
     Size aSize( CalcMinimumSize() );
@@ -306,8 +306,10 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
     {
-        if ( pItem->GetValue() != GetCoreValue( *this, ePoolUnit ) )
-            SetMetricValue( *this, pItem->GetValue(), ePoolUnit );
+        // tdf#132169 we always get the value in MapUnit::Map100thMM but have
+        // to set it in the core metric of the target application
+        if (pItem->GetValue() != GetCoreValue(*this, MapUnit::Map100thMM))
+            SetMetricValue(*this, pItem->GetValue(), MapUnit::Map100thMM);
     }
     else
         SetText( "" );
@@ -317,7 +319,7 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
 void SvxMetricField::Modify()
 {
     MetricField::Modify();
-    long nTmp = GetCoreValue( *this, ePoolUnit );
+    long nTmp = GetCoreValue( *this, eDestPoolUnit );
     XLineWidthItem aLineWidthItem( nTmp );
 
     Any a;
@@ -341,9 +343,9 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-void SvxMetricField::SetCoreUnit( MapUnit eUnit )
+void SvxMetricField::SetDestCoreUnit( MapUnit eUnit )
 {
-    ePoolUnit = eUnit;
+    eDestPoolUnit = eUnit;
 }
 
 void SvxMetricField::RefreshDlgUnit()
