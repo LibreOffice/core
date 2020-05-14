@@ -13889,6 +13889,7 @@ svx/source/tbxctrls/itemwin.cxx
 svx/source/tbxctrls/layctrl.cxx
 svx/source/tbxctrls/lboxctrl.cxx
 svx/source/tbxctrls/linectrl.cxx
+svx/source/tbxctrls/linemetricbox.hxx
 svx/source/tbxctrls/linewidthctrl.cxx
 svx/source/tbxctrls/tbcontrl.cxx
 svx/source/tbxctrls/tbunocontroller.cxx

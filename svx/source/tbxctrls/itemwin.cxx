@@ -36,6 +36,7 @@
 #include <svx/xtable.hxx>
 #include <svx/itemwin.hxx>
 #include <svtools/unitconv.hxx>
+#include "linemetricbox.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

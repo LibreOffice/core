@@ -24,7 +24,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
 
-class XLineWidthItem;
 class SfxObjectShell;
 class ValueSet;
 class SvxLineStyleToolBoxControl;
@@ -45,38 +44,6 @@ class SvxLineBox final : public WeldToolbarPopup
 public:
     SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex);
     virtual ~SvxLineBox() override;
-};
-
-class SvxMetricField final : public InterimItemWindow
-{
-private:
-    std::unique_ptr<weld::MetricSpinButton> m_xWidget;
-    int             nCurValue;
-    MapUnit         eDestPoolUnit;
-    FieldUnit       eDlgUnit;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
-
-    DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(FocusInHdl, weld::Widget&, void);
-
-    static void     ReleaseFocus_Impl();
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual void GetFocus() override;
-
-public:
-    SvxMetricField( vcl::Window* pParent,
-                    const css::uno::Reference< css::frame::XFrame >& rFrame );
-    virtual void dispose() override;
-    virtual ~SvxMetricField() override;
-
-    void            Update( const XLineWidthItem* pItem );
-    void            SetDestCoreUnit( MapUnit eUnit );
-    void            RefreshDlgUnit();
-
-    void            set_sensitive(bool bSensitive);
 };
 
 namespace SvxFillTypeBox

@@ -24,6 +24,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>
+#include "linemetricbox.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
