@@ -620,11 +620,11 @@ IMPL_LINK(ScContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
         aHelpText = OUString::number(m_xTreeView->iter_n_children(rEntry)) +
                     " " + m_xTreeView->get_text(rEntry);
     }
-    else if (m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::NOTE]) == 0)
+    else if (m_aRootNodes[ScContentId::NOTE] && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::NOTE]) == 0)
     {
         aHelpText = m_xTreeView->get_text(rEntry);     // notes as help text
     }
-    else if (m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::AREALINK]) == 0)
+    else if (m_aRootNodes[ScContentId::AREALINK] && m_xTreeView->iter_compare(*xParent, *m_aRootNodes[ScContentId::AREALINK]) == 0)
     {
         auto nIndex = GetChildIndex(&rEntry);
         if (nIndex != SC_CONTENT_NOCHILD)
