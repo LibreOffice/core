@@ -5545,7 +5545,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     //This string will store the relative position for aPos
     OString aAnch;
 
-    if (!rFlyFrameFormat->GetName().isEmpty())
+    if (rFlyFrameFormat && rFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
         //Get the horizontal alignment of the OLE via the frame format, to aHAlign
         OString aHAlign = convertToOOXMLHoriOrient(rFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
