@@ -48,7 +48,7 @@ SvxMetricField::SvxMetricField(
     : InterimItemWindow(pParent, "svx/ui/metricfieldbox.ui", "MetricFieldBox")
     , m_xWidget(m_xBuilder->weld_metric_spin_button("metricfield", FieldUnit::MM))
     , nCurValue(0)
-    , ePoolUnit(MapUnit::MapCM)
+    , eDestPoolUnit(MapUnit::Map100thMM)
     , eDlgUnit(SfxModule::GetModuleFieldUnit(rFrame))
     , mxFrame(rFrame)
 {
@@ -85,8 +85,10 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
     {
-        if (pItem->GetValue() != GetCoreValue(*m_xWidget, ePoolUnit))
-            SetMetricValue(*m_xWidget, pItem->GetValue(), ePoolUnit);
+        // tdf#132169 we always get the value in MapUnit::Map100thMM but have
+        // to set it in the core metric of the target application
+        if (pItem->GetValue() != GetCoreValue(*m_xWidget, MapUnit::Map100thMM))
+            SetMetricValue(*m_xWidget, pItem->GetValue(), MapUnit::Map100thMM);
     }
     else
         m_xWidget->set_text("");
@@ -94,7 +96,7 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
 
 IMPL_LINK_NOARG(SvxMetricField, ModifyHdl, weld::MetricSpinButton&, void)
 {
-    auto nTmp = GetCoreValue(*m_xWidget, ePoolUnit);
+    auto nTmp = GetCoreValue(*m_xWidget, eDestPoolUnit);
     XLineWidthItem aLineWidthItem( nTmp );
 
     Any a;
@@ -117,9 +119,9 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-void SvxMetricField::SetCoreUnit( MapUnit eUnit )
+void SvxMetricField::SetDestCoreUnit( MapUnit eUnit )
 {
-    ePoolUnit = eUnit;
+    eDestPoolUnit = eUnit;
 }
 
 void SvxMetricField::RefreshDlgUnit()
