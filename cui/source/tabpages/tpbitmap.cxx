@@ -106,6 +106,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     m_rXFSet.Put( XFillBitmapItem(OUString(), Graphic()) );
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
 
+    m_xBitmapLB->SetStyle(m_xBitmapLB->GetStyle() | WB_ITEMBORDER);
     m_xBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );
     m_xBitmapLB->SetRenameHdl( LINK(this, SvxBitmapTabPage, ClickRenameHdl) );
     m_xBitmapLB->SetDeleteHdl( LINK(this, SvxBitmapTabPage, ClickDeleteHdl) );
