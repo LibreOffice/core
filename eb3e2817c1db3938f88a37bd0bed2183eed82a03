@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d82e11b_fdf0fe78",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-14T00:14:00Z",
+      "side": 1,
+      "message": "Ah hmm - can\u0027t we register that xmlns at file scope?",
+      "revId": "eb3e2817c1db3938f88a37bd0bed2183eed82a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
