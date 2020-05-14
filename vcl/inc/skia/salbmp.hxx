@@ -71,8 +71,7 @@ public:
 #endif
 
 private:
-    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage(),
-    // and also the SkBitmap allocated in GetAsSkBitmap().
+    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage().
     void ResetCachedData();
     // Sets the data only as SkImage (will be converted as needed).
     void ResetToSkImage(sk_sp<SkImage> image);
@@ -97,10 +96,9 @@ private:
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
     {
-        // B - has SkBitmap, I/i - has SkImage (on GPU/CPU),
+        // I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
-                      << bitmap->mBitCount << (!bitmap->mBitmap.isNull() ? "B" : "")
                       << (bitmap->mImage ? (bitmap->mImage->isTextureBacked() ? "I" : "i") : "")
                       << (bitmap->mAlphaImage ? (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a")
                                               : "");
@@ -119,7 +117,6 @@ private:
     // mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
     boost::shared_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
-    SkBitmap mBitmap; // cached mBuffer, if needed
     sk_sp<SkImage> mImage; // possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
     // Actual scaling triggered by scale() is done on-demand. This is the size of the pixel
