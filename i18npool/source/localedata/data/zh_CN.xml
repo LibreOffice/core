@@ -61,7 +61,7 @@
     <DateAcceptancePattern>M月D日</DateAcceptancePattern>
     <!-- Fix number formats. Index range is from 0 to 5. -->
     <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
-      <FormatCode>General</FormatCode>
+      <FormatCode>常规</FormatCode>
     </FormatElement>
     <FormatElement msgid="NumberFormatskey2" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="1">
       <FormatCode>0</FormatCode>
