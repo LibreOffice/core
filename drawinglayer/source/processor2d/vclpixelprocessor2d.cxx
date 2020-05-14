@@ -924,12 +924,12 @@ namespace
    Negative fErodeDilateRadius values mean erode, positive - dilate.
    nTransparency defines minimal transparency level.
 */
-AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadius,
-                                  double fBlurRadius, sal_uInt8 nTransparency)
+Bitmap ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius, double fBlurRadius,
+                               sal_uInt8 nTransparency)
 {
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(rBWMask.CreateMask(COL_WHITE));
+    BitmapEx mask(rMask.CreateMask(COL_WHITE));
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.
@@ -964,7 +964,7 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadi
     // calculate blurry effect
     BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
 
-    return AlphaMask(mask.GetBitmap());
+    return mask.GetBitmap();
 }
 }
 
@@ -997,7 +997,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
                                                   Size(aRange.getWidth(), aRange.getHeight()));
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
+        Bitmap mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
 
         // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
         const basegfx::BColor aGlowColor(
@@ -1025,32 +1025,24 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     // Blur radius is equal to soft edge radius
     const double fBlurRadius = aRadiusVector.getLength();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        // Processing will draw whatever geometry on white background, applying *black*
-        // replacement color
         mpOutputDevice->Erase();
-        rCandidate.setMaskGeneration();
         process(rCandidate);
-        rCandidate.setMaskGeneration(false);
-        Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                                  Size(aRange.getWidth(), aRange.getHeight()));
+        BitmapEx bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()),
+                                                      Size(aRange.getWidth(), aRange.getHeight()));
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, -fBlurRadius, fBlurRadius, 0);
+        Bitmap oldMask = bitmap.GetAlpha();
+        Bitmap newMask = ProcessAndBlurAlphaMask(oldMask, -fBlurRadius, fBlurRadius, 0);
+        newMask.CombineSimple(oldMask, BmpCombine::Or);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-
-        mpOutputDevice->Erase();
-        process(rCandidate);
-        bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
-                                           Size(aRange.getWidth(), aRange.getHeight()));
-
         // alpha mask will be scaled up automatically to match bitmap
-        BitmapEx result(bitmap, mask);
+        BitmapEx result(bitmap.GetBitmap(), newMask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
