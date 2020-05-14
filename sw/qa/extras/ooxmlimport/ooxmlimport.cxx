@@ -882,8 +882,13 @@ DECLARE_OOXMLIMPORT_TEST(testFdo75722dml, "fdo75722-dml.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
+DECLARE_OOXMLEXPORT_TEST(testFdo76803, "fdo76803.docx")
 {
+    if (!mbExported)
+    {
+        return;
+    }
+
     // The ContourPolyPolygon was wrong
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
@@ -898,16 +903,20 @@ DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
 
-    CPPUNIT_ASSERT_EQUAL(double(-162), aPolygon.getB2DPoint(0).getX());
+    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(0).getX());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -35
+    // - Actual  : -67
+    // i.e. the cropping did not influence the wrap polygon during export.
     CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(0).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(-162), aPolygon.getB2DPoint(1).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3510), aPolygon.getB2DPoint(1).getY());
+    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(1).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(1).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(16892), aPolygon.getB2DPoint(2).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3510), aPolygon.getB2DPoint(2).getY());
+    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(2).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(2).getY());
 
-    CPPUNIT_ASSERT_EQUAL(double(16892), aPolygon.getB2DPoint(3).getX());
+    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(3).getX());
     CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(3).getY());
 }
 
@@ -1624,13 +1633,14 @@ DECLARE_OOXMLIMPORT_TEST(testWrapPolyCrop, "wrap-poly-crop.docx")
     // 10582, the lower 33% of the graphic is cropped, and the wrap polygon covers the middle third
     // of the area vertically. Which means 10582*2/3 = 7054.67 is the cropped height, and the top of
     // the middle third is 2351.55.
+    // Then there is a 15 twips shift from the origo, so it's 2351.55 + 26.46 = 2378.01 in mm100.
     //
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2361
+    // - Expected: 2368
     // - Actual  : 3542
     // i.e. the wrap polygon covered a larger-than-correct area, which end the end means 3 lines
     // were wrapping around the image, not only 2 as Word does it.
-    CPPUNIT_ASSERT_EQUAL(2361., aPolygon.getB2DPoint(0).getY());
+    CPPUNIT_ASSERT_EQUAL(2368., aPolygon.getB2DPoint(0).getY());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf117843, "tdf117843.docx")

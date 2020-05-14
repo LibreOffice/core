@@ -4131,8 +4131,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                 const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
                 if (pPolyPoly && pPolyPoly->Count())
                 {
-                    tools::Polygon aPoly
-                        = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                    tools::Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(
+                        *pPolyPoly, pNd, /*bCorrectCrop=*/true);
                     OStringBuffer aVerticies;
                     for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
                         aVerticies.append(";(")

@@ -613,7 +613,7 @@ namespace sw
         tools::Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
 
         /// Undo all scaling / move tricks of the wrap polygon done during import.
-        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd);
+        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd, bool bCorrectCrop);
 
         /** Make setting a drawing object's layer in a Writer document easy
 

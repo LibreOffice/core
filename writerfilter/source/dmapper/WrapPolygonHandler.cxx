@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/mapunit.hxx>
 
 #include <ooxml/resourceids.hxx>
 
@@ -97,7 +98,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
     const long nWrap100Percent = 21600;
 
     Fraction aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * Fraction(15, 1);
+    aMove = aMove * Fraction(convertTwipToMm100(15), 1);
     awt::Point aMovePoint(aMove.operator long(), 0);
     pResult = move(aMovePoint);
 

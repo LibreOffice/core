@@ -2153,7 +2153,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
             const tools::PolyPolygon *pPolyPoly = pNd->HasContour();
             if (pPolyPoly && pPolyPoly->Count())
             {
-                tools::Polygon aPoly = CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                tools::Polygon aPoly = CorrectWordWrapPolygonForExport(*pPolyPoly, pNd, /*bCorrectCrop=*/false);
                 SvMemoryStream aPolyDump;
                 aPolyDump.SetEndian(SvStreamEndian::LITTLE);
 

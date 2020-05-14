@@ -55,6 +55,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
+#include <grfatr.hxx>
 
 using namespace com::sun::star;
 
@@ -667,10 +668,31 @@ namespace sw
             }
         }
 
-        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd)
+        tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd, bool bCorrectCrop)
         {
             tools::Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
+
+            const SwAttrSet* pAttrSet = pNd->GetpSwAttrSet();
+            if (bCorrectCrop && pAttrSet)
+            {
+                if (pAttrSet->HasItem(RES_GRFATR_CROPGRF))
+                {
+                    // Word's wrap polygon deals with a canvas which has the size of the already
+                    // cropped graphic, do the opposite of correctCrop() in writerfilter/.
+                    const SwCropGrf& rCrop = pAttrSet->GetCropGrf();
+                    sal_Int32 nCropLeft = convertTwipToMm100(rCrop.GetLeft());
+                    sal_Int32 nCropRight = convertTwipToMm100(rCrop.GetRight());
+                    sal_Int32 nCropTop = convertTwipToMm100(rCrop.GetTop());
+                    sal_Int32 nCropBottom = convertTwipToMm100(rCrop.GetBottom());
+                    aPoly.Move(-nCropLeft, -nCropTop);
+
+                    Fraction aScaleX(rOrigSize.getWidth(), rOrigSize.getWidth() - nCropLeft - nCropRight);
+                    Fraction aScaleY(rOrigSize.getHeight(), rOrigSize.getHeight() - nCropTop - nCropBottom);
+                    aPoly.Scale(double(aScaleX), double(aScaleY));
+                }
+            }
+
             Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
             Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
             aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
