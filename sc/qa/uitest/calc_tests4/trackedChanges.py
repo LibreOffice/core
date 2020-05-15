@@ -29,8 +29,10 @@ class CalcTrackedChanges(UITestCase):
         xChangesList = xTrackDlg.getChild("calcchanges")
         self.assertEqual(1, len(xChangesList.getChildren()))
 
-        text = "Row inserted \tSheet1.1:1\t \t04/05/2020 17:01:10\t (Row 1:1 inserted)"
-        self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], text)
+        textStart = "Row inserted \tSheet1.1:1\t \t"
+        textEnd = "(Row 1:1 inserted)"
+        self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].startswith(textStart))
+        self.assertTrue(get_state_as_dict(xChangesList.getChild('0'))["Text"].endswith(textEnd))
 
         #it would crash here
         xRejBtn = xTrackDlg.getChild("reject")
