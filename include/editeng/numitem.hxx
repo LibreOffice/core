@@ -31,6 +31,7 @@
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <optional>
 #include <algorithm>
 
 class SvxBrushItem;
@@ -103,7 +104,9 @@ public:
 private:
     OUString            sPrefix;
     OUString            sSuffix;
-    OUString            sListFormat;        // Format string ">%1.%2<" can be used instead of prefix/suffix
+    std::optional<OUString> sListFormat;        // Format string ">%1.%2<" can be used instead of prefix/suffix
+                                                // Right now it is optional value to dostinguish empty list format
+                                                // and not set list format when we need to fallback to prefix/suffix.
 
     SvxAdjust           eNumAdjust;
 
@@ -169,7 +172,8 @@ public:
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString& GetSuffix() const { return sSuffix;}
     void            SetListFormat(const OUString& rSet) { sListFormat = rSet; }
-    const OUString& GetListFormat() const { return sListFormat; }
+    bool            HasListFormat() const { return sListFormat.has_value(); }
+    const OUString& GetListFormat() const { return *sListFormat; }
 
     void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFormatName()const;
