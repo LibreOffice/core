@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86993fac_9d44ce35",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-15T22:16:51Z",
+      "side": 1,
+      "message": "This does not look correct. It now deletes both hard attributes and styles if only one of the flags is set (ATTRIB \u003d HARDATTR | STYLES).",
+      "revId": "b86894aeef3bb2190da013eb4153edaeb7023945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e331d5cd_2fa9f8fe",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-15T22:16:51Z",
+      "side": 1,
+      "message": "And this HARDATTR isn\u0027t reached anymore.",
+      "revId": "b86894aeef3bb2190da013eb4153edaeb7023945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
