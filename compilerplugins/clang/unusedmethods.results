@@ -1696,8 +1696,6 @@ vcl/inc/fontinstance.hxx:69
     void LogicalFontInstance::SetAverageWidthFactor(double)
 vcl/inc/fontinstance.hxx:70
     double LogicalFontInstance::GetAverageWidthFactor() const
-vcl/inc/fontinstance.hxx:93
-    void LogicalFontInstance::ReleaseHbFont()
 vcl/inc/fontselect.hxx:48
     _Bool FontSelectPattern::operator!=(const class FontSelectPattern &) const
 vcl/inc/graphic/GraphicID.hxx:39

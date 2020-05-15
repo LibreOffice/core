@@ -90,7 +90,6 @@ protected:
     // Takes ownership of pHbFace.
     static hb_font_t* InitHbFont(hb_face_t* pHbFace);
     virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
-    inline void ReleaseHbFont();
 
 private:
     // cache of Unicode characters and replacement font names
@@ -111,14 +110,6 @@ inline hb_font_t* LogicalFontInstance::GetHbFont()
     if (!m_pHbFont)
         m_pHbFont = ImplInitHbFont();
     return m_pHbFont;
-}
-
-inline void LogicalFontInstance::ReleaseHbFont()
-{
-    if (!m_pHbFont)
-        return;
-    hb_font_destroy(m_pHbFont);
-    m_pHbFont = nullptr;
 }
 
 inline void LogicalFontInstance::DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName)
