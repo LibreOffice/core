@@ -22,6 +22,30 @@
       "revId": "0945034caecfa88309fc17eac93d751cbbda2bb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "091dbb3b_f7ad4468",
+        "filename": "sc/qa/uitest/calc_tests4/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-05-15T15:15:20Z",
+      "side": 1,
+      "message": "No idea to be honest. I think I\u0027ll remove that part too, to be on the safe side",
+      "parentUuid": "46ae086b_fa1a2bd9",
+      "range": {
+        "startLine": 32,
+        "startChar": 51,
+        "endLine": 32,
+        "endChar": 61
+      },
+      "revId": "0945034caecfa88309fc17eac93d751cbbda2bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
