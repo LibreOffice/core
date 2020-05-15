@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b472b068_f2c6299a",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-15T21:47:38Z",
+      "side": 1,
+      "message": "Sorting the formats into a \"more logical order\" (i.e. moving the old format here from index 20 to 32 and assigning a different format to 20) isn\u0027t such a good idea. Though it may look more logical in the dialog\u0027s formats list, it loses the capability of interchangeable formats when switching the default locale. See description at https://opengrok.libreoffice.org/xref/core/i18npool/source/localedata/data/locale.dtd#221 and its reference to NumberFormatIndex.idl\n\nAlso, as the old published UNO API provides access to format codes by the predefined index values (NumberFormatIndex.idl), changing the underlying meaning of those formats is not advisable.\n\nI\u0027d rather not do this rearranging. An old idea is to sort entries by the (arbitrary) msgid\u003d\"...\" value within the listbox, but that needs to be implemented..",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9389e5d_752daf71",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-15T21:47:38Z",
+      "side": 1,
+      "message": "Sure this should be the same? The first should be the context of \"and the following page\" and the second \"and following pages\" (i.e. plural).",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f9904b3_bb345119",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-15T21:47:38Z",
+      "side": 1,
+      "message": "Narrow actually means narrow, i.e. one character. You *may* use it differently, but it can come completely unexpected if a format was created in one locale using 1 character and is displayed in a locale that uses 2 to 4 characters.",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
