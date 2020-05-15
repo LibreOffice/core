@@ -49,7 +49,11 @@ void FormFieldButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
     // Then extend the size with the button area
     aBoxSize.AdjustWidth(GetParent()->LogicToPixel(rPortionPaintArea.SSize()).Height());
 
-    SetPosSizePixel(aBoxPos, aBoxSize);
+    if (aBoxPos != GetPosPixel() || aBoxSize != GetSizePixel())
+    {
+        SetPosSizePixel(aBoxPos, aBoxSize);
+        Invalidate();
+    }
 }
 
 void FormFieldButton::MouseButtonUp(const MouseEvent&)
