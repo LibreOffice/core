@@ -3508,6 +3508,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 // to the next paragraph in sw SplitNode and then be applied to
                 // every following paragraph
                 xContext->Erase(PROP_NUMBERING_RULES);
+                static_cast<ParagraphPropertyMap*>(xContext.get())->SetListId(-1);;
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
             m_pImpl->SetParaSectpr(false);
