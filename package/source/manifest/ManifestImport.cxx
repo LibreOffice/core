@@ -341,8 +341,8 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             doFileEntry(aConvertedAttribs);
         else if (aConvertedName == gsManifestKeyInfoElement) //loext:keyinfo
             ;
-        else if (aConvertedName == gsManifestKeyInfoElement13) //manifest:keyinfo
-            ;
+        else if (aConvertedName == gsEncryptedKeyElement13)   //manifest:encrypted-key
+            doEncryptedKey(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
         break;
@@ -357,8 +357,12 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             doEncryptionData(aConvertedAttribs);
         else if (aConvertedName == gsEncryptedKeyElement)   //loext:encrypted-key
             doEncryptedKey(aConvertedAttribs);
-        else if (aConvertedName == gsEncryptedKeyElement13)   //manifest:encrypted-key
-            doEncryptedKey(aConvertedAttribs);
+        else if (aConvertedName == gsEncryptionMethodElement13)   //manifest:encryption-method
+            doEncryptionMethod(aConvertedAttribs, gsAlgorithmAttribute13);
+        else if (aConvertedName == gsManifestKeyInfoElement13) //manifest:keyinfo
+            ;
+        else if (aConvertedName == gsCipherDataElement13)            //manifest:CipherData
+            ;
         else
             aStack.back().m_bValid = false;
         break;
@@ -377,16 +381,15 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             doStartKeyAlg(aConvertedAttribs);
         else if (aConvertedName == gsEncryptionMethodElement)   //loext:encryption-method
             doEncryptionMethod(aConvertedAttribs, gsAlgorithmAttribute);
-        else if (aConvertedName == gsEncryptionMethodElement13)   //manifest:encryption-method
-            doEncryptionMethod(aConvertedAttribs, gsAlgorithmAttribute13);
         else if (aConvertedName == gsKeyInfoElement)            //loext:KeyInfo
             ;
         else if (aConvertedName == gsCipherDataElement)            //loext:CipherData
             ;
-        else if (aConvertedName == gsCipherDataElement13)            //manifest:CipherData
-            ;
         else if (aConvertedName == gsPgpDataElement13)   //manifest:PGPData
             ;
+        else if (aConvertedName == gsCipherValueElement13) //manifest:CipherValue
+            // ciphervalue action happens on endElement
+            aCurrentCharacters = "";
         else
             aStack.back().m_bValid = false;
         break;
@@ -400,9 +403,6 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         else if (aConvertedName == gsPgpDataElement)   //loext:PGPData
             ;
         else if (aConvertedName == gsCipherValueElement) //loext:CipherValue
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else if (aConvertedName == gsCipherValueElement13) //manifest:CipherValue
             // ciphervalue action happens on endElement
             aCurrentCharacters = "";
         else if (aConvertedName == gsPgpKeyIDElement13)   //manifest:PGPKeyID
@@ -482,10 +482,15 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
 
     // end element handling for elements with cdata
     switch (nLevel) {
+        case 4: {
+            if (aConvertedName == gsCipherValueElement13) //manifest:CipherValue
+                doEncryptedCipherValue();
+            else
+                aStack.back().m_bValid = false;
+            break;
+        }
         case 5: {
             if (aConvertedName == gsCipherValueElement) //loext:CipherValue
-                doEncryptedCipherValue();
-            else if (aConvertedName == gsCipherValueElement13) //manifest:CipherValue
                 doEncryptedCipherValue();
             else if (aConvertedName == gsPgpKeyIDElement13)   //manifest:PGPKeyID
                 doEncryptedKeyId();
