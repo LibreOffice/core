@@ -477,7 +477,6 @@ bool ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
                 SelectItem( pItem->mnId );
                 if (!(GetStyle() & WB_NOPOINTERFOCUS))
                     GrabFocus();
-                Select();
             }
             else if ( rMouseEvent.GetClicks() == 2 )
                 maDoubleClickHdl.Call( this );
@@ -487,6 +486,17 @@ bool ValueSet::MouseButtonDown( const MouseEvent& rMouseEvent )
     }
 
     return CustomWidgetController::MouseButtonDown( rMouseEvent );
+}
+
+bool ValueSet::MouseButtonUp( const MouseEvent& rMouseEvent )
+{
+    if (rMouseEvent.IsLeft() && !rMouseEvent.IsMod2())
+    {
+        Select();
+        return true;
+    }
+
+    return CustomWidgetController::MouseButtonUp( rMouseEvent );
 }
 
 bool ValueSet::MouseMove(const MouseEvent& rMouseEvent)
