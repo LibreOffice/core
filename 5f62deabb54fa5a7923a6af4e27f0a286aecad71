@@ -46,6 +46,30 @@
       "revId": "5f62deabb54fa5a7923a6af4e27f0a286aecad71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dc4bda3_8b6667f1",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-15T05:38:05Z",
+      "side": 1,
+      "message": "Of course it doesn\u0027t contain 8-bit vdev. It contains 32-bit vdev, as it should (it\u0027s created with DeviceFormat::DEFAULT). The conversion to 8 bits happens inside GetBitmapEx; and that has nothing to do with the problem. The problem is that no drawing inside the process() ever touches the alpha vdev.",
+      "parentUuid": "58d01620_b3bf2941",
+      "range": {
+        "startLine": 1039,
+        "startChar": 25,
+        "endLine": 1039,
+        "endChar": 43
+      },
+      "revId": "5f62deabb54fa5a7923a6af4e27f0a286aecad71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
