@@ -1372,13 +1372,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     OSL_ENSURE( pEntry.get(), "no style sheet found" );
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     bool isNumberingViaStyle(false);
-    //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
-    //does not specify the numbering
     sal_Int32 nListId = -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
+        //apply numbering level/style to paragraph if it was set at the style, but only if the paragraph itself
+        //does not specify the numbering
         const std::optional<PropertyMap::Property> pParaNumRulesProp = pParaContext->getProperty(PROP_NUMBERING_RULES);
         const sal_Int16 nListLevel = pStyleSheetProperties->GetListLevel();
+        if ( !pParaNumRulesProp && nListLevel >= 0 )
+            pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false);
 
         bool bNumberingFromBaseStyle = false;
         nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
@@ -1428,8 +1430,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             if  ( pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) && (nParaRightMargin = oProperty->second.get<sal_Int32>()) != 0 )
             {
                 // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
-                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
-                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, "FirstLineIndent");
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, "IndentAt");
                 if (nFirstLineIndent != 0)
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
@@ -1438,8 +1440,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
             }
         }
-        if ( !pParaNumRulesProp && pStyleSheetProperties->GetListLevel() >= 0 )
-            pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
 
     // apply AutoSpacing: it has priority over all other margin settings
