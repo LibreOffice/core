@@ -291,7 +291,7 @@ void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const 
     if( getPeer().is() && m_aTabPageListeners.getLength() == 1 )
     {
         uno::Reference < awt::tab::XTabPageContainer >  xTabPageContainer( getPeer(), uno::UNO_QUERY );
-        xTabPageContainer->addTabPageContainerListener( &m_aTabPageListeners );
+        xTabPageContainer->removeTabPageContainerListener( &m_aTabPageListeners );
     }
     m_aTabPageListeners.removeInterface( listener );
 }
