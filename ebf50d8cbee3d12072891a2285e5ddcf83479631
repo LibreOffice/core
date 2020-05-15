@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e938f7b_ac87b5cd",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-15T14:42:03Z",
+      "side": 1,
+      "message": "Nice - that is where I was getting hung up.  I think I figured that out in a later bug...",
+      "range": {
+        "startLine": 642,
+        "startChar": 50,
+        "endLine": 642,
+        "endChar": 56
+      },
+      "revId": "ebf50d8cbee3d12072891a2285e5ddcf83479631",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "077e3255_6f4c3f69",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-15T14:42:03Z",
+      "side": 1,
+      "message": "Isn\u0027t this backwards?  You are applying direct character formatting IF a character style is also specified, but nothing from the char-style is applied.\n\n// (re)apply direct character formatting as paragraph defaults on empty paragraphs\n// if the formatting contains a char-style (which would otherwise replace the \"run\"\n// attributes of the paragraph marker).\n\n[or something to that affect that is actually accurate :-)]",
+      "range": {
+        "startLine": 1279,
+        "startChar": 22,
+        "endLine": 1279,
+        "endChar": 61
+      },
+      "revId": "ebf50d8cbee3d12072891a2285e5ddcf83479631",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b99f7606_52f44f40",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-15T14:42:03Z",
+      "side": 1,
+      "message": "This means we are applying it twice, isn\u0027t it? This is the same command that ran in the previous line - it is just run again with SetAttrMode::NOFORMATATTR. Is it necessary to run it twice?\n\n[Now that I think more about it, it probably IS necessary to run twice, because the run was probably cleared at the paragraph end, and thus only the char-style applies to the paragraph. Unfortunately, I can\u0027t understand from the documentation what NOFORMATATTR actually does. Perhaps a comment here indicating what running this again actually accomplishes would be good.",
+      "range": {
+        "startLine": 1295,
+        "startChar": 24,
+        "endLine": 1295,
+        "endChar": 60
+      },
+      "revId": "ebf50d8cbee3d12072891a2285e5ddcf83479631",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
