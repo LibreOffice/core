@@ -186,9 +186,9 @@ ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponen
     ,maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( false )
-    ,m_bEnabled( true )
     ,m_nTabPageId(0)
 {
+    ImplRegisterProperty(BASEPROPERTY_ENABLED);
 }
 
 ControlModelContainerBase::ControlModelContainerBase( const ControlModelContainerBase& rModel )
@@ -196,7 +196,6 @@ ControlModelContainerBase::ControlModelContainerBase( const ControlModelContaine
     , maContainerListeners( *this )
     , maChangeListeners ( GetMutex() )
     , mbGroupsUpToDate( false )
-    , m_bEnabled( rModel.m_bEnabled )
     , m_nTabPageId( rModel.m_nTabPageId )
 {
 }
@@ -752,11 +751,17 @@ void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArgum
 }
 sal_Bool SAL_CALL ControlModelContainerBase::getEnabled()
 {
-    return m_bEnabled;
+    SolarMutexGuard aGuard;
+    Reference<XPropertySet> xThis(*this, UNO_QUERY);
+    bool bEnabled;
+    xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
+    return bEnabled;
 }
 void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled )
 {
-    m_bEnabled = _enabled;
+    SolarMutexGuard aGuard;
+    Reference<XPropertySet> xThis(*this, UNO_QUERY);
+    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), makeAny(_enabled));
 }
 OUString SAL_CALL ControlModelContainerBase::getTitle()
 {
