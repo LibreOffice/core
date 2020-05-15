@@ -221,21 +221,32 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     sal_Int32 nLen = sSourceText.getLength();
     while ( (nPreSpaces < nLen) && (sSourceText[nPreSpaces] == ' ') )
         nPreSpaces++;
+    SAL_INFO( "l10ntools", "HelpParser::ProcessHelp-0");
     if( sCur == "qtz" )
     {
+        SAL_INFO( "l10ntools", "HelpParser::ProcessHelp-1");
         sNewText = MergeEntrys::GetQTZText(*pResData, sSourceText);
         sNewdata = sNewText;
+        SAL_INFO( "l10ntools", sNewdata);
+
     }
     else if( pMergeDataFile )
     {
+        SAL_INFO( "l10ntools", "HelpParser::ProcessHelp-2");
         pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if( pEntrys != nullptr)
         {
             pEntrys->GetText( sNewText, sCur, true );
+            SAL_INFO( "l10ntools", "HelpParser::ProcessHelp-3");
+            SAL_INFO( "l10ntools", sSourceText);
+            SAL_INFO( "l10ntools", sNewText);
+            SAL_INFO( "l10ntools", nPreSpaces);
             if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
             {
+                SAL_INFO( "l10ntools", "ProcessHelp-4");
                 sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
             }
+            SAL_INFO( "l10ntools", "ProcessHelp-5");
         }
     }
     if (!sNewdata.isEmpty())
