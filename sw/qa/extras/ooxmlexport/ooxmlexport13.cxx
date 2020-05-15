@@ -588,6 +588,7 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
     auto xShape(getShape(1));
@@ -879,6 +880,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
@@ -890,6 +892,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBtlrFrame, "btlr-frame.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125518, "tdf125518.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1068,6 +1071,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127339, "tdf127339.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1082,6 +1086,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1092,6 +1097,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127605, "tdf127605.odt")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1102,6 +1108,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127732, "internal_hyperlink_frame.odt
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127733, "internal_hyperlink_ole.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
@@ -1173,6 +1180,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127579, "tdf127579.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;
     uno::Reference<beans::XPropertySet> xProps1(getShape(1), uno::UNO_QUERY);

@@ -1234,6 +1234,7 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
@@ -1336,6 +1337,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two issues were here:
     //  1) second shape was not export (it is anchored to the end of the run)
@@ -1388,6 +1390,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf112169, "tdf112169.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(6, getPages());
     // LO crashed while export because of character background color handling
 

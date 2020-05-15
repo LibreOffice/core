@@ -29,6 +29,7 @@ public:
 
 DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that an image which is written in svm format (image/x-vclgraphic)
     // is accompanied by a png fallback graphic.
@@ -43,6 +44,7 @@ DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
 
 DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Same as testTdf113696, but with a writer image instead of a draw image
     // (they use different code paths).

@@ -205,6 +205,7 @@ DECLARE_RTFEXPORT_TEST(testTdf117268, "tdf117268.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf117505, "tdf117505.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xFirstPage(xPageStyles->getByName("First Page"),

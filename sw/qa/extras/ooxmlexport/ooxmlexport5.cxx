@@ -112,6 +112,7 @@ DECLARE_OOXMLEXPORT_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNoDuplicateAttributeExport, "duplicate-east-asia.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File asserting while saving in LO.
     parseExport("word/document.xml");
@@ -310,6 +311,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOldComplexMergeTableInTable, "ooo96040-2
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testHyperlinkContainingPlaceholderField, "hyperlink-field.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     parseExport("word/document.xml");
 }
 
@@ -1184,6 +1186,7 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testOO47778_1, "ooo47778-3.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(5, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[3]", "c");
@@ -1191,6 +1194,7 @@ DECLARE_OOXMLEXPORT_TEST(testOO47778_1, "ooo47778-3.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[4]", "c");
@@ -1212,6 +1216,7 @@ DECLARE_OOXMLEXPORT_TEST(testOO67471, "ooo67471-2.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//v:shape", "ID", "KoPathShape");
@@ -1219,6 +1224,7 @@ DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testKDE216114, "kde216114-1.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//w:pict", 1);

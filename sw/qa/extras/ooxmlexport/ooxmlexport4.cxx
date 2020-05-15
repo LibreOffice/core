@@ -409,6 +409,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First problem was LO crashed during export (crash test)
 

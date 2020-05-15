@@ -488,6 +488,7 @@ DECLARE_WW8EXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf126708emf, "tdf126708_containsemf.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xShape = getShape(1);
     // First check the size of the EMF graphic contained in the shape.
@@ -506,6 +507,7 @@ DECLARE_WW8EXPORT_TEST(testTdf126708emf, "tdf126708_containsemf.odt")
 
 DECLARE_WW8EXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (!mbExported)
     {

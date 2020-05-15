@@ -222,6 +222,7 @@ DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
 
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> const xShape(getShape(1));
 
@@ -268,6 +269,7 @@ DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
 
 DECLARE_ODFEXPORT_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
         // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
@@ -278,6 +280,7 @@ DECLARE_ODFEXPORT_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
 
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(16, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
    //Counting the Number of Frames and checking with the expected count
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -449,6 +452,7 @@ DECLARE_ODFEXPORT_TEST(testOOoxmlEmbedded, "oooxml_embedded.sxw")
 
 DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //Note this is for a crash test
     //Counting the Number of Frames and checking with the expected count
@@ -459,6 +463,7 @@ DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
 
 DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
 {
+    CPPUNIT_ASSERT_EQUAL(12, getShapes());
     //Crash test, Check number of pages
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
@@ -644,6 +649,7 @@ DECLARE_ODFEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
 
 DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -1074,6 +1080,7 @@ DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
 
 DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     // ODF stores opacity of 75%, that means 25% transparency.
@@ -1082,6 +1089,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-sh
 
 DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xTextFrame = getShape(1);
     // This was text::RelOrientation::FRAME (the default), RelativeHeightRelation was not handled in xmloff.
@@ -1095,6 +1103,7 @@ DECLARE_ODFEXPORT_TEST(testRelhPage, "relh-page.odt")
 
 DECLARE_ODFEXPORT_TEST(testRelhPageTdf80282, "relh-page-tdf80282.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xTextFrame = getShape(1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Height", sal_Int32(8391), parseDump("//anchored/fly/infos/bounds", "height").toInt32());
@@ -1103,6 +1112,7 @@ DECLARE_ODFEXPORT_TEST(testRelhPageTdf80282, "relh-page-tdf80282.odt")
 
 DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xTextFrame = getShape(1);
     // This was text::RelOrientation::FRAME (the default), RelativeWidthRelation was not handled in xmloff.
@@ -1116,6 +1126,7 @@ DECLARE_ODFEXPORT_TEST(testRelwPage, "relw-page.odt")
 
 DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test import/export of new frame attribute called TextVerticalAdjust
 
@@ -1132,6 +1143,7 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
 
 DECLARE_ODFEXPORT_TEST(testTdf111891_frameVertStyle, "tdf111891_frameVertStyle.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
@@ -1139,6 +1151,7 @@ DECLARE_ODFEXPORT_TEST(testTdf111891_frameVertStyle, "tdf111891_frameVertStyle.o
 
 DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // These were all 0, as style:rel-width/height was ignored on import for shapes.
@@ -1153,6 +1166,7 @@ DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
 
 DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry"));
@@ -1175,6 +1189,7 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
 // test that import whitespace collapsing is compatible with old docs
 DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XEnumerationAccess> xPara;
     uno::Reference<container::XEnumeration> xPortions;
@@ -1518,6 +1533,7 @@ DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
 
 DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Without the accompanying fix in place, this test would have failed, as
     // the btlr text direction in the text frame was lost on ODF import and
@@ -1627,6 +1643,7 @@ DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
 
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Just make sure the output is valid.
 }
@@ -1680,6 +1697,7 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
 #if HAVE_FEATURE_PDFIUM
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // This failed, pdf+png replacement graphics pair didn't survive an ODT roundtrip.
@@ -2089,6 +2107,7 @@ DECLARE_ODFEXPORT_TEST(testTdf129568ui, "tdf129568-ui.fodt")
 
 DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
     if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
@@ -2121,6 +2140,7 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
 
 DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
@@ -2206,6 +2226,7 @@ DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
 
 DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Without the accompanying fix in place, this test would have failed with:
@@ -2244,6 +2265,7 @@ DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fo
 
 DECLARE_ODFEXPORT_TEST(testQrCodeGenProperties, "qrcode-properties.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT(xShape.is());
@@ -2371,6 +2393,7 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
 
 DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Make sure the replacement graphic is still there
@@ -2473,6 +2496,7 @@ DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.odt")
 
 DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
     sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_BOTTOM;

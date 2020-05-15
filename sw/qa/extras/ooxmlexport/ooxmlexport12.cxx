@@ -346,6 +346,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCrossReferenceCustomFormat,
 
 DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(10, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export

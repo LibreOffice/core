@@ -59,6 +59,7 @@ DECLARE_OOXMLEXPORT_TEST(testN789482, "n789482.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBnc834035, "bnc834035.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(3, getPages());
     // Illustration index had wrong hyperlinks: anchor was using Writer's
     // <seqname>!<index>|sequence syntax, not a bookmark name.

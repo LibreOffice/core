@@ -948,6 +948,7 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     //The positions of OLE objects were not exported, check if now it is exported correctly
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");

@@ -433,6 +433,7 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -444,6 +445,7 @@ DECLARE_WW8EXPORT_TEST(testTdf70838, "tdf70838.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotation.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -458,6 +460,7 @@ DECLARE_WW8EXPORT_TEST(testTdf70838b_verticalRotation, "tdf70838b_verticalRotati
 
 DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
 {
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box anchored as a floating object
     uno::Reference<drawing::XControlShape> xControlShape;

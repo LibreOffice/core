@@ -747,6 +747,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
@@ -865,6 +866,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_WW8EXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
     text::GraphicCrop crop = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");
@@ -949,6 +951,7 @@ DECLARE_WW8EXPORT_TEST(testCommentsNested, "comments-nested.doc")
 
 DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This is very close to testBorderColours in ww8import.cxx, but for export
 
