@@ -1375,16 +1375,37 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
     //does not specify the numbering
     sal_Int32 nListId = -1;
-    if ( !bRemove && pStyleSheetProperties && pParaContext && !pParaContext->isSet(PROP_NUMBERING_RULES) )
+    if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
+        const std::optional<PropertyMap::Property> pParaNumRulesProp = pParaContext->getProperty(PROP_NUMBERING_RULES);
+        const sal_Int16 nListLevel = pStyleSheetProperties->GetListLevel();
+
         bool bNumberingFromBaseStyle = false;
         nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( pList->GetStyleName() ), false);
-            isNumberingViaStyle = true;
+            if ( !pParaNumRulesProp )
+            {
+                isNumberingViaStyle = true;
+                // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
+                // but now other code expects it, and perhaps some corner cases still need it as well.
+                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
+            }
+            else if ( !pList->isOutlineNumbering(nListLevel) )
+            {
+                // After ignoring anything related to the special Outline levels,
+                // we have direct numbering, as well as paragraph-style numbering.
+                // Apply the style if it uses the same list as the direct numbering.
+                // (apparently necessary to keep priority of numbering style formatting - tdf#133000)
+                const uno::Reference<container::XNamed> xParaNumRules(pParaNumRulesProp->second, uno::UNO_QUERY);
+                if ( xParaNumRules.is() && xParaNumRules->getName() == pList->GetStyleName() )
+                    pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
+            }
+        }
 
+        if ( isNumberingViaStyle )
+        {
             // Indent properties from the paragraph style have priority
             // over the ones from the numbering styles in Word
             // but in Writer numbering styles have priority,
@@ -1420,8 +1441,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
             }
         }
-
-        if ( pStyleSheetProperties->GetListLevel() >= 0 )
+        if ( !pParaNumRulesProp && pStyleSheetProperties->GetListLevel() >= 0 )
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
 

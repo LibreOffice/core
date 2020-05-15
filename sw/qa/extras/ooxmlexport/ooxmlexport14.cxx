@@ -191,6 +191,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
                                  true, bValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf133000_numStyleFormatting, "tdf133000_numStyleFormatting.docx")
+{
+    // Paragraph style's LeftMargin should not override numbering's Left Margin
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    assertXPathContent(pDump, "/root/page[1]/body/txt[2]", "First line");
+    const sal_Int32 nLevel1Margin = getXPath(pDump, "//page[1]/body/txt[2]/infos/prtBounds", "left").toInt32();
+    assertXPathContent(pDump, "/root/page[1]/body/txt[4]", "One sublevel");
+    const sal_Int32 nLevel2Margin = getXPath(pDump, "//page[1]/body/txt[4]/infos/prtBounds", "left").toInt32();
+    CPPUNIT_ASSERT( nLevel1Margin < nLevel2Margin );
+}
+
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.docx")
 {
     auto xNumberingRules
