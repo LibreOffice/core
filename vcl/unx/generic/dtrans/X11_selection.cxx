@@ -2743,6 +2743,7 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
                 dte.Source = static_cast< OWeakObject* >( it->second.m_pTarget );
                 aGuard.clear();
                 it->second.m_pTarget->dragExit( dte );
+                aGuard.reset();
             }
             else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
             {
