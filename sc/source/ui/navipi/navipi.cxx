@@ -24,6 +24,7 @@
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
+#include <uiobject.hxx>
 
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
@@ -336,6 +337,8 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     , nCurRow(0)
     , nCurTab(0)
 {
+    set_id("NavigatorPanelParent"); // for uitests
+
     m_xEdRow->set_range(1, SCNAV_MAXROW);
     m_xEdRow->set_width_chars(5);
     //max rows is 1,000,000, which is too long for typical use
@@ -421,6 +424,11 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
         // hides all controls below the top two rows of buttons.
         m_xTbxCmd1->set_item_visible("contents", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
     }
+}
+
+FactoryFunction ScNavigatorDlg::GetUITestFactory() const
+{
+    return ScNavigatorDlgUIObject::create;
 }
 
 ScNavigatorDlg::~ScNavigatorDlg()
