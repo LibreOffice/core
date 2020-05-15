@@ -738,12 +738,12 @@ IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
 {
     signal_activate(m_xMenu->GetCurItemIdent());
     /* tdf#131333 Menu::Select depends on a false here to allow
-       propogating a submens's selected id to its parent menu to become its
+       propagating a submens's selected id to its parent menu to become its
        selected id.
 
-       without this, while gen menus already have propogated this to its parent
+       without this, while gen menus already have propagated this to its parent
        in MenuFloatingWindow::EndExecute, SalMenus as used under kf5/macOS
-       won't propogate the selected id
+       won't propagate the selected id
     */
     return false;
 }
