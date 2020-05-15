@@ -1451,7 +1451,7 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
-    FontCharMapRef xFontCharMap ( new FontCharMap() );
+    FontCharMapRef xFontCharMap;
     bool bRet = GetFontCharMap( xFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 
