@@ -68,7 +68,7 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bo
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    return pButton ? o3tl::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
+    return pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
                    : nullptr;
 }
 
