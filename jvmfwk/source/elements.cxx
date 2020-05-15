@@ -878,7 +878,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
 
-    //Create the features element
+    //Create the vendorData element
     rtl::ByteSequence data = encodeBase16(arVendorData);
     xmlNode* dataNode = xmlNewChild(pJavaInfoNode, nullptr,
                                     reinterpret_cast<xmlChar const *>("vendorData"),
