@@ -1219,21 +1219,55 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="COMMA_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="bs">.uno:InsertCurrentDate</value>
+            <value xml:lang="da">.uno:InsertCurrentDate</value>
+            <value xml:lang="de">.uno:InsertCurrentDate</value>
             <value xml:lang="es">.uno:InsertCurrentDate</value>
+            <value xml:lang="et">.uno:InsertCurrentDate</value>
             <value xml:lang="fi">.uno:InsertCurrentDate</value>
-            <value xml:lang="ru">.uno:InsertCurrentDate</value>
+            <value xml:lang="fo">.uno:InsertCurrentDate</value>
+            <value xml:lang="hr">.uno:InsertCurrentDate</value>
+            <value xml:lang="is">.uno:InsertCurrentDate</value>
+            <value xml:lang="it">.uno:InsertCurrentDate</value>
+            <value xml:lang="nb">.uno:InsertCurrentDate</value>
+            <value xml:lang="nl-NL">.uno:InsertCurrentDate</value>
+            <value xml:lang="nn">.uno:InsertCurrentDate</value>
             <value xml:lang="pt">.uno:InsertCurrentDate</value>
             <value xml:lang="pt-BR">.uno:InsertCurrentDate</value>
+            <value xml:lang="ro">.uno:InsertCurrentDate</value>
+            <value xml:lang="ru">.uno:InsertCurrentDate</value>
+            <value xml:lang="sl">.uno:InsertCurrentDate</value>
+            <value xml:lang="sq">.uno:InsertCurrentDate</value>
+            <value xml:lang="sr">.uno:InsertCurrentDate</value>
+            <value xml:lang="sv">.uno:InsertCurrentDate</value>
+            <value xml:lang="tr">.uno:InsertCurrentDate</value>
           </prop>
         </node>
         <node oor:name="COMMA_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="bs">.uno:InsertCurrentTime</value>
+            <value xml:lang="da">.uno:InsertCurrentTime</value>
+            <value xml:lang="de">.uno:InsertCurrentTime</value>
             <value xml:lang="es">.uno:InsertCurrentTime</value>
+            <value xml:lang="et">.uno:InsertCurrentTime</value>
             <value xml:lang="fi">.uno:InsertCurrentTime</value>
-            <value xml:lang="ru">.uno:InsertCurrentTime</value>
+            <value xml:lang="fo">.uno:InsertCurrentTime</value>
+            <value xml:lang="hr">.uno:InsertCurrentTime</value>
+            <value xml:lang="is">.uno:InsertCurrentTime</value>
+            <value xml:lang="it">.uno:InsertCurrentTime</value>
+            <value xml:lang="nb">.uno:InsertCurrentTime</value>
+            <value xml:lang="nl-NL">.uno:InsertCurrentTime</value>
+            <value xml:lang="nn">.uno:InsertCurrentTime</value>
             <value xml:lang="pt">.uno:InsertCurrentTime</value>
             <value xml:lang="pt-BR">.uno:InsertCurrentTime</value>
+            <value xml:lang="ro">.uno:InsertCurrentTime</value>
+            <value xml:lang="ru">.uno:InsertCurrentTime</value>
+            <value xml:lang="sl">.uno:InsertCurrentTime</value>
+            <value xml:lang="sq">.uno:InsertCurrentTime</value>
+            <value xml:lang="sr">.uno:InsertCurrentTime</value>
+            <value xml:lang="sv">.uno:InsertCurrentTime</value>
+            <value xml:lang="tr">.uno:InsertCurrentTime</value>
           </prop>
         </node>
         <node oor:name="BRACKETLEFT_MOD1" oor:op="replace">
