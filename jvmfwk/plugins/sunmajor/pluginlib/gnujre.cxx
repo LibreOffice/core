@@ -92,8 +92,8 @@ char const* const* GnuInfo::getLibraryPaths(int* /*size*/)
 
 bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 {
-    //get java.vendor, java.version, java.home,
-    //javax.accessibility.assistive_technologies from system properties
+    //get java.vendor, java.version, java.home
+    //from system properties
 
     OUString sJavaLibraryPath;
     OUString const sVendorProperty("java.vendor");
@@ -101,14 +101,12 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     OUString const sJavaHomeProperty("java.home");
     OUString const sJavaLibraryPathProperty("java.library.path");
     OUString const sGNUHomeProperty("gnu.classpath.home.url");
-    OUString const sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;
     bool bHome = false;
     bool bJavaHome = false;
     bool bJavaLibraryPath = false;
-    bool bAccess = false;
 
     for (auto const& prop : props)
     {
@@ -149,17 +147,9 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
             osl_getFileURLFromSystemPath(prop.second.getToken(0, ':', nIndex).pData, &sJavaLibraryPath.pData);
             bJavaLibraryPath = true;
         }
-        else if (!bAccess && sAccessProperty == prop.first)
-        {
-            if (!prop.second.isEmpty())
-            {
-                m_bAccessibility = true;
-                bAccess = true;
-            }
+        if (bVendor && bVersion && bHome && bJavaHome && bJavaLibraryPath) {
+            break;
         }
-        // the javax.accessibility.xxx property may not be set. Therefore we
-        //must search through all properties.
-
     }
     if (!bVersion || !bVendor || !bHome)
         return false;

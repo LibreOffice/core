@@ -35,30 +35,6 @@ public class JREProperties
     {
          try
         {
-            boolean bNoAccess = false;
-            if(args.length > 0 && args[0].equals("noaccessibility")) {
-                bNoAccess = true;
-            }
-
-            //We need to be able to switch this part off because
-            //it causes an exception if the DISPLAY variable has
-            //a false value. Setting the noaccessibility argument
-            //can be done by providing a sunjavaplugin.ini with
-            //the bootstrap parameter JFW_PLUGIN_NO_NOT_CHECK_ACCESSIBILITY
-            //set to "1"
-            if (!bNoAccess)
-            {
-                try{
-                    //This line is needed to get the accessibility properties
-                    java.awt.Toolkit.getDefaultToolkit();
-                }
-                catch(Throwable e)
-                {
-                    System.err.println(e);
-                }
-            }
-
-
             Properties p = System.getProperties();
             Enumeration e = p.propertyNames();
             while (e.hasMoreElements()) {

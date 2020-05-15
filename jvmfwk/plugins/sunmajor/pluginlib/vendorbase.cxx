@@ -32,19 +32,18 @@ namespace jfw_plugin
 
 MalformedVersionException::~MalformedVersionException() = default;
 
-VendorBase::VendorBase(): m_bAccessibility(false)
+VendorBase::VendorBase()
 {
 }
 
 bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 {
-    //get java.vendor, java.version, java.home,
-    //javax.accessibility.assistive_technologies from system properties
+    //get java.vendor, java.version, java.home
+    //from system properties
 
     bool bVersion = false;
     bool bVendor = false;
     bool bHome = false;
-    bool bAccess = false;
     bool bArch = false;
 
     for (auto const& prop : props)
@@ -85,18 +84,9 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
             m_sArch = prop.second;
             bArch = true;
         }
-        else if (!bAccess
-                 && prop.first == "javax.accessibility.assistive_technologies")
-        {
-            if (!prop.second.isEmpty())
-            {
-                m_bAccessibility = true;
-                bAccess = true;
-            }
+        if (bVendor && bVersion && bHome && bArch) {
+            break;
         }
-        // the javax.accessibility.xxx property may not be set. Therefore we
-        //must search through all properties.
-
     }
     if (!bVersion || !bVendor || !bHome || !bArch)
         return false;
@@ -194,11 +184,6 @@ bool VendorBase::isValidArch() const
     (void)this;
     return true;
 #endif
-}
-
-bool VendorBase::supportsAccessibility() const
-{
-    return m_bAccessibility;
 }
 
 bool VendorBase::needsRestart() const

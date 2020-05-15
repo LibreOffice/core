@@ -168,7 +168,6 @@ std::unique_ptr<JavaInfo> createJavaInfo(
     return std::unique_ptr<JavaInfo>(
         new JavaInfo{
             info->getVendor(), info->getHome(), info->getVersion(),
-            sal_uInt64(info->supportsAccessibility() ? JFW_FEATURE_ACCESSBRIDGE : 0),
             sal_uInt64(info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0),
             rtl::ByteSequence(
                 reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),

@@ -159,11 +159,6 @@
     mentioned differently.</p>
 */
 
-/** indicates that a JRE has an accessibility bridge installed.
-    <p>
-    The flag is used with JavaInfo::nFeatures.</p>
- */
-#define JFW_FEATURE_ACCESSBRIDGE 0x1l
 /** indicates that there must be an environment set up before the Java process
     runs.
     <p>Therefore, when a Java is selected in OO then the office must be
@@ -218,12 +213,6 @@ struct JavaInfo
         </p>
     */
     OUString sVersion;
-    /** indicates supported special features.
-
-        <p>For example, <code>JFW_FEATURE_ACCESSBRIDGE</code> indicates that
-        assistive technology tools are supported.</p>
-     */
-    sal_uInt64 nFeatures;
     /** indicates requirements for running the java runtime.
 
         <p>For example, it may be necessary to prepare the environment before
@@ -288,9 +277,7 @@ JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
     which contains version requirements.</p>
     <p>
     JREs can be provided by different vendors.
-    The function obtains information about JRE installations and checks if
-    there is one among them that supports
-    a set of features (currently only accessibility is possible). If none was
+    The function obtains information about JRE installations. If none was
     found then it also uses a list of paths, which have been registered
     by <code>jfw_addJRELocation</code>
     to find JREs. Found JREs are examined in the same way.</p>
@@ -310,27 +297,7 @@ JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
     the PATH environment variable is inspected and the respective JREs
     are checked for their suitability next.</p>
     <p>
-    When support for assistive technology is required, then the
-    <code>JavaInfo</code> objects,
-    which are provided by the <code>getJavaInfo</code> functions, are
-    examined for a suitable JRE.
-    That is, the <code>JavaInfo</code> object that refers to the JRE referred to
-    by JAVA_HOME is examined. If it does not have the flag
-    <code>JFW_FEATURE_ACCESSBRIDGE</code> in the member <code>nFeatures</code>
-    then the <JavaInfo></code> objects that are related to the PATH variable
-    are examined.
-    If no suitable <code>JavaInfo</code> object is found, all <code>JavaInfo</code>
-    objects - representing Java installations on the system -, are examined.
-    As long as no <code>JavaInfo</code> object has the flag
-    <code>JFW_FEATURE_ACCESSBRIDGE</code> in the member <code>nFeatures</code>, more
-    <code>JavaInfo</code> objects are examined.
-    This goes on until a <code>JavaInfo</code> object was found which
-    represents a suitable JRE. Or no such <code>JavaInfo</code> object was found.
-    In that case the first <code>JavaInfo</code> object that was detected
-    by the algorithm described above is used to determine the JRE which is to be used.</p>
-    <p>
-    If there is no need for the support of assistive technology tools then
-    the first <code>JavaInfo</code> object that is detected by the algorithm
+    The first <code>JavaInfo</code> object that is detected by the algorithm
     as described above is used.</p>
 
     @param pInfo
