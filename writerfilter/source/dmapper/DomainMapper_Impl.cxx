@@ -1373,12 +1373,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = pParaContext && pParaContext->GetListId() > -1;
-    //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
-    //does not specify the numbering
     sal_Int32 nListId = -1;
     if ( !bRemove && pStyleSheetProperties && pParaContext )
     {
+        //apply numbering level/style to paragraph if it was set at the style, but only if the paragraph itself
+        //does not specify the numbering
         const sal_Int16 nListLevel = pStyleSheetProperties->GetListLevel();
+        if ( !isNumberingViaRule && nListLevel >= 0 )
+            pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         bool bNumberingFromBaseStyle = false;
         nListId = pEntry ? lcl_getListId(pEntry, GetStyleSheetTable(), bNumberingFromBaseStyle) : -1;
@@ -1406,10 +1408,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
         if ( isNumberingViaStyle )
         {
-            // Indent properties from the paragraph style have priority
-            // over the ones from the numbering styles in Word
-            // but in Writer numbering styles have priority,
-            // so insert directly into the paragraph properties to compensate.
+            // When numbering is defined by the paragraph style, then the para-style indents have priority.
+            // But since import has just copied para-style's PROP_NUMBERING_STYLE_NAME directly onto the paragraph,
+            // the numbering indents now have the priority.
+            // So now import must also copy the para-style indents directly onto the paragraph to compensate.
             std::optional<PropertyMap::Property> oProperty;
             const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
             const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
@@ -1431,8 +1433,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             if  ( pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) && (nParaRightMargin = oProperty->second.get<sal_Int32>()) != 0 )
             {
                 // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
-                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "FirstLineIndent");
-                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, pStyleSheetProperties->GetListLevel(), "IndentAt");
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, "FirstLineIndent");
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId, nListLevel, "IndentAt");
                 if (nFirstLineIndent != 0)
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
                 if (nParaLeftMargin != 0)
@@ -1441,8 +1443,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
             }
         }
-        if ( !isNumberingViaRule && pStyleSheetProperties->GetListLevel() >= 0 )
-            pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
 
     // apply AutoSpacing: it has priority over all other margin settings
