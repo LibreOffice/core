@@ -11,7 +11,25 @@
 #include <sal/config.h>
 #include <vcl/VectorGraphicSearch.hxx>
 
+#include <fpdf_doc.h>
 #include <fpdf_text.h>
+
+class VectorGraphicSearch::Implementation
+{
+public:
+    FPDF_DOCUMENT mpPdfDocument;
+
+    Implementation()
+        : mpPdfDocument(nullptr)
+    {
+    }
+
+    ~Implementation()
+    {
+        if (mpPdfDocument)
+            FPDF_CloseDocument(mpPdfDocument);
+    }
+};
 
 class SearchContext
 {
@@ -78,8 +96,8 @@ public:
 };
 
 VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
-    : maGraphic(rGraphic)
-    , mpPdfDocument(nullptr)
+    : mpImplementation(std::make_unique<VectorGraphicSearch::Implementation>())
+    , maGraphic(rGraphic)
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -92,9 +110,7 @@ VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
 VectorGraphicSearch::~VectorGraphicSearch()
 {
     mpSearchContext.reset();
-
-    if (mpPdfDocument)
-        FPDF_CloseDocument(mpPdfDocument);
+    mpImplementation.reset();
     FPDF_DestroyLibrary();
 }
 
@@ -115,11 +131,11 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
     if (rSearchString.isEmpty())
         return false;
 
-    mpPdfDocument
+    mpImplementation->mpPdfDocument
         = FPDF_LoadMemDocument(rData->getVectorGraphicDataArray().getConstArray(),
                                rData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);
 
-    if (!mpPdfDocument)
+    if (!mpImplementation->mpPdfDocument)
     {
         //TODO: Handle failure to load.
         switch (FPDF_GetLastError())
@@ -144,9 +160,10 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
         return false;
     }
 
-    sal_Int32 nPageIndex = std::max(rData->getPageIndex(), 0);
+    sal_Int32 nPageIndex = std::max(rData->getPageIndex(), sal_Int32(0));
 
-    mpSearchContext.reset(new SearchContext(mpPdfDocument, nPageIndex, rSearchString));
+    mpSearchContext.reset(
+        new SearchContext(mpImplementation->mpPdfDocument, nPageIndex, rSearchString));
 
     return mpSearchContext->initialize();
 }
