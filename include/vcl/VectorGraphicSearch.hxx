@@ -14,8 +14,6 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/dllapi.h>
 
-#include <fpdf_doc.h>
-
 #include <memory>
 
 class SearchContext;
@@ -23,9 +21,11 @@ class SearchContext;
 class VCL_DLLPUBLIC VectorGraphicSearch final
 {
 private:
+    class Implementation;
+    std::unique_ptr<Implementation> mpImplementation;
     Graphic maGraphic;
-    FPDF_DOCUMENT mpPdfDocument;
     std::unique_ptr<SearchContext> mpSearchContext;
+
     bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData, OUString const& rSearchString);
 
 public:
