@@ -44,7 +44,7 @@ PROP_SHARE_SUBDIR_NAME = "share_subdir_name"      # // <= cmdline
 PROP_ITEMS           = "items"                    # // <= pkg cfg files!
 
 #---begin java.util.Properties copy---#
-"""
+r"""
 
 An incomplete clean room implementation of 
 java.util.Properties written in Python.
