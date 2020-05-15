@@ -44,12 +44,15 @@ class SvxColorValueSetData;
 
 class SAL_WARN_UNUSED SvxColorValueSet_docking final : public SvxColorValueSet
 {
+    rtl::Reference<SvxColorValueSetData> m_xHelper;
     bool            mbLeftButton;
 
     // ValueSet
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    virtual bool StartDrag() override;
 
 public:
     SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> pWindow);
@@ -69,7 +72,6 @@ friend class SvxColorChildWindow;
 
 private:
     XColorListRef       pColorList;
-    rtl::Reference<SvxColorValueSetData> m_xHelper;
     std::unique_ptr<SvxColorValueSet_docking> xColorSet;
     std::unique_ptr<weld::CustomWeld> xColorSetWin;
 
@@ -84,8 +86,6 @@ private:
     virtual void GetFocus() override;
 
     virtual bool    Close() override;
-
-    void SetupDrag(const OUString& rItemText, const Color& rItemColor, css::drawing::FillStyle eStyle);
 
 public:
     SvxColorDockingWindow(SfxBindings* pBindings,

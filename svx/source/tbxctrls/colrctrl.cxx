@@ -52,16 +52,21 @@ using namespace com::sun::star;
 class SvxColorValueSetData final : public TransferDataContainer
 {
 private:
-
     uno::Sequence<beans::NamedValue> m_Data;
 
     virtual void AddSupportedFormats() override;
     virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc) override;
 
 public:
-    explicit SvxColorValueSetData(const uno::Sequence<beans::NamedValue>& rProps)
-        : m_Data(rProps)
-    {}
+    SvxColorValueSetData()
+    {
+    }
+
+    void SetData(const uno::Sequence<beans::NamedValue>& rData)
+    {
+        m_Data = rData;
+        ClearFormats(); // invalidate m_aAny so new data will take effect
+    }
 };
 
 void SvxColorValueSetData::AddSupportedFormats()
@@ -87,6 +92,10 @@ void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SvxColorValueSet::SetDrawingArea(pDrawingArea);
     SetAccessibleName(SvxResId(STR_COLORTABLE));
     SetStyle(GetStyle() | WB_ITEMBORDER);
+
+    m_xHelper.set(new SvxColorValueSetData);
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 }
 
 SvxColorValueSet_docking::SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> xWindow)
@@ -144,19 +153,27 @@ bool SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
     return bRet;
 }
 
-void SvxColorDockingWindow::SetupDrag(const OUString& rItemText, const Color& rItemColor, drawing::FillStyle eStyle)
+bool SvxColorValueSet_docking::StartDrag()
 {
+    sal_uInt16 nPos = GetSelectedItemId();
+    Color aItemColor( GetItemColor( nPos ) );
+    OUString sItemText( GetItemText( nPos ) );
+
+    drawing::FillStyle eStyle = ((1 == nPos)
+                            ? drawing::FillStyle_NONE
+                            : drawing::FillStyle_SOLID);
+
     uno::Sequence<beans::NamedValue> props(2);
-    XFillColorItem const color(rItemText, rItemColor);
+    XFillColorItem const color(sItemText, aItemColor);
     props[0].Name = "FillColor";
     color.QueryValue(props[0].Value, 0);
     XFillStyleItem const style(eStyle);
     props[1].Name = "FillStyle";
     style.QueryValue(props[1].Value, 0);
 
-    m_xHelper.set(new SvxColorValueSetData(props));
-    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
-    xColorSet->SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
+    m_xHelper->SetData(props);
+
+    return false;
 }
 
 static constexpr sal_uInt16 gnLeftSlot = SID_ATTR_FILL_COLOR;
@@ -283,10 +300,6 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     sal_uInt16 nPos = xColorSet->GetSelectedItemId();
     Color  aColor( xColorSet->GetItemColor( nPos ) );
     OUString aStr( xColorSet->GetItemText( nPos ) );
-
-    SetupDrag(aStr, aColor, ((1 == nPos)
-                            ? drawing::FillStyle_NONE
-                            : drawing::FillStyle_SOLID));
 
     if (xColorSet->IsLeftButton())
     {
