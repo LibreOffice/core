@@ -494,10 +494,10 @@ void MSWordExportBase::NumberingLevel(
     const vcl::Font* pBulletFont=nullptr;
     rtl_TextEncoding eChrSet=0;
     FontFamily eFamily=FAMILY_DECORATIVE;
-    if (!rRule.Get(nLvl).GetListFormat().isEmpty())
+    if (rRule.Get(nLvl).GetListFormat().has_value())
     {
         // Nothing to construct: we have it already
-        sNumStr = rRule.Get(nLvl).GetListFormat();
+        sNumStr = rRule.Get(nLvl).GetListFormat().value();
     }
     else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
