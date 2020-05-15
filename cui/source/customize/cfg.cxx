@@ -1303,17 +1303,21 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
 
     for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
     {
-        SaveInData* pData =
-            reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
-        if(m_xSaveInListBox->get_id(i) != notebookbarTabScope)
+        OUString sId = m_xSaveInListBox->get_id(i);
+        if (sId != notebookbarTabScope)
+        {
+            SaveInData* pData = reinterpret_cast<SaveInData*>(sId.toInt64());
             result = pData->Apply();
+        }
     }
     return result;
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectSaveInLocation, weld::ComboBox&, void)
 {
-    pCurrentSaveInData = reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_active_id().toInt64());
+    OUString sId = m_xSaveInListBox->get_active_id();
+    if (sId != notebookbarTabScope)
+        pCurrentSaveInData = reinterpret_cast<SaveInData*>(sId.toInt64());
     Init();
 }
 
