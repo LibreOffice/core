@@ -143,10 +143,9 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
     if (!m_aPropVals.empty())
         throw IllegalArgumentException();
 
-    const PropertyValue *pPropVals = rPropertyValues.getConstArray();
-    for (sal_Int32 n = 0; n < rPropertyValues.getLength(); ++n)
+    for (const PropertyValue& i : rPropertyValues)
     {
-        m_aPropVals.push_back(pPropVals[n]);
+        m_aPropVals.push_back(i);
     }
 }
 
