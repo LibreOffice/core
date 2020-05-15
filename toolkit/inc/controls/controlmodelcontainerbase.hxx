@@ -83,7 +83,6 @@ protected:
     AllGroups                           maGroups;
     bool                            mbGroupsUpToDate;
 
-    bool                         m_bEnabled;
     OUString                         m_sImageURL;
     OUString                         m_sTooltip;
     sal_Int16                        m_nTabPageId;
