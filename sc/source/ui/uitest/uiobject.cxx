@@ -17,6 +17,9 @@
 #include <dbfunc.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
+#include <navipi.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -205,6 +208,19 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             mxGridWindow->LaunchAutoFilterMenu(nCol, nRow);
         }
     }
+    else if (rAction == "SIDEBAR")
+    {
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        DBG_ASSERT(pViewFrm, "ScGridWinUIObject::execute: no viewframe");
+        pViewFrm->ShowChildWindow(SID_SIDEBAR);
+
+        auto itr = rParameters.find("PANEL");
+        if (itr != rParameters.end())
+        {
+            OUString aVal = itr->second;
+            ::sfx2::sidebar::Sidebar::ShowPanel(aVal, pViewFrm->GetFrame().GetFrameInterface());
+        }
+    }
     else
     {
         WindowUIObject::execute(rAction, rParameters);
@@ -274,4 +290,32 @@ OUString ScGridWinUIObject::get_name() const
     return "ScGridWinUIObject";
 }
 
+ScNavigatorDlgUIObject::ScNavigatorDlgUIObject(const VclPtr<ScNavigatorDlg>& xScNavigatorDlg):
+    WindowUIObject(xScNavigatorDlg),
+    mxScNavigatorDlg(xScNavigatorDlg)
+{
+}
+
+void ScNavigatorDlgUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "ROOT")
+    {
+        mxScNavigatorDlg->ToolBoxSelectHdl("toggle");
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> ScNavigatorDlgUIObject::create(vcl::Window* pWindow)
+{
+    ScNavigatorDlg* pScNavigatorDlg = dynamic_cast<ScNavigatorDlg*>(pWindow);
+    assert(pScNavigatorDlg);
+    return std::unique_ptr<UIObject>(new ScNavigatorDlgUIObject(pScNavigatorDlg));
+}
+
+OUString ScNavigatorDlgUIObject::get_name() const
+{
+    return "ScNavigatorDlgUIObject";
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
