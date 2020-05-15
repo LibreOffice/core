@@ -147,10 +147,12 @@ class UITest(object):
     def close_dialog_through_button(self, button):
         with EventListener(self._xContext, "DialogClosed" ) as event:
             button.executeAction("CLICK", tuple())
-            while True:
+            time_ = 0
+            while time_ < MAX_WAIT:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
+                time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
     def close_doc(self):
