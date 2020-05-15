@@ -163,7 +163,6 @@ class SwFont
     SwFontScript m_nActual;        // actual font (Latin, CJK or CTL)
 
     // switch for the font-extensions
-    bool m_bBlink         :1;  // blinking font
     bool m_bPaintBlank    :1;  // blanks not with DrawRect
     bool m_bFontChg       :1;
     bool m_bOrgChg        :1;  // nOrgHeight/Ascent are invalid
@@ -245,7 +244,6 @@ public:
     inline void SetRelief( const FontRelief eNew );
 
     // Get/Set-methods for the current setting
-    inline void SetBlink( const bool bBlink );
     sal_uInt8 &GetTox() { return m_nToxCount; }
     bool IsTox() const { return ( 0 != m_nToxCount ); }
     sal_uInt8 &GetRef() { return m_nRefCount; }
@@ -812,11 +810,6 @@ inline void SwFont::SetLanguage( const LanguageType eNewLang, const SwFontScript
         m_aSub[SwFontScript::CJK].SetCJKContextLanguage( eNewLang );
         m_aSub[SwFontScript::CTL].SetCJKContextLanguage( eNewLang );
     }
-}
-
-inline void SwFont::SetBlink( const bool bNew )
-{
-    m_bBlink = bNew;
 }
 
 inline void SwFont::SetGreyWave( const bool bNew )

@@ -254,7 +254,7 @@ desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
 desktop/source/deployment/gui/dp_gui_updatedialog.hxx:152
     dp_gui::UpdateDialog m_xExtensionManager css::uno::Reference<css::deployment::XExtensionManager>
-desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:102
+desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:100
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/source/deployment/manager/dp_managerfac.cxx:43
     dp_manager::factory::(anonymous namespace)::PackageManagerFactoryImpl m_xUserMgr Reference<deployment::XPackageManager>
@@ -694,9 +694,7 @@ sfx2/source/inc/templdgi.hxx:104
     SfxCommonTemplateDialog_Impl m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
 sfx2/source/inc/templdgi.hxx:105
     SfxCommonTemplateDialog_Impl m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:129
-    SfxCommonTemplateDialog_Impl m_bNewHasMenu _Bool
-sfx2/source/inc/templdgi.hxx:275
+sfx2/source/inc/templdgi.hxx:274
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
@@ -760,8 +758,6 @@ svl/source/misc/inethist.cxx:45
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
 svl/source/undo/undo.cxx:314
     svl::undo::impl::UndoManagerGuard m_aUndoActionsCleanup ::std::vector<std::unique_ptr<SfxUndoAction> >
-svx/inc/colrctrl.hxx:77
-    SvxColorDockingWindow nCount long
 svx/inc/galbrws2.hxx:82
     GalleryBrowser2 mxDragDropTargetHelper std::unique_ptr<GalleryDragDrop>
 svx/inc/sdr/overlay/overlaytools.hxx:41
@@ -804,21 +800,21 @@ svx/source/sidebar/lists/ListsPropertyPanel.hxx:44
     svx::sidebar::ListsPropertyPanel mxNumBulletDispatcher std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/lists/ListsPropertyPanel.hxx:46
     svx::sidebar::ListsPropertyPanel mxOutlineDispatcher std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:80
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:79
     svx::sidebar::ParaPropertyPanel mxHorzAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:82
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:81
     svx::sidebar::ParaPropertyPanel mxVertAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:85
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:84
     svx::sidebar::ParaPropertyPanel mxNumBulletDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:87
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:86
     svx::sidebar::ParaPropertyPanel mxBackColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:90
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:89
     svx::sidebar::ParaPropertyPanel mxWriteDirectionDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:92
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:91
     svx::sidebar::ParaPropertyPanel mxParaSpacingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:94
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:93
     svx::sidebar::ParaPropertyPanel mxLineSpacingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:96
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:95
     svx::sidebar::ParaPropertyPanel mxIndentDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx:109
     svx::sidebar::PosSizePropertyPanel mxFlipDispatch std::unique_ptr<ToolbarUnoDispatcher>
@@ -830,9 +826,11 @@ svx/source/sidebar/possize/PosSizePropertyPanel.hxx:117
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx:119
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch2 std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/styles/StylesPropertyPanel.hxx:14
+svx/source/sidebar/softedge/SoftEdgePropertyPanel.hxx:41
+    svx::sidebar::SoftEdgePropertyPanel maSoftEdgeRadiusController sfx2::sidebar::ControllerItem
+svx/source/sidebar/styles/StylesPropertyPanel.hxx:13
     svx::sidebar::StylesPropertyPanel m_xFontStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/styles/StylesPropertyPanel.hxx:17
+svx/source/sidebar/styles/StylesPropertyPanel.hxx:16
     svx::sidebar::StylesPropertyPanel m_xStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/text/TextPropertyPanel.hxx:50
     svx::sidebar::TextPropertyPanel mxFontDispatch std::unique_ptr<ToolbarUnoDispatcher>
@@ -856,7 +854,7 @@ svx/source/sidebar/text/TextPropertyPanel.hxx:68
     svx::sidebar::TextPropertyPanel mxPositionBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/text/TextPropertyPanel.hxx:70
     svx::sidebar::TextPropertyPanel mxSpacingBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/tbxctrls/tbcontrl.cxx:307
+svx/source/tbxctrls/tbcontrl.cxx:306
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -870,15 +868,17 @@ sw/inc/unoframe.hxx:311
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:182
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
-sw/source/core/inc/swfont.hxx:986
+sw/source/core/inc/swfont.hxx:166
+    SwFont m_bBlink _Bool
+sw/source/core/inc/swfont.hxx:985
     SvStatistics nGetTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:987
+sw/source/core/inc/swfont.hxx:986
     SvStatistics nDrawText sal_uInt16
-sw/source/core/inc/swfont.hxx:988
+sw/source/core/inc/swfont.hxx:987
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:989
+sw/source/core/inc/swfont.hxx:988
     SvStatistics nDrawStretchText sal_uInt16
-sw/source/core/inc/swfont.hxx:990
+sw/source/core/inc/swfont.hxx:989
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/inc/unoflatpara.hxx:134
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
@@ -897,7 +897,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
@@ -1112,9 +1112,9 @@ vcl/unx/gtk3/a11y/gtk3atkutil.cxx:138
     DocumentFocusListener m_aRefList std::set<uno::Reference<uno::XInterface> >
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1611
+vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:12692
+vcl/unx/gtk3/gtk3gtkinst.cxx:12696
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *

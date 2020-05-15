@@ -668,9 +668,6 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             else
                 rFnt.SetAutoKern( FontKerning::NONE );
             break;
-        case RES_CHRATR_BLINK :
-            rFnt.SetBlink( static_cast<const SvxBlinkItem&>(rItem).GetValue() );
-            break;
         case RES_CHRATR_BACKGROUND :
             rFnt.SetBackColor(new Color( static_cast<const SvxBrushItem&>(rItem).GetColor() ) );
             break;

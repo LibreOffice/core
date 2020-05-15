@@ -22,12 +22,10 @@
 struct SwAccessibilityOptions
 {
     bool bIsAlwaysAutoColor         :1;
-    bool bIsStopAnimatedText        :1;
     bool bIsStopAnimatedGraphics    :1;
 
     SwAccessibilityOptions() :
         bIsAlwaysAutoColor(false),
-        bIsStopAnimatedText(false),
         bIsStopAnimatedGraphics(false) {}
 
     bool IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
