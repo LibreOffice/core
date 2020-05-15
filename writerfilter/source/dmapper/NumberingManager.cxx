@@ -1069,6 +1069,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 m_pCurrentDefinition->SetNumStyleLink(sStyleName);
             }
             break;
+            case NS_ooxml::LN_CT_AbstractNum_styleLink:
+            {
+                OUString sStyleName = rSprm.getValue()->getString();
+                m_pCurrentDefinition->SetStyleLink(sStyleName);
+            }
+            break;
             case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
             case NS_ooxml::LN_EG_RPrBase_color:
             case NS_ooxml::LN_EG_RPrBase_u:
@@ -1107,21 +1113,17 @@ void ListsManager::lcl_entry(writerfilter::Reference<Properties>::Pointer_t ref 
 
 AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
 {
-    AbstractListDef::Pointer pAbstractList;
-
-    int nLen = m_aAbstractLists.size( );
-    int i = 0;
-    while ( !pAbstractList && i < nLen )
+    for (const auto& listDef : m_aAbstractLists)
     {
-        if ( m_aAbstractLists[i]->GetId( ) == nId )
+        if (listDef->GetId( ) == nId)
         {
-            if ( m_aAbstractLists[i]->GetNumStyleLink().getLength() > 0 )
+            if (listDef->GetNumStyleLink().getLength() > 0)
             {
                 // If the abstract num has a style linked, check the linked style's number id.
                 StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
 
                 const StyleSheetEntryPtr pStyleSheetEntry =
-                    pStylesTable->FindStyleSheetByISTD( m_aAbstractLists[i]->GetNumStyleLink() );
+                    pStylesTable->FindStyleSheetByISTD(listDef->GetNumStyleLink() );
 
                 const StyleSheetPropertyMap* pStyleSheetProperties =
                     dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr);
@@ -1131,20 +1133,24 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                     ListDef::Pointer pList = GetList( pStyleSheetProperties->GetListId() );
                     if ( pList!=nullptr )
                         return pList->GetAbstractDefinition();
-                    else
-                        pAbstractList = m_aAbstractLists[i];
                 }
 
+                // In stylesheet we did not found anything useful. Try to find base abstractnum having this stylelink
+                for (const auto & baseListDef : m_aAbstractLists)
+                {
+                    if (baseListDef->GetStyleLink() == listDef->GetNumStyleLink())
+                    {
+                        return baseListDef;
+                    }
+                }
             }
-            else
-            {
-                pAbstractList = m_aAbstractLists[i];
-            }
+
+            // Standalone abstract list
+            return listDef;
         }
-        i++;
     }
 
-    return pAbstractList;
+    return nullptr;
 }
 
 ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
