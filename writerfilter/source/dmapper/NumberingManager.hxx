@@ -160,6 +160,7 @@ public:
     const OUString&       GetNumStyleLink() const { return m_sNumStyleLink; };
 
     const OUString& MapListId(OUString const& rId);
+    bool isOutlineNumbering( sal_uInt16 nLvl ) { return GetLevel(nLvl) && GetLevel(nLvl)->isOutlineNumbering(); }
 };
 
 class ListDef : public AbstractListDef
