@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff94e212_8552bbfd",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-15T13:43:43Z",
+      "side": 1,
+      "message": "Possibly better add _BACKGROUND to clarify? Could a font color need to be defined at some point? Heiko, what do you think?",
+      "range": {
+        "startLine": 320,
+        "startChar": 18,
+        "endLine": 320,
+        "endChar": 29
+      },
+      "revId": "1db6d5389e57d1d04a22fe987e0a1c105213d2e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7da6653a_40517c73",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-15T13:43:43Z",
+      "side": 1,
+      "message": "These colors look suspicious. How were the values calculated?",
+      "range": {
+        "startLine": 320,
+        "startChar": 46,
+        "endLine": 321,
+        "endChar": 65
+      },
+      "revId": "1db6d5389e57d1d04a22fe987e0a1c105213d2e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
