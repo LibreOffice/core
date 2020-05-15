@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36668c3f_0c4c5fa4",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-05-15T10:10:56Z",
+      "side": 1,
+      "message": "This is where you push the stack.",
+      "revId": "1adc474333bc76602ef8bf041c7c8a0960f72d7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e312bb6_5c410943",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-05-15T10:10:56Z",
+      "side": 1,
+      "message": "And this is where you unconditionally pop() it, effectively asserting that startLevel() and endLevel() is always called in pairs. Let\u0027s hope that\u0027s actually true, or we would crash.",
+      "revId": "1adc474333bc76602ef8bf041c7c8a0960f72d7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
