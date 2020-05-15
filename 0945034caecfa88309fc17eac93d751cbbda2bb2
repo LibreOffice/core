@@ -46,6 +46,30 @@
       "revId": "0945034caecfa88309fc17eac93d751cbbda2bb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab25b067_172e7126",
+        "filename": "sc/qa/uitest/calc_tests4/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T15:19:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "091dbb3b_f7ad4468",
+      "range": {
+        "startLine": 32,
+        "startChar": 51,
+        "endLine": 32,
+        "endChar": 61
+      },
+      "revId": "0945034caecfa88309fc17eac93d751cbbda2bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
