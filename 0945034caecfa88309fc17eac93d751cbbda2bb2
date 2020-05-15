@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46ae086b_fa1a2bd9",
+        "filename": "sc/qa/uitest/calc_tests4/trackedChanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T15:12:54Z",
+      "side": 1,
+      "message": "and it cannot happen that this is run with a TZ where the displayed time\u0027s date part would be a day off from 04/05/2020?",
+      "range": {
+        "startLine": 32,
+        "startChar": 51,
+        "endLine": 32,
+        "endChar": 61
+      },
+      "revId": "0945034caecfa88309fc17eac93d751cbbda2bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
