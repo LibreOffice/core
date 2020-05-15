@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "42b2a698_b54ba442",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "I meant to emit this only in Exception.hdl, but it probably doesn\u0027t matter too much either way (it looks a bit fishy to keep redefining LIBO_USE_SOURCE_LOCATION, even though to the same value)",
+      "parentUuid": "392f3a53_cf691783",
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7f38658_2104bfdf",
         "filename": "codemaker/source/cppumaker/cpputype.cxx",
         "patchSetId": 15
@@ -33,6 +51,24 @@
       "revId": "a531bc25b96532d8652defda48153976dee47547",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17b05f63_210df577",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7f38658_2104bfdf",
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "88e593f8_5447a253",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2787,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db368843_c384396a",
+      "range": {
+        "startLine": 2787,
+        "startChar": 57,
+        "endLine": 2787,
+        "endChar": 58
+      },
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49219432_92a283b0",
         "filename": "codemaker/source/cppumaker/cpputype.cxx",
         "patchSetId": 15
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "8ea59aeb_6371bbab",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2825,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49219432_92a283b0",
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0be95926_49acde0f",
         "filename": "codemaker/source/cppumaker/cpputype.cxx",
         "patchSetId": 15
@@ -90,6 +168,24 @@
       "revId": "a531bc25b96532d8652defda48153976dee47547",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07bc298f_a06c5135",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0be95926_49acde0f",
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "06ae08b8_3aa8fd28",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "352683f2_ba8fe773",
+      "range": {
+        "startLine": 2832,
+        "startChar": 56,
+        "endLine": 2832,
+        "endChar": 57
+      },
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd2f89c0_0b6fea47",
         "filename": "codemaker/source/cppumaker/cpputype.cxx",
         "patchSetId": 15
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "a418bedb_780f1112",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2868,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd2f89c0_0b6fea47",
+      "range": {
+        "startLine": 2868,
+        "startChar": 31,
+        "endLine": 2868,
+        "endChar": 76
+      },
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34a30405_fe70d532",
         "filename": "codemaker/source/cppumaker/cpputype.cxx",
         "patchSetId": 15
@@ -153,6 +297,24 @@
       "revId": "a531bc25b96532d8652defda48153976dee47547",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e98dd2e2_e5d429b3",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2920,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34a30405_fe70d532",
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -176,6 +338,30 @@
       "revId": "a531bc25b96532d8652defda48153976dee47547",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d90729be_d0222872",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-15T07:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64fe9486_fa720eff",
+      "range": {
+        "startLine": 3150,
+        "startChar": 7,
+        "endLine": 3150,
+        "endChar": 13
+      },
+      "revId": "a531bc25b96532d8652defda48153976dee47547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
