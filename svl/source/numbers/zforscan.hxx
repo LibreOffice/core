@@ -161,6 +161,7 @@ public:
     bool GetConvertMode() const     { return bConvertMode; }
     LanguageType GetNewLnge() const { return eNewLnge; } // Read access on ConvertMode and convert country/language
     LanguageType GetTmpLnge() const { return eTmpLnge; } // Read access on StartCountry/Language
+    void SetNewLnge( LanguageType e ) { eNewLnge = e; }  // Set new convert country/language
 
                                                 /// get Thai T speciality
     sal_uInt8 GetNatNumModifier() const      { return nNatNumModifier; }
