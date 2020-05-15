@@ -34,6 +34,24 @@
       "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebd30f9e_4c4486c6",
+        "filename": "config_host.mk.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-15T20:20:12Z",
+      "side": 1,
+      "message": "I believe at least the qrcodegen stuff is cargo-cult. ;)\n\nThe flags never get passed into anything except our own gbuild makefiles (which FWICT deal with it properly) - and also only ever with system-box2d.\n\nSo yes, please remove.",
+      "parentUuid": "c529a464_881baa83",
+      "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
