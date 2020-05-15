@@ -3564,6 +3564,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         const OUString sTypeAction("TYPE");
         const OUString sUpAction("UP");
         const OUString sDownAction("DOWN");
+        const OUString sValue("VALUE");
 
         try
         {
