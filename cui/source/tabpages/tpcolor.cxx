@@ -125,6 +125,7 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     // disable modify buttons
     // Color palettes can't be modified
     m_xBtnDelete->set_sensitive(false);
+    m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR1) );
 
     // disable preset color values
     m_xRGBpreset->set_sensitive(false);
@@ -365,6 +366,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
         m_xValSetColorList->SelectItem( nId + 1 );
         m_xBtnDelete->set_sensitive(false);
+        m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
         ImpColorCountChanged();
     }
 
@@ -421,7 +423,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
         SelectValSetHdl_Impl(m_xValSetColorList.get());
     }
     else
+    {
         m_xBtnDelete->set_sensitive(false);
+        m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
+    }
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
@@ -454,7 +459,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
         }
     }
     if (nPos != 0)
+    {
         m_xBtnDelete->set_sensitive(false);
+        m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR1) );
+    }
 
     m_xValSetColorList->Resize();
 }
@@ -476,14 +484,21 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
     {
         m_xValSetRecentList->SetNoSelection();
         if (m_xSelectPalette->get_active() == 0 && m_xValSetColorList->GetSelectedItemId() != 0)
+        {
             m_xBtnDelete->set_sensitive(true);
+            m_xBtnDelete->set_tooltip_text("");
+        }
         else
+        {
             m_xBtnDelete->set_sensitive(false);
+            m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR1) );
+        }
     }
     if (pValSet == m_xValSetRecentList.get())
     {
         m_xValSetColorList->SetNoSelection();
         m_xBtnDelete->set_sensitive(false);
+        m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
     }
 }
 
