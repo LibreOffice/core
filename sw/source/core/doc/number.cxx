@@ -644,9 +644,9 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         {
             css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
 
-            OUString sLevelFormat = rMyNFormat.GetListFormat();
-            if (!sLevelFormat.isEmpty())
+            if (rMyNFormat.HasListFormat())
             {
+                OUString sLevelFormat = rMyNFormat.GetListFormat();
                 // In this case we are ignoring GetIncludeUpperLevels: we put all
                 // level numbers requested by level format
                 for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
