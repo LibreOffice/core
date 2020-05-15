@@ -1335,11 +1335,12 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
 
     //listformat
-    aUString = rFormat.GetListFormat();
-    aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", aUString));
+    if (rFormat.GetListFormat().has_value())
+    {
+        aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", rFormat.GetListFormat().value()));
+    }
 
     //char style name
-
     aUString.clear();
     SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
     aPropertyValues.push_back(comphelper::makePropertyValue("CharStyleName", aUString));
