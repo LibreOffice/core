@@ -662,9 +662,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_KERNING,
             true, &pItem ))
             SetFixKerning( static_cast<const SvxKerningItem*>(pItem)->GetValue() );
-        if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
-            true, &pItem ))
-            SetBlink( static_cast<const SvxBlinkItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
             SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue() );
@@ -704,7 +701,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     else
     {
         Invalidate();
-        m_bBlink = false;
     }
     m_bPaintBlank = false;
     OSL_ENSURE( m_aSub[SwFontScript::Latin].IsTransparent(), "SwFont: Transparent revolution" );
@@ -737,7 +733,6 @@ SwFont::SwFont( const SwFont &rFont )
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
     m_bGreyWave = rFont.m_bGreyWave;
-    m_bBlink = rFont.m_bBlink;
 }
 
 SwFont::SwFont( const SwAttrSet* pAttrSet,
@@ -751,7 +746,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     m_nInputFieldCount = 0;
     m_bPaintBlank = false;
     m_bGreyWave = false;
-    m_bBlink = pAttrSet->GetBlink().GetValue();
     m_bOrgChg = true;
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
@@ -933,7 +927,6 @@ SwFont& SwFont::operator=( const SwFont &rFont )
         m_bOrgChg = rFont.m_bOrgChg;
         m_bPaintBlank = rFont.m_bPaintBlank;
         m_bGreyWave = rFont.m_bGreyWave;
-        m_bBlink = rFont.m_bBlink;
     }
     return *this;
 }

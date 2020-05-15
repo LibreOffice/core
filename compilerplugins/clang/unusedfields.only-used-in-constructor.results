@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:43
 avmedia/source/vlc/wrapper/Types.hxx:44
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:45
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:42:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:42:7)
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t u union (anonymous union at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:40:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:40:5)
 avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dpolygontriangulator.cxx:112
@@ -170,8 +170,6 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2782
-      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:61
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:63
@@ -338,8 +336,6 @@ include/sfx2/msg.hxx:147
     SfxType23 aAttrib struct SfxTypeAttrib [23]
 include/sfx2/msg.hxx:147
     SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/templdlg.hxx:42
-    SfxTemplatePanelControl mpBindings class SfxBindings *
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:29
@@ -678,12 +674,6 @@ svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:285
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
-svx/inc/colrctrl.hxx:75
-    SvxColorDockingWindow nCols sal_uInt16
-svx/inc/colrctrl.hxx:76
-    SvxColorDockingWindow nLines sal_uInt16
-svx/inc/colrctrl.hxx:78
-    SvxColorDockingWindow aItemSize class Size
 svx/inc/GalleryControl.hxx:43
     svx::sidebar::GalleryControl mpGallery class Gallery *
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1083
@@ -726,21 +716,23 @@ svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image [9]
-svx/source/tbxctrls/tbcontrl.cxx:216
-    (anonymous namespace)::SvxStyleBox_Base bVisible _Bool
 svx/source/xml/xmleohlp.cxx:68
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 svx/source/xml/xmlgrhlp.cxx:87
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
+sw/inc/accessibilityoptions.hxx:25
+    SwAccessibilityOptions bIsStopAnimatedText _Bool
 sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:145
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4218
+sw/qa/extras/layout/layout.cxx:2921
+      class SvtSysLocaleOptions &
+sw/qa/extras/uiwriter/uiwriter.cxx:4214
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
-sw/source/core/inc/swfont.hxx:988
+sw/source/core/inc/swfont.hxx:987
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction enum DbgAction
@@ -800,8 +792,10 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salvtables.hxx:527
+vcl/inc/salvtables.hxx:564
     SalInstanceEntry m_aTextFilter class WeldTextFilter
+vcl/inc/salvtables.hxx:938
+    SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:127
     SvImpLBox m_aFctSet class ImpLBSelEng
 vcl/inc/unx/i18n_ic.hxx:40
@@ -828,8 +822,6 @@ vcl/inc/WidgetThemeLibrary.hxx:103
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:119
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:6057
-    (anonymous namespace)::SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/source/gdi/jobset.cxx:37
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:38
@@ -850,17 +842,17 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4755
+vcl/unx/gtk3/gtk3gtkinst.cxx:4757
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5128
+vcl/unx/gtk3/gtk3gtkinst.cxx:5130
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5271
+vcl/unx/gtk3/gtk3gtkinst.cxx:5273
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5279
+vcl/unx/gtk3/gtk3gtkinst.cxx:5281
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:12682
+vcl/unx/gtk3/gtk3gtkinst.cxx:12686
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:12688
+vcl/unx/gtk3/gtk3gtkinst.cxx:12692
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
