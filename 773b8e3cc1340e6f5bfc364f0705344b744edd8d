@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2726da3_440028b6",
+        "filename": "vcl/unx/generic/dtrans/X11_selection.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2770,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-15T11:20:21Z",
+      "side": 1,
+      "message": "That was a legitimate assertion: if the selected code was allowed to run uncynched, then why wasn\u0027t the guard was cleared earlier in all branches, and needed to be reset here? Otherwse, why was it run unsynched in this branch? So it\u0027s not strictly to \"avoid later assert\", but to fix a flaw in locking logic...",
+      "range": {
+        "startLine": 2763,
+        "startChar": 12,
+        "endLine": 2770,
+        "endChar": 42
+      },
+      "revId": "773b8e3cc1340e6f5bfc364f0705344b744edd8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
