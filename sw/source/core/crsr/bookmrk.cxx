@@ -556,19 +556,11 @@ namespace sw { namespace mark
 
     void DropDownFieldmark::SetPortionPaintArea(const SwRect& rPortionPaintArea)
     {
-        if(m_aPortionPaintArea == rPortionPaintArea &&
-           m_pButton && m_pButton->IsVisible())
-        {
-            SendLOKMessage("show");
-            return;
-        }
-
         m_aPortionPaintArea = rPortionPaintArea;
         if(m_pButton)
         {
             m_pButton->Show();
             m_pButton->CalcPosAndSize(m_aPortionPaintArea);
-            m_pButton->Invalidate();
             SendLOKMessage("show");
         }
     }
