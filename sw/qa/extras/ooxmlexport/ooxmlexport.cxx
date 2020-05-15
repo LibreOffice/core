@@ -633,6 +633,16 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharStyleName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParagraphMark2, "paragraph-mark2.docx")
+{
+    // The problem was that we didn't handle the situation when an empty paragraph's marker had both a char style and some direct formatting.
+
+    // This was Segoe UI, set by Char Style FontStyle11 presumably.
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    // This was 11, set by Char Style FontStyle11 presumably.
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
