@@ -1275,6 +1275,26 @@ SwXText::Impl::finishOrAppendParagraph(
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
 
         SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties);
+
+        // tdf#127616 keep direct character formatting of empty paragraphs,
+        // if character style of the paragraph sets also the same attributes
+        if (aPam.Start()->nNode.GetNode().GetTextNode()->Len() == 0)
+        {
+            auto itCharStyle = std::find_if(rProperties.begin(), rProperties.end(), [](const beans::PropertyValue& rValue)
+            {
+                return rValue.Name == "CharStyleName";
+            });
+            if ( itCharStyle != rProperties.end() )
+            {
+                for (const auto& rValue : rProperties)
+                {
+                    if ( rValue != *itCharStyle && rValue.Name.startsWith("Char") )
+                    {
+                        SwUnoCursorHelper::SetPropertyValue(aPam, *pParaPropSet, rValue.Name, rValue.Value);
+                    }
+                }
+            }
+        }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
     {
