@@ -131,7 +131,6 @@ private:
     short               m_nHorSBarHeight, m_nVerSBarWidth;
 
     bool                m_bUpdateMode : 1;
-    bool                m_bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
     bool                m_bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
     bool                m_bContextMenuHandling : 1;
     bool                mbForceMakeVisible;

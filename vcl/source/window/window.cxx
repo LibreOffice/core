@@ -2961,12 +2961,6 @@ tools::Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow 
     return ImplGetWindowExtentsRelative( pRelativeWindow, false );
 }
 
-tools::Rectangle Window::GetClientWindowExtentsRelative() const
-{
-    // without decoration
-    return ImplGetWindowExtentsRelative( nullptr, true );
-}
-
 tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();

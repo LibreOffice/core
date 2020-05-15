@@ -2299,18 +2299,6 @@ void SplitWindow::RemoveItem( sal_uInt16 nId )
     pOrgParent.clear();
 }
 
-void SplitWindow::Clear()
-{
-    // create Main-Set again
-    mpMainSet.reset(new ImplSplitSet());
-    if ( mnWinStyle & WB_NOSPLITDRAW )
-        mpMainSet->mnSplitSize -= 2;
-    mpBaseSet = mpMainSet.get();
-
-    // and invalidate again
-    ImplUpdate();
-}
-
 void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
                              bool bPropSmall, bool bPropGreat )
 {

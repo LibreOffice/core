@@ -984,10 +984,6 @@ bool ComboBox::IsMultiSelectionEnabled() const
 
 void ComboBox::SetSelectHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_SelectHdl = rLink; }
 
-void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_DoubleClickHdl = rLink; }
-
-const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
-
 void ComboBox::SetEntryActivateHdl(const Link<Edit&,bool>& rLink)
 {
     if (!m_pImpl->m_pSubEdit)

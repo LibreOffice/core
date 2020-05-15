@@ -137,7 +137,6 @@ public:
                                     sal_uInt16 nPos, sal_uInt16 nIntoSetId,
                                     SplitWindowItemFlags nBits );
     void                RemoveItem( sal_uInt16 nId );
-    void                Clear();
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
                                    bool bPropSmall,

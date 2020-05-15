@@ -438,7 +438,6 @@ public:
     void            SetSelectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aSelectHdl=rNewHdl; }
     void            SetDeselectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aDeselectHdl=rNewHdl; }
     void            SetDoubleClickHdl(const Link<SvTreeListBox*,bool>& rNewHdl) {aDoubleClickHdl=rNewHdl;}
-    const Link<SvTreeListBox*,bool>&   GetDoubleClickHdl() const { return aDoubleClickHdl; }
     void            SetExpandingHdl(const Link<SvTreeListBox*,bool>& rNewHdl){aExpandingHdl=rNewHdl;}
     void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
     void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink) { aPopupMenuHdl = rLink; }
@@ -615,7 +614,6 @@ public:
     void            SetCheckButtonHdl( const Link<SvTreeListBox*,void>& rLink )  { aCheckButtonHdl=rLink; }
     virtual void    CheckButtonHdl();
 
-    void            SetSublistOpenWithReturn();      // open/close sublist with return/enter
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
 
     void            EnableInplaceEditing( bool bEnable );
@@ -652,7 +650,6 @@ public:
     void            SetEntryWidth( short nWidth );
     Size            GetOutputSizePixel() const;
     short           GetIndent() const { return nIndent; }
-    void            SetIndent( short nIndent );
     void            SetSpaceBetweenEntries( short nSpace );
     Point           GetEntryPosition(const SvTreeListEntry*) const;
     void            MakeVisible( SvTreeListEntry* pEntry );

@@ -1043,8 +1043,6 @@ public:
     tools::Rectangle                           GetDesktopRectPixel() const;
     //  window extents including border and decoration
     tools::Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
-    // window extents of the client window, coordinates to be used in SetPosPixel
-    tools::Rectangle                           GetClientWindowExtentsRelative() const;
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,

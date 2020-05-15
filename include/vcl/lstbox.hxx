@@ -172,7 +172,6 @@ public:
 
     void                SetEntryData( sal_Int32  nPos, void* pNewData );
     void*               GetEntryData( sal_Int32  nPos ) const;
-    void*               GetSelectedEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
 
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
@@ -221,7 +220,6 @@ public:
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<ListBox&,void>& GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
