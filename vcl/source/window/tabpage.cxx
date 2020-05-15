@@ -168,10 +168,6 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     pDev->Pop();
 }
 
-void TabPage::ActivatePage()
-{
-}
-
 Size TabPage::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))

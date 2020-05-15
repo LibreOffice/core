@@ -88,7 +88,6 @@ struct ComboBox::Impl
     DECL_LINK( ImplClickBtnHdl, void*, void );
     DECL_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
     DECL_LINK( ImplAutocompleteHdl, Edit&, void );
     DECL_LINK( ImplListItemSelectHdl , LinkParamNone*, void );
 };
@@ -237,7 +236,6 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     m_pImpl->m_pImplLB->SetSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectHdl) );
     m_pImpl->m_pImplLB->SetCancelHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplCancelHdl) );
     m_pImpl->m_pImplLB->SetDoubleClickHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplDoubleClickHdl) );
-    m_pImpl->m_pImplLB->SetUserDrawHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplUserDrawHdl) );
     m_pImpl->m_pImplLB->SetSelectionChangedHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplSelectionChangedHdl) );
     m_pImpl->m_pImplLB->SetListItemSelectHdl( LINK(m_pImpl.get(), ComboBox::Impl, ImplListItemSelectHdl) );
     m_pImpl->m_pImplLB->Show();
@@ -1253,15 +1251,6 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         // DD-Button ?
     }
 
-}
-
-IMPL_LINK(ComboBox::Impl, ImplUserDrawHdl, UserDrawEvent*, pEvent, void)
-{
-    m_rThis.UserDraw(*pEvent);
-}
-
-void ComboBox::UserDraw( const UserDrawEvent& )
-{
 }
 
 void ComboBox::SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink)

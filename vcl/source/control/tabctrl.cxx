@@ -680,7 +680,6 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
             pCtrlParent->SetHelpId( pPage->GetHelpId() );
         }
 
-        pPage->ActivatePage();
         pPage->Show();
 
         if ( pOldPage && pOldPage->HasChildPathFocus() )

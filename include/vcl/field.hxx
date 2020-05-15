@@ -151,7 +151,7 @@ public:
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
     OUString                GetValueString() const;
-    virtual void            SetValueFromString(const OUString& rStr);
+    void                    SetValueFromString(const OUString& rStr);
 
 protected:
     sal_Int64               mnLastValue;

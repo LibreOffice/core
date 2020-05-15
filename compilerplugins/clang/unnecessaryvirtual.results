@@ -246,7 +246,7 @@ forms/source/xforms/namedcollection.hxx:101
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:106
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
-include/basegfx/utils/unopolypolygon.hxx:97
+include/basegfx/utils/unopolypolygon.hxx:94
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:54
     void comphelper::OInteraction::select()
@@ -282,31 +282,41 @@ include/vbahelper/vbacollectionimpl.hxx:295
     class com::sun::star::uno::Any ScVbaCollectionBase::Item(const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,)
 include/vbahelper/vbacollectionimpl.hxx:324
     unsigned char ScVbaCollectionBase::hasElements()
-include/vbahelper/vbahelperinterface.hxx:77
+include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
-include/vbahelper/vbahelperinterface.hxx:81
+include/vbahelper/vbahelperinterface.hxx:78
     class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> InheritedHelperInterfaceImpl::getParent()
-include/vbahelper/vbahelperinterface.hxx:83
+include/vbahelper/vbahelperinterface.hxx:80
     class com::sun::star::uno::Any InheritedHelperInterfaceImpl::Application()
-include/vbahelper/vbahelperinterface.hxx:91
+include/vbahelper/vbahelperinterface.hxx:88
     class rtl::OUString InheritedHelperInterfaceImpl::getImplementationName()
-include/vbahelper/vbahelperinterface.hxx:92
+include/vbahelper/vbahelperinterface.hxx:89
     unsigned char InheritedHelperInterfaceImpl::supportsService(const class rtl::OUString &,)
-include/vbahelper/vbahelperinterface.hxx:102
+include/vbahelper/vbahelperinterface.hxx:99
     class com::sun::star::uno::Sequence<class rtl::OUString> InheritedHelperInterfaceImpl::getSupportedServiceNames()
 include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
+include/vcl/combobox.hxx:63
+    void ComboBox::UserDraw(const class UserDrawEvent &,)
+include/vcl/combobox.hxx:64
+    void ComboBox::Select()
 include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/lstbox.hxx:132
-    void ListBox::UserDraw(const class UserDrawEvent &,)
-include/vcl/treelistbox.hxx:686
-    _Bool SvTreeListBox::Expand(class SvTreeListEntry *,)
-include/vcl/treelistbox.hxx:687
-    _Bool SvTreeListBox::Collapse(class SvTreeListEntry *,)
-include/vcl/weld.hxx:103
+include/vcl/field.hxx:154
+    void NumericFormatter::SetValueFromString(const class rtl::OUString &,)
+include/vcl/tabpage.hxx:50
+    void TabPage::ActivatePage()
+include/vcl/toolkit/dialog.hxx:96
+    void Dialog::set_content_area(class VclBox *,)
+include/vcl/treelistbox.hxx:449
+    void SvTreeListBox::ExpandedHdl()
+include/vcl/treelistbox.hxx:450
+    _Bool SvTreeListBox::ExpandingHdl()
+include/vcl/treelistbox.hxx:472
+    enum TriState SvTreeListBox::NotifyMoving(class SvTreeListEntry *,class SvTreeListEntry *,class SvTreeListEntry *&,unsigned long &,)
+include/vcl/weld.hxx:105
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -410,8 +420,6 @@ vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
     void SalFrame::Flush(const class tools::Rectangle &,)
-vcl/inc/salframe.hxx:264
-    void SalFrame::BeginSheet(class SalFrame *,)const
 vcl/inc/salinst.hxx:93
     _Bool SalInstance::SVMainHook(int *,)
 vcl/inc/salinst.hxx:203
@@ -426,7 +434,7 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:226
+vcl/inc/skia/gdiimpl.hxx:223
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
@@ -472,12 +480,6 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:70
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
-xmloff/source/forms/elementimport.hxx:574
-    class rtl::Reference<class SvXMLImportContext> xmloff::OContainerImport::CreateChildContext(unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
-xmloff/source/forms/elementimport.hxx:577
-    void xmloff::OContainerImport::EndElement()
-xmloff/source/forms/elementimport.hxx:582
-    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OContainerImport::createElement()
-xmloff/source/forms/elementimport.hxx:609
+xmloff/source/forms/elementimport.hxx:573
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 
