@@ -1275,6 +1275,31 @@ SwXText::Impl::finishOrAppendParagraph(
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
 
         SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties);
+
+        // tdf#127616 apply character style based formatting of empty paragraphs
+        // if the formatting contains also direct character formatting,
+        // using NOFORMATATTR as in insertTextPortion(), which isn't called
+        // in empty paragraphs.
+        if (aPam.Start()->nNode.GetNode().GetTextNode()->Len() == 0)
+        {
+            bool bHasCharStyleName = false;
+            bool bHasCharOther = false;
+            for (const auto& rValue : rProperties)
+            {
+                if (rValue.Name.startsWith("Char"))
+                {
+                    if (!bHasCharStyleName && rValue.Name == "CharStyleName")
+                        bHasCharStyleName = true;
+                    else if (!bHasCharOther)
+                        bHasCharOther = true;
+                    if (bHasCharStyleName && bHasCharOther)
+                    {
+                        SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties, SetAttrMode::NOFORMATATTR);
+                        break;
+                    }
+                }
+            }
+        }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
     {
