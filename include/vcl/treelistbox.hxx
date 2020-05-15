@@ -446,8 +446,8 @@ public:
     void SetCustomRenderHdl(const Link<svtree_render_args, void>& rLink) { aCustomRenderHdl = rLink; }
     void SetCustomMeasureHdl(const Link<svtree_measure_args, Size>& rLink) { aCustomMeasureHdl = rLink; }
 
-    virtual void    ExpandedHdl();
-    virtual bool    ExpandingHdl();
+    void            ExpandedHdl();
+    bool            ExpandingHdl();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
     virtual bool    DoubleClickHdl();
@@ -469,7 +469,7 @@ public:
     SvTreeListEntry*         CloneEntry( SvTreeListEntry* pSource );
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
-    virtual TriState NotifyMoving(
+    TriState NotifyMoving(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent

@@ -277,7 +277,6 @@ namespace vcl
         if ( pTabPage )
         {
             ImplPosTabPage();
-            pTabPage->ActivatePage();
             pTabPage->Show();
         }
 

@@ -47,8 +47,6 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void    ActivatePage();
-
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
     virtual void    SetPosPixel(const Point& rNewPos) override;

@@ -60,8 +60,7 @@ public:
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    virtual void    Select();
+    void            Select();
     void            DoubleClick();
 
     virtual void    Modify() override;
