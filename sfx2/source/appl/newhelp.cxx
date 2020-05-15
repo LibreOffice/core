@@ -22,7 +22,6 @@
 #include <sfx2/sfxresid.hxx>
 #include "helpinterceptor.hxx"
 #include <helper.hxx>
-#include "panelist.hxx"
 #include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sal/log.hxx>
@@ -135,25 +134,6 @@ using namespace ::comphelper;
 namespace sfx2
 {
 
-
-    void HandleTaskPaneList( vcl::Window* pWindow, bool bAddToList )
-    {
-        vcl::Window* pParent = pWindow->GetParent();
-        DBG_ASSERT( pParent, "HandleTaskPaneList(): every window here should have a parent" );
-
-        SystemWindow* pSysWin = pParent->GetSystemWindow();
-        if( pSysWin )
-        {
-            TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
-            if( pTaskPaneList )
-            {
-                if( bAddToList )
-                    pTaskPaneList->AddWindow( pWindow );
-                else
-                    pTaskPaneList->RemoveWindow( pWindow );
-            }
-        }
-    }
 
     /** Prepare a search string for searching or selecting.
         For searching every search word needs the postfix '*' and the delimiter ' ' if necessary.
@@ -1431,12 +1411,6 @@ HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(const OString& rName)
     assert(pPage && "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page");
 
     return pPage;
-}
-
-HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage()
-{
-    OString sName(m_xTabCtrl->get_current_page_ident());
-    return GetPage(sName);
 }
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl, weld::ComboBox&, void)

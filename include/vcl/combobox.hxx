@@ -113,8 +113,6 @@ public:
     bool            IsMultiSelectionEnabled() const;
 
     void            SetSelectHdl(const Link<ComboBox&,void>& rLink);
-    void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
-    const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
     void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
     void            SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 

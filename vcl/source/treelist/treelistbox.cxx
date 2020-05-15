@@ -1408,11 +1408,6 @@ void SvTreeListBox::SetNoAutoCurEntry( bool b )
     pImpl->SetNoAutoCurEntry( b );
 }
 
-void SvTreeListBox::SetSublistOpenWithReturn()
-{
-    pImpl->m_bSubLstOpRet = true;
-}
-
 void SvTreeListBox::SetSublistOpenWithLeftRight()
 {
     pImpl->m_bSubLstOpLR = true;
@@ -1835,14 +1830,6 @@ SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
     pClone->SetUserData( pSource->GetUserData() );
 
     return pClone;
-}
-
-void SvTreeListBox::SetIndent( short nNewIndent )
-{
-    nIndent = nNewIndent;
-    SetTabs();
-    if( IsUpdateMode() )
-        Invalidate();
 }
 
 const Image& SvTreeListBox::GetDefaultExpandedEntryBmp( ) const

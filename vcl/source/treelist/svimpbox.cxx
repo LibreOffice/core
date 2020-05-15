@@ -106,7 +106,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_bInVScrollHdl = false;
     m_nFlags |= LBoxFlags::Filling;
 
-    m_bSubLstOpRet = m_bSubLstOpLR = m_bContextMenuHandling = false;
+    m_bSubLstOpLR = m_bContextMenuHandling = false;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -2367,15 +2367,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RETURN:
-            if( m_bSubLstOpRet && IsExpandable() )
-            {
-                if( m_pView->IsExpanded( m_pCursor ) )
-                    m_pView->Collapse( m_pCursor );
-                else
-                    m_pView->Expand( m_pCursor );
-            }
-            else
-                bKeyUsed = false;
+            bKeyUsed = false;
             break;
 
         case KEY_F2:

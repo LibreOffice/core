@@ -250,7 +250,6 @@ private:
     void                Initialize();
     void                SetActiveFactory();
     HelpTabPage_Impl*   GetPage(const OString&);
-    HelpTabPage_Impl*   GetCurrentPage();
 
     inline ContentTabPage_Impl*     GetContentPage();
     inline IndexTabPage_Impl*       GetIndexPage();
