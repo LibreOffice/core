@@ -409,6 +409,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that we lacked the fallback to export the replacement
     // graphic for OLE objects.  But we can actually export the OLE itself now,
@@ -552,6 +553,7 @@ DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inner margins of the textframe wasn't exported.
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -788,6 +790,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     // Was text::WrapTextMode_THROUGH, due to missing Surround handling in the exporter.
@@ -923,6 +926,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);

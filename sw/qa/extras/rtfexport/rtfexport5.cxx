@@ -1155,6 +1155,7 @@ DECLARE_RTFEXPORT_TEST(testTdf106950, "tdf106950.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     auto xShape(getShape(1));
     // Without the accompanying fix in place, this test would have failed with
@@ -1165,6 +1166,7 @@ DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
 
 DECLARE_RTFEXPORT_TEST(testTdf128320, "tdf128320.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Shape does exist in RTF output
     auto xShape(getShape(1));

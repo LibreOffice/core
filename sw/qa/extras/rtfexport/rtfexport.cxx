@@ -398,6 +398,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     /*
      * The problem was that a custom shape was missing its second (and all the other remaining) coordinates.
@@ -449,6 +450,7 @@ DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
 
 DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The output was simply invalid, so let's check if all 3 frames were imported back.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -801,6 +803,7 @@ DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This was AS_CHARACTER, RTF export did not support writing anchored pictures.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
@@ -834,6 +837,7 @@ DECLARE_RTFEXPORT_TEST(testTdf113408, "tdf113408.rtf")
 
 DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).
     CPPUNIT_ASSERT(text::TextContentAnchorType_AS_CHARACTER
@@ -873,6 +877,7 @@ DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that:
     // 1) The import tried to use fieldmarks for SHAPE fields
