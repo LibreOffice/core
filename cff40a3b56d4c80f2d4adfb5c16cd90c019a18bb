@@ -52,6 +52,24 @@
       "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "185fd280_4e02b38e",
+        "filename": "config_host.mk.in",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-05-15T21:49:41Z",
+      "side": 1,
+      "message": "removed it :)",
+      "parentUuid": "ebd30f9e_4c4486c6",
+      "revId": "cff40a3b56d4c80f2d4adfb5c16cd90c019a18bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
