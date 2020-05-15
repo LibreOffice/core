@@ -37,9 +37,9 @@
 #include <optional>
 #include <string.h>
 
-// For backwards compatibility, the nFeatures and nRequirements flag words are
-// read/written as potentially signed hexadecimal numbers (though that has no
-// practical relevance given that each has only one flag with value 0x01
+// For backwards compatibility, the nRequirements flag word is
+// read/written as potentially signed hexadecimal number (though that has no
+// practical relevance given that it has only one flag with value 0x01
 // defined).
 
 using namespace osl;
@@ -553,7 +553,6 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
         m_javaInfo->sVendor = pInfo->sVendor;
         m_javaInfo->sLocation = pInfo->sLocation;
         m_javaInfo->sVersion = pInfo->sVersion;
-        m_javaInfo->nFeatures = pInfo->nFeatures;
         m_javaInfo->nRequirements = pInfo->nRequirements;
         m_javaInfo->arVendorData = pInfo->arVendorData;
     }
@@ -563,7 +562,6 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
         m_javaInfo->sVendor.clear();
         m_javaInfo->sLocation.clear();
         m_javaInfo->sVersion.clear();
-        m_javaInfo->nFeatures = 0;
         m_javaInfo->nRequirements = 0;
         m_javaInfo->arVendorData = rtl::ByteSequence();
     }
@@ -676,7 +674,7 @@ bool NodeJava::createSettingsDocument() const
 
 CNodeJavaInfo::CNodeJavaInfo() :
     m_bEmptyNode(false), bNil(true), bAutoSelect(true),
-    nFeatures(0), nRequirements(0)
+    nRequirements(0)
 {
 }
 
@@ -739,13 +737,6 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             CXmlCharPtr xmlVersion = xmlNodeListGetString(
                 pDoc, cur->children, 1);
             sVersion = xmlVersion;
-        }
-        else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("features"))== 0)
-        {
-            CXmlCharPtr xmlFeatures = xmlNodeListGetString(
-                    pDoc, cur->children, 1);
-            OUString sFeatures = xmlFeatures;
-            nFeatures = sFeatures.toInt64(16);
         }
         else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("requirements")) == 0)
         {
@@ -858,11 +849,10 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
-    //Create the features element
-    OUString sFeatures = OUString::number(
-        nFeatures, 16);
+    //Create the features element, for backwards compatibility (it used to support one flag
+    // JFW_FEATURE_ACCESSBRIDGE = 0x01, but is ignored and always written as zero now)
     xmlNewTextChild(pJavaInfoNode, nullptr, reinterpret_cast<xmlChar const *>("features"),
-                    CXmlCharPtr(sFeatures));
+                    reinterpret_cast<xmlChar const *>("0"));
     //add a new line for better readability
     nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
     xmlAddChild(pJavaInfoNode, nodeCrLf);
@@ -896,7 +886,7 @@ std::unique_ptr<JavaInfo> CNodeJavaInfo::makeJavaInfo() const
         return std::unique_ptr<JavaInfo>();
     return std::unique_ptr<JavaInfo>(
         new JavaInfo{
-            sVendor, sLocation, sVersion, nFeatures, nRequirements,
+            sVendor, sLocation, sVersion, nRequirements,
             arVendorData});
 }
 

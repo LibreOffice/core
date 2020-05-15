@@ -383,26 +383,12 @@ bool getJavaProps(const OUString & exePath,
         sClassPath += "/../Resources/java";
 #endif
 
-#ifdef UNX
-    // Java is no longer required for a11y - we use atk directly.
-    bool bNoAccessibility = true;
-#else
-    bool bNoAccessibility = false;
-#endif
-
     //prepare the arguments
-    sal_Int32 cArgs = 3;
+    sal_Int32 const cArgs = 3;
     OUString arg1 = "-classpath";// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3("JREProperties");
-    OUString arg4 = "noaccessibility";
-    rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
-    // Only add the fourth param if the bootstrap parameter is set.
-    if (bNoAccessibility)
-    {
-        args[3] = arg4.pData;
-        cArgs = 4;
-    }
+    rtl_uString *args[cArgs] = {arg1.pData, arg2.pData, arg3.pData};
 
     oslProcess javaProcess= nullptr;
     oslFileHandle fileOut= nullptr;

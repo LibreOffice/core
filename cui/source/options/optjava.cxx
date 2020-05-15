@@ -93,7 +93,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     std::vector<int> aWidths;
     aWidths.push_back(m_xJavaList->get_checkbox_column_width());
     aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
-    aWidths.push_back(m_xJavaList->get_pixel_size("0.0.0_00-icedtea").Width());
     m_xJavaList->set_column_fixed_widths(aWidths);
 
     std::vector<int> aRadioColumns;
@@ -361,10 +360,6 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
     m_xJavaList->set_toggle(nPos, TRISTATE_FALSE, 0);
     m_xJavaList->set_text(nPos, _pInfo->sVendor, 1);
     m_xJavaList->set_text(nPos, _pInfo->sVersion, 2);
-    OUString sFeature;
-    if ((_pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == JFW_FEATURE_ACCESSBRIDGE)
-        sFeature = m_sAccessibilityText;
-    m_xJavaList->set_text(nPos, sFeature, 3);
 
     INetURLObject aLocObj(_pInfo->sLocation);
     OUString sLocation = aLocObj.getFSysPath(FSysStyle::Detect);

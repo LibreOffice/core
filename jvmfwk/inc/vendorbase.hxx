@@ -124,7 +124,6 @@ public:
     const OUString & getHome() const;
     const OUString & getRuntimeLibrary() const;
     const OUString & getLibraryPath() const;
-    bool supportsAccessibility() const;
     bool isValidArch() const;
      /* determines if prior to running java something has to be done,
         like setting the LD_LIBRARY_PATH. This implementation checks
@@ -172,7 +171,6 @@ protected:
     OUString m_sRuntimeLibrary;
     OUString m_sLD_LIBRARY_PATH;
     OUString m_sArch;
-    bool m_bAccessibility;
 
 
     typedef rtl::Reference<VendorBase> (* createInstance_func) ();

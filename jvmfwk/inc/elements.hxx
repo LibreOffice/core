@@ -84,7 +84,6 @@ public:
     OUString sVendor;
     OUString sLocation;
     OUString sVersion;
-    sal_uInt64 nFeatures;
     sal_uInt64 nRequirements;
     ::rtl::ByteSequence arVendorData;
 

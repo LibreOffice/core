@@ -282,7 +282,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
 
         // 'bInfoFound' indicates whether a Java installation has been found
-        // that supports all desired features
         bool bInfoFound = false;
 
         // get list of vendors for Java installations
@@ -299,7 +298,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
             bInfoFound = true;
         }
 
-        // if no Java installation providing all features was detected by using JAVA_HOME,
+        // if no Java installation was detected by using JAVA_HOME,
         // query PATH for Java installations
         if (!bInfoFound)
         {
@@ -359,8 +358,6 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
                     if (aInfo)
                     {
-                        //the just found Java implements all required features
-                        //currently there is only accessibility!!!
                         aCurrentInfo = std::move(aInfo);
                         break;
                     }
@@ -403,7 +400,6 @@ bool jfw_areEqualJavaInfo(JavaInfo const * pInfoA,JavaInfo const * pInfoB)
     if (pInfoA->sVendor == pInfoB->sVendor
         && pInfoA->sLocation == pInfoB->sLocation
         && pInfoA->sVersion == pInfoB->sVersion
-        && pInfoA->nFeatures == pInfoB->nFeatures
         && pInfoA->nRequirements == pInfoB->nRequirements
         && pInfoA->arVendorData == pInfoB->arVendorData)
     {
