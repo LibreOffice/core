@@ -237,6 +237,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    OUString sNodeType;
+
+    // First paragraph does not have tab before
+    sNodeType = parseDump("/root/page/body/txt[1]/Text[1]", "nType");
+    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
+
+    // Second paragraph starts with tab
+    sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
+    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
 {
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
@@ -351,6 +365,22 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128889, "tdf128889.fodt")
     assertXPath(pXml, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132754, "tdf132754.docx")
+{
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("0.0.0."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("0.0.1."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("0.0.2."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
 {
     CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
@@ -376,6 +406,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
                                   "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
                                   ""), // ending with an empty paragraph
                          aIndexString);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString("1.2.1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
