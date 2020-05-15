@@ -3637,7 +3637,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     {
                         pUIWindow->execute(sDownAction, aMap);
                     }
-                    else if (aMap["cmd"] == "set" || aMap["cmd"] == "change")
+                    else if (aMap["cmd"] == "set")
                     {
                         aMap["TEXT"] = aMap["data"];
 
