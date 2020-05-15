@@ -769,8 +769,8 @@ void Bridge::handleCommitChangeRequest(
     css::uno::Sequence< css::bridge::ProtocolProperty > s;
     [[maybe_unused]] bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
     assert(ok);
-    for (sal_Int32 i = 0; i != s.getLength(); ++i) {
-        if (s[i].Name == "CurrentContext") {
+    for (const auto & pp : std::as_const(s)) {
+        if (pp.Name == "CurrentContext") {
             bCcMode = true;
         } else {
             bCcMode = false;
@@ -779,7 +779,7 @@ void Bridge::handleCommitChangeRequest(
                 css::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
                         "InvalidProtocolChangeException",
-                        css::uno::Reference< css::uno::XInterface >(), s[i],
+                        css::uno::Reference< css::uno::XInterface >(), pp,
                         1)));
             break;
         }
