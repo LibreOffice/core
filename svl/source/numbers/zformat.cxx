@@ -162,14 +162,9 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     else
     {
 
-        if (tblDBNumToNatNum.count(eLang) != 0)
-        {
+        auto const it = tblDBNumToNatNum.find(eLang);
+        if (it != tblDBNumToNatNum.end())
             nNatNum = tblDBNumToNatNum.at(eLang)[nDBNum - 1];
-        }
-        else
-        {
-            nNatNum = 0;
-        }
     }
     return nNatNum;
 }
@@ -198,14 +193,9 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
     }
     else
     {
-        if (tblNatNumToDBNum.count(eLang) != 0)
-        {
+        auto const it = tblNatNumToDBNum.find(eLang);
+        if (it != tblNatNumToDBNum.end())
             nDBNum = tblNatNumToDBNum.at(eLang)[nDBNum - 1];
-        }
-        else
-        {
-            nDBNum = 0;
-        }
     }
     return nDBNum;
 }
