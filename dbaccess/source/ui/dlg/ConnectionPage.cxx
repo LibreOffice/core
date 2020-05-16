@@ -211,6 +211,7 @@ namespace dbaui
         m_xUserName->save_value();
         m_xConnectionURL->save_value();
         m_xJavaDriver->save_value();
+        m_xPasswordRequired->save_state();
     }
 
     bool OConnectionTabPage::FillItemSet(SfxItemSet* _rSet)
