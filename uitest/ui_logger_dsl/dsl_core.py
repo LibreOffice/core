@@ -42,6 +42,7 @@ class ul_Compiler:
     parent_hierarchy_count = 0
     last_parent = []
     flag_for_QuerySaveDialog = False
+    math_element_selector_initializer= False;
 
     def __init__(self, input_address, output_address):
         self.ui_dsl_mm = metamodel_from_file("ui_logger_dsl_grammar.tx")
@@ -169,6 +170,7 @@ class ul_Compiler:
                 + name_of_child
                 + '")\n'
             )
+
             self.variables.append(line)
 
     def write_line_without_parameters(self, Action_holder, Action, Action_type):
@@ -368,6 +370,10 @@ class ul_Compiler:
                 self.parent_hierarchy_count = self.parent_hierarchy_count - 1
             else:
                 self.flag_for_QuerySaveDialog = False
+
+        # This is to solve the problem of re-using the same id again in diffrent Dialogs
+
+        self.objects.clear()
 
         self.prev_command = DialogCommand
 
@@ -785,9 +791,24 @@ class ul_Compiler:
 
     def handle_math_element_selector(self, math_element_selector):
 
+        if( self.math_element_selector_initializer == False ):
+            # This part to initialize the element selector in math application
+            self.math_element_selector_initializer = True
+            line = (
+                double_tab
+                + "element_selector"
+                + ' = MainWindow.getChild("'
+                + "element_selector"
+                + '")\n'
+            )
+            self.variables.append(line)
+
+        # this put a prefix of char 'x' to avoid variable with name equal to number only
+        element_name="x"+str(math_element_selector.element_no)
+
         line = (
             double_tab
-            + str(math_element_selector.element_no)
+            + str(element_name)
             + ' = element_selector.getChild("'
             + str(math_element_selector.element_no)
             + '")\n'
@@ -795,7 +816,7 @@ class ul_Compiler:
         self.variables.append(line)
 
         self.write_line_without_parameters(
-            str(math_element_selector.element_no), "SELECT", "tuple"
+            str(element_name), "SELECT", "tuple"
         )
 
         self.prev_command = math_element_selector

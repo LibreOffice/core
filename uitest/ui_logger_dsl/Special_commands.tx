@@ -174,7 +174,7 @@ math_command:
     math_element_selector | math_Type_command
 ;
 math_element_selector:
-    'Select element no ' element_no=INT ' From ' place=ID
+    'Select element no ' element_no=INT 'From' place=ID
 ;
 math_Type_command:
     'Type on math ' what_to_type=Type_options
