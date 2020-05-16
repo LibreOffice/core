@@ -198,6 +198,10 @@ public:
                     {
                         mnGeneratorVersion = SvXMLImport::LO_6x;
                     }
+                    else if ('7' == loVersion[0])
+                    {
+                        mnGeneratorVersion = SvXMLImport::LO_7x;
+                    }
                     else
                     {
                         SAL_INFO("xmloff.core", "unknown LO version: " << loVersion);

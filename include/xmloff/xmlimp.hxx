@@ -558,6 +558,7 @@ public:
     /// @ATTENTION: when adding a new value more specific than "6x", grep for
     /// all current uses and adapt them!!!
     static const sal_uInt16 LO_6x = 60 | LO_flag;
+    static const sal_uInt16 LO_7x = 70 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
 
     /** depending on whether the generator version indicates LO, compare
