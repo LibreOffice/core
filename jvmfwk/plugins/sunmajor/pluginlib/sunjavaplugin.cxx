@@ -201,6 +201,7 @@ extern "C" void JNICALL abort_handler()
 
 typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
 
+#ifndef ANDROID
 int createJvm(
     JNI_CreateVM_Type * pCreateJavaVM, JavaVM ** pJavaVM, JNIEnv ** ppEnv, JavaVMInitArgs * vm_args)
 {
@@ -228,6 +229,7 @@ int createJvm(
         err= 1;
     return err;
 }
+#endif
 
 /** helper function to check Java version requirements
 
