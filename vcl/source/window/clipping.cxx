@@ -27,6 +27,14 @@
 
 namespace vcl {
 
+vcl::Region Window::GetOutputBoundsClipRegion() const
+{
+    vcl::Region aClip(GetClipRegion());
+    aClip.Intersect(tools::Rectangle(Point(), GetOutputSize()));
+
+    return aClip;
+}
+
 void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
