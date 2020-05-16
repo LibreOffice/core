@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f7976912_e5851fcb",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-05-16T12:04:06Z",
+      "side": 1,
+      "message": "About interchangability when switching locales - I just noticed that two more map differently vs. English:\n - \"M/D/YY\" → \"DD.MM.YY\"\n - \"MM/DD/YY\" → \"D.M.YY\"\nAs neither of the Estonian formats are wrong in itself, I suppose it\u0027s better to keep them as they were, in case someone is referring to them using the API.",
+      "parentUuid": "e26e5eb5_c4ef0ec3",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9389e5d_752daf71",
         "filename": "i18npool/source/localedata/data/et_EE.xml",
         "patchSetId": 4
