@@ -79,12 +79,10 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     , m_xExpertConfigBtn(m_xBuilder->weld_button("expertconfig"))
     , m_xExperimentalCB(m_xBuilder->weld_check_button("experimental"))
     , m_xMacroCB(m_xBuilder->weld_check_button("macrorecording"))
-    , m_xAccessibilityText(m_xBuilder->weld_label("a11y"))
     , m_xAddDialogText(m_xBuilder->weld_label("selectruntime"))
     , m_xJavaFrame(m_xBuilder->weld_widget("javaframe"))
 {
     m_sInstallText = m_xJavaPathText->get_label();
-    m_sAccessibilityText = m_xAccessibilityText->get_label();
     m_sAddDialogText = m_xAddDialogText->get_label();
 
     m_xJavaList->set_size_request(m_xJavaList->get_approximate_digit_width() * 30,

@@ -265,17 +265,6 @@
                             <property name="no_show_all">True</property>
                             <property name="column_spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="a11y">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="optadvancedpage|a11y">with accessibility support</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="selectruntime">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>

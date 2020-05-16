@@ -55,7 +55,6 @@ private:
     OUString                m_pClassPath;
 #endif
     OUString                m_sInstallText;
-    OUString                m_sAccessibilityText;
     OUString                m_sAddDialogText;
     Idle                    m_aResetIdle;
 
@@ -78,7 +77,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xExperimentalCB;
     std::unique_ptr<weld::CheckButton> m_xMacroCB;
 
-    std::unique_ptr<weld::Label> m_xAccessibilityText;
     std::unique_ptr<weld::Label> m_xAddDialogText;
 
     std::unique_ptr<weld::Widget> m_xJavaFrame;
