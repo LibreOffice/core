@@ -137,7 +137,7 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
     nCntExp      = rNumFor.nCntExp;
 }
 
-static const std::map<LanguageType, std::vector<sal_uInt8>> tblDBNumToNatNum
+static const std::map<LanguageType, std::array<sal_uInt8,4>> tblDBNumToNatNum
     = { { primary(LANGUAGE_CHINESE),    { 4, 5, 6, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 4, 5, 3, 0 } },
         { primary(LANGUAGE_KOREAN),     { 1, 2, 3, 9 } } };
@@ -169,7 +169,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     return nNatNum;
 }
 
-static const std::map<LanguageType, std::vector<sal_uInt8>> tblNatNumToDBNum
+static const std::map<LanguageType, std::array<sal_uInt8,9>> tblNatNumToDBNum
     = { { primary(LANGUAGE_CHINESE),    { 1, 0, 0, 1, 2, 3, 0, 0, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 1, 2, 3, 1, 2, 3, 1, 2, 0 } },
         { primary(LANGUAGE_KOREAN),     { 0, 2, 3, 1, 0, 0, 0, 0, 0 } } };
