@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7e7efa9_2d028259",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-16T16:25:32Z",
+      "side": 1,
+      "message": "this line can be\n   nNatNum \u003d (*it)[nDBNum - 1]\navoiding a second lookup",
+      "revId": "ba2cdef6cf48ff6392b3e1fa0b830396095bfbde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
