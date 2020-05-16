@@ -401,19 +401,17 @@ ErrCode SwASCIIParser::ReadChars()
                         *pStt = 0;
                         ++pStt;
 
-                        bool bChkSplit = false;
+                        bool bChkSplit = true;
                         if( LINEEND_CRLF == pUseMe->GetParaFlags() )
                         {
                             if( pStt == pEnd )
-                                cLastCR = 0x0d;
-                            else if( 0x0a == *pStt )
                             {
-                                ++pStt;
-                                bChkSplit = true;
+                                cLastCR = 0x0d;
+                                bChkSplit = false;
                             }
+                            else if( 0x0a == *pStt )
+                                ++pStt;
                         }
-                        else
-                            bChkSplit = true;
 
                         // We skip the last one at the end
                         if( bChkSplit && ( !rInput.eof() || pEnd != pStt ))
