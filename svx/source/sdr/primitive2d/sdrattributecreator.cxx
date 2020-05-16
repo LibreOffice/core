@@ -398,7 +398,9 @@ namespace drawinglayer::primitive2d
 
                     const Color aColor(rSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
 
-                    return attribute::SdrShadowAttribute(aOffset, aSize, static_cast<double>(nTransparence) * 0.01, aColor.getBColor());
+                    sal_Int32 nBlur(rSet.Get(SDRATTR_SHADOWBLUR).GetValue());
+
+                    return attribute::SdrShadowAttribute(aOffset, aSize, static_cast<double>(nTransparence) * 0.01,nBlur, aColor.getBColor());
                 }
             }
 
