@@ -1463,6 +1463,15 @@
                 <string>vnd.libreoffice.cmis</string>
             </array>
         </dict>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>@PRODUCTNAME@ WebDav</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>vnd.sun.star.webdav</string>
+				<string>vnd.sun.star.webdavs</string>
+            </array>
+        </dict>
     </array>
 
     <key>CFBundleDocumentTypes</key>
