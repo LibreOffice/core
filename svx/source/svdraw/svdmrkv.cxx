@@ -665,6 +665,258 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 }
 } // anonymous namespace
 
+void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxViewShell* pOtherShell)
+{
+    SfxViewShell* pViewShell = GetSfxViewShell();
+
+    tools::Rectangle aSelection(rRect);
+    bool bIsChart = false;
+
+    if (!rRect.IsEmpty())
+    {
+        sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
+        if (nTotalPaintWindows == 1)
+        {
+            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+            if (pWin && pWin->IsChart())
+            {
+                bIsChart = true;
+                const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
+                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                {
+                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                }
+            }
+        }
+    }
+
+    if (!aSelection.IsEmpty())
+    {
+        // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+        if (mpMarkedPV)
+        {
+            if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
+            {
+                if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            }
+        }
+
+        // hide the text selection too
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+    }
+
+    {
+        OString sSelectionText;
+        boost::property_tree::ptree aTableJsonTree;
+        bool bTableSelection = false;
+
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+        {
+            auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
+            bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+        }
+        if (GetMarkedObjectCount())
+        {
+            SdrMark* pM = GetSdrMarkByIndex(0);
+            SdrObject* pO = pM->GetMarkedSdrObj();
+            long nRotAngle = pO->GetRotateAngle();
+            // true if we are dealing with a RotGrfFlyFrame
+            // (SwVirtFlyDrawObj with a SwGrfNode)
+            bool bWriterGraphic = pO->HasLimitedRotation();
+
+            if (bWriterGraphic)
+            {
+                nRotAngle *= 10;
+            }
+
+            OStringBuffer aExtraInfo;
+
+            aExtraInfo.append("{\"id\":\"");
+            aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
+            aExtraInfo.append("\",\"type\":");
+            aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
+
+            if (bWriterGraphic)
+            {
+                aExtraInfo.append(", \"isWriterGraphic\": true");
+            }
+            else if (bIsChart)
+            {
+                LokChartHelper aChartHelper(pViewShell);
+                css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
+                css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
+                if (xSelectionSupplier.is())
+                {
+                    uno::Any aSel = xSelectionSupplier->getSelection();
+                    OUString aValue;
+                    if (aSel >>= aValue)
+                    {
+                        OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
+                        const std::vector<OString> aProps{"Draggable", "Resizable", "Rotatable"};
+                        for (const auto& rProp: aProps)
+                        {
+                            sal_Int32 nPos = aObjectCID.indexOf(rProp);
+                            if (nPos == -1) continue;
+                            nPos += rProp.getLength() + 1; // '='
+                            if (aExtraInfo.getLength() > 2) // != "{ "
+                                aExtraInfo.append(", ");
+                            aExtraInfo.append("\"is");
+                            aExtraInfo.append(rProp);
+                            aExtraInfo.append("\": ");
+                            aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
+                        }
+
+                        OUString sDragMethod = lcl_getDragMethodServiceName(aValue);
+                        if (sDragMethod == "PieSegmentDragging")
+                        {
+                            // old initial offset inside the CID returned by xSelectionSupplier->getSelection()
+                            // after a pie segment dragging; using SdrObject::GetName for getting a CID with the updated offset
+                            aValue = pO->GetName();
+                            OUString sDragParameters = lcl_getDragParameterString(aValue);
+                            if (!sDragParameters.isEmpty())
+                            {
+                                aExtraInfo.append(", \"dragInfo\": { ");
+                                aExtraInfo.append("\"dragMethod\": \"");
+                                aExtraInfo.append(sDragMethod.toUtf8());
+                                aExtraInfo.append("\"");
+
+                                OUString sParam;
+                                sal_Int32 nStartIndex = 0;
+                                std::array<int, 5> aDragParameters;
+                                for (auto& rParam : aDragParameters)
+                                {
+                                    sParam = sDragParameters.getToken(0, ',', nStartIndex);
+                                    if (sParam.isEmpty())
+                                        break;
+                                    rParam = sParam.toInt32();
+                                }
+
+                                // initial offset in %
+                                if (aDragParameters[0] < 0)
+                                    aDragParameters[0] = 0;
+                                else if (aDragParameters[0] > 100)
+                                    aDragParameters[0] = 100;
+
+                                aExtraInfo.append(", \"initialOffset\": ");
+                                aExtraInfo.append(OString::number(aDragParameters[0]));
+
+                                // drag direction constraint
+                                Point aMinPos(aDragParameters[1], aDragParameters[2]);
+                                Point aMaxPos(aDragParameters[3], aDragParameters[4]);
+                                Point aDragDirection = aMaxPos - aMinPos;
+                                aDragDirection = OutputDevice::LogicToLogic(aDragDirection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+
+                                aExtraInfo.append(", \"dragDirection\": [");
+                                aExtraInfo.append(aDragDirection.toString());
+                                aExtraInfo.append("]");
+
+                                // polygon approximating the pie segment or donut segment
+                                if (pO->GetObjIdentifier() == OBJ_PATHFILL)
+                                {
+                                    const basegfx::B2DPolyPolygon aPolyPolygon(pO->TakeXorPoly());
+                                    if (aPolyPolygon.count() == 1)
+                                    {
+                                        const basegfx::B2DPolygon aPolygon = aPolyPolygon.getB2DPolygon(0);
+                                        if (sal_uInt32 nPolySize = aPolygon.count())
+                                        {
+                                            const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+                                            const vcl::Window* pViewShellWindow = pViewShell->GetEditWindowForActiveOLEObj();
+                                            if (pWin && pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                                            {
+                                                // in the following code escaping sequences used inside raw literal strings
+                                                // are for making them understandable by the JSON parser
+
+                                                Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                                                Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                                                OString sPolygonElem("<polygon points=\\\"");
+                                                for (sal_uInt32 nIndex = 0; nIndex < nPolySize; ++nIndex)
+                                                {
+                                                    const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
+                                                    Point aPoint(aB2Point.getX(), aB2Point.getY());
+                                                    aPoint.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                                                    if (nIndex > 0)
+                                                        sPolygonElem += " ";
+                                                    sPolygonElem += aPoint.toString();
+                                                }
+                                                sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
+
+                                                aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
+
+                                                OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
+                                                    OString::number(aSelection.GetWidth() / 100.0) +
+                                                    R"elem(mm\" height=\")elem" +
+                                                    OString::number(aSelection.GetHeight() / 100.0) +
+                                                    R"elem(mm\" viewBox=\")elem" +
+                                                    aSelection.toString() +
+                                                    R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
+
+                                                aExtraInfo.append(", \"svg\": \"");
+                                                aExtraInfo.append(sSVGElem);
+                                                aExtraInfo.append("\\n  ");
+                                                aExtraInfo.append(sPolygonElem);
+                                                aExtraInfo.append("\\n</svg>");
+                                                aExtraInfo.append("\""); // svg
+                                            }
+                                        }
+                                    }
+                                }
+                                aExtraInfo.append("}"); // dragInfo
+                            }
+                        }
+                    }
+                }
+            }
+            aExtraInfo.append("}");
+
+            sSelectionText = aSelection.toString() +
+                ", " + OString::number(nRotAngle);
+            if (!aExtraInfo.isEmpty())
+            {
+                sSelectionText += ", " + aExtraInfo.makeStringAndClear();
+            }
+        }
+
+        if (sSelectionText.isEmpty())
+            sSelectionText = "EMPTY";
+
+        if (bTableSelection)
+        {
+            boost::property_tree::ptree aTableRectangle;
+            aTableRectangle.put("x", aSelection.Left());
+            aTableRectangle.put("y", aSelection.Top());
+            aTableRectangle.put("width", aSelection.GetWidth());
+            aTableRectangle.put("height", aSelection.GetHeight());
+            aTableJsonTree.push_back(std::make_pair("rectangle", aTableRectangle));
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTableJsonTree);
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
+        }
+        else
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}");
+        }
+
+        if (pOtherShell)
+        {
+            // Another shell wants to know about our existing
+            // selection.
+            if (pViewShell != pOtherShell)
+                SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+        }
+        else
+        {
+            // We have a new selection, so both pViewShell and the
+            // other views want to know about it.
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
+            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
+        }
+    }
+}
+
 void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 {
     // remember old focus handle values to search for it again
@@ -774,252 +1026,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
     if (bTiledRendering && pViewShell)
     {
-        tools::Rectangle aSelection(aRect);
-        bool bIsChart = false;
-
-        if (!aRect.IsEmpty())
-        {
-            sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
-            if (nTotalPaintWindows == 1)
-            {
-                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
-                if (pWin && pWin->IsChart())
-                {
-                    bIsChart = true;
-                    const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
-                    {
-                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                    }
-                }
-            }
-        }
-
-        if (!aSelection.IsEmpty())
-        {
-            // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
-            if (mpMarkedPV)
-            {
-                if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
-                {
-                    if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                        aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                }
-            }
-
-            // hide the text selection too
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
-        }
-
-        {
-            OString sSelectionText;
-            boost::property_tree::ptree aTableJsonTree;
-            bool bTableSelection = false;
-
-            if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
-            {
-                auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
-                bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
-            }
-            if (GetMarkedObjectCount())
-            {
-                SdrMark* pM = GetSdrMarkByIndex(0);
-                SdrObject* pO = pM->GetMarkedSdrObj();
-                long nRotAngle = pO->GetRotateAngle();
-                // true if we are dealing with a RotGrfFlyFrame
-                // (SwVirtFlyDrawObj with a SwGrfNode)
-                bool bWriterGraphic = pO->HasLimitedRotation();
-
-                if (bWriterGraphic)
-                {
-                    nRotAngle *= 10;
-                }
-
-                OStringBuffer aExtraInfo;
-
-                aExtraInfo.append("{\"id\":\"");
-                aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
-                aExtraInfo.append("\",\"type\":");
-                aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
-
-                if (bWriterGraphic)
-                {
-                    aExtraInfo.append(", \"isWriterGraphic\": true");
-                }
-                else if (bIsChart)
-                {
-                    LokChartHelper aChartHelper(pViewShell);
-                    css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
-                    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
-                    if (xSelectionSupplier.is())
-                    {
-                        uno::Any aSel = xSelectionSupplier->getSelection();
-                        OUString aValue;
-                        if (aSel >>= aValue)
-                        {
-                            OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
-                            const std::vector<OString> aProps{"Draggable", "Resizable", "Rotatable"};
-                            for (const auto& rProp: aProps)
-                            {
-                                sal_Int32 nPos = aObjectCID.indexOf(rProp);
-                                if (nPos == -1) continue;
-                                nPos += rProp.getLength() + 1; // '='
-                                if (aExtraInfo.getLength() > 2) // != "{ "
-                                    aExtraInfo.append(", ");
-                                aExtraInfo.append("\"is");
-                                aExtraInfo.append(rProp);
-                                aExtraInfo.append("\": ");
-                                aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
-                            }
-
-                            OUString sDragMethod = lcl_getDragMethodServiceName(aValue);
-                            if (sDragMethod == "PieSegmentDragging")
-                            {
-                                // old initial offset inside the CID returned by xSelectionSupplier->getSelection()
-                                // after a pie segment dragging; using SdrObject::GetName for getting a CID with the updated offset
-                                aValue = pO->GetName();
-                                OUString sDragParameters = lcl_getDragParameterString(aValue);
-                                if (!sDragParameters.isEmpty())
-                                {
-                                    aExtraInfo.append(", \"dragInfo\": { ");
-                                    aExtraInfo.append("\"dragMethod\": \"");
-                                    aExtraInfo.append(sDragMethod.toUtf8());
-                                    aExtraInfo.append("\"");
-
-                                    OUString sParam;
-                                    sal_Int32 nStartIndex = 0;
-                                    std::array<int, 5> aDragParameters;
-                                    for (auto& rParam : aDragParameters)
-                                    {
-                                        sParam = sDragParameters.getToken(0, ',', nStartIndex);
-                                        if (sParam.isEmpty())
-                                            break;
-                                        rParam = sParam.toInt32();
-                                    }
-
-                                    // initial offset in %
-                                    if (aDragParameters[0] < 0)
-                                        aDragParameters[0] = 0;
-                                    else if (aDragParameters[0] > 100)
-                                        aDragParameters[0] = 100;
-
-                                    aExtraInfo.append(", \"initialOffset\": ");
-                                    aExtraInfo.append(OString::number(aDragParameters[0]));
-
-                                    // drag direction constraint
-                                    Point aMinPos(aDragParameters[1], aDragParameters[2]);
-                                    Point aMaxPos(aDragParameters[3], aDragParameters[4]);
-                                    Point aDragDirection = aMaxPos - aMinPos;
-                                    aDragDirection = OutputDevice::LogicToLogic(aDragDirection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-
-                                    aExtraInfo.append(", \"dragDirection\": [");
-                                    aExtraInfo.append(aDragDirection.toString());
-                                    aExtraInfo.append("]");
-
-                                    // polygon approximating the pie segment or donut segment
-                                    if (pO->GetObjIdentifier() == OBJ_PATHFILL)
-                                    {
-                                        const basegfx::B2DPolyPolygon aPolyPolygon(pO->TakeXorPoly());
-                                        if (aPolyPolygon.count() == 1)
-                                        {
-                                            const basegfx::B2DPolygon aPolygon = aPolyPolygon.getB2DPolygon(0);
-                                            if (sal_uInt32 nPolySize = aPolygon.count())
-                                            {
-                                                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
-                                                const vcl::Window* pViewShellWindow = pViewShell->GetEditWindowForActiveOLEObj();
-                                                if (pWin && pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
-                                                {
-                                                    // in the following code escaping sequences used inside raw literal strings
-                                                    // are for making them understandable by the JSON parser
-
-                                                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                                                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                                                    OString sPolygonElem("<polygon points=\\\"");
-                                                    for (sal_uInt32 nIndex = 0; nIndex < nPolySize; ++nIndex)
-                                                    {
-                                                        const basegfx::B2DPoint aB2Point = aPolygon.getB2DPoint(nIndex);
-                                                        Point aPoint(aB2Point.getX(), aB2Point.getY());
-                                                        aPoint.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                                                        if (nIndex > 0)
-                                                            sPolygonElem += " ";
-                                                        sPolygonElem += aPoint.toString();
-                                                    }
-                                                    sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
-
-                                                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
-
-                                                    OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
-                                                        OString::number(aSelection.GetWidth() / 100.0) +
-                                                        R"elem(mm\" height=\")elem" +
-                                                        OString::number(aSelection.GetHeight() / 100.0) +
-                                                        R"elem(mm\" viewBox=\")elem" +
-                                                        aSelection.toString() +
-                                                        R"elem(\" preserveAspectRatio=\"xMidYMid\" xmlns=\"http://www.w3.org/2000/svg\">)elem";
-
-                                                    aExtraInfo.append(", \"svg\": \"");
-                                                    aExtraInfo.append(sSVGElem);
-                                                    aExtraInfo.append("\\n  ");
-                                                    aExtraInfo.append(sPolygonElem);
-                                                    aExtraInfo.append("\\n</svg>");
-                                                    aExtraInfo.append("\""); // svg
-                                                }
-                                            }
-                                        }
-                                    }
-                                    aExtraInfo.append("}"); // dragInfo
-                                }
-                            }
-                        }
-                    }
-                }
-                aExtraInfo.append("}");
-
-                sSelectionText = aSelection.toString() +
-                    ", " + OString::number(nRotAngle);
-                if (!aExtraInfo.isEmpty())
-                {
-                    sSelectionText += ", " + aExtraInfo.makeStringAndClear();
-                }
-            }
-
-            if (sSelectionText.isEmpty())
-                sSelectionText = "EMPTY";
-
-            if (bTableSelection)
-            {
-                boost::property_tree::ptree aTableRectangle;
-                aTableRectangle.put("x", aSelection.Left());
-                aTableRectangle.put("y", aSelection.Top());
-                aTableRectangle.put("width", aSelection.GetWidth());
-                aTableRectangle.put("height", aSelection.GetHeight());
-                aTableJsonTree.push_back(std::make_pair("rectangle", aTableRectangle));
-
-                std::stringstream aStream;
-                boost::property_tree::write_json(aStream, aTableJsonTree);
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
-            }
-            else
-            {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, "{}");
-            }
-
-            if (pOtherShell)
-            {
-                // Another shell wants to know about our existing
-                // selection.
-                if (pViewShell != pOtherShell)
-                    SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
-            }
-            else
-            {
-                // We have a new selection, so both pViewShell and the
-                // other views want to know about it.
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
-                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionText);
-            }
-        }
+        SetMarkHandlesForLOKit(aRect, pOtherShell);
     }
 
     if (bFrmHdl)
