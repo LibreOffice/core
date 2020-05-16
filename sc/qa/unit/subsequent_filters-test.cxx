@@ -244,6 +244,7 @@ public:
     void testMergedCellsXLSXML();
     void testBackgroundColorStandardXLSXML();
     void testTdf131536();
+    void testTdf85617();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
@@ -390,6 +391,7 @@ public:
     CPPUNIT_TEST(testMergedCellsXLSXML);
     CPPUNIT_TEST(testBackgroundColorStandardXLSXML);
     CPPUNIT_TEST(testTdf131536);
+    CPPUNIT_TEST(testTdf85617);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
@@ -3833,7 +3835,7 @@ void ScFiltersTest::testBackgroundColorStandardXLSXML()
 void ScFiltersTest::testTdf131536()
 {
     ScDocShellRef xDocSh = loadDoc("tdf131536.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load named-exp-global.xml", xDocSh.is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     ScAddress aPos(3,9,0);
@@ -3845,6 +3847,17 @@ void ScFiltersTest::testTdf131536()
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos2));
     ASSERT_FORMULA_EQUAL(rDoc, aPos2, "IF(D$4=\"-\",\"-\",MID(TEXT(INDEX($Comparison.$I:$J,$Comparison.$A5,$Comparison.D$2),\"0\"),2,4)"
                                       "=RIGHT(TEXT(INDEX($Comparison.$L:$Z,$Comparison.$A5,$Comparison.D$4),\"0\"),4))", nullptr);
+}
+
+void ScFiltersTest::testTdf85617()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf85617.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScAddress aPos(2,2,0);
+    //Without the fix in place, it would be Err:509
+    CPPUNIT_ASSERT_EQUAL(4.5, rDoc.GetValue(aPos));
 }
 
 void ScFiltersTest::testNamedExpressionsXLSXML()
