@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e26e5eb5_c4ef0ec3",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-05-16T10:05:55Z",
+      "side": 1,
+      "message": "\"Interchangeable formats when switching the default locale\" really aren\u0027t that interchangeable anyway, as there are several problems with the current date formats:\n\n1) One maps differently:\n - \"MMMM D, YYYY\" → \"NNNND. MMMM YYYY. a\" (\"NNNN\" added)\n\n2) Two give ungrammatical results:\n - \"NNNNMMMM D, YYYY\" → \"NNNND. MMMM, YYYY. a\" (always incorrect - we don\u0027t put comma there in Estonian)\n - \"D. MMM. YYYY\" → \"D. MMM. YYYY\" (incorrect for the four months that don\u0027t have an abbreviation: märts, mai, juuni, juuli)\n\n3) Seven map to formats that either look weird or just aren\u0027t used:\n - \"NNNNMMMM DD, YYYY\" → \"NNNNDD. MMMM YYYY. a\" (leading-zero day with non-numeric month looks weird)\n - \"MMM D, YY\" → \"D. MMM YY\" (2-digit years rarely used past 1999 in non-numeric date formats)\n - \"NN, MMM D, YY\" → \"NN, D. MMM YY\" (same)\n - \"NN DD/MMM YY\" → \"NN, DD. MMM YY\" (same + leading-zero day with non-numeric month looks weird)\n - \"MM/YY\" → \"MM.YY\" (depending on year, this can be confused with HH:MM)\n - \"MMM DD\" → \"DD. MMM\" (leading-zero day with non-numeric month looks weird)\n - \"QQ YY\" → \"QQ YY\" (spelled-out quarter with 2-digit year looks weird, especially with years past 1999)\n\nHowever I see your point about the order, as \"new\" indexes 23...32, 34...38 don\u0027t really map at all between English and Estonian. I\u0027ll try and see what I can do about that.\n\nAs for the API access to format codes by the index - I\u0027m not sure if it\u0027s really that important to keep *precise* backwards-compatibility here between \"old\" and \"new\" Estonian date formats, because:\n1) there are many problems with current Estonian date formats, which get fixed by this patch,\n2) quite a few new formats get added.\nSo if anyone is using the API with Estonian date formats, they likely should take a look at it again anyway once 7.0 lands.\n\nBut, as said, I\u0027ll take another stab at the ordering to minimise the changes to underlying meanings.",
+      "parentUuid": "b472b068_f2c6299a",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9389e5d_752daf71",
         "filename": "i18npool/source/localedata/data/et_EE.xml",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9ea5c1a8_e646e020",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-05-16T10:05:55Z",
+      "side": 1,
+      "message": "Yes. This system isn\u0027t much used over here and so we don\u0027t have different abbreviations for them. More often, actual page ranges are used instead.",
+      "parentUuid": "a9389e5d_752daf71",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f9904b3_bb345119",
         "filename": "i18npool/source/localedata/data/et_EE.xml",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2020-05-15T21:47:38Z",
       "side": 1,
       "message": "Narrow actually means narrow, i.e. one character. You *may* use it differently, but it can come completely unexpected if a format was created in one locale using 1 character and is displayed in a locale that uses 2 to 4 characters.",
+      "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a316600f_05fe1ff0",
+        "filename": "i18npool/source/localedata/data/et_EE.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-05-16T10:05:55Z",
+      "side": 1,
+      "message": "We don\u0027t really use one-letter abbreviations for months. The only case where months could be abbreviated to their first letter is in table headers or such, listing *all* the months in sequence, i.e. J-V-M-A-M-J-J-A-S-O-N-D, but I don\u0027t see why anyone would use date format there. In comparison, the Roman numerals for months are used much more often, so it would make sense to have them easily available. Moving date formats between locales will (!) give unexpected/incorrect results anyway, so I think the benefits outweigh the potential issues here.",
+      "parentUuid": "6f9904b3_bb345119",
       "revId": "3688049571eb4ddcdc4e961a61237626cafaa28a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
