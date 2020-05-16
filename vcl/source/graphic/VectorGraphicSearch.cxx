@@ -8,8 +8,9 @@
  *
  */
 
-#include <sal/config.h>
 #include <vcl/VectorGraphicSearch.hxx>
+
+#include <sal/config.h>
 
 #include <fpdf_doc.h>
 #include <fpdf_text.h>
@@ -92,6 +93,44 @@ public:
         if (mpSearchHandle)
             return FPDFText_GetSchResultIndex(mpSearchHandle);
         return -1;
+    }
+
+    int size()
+    {
+        if (mpSearchHandle)
+            return FPDFText_GetSchCount(mpSearchHandle);
+        return -1;
+    }
+
+    std::vector<basegfx::B2DRectangle> getTextRectangles()
+    {
+        std::vector<basegfx::B2DRectangle> aRectangles;
+
+        if (!mpTextPage || !mpSearchHandle)
+            return aRectangles;
+
+        int nIndex = index();
+        if (nIndex < 0)
+            return aRectangles;
+
+        int nSize = size();
+        if (nSize <= 0)
+            return aRectangles;
+
+        for (int nCount = 0; nCount < nSize; nCount++)
+        {
+            double left = 0.0;
+            double right = 0.0;
+            double bottom = 0.0;
+            double top = 0.0;
+
+            if (FPDFText_GetCharBox(mpTextPage, nIndex + nCount, &left, &right, &bottom, &top))
+            {
+                aRectangles.emplace_back(left, bottom, right, top);
+            }
+        }
+
+        return aRectangles;
     }
 };
 
@@ -180,6 +219,14 @@ int VectorGraphicSearch::index()
     if (mpSearchContext)
         return mpSearchContext->index();
     return -1;
+}
+
+std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
+{
+    if (mpSearchContext)
+        return mpSearchContext->getTextRectangles();
+
+    return std::vector<basegfx::B2DRectangle>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

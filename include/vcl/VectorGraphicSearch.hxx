@@ -14,6 +14,8 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/dllapi.h>
 
+#include <basegfx/range/b2drectangle.hxx>
+
 #include <memory>
 
 class SearchContext;
@@ -34,6 +36,7 @@ public:
     bool search(OUString const& rSearchString);
     bool next();
     int index();
+    std::vector<basegfx::B2DRectangle> getTextRectangles();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
