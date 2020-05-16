@@ -761,9 +761,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOOxmlOutlineNumberTypes, "outline-number
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
-//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
-//I think this unit test is wrong, but I will revert to its original claim.
-    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
+    // There has been some back-and-forth between whether this should .startsWith("WWNum") or be "Outline"
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt/Special", 4);  //all four paragraphs have numbering
+    assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "1");
+    assertXPath(pXmlDoc, "//body/txt[2]/Special", "rText", "1.1");
+    assertXPath(pXmlDoc, "//body/txt[3]/Special", "rText", "2");
+    assertXPath(pXmlDoc, "//body/txt[4]/Special", "rText", "2.1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
