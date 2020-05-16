@@ -729,6 +729,7 @@ private:
 
 public:
     virtual vcl::Region                 GetActiveClipRegion() const override;
+    virtual vcl::Region                 GetOutputBoundsClipRegion() const override;
 
 protected:
     // Single argument ctors shall be explicit.

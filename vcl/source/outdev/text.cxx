@@ -779,6 +779,11 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
         mpAlphaVDev->SetTextAlign( eAlign );
 }
 
+vcl::Region OutputDevice::GetOutputBoundsClipRegion() const
+{
+    return GetClipRegion();
+}
+
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
                              MetricVector* pVector, OUString* pDisplayText,
@@ -806,9 +811,8 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
     if( pVector )
     {
-        vcl::Region aClip( GetClipRegion() );
-        if( meOutDevType == OUTDEV_WINDOW )
-            aClip.Intersect( tools::Rectangle( Point(), GetOutputSize() ) );
+        vcl::Region aClip(GetOutputBoundsClipRegion());
+
         if (mpOutDevData->mpRecordLayout)
         {
             mpOutDevData->mpRecordLayout->m_aLineIndices.push_back( mpOutDevData->mpRecordLayout->m_aDisplayText.getLength() );
