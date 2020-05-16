@@ -374,8 +374,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noi
     // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
     // Adding this preventative unit test to ensure that any fix for tdf106541 doesn't make incorrect assumptions.
 
-//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
-//    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
 
     OUString sPara3NumberingStyle = getProperty<OUString>(getParagraph(3), "NumberingStyleName");
     CPPUNIT_ASSERT_EQUAL(sPara3NumberingStyle, getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
@@ -761,9 +760,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOOxmlOutlineNumberTypes, "outline-number
 
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
-//reverting tdf#76817 hard-codes the numbering style on the paragraph, preventing RT of "Outline" style
-//I think this unit test is wrong, but I will revert to its original claim.
-    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
+    // There has been some back-and-forth between whether this should .startsWith("WWNum") or be "Outline"
+    CPPUNIT_ASSERT_EQUAL(OUString("Outline"), getProperty<OUString>(getParagraph(4), "NumberingStyleName"));
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt/Special", 4);  //all four paragraphs have numbering
+    assertXPath(pXmlDoc, "//body/txt[1]/Special", "rText", "1");
+    assertXPath(pXmlDoc, "//body/txt[2]/Special", "rText", "1.1");
+    assertXPath(pXmlDoc, "//body/txt[3]/Special", "rText", "2");
+    assertXPath(pXmlDoc, "//body/txt[4]/Special", "rText", "2.1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")

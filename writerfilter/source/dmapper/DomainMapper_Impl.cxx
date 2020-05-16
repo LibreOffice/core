@@ -1387,9 +1387,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             if ( !pParaNumRulesProp )
             {
-                // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
-                // but now other code expects it, and perhaps some corner cases still need it as well.
-                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(pList->GetStyleName()), true );
                 isNumberingViaStyle = true;
             }
             else if ( !pList->isOutlineNumbering(nListLevel) )
@@ -1734,9 +1731,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             {
                                 OUString paraId;
                                 m_xPreviousParagraph->getPropertyValue("ListId") >>= paraId;
-                                assert(!paraId.isEmpty()); // must be on some list?
                                 OUString const listId = pAbsList->MapListId(paraId);
-                                if (listId != paraId)
+                                if (!paraId.isEmpty() && listId != paraId)
                                 {
                                     m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
                                 }
