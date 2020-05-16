@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20cd4e0e_050562b7",
+        "filename": "sc/qa/uitest/calc_tests8/navigator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-05-16T03:30:31Z",
+      "side": 1,
+      "message": "xCalcDoc.getChild seems to work for me, how about for you?",
+      "range": {
+        "startLine": 22,
+        "startChar": 26,
+        "endLine": 22,
+        "endChar": 43
+      },
+      "revId": "3cfa3c94a5f7aa9d39e3aa272e1471c8653a035b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5b28c05_0a6a3795",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-05-16T03:30:31Z",
+      "side": 1,
+      "message": "ScGridWinUIObject, right?",
+      "range": {
+        "startLine": 214,
+        "startChar": 30,
+        "endLine": 214,
+        "endChar": 47
+      },
+      "revId": "3cfa3c94a5f7aa9d39e3aa272e1471c8653a035b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf04008_85bd9204",
+        "filename": "sc/source/ui/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-05-16T03:30:31Z",
+      "side": 1,
+      "message": "maybe you want \"toggle\" instead of \"root\"\nhttps://opengrok.libreoffice.org/xref/core/sc/source/ui/navipi/navipi.cxx?r\u003d5838b62e#185",
+      "revId": "3cfa3c94a5f7aa9d39e3aa272e1471c8653a035b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
