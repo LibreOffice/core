@@ -1568,7 +1568,15 @@ void ScContentTree::ApplyNavigatorSettings()
     if( pSettings )
     {
         ScContentId nRootSel = pSettings->GetRootSelected();
-        sal_uLong nChildSel = pSettings->GetChildSelected();
+        auto nChildSel = pSettings->GetChildSelected();
+
+        // tdf#133079 ensure Sheet root is selected if nothing
+        // else would be
+        if (nRootSel == ScContentId::ROOT)
+        {
+            nRootSel = ScContentId::TABLE;
+            nChildSel = SC_CONTENT_NOCHILD;
+        }
 
         for( int i = 1; i <= int(ScContentId::LAST); ++i )
         {
