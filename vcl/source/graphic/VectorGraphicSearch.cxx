@@ -64,6 +64,21 @@ public:
             FPDF_ClosePage(mpPage);
     }
 
+    basegfx::B2DSize getPageSize()
+    {
+        basegfx::B2DSize aSize;
+        if (!mpPdfDocument)
+            return aSize;
+
+        FS_SIZEF aPDFSize;
+        if (FPDF_GetPageSizeByIndexF(mpPdfDocument, mnPageIndex, &aPDFSize))
+        {
+            aSize = basegfx::B2DSize(convertPointToMm100(aPDFSize.width),
+                                     convertPointToMm100(aPDFSize.height));
+        }
+        return aSize;
+    }
+
     bool initialize()
     {
         if (!mpPdfDocument)
@@ -117,6 +132,8 @@ public:
         if (nSize <= 0)
             return aRectangles;
 
+        double fPageHeight = getPageSize().getY();
+
         for (int nCount = 0; nCount < nSize; nCount++)
         {
             double left = 0.0;
@@ -126,6 +143,11 @@ public:
 
             if (FPDFText_GetCharBox(mpTextPage, nIndex + nCount, &left, &right, &bottom, &top))
             {
+                left = convertPointToMm100(left);
+                right = convertPointToMm100(right);
+                top = fPageHeight - convertPointToMm100(top);
+                bottom = fPageHeight - convertPointToMm100(bottom);
+
                 aRectangles.emplace_back(left, bottom, right, top);
             }
         }
@@ -205,6 +227,14 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
         new SearchContext(mpImplementation->mpPdfDocument, nPageIndex, rSearchString));
 
     return mpSearchContext->initialize();
+}
+
+basegfx::B2DSize VectorGraphicSearch::pageSize()
+{
+    basegfx::B2DSize aSize;
+    if (mpSearchContext)
+        aSize = mpSearchContext->getPageSize();
+    return aSize;
 }
 
 bool VectorGraphicSearch::next()
