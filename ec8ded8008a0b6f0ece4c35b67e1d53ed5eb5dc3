@@ -22,6 +22,30 @@
       "revId": "ec8ded8008a0b6f0ece4c35b67e1d53ed5eb5dc3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c01f499_a1a50da2",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-05-17T15:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a4de429_e121efcc",
+      "range": {
+        "startLine": 428,
+        "startChar": 74,
+        "endLine": 428,
+        "endChar": 80
+      },
+      "revId": "ec8ded8008a0b6f0ece4c35b67e1d53ed5eb5dc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
