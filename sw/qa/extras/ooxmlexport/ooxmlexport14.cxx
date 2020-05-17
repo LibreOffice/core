@@ -378,6 +378,31 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
                          aIndexString);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString(CHAR_ZWSP), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xPara, "NumberingLevel"));
+        CPPUNIT_ASSERT_EQUAL(OUString("1.2.1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
 {
     // Explicitly set hyphenation=auto on document level
