@@ -371,7 +371,7 @@ class ul_Compiler:
             else:
                 self.flag_for_QuerySaveDialog = False
 
-        # This is to solve the problem of re-using the same id again in diffrent Dialogs
+        # This is to solve the problem of re-using the same id again in different Dialogs
 
         self.objects.clear()
 
