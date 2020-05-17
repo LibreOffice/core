@@ -15,6 +15,7 @@
 #include <vcl/dllapi.h>
 
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 #include <memory>
 
@@ -34,6 +35,7 @@ public:
     VectorGraphicSearch(Graphic const& rGraphic);
     ~VectorGraphicSearch();
     bool search(OUString const& rSearchString);
+    basegfx::B2DSize pageSize();
     bool next();
     int index();
     std::vector<basegfx::B2DRectangle> getTextRectangles();
