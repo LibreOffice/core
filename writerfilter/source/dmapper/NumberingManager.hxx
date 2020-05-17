@@ -126,13 +126,13 @@ private:
     // levels of a numbering.
     ::std::vector< ListLevel::Pointer >  m_aLevels;
 
-    // Only used during the numberings import
+    // Only used during the numbering import
     ListLevel::Pointer                         m_pCurrentLevel;
 
     // The style name linked to.
     OUString                      m_sNumStyleLink;
 
-    // This absract numbering is a base definition for this style
+    // This abstract numbering is a base definition for this style
     OUString                      m_sStyleLink;
 
     /// list id to use for all derived numbering definitions

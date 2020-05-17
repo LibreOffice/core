@@ -105,7 +105,7 @@ private:
     OUString            sPrefix;
     OUString            sSuffix;
     std::optional<OUString> sListFormat;        // Format string ">%1.%2<" can be used instead of prefix/suffix
-                                                // Right now it is optional value to dostinguish empty list format
+                                                // Right now it is optional value to distinguish empty list format
                                                 // and not set list format when we need to fallback to prefix/suffix.
 
     SvxAdjust           eNumAdjust;
