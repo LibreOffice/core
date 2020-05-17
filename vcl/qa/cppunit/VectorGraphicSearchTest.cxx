@@ -44,28 +44,41 @@ void VectorGraphicSearchTest::test()
     CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy"));
     CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
     CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+    basegfx::B2DSize aSize = aSearch.pageSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(21590.00, aSize.getX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(27940.00, aSize.getY(), 1E-2);
+
     auto aRectangles = aSearch.getTextRectangles();
     CPPUNIT_ASSERT_EQUAL(size_t(4), aRectangles.size());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(229.00, aRectangles[0].getMinX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(231.85, aRectangles[0].getMaxX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(724.10, aRectangles[0].getMinY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(732.42, aRectangles[0].getMaxY(), 1E-2);
+    // Check first and last
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8078.61, aRectangles[0].getMinX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8179.36, aRectangles[0].getMaxX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2101.56, aRectangles[0].getMinY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2395.36, aRectangles[0].getMaxY(), 1E-2);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(232.47, aRectangles[1].getMinX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(237.22, aRectangles[1].getMaxX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(723.99, aRectangles[1].getMinY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(729.72, aRectangles[1].getMaxY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8565.86, aRectangles[3].getMinX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8770.76, aRectangles[3].getMaxX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2201.05, aRectangles[3].getMinY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2486.37, aRectangles[3].getMaxY(), 1E-2);
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(237.68, aRectangles[2].getMinX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(242.35, aRectangles[2].getMaxX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(724.09, aRectangles[2].getMinY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(729.60, aRectangles[2].getMaxY(), 1E-2);
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(242.81, aRectangles[3].getMinX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(248.61, aRectangles[3].getMaxX(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(721.51, aRectangles[3].getMinY(), 1E-2);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(729.60, aRectangles[3].getMaxY(), 1E-2);
+    aRectangles = aSearch.getTextRectangles();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aRectangles.size());
+
+    // Check first and last
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6562.23, aRectangles[0].getMinX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6662.98, aRectangles[0].getMaxX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5996.23, aRectangles[0].getMinY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6290.02, aRectangles[0].getMaxY(), 1E-2);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7049.48, aRectangles[3].getMinX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7254.38, aRectangles[3].getMaxX(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6095.71, aRectangles[3].getMinY(), 1E-2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6381.04, aRectangles[3].getMaxY(), 1E-2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
