@@ -667,6 +667,13 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                     if (nPosition >= 0)
                         sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
                 }
+
+                // As a fallback: caller code expects nonempty string as a result.
+                // But if we have empty string (and had no errors before) this is valid result.
+                // So use classical hack with zero-width-space as a string filling.
+                if (sLevelFormat.isEmpty())
+                    sLevelFormat += OUString(CHAR_ZWSP);
+
                 aStr = sLevelFormat;
             }
             else

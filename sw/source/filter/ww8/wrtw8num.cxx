@@ -494,12 +494,7 @@ void MSWordExportBase::NumberingLevel(
     const vcl::Font* pBulletFont=nullptr;
     rtl_TextEncoding eChrSet=0;
     FontFamily eFamily=FAMILY_DECORATIVE;
-    if (rRule.Get(nLvl).HasListFormat())
-    {
-        // Nothing to construct: we have it already
-        sNumStr = rRule.Get(nLvl).GetListFormat();
-    }
-    else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
+    if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
     {
         // Use bullet
@@ -507,7 +502,9 @@ void MSWordExportBase::NumberingLevel(
     }
     else
     {
-        // Construct list format string from prefix, level numbers and suffix
+        // Create level string
+        // For docx it is not the best way: we can just take it from rRule.Get(nLvl).GetListFormat()
+        // But for compatibility with doc we follow same routine
         if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
         {
             sal_uInt8* pLvlPos = aNumLvlPos;
@@ -518,20 +515,23 @@ void MSWordExportBase::NumberingLevel(
             // now search the nums in the string
             for (sal_uInt8 i = 0; i <= nLvl; ++i)
             {
-                OUString sSrch( OUString::number( i ));
-                sal_Int32 nFnd = sNumStr.indexOf( sSrch );
-                if( -1 != nFnd )
+                OUString sSrch(OUString::number(i));
+                sal_Int32 nFnd = sNumStr.indexOf(sSrch);
+                if (-1 != nFnd)
                 {
-                    *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1 );
+                    *pLvlPos = static_cast<sal_uInt8>(nFnd + rFormat.GetPrefix().getLength() + 1);
                     ++pLvlPos;
-                    sNumStr = sNumStr.replaceAt( nFnd, 1, OUString(static_cast<char>(i)) );
+                    sNumStr = sNumStr.replaceAt(nFnd, 1, OUString(static_cast<char>(i)));
                 }
             }
         }
 
-        if (!rFormat.GetPrefix().isEmpty())
-            sNumStr = rFormat.GetPrefix() + sNumStr;
-        sNumStr += rFormat.GetSuffix();
+        if (!rRule.Get(nLvl).HasListFormat())
+        {
+            if (!rFormat.GetPrefix().isEmpty())
+                sNumStr = rFormat.GetPrefix() + sNumStr;
+            sNumStr += rFormat.GetSuffix();
+        }
     }
 
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
