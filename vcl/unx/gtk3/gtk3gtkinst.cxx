@@ -11454,12 +11454,12 @@ private:
             case KEY_RETURN:
                 m_aQuickSelectionEngine.Reset();
                 // tdf#131076 don't let bare return toggle menu popup active, but do allow deactive
-                if (nCode == KEY_RETURN && !pEvent->state && !m_bPopupActive)
+                if (nCode == KEY_RETURN && !aKeyCode.GetModifier() && !m_bPopupActive)
                     bDone = combobox_activate();
                 break;
             default:
                 // tdf#131076 let base space toggle menu popup when its not already visible
-                if (nCode == KEY_SPACE && !pEvent->state && !m_bPopupActive)
+                if (nCode == KEY_SPACE && !aKeyCode.GetModifier() && !m_bPopupActive)
                     bDone = false;
                 else
                     bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
@@ -12051,7 +12051,7 @@ private:
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
-        if (pEvent->state) // only with no modifiers held
+        if (GtkSalFrame::GetMouseModCode(pEvent->state)) // only with no modifiers held
             return false;
 
         if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
