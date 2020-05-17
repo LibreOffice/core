@@ -343,8 +343,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
 
         if (rProp.Name == "Suffix")
         {
-            OUString aExpected(u'\x200B');
-            CPPUNIT_ASSERT_EQUAL(aExpected, rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
         }
     }
 }
@@ -1358,7 +1357,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 
         if (rProp.Name == "Suffix")
             // This was '0', invalid \levelnumbers wasn't ignored.
-            CPPUNIT_ASSERT_EQUAL(CHAR_ZWSP, rProp.Value.get<OUString>().toChar());
+            CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
     }
 }
 
