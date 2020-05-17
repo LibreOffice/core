@@ -207,10 +207,6 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
     {
         if (m_xGraphicBitmap.is())
             nNumberFormat = style::NumberingType::BITMAP;
-        else if (m_sBulletChar.isEmpty() && nNumberFormat != style::NumberingType::CHAR_SPECIAL)
-            // w:lvlText is empty, that means no numbering in Word.
-            // CHAR_SPECIAL is handled separately below.
-            nNumberFormat = style::NumberingType::NUMBER_NONE;
         aNumberingProperties.push_back(lcl_makePropVal(PROP_NUMBERING_TYPE, nNumberFormat));
     }
 
@@ -548,40 +544,14 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 if (pLevel && !pLevel->GetBulletChar().isEmpty())
                     sText = pLevel->GetBulletChar( );
 
-                if (sText.isEmpty())
-                {
-                    // Empty <w:lvlText>? Then put a Unicode "zero width space" as a suffix, so LabelFollowedBy is still shown, as in Word.
-                    // With empty suffix, Writer does not show LabelFollowedBy, either.
-                    OUString sSuffix;
-                    auto it = std::find_if(aLvlProps.begin(), aLvlProps.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "NumberingType"; });
-                    if (it != aLvlProps.end())
-                    {
-                        sal_Int16 nNumberFormat = it->Value.get<sal_Int16>();
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), OUString("")));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), OUString("")));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LIST_FORMAT), sText));
 
-                        // No need for a zero width space without a real LabelFollowedBy.
-                        bool bLabelFollowedBy = true;
-                        it = std::find_if(aLvlProps.begin(), aLvlProps.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "LabelFollowedBy"; });
-                        if (it != aLvlProps.end())
-                        {
-                            sal_Int16 nValue;
-                            if (it->Value >>= nValue)
-                                bLabelFollowedBy = nValue != SvxNumberFormat::NOTHING;
-                        }
-
-                        if (bLabelFollowedBy && nNumberFormat == style::NumberingType::NUMBER_NONE)
-                            sSuffix = OUString(u'\x200B');
-                    }
-                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), sSuffix));
-                }
-                else
-                {
-                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LIST_FORMAT), sText));
-
-                    // Total count of replacement holders is determining amount of required parent numbering to include
-                    // TODO: not sure how "%" symbol is escaped. This is not supported yet
-                    sal_Int16 nParentNum = comphelper::string::getTokenCount(sText, '%');
-                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
-                }
+                // Total count of replacement holders is determining amount of required parent numbering to include
+                // TODO: not sure how "%" symbol is escaped. This is not supported yet
+                sal_Int16 nParentNum = comphelper::string::getTokenCount(sText, '%');
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
 
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
