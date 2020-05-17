@@ -31,6 +31,7 @@
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/menu.hxx>
+#include <formula/opcode.hxx>
 
 class EditView;
 class ScAccessibleEditLineTextData;
@@ -308,6 +309,8 @@ public:
 
     DECL_LINK( MenuHdl, Menu *, bool );
     DECL_LINK( DropdownClickHdl, ToolBox*, void );
+
+    void            AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode );
 
 private:
     bool IsPointerAtResizePos();
