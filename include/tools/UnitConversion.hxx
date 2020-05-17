@@ -15,12 +15,17 @@ constexpr sal_Int64 convertTwipToMm100(sal_Int64 n)
     return (n >= 0) ? (n * 127 + 36) / 72 : (n * 127 - 36) / 72;
 }
 
-constexpr sal_Int64 convertPointToMm100(sal_Int64 n) { return convertTwipToMm100(n * 20); }
-
 constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
 {
     return (n >= 0) ? (n * 72 + 63) / 127 : (n * 72 - 63) / 127;
 }
+
+constexpr sal_Int64 convertPointToMm100(sal_Int64 nNumber)
+{
+    return convertTwipToMm100(nNumber * 20);
+}
+
+constexpr double convertPointToMm100(double fNumber) { return fNumber * 35.27777777778; }
 
 // Convert PPT's "master unit" (1/576 inch) to twips
 constexpr sal_Int64 convertMasterUnitToTwip(sal_Int64 n) { return n * 2540.0 / 576.0; }
