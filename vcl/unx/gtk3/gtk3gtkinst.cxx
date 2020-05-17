@@ -13272,7 +13272,7 @@ private:
             }
             default:
                 // tdf#131076 let base space toggle menu popup when it's not already visible
-                if (nCode == KEY_SPACE && !pEvent->state && !m_bPopupActive)
+                if (nCode == KEY_SPACE && !aKeyCode.GetModifier() && !m_bPopupActive)
                     bDone = false;
                 else
                     bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
@@ -14500,7 +14500,7 @@ private:
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
-        if (pEvent->state) // only with no modifiers held
+        if (GtkSalFrame::GetMouseModCode(pEvent->state)) // only with no modifiers held
             return false;
 
         if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
