@@ -1344,6 +1344,27 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
             case KEY_PAGEDOWN:
                 nSlotId = bShift ? SID_CURSORPAGERIGHT_SEL : SID_CURSORPAGERIGHT_;
                 break;
+            case KEY_EQUAL:
+            {
+                // #tdf39302: Use "Alt + =" for autosum
+                if ( !bAnyEdit ) // Ignore shortcut if currently editing a cell
+                {
+                    ScInputHandler* pHdl = pScMod->GetInputHdl(this);
+                    if ( pHdl )
+                    {
+                        ScInputWindow* pWin = pHdl->GetInputWindow();
+                        if ( pWin )
+                        {
+                            bool bRangeFinder = false;
+                            bool bSubTotal = false;
+                            pWin->AutoSum( bRangeFinder, bSubTotal, ocSum );
+                        }
+                    }
+
+                    bUsed = true;
+                    break;
+                }
+            }
         }
         if ( nSlotId )
         {
