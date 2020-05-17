@@ -63,7 +63,6 @@
 #include <rangeutl.hxx>
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
-#include <formula/opcode.hxx>
 #include <editeng/fontitem.hxx>
 #include <AccessibleEditObject.hxx>
 #include <AccessibleText.hxx>
@@ -821,6 +820,43 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ToolBox::MouseButtonUp( rMEvt );
 }
 
+void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
+{
+    ScModule* pScMod = SC_MOD();
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
+    if ( pViewSh )
+    {
+        const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, eCode);
+        if ( !aFormula.isEmpty() )
+        {
+            SetFuncString( aFormula );
+            const sal_Int32 aOpen = aFormula.indexOf('(');
+            const sal_Int32 aLen  = aFormula.getLength();
+            if (bRangeFinder && pScMod->IsEditMode())
+            {
+                ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
+                if ( pHdl )
+                {
+                    pHdl->InitRangeFinder( aFormula );
+
+                    //! SetSelection at the InputHandler?
+                    //! Set bSelIsRef?
+                    if ( aOpen != -1 && aLen > aOpen )
+                    {
+                        ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
+                        EditView* pTableView = pHdl->GetTableView();
+                        if ( pTableView )
+                            pTableView->SetSelection( aSel );
+                        EditView* pTopView = pHdl->GetTopView();
+                        if ( pTopView )
+                            pTopView->SetSelection( aSel );
+                    }
+                }
+            }
+        }
+    }
+}
+
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_HIDE | WB_TABSTOP)),
       maTextWndGroup(VclPtr<ScTextWndGroup>::Create(this, pViewSh)),
@@ -962,63 +998,31 @@ IMPL_LINK( ScInputWindow, MenuHdl, Menu *, pMenu, bool )
     OString aCommand = pMenu->GetCurItemIdent();
     if (!aCommand.isEmpty())
     {
-        ScModule* pScMod = SC_MOD();
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-        if ( pViewSh )
+        bool bSubTotal = false;
+        bool bRangeFinder = false;
+        OpCode eCode = ocSum;
+        if ( aCommand ==  "sum" )
         {
-            bool bSubTotal = false;
-            bool bRangeFinder = false;
-            OpCode eCode = ocSum;
-            if ( aCommand ==  "sum" )
-            {
-                eCode = ocSum;
-            }
-            else if ( aCommand == "average" )
-            {
-                eCode = ocAverage;
-            }
-            else if ( aCommand == "max" )
-            {
-                eCode = ocMax;
-            }
-            else if ( aCommand == "min" )
-            {
-                eCode = ocMin;
-            }
-            else if ( aCommand == "count" )
-            {
-                eCode = ocCount;
-            }
-
-            const OUString aFormula = pViewSh->DoAutoSum(bRangeFinder, bSubTotal, eCode);
-            if ( !aFormula.isEmpty() )
-            {
-                SetFuncString( aFormula );
-                const sal_Int32 aOpen = aFormula.indexOf('(');
-                const sal_Int32 aLen  = aFormula.getLength();
-                if (bRangeFinder && pScMod->IsEditMode())
-                {
-                    ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
-                    if ( pHdl )
-                    {
-                        pHdl->InitRangeFinder( aFormula );
-
-                        //! SetSelection at the InputHandler?
-                        //! Set bSelIsRef?
-                        if ( aOpen != -1 && aLen > aOpen )
-                        {
-                            ESelection aSel( 0, aOpen + (bSubTotal ? 3 : 1), 0, aLen-1 );
-                            EditView* pTableView = pHdl->GetTableView();
-                            if ( pTableView )
-                                pTableView->SetSelection( aSel );
-                            EditView* pTopView = pHdl->GetTopView();
-                            if ( pTopView )
-                                pTopView->SetSelection( aSel );
-                        }
-                    }
-                }
-            }
+            eCode = ocSum;
         }
+        else if ( aCommand == "average" )
+        {
+            eCode = ocAverage;
+        }
+        else if ( aCommand == "max" )
+        {
+            eCode = ocMax;
+        }
+        else if ( aCommand == "min" )
+        {
+            eCode = ocMin;
+        }
+        else if ( aCommand == "count" )
+        {
+            eCode = ocCount;
+        }
+
+        AutoSum( bRangeFinder, bSubTotal, eCode );
     }
     return false;
 }
