@@ -4834,7 +4834,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
 
             // apply font size to the form control
-            if ( m_pLastCharacterContext && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
+            if (!m_aTextAppendStack.empty() &&  m_pLastCharacterContext && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
             {
                 uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                 if (xTextAppend.is())
