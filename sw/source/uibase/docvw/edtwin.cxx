@@ -139,6 +139,8 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -551,11 +553,17 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     IsAttrAtPos::ClickField |
                     IsAttrAtPos::InetAttr |
                     IsAttrAtPos::Ftn |
-                    IsAttrAtPos::SmartTag );
+                    IsAttrAtPos::SmartTag |
+                    IsAttrAtPos::Outline);
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
+                    if (IsAttrAtPos::Outline == aSwContentAtPos.eContentAtPos)
+                    {
+                        if (nModifier == KEY_MOD1)
+                            eStyle = PointerStyle::RefHand;
+                    }
                     // Is edit inline input field
-                    if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos
+                    else if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos
                         && aSwContentAtPos.pFndTextAttr != nullptr
                         && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
                     {
@@ -3453,6 +3461,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     case KEY_MOD1:
                     if ( !bExecDrawTextLink )
                     {
+                        SwContentAtPos aContentAtPos(IsAttrAtPos::Outline);
+                        if(rSh.GetContentAtPos(aDocPos, aContentAtPos))
+                        {
+                            MoveCursor(rSh, aDocPos, bOnlyText, bLockView);
+                            SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
+                            SwOutlineNodes::size_type nPos;
+                            if (rSh.GetNodes().GetOutLineNds().Seek_Entry( &aPam.GetPoint()->nNode.GetNode(), &nPos))
+                                rSh.ToggleOutlineContentVisibility(nPos);
+                            return;
+                        }
                         if ( !m_bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                         {
                             m_rView.NoRotate();
@@ -3684,28 +3702,53 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             }
         }
     }
-    else if ( MOUSE_RIGHT == rMEvt.GetButtons() && !rMEvt.GetModifier()
-        && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
-        && !rSh.TestCurrPam( aDocPos ) )
+    else if (MOUSE_RIGHT == rMEvt.GetButtons())
     {
-        SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
-
-        // Are we clicking on a field?
-        if (g_bValidCursorPos
-            && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
-            && aFieldAtPos.pFndTextAttr != nullptr
-            && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD
-            && (!pCursorField || pCursorField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
+        if (rMEvt.GetModifier() == KEY_MOD1)
         {
-            // Move the cursor
-            MoveCursor( rSh, aDocPos, rSh.IsObjSelectable( aDocPos ), m_bWasShdwCursor );
-            bCallBase = false;
+            SwContentAtPos aContentAtPos(IsAttrAtPos::Outline);
+            if(rSh.GetContentAtPos(aDocPos, aContentAtPos))
+            {
+                MoveCursor(rSh, aDocPos, false, true);
+                SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
+                SwOutlineNodes::size_type nPos;
+                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(&aPam.GetPoint()->nNode.GetNode(), &nPos))
+                {
+                    SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+                    int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+                    bool bFold = rSh.IsOutlineContentFolded(nPos);
+                    do
+                    {
+                        if (rSh.IsOutlineContentFolded(nPos) == bFold)
+                            rSh.ToggleOutlineContentVisibility(nPos);
+                    } while (++nPos < nOutlineNodesCount && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
+                    return;
+                }
+            }
+        }
+        else if ( !rMEvt.GetModifier()
+                  && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
+                  && !rSh.TestCurrPam( aDocPos ) )
+        {
+            SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
 
-            // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
-            // and CH_TXT_ATR_INPUTFIELDEND
-            rSh.SttSelect();
-            rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
-                         *(aFieldAtPos.pFndTextAttr->End()) - 1 );
+            // Are we clicking on a field?
+            if (g_bValidCursorPos
+                    && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
+                    && aFieldAtPos.pFndTextAttr != nullptr
+                    && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD
+                    && (!pCursorField || pCursorField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
+            {
+                // Move the cursor
+                MoveCursor( rSh, aDocPos, rSh.IsObjSelectable( aDocPos ), m_bWasShdwCursor );
+                bCallBase = false;
+
+                // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
+                // and CH_TXT_ATR_INPUTFIELDEND
+                rSh.SttSelect();
+                rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
+                                *(aFieldAtPos.pFndTextAttr->End()) - 1 );
+            }
         }
     }
 
