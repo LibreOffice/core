@@ -68,6 +68,30 @@
       "revId": "ebf50d8cbee3d12072891a2285e5ddcf83479631",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb582253_a03c3f6e",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-18T08:21:05Z",
+      "side": 1,
+      "message": "I\u0027ve found, that missing call of insertTextPortion() with its NOFORMATATTR is the key here. Now I documented it:\n\n+        // tdf#127616 apply character style based formatting of empty paragraphs\n+        // if the formatting contains also direct character formatting,\n+        // using NOFORMATATTR as in insertTextPortion(), which isn\u0027t called\n+        // in empty paragraphs.\n\nIndeed, there is no documentation about NOFORMATATTR, but this is which used for runs, so I only adapted to the corner case, without knowing exactly, what is there in the background. :( By the way, this is only half of the solution, so I will continue on changing the format of the paragraph marker, too, to solve the potential page layout difference. :)\n\nThanks for your review!",
+      "parentUuid": "b99f7606_52f44f40",
+      "range": {
+        "startLine": 1295,
+        "startChar": 24,
+        "endLine": 1295,
+        "endChar": 60
+      },
+      "revId": "ebf50d8cbee3d12072891a2285e5ddcf83479631",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
