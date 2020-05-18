@@ -399,6 +399,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
+    pVDev->SetBackground(Wallpaper(COL_TRANSPARENT));
     pVDev->SetOutputSizePixel(aSliderWindowSize);
 
     tools::Rectangle aSlider = aRect;
@@ -419,21 +420,6 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
 
     tools::Rectangle aRight(aSlider);
     aRight.SetLeft( aRight.Right() );
-
-    // draw VirtualDevice's background color
-    Color aStartColor = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
-    Color aEndColor   = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
-
-    if (aEndColor.IsDark())
-        aStartColor = aEndColor;
-
-    Gradient aGradient;
-    aGradient.SetAngle(0);
-    aGradient.SetStyle(GradientStyle::Linear);
-
-    aGradient.SetStartColor(aStartColor);
-    aGradient.SetEndColor(aEndColor);
-    pVDev->DrawGradient(aRect, aGradient);
 
     // draw slider
     pVDev->SetLineColor(COL_WHITE);
