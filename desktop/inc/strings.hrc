@@ -114,6 +114,7 @@
 #define RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN                 NC_("RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN", "Extension requires at least OpenOffice.org reference version %VERSION")
 #define RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX                 NC_("RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX", "Extension does not support OpenOffice.org reference versions greater than %VERSION")
 #define RID_DEPLOYMENT_DEPENDENCIES_LO_MIN                  NC_("RID_DEPLOYMENT_DEPENDENCIES_LO_MIN", "Extension requires at least %PRODUCTNAME version %VERSION")
+#define RID_DEPLOYMENT_DEPENDENCIES_LO_MAX                  NC_("RID_DEPLOYMENT_DEPENDENCIES_LO_MAX", "Extension does not support %PRODUCTNAME versions greater than %VERSION")
 
 #define RID_STR_WARNING_VERSION_LESS                        NC_("RID_STR_WARNING_VERSION_LESS", "You are about to install version $NEW of the extension '$NAME'.\n" \
                                                                "The newer version $DEPLOYED is already installed.\n"\
