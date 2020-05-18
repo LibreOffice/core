@@ -299,6 +299,30 @@
     },
     {
       "key": {
+        "uuid": "6bcb5cb0_75a06209",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-18T13:16:43Z",
+      "side": 1,
+      "message": "Yeah with extensions I didn\u0027t mean to exclude other third-party code, this is just the primary use case in my mind...\n\nSo if unoloader.jar is to be used by external code, it should also have a module-info.\nAlso it looks like unoloader.jar is required by libreoffice.jar, so libreoffice.jar needs to require unoloader.jar in it\u0027s module-info too (classpath is ignored when using java modules).",
+      "parentUuid": "a0525136_76e637a0",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7fe8db6_7717937f",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
