@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38eb1d1d_197a27f2",
+        "filename": "sal/osl/unx/process.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-18T10:46:10Z",
+      "side": 1,
+      "message": "Maybe create a return value variable, and set it to osl_Process_E_None here, to proceed with following common cleanup code?\n\n(I see it looking reasonable, but I know nothing about unx process execution specifics.)",
+      "range": {
+        "startLine": 666,
+        "startChar": 8,
+        "endLine": 668,
+        "endChar": 34
+      },
+      "revId": "f553b634e8aa31a57d34495d2e406d054c26e86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
