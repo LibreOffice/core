@@ -117,12 +117,11 @@ void DiagramHelper::setVertical(
         if (!xCnt.is())
             return;
 
-        Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
+        const Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
         uno::Any aValue;
         aValue <<= bVertical;
-        for( sal_Int32 i=0; i<aCooSys.getLength(); ++i )
+        for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSys )
         {
-            uno::Reference< XCoordinateSystem > xCooSys( aCooSys[i] );
             Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
             bool bChanged = false;
             if (xProp.is())
@@ -196,11 +195,11 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
     if (!xCnt.is())
         return false;
 
-    Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
+    const Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
 
-    for (sal_Int32 i = 0; i < aCooSys.getLength(); ++i)
+    for (Reference<XCoordinateSystem> const & coords : aCooSys)
     {
-        Reference<beans::XPropertySet> xProp(aCooSys[i], uno::UNO_QUERY);
+        Reference<beans::XPropertySet> xProp(coords, uno::UNO_QUERY);
         if (!xProp.is())
             continue;
 
@@ -252,10 +251,9 @@ void DiagramHelper::setStackMode(
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
         if( !xCooSysContainer.is() )
             return;
-        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+        const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
         {
-            uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
             //set correct percent stacking
             const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(1);
             for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
@@ -290,10 +288,10 @@ void DiagramHelper::setStackMode(
             if( !xDataSeriesContainer.is() )
                 continue;
 
-            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-            for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
             {
-                Reference< beans::XPropertySet > xProp( aSeriesList[nS], uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xProp( dataSeries, uno::UNO_QUERY );
                 if(xProp.is())
                     xProp->setPropertyValue( "StackingDirection", aNewDirection );
             }
@@ -316,11 +314,9 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is() )
         return eGlobalStackMode;
-    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
     {
-        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         if( !xChartTypeContainer.is() )
@@ -438,12 +434,11 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
         Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
         if( xCooSysCnt.is() )
         {
-            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
                 xCooSysCnt->getCoordinateSystems());
 
-            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+            for( Reference< XCoordinateSystem > const & xCooSys : aCooSysSeq )
             {
-                Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
                 if(xCooSys.is())
                 {
                     nResult = xCooSys->getDimension();
@@ -627,31 +622,27 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     if( !xCooSysContainer.is())
         return nullptr;
 
-    uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
     {
-        uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
             continue;
-        uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        const uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        for( uno::Reference< XChartType > const & xChartType : aChartTypeList )
         {
-            uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
-
             //iterate through all series in this chart type
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
                 continue;
 
-            uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-            for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
             {
-                if( xGivenDataSeries==aSeriesList[nS] )
+                if( xGivenDataSeries==dataSeries )
                     return xChartType;
             }
         }
@@ -669,15 +660,15 @@ std::vector< Reference< XDataSeries > >
     {
         Reference< XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
         {
-            Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
-            Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            for( sal_Int32 j=0; j<aChartTypeSeq.getLength(); ++j )
+            Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
+            const Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+            for( Reference< XChartType> const & chartType : aChartTypeSeq )
             {
-                Reference< XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
+                Reference< XDataSeriesContainer > xDSCnt( chartType, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
                 std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
                              std::back_inserter( aResult ));
@@ -701,17 +692,17 @@ Sequence< Sequence< Reference< XDataSeries > > >
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( xCooSysContainer.is() )
     {
-        Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-        for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+        const Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        for( Reference< XCoordinateSystem > const & coords : aCooSysList )
         {
             //iterate through all chart types in the current coordinate system
-            Reference< XChartTypeContainer > xChartTypeContainer( aCooSysList[nCS], uno::UNO_QUERY );
+            Reference< XChartTypeContainer > xChartTypeContainer( coords, uno::UNO_QUERY );
             if( !xChartTypeContainer.is() )
                 continue;
-            Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-            for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+            const Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+            for( Reference< XChartType >  const & chartType : aChartTypeList )
             {
-                Reference< XDataSeriesContainer > xDataSeriesContainer( aChartTypeList[nT], uno::UNO_QUERY );
+                Reference< XDataSeriesContainer > xDataSeriesContainer( chartType, uno::UNO_QUERY );
                 if( !xDataSeriesContainer.is() )
                     continue;
                 aResult.push_back( xDataSeriesContainer->getDataSeries() );
@@ -731,11 +722,11 @@ Reference< XChartType >
     if( ! xCooSysContainer.is())
         return xChartType;
 
-    Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
     sal_Int32 nTypesSoFar = 0;
-    for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+    for( Reference< XCoordinateSystem > const & coords : aCooSysList )
     {
-        Reference< XChartTypeContainer > xChartTypeContainer( aCooSysList[nCS], uno::UNO_QUERY );
+        Reference< XChartTypeContainer > xChartTypeContainer( coords, uno::UNO_QUERY );
         if( !xChartTypeContainer.is() )
             continue;
         Sequence< Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -764,11 +755,10 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
     {
         Reference< XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( Reference< XCoordinateSystem > const & xCooSys : aCooSysSeq )
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
             OSL_ASSERT( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
@@ -811,11 +801,10 @@ bool DiagramHelper::isCategoryDiagram(
     {
         Reference< XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+        const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        for( Reference< XCoordinateSystem > const & xCooSys : aCooSysSeq )
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
             OSL_ASSERT( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
@@ -924,10 +913,10 @@ static void lcl_generateAutomaticCategoriesFromChartType(
     if( !xSeriesCnt.is() )
         return;
 
-    Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
-    for( sal_Int32 nS = 0; nS < aSeriesSeq.getLength(); nS++ )
+    const Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
+    for( Reference< XDataSeries > const & dataSeries : aSeriesSeq )
     {
-        Reference< data::XDataSource > xDataSource( aSeriesSeq[nS], uno::UNO_QUERY );
+        Reference< data::XDataSource > xDataSource( dataSeries, uno::UNO_QUERY );
         if( !xDataSource.is() )
             continue;
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
@@ -950,10 +939,10 @@ Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const
     Reference< XChartTypeContainer > xTypeCntr( xCooSys, uno::UNO_QUERY );
     if( xTypeCntr.is() )
     {
-        Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
-        for( sal_Int32 nN=0; nN<aChartTypes.getLength(); nN++ )
+        const Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
+        for( Reference< XChartType > const & chartType : aChartTypes )
         {
-            lcl_generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
+            lcl_generateAutomaticCategoriesFromChartType( aRet, chartType );
             if( aRet.hasElements() )
                 return aRet;
         }
@@ -1207,11 +1196,11 @@ Sequence< Reference< XChartType > >
         {
             Reference< XCoordinateSystemContainer > xCooSysCnt(
                 xDiagram, uno::UNO_QUERY_THROW );
-            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
                 xCooSysCnt->getCoordinateSystems());
-            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+            for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
-                Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
+                Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 std::copy( aChartTypeSeq.begin(), aChartTypeSeq.end(),
                              std::back_inserter( aResult ));
@@ -1449,11 +1438,10 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
     //todo: allow this in future again, if fileversion is available for OLE objects (metastream)
     //thus the wrong bottom can be removed on import
 
-    Sequence< Reference< chart2::XChartType > > aTypes(
+    const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-    for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
+    for( Reference< chart2::XChartType > const & xType : aTypes )
     {
-        Reference< chart2::XChartType > xType( aTypes[nN] );
         if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return false;
         if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
@@ -1542,15 +1530,15 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
             const Reference< chart2::XChartType >& xChartType )
 {
     sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
-    uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
+    const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
                 ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     if( xDiaProp.is() && (xDiaProp->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
     {
         //ensure that the set value is supported by this charttype
-        for( sal_Int32 nN = 0; nN < aAvailableMissingValueTreatments.getLength(); nN++ )
-            if( aAvailableMissingValueTreatments[nN] == nResult )
+        for( sal_Int32 n : aAvailableMissingValueTreatments )
+            if( n == nResult )
                 return nResult; //ok
     }
 

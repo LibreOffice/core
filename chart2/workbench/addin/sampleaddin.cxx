@@ -48,7 +48,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             uno::Sequence< OUString > aSequ = SampleAddIn::getSupportedServiceNames_Static();
             const OUString * pArray = aSequ.getConstArray();
-            for( sal_Int32 i = 0; i < aSequ.getLength(); i++ )
+            for( sal_Int32 i = 0; i < aSequ.(); i++ )
                 xNewKey->createKey( pArray[i] );
 
             return sal_True;

@@ -50,10 +50,10 @@ AllAxisItemConverter::AllAxisItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
+    const Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+    for( Reference< XAxis > const & axis : aElementList )
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xObjectProperties(axis, uno::UNO_QUERY);
         m_aConverters.emplace_back( new ::chart::wrapper::AxisItemConverter(
             xObjectProperties, rItemPool, rDrawModel,
             uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), nullptr, nullptr,
@@ -79,10 +79,9 @@ AllGridItemConverter::AllGridItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Sequence< Reference< beans::XPropertySet > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
-    for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
+    const Sequence< Reference< beans::XPropertySet > > aElementList( AxisHelper::getAllGrids( xDiagram ) );
+    for( Reference< beans::XPropertySet > const & xObjectProperties : aElementList )
     {
-        Reference< beans::XPropertySet > xObjectProperties(aElementList[nA]);
         m_aConverters.emplace_back( new ::chart::wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
                                         ::chart::wrapper::GraphicObjectType::LineProperties ) );

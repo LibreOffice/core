@@ -73,9 +73,9 @@ void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xP
         return;
 
     bool bValid = false;
-    for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
+    for( sal_Int32 i : rAvailablePlacements )
     {
-        if( rAvailablePlacements[nN] == nLabelPlacement )
+        if( i == nLabelPlacement )
         {
             bValid = true;
             break;
@@ -155,13 +155,11 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
             xInterpreter->interpretDataSource(
                 xDataSource, aArguments, Sequence< Reference< XDataSeries > >() ));
 
-        Sequence< Sequence< Reference< XDataSeries > > > aSeries( aData.Series );
-        sal_Int32 i, j, nCount = 0;
-        for( i=0; i<aSeries.getLength(); ++i )
-        {
-            for( j=0; j<aSeries[i].getLength(); ++j, ++nCount )
-                lcl_applyDefaultStyle( aSeries[i][j], nCount, xDia );
-        }
+        const Sequence< Sequence< Reference< XDataSeries > > > aSeries( aData.Series );
+        sal_Int32 nCount = 0;
+        for( auto const & i : aSeries )
+            for( auto const & j : i )
+                lcl_applyDefaultStyle( j, nCount++, xDia );
 
         Sequence< Reference< XChartType > > aOldChartTypesSeq;
         FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq );
@@ -219,12 +217,12 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
         }
         aSeriesSeq = aData.Series;
 
-        sal_Int32 i, j, nIndex = 0;
-        for( i=0; i<aSeriesSeq.getLength(); ++i )
-            for( j=0; j<aSeriesSeq[i].getLength(); ++j, ++nIndex )
+        sal_Int32 nIndex = 0;
+        for( auto const & i : std::as_const(aSeriesSeq) )
+            for( auto const & j : i )
             {
                 if( nIndex >= nFormerSeriesCount )
-                    lcl_applyDefaultStyle( aSeriesSeq[i][j], nIndex, xDiagram );
+                    lcl_applyDefaultStyle( j, nIndex++, xDiagram );
             }
 
         // remove charttype groups from all coordinate systems
@@ -235,11 +233,11 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
         OSL_ASSERT( xCoordSysCnt.is());
         if( xCoordSysCnt.is())
         {
-            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
                 xCoordSysCnt->getCoordinateSystems());
-            for( sal_Int32 nCooSysIdx = 0; nCooSysIdx < aCooSysSeq.getLength(); ++nCooSysIdx )
+            for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
-                Reference< XChartTypeContainer > xContainer( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                Reference< XChartTypeContainer > xContainer( coords, uno::UNO_QUERY );
                 if( xContainer.is() )
                     xContainer->setChartTypes( Sequence< Reference< XChartType > >() );
             }
@@ -436,12 +434,12 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
     if( bPercent )
     {
-        Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-        for( sal_Int32 i=0; i<aAxisSeq.getLength(); ++i )
+        const Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+        for( Reference< chart2::XAxis > const & axis : aAxisSeq )
         {
-            if( AxisHelper::getDimensionIndexOfAxis( aAxisSeq[i], xDiagram )== 1 )
+            if( AxisHelper::getDimensionIndexOfAxis( axis, xDiagram )== 1 )
             {
-                Reference< beans::XPropertySet > xAxisProp( aAxisSeq[i], uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xAxisProp( axis, uno::UNO_QUERY );
                 if( xAxisProp.is())
                 {
                     // set number format to source format
@@ -457,31 +455,26 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
         if( xCooSysContainer.is() )
         {
-            uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
-            for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+            const uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+            for( uno::Reference< XCoordinateSystem > const & xCooSys : aCooSysList )
             {
-                uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-
                 //iterate through all chart types in the current coordinate system
                 uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
                 OSL_ASSERT( xChartTypeContainer.is());
                 if( !xChartTypeContainer.is() )
                     continue;
-                uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
-                for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+                const uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+                for( uno::Reference< XChartType > const & xChartType : aChartTypeList )
                 {
-                    uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
-
                     //iterate through all series in this chart type
                     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
                     OSL_ASSERT( xDataSeriesContainer.is());
                     if( !xDataSeriesContainer.is() )
                         continue;
 
-                    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
-                    for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+                    const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+                    for( Reference< XDataSeries > const & xSeries : aSeriesList )
                     {
-                        Reference< XDataSeries > xSeries(aSeriesList[nS]);
                         Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                         if(!xSeries.is() || !xSeriesProp.is() )
                             continue;
@@ -600,11 +593,10 @@ void ChartTypeTemplate::adaptScales(
     )
 {
     bool bSupportsCategories( supportsCategories() );
-    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+    for( Reference< XCoordinateSystem > const & xCooSys : aCooSysSeq )
     {
         try
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIdx] );
             if( !xCooSys.is() )
                 continue;
 
@@ -719,9 +711,8 @@ void ChartTypeTemplate::adaptAxes(
     if( !rCoordSys.hasElements() )
         return;
 
-    for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
+    for( Reference< XCoordinateSystem > const & xCooSys : rCoordSys )
     {
-        Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
         if( !xCooSys.is() )
             continue;
         sal_Int32 nDimCount = xCooSys->getDimension();
@@ -868,10 +859,8 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
     OUString aNewChartType( xNewChartType->getChartType() );
 
     Reference< beans::XPropertySet > xSource;
-    sal_Int32 nN=0;
-    for( nN=0; nN<rOldChartTypesSeq.getLength();++nN)
+    for( Reference< XChartType > const & xOldType : rOldChartTypesSeq )
     {
-        Reference< XChartType > xOldType( rOldChartTypesSeq[nN] );
         if( xOldType.is() && xOldType->getChartType() == aNewChartType )
         {
             xSource.set( Reference< beans::XPropertySet >(xOldType, uno::UNO_QUERY ) );

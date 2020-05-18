@@ -274,11 +274,11 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
 
     Color nPreferredColor = defaultPreferredColor;
     std::vector< chart2::data::HighlightedRange > aHilightedRanges;
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
-    for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
+    for( Reference< chart2::data::XLabeledDataSequence > const & labelDataSeq : aLSeqSeq )
     {
-        Reference< chart2::data::XDataSequence > xLabel( aLSeqSeq[i]->getLabel());
-        Reference< chart2::data::XDataSequence > xValues( aLSeqSeq[i]->getValues());
+        Reference< chart2::data::XDataSequence > xLabel( labelDataSeq->getLabel());
+        Reference< chart2::data::XDataSequence > xValues( labelDataSeq->getValues());
 
         if( xLabel.is())
             aHilightedRanges.emplace_back(

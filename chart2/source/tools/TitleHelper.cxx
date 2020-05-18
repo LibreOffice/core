@@ -305,9 +305,9 @@ OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle 
     if(!xTitle.is())
         return OUString();
     OUStringBuffer aRet;
-    uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
-    for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
-        aRet.append( aStringList[nN]->getString() );
+    const uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
+    for( uno::Reference< XFormattedString > const & formattedStr : aStringList )
+        aRet.append( formattedStr->getString() );
     return aRet.makeStringAndClear();
 }
 

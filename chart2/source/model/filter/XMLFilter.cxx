@@ -335,17 +335,17 @@ ErrCode XMLFilter::impl_Import(
         uno::Reference<frame::XModel> const xModel(m_xTargetDoc, uno::UNO_QUERY);
         if( xModel.is() )
         {
-            uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
-            for( sal_Int32 nInd = 0; nInd < aModProps.getLength(); nInd++ )
+            const uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
+            for( beans::PropertyValue const & prop : aModProps )
             {
-                if( aModProps[nInd].Name == "HierarchicalDocumentName" )
+                if( prop.Name == "HierarchicalDocumentName" )
                 {
                     // Actually this argument only has meaning for embedded documents
-                    aModProps[nInd].Value >>= aHierarchName;
+                    prop.Value >>= aHierarchName;
                 }
-                else if( aModProps[nInd].Name == "DocumentBaseURL" )
+                else if( prop.Name == "DocumentBaseURL" )
                 {
-                    aModProps[nInd].Value >>= aBaseUri;
+                    prop.Value >>= aBaseUri;
                 }
             }
         }

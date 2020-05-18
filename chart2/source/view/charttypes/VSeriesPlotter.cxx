@@ -581,9 +581,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             }
         }
 
-        for( sal_Int32 nN = 0; nN < aTextList.getLength(); ++nN )
+        for( auto const & line : std::as_const(aTextList) )
         {
-            if( !aTextList[nN].isEmpty() )
+            if( !line.isEmpty() )
             {
                 ++nLineCountForSymbolsize;
             }
@@ -864,11 +864,10 @@ double lcl_getErrorBarLogicLength(
                 {
                     double fMaxValue;
                     ::rtl::math::setInf(&fMaxValue, true);
-                    const double* pValues = rData.getConstArray();
-                    for(sal_Int32 i=0; i<rData.getLength(); ++i, ++pValues)
+                    for(double d : rData)
                     {
-                        if(fMaxValue<*pValues)
-                            fMaxValue=*pValues;
+                        if(fMaxValue < d)
+                            fMaxValue = d;
                     }
                     if( std::isfinite( fMaxValue ) &&
                         std::isfinite( fPercent ))
@@ -1399,7 +1398,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             xScalingY.set( aScales[1].Scaling );
         }
 
-        uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
+        const uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
             xCalculator->getCurveValues(
                             fMinX, fMaxX, nPointCount,
                             xScalingX, xScalingY, bMaySkipPoints ));
@@ -1416,10 +1415,10 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
         sal_Int32 nRealPointCount = 0;
 
-        for(sal_Int32 nP = 0; nP < aCalculatedPoints.getLength(); ++nP)
+        for(geometry::RealPoint2D const & p : aCalculatedPoints)
         {
-            double fLogicX = aCalculatedPoints[nP].X;
-            double fLogicY = aCalculatedPoints[nP].Y;
+            double fLogicX = p.X;
+            double fLogicY = p.Y;
             double fLogicZ = 0.0; //dummy
 
             // fdo#51656: don't scale mean value lines

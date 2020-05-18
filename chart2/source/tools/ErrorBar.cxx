@@ -191,13 +191,13 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
     else
         aDirection = "negative";
 
-    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aSequences )
     {
         try
         {
-            if( aSequences[nI].is())
+            if( labeledData.is())
             {
-                uno::Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+                uno::Reference< chart2::data::XDataSequence > xSequence( labeledData->getValues());
                 uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
                 OUString aRole;
                 if( ( xSeqProp->getPropertyValue( "Role" ) >>= aRole ) &&

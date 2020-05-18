@@ -836,9 +836,9 @@ void ChartController::executeDispatch_InsertMinorGrid()
         Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getModel() );
         if( xAxis.is() )
         {
-            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            for( sal_Int32 nN=0; nN<aSubGrids.getLength(); nN++)
-                AxisHelper::makeGridVisible( aSubGrids[nN] );
+            const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+            for( Reference< beans::XPropertySet > const & props : aSubGrids)
+                AxisHelper::makeGridVisible( props );
             aUndoGuard.commit();
         }
     }
@@ -860,9 +860,9 @@ void ChartController::executeDispatch_DeleteMinorGrid()
         Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getModel() );
         if( xAxis.is() )
         {
-            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            for( sal_Int32 nN=0; nN<aSubGrids.getLength(); nN++)
-                AxisHelper::makeGridInvisible( aSubGrids[nN] );
+            const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+            for( Reference< beans::XPropertySet > const & props : aSubGrids)
+                AxisHelper::makeGridInvisible( props );
             aUndoGuard.commit();
         }
     }
