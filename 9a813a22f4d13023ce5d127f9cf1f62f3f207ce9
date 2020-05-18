@@ -275,6 +275,30 @@
     },
     {
       "key": {
+        "uuid": "a0525136_76e637a0",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-18T09:45:04Z",
+      "side": 1,
+      "message": "* Not sure why the fixation on extensions.  unoloader.jar can be used by third-party code, see e.g. ure/source/uretest/Runner.java.\n\n* I cannot help you with the guesswork here.  I have little idea how that modular Java is actually meant to be used.",
+      "parentUuid": "13a6a1fa_9e912c3c",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d7fe8db6_7717937f",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
