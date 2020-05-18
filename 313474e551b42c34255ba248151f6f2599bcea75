@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "d9a45bde_026357ee",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-18T20:15:58Z",
+      "side": 1,
+      "message": "I assume the other changes (Chinese,...) are the cases mentioned in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d130140#c1 and following?",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30aa1b77_84999c66",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
