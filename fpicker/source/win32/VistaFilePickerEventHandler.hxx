@@ -22,7 +22,6 @@
 
 #include <shobjidl.h>
 
-#include "comptr.hxx"
 #include "vistatypes.h"
 #include "IVistaFilePickerInternalNotify.hxx"
 
