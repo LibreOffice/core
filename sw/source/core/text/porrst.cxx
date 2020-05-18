@@ -334,12 +334,6 @@ bool SwTextFrame::FormatEmpty()
         SetUndersized( false );
     AdjustFrame( nChg );
 
-    if( HasBlinkPor() )
-    {
-        ClearPara();
-        ResetBlinkPor();
-    }
-
     if (GetHasRotatedPortions())
     {
         ClearPara();

@@ -519,7 +519,6 @@ public:
     inline void ResetRepaint() const;
     bool HasRepaint() const { return mbRepaint; }
     inline void ResetBlinkPor() const;
-    bool HasBlinkPor() const { return mbHasBlinkPortions; }
     void SetHasRotatedPortions(bool bHasRotatedPortions);
     bool GetHasRotatedPortions() const { return mbHasRotatedPortions; }
     void SetAnimation() const
