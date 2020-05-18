@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "bc6c336e_3f8717b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-18T09:02:58Z",
+      "side": 1,
+      "message": "Does it still need doing, given \u003chttps://gerrit.libreoffice.org/c/core/+/91105/12#message-c20153c548f3057922fe8a9ff819edf64e41ea80\u003e claims:  \"I tested it with both Java 8 and Java 9 (importing the module) and both work fine.  Looks like Java 8 just ignores the module-info.class, so hopefully this does not cause any problems.\"",
+      "parentUuid": "f1dcb7a6_b153e843",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8adb3070_53ae17c0",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
@@ -188,6 +206,30 @@
       "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f808f72d_8fe142ae",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-18T09:02:58Z",
+      "side": 1,
+      "message": "\u003e Should I add a module-info.java for officeloader too?\n\nWhat would be the benefit of that?",
+      "parentUuid": "9f499859_560c355a",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     },
     {
       "key": {
