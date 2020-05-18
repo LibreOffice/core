@@ -224,7 +224,6 @@ public:
     inline const SvxEscapementItem      &GetEscapement( bool = true ) const;
     inline const SvxCaseMapItem         &GetCaseMap( bool = true ) const;
     inline const SvxNoHyphenItem      &GetNoHyphenHere( bool = true ) const;
-    inline const SvxBlinkItem         &GetBlink( bool = true ) const;
     inline const SvxFontItem          &GetCJKFont( bool = true ) const;
     inline const SvxFontHeightItem    &GetCJKSize( bool = true ) const;
     inline const SvxLanguageItem      &GetCJKLanguage( bool = true ) const;
