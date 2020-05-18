@@ -172,6 +172,11 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
             OUString& rAlign = m_rAligns.second;
             if (rAlign == "top")
                 m_nOrient = text::VertOrientation::TOP;
+            else if (rAlign == "bottom" && text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+            {
+                m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.second.toInt32());
+                m_rPositionOffsets.second.clear();
+            }
             else if (rAlign == "bottom")
                 m_nOrient = text::VertOrientation::BOTTOM;
             else if (rAlign == "center")

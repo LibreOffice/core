@@ -1280,6 +1280,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112287, "tdf112287.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr","vAnchor","margin");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf133071, "tdf133071.docx")
+{
+    xmlDocUniquePtr pXmlFooter = parseExport("word/footer1.xml");
+    if (!pXmlFooter)
+        return;
+
+    assertXPath(pXmlFooter, "/w:ftr/w:sdt/w:sdtContent/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing"
+    "/wp:anchor/wp:positionV","relativeFrom","bottomMargin");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
