@@ -841,7 +841,7 @@ static SystemWindow *ImplGetLastSystemWindow( vcl::Window *pWin )
 
 void Window::SetParent( vcl::Window* pNewParent )
 {
-    SAL_INFO_IF( !pNewParent, "vcl", "Window::SetParent(): pParent == NULL" );
+    SAL_WARN_IF( !pNewParent, "vcl", "Window::SetParent(): pParent == NULL" );
     SAL_WARN_IF( pNewParent == this, "vcl", "someone tried to reparent a window to itself" );
 
     if( !pNewParent || pNewParent == this )
