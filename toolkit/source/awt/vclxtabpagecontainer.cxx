@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <sal/log.hxx>
+#include <toolkit/helper/property.hxx>
 #include <vcl/image.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -207,6 +208,28 @@ void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::Contai
 }
 void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::ContainerEvent& /*Event*/ )
 {
+}
+
+void VCLXTabPageContainer::propertiesChange(const::css::uno::Sequence<PropertyChangeEvent>& rEvents)
+{
+    SolarMutexGuard aGuard;
+    VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
+    if (!pTabCtrl)
+        return;
+
+    for (const beans::PropertyChangeEvent& rEvent : rEvents) {
+        // handle property changes for tab pages
+        Reference< css::awt::tab::XTabPageModel > xTabPageModel(rEvent.Source, uno::UNO_QUERY);
+        if (!xTabPageModel.is())
+            continue;
+
+        const sal_Int16 nId = xTabPageModel->getTabPageID();
+        if (rEvent.PropertyName == GetPropertyName(BASEPROPERTY_ENABLED)) {
+            pTabCtrl->SetPageEnabled(nId, xTabPageModel->getEnabled());
+        } else if (rEvent.PropertyName == GetPropertyName(BASEPROPERTY_TITLE)) {
+            pTabCtrl->SetPageText(nId, xTabPageModel->getTitle());
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

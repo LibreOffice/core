@@ -21,6 +21,7 @@
 #define INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
 
 #include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -29,6 +30,7 @@
 
 typedef cppu::ImplInheritanceHelper< VCLXContainer,
                                      css::awt::tab::XTabPageContainer,
+                                     css::beans::XPropertiesChangeListener,
                                      css::container::XContainerListener
                                    > VCLXTabPageContainer_Base;
 class VCLXTabPageContainer final : public VCLXTabPageContainer_Base
@@ -56,6 +58,9 @@ public:
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
     virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
     virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
+
+    // css::beans::XPropertiesChangeListener
+    virtual void SAL_CALL propertiesChange( const ::css::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
