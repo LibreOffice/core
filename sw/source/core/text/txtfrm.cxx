@@ -751,7 +751,6 @@ void SwTextFrame::Init()
     if( !IsLocked() )
     {
         ClearPara();
-        ResetBlinkPor();
         SetHasRotatedPortions(false);
         // set flags directly to save a ResetPreps call,
         // and thereby an unnecessary GetPara call

@@ -518,7 +518,6 @@ public:
     inline void SetRepaint() const;
     inline void ResetRepaint() const;
     bool HasRepaint() const { return mbRepaint; }
-    inline void ResetBlinkPor() const;
     void SetHasRotatedPortions(bool bHasRotatedPortions);
     bool GetHasRotatedPortions() const { return mbHasRotatedPortions; }
     void SetAnimation() const
@@ -868,11 +867,6 @@ inline void SwTextFrame::SetRepaint() const
 inline void SwTextFrame::ResetRepaint() const
 {
     const_cast<SwTextFrame*>(this)->mbRepaint = false;
-}
-
-inline void SwTextFrame::ResetBlinkPor() const
-{
-    const_cast<SwTextFrame*>(this)->mbHasBlinkPortions = false;
 }
 
 class TemporarySwap {
