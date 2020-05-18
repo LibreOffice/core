@@ -1,9 +1,9 @@
 diff --git a/src/core/SkBlitter_Sprite.cpp b/src/core/SkBlitter_Sprite.cpp
-index 6ae7893681..3878eb3b81 100644
+index df7d9a7025..7f94c2a660 100644
 --- a/src/core/SkBlitter_Sprite.cpp
 +++ b/src/core/SkBlitter_Sprite.cpp
-@@ -179,7 +179,7 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
-     SkASSERT(alloc != nullptr);
+@@ -191,7 +191,7 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
+     }
  
      // TODO: in principle SkRasterPipelineSpriteBlitter could be made to handle this.
 -    if (source.alphaType() == kUnpremul_SkAlphaType) {
