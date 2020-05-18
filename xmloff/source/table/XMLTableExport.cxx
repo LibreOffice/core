@@ -613,7 +613,7 @@ void XMLTableExport::exportTableTemplates()
             else
             {
                 // checks if any of the extended version of ODF are set
-                if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
+                if (eVersion == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
                 {
                     // tdf#106780 historically this wrong attribute was used
                     // for the name; write it if extended because LO < 5.3 can
