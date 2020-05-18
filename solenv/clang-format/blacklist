@@ -3642,7 +3642,6 @@ drawinglayer/inc/processor3d/zbufferprocessor3d.hxx
 drawinglayer/inc/texture/texture.hxx
 drawinglayer/inc/texture/texture3d.hxx
 drawinglayer/inc/wmfemfhelper.hxx
-drawinglayer/qa/unit/border.cxx
 drawinglayer/source/animation/animationtiming.cxx
 drawinglayer/source/attribute/fillgradientattribute.cxx
 drawinglayer/source/attribute/fillgraphicattribute.cxx
@@ -4980,7 +4979,6 @@ framework/inc/xml/statusbardocumenthandler.hxx
 framework/inc/xml/toolboxconfigurationdefines.hxx
 framework/inc/xml/toolboxdocumenthandler.hxx
 framework/inc/xml/xmlnamespaces.hxx
-framework/qa/cppunit/dispatchtest.cxx
 framework/source/accelerators/acceleratorconfiguration.cxx
 framework/source/accelerators/documentacceleratorconfiguration.cxx
 framework/source/accelerators/globalacceleratorconfiguration.cxx
@@ -5658,7 +5656,6 @@ include/comphelper/propertysequence.hxx
 include/comphelper/propertysethelper.hxx
 include/comphelper/propertysetinfo.hxx
 include/comphelper/propertystatecontainer.hxx
-include/comphelper/propertyvalue.hxx
 include/comphelper/propmultiplex.hxx
 include/comphelper/propstate.hxx
 include/comphelper/proxyaggregation.hxx
@@ -12784,8 +12781,6 @@ starmath/source/unomodel.cxx
 starmath/source/utility.cxx
 starmath/source/view.cxx
 starmath/source/visitors.cxx
-starmath/source/wordexportbase.cxx
-starmath/source/wordexportbase.hxx
 stoc/source/corereflection/base.hxx
 stoc/source/corereflection/crarray.cxx
 stoc/source/corereflection/crbase.cxx
