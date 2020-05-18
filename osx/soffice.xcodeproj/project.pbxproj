@@ -469,6 +469,39 @@
 		BEBF3EAB246AD75500415E87 /* filcmd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filcmd.cxx; path = ../ucb/source/ucp/file/filcmd.cxx; sourceTree = "<group>"; };
 		BEBF3EAC246AD75500415E87 /* filinl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filinl.hxx; path = ../ucb/source/ucp/file/filinl.hxx; sourceTree = "<group>"; };
 		BEBF3EAD246AD75600415E87 /* filinpstr.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = filinpstr.hxx; path = ../ucb/source/ucp/file/filinpstr.hxx; sourceTree = "<group>"; };
+		BEBF3EB22472A92D00415E87 /* dp_gui_dependencydialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_dependencydialog.cxx; path = ../desktop/source/deployment/gui/dp_gui_dependencydialog.cxx; sourceTree = "<group>"; };
+		BEBF3EB32472A92D00415E87 /* dp_gui_extensioncmdqueue.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_extensioncmdqueue.hxx; path = ../desktop/source/deployment/gui/dp_gui_extensioncmdqueue.hxx; sourceTree = "<group>"; };
+		BEBF3EB42472A92D00415E87 /* dp_gui_theextmgr.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_theextmgr.hxx; path = ../desktop/source/deployment/gui/dp_gui_theextmgr.hxx; sourceTree = "<group>"; };
+		BEBF3EB52472A92D00415E87 /* license_dialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = license_dialog.hxx; path = ../desktop/source/deployment/gui/license_dialog.hxx; sourceTree = "<group>"; };
+		BEBF3EB62472A92D00415E87 /* dp_gui_dependencydialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_dependencydialog.hxx; path = ../desktop/source/deployment/gui/dp_gui_dependencydialog.hxx; sourceTree = "<group>"; };
+		BEBF3EB72472A92D00415E87 /* dp_gui_updatedialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_updatedialog.cxx; path = ../desktop/source/deployment/gui/dp_gui_updatedialog.cxx; sourceTree = "<group>"; };
+		BEBF3EB82472A92D00415E87 /* license_dialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = license_dialog.cxx; path = ../desktop/source/deployment/gui/license_dialog.cxx; sourceTree = "<group>"; };
+		BEBF3EB92472A92D00415E87 /* dp_gui_dialog2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_dialog2.cxx; path = ../desktop/source/deployment/gui/dp_gui_dialog2.cxx; sourceTree = "<group>"; };
+		BEBF3EBA2472A92D00415E87 /* dp_gui_updateinstalldialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_updateinstalldialog.cxx; path = ../desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx; sourceTree = "<group>"; };
+		BEBF3EBB2472A92D00415E87 /* dp_gui_theextmgr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_theextmgr.cxx; path = ../desktop/source/deployment/gui/dp_gui_theextmgr.cxx; sourceTree = "<group>"; };
+		BEBF3EBC2472A92D00415E87 /* dp_gui_service.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_service.cxx; path = ../desktop/source/deployment/gui/dp_gui_service.cxx; sourceTree = "<group>"; };
+		BEBF3EBD2472A92D00415E87 /* dp_gui_updatedata.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_updatedata.hxx; path = ../desktop/source/deployment/gui/dp_gui_updatedata.hxx; sourceTree = "<group>"; };
+		BEBF3EBE2472A92D00415E87 /* dp_gui_extlistbox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_extlistbox.cxx; path = ../desktop/source/deployment/gui/dp_gui_extlistbox.cxx; sourceTree = "<group>"; };
+		BEBF3EBF2472A92D00415E87 /* dp_gui_extlistbox.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_extlistbox.hxx; path = ../desktop/source/deployment/gui/dp_gui_extlistbox.hxx; sourceTree = "<group>"; };
+		BEBF3EC02472A92D00415E87 /* dp_gui_extensioncmdqueue.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_gui_extensioncmdqueue.cxx; path = ../desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx; sourceTree = "<group>"; };
+		BEBF3EC12472A92D00415E87 /* dp_gui_updateinstalldialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_updateinstalldialog.hxx; path = ../desktop/source/deployment/gui/dp_gui_updateinstalldialog.hxx; sourceTree = "<group>"; };
+		BEBF3EC22472A92D00415E87 /* dp_gui_updatedialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_updatedialog.hxx; path = ../desktop/source/deployment/gui/dp_gui_updatedialog.hxx; sourceTree = "<group>"; };
+		BEBF3EC32472A92D00415E87 /* dp_gui_dialog2.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_gui_dialog2.hxx; path = ../desktop/source/deployment/gui/dp_gui_dialog2.hxx; sourceTree = "<group>"; };
+		BEBF3EC42472A92D00415E87 /* dp_gui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = dp_gui.h; path = ../desktop/source/deployment/gui/dp_gui.h; sourceTree = "<group>"; };
+		BEBF3EC72472AC5900415E87 /* dp_extbackenddb.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dp_extbackenddb.hxx; path = ../desktop/source/deployment/registry/package/dp_extbackenddb.hxx; sourceTree = "<group>"; };
+		BEBF3EC82472AC5900415E87 /* dp_extbackenddb.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_extbackenddb.cxx; path = ../desktop/source/deployment/registry/package/dp_extbackenddb.cxx; sourceTree = "<group>"; };
+		BEBF3EC92472AC5900415E87 /* dp_package.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_package.cxx; path = ../desktop/source/deployment/registry/package/dp_package.cxx; sourceTree = "<group>"; };
+		BEBF3ECB2472B21600415E87 /* dp_interact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_interact.cxx; path = ../desktop/source/deployment/misc/dp_interact.cxx; sourceTree = "<group>"; };
+		BEBF3ECC2472B21600415E87 /* dp_platform.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_platform.cxx; path = ../desktop/source/deployment/misc/dp_platform.cxx; sourceTree = "<group>"; };
+		BEBF3ECD2472B21600415E87 /* dp_identifier.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_identifier.cxx; path = ../desktop/source/deployment/misc/dp_identifier.cxx; sourceTree = "<group>"; };
+		BEBF3ECE2472B21600415E87 /* dp_descriptioninfoset.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_descriptioninfoset.cxx; path = ../desktop/source/deployment/misc/dp_descriptioninfoset.cxx; sourceTree = "<group>"; };
+		BEBF3ECF2472B21600415E87 /* dp_update.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_update.cxx; path = ../desktop/source/deployment/misc/dp_update.cxx; sourceTree = "<group>"; };
+		BEBF3ED02472B21600415E87 /* lockfile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lockfile.cxx; path = ../desktop/source/deployment/misc/lockfile.cxx; sourceTree = "<group>"; };
+		BEBF3ED12472B21600415E87 /* dp_resource.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_resource.cxx; path = ../desktop/source/deployment/misc/dp_resource.cxx; sourceTree = "<group>"; };
+		BEBF3ED22472B21600415E87 /* dp_version.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_version.cxx; path = ../desktop/source/deployment/misc/dp_version.cxx; sourceTree = "<group>"; };
+		BEBF3ED32472B21600415E87 /* dp_misc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_misc.cxx; path = ../desktop/source/deployment/misc/dp_misc.cxx; sourceTree = "<group>"; };
+		BEBF3ED42472B21600415E87 /* dp_dependencies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_dependencies.cxx; path = ../desktop/source/deployment/misc/dp_dependencies.cxx; sourceTree = "<group>"; };
+		BEBF3ED52472B21600415E87 /* dp_ucb.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_ucb.cxx; path = ../desktop/source/deployment/misc/dp_ucb.cxx; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
 		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
 		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
@@ -1176,7 +1209,10 @@
 		BEBF3E7F246ACF9B00415E87 /* deployment */ = {
 			isa = PBXGroup;
 			children = (
+				BEBF3EB12472A90900415E87 /* gui */,
 				BEBF3E80246ACFA700415E87 /* manager */,
+				BEBF3ECA2472B1EE00415E87 /* misc */,
+				BEBF3EC52472AC2D00415E87 /* registry */,
 			);
 			name = deployment;
 			sourceTree = "<group>";
@@ -1251,6 +1287,68 @@
 				BEBF3EA1246AD75500415E87 /* prov.hxx */,
 			);
 			name = file;
+			sourceTree = "<group>";
+		};
+		BEBF3EB12472A90900415E87 /* gui */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3EB22472A92D00415E87 /* dp_gui_dependencydialog.cxx */,
+				BEBF3EB62472A92D00415E87 /* dp_gui_dependencydialog.hxx */,
+				BEBF3EB92472A92D00415E87 /* dp_gui_dialog2.cxx */,
+				BEBF3EC32472A92D00415E87 /* dp_gui_dialog2.hxx */,
+				BEBF3EC02472A92D00415E87 /* dp_gui_extensioncmdqueue.cxx */,
+				BEBF3EB32472A92D00415E87 /* dp_gui_extensioncmdqueue.hxx */,
+				BEBF3EBE2472A92D00415E87 /* dp_gui_extlistbox.cxx */,
+				BEBF3EBF2472A92D00415E87 /* dp_gui_extlistbox.hxx */,
+				BEBF3EBC2472A92D00415E87 /* dp_gui_service.cxx */,
+				BEBF3EBB2472A92D00415E87 /* dp_gui_theextmgr.cxx */,
+				BEBF3EB42472A92D00415E87 /* dp_gui_theextmgr.hxx */,
+				BEBF3EBD2472A92D00415E87 /* dp_gui_updatedata.hxx */,
+				BEBF3EB72472A92D00415E87 /* dp_gui_updatedialog.cxx */,
+				BEBF3EC22472A92D00415E87 /* dp_gui_updatedialog.hxx */,
+				BEBF3EBA2472A92D00415E87 /* dp_gui_updateinstalldialog.cxx */,
+				BEBF3EC12472A92D00415E87 /* dp_gui_updateinstalldialog.hxx */,
+				BEBF3EC42472A92D00415E87 /* dp_gui.h */,
+				BEBF3EB82472A92D00415E87 /* license_dialog.cxx */,
+				BEBF3EB52472A92D00415E87 /* license_dialog.hxx */,
+			);
+			name = gui;
+			sourceTree = "<group>";
+		};
+		BEBF3EC52472AC2D00415E87 /* registry */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3EC62472AC3A00415E87 /* package */,
+			);
+			name = registry;
+			sourceTree = "<group>";
+		};
+		BEBF3EC62472AC3A00415E87 /* package */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3EC82472AC5900415E87 /* dp_extbackenddb.cxx */,
+				BEBF3EC72472AC5900415E87 /* dp_extbackenddb.hxx */,
+				BEBF3EC92472AC5900415E87 /* dp_package.cxx */,
+			);
+			name = package;
+			sourceTree = "<group>";
+		};
+		BEBF3ECA2472B1EE00415E87 /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3ED42472B21600415E87 /* dp_dependencies.cxx */,
+				BEBF3ECE2472B21600415E87 /* dp_descriptioninfoset.cxx */,
+				BEBF3ECD2472B21600415E87 /* dp_identifier.cxx */,
+				BEBF3ECB2472B21600415E87 /* dp_interact.cxx */,
+				BEBF3ED32472B21600415E87 /* dp_misc.cxx */,
+				BEBF3ECC2472B21600415E87 /* dp_platform.cxx */,
+				BEBF3ED12472B21600415E87 /* dp_resource.cxx */,
+				BEBF3ED52472B21600415E87 /* dp_ucb.cxx */,
+				BEBF3ECF2472B21600415E87 /* dp_update.cxx */,
+				BEBF3ED22472B21600415E87 /* dp_version.cxx */,
+				BEBF3ED02472B21600415E87 /* lockfile.cxx */,
+			);
+			name = misc;
 			sourceTree = "<group>";
 		};
 		BEC3D9171710B0390030AD56 = {
