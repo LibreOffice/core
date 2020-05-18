@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/documentconstants.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -171,8 +172,14 @@ void XMLTransGradientStyleImport::importXML(
             break;
         case XML_TOK_GRADIENT_ANGLE:
             {
+                auto const cmp12(rImport.GetODFVersion().compareTo(ODFVER_012_TEXT));
                 bool const bSuccess =
-                    ::sax::Converter::convertAngle(aGradient.Angle, rStrValue);
+                    ::sax::Converter::convertAngle(aGradient.Angle, rStrValue,
+                        // tdf#89475 try to detect borked OOo angles
+                        (cmp12 < 0) || (cmp12 == 0
+                            && (rImport.isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_7x)
+                                // also for AOO 4.x, assume there won't ever be a 4.2
+                                || rImport.getGeneratorVersion() == SvXMLImport::AOO_4x)));
                 SAL_INFO_IF(!bSuccess, "xmloff.style", "failed to import draw:angle");
             }
             break;
@@ -265,7 +272,7 @@ void XMLTransGradientStyleExport::exportXML(
                 // Angle
                 if( aGradient.Style != awt::GradientStyle_RADIAL )
                 {
-                    ::sax::Converter::convertAngle(aOut, aGradient.Angle);
+                    ::sax::Converter::convertAngle(aOut, aGradient.Angle, rExport.getSaneDefaultVersion());
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
                 }
