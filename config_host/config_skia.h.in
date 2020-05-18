@@ -31,6 +31,9 @@ are the same.
 
 #define SK_VULKAN 1
 
+// Memory allocator for Vulkan.
+#define SK_USE_VMA 1
+
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 

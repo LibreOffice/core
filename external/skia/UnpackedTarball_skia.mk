@@ -35,6 +35,7 @@ skia_patches := \
     extend-rgb-to-rgba.patch.0 \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
+    fix-windows-dwrite.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

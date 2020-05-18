@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-06 12:59:34 using:
+ Generated on 2020-05-18 11:43:55 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <cctype>
 #include <cfloat>
 #include <chrono>
+#include <cinttypes>
 #include <climits>
 #include <cmath>
 #include <cstddef>
@@ -258,8 +259,8 @@
 #include <include/utils/SkBase64.h>
 #include <include/utils/SkCamera.h>
 #include <include/utils/SkCanvasStateUtils.h>
+#include <include/utils/SkCustomTypeface.h>
 #include <include/utils/SkEventTracer.h>
-#include <include/utils/SkFrontBufferedStream.h>
 #include <include/utils/SkInterpolator.h>
 #include <include/utils/SkNWayCanvas.h>
 #include <include/utils/SkNoDrawCanvas.h>
@@ -315,7 +316,6 @@
 #include <src/core/SkBlurPriv.h>
 #include <src/core/SkBuffer.h>
 #include <src/core/SkCachedData.h>
-#include <src/core/SkCanvasMatrix.h>
 #include <src/core/SkCanvasPriv.h>
 #include <src/core/SkClipOpPriv.h>
 #include <src/core/SkClipStack.h>
@@ -343,7 +343,6 @@
 #include <src/core/SkEffectPriv.h>
 #include <src/core/SkEndian.h>
 #include <src/core/SkEnumerate.h>
-#include <src/core/SkExchange.h>
 #include <src/core/SkFDot6.h>
 #include <src/core/SkFontDescriptor.h>
 #include <src/core/SkFontPriv.h>
@@ -369,6 +368,7 @@
 #include <src/core/SkLocalMatrixImageFilter.h>
 #include <src/core/SkMD5.h>
 #include <src/core/SkMSAN.h>
+#include <src/core/SkMarkerStack.h>
 #include <src/core/SkMask.h>
 #include <src/core/SkMaskBlurFilter.h>
 #include <src/core/SkMaskCache.h>
@@ -377,6 +377,7 @@
 #include <src/core/SkMathPriv.h>
 #include <src/core/SkMatrixImageFilter.h>
 #include <src/core/SkMatrixPriv.h>
+#include <src/core/SkMatrixProvider.h>
 #include <src/core/SkMatrixUtils.h>
 #include <src/core/SkMessageBus.h>
 #include <src/core/SkMiniRecorder.h>
@@ -509,6 +510,7 @@
 #include <src/gpu/GrDynamicAtlas.h>
 #include <src/gpu/GrEagerVertexAllocator.h>
 #include <src/gpu/GrFPArgs.h>
+#include <src/gpu/GrFinishCallbacks.h>
 #include <src/gpu/GrFixedClip.h>
 #include <src/gpu/GrFragmentProcessor.h>
 #include <src/gpu/GrGeometryProcessor.h>
@@ -558,6 +560,8 @@
 #include <src/gpu/GrResourceCache.h>
 #include <src/gpu/GrResourceProvider.h>
 #include <src/gpu/GrResourceProviderPriv.h>
+#include <src/gpu/GrSPIRVUniformHandler.h>
+#include <src/gpu/GrSPIRVVaryingHandler.h>
 #include <src/gpu/GrSWMaskHelper.h>
 #include <src/gpu/GrSamplePatternDictionary.h>
 #include <src/gpu/GrSamplerState.h>
@@ -567,8 +571,10 @@
 #include <src/gpu/GrShaderVar.h>
 #include <src/gpu/GrSimpleMesh.h>
 #include <src/gpu/GrSoftwarePathRenderer.h>
+#include <src/gpu/GrStagingBuffer.h>
 #include <src/gpu/GrStencilAttachment.h>
 #include <src/gpu/GrStencilClip.h>
+#include <src/gpu/GrStencilMaskHelper.h>
 #include <src/gpu/GrStencilSettings.h>
 #include <src/gpu/GrStyle.h>
 #include <src/gpu/GrSurface.h>
@@ -640,7 +646,6 @@
 #include <src/gpu/effects/GrRRectEffect.h>
 #include <src/gpu/effects/GrShadowGeoProc.h>
 #include <src/gpu/effects/GrSkSLFP.h>
-#include <src/gpu/effects/GrTextureDomain.h>
 #include <src/gpu/effects/GrTextureEffect.h>
 #include <src/gpu/effects/GrXfermodeFragmentProcessor.h>
 #include <src/gpu/effects/GrYUVtoRGBEffect.h>
@@ -659,6 +664,7 @@
 #include <src/gpu/effects/generated/GrHSLToRGBFilterEffect.h>
 #include <src/gpu/effects/generated/GrLumaColorFilterEffect.h>
 #include <src/gpu/effects/generated/GrMagnifierEffect.h>
+#include <src/gpu/effects/generated/GrMatrixEffect.h>
 #include <src/gpu/effects/generated/GrMixerEffect.h>
 #include <src/gpu/effects/generated/GrOverrideInputFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrPremulInputFragmentProcessor.h>
@@ -671,6 +677,7 @@
 #include <src/gpu/geometry/GrQuadUtils.h>
 #include <src/gpu/geometry/GrRect.h>
 #include <src/gpu/geometry/GrShape.h>
+#include <src/gpu/geometry/GrStyledShape.h>
 #include <src/gpu/gl/GrGLGpu.h>
 #include <src/gpu/gl/GrGLTexture.h>
 #include <src/gpu/gl/GrGLUtil.h>
@@ -740,7 +747,8 @@
 #include <src/gpu/ops/GrTriangulatingPathRenderer.h>
 #include <src/gpu/tessellate/GrDrawAtlasPathOp.h>
 #include <src/gpu/tessellate/GrFillPathShader.h>
-#include <src/gpu/tessellate/GrPathParser.h>
+#include <src/gpu/tessellate/GrMiddleOutPolygonTriangulator.h>
+#include <src/gpu/tessellate/GrMidpointContourParser.h>
 #include <src/gpu/tessellate/GrStencilPathShader.h>
 #include <src/gpu/tessellate/GrTessellatePathOp.h>
 #include <src/gpu/tessellate/GrTessellationPathRenderer.h>
@@ -764,9 +772,9 @@
 #include <src/gpu/vk/GrVkImage.h>
 #include <src/gpu/vk/GrVkImageLayout.h>
 #include <src/gpu/vk/GrVkImageView.h>
-#include <src/gpu/vk/GrVkIndexBuffer.h>
 #include <src/gpu/vk/GrVkInterface.h>
 #include <src/gpu/vk/GrVkMemory.h>
+#include <src/gpu/vk/GrVkMeshBuffer.h>
 #include <src/gpu/vk/GrVkOpsRenderPass.h>
 #include <src/gpu/vk/GrVkPipeline.h>
 #include <src/gpu/vk/GrVkPipelineState.h>
@@ -787,7 +795,6 @@
 #include <src/gpu/vk/GrVkUniformHandler.h>
 #include <src/gpu/vk/GrVkUtil.h>
 #include <src/gpu/vk/GrVkVaryingHandler.h>
-#include <src/gpu/vk/GrVkVertexBuffer.h>
 #include <src/image/SkImage_Base.h>
 #include <src/image/SkImage_Gpu.h>
 #include <src/image/SkImage_GpuBase.h>
@@ -856,7 +863,6 @@
 #include <src/sksl/SkSLGLSLCodeGenerator.h>
 #include <src/sksl/SkSLHCodeGenerator.h>
 #include <src/sksl/SkSLIRGenerator.h>
-#include <src/sksl/SkSLInterpreter.h>
 #include <src/sksl/SkSLLexer.h>
 #include <src/sksl/SkSLMetalCodeGenerator.h>
 #include <src/sksl/SkSLOutputStream.h>
@@ -864,6 +870,7 @@
 #include <src/sksl/SkSLPipelineStageCodeGenerator.h>
 #include <src/sksl/SkSLSPIRVCodeGenerator.h>
 #include <src/sksl/SkSLSPIRVtoHLSL.h>
+#include <src/sksl/SkSLSampleMatrix.h>
 #include <src/sksl/SkSLSectionAndParameterHelper.h>
 #include <src/sksl/SkSLString.h>
 #include <src/sksl/SkSLStringStream.h>

@@ -1,0 +1,20 @@
+diff --git a/src/ports/SkFontMgr_win_dw.cpp b/src/ports/SkFontMgr_win_dw.cpp
+index 6a4748f91c..50086a7780 100644
+--- a/src/ports/SkFontMgr_win_dw.cpp
++++ b/src/ports/SkFontMgr_win_dw.cpp
+@@ -361,6 +361,7 @@ static bool FindByDWriteFont(SkTypeface* cached, void* ctx) {
+     DWriteFontTypeface* cshFace = reinterpret_cast<DWriteFontTypeface*>(cached);
+     ProtoDWriteTypeface* ctxFace = reinterpret_cast<ProtoDWriteTypeface*>(ctx);
+ 
++#if defined(NTDDI_WIN10_RS3) && NTDDI_VERSION >= NTDDI_WIN10_RS3
+     // IDWriteFontFace5 introduced both Equals and HasVariations
+     SkTScopedComPtr<IDWriteFontFace5> cshFontFace5;
+     SkTScopedComPtr<IDWriteFontFace5> ctxFontFace5;
+@@ -369,6 +370,7 @@ static bool FindByDWriteFont(SkTypeface* cached, void* ctx) {
+     if (cshFontFace5 && ctxFontFace5) {
+         return cshFontFace5->Equals(ctxFontFace5.get());
+     }
++#endif
+ 
+     bool same;
+ 
