@@ -181,6 +181,7 @@
                           </packing>
                         </child>
                         <child>
+                          
                           <object class="GtkSeparator" id="separator3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
