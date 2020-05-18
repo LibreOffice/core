@@ -208,6 +208,7 @@
                     <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkScrolledWindow">
+                        <property name="width_request">42</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
