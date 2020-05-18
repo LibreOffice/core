@@ -63,6 +63,7 @@ void setTextEngineText (ExtTextEngine&, OUString const&);
 class EditorWindow final : public vcl::Window, public SfxListener
 {
 friend class CodeCompleteWindow;
+friend class EditorWindowUIObject;
 private:
     class ChangesListener;
 
@@ -148,6 +149,8 @@ public:
     void            UpdateSyntaxHighlighting ();
 
     bool            GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class BreakPointWindow final : public vcl::Window
