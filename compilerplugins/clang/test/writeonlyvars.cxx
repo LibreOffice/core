@@ -16,6 +16,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+// expected-error@o3tl/runtimetooustring.hxx:34 {{read ok [loplugin:writeonlyvars]}}
+// expected-error@o3tl/runtimetooustring.hxx:33 {{read s [loplugin:writeonlyvars]}}
+// expected-error@o3tl/runtimetooustring.hxx:33 {{write s [loplugin:writeonlyvars]}}
+
 namespace Bar
 {
 void test()
