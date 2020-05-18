@@ -8,6 +8,8 @@
 
 module org.libreoffice.uno
 {
+    requires org.libreoffice.unoloader;
+
     exports com.sun.star.accessibility;
     exports com.sun.star.animations;
     exports com.sun.star.auth;
