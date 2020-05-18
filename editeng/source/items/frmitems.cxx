@@ -631,7 +631,7 @@ boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
 
     boost::property_tree::ptree aState;
 
-    MapUnit eTargetUnit = MapUnit::MapInch;
+    MapUnit eTargetUnit = MapUnit::MapCM;
 
     OUString sLeft = GetMetricText(GetLeft(),
                         MapUnit::MapTwip, eTargetUnit, nullptr);
@@ -645,7 +645,7 @@ boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
     aState.put("left", sLeft);
     aState.put("right", sRight);
     aState.put("firstline", sFirstline);
-    aState.put("unit", "inch");
+    aState.put("unit", "cm");
 
     aTree.push_back(std::make_pair("state", aState));
 
@@ -877,7 +877,7 @@ boost::property_tree::ptree SvxULSpaceItem::dumpAsJSON() const
 
     boost::property_tree::ptree aState;
 
-    MapUnit eTargetUnit = MapUnit::MapInch;
+    MapUnit eTargetUnit = MapUnit::MapCM;
 
     OUString sUpper = GetMetricText(GetUpper(),
                         MapUnit::MapTwip, eTargetUnit, nullptr);
@@ -887,7 +887,7 @@ boost::property_tree::ptree SvxULSpaceItem::dumpAsJSON() const
 
     aState.put("upper", sUpper);
     aState.put("lower", sLower);
-    aState.put("unit", "inch");
+    aState.put("unit", "cm");
 
     aTree.push_back(std::make_pair("state", aState));
 
