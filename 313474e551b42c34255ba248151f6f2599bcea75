@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa7c7a9b_7290c523",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-18T19:55:43Z",
+      "side": 1,
+      "message": "Before doing the lookup there should be a check that nDBNum does not have a value out of bounds of the arrays, i.e. be 0 \u003c nDBNum \u003c\u003d 4.",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ec8c9f9_50b5774b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-18T19:55:43Z",
+      "side": 1,
+      "message": "We already have the iterator here, why not use it instead of doing another lookup with at()?",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30aa1b77_84999c66",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-18T19:55:43Z",
+      "side": 1,
+      "message": "Before doing the lookup there should be a check that nNatNum does not have a value out of bounds of the arrays, i.e. be 0 \u003c nNatNum \u003c\u003d 9.",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8195321d_e5669d4f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-18T19:55:43Z",
+      "side": 1,
+      "message": "Same, we already have the iterator here, why not use it instead of doing another lookup with at()?",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
