@@ -654,6 +654,7 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
 
     osl_destroyThread(hThread);
 
+    oslProcessError nReturn = osl_Process_E_Unknown;
     if (Data.m_pProcImpl->m_pid != 0)
     {
         assert(hThread != nullptr);
@@ -663,13 +664,13 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
         if (Options & osl_Process_WAIT)
             osl_joinProcess(*pProcess);
 
-        return osl_Process_E_None;
+        nReturn = osl_Process_E_None;
     }
 
     osl_destroyCondition(Data.m_pProcImpl->m_terminated);
     free(Data.m_pProcImpl);
 
-    return osl_Process_E_Unknown;
+    return nReturn;
 }
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
