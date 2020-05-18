@@ -18,7 +18,6 @@
 
 namespace comphelper
 {
-
 /**
  * Creates a beans::PropertyValue easily, i.e. you can write:
  *
@@ -26,14 +25,13 @@ namespace comphelper
  *
  * instead of writing 3 extra lines to set the name and value of the beans::PropertyValue.
  */
-template<typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
+template <typename T> css::beans::PropertyValue makePropertyValue(const OUString& rName, T&& rValue)
 {
     css::beans::PropertyValue aValue;
     aValue.Name = rName;
     aValue.Value = css::uno::toAny(std::forward<T>(rValue));
     return aValue;
 }
-
 }
 
 #endif // INCLUDED_COMPHELPER_PROPERTYVALUE_HXX
