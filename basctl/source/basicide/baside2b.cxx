@@ -62,6 +62,8 @@
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
+#include "uiobject.hxx"
+
 
 namespace basctl
 {
@@ -239,6 +241,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     bDelayHighlight(true),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
+    set_id("EditorWindow");
     SetBackground(Wallpaper(rModulWindow.GetLayout().GetSyntaxBackgroundColor()));
     SetPointer( PointerStyle::Text );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
@@ -1341,6 +1344,12 @@ void EditorWindow::ForceSyntaxTimeout()
     aSyntaxIdle.Stop();
     aSyntaxIdle.Invoke();
 }
+
+FactoryFunction EditorWindow::GetUITestFactory() const
+{
+    return EditorWindowUIObject::create;
+}
+
 
 // BreakPointWindow
 
