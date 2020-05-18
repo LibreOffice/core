@@ -56,6 +56,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
 				$(gb_JavaClassSet_JAVACDEBUG) \
 				-classpath "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
+				--module-path "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 				$(if $(T_MODULENAME),--patch-module $(T_MODULENAME)="$(subst $(WHITESPACE),$(gb_CLASSPATHSEP),$(strip $(dir $(PACKAGEDIRS))))") \
 				-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 				@$$RESPONSEFILE &&) \
