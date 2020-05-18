@@ -528,7 +528,12 @@ namespace
 IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 {
     CachePreview(mnPreviewProgress++, nullptr);
-    if (mnPreviewProgress < mpFontList->size())
+    // tdf#132536 limit to ~25 pre-rendered for now. The font caches look
+    // b0rked, the massive charmaps are ~never swapped out, and don't count
+    // towards the size of a font in the font cache and if the freetype font
+    // cache size is set experimentally very low then we crash, so there's an
+    // awful lot to consider there.
+    if (mnPreviewProgress < std::min<size_t>(25, mpFontList->size()))
         maUpdateIdle.Start();
 }
 
