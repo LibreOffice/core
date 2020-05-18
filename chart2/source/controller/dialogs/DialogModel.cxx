@@ -140,17 +140,17 @@ struct lcl_DataSeriesContainerAppend
         {
             if( xVal.is())
             {
-                Sequence< Reference< XDataSeries > > aSeq( xVal->getDataSeries());
+                const Sequence< Reference< XDataSeries > > aSeq( xVal->getDataSeries());
                 OUString aRole( "values-y" );
                 Reference< XChartType > xCT( xVal, uno::UNO_QUERY );
                 if( xCT.is())
                     aRole = xCT->getRoleOfSequenceForSeriesLabel();
-                for( sal_Int32 nI = 0; nI < aSeq.getLength(); ++ nI )
+                for( Reference< XDataSeries > const & dataSeries : aSeq )
                 {
                     m_rDestCnt->push_back(
                         ::chart::DialogModel::tSeriesWithChartTypeByName(
-                            ::chart::DataSeriesHelper::getDataSeriesLabel( aSeq[nI], aRole ),
-                            std::make_pair( aSeq[nI], xCT )));
+                            ::chart::DataSeriesHelper::getDataSeriesLabel( dataSeries, aRole ),
+                            std::make_pair( dataSeries, xCT )));
                 }
             }
         }
@@ -311,16 +311,15 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES));
             const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
             const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
-            sal_Int32 nI = 0;
 
-            for(nI=0; nI<aRoles.getLength(); ++nI)
+            for(OUString const & role : aRoles)
             {
-                if( aRoles[nI] == lcl_aLabelRole )
+                if( role == lcl_aLabelRole )
                     continue;
                 Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence() );
-                lcl_SetSequenceRole( xSeq, aRoles[nI] );
+                lcl_SetSequenceRole( xSeq, role );
                 // assert that aRoleOfSeqForSeriesLabel is part of the mandatory roles
-                if( aRoles[nI] == aRoleOfSeqForSeriesLabel )
+                if( role == aRoleOfSeqForSeriesLabel )
                 {
                     Reference< data::XDataSequence > xLabel( ::chart::DataSourceHelper::createCachedDataSequence( aLabel ));
                     lcl_SetSequenceRole( xLabel, lcl_aLabelRole );
@@ -330,12 +329,12 @@ Reference< XDataSeries > lcl_CreateNewSeries(
                     aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
-            for(nI=0; nI<aOptRoles.getLength(); ++nI)
+            for(OUString const & role : aOptRoles)
             {
-                if( aOptRoles[nI] == lcl_aLabelRole )
+                if( role == lcl_aLabelRole )
                     continue;
                 Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence());
-                lcl_SetSequenceRole( xSeq, aOptRoles[nI] );
+                lcl_SetSequenceRole( xSeq, role );
                 aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
@@ -428,11 +427,11 @@ std::vector< Reference< XDataSeriesContainer > >
         {
             Reference< XCoordinateSystemContainer > xCooSysCnt(
                 xDiagram, uno::UNO_QUERY_THROW );
-            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+            const Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
                 xCooSysCnt->getCoordinateSystems());
-            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+            for( Reference< XCoordinateSystem > const & coords : aCooSysSeq )
             {
-                Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
+                Reference< XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 std::transform(
                     aChartTypeSeq.begin(), aChartTypeSeq.end(),
@@ -465,10 +464,10 @@ namespace {
 
 void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence<OUString>& rRoles)
 {
-    for(sal_Int32 i = 0, n = rRoles.getLength(); i < n; ++i)
+    for(OUString const & role : rRoles)
     {
-        if(rResult.find(rRoles[i]) == rResult.end())
-            rResult.emplace(rRoles[i], OUString());
+        if(rResult.find(role) == rResult.end())
+            rResult.emplace(role, OUString());
     }
 }
 

@@ -162,14 +162,13 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
 {
     Reference< beans::XPropertySet > xPropSet;
 
-    Sequence< Reference< chart2::XChartType > > aTypes(
+    const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-    for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
+    for( Reference< chart2::XChartType > const & xType : aTypes )
     {
-        Reference< chart2::XChartType > xType( aTypes[nN] );
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< beans::XPropertySet > xTypeProps( aTypes[nN], uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xTypeProps( xType, uno::UNO_QUERY );
             if(xTypeProps.is())
             {
                 xTypeProps->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
@@ -185,14 +184,13 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyN
 
     Reference< beans::XPropertySet > xPropSet;
 
-    Sequence< Reference< chart2::XChartType > > aTypes(
+    const Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-    for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
+    for( Reference< chart2::XChartType > const & xType : aTypes )
     {
-        Reference< chart2::XChartType > xType( aTypes[nN] );
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Reference< beans::XPropertySet > xTypeProps( aTypes[nN], uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xTypeProps( xType, uno::UNO_QUERY );
             if(xTypeProps.is())
             {
                 xTypeProps->getPropertyValue( m_aPropertySetName ) >>= xPropSet;
@@ -311,18 +309,16 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropert
 void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
 {
     const Sequence< beans::Property >& rPropSeq = *StaticUpDownBarWrapperPropertyArray::get();
-    for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
+    for(beans::Property const & prop : rPropSeq)
     {
-        OUString aPropertyName( rPropSeq[nN].Name );
-        setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( prop.Name );
     }
 }
 void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const uno::Sequence< OUString >& rNameSeq )
 {
-    for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
+    for(OUString const & s : rNameSeq)
     {
-        OUString aPropertyName( rNameSeq[nN] );
-        setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( s );
     }
 }
 uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )

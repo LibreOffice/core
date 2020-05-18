@@ -238,9 +238,9 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
         if( !m_bOrderingForElementSelector )
         {
             // Axis Titles. Note: These are interpreted of being top level
-            Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-            for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
-                lcl_addAxisTitle( aAxes[i], aTopLevelContainer, xModel );
+            const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+            for( Reference< XAxis > const & axis : aAxes )
+                lcl_addAxisTitle( axis, aTopLevelContainer, xModel );
 
             // Diagram
             aTopLevelContainer.push_back( aDiaOID );
@@ -319,9 +319,8 @@ void ImplObjectHierarchy::createAxesTree(
     aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
     // Grids
     Reference< frame::XModel > xChartModel = xChartDoc;
-    for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
+    for( Reference< XAxis > const & xAxis : std::as_const(aAxes) )
     {
-        Reference< XAxis > xAxis( aAxes[nA] );
         if(!xAxis.is())
             continue;
 
@@ -339,7 +338,7 @@ void ImplObjectHierarchy::createAxesTree(
                 rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel ) );
 
             // axis title
-            lcl_addAxisTitle( aAxes[nA], rContainer, xChartModel );
+            lcl_addAxisTitle( xAxis, rContainer, xChartModel );
         }
 
         Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );

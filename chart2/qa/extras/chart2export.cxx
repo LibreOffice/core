@@ -775,15 +775,15 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    const char* const testEmbeddedFileNames[] {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
-   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
    {
-       if (aGrabBag[i].Name == "OOXEmbeddings")
+       if (prop.Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
            uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
-           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
+           CPPUNIT_ASSERT(prop.Value >>= aEmbeddingsList); // PropertyValue of proper type
            sal_Int32 length = aEmbeddingsList.getLength();
            CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
            for(int j = 0; j < length; ++j)
@@ -1513,15 +1513,15 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
    const char* const testEmbeddedFileNames[] = {"word/embeddings/oleObject1.bin"};
-   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
    {
-       if (aGrabBag[i].Name == "OOXEmbeddings")
+       if (prop.Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
            uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
-           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
+           CPPUNIT_ASSERT(prop.Value >>= aEmbeddingsList); // PropertyValue of proper type
            sal_Int32 length = aEmbeddingsList.getLength();
            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);
            for(int j = 0; j < length; ++j)

@@ -107,12 +107,12 @@ bool lcl_SequenceOfSeriesIsShared(
         OUString aValuesRole( lcl_getRole( xValues ));
         OUString aValuesRep( xValues->getSourceRangeRepresentation());
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
-        for( sal_Int32 i=0; i<aLSeq.getLength(); ++i )
-            if (aLSeq[i].is() && DataSeriesHelper::getRole(aLSeq[i]) == aValuesRole)
+        const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
+        for( Reference< chart2::data::XLabeledDataSequence > const & labeledDataSeq : aLSeq )
+            if (labeledDataSeq.is() && DataSeriesHelper::getRole(labeledDataSeq) == aValuesRole)
             {
                 // getValues().is(), because lcl_getRole checked that already
-                bResult = (aValuesRep == aLSeq[i]->getValues()->getSourceRangeRepresentation());
+                bResult = (aValuesRep == labeledDataSeq->getValues()->getSourceRangeRepresentation());
                 // assumption: a role appears only once in a series
                 break;
             }
@@ -136,10 +136,10 @@ lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDa
         return aResult;
 
     Reference< chart2::data::XDataSource > xSource( rSeries[0], uno::UNO_QUERY );
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
-    for( sal_Int32 nIdx=0; nIdx<aLSeq.getLength(); ++nIdx )
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
+    for( Reference< chart2::data::XLabeledDataSequence >  const & labeledDataSeq : aLSeq )
     {
-        Reference< chart2::data::XDataSequence > xValues( aLSeq[nIdx]->getValues());
+        Reference< chart2::data::XDataSequence > xValues( labeledDataSeq->getValues());
         bool bShared = true;
         for( sal_Int32 nSeriesIdx=1; nSeriesIdx<rSeries.getLength(); ++nSeriesIdx )
         {
@@ -148,7 +148,7 @@ lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDa
                 break;
         }
         if( bShared )
-            aResult.push_back( aLSeq[nIdx] );
+            aResult.push_back( labeledDataSeq );
     }
 
     return aResult;
@@ -480,13 +480,13 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
     // Check if the sequences to be deleted are still referenced by any of
     // the other data series.  If not, mark them for deletion.
     std::vector<sal_Int32> aSequenceIndexesToDelete;
-    Sequence<Reference<chart2::data::XLabeledDataSequence> > aSequencesOfDeleted = xSourceOfDeleted->getDataSequences();
-    for (sal_Int32 i = 0; i < aSequencesOfDeleted.getLength(); ++i)
+    const Sequence<Reference<chart2::data::XLabeledDataSequence> > aSequencesOfDeleted = xSourceOfDeleted->getDataSequences();
+    for (auto const & labeledDataSeq : aSequencesOfDeleted)
     {
         // if not used by the remaining series this sequence can be deleted
         if( std::none_of( aAllDataSeqs.begin(), aAllDataSeqs.end(),
-                         lcl_RepresentationsOfLSeqMatch( aSequencesOfDeleted[i] )) )
-            aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeleted[i] ) );
+                         lcl_RepresentationsOfLSeqMatch( labeledDataSeq )) )
+            aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( labeledDataSeq ) );
     }
 
     // delete unnecessary sequences of the internal data
@@ -809,12 +809,12 @@ void DataBrowserModel::updateFromModel()
     Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
     if( !xCooSysCnt.is())
         return;
-    Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
     {
-        Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, aCooSysSeq[nCooSysIdx], 0, 0 );
+        Reference< chart2::XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
+        const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, coords, 0, 0 );
 
         for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
         {
@@ -823,7 +823,7 @@ void DataBrowserModel::updateFromModel()
             {
                 OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
 
-                Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
+                const Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
                 lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
                 for (auto const& sharedSequence : aSharedSequences)
                 {
@@ -838,10 +838,10 @@ void DataBrowserModel::updateFromModel()
                     m_aColumns.push_back( aSharedSequence );
                     ++nHeaderStart;
                 }
-                for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
+                for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
                 {
                     tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
-                    Reference< chart2::XDataSeries > xSeries( aSeries[nSeriesIdx] );
+                    Reference< chart2::XDataSeries > xSeries( dataSeries );
                     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
                     if( xSource.is())
                     {
@@ -853,7 +853,7 @@ void DataBrowserModel::updateFromModel()
                         // @todo: dimension index 1 for y-values used here. This is just a guess
                         sal_Int32 nYAxisNumberFormatKey =
                             DataSeriesHelper::getNumberFormatKeyFromAxis(
-                                aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 1 );
+                                dataSeries, coords, 1 );
 
                         sal_Int32 nSeqIdx=0;
                         for( ; nSeqIdx<aLSeqs.getLength(); ++nSeqIdx )
@@ -874,7 +874,7 @@ void DataBrowserModel::updateFromModel()
                             {
                                 // no shared sequence
                                 m_aColumns.emplace_back(
-                                        aSeries[nSeriesIdx],
+                                        dataSeries,
                                         lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
                                         aLSeqs[nSeqIdx],
                                         NUMBER,
@@ -886,20 +886,20 @@ void DataBrowserModel::updateFromModel()
                         bool bSwapXAndYAxis = false;
                         try
                         {
-                            Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                            Reference< beans::XPropertySet > xProp( coords, uno::UNO_QUERY );
                             xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
                         }
                         catch( const beans::UnknownPropertyException & ) {}
 
                         // add ranges for error bars if present for a series
-                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx] ))
-                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
+                        if( StatisticsHelper::usesErrorBarRanges( dataSeries ))
+                            addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, true );
 
-                        if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ false ))
-                            addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
+                        if( StatisticsHelper::usesErrorBarRanges( dataSeries, /* bYError = */ false ))
+                            addErrorBarRanges( dataSeries, nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
 
                         m_aHeaders.emplace_back(
-                                aSeries[nSeriesIdx],
+                                dataSeries,
                                 aChartTypes[nCTIdx],
                                 bSwapXAndYAxis,
                                 nHeaderStart,

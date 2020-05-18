@@ -87,17 +87,17 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
     const Reference< chart2::data::XDataSource > & xDataSource )
 {
     Reference< chart2::data::XLabeledDataSequence > xResult;
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
 
-    for( sal_Int32 i=0; i<aSequences.getLength(); ++i )
+    for( auto const & labeledData : aSequences )
     {
-        OSL_ENSURE( aSequences[i].is(), "empty LabeledDataSequence" );
+        OSL_ENSURE( labeledData.is(), "empty LabeledDataSequence" );
         // no values are set but a label exists
-        if( aSequences[i].is() &&
-            ( ! aSequences[i]->getValues().is() &&
-              aSequences[i]->getLabel().is()))
+        if( labeledData.is() &&
+            ( ! labeledData->getValues().is() &&
+              labeledData->getLabel().is()))
         {
-            xResult.set( aSequences[i] );
+            xResult.set( labeledData );
             break;
         }
     }
@@ -115,23 +115,23 @@ void lcl_getCooSysAndChartTypeOfSeries(
     if( !xCooSysCnt.is())
         return;
 
-    Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+    const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+    for( Reference< chart2::XCoordinateSystem > const & coords : aCooSysSeq )
     {
-        Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+        Reference< chart2::XChartTypeContainer > xCTCnt( coords, uno::UNO_QUERY_THROW );
+        const Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        for( Reference< chart2::XChartType > const & chartType : aChartTypes )
         {
-            Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
+            Reference< chart2::XDataSeriesContainer > xSeriesCnt( chartType, uno::UNO_QUERY );
             if( xSeriesCnt.is())
             {
-                Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
-                for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
+                const Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
+                for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
                 {
-                    if( aSeries[nSeriesIdx] == xSeries )
+                    if( dataSeries == xSeries )
                     {
-                        xOutCooSys.set( aCooSysSeq[nCooSysIdx] );
-                        xOutChartType.set( aChartTypes[nCTIdx] );
+                        xOutCooSys.set( coords );
+                        xOutChartType.set( chartType );
                     }
                 }
             }
@@ -238,9 +238,9 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
 
-    for( sal_Int32 i = 0; i < aSeries.getLength(); ++i )
+    for( uno::Reference<chart2::XDataSeries> const & dataSeries : aSeries )
     {
-        Reference< chart2::data::XDataSource > xSource( aSeries[ i ], uno::UNO_QUERY );
+        Reference< chart2::data::XDataSource > xSource( dataSeries, uno::UNO_QUERY );
         if( xSource.is())
         {
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
@@ -392,11 +392,11 @@ void setStackModeAtSeries(
         : chart2::StackingDirection_NO_STACKING );
 
     std::set< sal_Int32 > aAxisIndexSet;
-    for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
+    for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
     {
         try
         {
-            Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xProp( dataSeries, uno::UNO_QUERY );
             if( xProp.is() )
             {
                 xProp->setPropertyValue( "StackingDirection", aPropValue );

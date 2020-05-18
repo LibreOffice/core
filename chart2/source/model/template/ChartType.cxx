@@ -173,13 +173,13 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
     m_bNotifyChanges = false;
     try
     {
-        Sequence< Reference< chart2::XDataSeries > > aOldSeries( getDataSeries() );
-        for( sal_Int32 nN=0; nN<aOldSeries.getLength(); ++nN )
-            ModifyListenerHelper::removeListener( aOldSeries[nN], m_xModifyEventForwarder );
+        const Sequence< Reference< chart2::XDataSeries > > aOldSeries( getDataSeries() );
+        for( auto const & i : aOldSeries )
+            ModifyListenerHelper::removeListener( i, m_xModifyEventForwarder );
         m_aDataSeries.clear();
 
-        for( sal_Int32 i=0; i<aDataSeries.getLength(); ++i )
-            impl_addDataSeriesWithoutNotification( aDataSeries[i] );
+        for( auto const & i : aDataSeries )
+            impl_addDataSeriesWithoutNotification( i );
     }
     catch( ... )
     {

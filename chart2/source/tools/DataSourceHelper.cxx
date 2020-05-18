@@ -239,7 +239,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(
         DataSeriesHelper::getDataSource( comphelper::containerToSequence(aSeriesVector) ) );
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
+    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
 
     //the first x-values is always the next sequence //todo ... other x-values get lost for old format
     Reference< chart2::data::XLabeledDataSequence > xXValues(
@@ -248,11 +248,11 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
         aResultVector.push_back( xXValues );
 
     //add all other sequences now without x-values
-    for( sal_Int32 nN=0; nN<aDataSequences.getLength(); nN++ )
+    for(  Reference< chart2::data::XLabeledDataSequence > const & labeledData : aDataSequences )
     {
-        OUString aRole = DataSeriesHelper::getRole(aDataSequences[nN]);
+        OUString aRole = DataSeriesHelper::getRole(labeledData);
         if( aRole != "values-x" )
-            aResultVector.push_back( aDataSequences[nN] );
+            aResultVector.push_back( labeledData );
     }
 
     return new DataSource( comphelper::containerToSequence(aResultVector) );
@@ -512,11 +512,11 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     std::vector< OUString > aResult;
     if( xSource.is())
     {
-        Sequence< Reference< data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
-        for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )
+        const Sequence< Reference< data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
+        for( Reference< data::XLabeledDataSequence > const & labeledData : aLSeqSeq )
         {
-            Reference< data::XDataSequence > xLabel( aLSeqSeq[i]->getLabel());
-            Reference< data::XDataSequence > xValues( aLSeqSeq[i]->getValues());
+            Reference< data::XDataSequence > xLabel( labeledData->getLabel());
+            Reference< data::XDataSequence > xValues( labeledData->getValues());
 
             if( xLabel.is())
                 aResult.push_back( xLabel->getSourceRangeRepresentation());

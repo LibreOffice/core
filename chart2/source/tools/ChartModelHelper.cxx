@@ -254,13 +254,13 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
                 if( xUsedData.is() )
                 {
                     uno::Reference< beans::XPropertySet > xProp;
-                    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
-                    for( sal_Int32 i=0; i<aData.getLength(); ++i )
+                    const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
+                    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
                     {
-                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getValues(), uno::UNO_QUERY ) );
+                        xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getValues(), uno::UNO_QUERY ) );
                         if(xProp.is())
                             xProp->setPropertyValue("IncludeHiddenCells", aNewValue );
-                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getLabel(), uno::UNO_QUERY ) );
+                        xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getLabel(), uno::UNO_QUERY ) );
                         if(xProp.is())
                             xProp->setPropertyValue("IncludeHiddenCells", aNewValue );
                     }
