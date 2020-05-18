@@ -1264,12 +1264,12 @@ bool addProperty(
             }
         case TYPE_STRING_LIST:
             {
-                css::uno::Sequence<OUString> seq(
+                const css::uno::Sequence<OUString> seq(
                     value.get<css::uno::Sequence<OUString>>());
                 std::vector<GVariant *> vs;
-                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                for (OUString const & s : seq) {
                     children.emplace_front(
-                        g_variant_new_string(encodeString(seq[i]).getStr()));
+                        g_variant_new_string(encodeString(s).getStr()));
                     if (children.front().get() == nullptr) {
                         SAL_WARN(
                             "configmgr.dconf", "g_variant_new_string failed");
@@ -1287,11 +1287,11 @@ bool addProperty(
             }
         case TYPE_HEXBINARY_LIST:
             {
-                css::uno::Sequence<css::uno::Sequence<sal_Int8>> seq(
+                const css::uno::Sequence<css::uno::Sequence<sal_Int8>> seqSeq(
                     value.get<
                         css::uno::Sequence<css::uno::Sequence<sal_Int8>>>());
                 std::vector<GVariant *> vs;
-                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                for (css::uno::Sequence<sal_Int8> const & seq : seqSeq) {
                     static_assert(
                         sizeof(sal_Int32) <= sizeof(gsize),
                         "G_MAXSIZE too small");
@@ -1299,8 +1299,8 @@ bool addProperty(
                         sizeof (sal_Int8) == sizeof (guchar), "size mismatch");
                     children.emplace_front(
                         g_variant_new_fixed_array(
-                            G_VARIANT_TYPE_BYTE, seq[i].getConstArray(),
-                            seq[i].getLength(), sizeof (sal_Int8)));
+                            G_VARIANT_TYPE_BYTE, seq.getConstArray(),
+                            seq.getLength(), sizeof (sal_Int8)));
                     if (children.front().get() == nullptr) {
                         SAL_WARN(
                             "configmgr.dconf",
@@ -1318,7 +1318,7 @@ bool addProperty(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
                 v.reset(
-                    g_variant_new_array(ty.get(), vs.data(), seq.getLength()));
+                    g_variant_new_array(ty.get(), vs.data(), seqSeq.getLength()));
                 break;
             }
         default:

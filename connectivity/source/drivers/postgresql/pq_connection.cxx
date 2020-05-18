@@ -397,12 +397,12 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         "requiressl"
     };
 
-    for( int i = 0; i < args.getLength() ; ++i )
+    for( PropertyValue const & prop : args )
     {
         bool append = false;
         for(const char* j : keyword_list)
         {
-            if( args[i].Name.equalsIgnoreAsciiCaseAscii( j ))
+            if( prop.Name.equalsIgnoreAsciiCaseAscii( j ))
             {
                 keywords.push_back( j, SAL_NO_ACQUIRE );
                 append = true;
@@ -413,14 +413,14 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         if( append )
         {
             OUString value;
-            tc->convertTo( args[i].Value, cppu::UnoType<decltype(value)>::get() ) >>= value;
+            tc->convertTo( prop.Value, cppu::UnoType<decltype(value)>::get() ) >>= value;
             char *v = strdup(OUStringToOString(value, enc).getStr());
             values.push_back ( v );
         }
         else
         {
             // ignore for now
-            SAL_WARN("connectivity.postgresql", "sdbc-postgresql: unknown argument '" << args[i].Name << "' having value: " << args[i].Value );
+            SAL_WARN("connectivity.postgresql", "sdbc-postgresql: unknown argument '" << prop.Name << "' having value: " << prop.Value );
         }
     }
 }

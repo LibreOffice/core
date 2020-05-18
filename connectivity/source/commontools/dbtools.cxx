@@ -946,11 +946,10 @@ try
     Reference< XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
     Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
 
-    Sequence< Property> aOldProperties = xOldInfo->getProperties();
+    const Sequence< Property> aOldProperties = xOldInfo->getProperties();
     Sequence< Property> aNewProperties = xNewInfo->getProperties();
     int nNewLen = aNewProperties.getLength();
 
-    Property* pOldProps = aOldProperties.getArray();
     Property* pNewProps = aNewProperties.getArray();
 
     OUString sPropFormatsSupplier("FormatsSupplier");
@@ -968,18 +967,18 @@ try
     OUString sPropClassId("ClassId");
     OUString sFormattedServiceName( "com.sun.star.form.component.FormattedField" );
 
-    for (sal_Int32 i=0; i<aOldProperties.getLength(); ++i)
+    for (const Property& rOldProp : aOldProperties)
     {
-        if ( pOldProps[i].Name != "DefaultControl" && pOldProps[i].Name != "LabelControl" )
+        if ( rOldProp.Name != "DefaultControl" && rOldProp.Name != "LabelControl" )
         {
             // binary search
             Property* pResult = std::lower_bound(
-                pNewProps, pNewProps + nNewLen, pOldProps[i], ::comphelper::PropertyCompareByName());
+                pNewProps, pNewProps + nNewLen, rOldProp, ::comphelper::PropertyCompareByName());
 
             if (   ( pResult != aNewProperties.end() )
-                && ( pResult->Name == pOldProps[i].Name )
+                && ( pResult->Name == rOldProp.Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
-                && ( pResult->Type.equals(pOldProps[i].Type)) )
+                && ( pResult->Type.equals(rOldProp.Type)) )
             {   // Attributes match and the property is not read-only
                 try
                 {
