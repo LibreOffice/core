@@ -924,7 +924,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     {
         OSL_ENSURE( aExc.Message.startsWith("dum dum dum I dance around the circle..."),
                      "### unexpected exception content!" );
-        return aExc.Messag.startsWith("dum dum dum I dance around the circle...");
+        return aExc.Message.startsWith("dum dum dum I dance around the circle...");
     }
     return sal_False;
 }
