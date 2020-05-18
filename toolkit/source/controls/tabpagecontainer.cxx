@@ -294,6 +294,15 @@ void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const 
     m_aTabPageListeners.removeInterface( listener );
 }
 
+void UnoControlTabPageContainer::propertiesChange(const::css::uno::Sequence<PropertyChangeEvent> &aEvent)
+{
+    UnoControlTabPageContainer_Base::propertiesChange(aEvent);
+
+    SolarMutexGuard aSolarGuard;
+    Reference< XPropertiesChangeListener >  xPropertiesChangeListener( getPeer(), UNO_QUERY_THROW );
+    return xPropertiesChangeListener->propertiesChange(aEvent);
+}
+
 void UnoControlTabPageContainer::updateFromModel()
 {
     UnoControlTabPageContainer_Base::updateFromModel();

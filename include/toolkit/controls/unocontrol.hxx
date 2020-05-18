@@ -218,7 +218,7 @@ public:
     // XStyleSettingsSupplier
     virtual css::uno::Reference< css::awt::XStyleSettings > SAL_CALL getStyleSettings() override;
 
-private:
+protected:
     // css::beans::XPropertiesChangeListener
     void SAL_CALL propertiesChange( const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) override;
 };
