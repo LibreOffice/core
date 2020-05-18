@@ -1084,7 +1084,13 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingLevels, "tdf95495.docx")
         return;
 
     // tdf#95495: set list level of the custom style based on the setting of the parent style
+    // [this assertXPath is not a very good test, since the numbering definition is not set on the paragraph itself,
+    //  but in a style. This just tests the current copy-to-paragraph implementation. But leaving it for now,
+    //  since this example is very much a corner case, so anyone trespassing here should double-check everything...]
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//body/txt[5]/LineBreak", "Line", "A.2.1 .DESCRIPTION");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
