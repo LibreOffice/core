@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>
+#include <unotools/saveopt.hxx>
 
 namespace boost { template <class T> class optional; }
 
@@ -144,10 +145,12 @@ public:
     static bool convertDouble(double& rValue, const OUString& rString);
 
     /** convert number, 10th of degrees with range [0..3600] to SVG angle */
-    static void convertAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle);
+    static void convertAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle,
+            SvtSaveOptions::ODFSaneDefaultVersion nVersion);
 
     /** convert SVG angle to number, 10th of degrees with range [0..3600] */
-    static bool convertAngle(sal_Int16& rAngle, OUString const& rString);
+    static bool convertAngle(sal_Int16& rAngle, OUString const& rString,
+            bool isWrongOOo10thDegAngle);
 
     /** convert double to XMLSchema-2 "duration" string; negative durations allowed */
     static void convertDuration(OUStringBuffer& rBuffer,
