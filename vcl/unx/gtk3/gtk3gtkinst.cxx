@@ -1714,10 +1714,14 @@ namespace
 
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
-        g_object_ref(pWidget);
-
         // remove the widget and replace it with pReplacement
         GtkWidget* pParent = gtk_widget_get_parent(pWidget);
+
+        // if pWidget was un-parented then don't bother
+        if (!pParent)
+            return;
+
+        g_object_ref(pWidget);
 
         gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
         if (GTK_IS_GRID(pParent))
