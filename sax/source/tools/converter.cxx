@@ -623,21 +623,25 @@ bool Converter::convertDouble(double& rValue, const OUString& rString)
 }
 
 /** convert number, 10th of degrees with range [0..3600] to SVG angle */
-void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle)
+void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
+        SvtSaveOptions::ODFSaneDefaultVersion const nVersion)
 {
-#if 1
-    // wrong, but backward compatible with OOo/LO < 4.4
-    rBuffer.append(static_cast<sal_Int32>(nAngle));
-#else
-    // maybe in the future... (see other convertAngle)
-    double fAngle(double(nAngle) / 10.0);
-    ::sax::Converter::convertDouble(rBuffer, fAngle);
-    rBuffer.append("deg");
-#endif
+    if (nVersion < SvtSaveOptions::ODFSVER_012 || nVersion == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
+    {
+        // wrong, but backward compatible with OOo/LO < 4.4
+        rBuffer.append(static_cast<sal_Int32>(nAngle));
+    }
+    else
+    { // OFFICE-3774 tdf#89475 write valid ODF 1.2 angle; needs LO 4.4 to import
+        double fAngle(double(nAngle) / 10.0);
+        ::sax::Converter::convertDouble(rBuffer, fAngle);
+        rBuffer.append("deg");
+    }
 }
 
 /** convert SVG angle to number, 10th of degrees with range [0..3600] */
-bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString)
+bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString,
+        bool const isWrongOOo10thDegAngle)
 {
     // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
     // degrees, while OOo has historically used 10th of degrees :(
@@ -662,7 +666,14 @@ bool Converter::convertAngle(sal_Int16& rAngle, OUString const& rString)
     }
     else // no explicit unit
     {
-        nValue = fValue; // wrong, but backward compatible with OOo/LO < 4.4
+        if (isWrongOOo10thDegAngle)
+        {
+            nValue = fValue; // wrong, but backward compatible with OOo/LO < 7.0
+        }
+        else
+        {
+            nValue = fValue * 10.0; // ODF 1.2
+        }
     }
     // limit to valid range [0..3600]
     nValue = nValue % 3600;
