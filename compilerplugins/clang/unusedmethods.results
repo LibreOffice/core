@@ -808,11 +808,7 @@ include/vcl/ColorMask.hxx:114
     void ColorMask::SetColorFor16BitMSB(const class BitmapColor &,unsigned char *) const
 include/vcl/ColorMask.hxx:116
     void ColorMask::SetColorFor16BitLSB(const class BitmapColor &,unsigned char *) const
-include/vcl/combobox.hxx:117
-    void ComboBox::SetDoubleClickHdl(const class Link<class ComboBox &, void> &)
-include/vcl/combobox.hxx:118
-    const class Link<class ComboBox &, void> & ComboBox::GetDoubleClickHdl() const
-include/vcl/combobox.hxx:141
+include/vcl/combobox.hxx:138
     class rtl::OUString ComboBox::GetSelectedEntry() const
 include/vcl/commandevent.hxx:249
      CommandMediaData::CommandMediaData(enum MediaCommand)
@@ -852,10 +848,6 @@ include/vcl/ITiledRenderable.hxx:190
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:24
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/lstbox.hxx:175
-    void * ListBox::GetSelectedEntryData() const
-include/vcl/lstbox.hxx:224
-    const class Link<class ListBox &, void> & ListBox::GetDoubleClickHdl() const
 include/vcl/menu.hxx:456
     unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
 include/vcl/menu.hxx:460
@@ -872,9 +864,9 @@ include/vcl/opengl/OpenGLHelper.hxx:67
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:100
     void OpenGLHelper::debugMsgStreamWarn(const class std::__cxx11::basic_ostringstream<char> &)
-include/vcl/outdev.hxx:1742
+include/vcl/outdev.hxx:1744
     class basegfx::B2DPolyPolygon OutputDevice::LogicToPixel(const class basegfx::B2DPolyPolygon &,const class MapMode &) const
-include/vcl/outdev.hxx:1762
+include/vcl/outdev.hxx:1764
     class basegfx::B2DPolyPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolyPolygon &,const class MapMode &) const
 include/vcl/pngread.hxx:56
     void vcl::PNGReader::SetIgnoreGammaChunk(_Bool)
@@ -896,8 +888,6 @@ include/vcl/settings.hxx:721
     _Bool AllSettings::operator!=(const class AllSettings &) const
 include/vcl/split.hxx:92
     void Splitter::SetHorizontal(_Bool)
-include/vcl/splitwin.hxx:140
-    void SplitWindow::Clear()
 include/vcl/svapp.hxx:169
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
 include/vcl/svapp.hxx:802
@@ -920,12 +910,6 @@ include/vcl/treelist.hxx:171
     const class SvTreeListEntry * SvTreeList::GetParent(const class SvTreeListEntry *) const
 include/vcl/treelistbox.hxx:368
     void SvTreeListBox::RemoveSelection()
-include/vcl/treelistbox.hxx:441
-    const class Link<class SvTreeListBox *, _Bool> & SvTreeListBox::GetDoubleClickHdl() const
-include/vcl/treelistbox.hxx:618
-    void SvTreeListBox::SetSublistOpenWithReturn()
-include/vcl/treelistbox.hxx:655
-    void SvTreeListBox::SetIndent(short)
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
 include/vcl/uitest/uiobject.hxx:278
@@ -1056,8 +1040,6 @@ include/vcl/weld.hxx:2198
     class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
 include/vcl/window.hxx:410
     const char * ImplDbgCheckWindow(const void *)
-include/vcl/window.hxx:1047
-    class tools::Rectangle vcl::Window::GetClientWindowExtentsRelative() const
 include/xmloff/txtimp.hxx:385
     class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()
 include/xmloff/txtimp.hxx:386
@@ -1078,10 +1060,10 @@ libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:72
     void ::operator()(struct _GtkBuilder *) const
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
-libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:49
-    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-helpers.cxx:80
     void ::operator()(struct _GtkTargetList *) const
+libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx:183
+    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
@@ -1360,12 +1342,6 @@ sfx2/inc/autoredactdialog.hxx:73
     int TargetsTable::n_children() const
 sfx2/source/appl/newhelp.hxx:57
     class weld::Widget * HelpTabPage_Impl::GetLastFocusControl()
-sfx2/source/appl/newhelp.hxx:253
-    class HelpTabPage_Impl * SfxHelpIndexWindow_Impl::GetCurrentPage()
-sfx2/source/appl/panelist.hxx:32
-    void sfx2::AddToTaskPaneList(class vcl::Window *)
-sfx2/source/appl/panelist.hxx:37
-    void sfx2::RemoveFromTaskPaneList(class vcl::Window *)
 sfx2/source/appl/shutdownicon.hxx:79
     class rtl::OUString ShutdownIcon::getShortcutName()
 sfx2/source/appl/shutdownicon.hxx:95
@@ -1427,11 +1403,11 @@ slideshow/source/inc/listenercontainer.hxx:45
 slideshow/source/inc/listenercontainer.hxx:45
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::EventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:45
+    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
+slideshow/source/inc/listenercontainer.hxx:45
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::IntrinsicAnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:45
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::UserPaintEventHandler> &)
-slideshow/source/inc/listenercontainer.hxx:45
-    _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewUpdate> &)
 slideshow/source/inc/listenercontainer.hxx:45
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:45
@@ -1525,9 +1501,9 @@ sw/inc/docary.hxx:94
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwCharFormat **, class std::__cxx1998::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> > >, class std::__debug::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
-    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwNumRule **, class std::__cxx1998::vector<class SwNumRule *, class std::allocator<class SwNumRule *> > >, class std::__debug::vector<class SwNumRule *, class std::allocator<class SwNumRule *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
-sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
+sw/inc/docary.hxx:94
+    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwNumRule **, class std::__cxx1998::vector<class SwNumRule *, class std::allocator<class SwNumRule *> > >, class std::__debug::vector<class SwNumRule *, class std::allocator<class SwNumRule *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:140
     void SwVectorModifyBase::dumpAsXml(struct _xmlTextWriter *)
 sw/inc/docufld.hxx:494
@@ -1592,6 +1568,8 @@ sw/inc/ring.hxx:203
      sw::RingIterator::RingIterator<value_type>()
 sw/inc/swatrset.hxx:226
     const class SvxNoHyphenItem & SwAttrSet::GetNoHyphenHere(_Bool) const
+sw/inc/swatrset.hxx:227
+    const class SvxBlinkItem & SwAttrSet::GetBlink(_Bool) const
 sw/inc/swcrsr.hxx:219
     class SwCursor * SwCursor::GetPrev()
 sw/inc/swcrsr.hxx:220
@@ -1800,7 +1778,7 @@ vcl/inc/unx/salframe.h:184
     enum SalFrameStyleFlags X11SalFrame::GetStyle() const
 vcl/qa/cppunit/lifecycle.cxx:237
      (anonymous namespace)::LeakTestClass::LeakTestClass(_Bool &,type-parameter-?-? &&...)
-vcl/skia/salbmp.cxx:436
+vcl/skia/salbmp.cxx:430
     void ::operator()(void *,void *) const
 vcl/source/app/scheduler.cxx:83
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & (anonymous namespace)::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const class Idle &)
