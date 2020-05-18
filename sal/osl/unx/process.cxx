@@ -663,6 +663,8 @@ oslProcessError osl_psz_executeProcess(char *pszImageName,
         if (Options & osl_Process_WAIT)
             osl_joinProcess(*pProcess);
 
+        osl_destroyCondition(Data.m_pProcImpl->m_terminated);
+        free(Data.m_pProcImpl);
         return osl_Process_E_None;
     }
 
