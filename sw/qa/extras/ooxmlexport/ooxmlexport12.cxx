@@ -946,19 +946,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf94628, "tdf94628.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-        if (rProp.Name == "BulletChar")
-        {
-            // Check for 'BLACK UPPER RIGHT TRIANGLE' (U+25E5) as a bullet
-            CPPUNIT_ASSERT_EQUAL(OUString(u"\u25E5"), rProp.Value.get<OUString>());
-            return;
-        }
-    }
-
-    // Shouldn't reach here
-    CPPUNIT_FAIL("Did not find bullet with level 0");
+    OUString sBulletChar = std::find_if(aProps.begin(), aProps.end(),
+                                        [](const beans::PropertyValue& rValue) {
+                                            return rValue.Name == "BulletChar";
+                                        })
+                               ->Value.get<OUString>();
+    // Actually for 'BLACK UPPER RIGHT TRIANGLE' is \u25E5
+    // But we use Wingdings 3 font here, so code is different
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uF07B"), sBulletChar);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")

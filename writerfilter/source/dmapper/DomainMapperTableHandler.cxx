@@ -1029,7 +1029,7 @@ void DomainMapperTableHandler::ApplyParaProperty(css::beans::PropertyValues aTab
     if (pTableProp != aTableProperties.end())
     {
         uno::Any aValue = pTableProp->Value;
-        for (const auto& rParaProp : m_rDMapper_Impl.m_aParagraphsToEndTable)
+        for (const auto& rParaProp : *m_rDMapper_Impl.getTableManager().getCurrentParagraphs())
         {
             // there is no direct paragraph formatting
             if (!rParaProp.m_pPropertyMap->isSet(eId))
@@ -1227,7 +1227,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aCellProperties.clear();
     m_aRowProperties.clear();
     m_bHadFootOrEndnote = false;
-    m_rDMapper_Impl.m_aParagraphsToEndTable.clear();
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();

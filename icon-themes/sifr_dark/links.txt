@@ -1872,7 +1872,7 @@ res/tables_32.png cmd/32/dbviewtables.png
 
 # formula
 # ==============================================
-formula/res/fapclose.png cmd/sc_open.png
+formula/res/fapclose.png svtools/res/folder.png
 formula/res/faperror.png cmd/sc_cancel.png
 formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
@@ -1881,7 +1881,7 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 # fpicker
 # ==============================================
 fpicker/res/fp011.png cmd/sc_firstpage.png
-fpicker/res/fp014.png cmd/sc_open.png
+fpicker/res/fp014.png res/fp015.png
 fpicker/res/fp015.png cmd/sc_starshapes.png
 fpicker/res/fp016.png desktop/res/shared_16.png
 
@@ -1918,10 +1918,9 @@ res/dir-open.png cmd/sc_open.png
 res/extension_plus_26.png cmd/lc_insertplugin.png
 res/extension_plus_32.png cmd/32/insertplugin.png
 res/fileopen.png cmd/sc_open.png
-res/foldercl.png cmd/sc_open.png
+res/foldercl.png svtools/res/folder.png
 res/folderop.png cmd/sc_open.png
-res/fp010.png cmd/sc_open.png
-res/fp015.png cmd/sc_starshapes.png
+res/fp010.png cmd/sc_upsearch.png
 res/hldocntp.png cmd/32/adddirect.png
 res/hldoctp.png cmd/32/insertreferencefield.png
 res/hlinettp.png cmd/32/browseview.png
@@ -1989,6 +1988,7 @@ res/sc10867.png cmd/sc_grafblue.png
 res/sc10868.png cmd/sc_grafgamma.png
 res/sc10869.png cmd/sc_graftransparence.png
 res/script.png cmd/sc_insertscript.png
+res/sx03141.png svtools/res/folder.png
 res/sx03150.png cmd/sc_showsinglepage.png
 res/sx03164.png res/harddisk_16.png
 res/sx03188.png cmd/sc_dbviewtables.png
@@ -2159,7 +2159,6 @@ svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/bmpfont.png cmd/color.png
 svtools/res/ed06.png dbaccess/res/pkey.png
-svtools/res/folder.png cmd/sc_open.png
 svtools/res/folderop.png cmd/sc_open.png
 svtools/res/info_large.png cmd/lc_alignleft.png
 svtools/res/info_small.png cmd/sc_alignleft.png

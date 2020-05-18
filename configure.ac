@@ -2143,6 +2143,12 @@ libo_FUZZ_ARG_WITH(lxml,
          report widget classes and ids.]),
 ,)
 
+libo_FUZZ_ARG_WITH(latest-c++,
+    AS_HELP_STRING([--with-latest-c++],
+        [Try to enable the latest features of the C++ compiler, even if they are not yet part of a
+         published standard.]),,
+        [with_latest_c__=no])
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -6456,9 +6462,17 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether $CXX_BASE supports C++17])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
-    CXXFLAGS_CXX11='-std:c++17 -Zc:__cplusplus'
+    if test "$with_latest_c__" = yes; then
+        CXXFLAGS_CXX11=-std:c++latest
+    else
+        CXXFLAGS_CXX11=-std:c++17
+    fi
+    CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -Zc:__cplusplus"
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    my_flags='-std=c++2a -std=c++17 -std=c++1z'
+    my_flags='-std=c++17 -std=c++1z'
+    if test "$with_latest_c__" = yes; then
+        my_flags="-std=gnu++2a -std=c++2a $my_flags"
+    fi
     for flag in $my_flags; do
         if test "$COM" = MSC; then
             flag="-Xclang $flag"

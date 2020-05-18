@@ -546,7 +546,6 @@ namespace sw
             sal_Int32 mnPtContent;
         public:
             explicit Position(const SwPosition &rPos);
-            Position(const Position &rPos);
             operator SwPosition() const;
             const SwNodeIndex& GetPtNode() const { return maPtNode; };
             sal_Int32 GetPtContent() const { return mnPtContent; };

@@ -244,6 +244,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121658, "tdf121658.docx")
     assertXPath(pXmlSettings, "/w:settings/w:doNotHyphenateCaps");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Ensure that for list=1 and level=0 we wrote correct bullet char and correct font
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:lvlText",
+                "val", u"\uF0B7");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "ascii", "Symbol");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "hAnsi", "Symbol");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
+                "cs", "Symbol");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

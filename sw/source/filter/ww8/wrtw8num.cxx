@@ -451,7 +451,11 @@ void MSWordExportBase::NumberingLevel(
     // #i86652#
     if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
     {
-        nFollow = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+        // <nFollow = 2>, if minimum label width equals 0 and
+        // minimum distance between label and text equals 0
+        nFollow = (rFormat.GetFirstLineOffset() == 0 &&
+            rFormat.GetCharTextDistance() == 0)
+            ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
     }
     else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
     {
@@ -489,44 +493,20 @@ void MSWordExportBase::NumberingLevel(
     const vcl::Font* pBulletFont=nullptr;
     rtl_TextEncoding eChrSet=0;
     FontFamily eFamily=FAMILY_DECORATIVE;
-
     if (!rRule.Get(nLvl).GetListFormat().isEmpty())
     {
-        // We have stored list format, use it
+        // Nothing to construct: we have it already
         sNumStr = rRule.Get(nLvl).GetListFormat();
     }
     else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
     {
+        // Use bullet
         sNumStr = OUString(rFormat.GetBulletChar());
-        bWriteBullet = true;
-
-        pBulletFont = rFormat.GetBulletFont();
-        if (!pBulletFont)
-        {
-            pBulletFont = &numfunc::GetDefBulletFont();
-        }
-
-        eChrSet = pBulletFont->GetCharSet();
-        sFontName = pBulletFont->GetFamilyName();
-        eFamily = pBulletFont->GetFamilyType();
-
-        if (IsStarSymbol(sFontName))
-            SubstituteBullet( sNumStr, eChrSet, sFontName );
-
-        // #i86652#
-        if (rFormat.GetPositionAndSpaceMode() ==
-                                SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
-        {
-            // <nFollow = 2>, if minimum label width equals 0 and
-            // minimum distance between label and text equals 0
-            nFollow = (rFormat.GetFirstLineOffset() == 0 &&
-                       rFormat.GetCharTextDistance() == 0)
-                      ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-        }
     }
     else
     {
+        // Construct list format string from prefix, level numbers and suffix
         if (SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType())
         {
             sal_uInt8* pLvlPos = aNumLvlPos;
@@ -546,21 +526,30 @@ void MSWordExportBase::NumberingLevel(
                     sNumStr = sNumStr.replaceAt( nFnd, 1, OUString(static_cast<char>(i)) );
                 }
             }
-            // #i86652#
-            if (rFormat.GetPositionAndSpaceMode() ==
-                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
-            {
-                // <nFollow = 2>, if minimum label width equals 0 and
-                // minimum distance between label and text equals 0
-                nFollow = (rFormat.GetFirstLineOffset() == 0 &&
-                           rFormat.GetCharTextDistance() == 0)
-                          ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
-            }
         }
 
         if (!rFormat.GetPrefix().isEmpty())
             sNumStr = rFormat.GetPrefix() + sNumStr;
         sNumStr += rFormat.GetSuffix();
+    }
+
+    if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
+        SVX_NUM_BITMAP == rFormat.GetNumberingType())
+    {
+        bWriteBullet = true;
+
+        pBulletFont = rFormat.GetBulletFont();
+        if (!pBulletFont)
+        {
+            pBulletFont = &numfunc::GetDefBulletFont();
+        }
+
+        eChrSet = pBulletFont->GetCharSet();
+        sFontName = pBulletFont->GetFamilyName();
+        eFamily = pBulletFont->GetFamilyType();
+
+        if (IsStarSymbol(sFontName))
+            SubstituteBullet(sNumStr, eChrSet, sFontName);
     }
 
     // Attributes of the numbering
