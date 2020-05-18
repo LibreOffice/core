@@ -647,14 +647,6 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     if (!aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
     {
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-        // #i83087# Naturally, system alpha blending cannot work with
-        // separate alpha VDev
-
-        // Not clear how the above comment relates to the following declaration and initialisation
-        // of bTryDirectPaint. Does bTryDirectPaint being true mean that we can use "system alpha
-        // blending"? Or that we can't? Or are the two not related at all, and should the above
-        // comment actually be better located below, before the "if (mpAlphaVDev)" test?
-
         bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
 
         if (bTryDirectPaint)
@@ -668,6 +660,9 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
             SalBitmap* pSalSrcBmp = rBmp.ImplGetSalBitmap().get();
             SalBitmap* pSalAlphaBmp = rAlpha.ImplGetSalBitmap().get();
+
+            // #i83087# Naturally, system alpha blending (SalGraphics::DrawAlphaBitmap) cannot work
+            // with separate alpha VDev
 
             // try to blend the alpha bitmap with the alpha virtual device
             if (mpAlphaVDev)
