@@ -1263,10 +1263,10 @@ void ComboBox::EnableUserDraw( bool bUserDraw )
     m_pImpl->m_pImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
 }
 
-void ComboBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawText, bool bDrawTextAtImagePos)
+void ComboBox::DrawEntry(const UserDrawEvent& rEvt)
 {
     SAL_WARN_IF(rEvt.GetWindow() != m_pImpl->m_pImplLB->GetMainWindow(), "vcl", "DrawEntry?!");
-    m_pImpl->m_pImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, bDrawText, bDrawTextAtImagePos);
+    m_pImpl->m_pImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, /*bDrawText*/false, /*bDrawTextAtImagePos*/false);
 }
 
 void ComboBox::AddSeparator( sal_Int32 n )
