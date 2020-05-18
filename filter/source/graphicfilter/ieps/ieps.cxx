@@ -151,7 +151,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
     rtl_uString* pArgs[], sal_uInt32 nArgs, oslProcess *pProcess,
     oslFileHandle *pIn, oslFileHandle *pOut, oslFileHandle *pErr)
 {
-    oslProcessError result;
+    oslProcessError result = osl_Process_E_None;
     oslSecurity pSecurity = osl_getCurrentSecurity();
 #ifdef _WIN32
     /*
@@ -174,10 +174,11 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
 
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)
-        return osl_Process_E_NotFound;
+        result = osl_Process_E_NotFound;
 
-    result = osl_executeProcess_WithRedirectedIO(url.pData,
-    pArgs, nArgs, osl_Process_HIDDEN,
+    if (result != osl_Process_E_NotFound)
+        result = osl_executeProcess_WithRedirectedIO(url.pData,
+            pArgs, nArgs, osl_Process_HIDDEN,
         pSecurity, nullptr, nullptr, 0, pProcess, pIn, pOut, pErr);
 #else
     result = osl_executeProcess_WithRedirectedIO(rProgName.pData,
