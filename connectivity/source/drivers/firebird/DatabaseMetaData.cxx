@@ -1338,13 +1338,13 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     else
     {
         queryBuf.append("( (0 = 1) ");
-        for (int i = 0; i < types.getLength(); i++)
+        for (OUString const & t : types)
         {
-            if (types[i] == "SYSTEM TABLE")
+            if (t == "SYSTEM TABLE")
                 queryBuf.append("OR (RDB$SYSTEM_FLAG = 1 AND RDB$VIEW_BLR IS NULL) ");
-            else if (types[i] == "TABLE")
+            else if (t == "TABLE")
                 queryBuf.append("OR (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NULL) ");
-            else if (types[i] == "VIEW")
+            else if (t == "VIEW")
                 queryBuf.append("OR (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NOT NULL) ");
             else
                 throw SQLException(); // TODO: implement other types, see above.

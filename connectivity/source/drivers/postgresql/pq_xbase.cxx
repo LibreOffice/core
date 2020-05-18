@@ -178,12 +178,12 @@ void ReflectionBase::copyValuesFrom( const Reference< XPropertySet > & set )
     {
         Reference< XPropertySetInfo > myPropInfo = getPropertySetInfo();
 
-        Sequence< Property > props = info->getProperties();
-        for( int i = 0 ; i < props.getLength() ; i ++ )
+        const Sequence< Property > props = info->getProperties();
+        for( Property const & prop : props )
         {
-            if( myPropInfo->hasPropertyByName( props[i].Name ) )
+            if( myPropInfo->hasPropertyByName( prop.Name ) )
                 setPropertyValue_NoBroadcast_public(
-                    props[i].Name, set->getPropertyValue( props[i].Name ) );
+                    prop.Name, set->getPropertyValue( prop.Name ) );
         }
     }
 }
