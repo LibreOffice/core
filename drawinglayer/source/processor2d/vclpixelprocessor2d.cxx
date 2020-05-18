@@ -502,11 +502,10 @@ void VclPixelProcessor2D::processPolyPolygonGradientPrimitive2D(
     if (!aLocalPolyPolygon.count())
         return;
 
-    aLocalPolyPolygon.transform(maCurrentTransformation);
-
     if (aStartColor == aEndColor)
     {
         // no gradient at all, draw as polygon in AA and non-AA case
+        aLocalPolyPolygon.transform(maCurrentTransformation);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor(Color(aStartColor));
         mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
