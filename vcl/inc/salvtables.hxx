@@ -813,7 +813,7 @@ public:
         const tools::Rectangle& rRect = pEvent->GetRect();
         const OUString sId = get_id(nPos);
         signal_custom_render(*pRenderContext, rRect, pEvent->IsSelected(), sId);
-        m_xComboBox->DrawEntry(*pEvent, false, false); // draw separator
+        m_xComboBox->DrawEntry(*pEvent); // draw separator
 
         if (m_xMenuButton && m_xMenuButton->IsVisible() && m_sMenuButtonRow == sId)
         {

@@ -2061,9 +2061,9 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry const * pEntry )
     }
 }
 
-void SvTreeListBox::SetEntryHeight( short nHeight, bool bForce )
+void SvTreeListBox::SetEntryHeight( short nHeight )
 {
-    if( nHeight > nEntryHeight || bForce )
+    if( nHeight > nEntryHeight )
     {
         nEntryHeight = nHeight;
         if( nEntryHeight )
