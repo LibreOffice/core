@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "788ad3e1_8c8ad522",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-18T09:12:00Z",
+      "side": 1,
+      "message": "No, turns out that this was not necessary.",
+      "parentUuid": "bc6c336e_3f8717b3",
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8adb3070_53ae17c0",
         "filename": "ridljar/source/libreoffice/module-info.java",
         "patchSetId": 7
@@ -221,6 +239,30 @@
       "side": 1,
       "message": "\u003e Should I add a module-info.java for officeloader too?\n\nWhat would be the benefit of that?",
       "parentUuid": "9f499859_560c355a",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "9a813a22f4d13023ce5d127f9cf1f62f3f207ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a6a1fa_9e912c3c",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-18T09:12:00Z",
+      "side": 1,
+      "message": "Wait, there is no jar named officeloader.jar, just unoloader.jar.\nBut that doesn\u0027t look like it needs to be included by extensions?!\n\nI guess every jar that can be used by extensions should have a module-info so that it can be included via the java module mechanism.",
+      "parentUuid": "f808f72d_8fe142ae",
       "range": {
         "startLine": 1,
         "startChar": 7,
