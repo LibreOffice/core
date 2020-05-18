@@ -16,6 +16,19 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+// See 1d0bc2139759f087d50432f8a2116060676f34e1 "use std::experimental::source_location in
+// uno::Exception" modification to
+// workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/uno/Exception.hdl, which is indirectly
+// included through the above #include directives, in turn causing conditional inclusion of
+// include/o3tl/runtimetooustring.hxx (and where `ok` is only read in an assert in !NDEBUG builds):
+#if defined LIBO_USE_SOURCE_LOCATION
+// expected-error@o3tl/runtimetooustring.hxx:* {{read s [loplugin:writeonlyvars]}}
+// expected-error@o3tl/runtimetooustring.hxx:* {{write s [loplugin:writeonlyvars]}}
+#if !defined NDEBUG
+// expected-error@o3tl/runtimetooustring.hxx:* {{read ok [loplugin:writeonlyvars]}}
+#endif
+#endif
+
 namespace Bar
 {
 void test()
