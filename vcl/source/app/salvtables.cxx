@@ -1107,7 +1107,10 @@ void SalInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewPare
     assert(pVclWidget);
     SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
     assert(!pNewParent || pNewVclParent);
-    pVclWidget->getWidget()->SetParent(pNewVclParent ? pNewVclParent->getWidget() : nullptr);
+    if (pNewVclParent)
+        pVclWidget->getWidget()->SetParent(pNewVclParent->getWidget());
+    else
+        pVclWidget->getWidget()->SetParentToDefaultWindow();
 }
 
 void SalInstanceContainer::recursively_unset_default_buttons()
