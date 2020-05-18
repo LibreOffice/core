@@ -685,6 +685,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
     CPPUNIT_ASSERT(xCellB1->getString().endsWith("test1"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
+{
+    load(DATA_DIRECTORY, "tdf128782.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    uno::Reference<drawing::XShape> xShape1 = getShape(1);
+    uno::Reference<drawing::XShape> xShape2 = getShape(2);
+
+    awt::Point aPos[2];
+    aPos[0] = xShape1->getPosition();
+    aPos[1] = xShape2->getPosition();
+
+    //select shape 2 and move it down
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos[0].Y, xShape1->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(aPos[1].X, xShape2->getPosition().X);
+    //Y position in shape 2 has changed
+    CPPUNIT_ASSERT(aPos[1].Y != xShape2->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos[0].Y, xShape1->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(aPos[1].X, xShape2->getPosition().X);
+    // Shape2 has come back to the original position
+    // without the fix in place, it would have failed
+    CPPUNIT_ASSERT_EQUAL(aPos[1].Y, xShape2->getPosition().Y);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132637_protectTrackChanges)
 {
     load(DATA_DIRECTORY, "tdf132637_protectTrackChanges.doc");
