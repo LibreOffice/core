@@ -204,6 +204,8 @@ cppu/source/uno/check.cxx:107
     (anonymous namespace)::P p2 double
 cppu/source/uno/check.cxx:115
     (anonymous namespace)::second a int
+cppu/source/uno/check.cxx:120
+    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:126
     (anonymous namespace)::Char1 c1 char
 cppu/source/uno/check.cxx:130
@@ -464,7 +466,7 @@ io/source/stm/odata.cxx:244
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
 io/source/stm/odata.cxx:244
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
-jvmfwk/inc/vendorbase.hxx:174
+jvmfwk/inc/vendorbase.hxx:173
     jfw_plugin::VendorBase m_sArch class rtl::OUString
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
@@ -868,17 +870,15 @@ sw/inc/unoframe.hxx:311
     SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:182
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
-sw/source/core/inc/swfont.hxx:166
-    SwFont m_bBlink _Bool
-sw/source/core/inc/swfont.hxx:985
+sw/source/core/inc/swfont.hxx:978
     SvStatistics nGetTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:986
+sw/source/core/inc/swfont.hxx:979
     SvStatistics nDrawText sal_uInt16
-sw/source/core/inc/swfont.hxx:987
+sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
-sw/source/core/inc/swfont.hxx:988
+sw/source/core/inc/swfont.hxx:981
     SvStatistics nDrawStretchText sal_uInt16
-sw/source/core/inc/swfont.hxx:989
+sw/source/core/inc/swfont.hxx:982
     SvStatistics nChangeFont sal_uInt16
 sw/source/core/inc/unoflatpara.hxx:134
     SwXFlatParagraphIterator m_aFlatParaList std::set<css::uno::Reference<css::text::XFlatParagraph> >
@@ -897,7 +897,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:146
