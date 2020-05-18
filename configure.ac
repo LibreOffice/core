@@ -2021,7 +2021,7 @@ AC_ARG_WITH(help,
          can be used to bundle only the common part, .e.g help-specific icons.
          This is useful when you build the helpcontent separately.])
     [
-                          Usage: --with-help        build the new HTML local help
+                          Usage:     --with-help    build the old local help
                                  --without-help     no local help (default)
                                  --with-help=html   build the new HTML local help
                                  --with-help=online build the new HTML online help
@@ -5049,9 +5049,8 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
         AC_MSG_RESULT([HTML])
         ;;
     yes)
-        ENABLE_HTMLHELP=TRUE
         SCPDEFS="$SCPDEFS -DWITH_HELP"
-        AC_MSG_RESULT([HTML])
+        AC_MSG_RESULT([yes])
         ;;
     *)
         AC_MSG_ERROR([Unknown --with-help=$with_help])
