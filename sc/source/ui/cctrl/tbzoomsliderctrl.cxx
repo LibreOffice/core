@@ -97,8 +97,9 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
     bool                     mbOmitPaint;
+    vcl::Window*             mpParentWindow;
 
-    explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
+    explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom, vcl::Window* parentWindow ) :
         mnCurrentZoom( nCurrentZoom ),
         mnMinZoom( 10 ),
         mnMaxZoom( 400 ),
@@ -107,7 +108,8 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
         maSliderButton(),
         maIncreaseButton(),
         maDecreaseButton(),
-        mbOmitPaint( false )
+        mbOmitPaint( false ),
+        mpParentWindow(parentWindow)
         {
         }
 };
@@ -207,7 +209,7 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
                 const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                 sal_uInt16 nCurrentZoom ):
                 InterimItemWindow(pParent, "modules/scalc/ui/zoombox.ui", "ZoomBox"),
-                mxWidget(new ScZoomSlider(rDispatchProvider, nCurrentZoom)),
+                mxWidget(new ScZoomSlider(rDispatchProvider, nCurrentZoom, pParent)),
                 mxWeld(new weld::CustomWeld(*m_xBuilder, "zoom", *mxWidget))
 {
     Size aLogicalSize( 115, 40 );
@@ -231,8 +233,8 @@ void ScZoomSliderWnd::dispose()
 }
 
 ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvider>& rDispatchProvider,
-                           sal_uInt16 nCurrentZoom)
-    : mpImpl(new ScZoomSliderWnd_Impl(nCurrentZoom))
+                           sal_uInt16 nCurrentZoom, vcl::Window* parentWindow)
+    : mpImpl(new ScZoomSliderWnd_Impl(nCurrentZoom, parentWindow))
     , m_xDispatchProvider(rDispatchProvider)
 {
     mpImpl->maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
@@ -275,9 +277,8 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     if( nOldZoom == mpImpl->mnCurrentZoom )
         return true;
 
-    tools::Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
-
-    Invalidate(aRect);
+    // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
+    mpImpl->mpParentWindow->Invalidate();
     mpImpl->mbOmitPaint = true;
 
     SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
@@ -311,8 +312,8 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
         {
             mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
 
-            tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
-            Invalidate(aRect);
+            // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
+            mpImpl->mpParentWindow->Invalidate();
 
             mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
 
@@ -378,11 +379,9 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
         }
     }
 
-    Size aSliderWindowSize = GetOutputSizePixel();
-    tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
-
     if ( !mpImpl->mbOmitPaint )
-       Invalidate(aRect);
+        // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
+        mpImpl->mpParentWindow->Invalidate();
 }
 
 void ScZoomSlider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
@@ -399,6 +398,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
+    pVDev->SetBackground(Wallpaper(COL_TRANSPARENT));
     pVDev->SetOutputSizePixel(aSliderWindowSize);
 
     tools::Rectangle aSlider = aRect;
@@ -419,21 +419,6 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
 
     tools::Rectangle aRight(aSlider);
     aRight.SetLeft( aRight.Right() );
-
-    // draw VirtualDevice's background color
-    Color aStartColor = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
-    Color aEndColor   = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
-
-    if (aEndColor.IsDark())
-        aStartColor = aEndColor;
-
-    Gradient aGradient;
-    aGradient.SetAngle(0);
-    aGradient.SetStyle(GradientStyle::Linear);
-
-    aGradient.SetStartColor(aStartColor);
-    aGradient.SetEndColor(aEndColor);
-    pVDev->DrawGradient(aRect, aGradient);
 
     // draw slider
     pVDev->SetLineColor(COL_WHITE);
