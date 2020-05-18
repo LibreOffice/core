@@ -968,6 +968,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
         uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
         xDocStorable->storeToURL(aTempFile.GetURL(), props);
     }
+    validate(aTempFile.GetFileName(), test::ODF);
 
     createDoc(aTempFile.GetURL());
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
