@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/register \
 	basctl/source/basicide/sbxitem \
 	basctl/source/basicide/scriptdocument \
+	basctl/source/basicide/uiobject \
 	basctl/source/basicide/unomodel \
 	basctl/source/dlged/dlgedclip \
 	basctl/source/dlged/dlged \
