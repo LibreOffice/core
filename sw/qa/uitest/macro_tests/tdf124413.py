@@ -6,6 +6,7 @@
 #
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 
 class tdf124413(UITestCase):
 
@@ -19,6 +20,13 @@ class tdf124413(UITestCase):
         xEditBtn = xDialog.getChild("edit")
         xEditBtn.executeAction("CLICK", tuple())
 
+        resultText = "REM  *****  BASIC  *****\n\nSub Main\n\nEnd Sub\n"
+
+        xMacroWin = self.xUITest.getTopFocusWindow()
+        xEditWin = xMacroWin.getChild('EditorWindow')
+
+        self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
+
         self.xUITest.executeCommand(".uno:SelectAll")
         self.xUITest.executeCommand(".uno:Copy")
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -29,4 +37,7 @@ class tdf124413(UITestCase):
         self.xUITest.executeCommand(".uno:Redo")
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
+
+        self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
