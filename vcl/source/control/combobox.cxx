@@ -62,7 +62,6 @@ struct ComboBox::Impl
     sal_Int32           m_nMaxWidthChars;
     sal_Int32           m_nWidthInChars;
     Link<ComboBox&,void>               m_SelectHdl;
-    Link<ComboBox&,void>               m_DoubleClickHdl;
 
     explicit Impl(ComboBox & rThis)
         : m_rThis(rThis)
@@ -506,7 +505,7 @@ void ComboBox::Select()
 
 void ComboBox::DoubleClick()
 {
-    ImplCallEventListenersAndHandler( VclEventId::ComboboxDoubleClick, [this] () { m_pImpl->m_DoubleClickHdl.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::ComboboxDoubleClick, [] () {} );
 }
 
 bool ComboBox::IsAutoSizeEnabled() const { return m_pImpl->m_isDDAutoSize; }
