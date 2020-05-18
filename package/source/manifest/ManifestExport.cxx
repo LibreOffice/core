@@ -452,48 +452,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
-            // ==== Key Derivation
-            pNewAttrList = new ::comphelper::AttributeList;
-            xNewAttrList = pNewAttrList;
-
-            if ( pKeyInfoProperty )
-            {
-                pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute,
-                                             sCdataAttribute,
-                                             sPGP_Name );
-                // no start-key-generation needed, our session key has
-                // max size already
-                bStoreStartKeyGeneration = false;
-            }
-            else
-            {
-                pNewAttrList->AddAttribute ( sKeyDerivationNameAttribute,
-                                             sCdataAttribute,
-                                             sPBKDF2_Name );
-
-                if ( bStoreStartKeyGeneration )
-                {
-                    aBuffer.append( nDerivedKeySize );
-                    pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-                }
-
-                sal_Int32 nCount = 0;
-                *pIterationCount >>= nCount;
-                aBuffer.append (nCount);
-                pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-
-                *pSalt >>= aSequence;
-                ::comphelper::Base64::encode(aBuffer, aSequence);
-                pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-            }
-
-            xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sKeyDerivationElement , xNewAttrList);
-            xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->endElement( sKeyDerivationElement );
-
-            // we have to store start-key-generation element as the last one to workaround the parsing problem
-            // in OOo3.1 and older versions
             if ( bStoreStartKeyGeneration )
             {
                 // ==== Start Key Generation
@@ -527,6 +485,46 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sStartKeyGenerationElement );
             }
+
+            // ==== Key Derivation
+            pNewAttrList = new ::comphelper::AttributeList;
+            xNewAttrList = pNewAttrList;
+
+            if (pKeyInfoProperty)
+            {
+                pNewAttrList->AddAttribute(sKeyDerivationNameAttribute,
+                                           sCdataAttribute,
+                                           sPGP_Name);
+                // no start-key-generation needed, our session key has
+                // max size already
+                bStoreStartKeyGeneration = false;
+            }
+            else
+            {
+                pNewAttrList->AddAttribute(sKeyDerivationNameAttribute,
+                                           sCdataAttribute,
+                                           sPBKDF2_Name);
+
+                if (bStoreStartKeyGeneration)
+                {
+                    aBuffer.append(nDerivedKeySize);
+                    pNewAttrList->AddAttribute(sKeySizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+                }
+
+                sal_Int32 nCount = 0;
+                *pIterationCount >>= nCount;
+                aBuffer.append(nCount);
+                pNewAttrList->AddAttribute(sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+
+                *pSalt >>= aSequence;
+                ::comphelper::Base64::encode(aBuffer, aSequence);
+                pNewAttrList->AddAttribute(sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear());
+            }
+
+            xHandler->ignorableWhitespace(sWhiteSpace);
+            xHandler->startElement(sKeyDerivationElement, xNewAttrList);
+            xHandler->ignorableWhitespace(sWhiteSpace);
+            xHandler->endElement(sKeyDerivationElement);
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sEncryptionDataElement );
