@@ -233,6 +233,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
+    m_nSetSourceInBasicId(nullptr),
     aHighlighter(HighlighterLanguage::Basic),
     bHighlighting(false),
     bDoSyntaxHighlight(true),
@@ -263,6 +264,12 @@ EditorWindow::~EditorWindow()
 
 void EditorWindow::dispose()
 {
+    if (m_nSetSourceInBasicId)
+    {
+        Application::RemoveUserEvent(m_nSetSourceInBasicId);
+        m_nSetSourceInBasicId = nullptr;
+    }
+
     Reference< beans::XMultiPropertySet > n;
     {
         osl::MutexGuard g(mutex_);
@@ -929,8 +936,18 @@ void EditorWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void EditorWindow::LoseFocus()
 {
-    SetSourceInBasic();
+    // tdf#114258 wait until the next event loop cycle to do this so it doesn't
+    // happen during a mouse down/up selection in the treeview whose contents
+    // this may update
+    if (!m_nSetSourceInBasicId)
+        m_nSetSourceInBasicId = Application::PostUserEvent(LINK(this, EditorWindow, SetSourceInBasicHdl));
     Window::LoseFocus();
+}
+
+IMPL_LINK_NOARG(EditorWindow, SetSourceInBasicHdl, void*, void)
+{
+    m_nSetSourceInBasicId = nullptr;
+    SetSourceInBasic();
 }
 
 void EditorWindow::SetSourceInBasic()
