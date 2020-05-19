@@ -77,10 +77,13 @@ private:
 
     long            nCurTextWidth;
 
+    ImplSVEvent* m_nSetSourceInBasicId;
+
     SyntaxHighlighter   aHighlighter;
     Idle                aSyntaxIdle;
     std::set<sal_uInt16>       aSyntaxLineTable;
     DECL_LINK(SyntaxTimerHdl, Timer *, void);
+    DECL_LINK(SetSourceInBasicHdl, void*, void);
 
     // progress bar
     class ProgressInfo;
