@@ -835,12 +835,11 @@ void ScXMLExportDataPilot::WriteDataPilots()
             if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
             {
                 if (pSheetSource->HasRangeName())
-                {
+                {   // ODF 1.3 OFFICE-3665
                     // FIXME this was wrongly exported to TABLE namespace since 2011
+                    // so continue doing that in ODF 1.2 extended, for now
                     rExport.AddAttribute(
                         XML_NAMESPACE_TABLE, XML_NAME, pSheetSource->GetRangeName());
-                    rExport.AddAttribute(
-                        XML_NAMESPACE_LO_EXT, XML_NAME, pSheetSource->GetRangeName());
                 }
             }
 
