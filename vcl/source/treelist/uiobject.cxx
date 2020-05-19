@@ -135,6 +135,11 @@ void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*
             return;
         pItem->ClickHdl(mpEntry);
     }
+    else if (rAction == "DOUBLECLICK")
+    {
+        mxTreeList->Select(mpEntry);
+        mxTreeList->DoubleClickHdl();
+    }
 }
 
 std::unique_ptr<UIObject> TreeListEntryUIObject::get_child(const OUString& rID)
