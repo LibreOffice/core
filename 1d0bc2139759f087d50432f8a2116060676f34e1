@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fd7e742_e959935f",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-19T08:35:48Z",
+      "side": 1,
+      "message": "what is the exact motivation for this qualification?  \u003chttps://ci.libreoffice.org//job/lo_ubsan/1631/\u003e builds with some\n\n  checking whether Clang is new enough... yes (9.0.0)\n\nbut nevertheless fails with\n\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/cppu/source/cppu/cppu_opt.cxx:22:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/include/com/sun/star/uno/Any.hxx:36:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/include/com/sun/star/uno/genfunc.hxx:28:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/uno/XInterface.hpp:8:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/uno/RuntimeException.hpp:6:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/uno/RuntimeException.hdl:6:\n  In file included from /home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/UnoApiHeadersTarget/udkapi/normal/com/sun/star/uno/Exception.hdl:14:\n  /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/experimental/source_location:51:34: error: use of undeclared identifier \u0027__builtin_FILE\u0027\n      current(const char* __file \u003d __builtin_FILE(),\n                                   ^\n  /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/experimental/source_location:52:27: error: use of undeclared identifier \u0027__builtin_FUNCTION\u0027\n              const char* __func \u003d __builtin_FUNCTION(),\n                                   ^\n  /home/tdf/lode/opt_private/gcc-7.3.0/lib/gcc/x86_64-pc-linux-gnu/7.3.0/../../../../include/c++/7.3.0/experimental/source_location:53:19: error: use of undeclared identifier \u0027__builtin_LINE\u0027\n              int __line \u003d __builtin_LINE(),\n                           ^\n  3 errors generated.\n  /home/tdf/lode/jenkins/workspace/lo_ubsan/solenv/gbuild/LinkTarget.mk:303: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/CxxObject/cppu/source/cppu/cppu_opt.o\u0027 failed\n  make[1]: *** [/home/tdf/lode/jenkins/workspace/lo_ubsan/workdir/CxxObject/cppu/source/cppu/cppu_opt.o] Error 1",
+      "range": {
+        "startLine": 2791,
+        "startChar": 129,
+        "endLine": 2791,
+        "endChar": 149
+      },
+      "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
