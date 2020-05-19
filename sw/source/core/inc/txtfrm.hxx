@@ -220,7 +220,6 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     bool mbInFootnoteConnect  : 1;        // Is in Connect at the moment
     bool mbFootnote           : 1;        // Has at least one footnote
     bool mbRepaint       : 1;        // TextFrame: Repaint is ready to be fetched
-    bool mbHasBlinkPortions      : 1;        // Contains Blink Portions
     /// Contains rotated portions.
     bool mbHasRotatedPortions : 1;
     bool mbFieldFollow   : 1;        // Start with Field rest of the Master

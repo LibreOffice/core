@@ -779,7 +779,6 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
     , mbInFootnoteConnect( false )
     , mbFootnote( false )
     , mbRepaint( false )
-    , mbHasBlinkPortions( false )
     , mbHasRotatedPortions( false )
     , mbFieldFollow( false )
     , mbHasAnimation( false )
