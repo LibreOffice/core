@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ca5d666_fbe607e5",
+        "filename": "sal/osl/unx/process.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-19T08:16:42Z",
+      "side": 1,
+      "message": "if we return here, we don\u0027t call osl_destroyCondition and free instruction, isn\u0027t it a leak then?",
+      "range": {
+        "startLine": 667,
+        "startChar": 8,
+        "endLine": 667,
+        "endChar": 36
+      },
+      "revId": "286cff6f396736997beedb16e493c2e1e4e8b5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
