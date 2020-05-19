@@ -86,6 +86,7 @@ enum Compat : sal_uInt32
 {
     none = 0,
     scNoGridBackground = 1,
+    scPrintTwipsMsgs = 2,
 };
 /// Set compatibility flags
 COMPHELPER_DLLPUBLIC void setCompatFlag(Compat flag);
