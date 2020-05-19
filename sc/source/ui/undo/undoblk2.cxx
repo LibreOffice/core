@@ -125,9 +125,14 @@ void ScUndoWidthOrHeight::Undo()
 
     if (pViewShell)
     {
+        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNo();
+        bool bAffectsVisibility = (eMode != SC_SIZE_ORIGINAL && eMode != SC_SIZE_VISOPT);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                pViewShell, bWidth /* bColumns */, !bWidth /* bRows */,
+                true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
+                false /* bGroups */, nCurrentTab);
         pViewShell->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
-        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNo();
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
     }

@@ -390,6 +390,10 @@ public:
     /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
     static void notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex);
     static bool isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
+    /// Emits a LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY for all views whose current tab
+    /// is equal to nCurrentTabIndex
+    static void notifyAllViewsSheetGeomInvalidation(SfxViewShell* pForViewShell, bool bColumns, bool bRows, bool bSizes,
+                                                    bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 

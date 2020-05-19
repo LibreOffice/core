@@ -273,11 +273,21 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
+            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+            bool bColsAffected = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT);
+            bool bRowsAffected = (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN);
 
-            if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, pViewShell->GetViewData().GetTabNo());
+            if (bColsAffected)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
+
+            if (bRowsAffected)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    pViewShell,
+                    bColsAffected, bRowsAffected,
+                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                    true /* bGroups */, nTab);
         }
     }
 }
@@ -534,11 +544,21 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, pViewShell->GetViewData().GetTabNo());
+            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+            bool bColsAffected = (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft);
+            bool bRowsAffected = (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp);
 
-            if (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, pViewShell->GetViewData().GetTabNo());
+            if (bColsAffected)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, COLUMN_HEADER, nTab);
+
+            if (bRowsAffected)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    pViewShell,
+                    bColsAffected, bRowsAffected,
+                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                    true /* bGroups */, nTab);
         }
 
     }
