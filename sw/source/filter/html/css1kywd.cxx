@@ -217,6 +217,7 @@ const char* const sCSS1_P_page_break_after = "page-break-after";
 const char* const sCSS1_P_page_break_inside = "page-break-inside";
 const char* const sCSS1_P_size = "size";
 const char* const sCSS1_P_widows = "widows";
+const char* const sCSS1_P_visibility = "visibility";
 const char* const sCSS1_P_orphans = "orphans";
 //const char* const sCSS1_P_marks = "marks";
 
