@@ -134,7 +134,19 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                           CreateContainer(aClass, aItemSet, aPropInfo,
                                           xCntxt.get());
             if( !bPositioned )
+            {
+                if (aPropInfo.m_bVisible && m_aContexts.size())
+                {
+                    const std::unique_ptr<HTMLAttrContext>& pParent
+                        = m_aContexts[m_aContexts.size() - 1];
+                    if (!pParent->IsVisible())
+                    {
+                        // If the parent context is hidden, we are not visible, either.
+                        aPropInfo.m_bVisible = false;
+                    }
+                }
                 bPositioned = DoPositioning(aItemSet, aPropInfo, xCntxt.get());
+            }
         }
     }
 
@@ -381,6 +393,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
     if( bStyleParsed )
         InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
 
+    xCntxt->SetVisible(aPropInfo.m_bVisible);
     PushContext(xCntxt);
 }
 

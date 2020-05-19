@@ -1428,6 +1428,12 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
 bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                     bool bAutoWidth )
 {
+    if (!rPropInfo.m_bVisible)
+    {
+        // Don't create a textframe for this div if it's hidden.
+        return false;
+    }
+
     // abs-pos
     // left/top none    auto    twip    perc
 
