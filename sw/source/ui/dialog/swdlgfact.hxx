@@ -467,16 +467,16 @@ class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
 protected:
-    std::unique_ptr<SwInsTableDlg> m_xDlg;
+    std::shared_ptr<weld::DialogController> m_xDlg;
 public:
-    explicit AbstractInsTableDlg_Impl(std::unique_ptr<SwInsTableDlg> p)
-        : m_xDlg(std::move(p))
+    explicit AbstractInsTableDlg_Impl(std::shared_ptr<weld::DialogController> p)
+        : m_xDlg(p)
     {
     }
-    virtual short Execute() override;
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 SwTableAutoFormat *& prTAFormat ) override;
+    virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
 };
 
 class SwJavaEditDialog;
@@ -702,7 +702,7 @@ public:
         weld::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
     virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) override;
-    virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) override;
+    virtual std::shared_ptr<AbstractInsTableDlg> CreateInsTableDlg(SwView& rView) override;
     virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) override;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(

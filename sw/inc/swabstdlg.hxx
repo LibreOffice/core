@@ -57,6 +57,7 @@ struct SfxChildWinInfo;
 class SwTOXMark;
 struct SwDocStat;
 struct SwInsertTableOptions;
+class SwInsTableDlg;
 enum class SwBorderModes;
 enum class SwCharDlgMode;
 enum class SfxStyleFamily;
@@ -117,14 +118,15 @@ public:
     virtual void        SetText( const OUString& rStr ) = 0;
 };
 
-class AbstractInsTableDlg : public VclAbstractDialog
+class AbstractInsTableDlg
 {
 protected:
-    virtual ~AbstractInsTableDlg() override = default;
+    virtual ~AbstractInsTableDlg() = default;
 public:
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 SwTableAutoFormat *& prTAFormat ) = 0;
+    virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog
@@ -457,7 +459,7 @@ public:
         SwWrtShell &rSh, bool bEd = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateTitlePageDlg(weld::Window* pParent) = 0;
     virtual VclPtr<VclAbstractDialog>         CreateVclSwViewDialog(SwView& rView) = 0;
-    virtual VclPtr<AbstractInsTableDlg>        CreateInsTableDlg(SwView& rView) = 0;
+    virtual std::shared_ptr<AbstractInsTableDlg> CreateInsTableDlg(SwView& rView) = 0;
     virtual VclPtr<AbstractJavaEditDialog>     CreateJavaEditDialog(weld::Window* pParent,
         SwWrtShell* pWrtSh) = 0;
     virtual VclPtr<AbstractMailMergeDlg>       CreateMailMergeDlg(

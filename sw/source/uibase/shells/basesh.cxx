@@ -2648,6 +2648,48 @@ SwWrtShell* SwBaseShell::GetShellPtr()
     return rView.GetWrtShellPtr();
 }
 
+static void EndUndo(SwWrtShell& rSh)
+{
+    SwRewriter aRewriter;
+
+    if (rSh.GetTableFormat())
+    {
+        aRewriter.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
+        aRewriter.AddRule(UndoArg2, rSh.GetTableFormat()->GetName());
+        aRewriter.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
+
+    }
+    rSh.EndUndo(SwUndoId::INSTABLE, &aRewriter); // If possible change the Shell
+}
+
+static void InsertTableImpl(SwWrtShell& rSh,
+                    SwView &rTempView,
+                    const OUString& aTableName,
+                    sal_uInt16 nRows,
+                    sal_uInt16 nCols,
+                    SwInsertTableOptions aInsTableOpts,
+                    const OUString& aAutoName,
+                    SwTableAutoFormat* pTAFormat)
+{
+    rSh.StartUndo(SwUndoId::INSTABLE);
+
+    rSh.StartAllAction();
+    if( rSh.HasSelection() )
+        rSh.DelRight();
+
+    rSh.InsertTable( aInsTableOpts, nRows, nCols, pTAFormat );
+    rSh.MoveTable( GotoPrevTable, fnTableStart );
+
+    if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
+        rSh.GetTableFormat()->SetName( aTableName );
+
+    if( pTAFormat != nullptr && aAutoName != SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() ) )
+        rSh.SetTableStyle( aAutoName );
+
+    rSh.EndAllAction();
+    rTempView.AutoCaption(TABLE_CAP);
+}
+
 void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 {
     const SfxItemSet* pArgs = _rRequest.GetArgs();
@@ -2727,16 +2769,34 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             if( !nCols || !nRows )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
-                if( RET_OK == pDlg->Execute() )
-                {
-                    pDlg->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
-                }
-                else
-                    _rRequest.Ignore();
-            }
+                std::shared_ptr<AbstractInsTableDlg> pAbstractDialog(pFact->CreateInsTableDlg(rTempView));
+                std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
 
-            if( nCols && nRows )
+                weld::DialogController::runAsync(pDialogController,
+                    [pAbstractDialog, &rSh, &rTempView] (sal_Int32 nResult) {
+                        if( RET_OK == nResult )
+                        {
+                            sal_uInt16 nCols = 0;
+                            sal_uInt16 nRows = 0;
+                            SwInsertTableOptions aInsTableOpts( SwInsertTableFlags::All, 1 );
+                            OUString aTableName;
+                            OUString aAutoName;
+                            SwTableAutoFormat* pTAFormat = nullptr;
+
+                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+
+                            if( nCols && nRows )
+                            {
+                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                                EndUndo(rSh);
+                            }
+
+                            delete pTAFormat;
+                        }
+                    }
+                );
+            }
+            else if( nCols && nRows )
             {
                 // record before shell change
                 _rRequest.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableName ) );
@@ -2747,41 +2807,16 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, static_cast<sal_Int32>(aInsTableOpts.mnInsMode) ) );
                 _rRequest.Done();
 
-                rSh.StartUndo(SwUndoId::INSTABLE);
+                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+
                 bCallEndUndo = true;
-
-                rSh.StartAllAction();
-                if( rSh.HasSelection() )
-                    rSh.DelRight();
-
-                rSh.InsertTable( aInsTableOpts, nRows, nCols, pTAFormat );
-                rSh.MoveTable( GotoPrevTable, fnTableStart );
-
-                if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
-                    rSh.GetTableFormat()->SetName( aTableName );
-
-                if( pTAFormat != nullptr && aAutoName != SwStyleNameMapper::GetUIName( RES_POOLTABSTYLE_DEFAULT, OUString() ) )
-                    rSh.SetTableStyle( aAutoName );
-
-                rSh.EndAllAction();
-                rTempView.AutoCaption(TABLE_CAP);
             }
+
             delete pTAFormat;
         }
 
         if( bCallEndUndo )
-        {
-            SwRewriter aRewriter;
-
-            if (rSh.GetTableFormat())
-            {
-                aRewriter.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
-                aRewriter.AddRule(UndoArg2, rSh.GetTableFormat()->GetName());
-                aRewriter.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
-
-            }
-            rSh.EndUndo(SwUndoId::INSTABLE, &aRewriter); // If possible change the Shell
-        }
+            EndUndo(rSh);
     }
 }
 
