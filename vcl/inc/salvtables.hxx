@@ -668,7 +668,7 @@ protected:
     // owner for ListBox/ComboBox UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<vcl_type> m_xComboBox;
-    ScopedVclPtr<MenuButton> m_xMenuButton;
+    ScopedVclPtr<::MenuButton> m_xMenuButton;
     OUString m_sMenuButtonRow;
 
 public:
@@ -838,7 +838,7 @@ public:
 
         if (!m_xMenuButton)
             m_xMenuButton
-                = VclPtr<MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+                = VclPtr<::MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
 
         m_xMenuButton->SetPopupMenu(pPopup);
         m_xMenuButton->Show(pPopup != nullptr);
