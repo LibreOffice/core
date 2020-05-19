@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7335322a_acde7d47",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-19T17:30:30Z",
+      "side": 1,
+      "message": "I re-organize and re-use this in a following commit, so I place it here to avoid code churn.",
+      "range": {
+        "startLine": 1381,
+        "startChar": 24,
+        "endLine": 1381,
+        "endChar": 34
+      },
+      "revId": "f48bf2ae43fd07dd2a28264db6f3d1d796bd4d4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f408c8d_181c9416",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-19T17:30:30Z",
+      "side": 1,
+      "message": "true is a bit less expensive, and we already know !isSet(PROP_NUMBERING_STYLE_NAME).",
+      "range": {
+        "startLine": 1393,
+        "startChar": 102,
+        "endLine": 1393,
+        "endChar": 106
+      },
+      "revId": "f48bf2ae43fd07dd2a28264db6f3d1d796bd4d4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
