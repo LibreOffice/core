@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5612147c_45fc2083",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-19T19:05:06Z",
+      "side": 1,
+      "message": "Here is a minor difference - again added specifically to avoid problematic cases (that typically come from styles - but I think this workaround was added first.) Again, it doesn\u0027t make much sense to try to keep a gigantic table together (aka force a page break). So I think that this change doesn\u0027t have much bearing on the final decision.\n\nActually, is there even any reason to add it here?  Why did I do that. Just leave it on bEmulateTableKeep (since I didn\u0027t remove it from there yet anyway). [YES - JUST LEAVE THIS COMPLETELY ALONE, SINCE WHAT CAN THIS VARIABLE ACTUALLY DO ANYWAY - NOTHING!!! IT ONLY SAYS, IS THIS MSFORMAT?]",
+      "range": {
+        "startLine": 1927,
+        "startChar": 46,
+        "endLine": 1927,
+        "endChar": 58
+      },
+      "revId": "b4153ac52f4449143f2e80bcb31e100120dd8577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf5fea2f_8cfda6ff",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-19T19:05:06Z",
+      "side": 1,
+      "message": "This is probably the biggest difference. This was specifically added because styles are NOT supposed to cause the emulation - and people tend to do that by accident. So it might miss a few cases where WORD looks a bit different than LO - in the extreme cases where it was intentional and not accidental.  Is the simplification worth the risk?\n\nIt is possible that I could return CheckParents\u003dtrue, because before I was incorrectly setting bTryToSplit\u003dfalse. So this perhaps this isn\u0027t needed anymore, and could just be enabled again.",
+      "range": {
+        "startLine": 1940,
+        "startChar": 118,
+        "endLine": 1940,
+        "endChar": 141
+      },
+      "revId": "b4153ac52f4449143f2e80bcb31e100120dd8577",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
