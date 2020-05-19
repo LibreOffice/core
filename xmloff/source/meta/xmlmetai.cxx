@@ -47,11 +47,13 @@ class XMLDocumentBuilderContext : public SvXMLImportContext
 {
 private:
     css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
+    SvXMLMetaDocumentContext *const m_pTopLevel;
 
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        const css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
+        const css::uno::Reference<css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder,
+        SvXMLMetaDocumentContext * pTopLevel);
 
     virtual void SAL_CALL characters( const OUString& aChars ) override;
 
@@ -74,9 +76,11 @@ public:
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
         sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>&,
-        const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder) :
-    SvXMLImportContext( rImport ),
-    mxDocBuilder(rDocBuilder)
+        const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder,
+        SvXMLMetaDocumentContext *const pTopLevel)
+    : SvXMLImportContext(rImport)
+    , mxDocBuilder(rDocBuilder)
+    , m_pTopLevel(pTopLevel)
 {
 }
 
@@ -89,6 +93,13 @@ void SAL_CALL XMLDocumentBuilderContext::startFastElement( sal_Int32 nElement,
 void SAL_CALL XMLDocumentBuilderContext::endFastElement( sal_Int32 nElement )
 {
     mxDocBuilder->endFastElement(nElement);
+    if (m_pTopLevel)
+    {
+        // call this here because in the flat ODF case the top-level
+        // endFastElement is called only at the very end of the document,
+        // which is too late to init BuildId
+        m_pTopLevel->FinishMetaElement();
+    }
 }
 
 void SAL_CALL XMLDocumentBuilderContext::startUnknownElement( const OUString& rNamespace,
@@ -110,7 +121,7 @@ void SAL_CALL XMLDocumentBuilderContext::characters( const OUString& rChars )
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL XMLDocumentBuilderContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return new XMLDocumentBuilderContext( GetImport(), nElement, xAttrList, mxDocBuilder );
+    return new XMLDocumentBuilderContext(GetImport(), nElement, xAttrList, mxDocBuilder, nullptr);
 }
 
 static void
@@ -186,18 +197,22 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 {
 }
 
-void SAL_CALL SvXMLMetaDocumentContext::startFastElement( sal_Int32 nElement,
+void SAL_CALL SvXMLMetaDocumentContext::startFastElement(sal_Int32 /*nElement*/,
             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     mxDocBuilder->startDocument();
     // hardcode office:document-meta (necessary in case of flat file ODF)
-    mxDocBuilder->startFastElement( ( nElement & NMSP_MASK ) | XML_DOCUMENT_META, xAttrList );
+    mxDocBuilder->startFastElement(XML_ELEMENT(OFFICE, XML_DOCUMENT_META), xAttrList);
 }
 
-void SAL_CALL SvXMLMetaDocumentContext::endFastElement( sal_Int32 nElement )
+void SAL_CALL SvXMLMetaDocumentContext::endFastElement(sal_Int32 /*nElement*/)
+{
+}
+
+void SvXMLMetaDocumentContext::FinishMetaElement()
 {
     // hardcode office:document-meta (necessary in case of flat file ODF)
-    mxDocBuilder->endFastElement( ( nElement & NMSP_MASK ) | XML_DOCUMENT_META );
+    mxDocBuilder->endFastElement(XML_ELEMENT(OFFICE, XML_DOCUMENT_META));
     mxDocBuilder->endDocument();
     if (mxDocProps.is())
     {
@@ -218,7 +233,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContex
 {
     if ( nElement == XML_ELEMENT(OFFICE, XML_META) )
         return new XMLDocumentBuilderContext(
-                GetImport(), nElement, xAttrList, mxDocBuilder);
+                GetImport(), nElement, xAttrList, mxDocBuilder, this);
     return nullptr;
 }
 
