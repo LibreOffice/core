@@ -213,11 +213,10 @@ int createJvm(
     g_bInGetJavaVM = 1;
     jint err;
     memset( jmp_jvm_abort, 0, sizeof(jmp_jvm_abort));
-    int jmpval= setjmp( jmp_jvm_abort );
-    /* If jmpval is not "0" then this point was reached by a longjmp in the
+    /* If the setjmp return value is not "0" then this point was reached by a longjmp in the
        abort_handler, which was called indirectly by JNI_CreateVM.
     */
-    if( jmpval == 0)
+    if( setjmp( jmp_jvm_abort ) == 0)
     {
         //returns negative number on failure
         err= pCreateJavaVM(pJavaVM, ppEnv, vm_args);
