@@ -233,6 +233,8 @@ class HTMLAttrContext
     bool    m_bRestartListing : 1;
     bool    m_bHeaderOrFooter : 1;
 
+    bool m_bVisible = true;
+
 public:
     void ClearSaveDocContext();
 
@@ -291,6 +293,9 @@ public:
 
     void SetAppendMode( SwHTMLAppendMode eMode ) { m_eAppend = eMode; }
     SwHTMLAppendMode GetAppendMode() const { return m_eAppend; }
+
+    void SetVisible(bool bVisible) { m_bVisible = bVisible; }
+    bool IsVisible() const { return m_bVisible; }
 };
 
 typedef std::vector<std::unique_ptr<HTMLAttrContext>> HTMLAttrContexts;
