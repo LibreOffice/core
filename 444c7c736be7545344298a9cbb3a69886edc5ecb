@@ -16,6 +16,24 @@
       "revId": "444c7c736be7545344298a9cbb3a69886edc5ecb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcbbbca4_ee961b47",
+        "filename": "sc/source/ui/cctrl/tbzoomsliderctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-19T11:50:24Z",
+      "side": 1,
+      "message": "thanks, fix in progres\n https://gerrit.libreoffice.org/c/core/+/94498",
+      "parentUuid": "91780289_8dd17d94",
+      "revId": "444c7c736be7545344298a9cbb3a69886edc5ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
