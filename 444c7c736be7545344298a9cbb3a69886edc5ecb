@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91780289_8dd17d94",
+        "filename": "sc/source/ui/cctrl/tbzoomsliderctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-19T11:13:41Z",
+      "side": 1,
+      "message": "the clang VclPtr error here didn\u0027t get fixed before the push FWIW",
+      "revId": "444c7c736be7545344298a9cbb3a69886edc5ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
