@@ -165,7 +165,7 @@ public:
     const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 
     /** Applies the navigator settings to the listbox. */
-    void ApplyNavigatorSettings();
+    void ApplyNavigatorSettings(bool bRestoreScrollPos = false, int nScrollPos = 0);
     /** Stores the current listbox state in the navigator settings. */
     void StoreNavigatorSettings() const;
 };
