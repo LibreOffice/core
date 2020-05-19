@@ -5,8 +5,6 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-using namespace weld;
-
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
     : SalInstanceBuilder(dynamic_cast<SalInstanceWidget*>(pParent)
