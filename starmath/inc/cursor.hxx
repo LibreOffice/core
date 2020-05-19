@@ -88,7 +88,7 @@ public:
     /** Move the position of this cursor */
     void Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor = true);
 
-    /** Move to the caret position closet to a given point */
+    /** Move to the caret position closest to a given point */
     void MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor);
 
     /** Delete the current selection or do nothing */
