@@ -204,7 +204,7 @@ public:
     ScrollBar&      GetScrollBar() { return *maScrollbar.get(); }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
-    long            GetNumLines() { return maTextWnd->GetNumLines(); }
+    long            GetNumLines() override { return maTextWnd->GetNumLines(); }
     long            GetVertOffset() { return  mnVertOffset; }
 
 private:
