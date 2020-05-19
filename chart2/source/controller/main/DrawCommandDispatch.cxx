@@ -157,7 +157,6 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
             }
             if ( !bAttributesAppliedFromGallery )
             {
-                pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, 0 ) );
                 pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                 pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
                 pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
