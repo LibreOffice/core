@@ -70,6 +70,30 @@
       "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c52ad6b3_3602efcc",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-19T15:08:11Z",
+      "side": 1,
+      "message": "done: \u003chttps://git.libreoffice.org/lode/+/456553363765ba248589a54739cc88581ea4f327%5E%21\u003e \"Update ASan/UBSan bot to a released Clang 9 version\" (rolled out on \u003chttps://ci.libreoffice.org/computer/tb76-maggie\u003e for \u003chttps://ci.libreoffice.org/job/lo_ubsan/\u003e) and \u003chttps://git.libreoffice.org/core/+/809ddff82dc9a28051d8f6b0d6513b1824ba0ab9%5E%21\u003e \"Fix the Clang check for using \u003cexperimental/source_location\u003e\"",
+      "parentUuid": "ef7da433_c90d3e36",
+      "range": {
+        "startLine": 2791,
+        "startChar": 129,
+        "endLine": 2791,
+        "endChar": 149
+      },
+      "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
