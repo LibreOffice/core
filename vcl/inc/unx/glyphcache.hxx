@@ -130,7 +130,7 @@ public:
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
-    FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance; }
+    FreetypeFontInstance&   GetFontInstance() const { return mrFontInstance; }
 
     void                    SetFontVariationsOnHBFont(hb_font_t* pHbFace) const;
 
@@ -144,11 +144,11 @@ private:
     friend class FreetypeFontInstance;
     friend class FreetypeManager;
 
-    explicit FreetypeFont(LogicalFontInstance*, FreetypeFontInfo*);
+    explicit FreetypeFont(FreetypeFontInstance&, FreetypeFontInfo*);
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 
-    FreetypeFontInstance* mpFontInstance;
+    FreetypeFontInstance& mrFontInstance;
 
     // 16.16 fixed point values used for a rotated font
     long                    mnCos;
