@@ -91,10 +91,7 @@ void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                   
 
 css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
 {
-    css::uno::Sequence< sal_Int16 > lGroups(2);
-    lGroups[0] = css::frame::CommandGroup::VIEW;
-    lGroups[1] = css::frame::CommandGroup::DOCUMENT;
-    return lGroups;
+    return  css::uno::Sequence< sal_Int16 >{css::frame::CommandGroup::VIEW, css::frame::CommandGroup::DOCUMENT};
 }
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
