@@ -2712,7 +2712,7 @@ static void InsertTableImpl(SwWrtShell& rSh,
                     sal_uInt16 nCols,
                     SwInsertTableOptions aInsTableOpts,
                     const OUString& aAutoName,
-                    std::unique_ptr<SwTableAutoFormat> pTAFormat)
+                    std::unique_ptr<SwTableAutoFormat>& pTAFormat)
 {
     rSh.StartUndo(SwUndoId::INSTABLE);
 
@@ -2755,6 +2755,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
         bool bCallEndUndo = false;
 
         if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() &&
+            !rSh.IsTableMode() )
         {
             const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
             SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
@@ -2825,7 +2826,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
 
                 weld::DialogController::runAsync(pDialogController,
-                    [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, pTAFormatIn] (sal_Int32 nResult) {
+                    [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, &pTAFormatIn] (sal_Int32 nResult) {
                         if( RET_OK == nResult )
                         {
                             sal_uInt16 nCols = nColsIn;
@@ -2833,17 +2834,14 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                             SwInsertTableOptions aInsTableOpts = aInsTableOptsIn;
                             OUString aTableName = aTableNameIn;
                             OUString aAutoName = aAutoNameIn;
-                            SwTableAutoFormat* pTAFormat = pTAFormatIn;
 
-                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormatIn );
 
                             if( nCols && nRows )
                             {
-                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormatIn );
                                 EndUndo(rSh);
                             }
-
-                            delete pTAFormat;
                         }
                     }
                 );
@@ -2862,7 +2860,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 InsertTableImpl( rSh, rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, pTAFormatIn );
 
                 bCallEndUndo = true;
-                delete pTAFormatIn;
             }
         }
 
