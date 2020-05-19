@@ -220,6 +220,7 @@ extern const sal_Char* sCSS1_P_page_break_after;
 extern const sal_Char* sCSS1_P_page_break_inside;
 extern const sal_Char* sCSS1_P_size;
 extern const sal_Char* sCSS1_P_widows;
+extern const sal_Char* sCSS1_P_visibility;
 extern const sal_Char* sCSS1_P_orphans;
 //extern const sal_Char* sCSS1_P_marks;
 

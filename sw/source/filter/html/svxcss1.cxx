@@ -3076,6 +3076,15 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     }
 }
 
+static void ParseCSS1_visibility(const CSS1Expression* pExpr, SfxItemSet& /*rItemSet*/,
+                                 SvxCSS1PropertyInfo& rPropInfo, const SvxCSS1Parser& /*rParser*/)
+{
+    if (pExpr->GetType() != CSS1_IDENT)
+        return;
+
+    rPropInfo.m_bVisible = pExpr->GetString() != "hidden";
+}
+
 // the assignment of property to parsing function
 struct CSS1PropEntry
 {
@@ -3140,6 +3149,7 @@ static CSS1PropEntry const aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(text_indent),
     CSS1_PROP_ENTRY(text_transform),
     CSS1_PROP_ENTRY(top),
+    CSS1_PROP_ENTRY(visibility),
     CSS1_PROP_ENTRY(widows),
     CSS1_PROP_ENTRY(width),
 };
