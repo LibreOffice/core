@@ -1,0 +1,10 @@
+--- src/core/SkVM.h
++++ src/core/SkVM.h
+@@ -909,6 +909,7 @@
+     static inline F32 max(float x, F32  y) { return y->max(x,y); }
+ 
+     static inline I32 operator==(F32   x, F32a y) { return x->eq(x,y); }
++    static inline I32 operator==(F32   x, float y) { return x->eq(x,y); }
+     static inline I32 operator==(float x, F32  y) { return y->eq(x,y); }
+     static inline I32 eq_op(float x, F32  y) { return y->eq(x,y); }
+ 
