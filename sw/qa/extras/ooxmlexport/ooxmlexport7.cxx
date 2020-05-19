@@ -887,6 +887,28 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
     assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:fill", "type", "solid");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118242, "tdf118242.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:pStyle", "val", "HeaderRight");
+
+    // w:sectPr is not exported
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:sectPr", 0);
+
+    // and drawing is no longer in the document
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[3]", 0);
+
+    //but it's in the header
+    pXmlDocument = parseExport("word/header1.xml");
+
+    assertXPath(pXmlDocument, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData"
+            "/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r/w:drawing", 1);
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testWrapTightThrough, "wrap-tight-through.docx")
 {
     // These were wrapSquare without a wrap polygon before.
