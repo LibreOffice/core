@@ -27,6 +27,7 @@ char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
 
 namespace
 {
+#if !defined(MACOSX)
 void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand,
                      const uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
@@ -42,6 +43,7 @@ void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const O
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
+#endif
 }
 
 /// SVG filter tests.
