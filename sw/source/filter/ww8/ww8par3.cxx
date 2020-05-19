@@ -628,20 +628,15 @@ SvxNumType WW8ListManager::GetSvxNumTypeFromMSONFC(sal_uInt16 nNFC)
 }
 
 bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet>& rpItemSet,
-    sal_uInt16 nLevelStyle, bool bSetStartNo,
-    std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
-    ww::bytes &rParaSprms)
+    sal_uInt16 nLevelStyle, bool bSetStartNo, sal_uInt16 /*nLevel*/, ww::bytes &rParaSprms)
 {
     sal_uInt8       aBits1(0);
-    sal_uInt16      nStartNo(0);        // Start-No. for Writer
     SvxNumType      nType(SVX_NUM_ARABIC);
     SvxAdjust       eAdj;               // Alignment (Left/right/centered)
     sal_Unicode     cBullet(0x2190);    // default safe bullet
 
     sal_Unicode     cGrfBulletCP(USHRT_MAX);
 
-    OUString        sPrefix;
-    OUString        sPostfix;
     WW8LVL          aLVL = {};
 
     // 1. read LVLF
@@ -839,77 +834,12 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     // 5. convert read values into Writer syntax
 
-    if( 0 <= aLVL.nStartAt )
-        nStartNo = static_cast<sal_uInt16>(aLVL.nStartAt);
-
     nType = GetSvxNumTypeFromMSONFC(aLVL.nNFC);
     //For i120928,type info
     if (bIsPicBullet)
     {
         nType = SVX_NUM_BITMAP;
     }
-
-    //If a number level is not going to be used, then record this fact
-    if (SVX_NUM_NUMBER_NONE == nType)
-        rNotReallyThere[nLevel] = true;
-
-    /*
-     If a number level was not used (i.e. is in NotReallyThere), and that
-     number level appears at one of the positions in the display string of the
-     list, then it effectively is not there at all. So remove that level entry
-     from a copy of the aOfsNumsXCH.
-    */
-    std::vector<sal_uInt8> aOfsNumsXCH;
-    aOfsNumsXCH.reserve(nMaxLevel);
-
-    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
-        aOfsNumsXCH.push_back(aLVL.aOfsNumsXCH[nLevelB]);
-
-    // nLevelB is an index in the aOfsNumsXCH array.
-    for(sal_uInt16 nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
-    {
-        // nPos is a one-based character offset to a level placeholder in
-        // sNumString.
-        sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
-        if (nPos && nPos < sNumString.getLength())
-        {
-            // nPosValue is the actual numbering level.
-            sal_Unicode nPosValue = sNumString[nPos-1];
-            if (nPosValue < nMaxLevel)
-            {
-                if (rNotReallyThere[nPosValue])
-                    aOfsNumsXCH[nLevelB] = 0;
-            }
-        }
-    }
-    auto aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
-    auto aEnd = aOfsNumsXCH.end();
-    // #i60633# - suppress access on <aOfsNumsXCH.end()>
-    if ( aIter != aEnd )
-    {
-        // Somehow the first removed vector element, at which <aIter>
-        // points to, isn't reset to zero.
-        // Investigation is needed to clarify why. It seems that only
-        // special arrays are handled correctly by this code.
-        ++aIter;
-        while (aIter != aEnd)
-        {
-            (*aIter) = 0;
-            ++aIter;
-        }
-    }
-
-    sal_uInt8 nUpperLevel = 0;  // current displaydepth for Writer
-    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
-    {
-        if (!nUpperLevel && !aOfsNumsXCH[nLevelB])
-            nUpperLevel = nLevelB;
-    }
-
-    // If the terminating char was not NULL, all indices of the list are
-    // filled, so the levels have to be displayed.
-    if (!nUpperLevel)
-        nUpperLevel = nMaxLevel;
 
     if (style::NumberingType::CHAR_SPECIAL == nType)
     {
@@ -921,35 +851,6 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     else if (style::NumberingType::BITMAP == nType)   //For i120928,position index info of graphic
     {
         cGrfBulletCP = nWitchPicIsBullet;       // This is a bullet picture ID
-    }
-    else
-    {
-        /*
-        #i173#
-        Our aOfsNumsXCH seems generally to be an array that contains the
-        offset into sNumString of locations where the numbers should be
-        filled in, so if the first "fill in a number" slot is greater than
-        1 there is a "prefix" before the number
-        */
-        //First number appears at
-        sal_uInt8 nOneBasedFirstNoIndex = aOfsNumsXCH[0];
-        const sal_Int32 nFirstNoIndex =
-            nOneBasedFirstNoIndex > 0 ? nOneBasedFirstNoIndex -1 : SAL_MAX_INT32;
-        lcl_CopyGreaterEight(sPrefix, sNumString, 0, nFirstNoIndex);
-
-        //Next number appears at
-        assert(nUpperLevel > 0);
-        sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
-        const sal_Int32 nNextNoIndex =
-            nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex : SAL_MAX_INT32;
-        if (sNumString.getLength() > nNextNoIndex)
-            lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
-
-        /*
-         We use lcl_CopyGreaterEight because once if we have removed unused
-         number indexes from the aOfsNumsXCH then placeholders remain in
-         sNumString which must not be copied into the final numbering strings
-        */
     }
 
     switch( aLVL.nAlign )
@@ -976,8 +877,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     }
 
     // 6. Configure NumFormat
-    if( bSetStartNo )
-        rNumFormat.SetStart( nStartNo );
+    if( bSetStartNo && 0 <= aLVL.nStartAt)
+        rNumFormat.SetStart(static_cast<sal_uInt16>(aLVL.nStartAt));
     rNumFormat.SetNumberingType( nType );
     rNumFormat.SetNumAdjust( eAdj );
 
@@ -995,12 +896,27 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     }
     else
     {
-        // reminder: Garnix is default Prefix
-        if( !sPrefix.isEmpty() )
-            rNumFormat.SetPrefix( sPrefix );
-        // reminder: Point is default Postfix
-        rNumFormat.SetSuffix( sPostfix );
-        rNumFormat.SetIncludeUpperLevels( nUpperLevel );
+        // Replace symbols at aOfsNumsXCH offsets to %1, %2 as supported by DOCX and LO
+        OUString sListFormat = sNumString;
+        if (sListFormat.getLength())
+        {
+            sal_uInt32 nExtraOffset = 0;
+            for (sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+            {
+                OUString sReplacement("%" + OUString::number(nLevelB + 1));
+                if (aLVL.aOfsNumsXCH[nLevelB])
+                    sListFormat = sListFormat.replaceAt(aLVL.aOfsNumsXCH[nLevelB] + nExtraOffset - 1, 1, sReplacement);
+                // We need also update an offset, since we are replacing one symbol by at least two
+                nExtraOffset += sReplacement.getLength() - 1;
+            }
+        }
+
+        rNumFormat.SetListFormat(sListFormat);
+
+        // Total count of replacement holders is determining amount of required parent numbering to include
+        // TODO: not sure how "%" symbol is escaped. This is not supported yet
+        sal_Int16 nParentNum = comphelper::string::getTokenCount(sListFormat, '%');
+        rNumFormat.SetIncludeUpperLevels(nParentNum);
     }
 
     // #i89181#
@@ -1298,15 +1214,13 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         // 1.2.1 read specific LVL(s) for this aLST
 
         sal_uInt16 nLvlCount = static_cast< sal_uInt16 >(pListInfo->bSimpleList ? nMinLevel : nMaxLevel);
-        std::deque<bool> aNotReallyThere;
-        aNotReallyThere.resize(nMaxLevel);
         pListInfo->maParaSprms.resize(nMaxLevel);
         for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
             SwNumFormat aNumFormat( rMyNumRule.Get( nLevel ) );
             // read LVLF
             bLVLOk = ReadLVL( aNumFormat, aItemSet[nLevel],
-                pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel,
+                pListInfo->aIdSty[nLevel], true, nLevel,
                 pListInfo->maParaSprms[nLevel]);
             if( !bLVLOk )
                 break;
@@ -1449,7 +1363,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 while (nTest == 0xFFFFFFFF);
                 rSt.SeekRel(-4);
 
-                std::deque<bool> aNotReallyThere(WW8ListManager::nMaxLevel);
                 for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
@@ -1487,7 +1400,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                             bLVLOk = nLevel < rLFOInfo.maParaSprms.size() &&
                                 ReadLVL(aNumFormat, aItemSet[nLevel],
                                 pParentListInfo->aIdSty[nLevel],
-                                aLFOLVL.bStartAt, aNotReallyThere, nLevel,
+                                aLFOLVL.bStartAt, nLevel,
                                 rLFOInfo.maParaSprms[nLevel]);
 
                             if (!bLVLOk)

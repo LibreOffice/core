@@ -173,8 +173,7 @@ private:
     //the rParaSprms returns back the original word paragraph indent
     //sprms which are attached to this numbering level
     bool ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet>& rpItemSet, sal_uInt16 nLevelStyle,
-        bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
-        ww::bytes &rParaSprms);
+        bool bSetStartNo, sal_uInt16 nLevel, ww::bytes &rParaSprms);
 
     // character attributes from GrpprlChpx
     typedef std::unique_ptr<SfxItemSet> WW8aISet[nMaxLevel];
