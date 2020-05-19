@@ -161,7 +161,7 @@ SvXMLImportContextRef PageStyleContext::CreateChildContext(
 
 void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > &)
 {
-    assert(false); // dont call this virtual, call function below
+    assert(false); // don't call this virtual, call function below
 }
 
 void PageStyleContext::FillPropertySet_PageStyle(
