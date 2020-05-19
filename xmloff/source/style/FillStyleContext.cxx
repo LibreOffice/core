@@ -154,6 +154,16 @@ SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPre
 
 void XMLBitmapStyleContext::EndElement()
 {
+    if (!maAny.has<uno::Reference<graphic::XGraphic>>() && mxBase64Stream.is())
+    {
+        // No graphic so far? Then see if it's inline.
+        uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicFromBase64(mxBase64Stream);
+        if (xGraphic.is())
+        {
+            maAny <<= xGraphic;
+        }
+    }
+
     if (maAny.has<uno::Reference<graphic::XGraphic>>())
     {
         uno::Reference<container::XNameContainer> xBitmapContainer(GetImport().GetBitmapHelper());
