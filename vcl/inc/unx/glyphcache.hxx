@@ -52,7 +52,7 @@ namespace vcl { struct FontCapabilities; }
  /**
   * The FreetypeManager caches various aspects of Freetype fonts
   *
-  * It mainly consists of three std::unordered_map lists, which hold the items of the cache.
+  * It mainly consists of two std::unordered_map lists, which hold the items of the cache.
   *
   * They form kind of a tree, with FreetypeFontFile as the roots, referenced by multiple FreetypeFontInfo
   * entries, which are referenced by the FreetypeFont items.
@@ -63,17 +63,13 @@ namespace vcl { struct FontCapabilities; }
   * The respective resources are:
   *   FreetypeFontFile = holds the mmapped font file, as long as it's used by any FreetypeFontInfo.
   *   FreetypeFontInfo = holds the FT_FaceRec_ object, as long as it's used by any FreetypeFont.
-  *   FreetypeFont     = holds the FT_SizeRec_.
+  *   FreetypeFont     = holds the FT_SizeRec_ and is owned by a FreetypeFontInstance
   *
   * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
-  * FreetypeFont is embedded in the Freetype subclass of LogicalFontInstance.
+  * FreetypeFont is owned by FreetypeFontInstance, the Freetype subclass of LogicalFontInstance.
   *
   * Nowadays there is not really a reason to have separate files for the classes, as the FreetypeManager
   * is just about handling of Freetype based fonts, not some abstract glyphs.
-  *
-  * One additional note: the byte-size based garbage collection of unused fonts can currently be assumed
-  * to be broken. Since the move of the glyph rect cache into the ImplFontCache, so it can be used by all
-  * platforms, it just takes too long to kick-in, as there is no real accounting left.
   **/
 class VCL_DLLPUBLIC FreetypeManager final
 {
@@ -89,23 +85,9 @@ public:
 
     void                    AnnounceFonts( PhysicalFontCollection* ) const;
 
-    FreetypeFont*           CacheFont(LogicalFontInstance* pFontInstance);
-    void                    UncacheFont( FreetypeFont& );
-
-    /** Try to GarbageCollect an explicit logical font
-     *
-     * This should just be called from the ~ImplFontCache destructor, which holds the mapping of the
-     * FontSelectPattern to the LogicalFontInstance per OutputDevice. All other users should just
-     * call CacheFont and UncacheFont correctly. When the ImplFontCache is destroyed with its
-     * OutputDevice, we can safely garbage collection its unused entries, as these can't be reused.
-     *
-     * It's always safe to call this, as it just ignores the used bytes when considering a font for
-     * garbage collection, which normally keeps unreferenced fonts alive.
-     **/
-    void TryGarbageCollectFont(LogicalFontInstance*);
-
     void                    ClearFontCache();
-    void                    ClearFontOptions();
+
+    FreetypeFont*           CreateFont(FreetypeFontInstance* pLogicalFont);
 
 private:
     // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
@@ -113,22 +95,10 @@ private:
     explicit FreetypeManager();
 
     static void             InitFreetype();
-    void                    GarbageCollect();
-    FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
     FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
 
-    // the FreetypeManager's FontList matches a font request to a serverfont instance
-    // the FontList key's mpFontData member is reinterpreted as integer font id
-    struct IFSD_Equal{  bool operator()( const rtl::Reference<LogicalFontInstance>&, const rtl::Reference<LogicalFontInstance>& ) const; };
-    struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
-    typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
     typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontInfoList;
     typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
-
-    FontList                maFontList;
-    static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
-    mutable sal_uLong       mnBytesUsed;
-    FreetypeFont*           mpCurrentGCFont;
 
     FontInfoList            m_aFontInfoList;
     sal_IntPtr              m_nMaxFontId;
@@ -148,7 +118,6 @@ public:
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     const FontConfigFontOptions* GetFontOptions() const;
-    void                    ClearFontOptions();
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
@@ -161,7 +130,7 @@ public:
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
 
-    FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance.get(); }
+    FreetypeFontInstance*   GetFontInstance() const { return mpFontInstance; }
 
     void                    SetFontVariationsOnHBFont(hb_font_t* pHbFace) const;
 
@@ -172,26 +141,14 @@ public:
     static bool             AlmostHorizontalDrainsRenderingPool(int nRatio, const FontSelectPattern& rFSD);
 
 private:
+    friend class FreetypeFontInstance;
     friend class FreetypeManager;
+
     explicit FreetypeFont(LogicalFontInstance*, FreetypeFontInfo*);
-
-    void                    AddRef() const      { ++mnRefCount; }
-    long                    GetRefCount() const { return mnRefCount; }
-    long                    Release() const;
-    sal_uLong               GetByteCount() const { return mnBytesUsed; }
-
-    void                    ReleaseFromGarbageCollect();
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 
-    rtl::Reference<FreetypeFontInstance> mpFontInstance;
-
-    // used by FreetypeManager for cache LRU algorithm
-    mutable long            mnRefCount;
-    mutable sal_uLong       mnBytesUsed;
-
-    FreetypeFont*           mpPrevGCFont;
-    FreetypeFont*           mpNextGCFont;
+    FreetypeFontInstance* mpFontInstance;
 
     // 16.16 fixed point values used for a rotated font
     long                    mnCos;
