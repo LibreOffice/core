@@ -167,6 +167,7 @@ public:
     void testTdf127792();
     void testTdf131979();
     void testTdf132076();
+    void testTdf125812();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -297,6 +298,7 @@ public:
     CPPUNIT_TEST(testTdf127792);
     CPPUNIT_TEST(testTdf131979);
     CPPUNIT_TEST(testTdf132076);
+    CPPUNIT_TEST(testTdf125812);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2750,6 +2752,18 @@ void Chart2ExportTest::testTdf132076()
         assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "formatCode", "dd");
         assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "sourceLinked", "0");
     }
+}
+
+void Chart2ExportTest::testTdf125812()
+{
+    load("/chart2/qa/extras/data/odp/", "ellipticalGradientFill.odp");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path", "circle");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "l", "50000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "t", "49000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "r", "50000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "b", "51000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

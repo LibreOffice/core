@@ -176,9 +176,9 @@ static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>&
 
 namespace
 {
-void WriteRadialGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS)
+void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, const bool bCircle)
 {
-    pFS->startElementNS(XML_a, XML_path, XML_path, "circle");
+    pFS->startElementNS(XML_a, XML_path, XML_path, bCircle ? "circle" : "rect");
 
     // Write the focus rectangle. Work with the focus point, and assume
     // that it extends 50% in all directions.  The below
@@ -186,13 +186,13 @@ void WriteRadialGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& 
     // edge of the tile rectangle and 100% means the center of it.
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(
         sax_fastparser::FastSerializerHelper::createAttrList());
-    sal_Int32 nLeftPercent = rGradient.XOffset * 2 - 50;
+    sal_Int32 nLeftPercent = rGradient.XOffset;
     pAttributeList->add(XML_l, OString::number(nLeftPercent * PER_PERCENT));
-    sal_Int32 nTopPercent = rGradient.YOffset * 2 - 50;
+    sal_Int32 nTopPercent = rGradient.YOffset;
     pAttributeList->add(XML_t, OString::number(nTopPercent * PER_PERCENT));
-    sal_Int32 nRightPercent = (100 - rGradient.XOffset) * 2 - 50;
+    sal_Int32 nRightPercent = 100 - rGradient.XOffset;
     pAttributeList->add(XML_r, OString::number(nRightPercent * PER_PERCENT));
-    sal_Int32 nBottomPercent = (100 - rGradient.YOffset) * 2 - 50;
+    sal_Int32 nBottomPercent = 100 - rGradient.YOffset;
     pAttributeList->add(XML_b, OString::number(nBottomPercent * PER_PERCENT));
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList.get());
     pFS->singleElementNS(XML_a, XML_fillToRect, xAttributeList);
@@ -570,7 +570,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
                 OString::number((((3600 - rGradient.Angle + 900) * 6000) % 21600000)));
             break;
         case awt::GradientStyle_RADIAL:
-            WriteRadialGradientPath(rGradient, mpFS);
+            WriteGradientPath(rGradient, mpFS, true);
             break;
     }
 }
@@ -638,6 +638,9 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
         }
 
         case awt::GradientStyle_RADIAL:
+        case awt::GradientStyle_ELLIPTICAL:
+        case awt::GradientStyle_RECT:
+        case awt::GradientStyle_SQUARE:
         {
             mpFS->startElementNS(XML_a, XML_gsLst);
             WriteGradientStop(0, ColorWithIntensity(rGradient.EndColor, rGradient.EndIntensity));
@@ -651,22 +654,9 @@ void DrawingML::WriteGradientFill(awt::Gradient rGradient, awt::Gradient rTransp
                               ColorWithIntensity(rGradient.StartColor, rGradient.StartIntensity));
             mpFS->endElementNS(XML_a, XML_gsLst);
 
-            WriteRadialGradientPath(rGradient, mpFS);
+            WriteGradientPath(rGradient, mpFS, rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL);
             break;
         }
-            /* I don't see how to apply transformation to gradients, so
-             * elliptical will end as radial and square as
-             * rectangular. also position offsets are not applied */
-        case awt::GradientStyle_ELLIPTICAL:
-        case awt::GradientStyle_RECT:
-        case awt::GradientStyle_SQUARE:
-            mpFS->startElementNS(XML_a, XML_gsLst);
-            WriteGradientStop( 0, ColorWithIntensity( rGradient.EndColor, rGradient.EndIntensity ) );
-            WriteGradientStop( 100, ColorWithIntensity( rGradient.StartColor, rGradient.StartIntensity ) );
-            mpFS->endElementNS( XML_a, XML_gsLst );
-            mpFS->singleElementNS( XML_a, XML_path,
-                    XML_path, ( rGradient.Style == awt::GradientStyle_RADIAL || rGradient.Style == awt::GradientStyle_ELLIPTICAL ) ? "circle" : "rect" );
-            break;
     }
 }
 
