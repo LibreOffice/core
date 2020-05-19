@@ -69,6 +69,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -1001,6 +1002,14 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     // Store the visible area so that we can use at places like shape insertion
     pViewData->setLOKVisibleArea(rRectangle);
+
+    if (comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    {
+        ScTabView* pTabView = pViewData->GetView();
+        if (pTabView)
+            pTabView->extendTiledAreaIfNeeded();
+    }
 }
 
 void ScModelObj::setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden)

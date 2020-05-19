@@ -596,6 +596,7 @@ public:
     /// @see ScModelObj::getSheetGeometryData()
     OString getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                  bool bFiltered, bool bGroups);
+    void extendTiledAreaIfNeeded();
 
     static void OnLOKNoteStateChanged(const ScPostIt* pNote);
 

@@ -2433,6 +2433,167 @@ void lcl_createGroupsData(
     }
 }
 
+class ScRangeProvider
+{
+public:
+    ScRangeProvider(const tools::Rectangle& rArea, bool bInPixels,
+                    ScViewData& rViewData, SCCOLROW nEnlargeX = 0,
+                    SCCOLROW nEnlargeY = 0):
+        mrViewData(rViewData),
+        mnEnlargeX(nEnlargeX),
+        mnEnlargeY(nEnlargeY)
+    {
+        tools::Rectangle aAreaPx = bInPixels ? rArea :
+            tools::Rectangle(rArea.Left() * mrViewData.GetPPTX(),
+                             rArea.Top() * mrViewData.GetPPTY(),
+                             rArea.Right() * mrViewData.GetPPTX(),
+                             rArea.Bottom() * mrViewData.GetPPTY());
+        calculateBounds(aAreaPx);
+    }
+
+    const ScRange& getCellRange() const
+    {
+        return maRange;
+    }
+
+    void getColPositions(long& rStartColPos, long& rEndColPos) const
+    {
+        rStartColPos = maBoundPositions.Left();
+        rEndColPos = maBoundPositions.Right();
+    }
+
+    void getRowPositions(long& rStartRowPos, long& rEndRowPos) const
+    {
+        rStartRowPos = maBoundPositions.Top();
+        rEndRowPos = maBoundPositions.Bottom();
+    }
+
+private:
+    void calculateBounds(const tools::Rectangle& rAreaPx)
+    {
+        long nLeftPx = 0, nRightPx = 0;
+        SCCOLROW nStartCol = -1, nEndCol = -1;
+        calculateDimensionBounds(rAreaPx.Left(), rAreaPx.Right(), true,
+                                 nStartCol, nEndCol, nLeftPx, nRightPx,
+                                 mnEnlargeX, mrViewData);
+        long nTopPx = 0, nBottomPx = 0;
+        SCCOLROW nStartRow = -1, nEndRow = -1;
+        calculateDimensionBounds(rAreaPx.Top(), rAreaPx.Bottom(), false,
+                                 nStartRow, nEndRow, nTopPx, nBottomPx,
+                                 mnEnlargeY, mrViewData);
+
+        maRange.aStart.Set(nStartCol, nStartRow, mrViewData.GetTabNo());
+        maRange.aEnd.Set(nEndCol, nEndRow, mrViewData.GetTabNo());
+
+        maBoundPositions.SetLeft(nLeftPx);
+        maBoundPositions.SetRight(nRightPx);
+        maBoundPositions.SetTop(nTopPx);
+        maBoundPositions.SetBottom(nBottomPx);
+    }
+
+    // All positions are in pixels.
+    static void calculateDimensionBounds(const long nStartPos, const long nEndPos,
+                                         bool bColumns, SCCOLROW& rStartIndex,
+                                         SCCOLROW& rEndIndex, long& rBoundStart,
+                                         long& rBoundEnd, SCCOLROW nEnlarge,
+                                         ScViewData& rViewData)
+    {
+        ScPositionHelper& rPosHelper = bColumns ? rViewData.GetLOKWidthHelper() :
+            rViewData.GetLOKHeightHelper();
+        const auto& rStartNearest = rPosHelper.getNearestByPosition(nStartPos);
+        const auto& rEndNearest = rPosHelper.getNearestByPosition(nEndPos);
+
+        ScBoundsProvider aBoundsProvider(rViewData, rViewData.GetTabNo(), bColumns);
+        aBoundsProvider.Compute(rStartNearest, rEndNearest, nStartPos, nEndPos);
+        aBoundsProvider.EnlargeBy(nEnlarge);
+        if (bColumns)
+        {
+            SCCOL nStartCol = -1, nEndCol = -1;
+            aBoundsProvider.GetStartIndexAndPosition(nStartCol, rBoundStart);
+            aBoundsProvider.GetEndIndexAndPosition(nEndCol, rBoundEnd);
+            rStartIndex = nStartCol;
+            rEndIndex = nEndCol;
+        }
+        else
+        {
+            SCROW nStartRow = -1, nEndRow = -1;
+            aBoundsProvider.GetStartIndexAndPosition(nStartRow, rBoundStart);
+            aBoundsProvider.GetEndIndexAndPosition(nEndRow, rBoundEnd);
+            rStartIndex = nStartRow;
+            rEndIndex = nEndRow;
+        }
+    }
+
+private:
+
+    ScRange maRange;
+    tools::Rectangle maBoundPositions;
+    ScViewData& mrViewData;
+    SCCOLROW mnEnlargeX;
+    SCCOLROW mnEnlargeY;
+};
+
+void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW nExtra,
+                              ScTabView& rTabView, ScViewData& rViewData)
+{
+    ScDocument* pDoc = rViewData.GetDocument();
+    // If we are approaching current max tiled row/col, signal a size changed event
+    // and invalidate the involved area
+    SCCOLROW nMaxTiledIndex = bColumn ? rViewData.GetMaxTiledCol() : rViewData.GetMaxTiledRow();
+    SCCOLROW nHardLimit = !bColumn ? MAXTILEDROW : pDoc ? pDoc->MaxCol() : MAXCOL;
+
+    if (nMaxTiledIndex >= nHardLimit)
+        return;
+
+    if (nEnd <= nMaxTiledIndex - nExtra) // No need to extend.
+        return;
+
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScModelObj* pModelObj = pDocSh ?
+        comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
+    Size aOldSize(0, 0);
+    if (pModelObj)
+        aOldSize = pModelObj->getDocumentSize();
+
+    SCCOLROW nNewMaxTiledIndex = std::min(std::max(nEnd, nMaxTiledIndex) + nExtra, nHardLimit);
+
+    if (bColumn)
+        rViewData.SetMaxTiledCol(nNewMaxTiledIndex);
+    else
+        rViewData.SetMaxTiledRow(nNewMaxTiledIndex);
+
+    Size aNewSize(0, 0);
+    if (pModelObj)
+        aNewSize = pModelObj->getDocumentSize();
+
+    if (aOldSize == aNewSize)
+        return;
+
+    if (!pDocSh)
+        return;
+
+    // New area extended to the right/bottom of the sheet after last col/row
+    // excluding overlapping area with aNewArea
+    tools::Rectangle aNewArea = bColumn ?
+        tools::Rectangle(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight()):
+        tools::Rectangle(0, aOldSize.getHeight(), aNewSize.getWidth(), aNewSize.getHeight());
+
+    // Only invalidate if spreadsheet has extended to the right or bottom
+    if ((bColumn && aNewArea.getWidth()) || (!bColumn && aNewArea.getHeight()))
+    {
+        rTabView.UpdateSelectionOverlay();
+        SfxLokHelper::notifyInvalidation(rViewData.GetViewShell(), aNewArea.toString());
+    }
+
+    // Provide size in the payload, so clients don't have to query for that.
+    std::stringstream ss;
+    ss << aNewSize.Width() << ", " << aNewSize.Height();
+    OString sSize = ss.str().c_str();
+    ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(
+        rViewData.GetViewShell()->GetCurrentDocument());
+    SfxLokHelper::notifyDocumentSizeChanged(rViewData.GetViewShell(), sSize, pModel, false);
+}
+
 } // anonymous namespace
 
 void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
@@ -2831,6 +2992,105 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
     }
 
     return getJSONString(aTree).c_str();
+}
+
+void ScTabView::extendTiledAreaIfNeeded()
+{
+    SAL_INFO("sc.lok.header",
+        "extendTiledAreaIfNeeded: START: ClientView: ColRange["
+        << mnLOKStartHeaderCol << "," << mnLOKEndHeaderCol
+        << "] RowRange[" << mnLOKStartHeaderRow << "," << mnLOKEndHeaderRow
+        << "] MaxTiledCol = " << aViewData.GetMaxTiledCol()
+        << " MaxTiledRow = " << aViewData.GetMaxTiledRow());
+
+    const tools::Rectangle rVisArea = aViewData.getLOKVisibleArea();
+    if (rVisArea.Top() >= rVisArea.Bottom() ||
+        rVisArea.Left() >= rVisArea.Right())
+        return;
+
+    // Needed for conditional updating of visible-range/formula.
+    tools::Rectangle aOldVisCellRange(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
+                                      mnLOKEndHeaderCol, mnLOKEndHeaderRow);
+
+    ScRangeProvider aRangeProvider(rVisArea, /* bInPixels */ false, aViewData,
+                                   /* nEnlargeX */ 2, /* nEnlargeY */ 2);
+    // Index bounds.
+    const ScRange& rCellRange = aRangeProvider.getCellRange();
+    const SCCOL nStartCol = rCellRange.aStart.Col();
+    const SCCOL nEndCol = rCellRange.aEnd.Col();
+    const SCROW nStartRow = rCellRange.aStart.Row();
+    const SCROW nEndRow = rCellRange.aEnd.Row();
+
+    // Column/Row positions.
+    long nStartColPos, nEndColPos, nStartRowPos, nEndRowPos;
+    aRangeProvider.getColPositions(nStartColPos, nEndColPos);
+    aRangeProvider.getRowPositions(nStartRowPos, nEndRowPos);
+
+    ScPositionHelper& rWidthHelper = aViewData.GetLOKWidthHelper();
+    ScPositionHelper& rHeightHelper = aViewData.GetLOKHeightHelper();
+
+    // Update mnLOKStartHeaderCol and mnLOKEndHeaderCol members.
+    // These are consulted in some ScGridWindow methods.
+    if (mnLOKStartHeaderCol != nStartCol)
+    {
+        rWidthHelper.removeByIndex(mnLOKStartHeaderCol);
+        rWidthHelper.insert(nStartCol, nStartColPos);
+        mnLOKStartHeaderCol = nStartCol;
+    }
+
+    if (mnLOKEndHeaderCol != nEndCol)
+    {
+        rWidthHelper.removeByIndex(mnLOKEndHeaderCol);
+        rWidthHelper.insert(nEndCol, nEndColPos);
+        mnLOKEndHeaderCol = nEndCol;
+    }
+
+    // Update mnLOKStartHeaderRow and mnLOKEndHeaderRow members.
+    // These are consulted in some ScGridWindow methods.
+    if (mnLOKStartHeaderRow != nStartRow)
+    {
+        rHeightHelper.removeByIndex(mnLOKStartHeaderRow);
+        rHeightHelper.insert(nStartRow, nStartRowPos);
+        mnLOKStartHeaderRow = nStartRow;
+    }
+
+    if (mnLOKEndHeaderRow != nEndRow)
+    {
+        rHeightHelper.removeByIndex(mnLOKEndHeaderRow);
+        rHeightHelper.insert(nEndRow, nEndRowPos);
+        mnLOKEndHeaderRow = nEndRow;
+    }
+
+    constexpr SCCOL nMinExtraCols = 10;
+    SCCOL nExtraCols = std::max<SCCOL>(nMinExtraCols, nEndCol - nStartCol);
+    // If we are approaching current max tiled column, signal a size changed event
+    // and invalidate the involved area.
+    lcl_ExtendTiledDimension(/* bColumn */ true, nEndCol, nExtraCols, *this, aViewData);
+
+    constexpr SCROW nMinExtraRows = 25;
+    SCROW nExtraRows = std::max(nMinExtraRows, nEndRow - nStartRow);
+    // If we are approaching current max tiled row, signal a size changed event
+    // and invalidate the involved area.
+    lcl_ExtendTiledDimension(/* bColumn */ false, nEndRow, nExtraRows, *this, aViewData);
+
+    vcl::Region aNewVisCellRange(
+            tools::Rectangle(mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
+                             mnLOKEndHeaderCol, mnLOKEndHeaderRow));
+    aNewVisCellRange.Exclude(aOldVisCellRange);
+    tools::Rectangle aChangedCellRange = aNewVisCellRange.GetBoundRect();
+    if (!aChangedCellRange.IsEmpty())
+    {
+        UpdateVisibleRange();
+        UpdateFormulas(aChangedCellRange.Left(), aChangedCellRange.Top(),
+                       aChangedCellRange.Right(), aChangedCellRange.Bottom());
+    }
+
+    SAL_INFO("sc.lok.header",
+        "extendTiledAreaIfNeeded: END: ClientView: ColRange["
+        << mnLOKStartHeaderCol << "," << mnLOKEndHeaderCol
+        << "] RowRange[" << mnLOKStartHeaderRow << "," << mnLOKEndHeaderRow
+        << "] MaxTiledCol = " << aViewData.GetMaxTiledCol()
+        << " MaxTiledRow = " << aViewData.GetMaxTiledRow());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
