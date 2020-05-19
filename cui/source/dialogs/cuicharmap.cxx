@@ -222,17 +222,17 @@ void SvxCharacterMap::DisableFontSelection()
 void SvxCharacterMap::getRecentCharacterList()
 {
     //retrieve recent character list
-    css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
-    for (int i = 0; i < rRecentCharList.getLength(); ++i)
+    const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    for (OUString const & s : rRecentCharList)
     {
-        maRecentCharList.push_back(rRecentCharList[i]);
+        maRecentCharList.push_back(s);
     }
 
     //retrieve recent character font list
-    css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
-    for (int i = 0; i < rRecentCharFontList.getLength(); ++i)
+    const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    for (OUString const & s : rRecentCharFontList)
     {
-        maRecentCharFontList.push_back(rRecentCharFontList[i]);
+        maRecentCharFontList.push_back(s);
     }
 }
 
@@ -242,17 +242,17 @@ void SvxCharacterMap::getFavCharacterList()
     maFavCharList.clear();
     maFavCharFontList.clear();
     //retrieve recent character list
-    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
-    for (int i = 0; i < rFavCharList.getLength(); ++i)
+    const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    for (const OUString& s : rFavCharList)
     {
-        maFavCharList.push_back(rFavCharList[i]);
+        maFavCharList.push_back(s);
     }
 
     //retrieve recent character font list
-    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
-    for (int i = 0; i < rFavCharFontList.getLength(); ++i)
+    const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    for (const OUString& s : rFavCharFontList)
     {
-        maFavCharFontList.push_back(rFavCharFontList[i]);
+        maFavCharFontList.push_back(s);
     }
 }
 

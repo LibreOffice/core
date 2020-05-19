@@ -1302,15 +1302,15 @@ Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  )
 
 void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& aProps )
 {
-    for( sal_Int32 n = 0; n < aProps.getLength(); n++ )
+    for ( const PropertyValue& rProp : aProps )
     {
-        if( aProps[n].Name == gsColorKey )
+        if( rProp.Name == gsColorKey )
         {
-            aProps[n].Value >>= mnColor;
+            rProp.Value >>= mnColor;
         }
-        else if( aProps[n].Name == gsModeKey )
+        else if( rProp.Name == gsModeKey )
         {
-            aProps[n].Value >>= mnMode;
+            rProp.Value >>= mnMode;
         }
     }
 }

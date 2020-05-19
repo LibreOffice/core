@@ -153,10 +153,10 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
     }
 
     Reference<XModel> xDocumentModel;
-    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+    for ( const Reference< browse::XBrowseNode >& childNode : std::as_const(children) )
     {
         bool app = false;
-        OUString uiName = children[ n ]->getName();
+        OUString uiName = childNode->getName();
         OUString factoryURL;
         if ( uiName == userStr || uiName == shareStr )
         {
@@ -186,13 +186,11 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
                 } catch(const uno::Exception&)
                     {}
 
-                beans::PropertyValue const * pmoduleDescr =
-                    moduleDescr.getConstArray();
-                for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
+                for ( const beans::PropertyValue& prop : std::as_const(moduleDescr))
                 {
-                    if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
+                    if ( prop.Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
-                        pmoduleDescr[ pos ].Value >>= factoryURL;
+                        prop.Value >>= factoryURL;
                         break;
                     }
                 }
@@ -200,7 +198,7 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
         }
 
         Reference< browse::XBrowseNode > langEntries =
-            getLangNodeFromRootNode( children[ n ], language );
+            getLangNodeFromRootNode( childNode, language );
 
         insertEntry( uiName, app ? OUStringLiteral(RID_CUIBMP_HARDDISK) : OUStringLiteral(RID_CUIBMP_DOC),
             nullptr, true, std::make_unique< SFEntry >( langEntries, xDocumentModel ), factoryURL, false );
@@ -288,16 +286,16 @@ void SvxScriptOrgDialog::RequestSubEntries(const weld::TreeIter& rRootEntry, Ref
         // if we catch an exception in getChildNodes then no entries are added
     }
 
-    for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+    for ( const Reference< browse::XBrowseNode >& childNode : std::as_const(children) )
     {
-        OUString name( children[ n ]->getName() );
-        if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
+        OUString name( childNode->getName() );
+        if (  childNode->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry(name, RID_CUIBMP_LIB, &rRootEntry, true, std::make_unique<SFEntry>(children[n], model), false);
+            insertEntry(name, RID_CUIBMP_LIB, &rRootEntry, true, std::make_unique<SFEntry>(childNode, model), false);
         }
         else
         {
-            insertEntry(name, RID_CUIBMP_MACRO, &rRootEntry, false, std::make_unique<SFEntry>(children[n], model), false);
+            insertEntry(name, RID_CUIBMP_MACRO, &rRootEntry, false, std::make_unique<SFEntry>(childNode, model), false);
         }
     }
 }
@@ -761,9 +759,9 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
                 if(extnPos>0)
                     extn = nodeName.copy(extnPos);
             }
-            for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
+            for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
             {
-                if (aNewName+extn == childNodes[index]->getName())
+                if (aNewName+extn == n->getName())
                 {
                     bFound = true;
                     break;
@@ -788,9 +786,9 @@ void SvxScriptOrgDialog::createEntry(weld::TreeIter& rEntry)
             {
                 OUString aUserSuppliedName = aNewDlg.GetObjectName();
                 bValid = true;
-                for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
+                for( const Reference< browse::XBrowseNode >& n : std::as_const(childNodes) )
                 {
-                    if (aUserSuppliedName+extn == childNodes[index]->getName())
+                    if (aUserSuppliedName+extn == n->getName())
                     {
                         bValid = false;
                         OUString aError = m_createErrStr + m_createDupStr;
@@ -1009,11 +1007,11 @@ OUString SvxScriptOrgDialog::getListOfChildren( const Reference< browse::XBrowse
     {
         if ( node->hasChildNodes() )
         {
-            Sequence< Reference< browse::XBrowseNode > > children
+            const Sequence< Reference< browse::XBrowseNode > > children
                 = node->getChildNodes();
-            for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+            for( const Reference< browse::XBrowseNode >& n : children )
             {
-                result.append( getListOfChildren( children[ n ] , depth+1 ) );
+                result.append( getListOfChildren( n , depth+1 ) );
             }
         }
     }

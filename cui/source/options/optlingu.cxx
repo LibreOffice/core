@@ -466,30 +466,31 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
 
 static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
 {
-    const Locale* pAdd = rAdd.getConstArray();
     Sequence<Locale> aLocToAdd(rAdd.getLength());
-    const Locale* pAllLocales = aAllLocales.getConstArray();
     Locale* pLocToAdd = aLocToAdd.getArray();
     sal_Int32 nFound = 0;
-    sal_Int32 i;
-    for(i = 0; i < rAdd.getLength(); i++)
+    for(const Locale& i : rAdd)
     {
         bool bFound = false;
-        for(sal_Int32 j = 0; j < aAllLocales.getLength() && !bFound; j++)
+        for(const Locale& j : std::as_const(aAllLocales))
         {
-            bFound = pAdd[i].Language == pAllLocales[j].Language &&
-                pAdd[i].Country == pAllLocales[j].Country &&
-                pAdd[i].Variant == pAllLocales[j].Variant;
+            if (i.Language == j.Language &&
+                i.Country == j.Country &&
+                i.Variant == j.Variant)
+            {
+                bFound = true;
+                break;
+            }
         }
         if(!bFound)
         {
-            pLocToAdd[nFound++] = pAdd[i];
+            pLocToAdd[nFound++] = i;
         }
     }
     sal_Int32 nLength = aAllLocales.getLength();
     aAllLocales.realloc( nLength + nFound);
     Locale* pAllLocales2 = aAllLocales.getArray();
-    for(i = 0; i < nFound; i++)
+    for(sal_Int32 i = 0; i < nFound; i++)
         pAllLocales2[nLength++] = pLocToAdd[i];
 }
 
@@ -558,15 +559,13 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     aArgs.getArray()[0] <<= LinguMgr::GetLinguPropertySet();
 
     //read spell checker
-    Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
+    const Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
                     cSpell,    Locale() );
-    const OUString* pSpellNames = aSpellNames.getConstArray();
 
-    sal_Int32 nIdx;
-    for(nIdx = 0; nIdx < aSpellNames.getLength(); nIdx++)
+    for(const OUString& spellName : aSpellNames)
     {
         ServiceInfo_Impl aInfo;
-        aInfo.sSpellImplName = pSpellNames[nIdx];
+        aInfo.sSpellImplName = spellName;
         aInfo.xSpell.set(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sSpellImplName, aArgs, xContext), UNO_QUERY);
 
@@ -584,13 +583,12 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     }
 
     //read grammar checker
-    Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
+    const Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
                     cGrammar, Locale() );
-    const OUString* pGrammarNames = aGrammarNames.getConstArray();
-    for(nIdx = 0; nIdx < aGrammarNames.getLength(); nIdx++)
+    for(const OUString& grammarName : aGrammarNames)
     {
         ServiceInfo_Impl aInfo;
-        aInfo.sGrammarImplName = pGrammarNames[nIdx];
+        aInfo.sGrammarImplName = grammarName;
         aInfo.xGrammar.set(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sGrammarImplName, aArgs, xContext), UNO_QUERY);
 
@@ -608,13 +606,12 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     }
 
     //read hyphenator
-    Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
+    const Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
                     cHyph, Locale() );
-    const OUString* pHyphNames = aHyphNames.getConstArray();
-    for(nIdx = 0; nIdx < aHyphNames.getLength(); nIdx++)
+    for(const OUString& hyphName : aHyphNames)
     {
         ServiceInfo_Impl aInfo;
-        aInfo.sHyphImplName = pHyphNames[nIdx];
+        aInfo.sHyphImplName = hyphName;
         aInfo.xHyph.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sHyphImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
@@ -631,13 +628,12 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     }
 
     //read thesauri
-    Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
+    const Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
                     cThes,     Locale() );
-    const OUString* pThesNames = aThesNames.getConstArray();
-    for(nIdx = 0; nIdx < aThesNames.getLength(); nIdx++)
+    for(const OUString& thesName : aThesNames)
     {
         ServiceInfo_Impl aInfo;
-        aInfo.sThesImplName = pThesNames[nIdx];
+        aInfo.sThesImplName = thesName;
         aInfo.xThes.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sThesImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
@@ -654,27 +650,26 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     }
 
     Sequence< OUString > aCfgSvcs;
-    const Locale* pAllLocales = aAllServiceLocales.getConstArray();
-    for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
+    for(auto const & locale : std::as_const(aAllServiceLocales))
     {
-        LanguageType nLang = LanguageTag::convertToLanguageType( pAllLocales[nLocale] );
+        LanguageType nLang = LanguageTag::convertToLanguageType( locale );
 
-        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, locale);
         SetChecked( aCfgSvcs );
         if (aCfgSvcs.hasElements())
             aCfgSpellTable[ nLang ] = aCfgSvcs;
 
-        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, pAllLocales[nLocale]);
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, locale);
         SetChecked( aCfgSvcs );
         if (aCfgSvcs.hasElements())
             aCfgGrammarTable[ nLang ] = aCfgSvcs;
 
-        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, pAllLocales[nLocale]);
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, locale);
         SetChecked( aCfgSvcs );
         if (aCfgSvcs.hasElements())
             aCfgHyphTable[ nLang ] = aCfgSvcs;
 
-        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, pAllLocales[nLocale]);
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, locale);
         SetChecked( aCfgSvcs );
         if (aCfgSvcs.hasElements())
             aCfgThesTable[ nLang ] = aCfgSvcs;
@@ -683,15 +678,14 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
 {
-    const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
-    for(sal_Int32 n = 0; n < rConfiguredServices.getLength(); n++)
+    for(OUString const & configService : rConfiguredServices)
     {
         for (sal_uInt32 i = 0;  i < nDisplayServices;  ++i)
         {
             ServiceInfo_Impl& rEntry = aDisplayServiceArr[i];
             if (!rEntry.bConfigured)
             {
-                const OUString &rSrvcImplName = pConfiguredServices[n];
+                const OUString &rSrvcImplName = configService;
                 if (!rSrvcImplName.isEmpty()  &&
                     (rEntry.sSpellImplName == rSrvcImplName ||
                         rEntry.sGrammarImplName == rSrvcImplName ||
@@ -1583,10 +1577,9 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
 
     //fill language box
     const Sequence< Locale >& rLoc = rLinguData.GetAllSupportedLocales();
-    const Locale* pLocales = rLoc.getConstArray();
-    for (int i = 0; i < rLoc.getLength(); ++i)
+    for (Locale const & locale : rLoc)
     {
-        LanguageType nLang = LanguageTag::convertToLanguageType( pLocales[i] );
+        LanguageType nLang = LanguageTag::convertToLanguageType( locale );
         m_xLanguageLB->InsertLanguage(nLang);
     }
     LanguageType eSysLang = MsLangId::getSystemLanguage();

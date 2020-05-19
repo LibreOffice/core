@@ -110,7 +110,7 @@ void printPropertySet(
 
     SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
 
-    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); ++i )
+    for ( sal_Int32 i = 0; i < aPropDetails.(); ++i )
     {
         OUString tmp;
         sal_Int32 ival;
@@ -136,7 +136,7 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
+    for ( sal_Int32 i = 0; i < aProp.(); ++i )
     {
         OUString tmp;
 
@@ -479,23 +479,23 @@ void SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                     if ( a >>= aPropSeq )
                     {
                         OUString aMenuLabel;
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
+                        for ( const beans::PropertyValue& prop : std::as_const(aPropSeq) )
                         {
                             if ( bContextMenu )
                             {
-                                if ( aPropSeq[i].Name == "PopupLabel" )
+                                if ( prop.Name == "PopupLabel" )
                                 {
-                                    aPropSeq[i].Value >>= aLabel;
+                                    prop.Value >>= aLabel;
                                     break;
                                 }
-                                else if ( aPropSeq[i].Name == "Label" )
+                                else if ( prop.Name == "Label" )
                                 {
-                                    aPropSeq[i].Value >>= aMenuLabel;
+                                    prop.Value >>= aMenuLabel;
                                 }
                             }
-                            else if ( aPropSeq[i].Name == "Label" )
+                            else if ( prop.Name == "Label" )
                             {
-                                aPropSeq[i].Value >>= aLabel;
+                                prop.Value >>= aLabel;
                                 break;
                             }
                         }
@@ -1164,10 +1164,8 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                 DBG_UNHANDLED_EXCEPTION("cui.customize");
             }
 
-            for ( sal_Int32 i = 0; i < aFrameList.getLength(); ++i )
+            for ( uno::Reference < frame::XFrame > const & xf : std::as_const(aFrameList) )
             {
-                uno::Reference < frame::XFrame > xf = aFrameList[i];
-
                 if ( xf.is() && xf != m_xFrame )
                 {
                     OUString aCheckId;
@@ -1922,11 +1920,11 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
                 {
-                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
+                    if ( prop.Name == ITEM_DESCRIPTOR_STYLE )
                     {
-                        aProps[i].Value >>= result;
+                        prop.Value >>= result;
                         break;
                     }
                 }
@@ -2012,11 +2010,11 @@ void ToolbarSaveInData::SetSystemStyle(
 
         if ( a >>= aProps )
         {
-            for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+            for ( beans::PropertyValue& prop : aProps )
             {
-                if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
+                if ( prop.Name == ITEM_DESCRIPTOR_STYLE )
                 {
-                    aProps[ i ].Value <<= nStyle;
+                    prop.Value <<= nStyle;
                     break;
                 }
             }
@@ -2049,11 +2047,11 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 
             if ( a >>= aProps )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+                for ( beans::PropertyValue const & prop : std::as_const(aProps) )
                 {
-                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_UINAME )
+                    if ( prop.Name == ITEM_DESCRIPTOR_UINAME )
                     {
-                        aProps[ i ].Value >>= result;
+                        prop.Value >>= result;
                     }
                 }
             }
@@ -2076,11 +2074,11 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
-                for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
+                for ( beans::PropertyValue const & prop : std::as_const(aPropSeq) )
                 {
-                    if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
+                    if ( prop.Name == ITEM_DESCRIPTOR_LABEL )
                     {
-                        aPropSeq[i].Value >>= result;
+                        prop.Value >>= result;
                     }
                 }
             }
@@ -2105,28 +2103,26 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
         pRootEntry.reset( new SvxConfigEntry( "MainToolbars", OUString(), true, /*bParentData*/false) );
 
-        uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
+        const uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
                 css::ui::UIElementType::TOOLBAR );
 
-        for ( sal_Int32 i = 0; i < info.getLength(); ++i )
+        for ( uno::Sequence<beans::PropertyValue> const & props : info )
         {
-            uno::Sequence< beans::PropertyValue > props = info[ i ];
-
             OUString url;
             OUString systemname;
             OUString uiname;
 
-            for ( sal_Int32 j = 0; j < props.getLength(); ++j )
+            for ( const beans::PropertyValue& prop : props )
             {
-                if ( props[ j ].Name == ITEM_DESCRIPTOR_RESOURCEURL )
+                if ( prop.Name == ITEM_DESCRIPTOR_RESOURCEURL )
                 {
-                    props[ j ].Value >>= url;
+                    prop.Value >>= url;
                     systemname = url.copy( url.lastIndexOf( '/' ) + 1 );
                 }
-                else if ( props[ j ].Name == ITEM_DESCRIPTOR_UINAME )
+                else if ( prop.Name == ITEM_DESCRIPTOR_UINAME )
                 {
-                    props[ j ].Value >>= uiname;
+                    prop.Value >>= uiname;
                 }
             }
 
@@ -2182,28 +2178,26 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             // Retrieve also the parent toolbars to make it possible
             // to configure module toolbars and save them into the document
             // config manager.
-            uno::Sequence< uno::Sequence < beans::PropertyValue > > info_ =
+            const uno::Sequence< uno::Sequence < beans::PropertyValue > > info_ =
                 xParentCfgMgr->getUIElementsInfo(
                     css::ui::UIElementType::TOOLBAR );
 
-            for ( sal_Int32 i = 0; i < info_.getLength(); ++i )
+            for ( uno::Sequence<beans::PropertyValue> const & props : info_ )
             {
-                uno::Sequence< beans::PropertyValue > props = info_[ i ];
-
                 OUString url;
                 OUString systemname;
                 OUString uiname;
 
-                for ( sal_Int32 j = 0; j < props.getLength(); ++j )
+                for ( const beans::PropertyValue& prop : props )
                 {
-                    if ( props[ j ].Name == ITEM_DESCRIPTOR_RESOURCEURL )
+                    if ( prop.Name == ITEM_DESCRIPTOR_RESOURCEURL )
                     {
-                        props[ j ].Value >>= url;
+                        prop.Value >>= url;
                         systemname = url.copy( url.lastIndexOf( '/' ) + 1 );
                     }
-                    else if ( props[ j ].Name == ITEM_DESCRIPTOR_UINAME )
+                    else if ( prop.Name == ITEM_DESCRIPTOR_UINAME )
                     {
-                        props[ j ].Value >>= uiname;
+                        prop.Value >>= uiname;
                     }
                 }
 
@@ -2581,11 +2575,11 @@ void ToolbarSaveInData::LoadToolbar(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
-                        for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
+                        for ( beans::PropertyValue const & prop : std::as_const(aPropSeq) )
                         {
-                            if ( aPropSeq[i].Name == "Name" )
+                            if ( prop.Name == "Name" )
                             {
-                                aPropSeq[i].Value >>= aLabel;
+                                prop.Value >>= aLabel;
                                 break;
                             }
                         }
@@ -2714,12 +2708,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     m_xImportedImageManager->initialize(aProp);
 
     ImageInfo aImageInfo1;
-    uno::Sequence< OUString > names;
     if ( m_xImportedImageManager.is() )
     {
-        names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
-            aImageInfo1.emplace( names[n], false );
+        const uno::Sequence< OUString > names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+        for (auto const & name : names )
+            aImageInfo1.emplace( name, false );
     }
 
     uno::Sequence< OUString > name( 1 );
@@ -2739,19 +2732,19 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
 
     if ( m_xParentImageManager.is() )
     {
-        names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
-        for ( sal_Int32 n = 0; n < names.getLength(); ++n )
-            aImageInfo.emplace( names[n], false );
+        const uno::Sequence< OUString > names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+        for ( auto const & i : names )
+            aImageInfo.emplace( i, false );
     }
 
-    names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
-    for ( sal_Int32 n = 0; n < names.getLength(); ++n )
+    const uno::Sequence< OUString > names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+    for ( auto const & i : names )
     {
-        ImageInfo::iterator pIter = aImageInfo.find( names[n] );
+        ImageInfo::iterator pIter = aImageInfo.find( i );
         if ( pIter != aImageInfo.end() )
             pIter->second = true;
         else
-            aImageInfo.emplace( names[n], true );
+            aImageInfo.emplace( i, true );
     }
 
     // large growth factor, expecting many entries

@@ -266,11 +266,11 @@ OUString SvxConfigPageHelper::GetUIModuleName(
 
         if ( a >>= aSeq )
         {
-            for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+            for ( css::beans::PropertyValue const & rProp : std::as_const(aSeq) )
             {
-                if ( aSeq[i].Name == "ooSetupFactoryUIName" )
+                if ( rProp.Name == "ooSetupFactoryUIName" )
                 {
-                    aSeq[i].Value >>= aModuleUIName;
+                    rProp.Value >>= aModuleUIName;
                     break;
                 }
             }
@@ -301,30 +301,30 @@ bool SvxConfigPageHelper::GetMenuItemData(
 {
     try
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProp;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
+        css::uno::Sequence< css::beans::PropertyValue > aProps;
+        if ( rItemContainer->getByIndex( nIndex ) >>= aProps )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
+            for ( css::beans::PropertyValue const & rProp : std::as_const(aProps) )
             {
-                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+                if ( rProp.Name == ITEM_DESCRIPTOR_COMMANDURL )
                 {
-                    aProp[i].Value >>= rCommandURL;
+                    rProp.Value >>= rCommandURL;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_CONTAINER )
                 {
-                    aProp[i].Value >>= rSubMenu;
+                    rProp.Value >>= rSubMenu;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_STYLE )
                 {
-                    aProp[i].Value >>= rStyle;
+                    rProp.Value >>= rStyle;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_LABEL )
                 {
-                    aProp[i].Value >>= rLabel;
+                    rProp.Value >>= rLabel;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_TYPE )
                 {
-                    aProp[i].Value >>= rType;
+                    rProp.Value >>= rType;
                 }
             }
 
@@ -349,30 +349,30 @@ bool SvxConfigPageHelper::GetToolbarItemData(
 {
     try
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProp;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
+        css::uno::Sequence< css::beans::PropertyValue > aProps;
+        if ( rItemContainer->getByIndex( nIndex ) >>= aProps )
         {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
+            for ( css::beans::PropertyValue const & rProp : std::as_const(aProps) )
             {
-                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+                if ( rProp.Name == ITEM_DESCRIPTOR_COMMANDURL )
                 {
-                    aProp[i].Value >>= rCommandURL;
+                    rProp.Value >>= rCommandURL;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_STYLE )
                 {
-                    aProp[i].Value >>= rStyle;
+                    rProp.Value >>= rStyle;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_LABEL )
                 {
-                    aProp[i].Value >>= rLabel;
+                    rProp.Value >>= rLabel;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_TYPE )
                 {
-                    aProp[i].Value >>= rType;
+                    rProp.Value >>= rType;
                 }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_ISVISIBLE )
+                else if ( rProp.Name == ITEM_DESCRIPTOR_ISVISIBLE )
                 {
-                    aProp[i].Value >>= rIsVisible;
+                    rProp.Value >>= rIsVisible;
                 }
             }
 
