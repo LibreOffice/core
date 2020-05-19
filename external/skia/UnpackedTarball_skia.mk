@@ -36,6 +36,7 @@ skia_patches := \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
+    c++20.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
