@@ -6052,6 +6052,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else if (it == "sc_no_grid_bg")
                 comphelper::LibreOfficeKit::setCompatFlag(
                     comphelper::LibreOfficeKit::Compat::scNoGridBackground);
+            else if (it == "sc_print_twips_msgs")
+                comphelper::LibreOfficeKit::setCompatFlag(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
         }
     }
 
