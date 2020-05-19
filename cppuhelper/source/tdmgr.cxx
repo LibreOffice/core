@@ -204,20 +204,20 @@ static typelib_TypeDescription * createCTD(
         Reference< XTypeDescription > xType( xAttribute->getType() );
         OUString aMemberTypeName( xType->getName() );
         std::vector< rtl_uString * > getExc;
-        Sequence< Reference< XCompoundTypeDescription > > getExcs(
+        const Sequence< Reference< XCompoundTypeDescription > > getExcs(
             xAttribute->getGetExceptions() );
-        for (sal_Int32 i = 0; i != getExcs.getLength(); ++i)
+        for (const auto & ctd : getExcs)
         {
-            OSL_ASSERT( getExcs[i].is() );
-            getExc.push_back( getExcs[i]->getName().pData );
+            OSL_ASSERT( ctd.is() );
+            getExc.push_back( ctd->getName().pData );
         }
         std::vector< rtl_uString * > setExc;
-        Sequence< Reference< XCompoundTypeDescription > > setExcs(
+        const Sequence< Reference< XCompoundTypeDescription > > setExcs(
             xAttribute->getSetExceptions() );
-        for (sal_Int32 i = 0; i != setExcs.getLength(); ++i)
+        for (const auto & ctd : setExcs)
         {
-            OSL_ASSERT( setExcs[i].is() );
-            setExc.push_back( setExcs[i]->getName().pData );
+            OSL_ASSERT( ctd.is() );
+            setExc.push_back( ctd->getName().pData );
         }
         typelib_typedescription_newExtendedInterfaceAttribute(
             reinterpret_cast<typelib_InterfaceAttributeTypeDescription **>(&pRet),

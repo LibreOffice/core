@@ -500,7 +500,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
             // tdf#120362: Don't ask to enable disabled Java when filling script list
             css::uno::ContextLayer layer(comphelper::NoEnableJavaInteractionContext());
 
-            Sequence< Reference< browse::XBrowseNode > > children =
+            const Sequence< Reference< browse::XBrowseNode > > children =
                 xRootNode->getChildNodes();
             bool bIsRootNode = false;
 
@@ -524,9 +524,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
             }
 
-            for ( sal_Int32 n = 0; n < children.getLength(); ++n )
+            for ( Reference< browse::XBrowseNode > const & theChild : children )
             {
-                Reference< browse::XBrowseNode >& theChild = children[n];
                 bool bDisplay = true;
                 OUString uiName = theChild->getName();
                 if ( bIsRootNode )
@@ -557,15 +556,15 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                     bool bChildOnDemand = false;
                     if ( !bCheapChildrenOnDemand && theChild->hasChildNodes() )
                     {
-                        Sequence< Reference< browse::XBrowseNode > > grandchildren =
+                        const Sequence< Reference< browse::XBrowseNode > > grandchildren =
                             theChild->getChildNodes();
 
-                        for ( sal_Int32 m = 0; m < grandchildren.getLength(); ++m )
+                        for ( const auto& rxNode : grandchildren )
                         {
-                            if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
+                            if ( rxNode->getType() == browse::BrowseNodeTypes::CONTAINER )
                             {
                                 bChildOnDemand = true;
-                                m = grandchildren.getLength();
+                                break;
                             }
                         }
                     }
@@ -858,16 +857,16 @@ void CuiConfigGroupListBox::GroupSelected()
                 try {
                     if ( rootNode->hasChildNodes() )
                     {
-                        Sequence< Reference< browse::XBrowseNode > > children =
+                        const Sequence< Reference< browse::XBrowseNode > > children =
                             rootNode->getChildNodes();
 
-                        for ( sal_Int32 n = 0; n < children.getLength(); ++n )
+                        for ( const Reference< browse::XBrowseNode >& childNode : children )
                         {
-                            if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
+                            if (childNode->getType() == browse::BrowseNodeTypes::SCRIPT)
                             {
                                 OUString uri, description;
 
-                                Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
+                                Reference < beans::XPropertySet >xPropSet( childNode, UNO_QUERY );
                                 if (!xPropSet.is())
                                 {
                                     continue;
@@ -888,14 +887,14 @@ void CuiConfigGroupListBox::GroupSelected()
 
                                 OUString* pScriptURI = new OUString( uri );
 
-                                OUString aImage = GetImage(children[n], Reference< XComponentContext >(), false);
+                                OUString aImage = GetImage(childNode, Reference< XComponentContext >(), false);
                                 m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
                                 m_pFunctionListBox->aArr.back()->sCommand = uri;
-                                m_pFunctionListBox->aArr.back()->sLabel = children[n]->getName();
+                                m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
                                 m_pFunctionListBox->aArr.back()->sHelpText = description;
 
                                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_pFunctionListBox->aArr.back().get())));
-                                m_pFunctionListBox->append(sId, children[n]->getName(), aImage);
+                                m_pFunctionListBox->append(sId, childNode->getName(), aImage);
                             }
                         }
                     }

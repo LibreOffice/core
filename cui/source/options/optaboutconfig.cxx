@@ -259,10 +259,10 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
 {
     OUString sPath = Reference< XHierarchicalName >(
         xNameAccess, uno::UNO_QUERY_THROW )->getHierarchicalName();
-    uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
-    for( sal_Int32 i = 0; i < seqItems.getLength(); ++i )
+    const uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
+    for( const OUString& item : seqItems )
     {
-        Any aNode = xNameAccess->getByName( seqItems[i] );
+        Any aNode = xNameAccess->getByName( item );
 
         bool bNotLeaf = false;
 
@@ -287,7 +287,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 m_vectorUserData.push_back(std::make_unique<UserData>(xNextNameAccess, lineage + 1));
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
 
-                m_xPrefBox->insert(pParentEntry, -1, &seqItems[i], &sId, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
+                m_xPrefBox->insert(pParentEntry, -1, &item, &sId, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
                 //It is needed, without this the selection line will be truncated.
                 m_xPrefBox->set_text(*m_xScratchIter, "", 1);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 2);
@@ -297,7 +297,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         else
         {
             // leaf node
-            OUString sPropertyName = seqItems[i];
+            OUString sPropertyName = item;
             auto it = std::find_if(m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
               [&sPath, &sPropertyName](const prefBoxEntry& rEntry) -> bool
               {
@@ -352,10 +352,10 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     else if( sType == "[]byte" )
                     {
                         uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                        for( sal_Int8 j : seq )
                         {
                             OUString s = OUString::number(
-                                static_cast<sal_uInt8>(seq[j]), 16 );
+                                static_cast<sal_uInt8>(j), 16 );
                             if( s.getLength() == 1 )
                             {
                                 sValue.append("0");
@@ -372,10 +372,10 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             {
                                 sValue.append(",");
                             }
-                            for( sal_Int32 k = 0; k != seq[j].getLength(); ++k )
+                            for( sal_Int8 k : seq[j] )
                             {
                                 OUString s = OUString::number(
-                                    static_cast<sal_uInt8>(seq[j][k]), 16 );
+                                    static_cast<sal_uInt8>(k), 16 );
                                 if( s.getLength() == 1 )
                                 {
                                     sValue.append("0");
@@ -448,7 +448,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                     {
                         SAL_WARN(
                             "cui.options",
-                            "path \"" << sPath << "\" member " << seqItems[i]
+                            "path \"" << sPath << "\" member " << item
                                 << " of unsupported type " << sType);
                     }
                     break;
@@ -456,7 +456,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 default:
                     SAL_WARN(
                         "cui.options",
-                        "path \"" << sPath << "\" member " << seqItems[i]
+                        "path \"" << sPath << "\" member " << item
                             << " of unsupported type " << sType);
                     break;
                 }
@@ -467,7 +467,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             for(int j = 1; j < lineage; ++j)
                 index = sPath.indexOf("/", index + 1);
 
-            InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue.makeStringAndClear(), pParentEntry, !bLoadAll);
+            InsertEntry(sPath, sPath.copy(index+1), item, sType, sValue.makeStringAndClear(), pParentEntry, !bLoadAll);
         }
     }
 }

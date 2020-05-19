@@ -241,9 +241,9 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
     }
 
     OUString aLabel;
-    for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
-        if (aPropSeq[i].Name == "Name")
-            aPropSeq[i].Value >>= aLabel;
+    for (auto const& prop : std::as_const(aPropSeq))
+        if (prop.Name == "Name")
+            prop.Value >>= aLabel;
 
     OUString aName = SvxConfigPageHelper::stripHotKey(aLabel);
 

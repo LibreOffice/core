@@ -785,10 +785,9 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     //has to be called always to speed up accessibility tools
     m_xColorConfigCT->SetScrollPosition(sUser.toInt32());
     m_xColorSchemeLB->clear();
-    uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
-    const OUString* pSchemes = aSchemes.getConstArray();
-    for(sal_Int32 i = 0; i < aSchemes.getLength(); i++)
-        m_xColorSchemeLB->append_text(pSchemes[i]);
+    const uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
+    for(const OUString& s : aSchemes)
+        m_xColorSchemeLB->append_text(s);
     m_xColorSchemeLB->set_active_text(pColorConfig->GetCurrentSchemeName());
     m_xColorSchemeLB->save_value();
     m_xDeleteSchemePB->set_sensitive( aSchemes.getLength() > 1 );
