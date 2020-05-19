@@ -22,6 +22,30 @@
       "revId": "286cff6f396736997beedb16e493c2e1e4e8b5c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43877f83_1e45045c",
+        "filename": "sal/osl/unx/process.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-19T08:26:23Z",
+      "side": 1,
+      "message": "that is done in osl_freeProcessHandle",
+      "parentUuid": "0ca5d666_fbe607e5",
+      "range": {
+        "startLine": 667,
+        "startChar": 8,
+        "endLine": 667,
+        "endChar": 36
+      },
+      "revId": "286cff6f396736997beedb16e493c2e1e4e8b5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
