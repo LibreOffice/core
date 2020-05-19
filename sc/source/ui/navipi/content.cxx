@@ -659,14 +659,22 @@ void ScContentTree::ObjectFresh(ScContentId nType, const weld::TreeIter* pEntry)
 {
     if (bHiddenDoc && !pHiddenDocument)
         return;     // other document displayed
+
     if (nType == ScContentId::GRAPHIC || nType == ScContentId::OLEOBJECT || nType == ScContentId::DRAWING)
     {
+        auto nOldChildren = m_aRootNodes[nType] ? m_xTreeView->iter_n_children(*m_aRootNodes[nType]) : 0;
+        auto nOldPos = m_xTreeView->vadjustment_get_value();
+
         freeze();
         ClearType( nType );
         GetDrawNames( nType/*, nId*/ );
         thaw();
+
+        auto nNewChildren = m_aRootNodes[nType] ? m_xTreeView->iter_n_children(*m_aRootNodes[nType]) : 0;
+        bool bRestorePos = nOldChildren == nNewChildren;
+
         if (!pEntry)
-            ApplyNavigatorSettings();
+            ApplyNavigatorSettings(bRestorePos, nOldPos);
         if (pEntry)
         {
             weld::TreeIter* pParent = m_aRootNodes[nType].get();
@@ -1562,7 +1570,7 @@ void ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& r
     }
 }
 
-void ScContentTree::ApplyNavigatorSettings()
+void ScContentTree::ApplyNavigatorSettings(bool bRestorePos, int nScrollPos)
 {
     const ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )
@@ -1602,6 +1610,9 @@ void ScContentTree::ApplyNavigatorSettings()
                 // select
                 if( nRootSel == nEntry )
                 {
+                    if (bRestorePos)
+                        m_xTreeView->vadjustment_set_value(nScrollPos);
+
                     std::unique_ptr<weld::TreeIter> xEntry;
                     if (bExp && (nChildSel != SC_CONTENT_NOCHILD))
                     {
