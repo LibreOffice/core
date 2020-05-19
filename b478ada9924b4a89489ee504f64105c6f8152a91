@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64dea665_df2c842f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-19T23:00:46Z",
+      "side": 1,
+      "message": "With\nhttps://gerrit.libreoffice.org/c/core/+/94376/4/svl/source/numbers/zformat.cxx#165\n\"Before doing the lookup\" ... I meant the lookup (find()) is already unnecessary if the result can\u0027t be used anyway.",
+      "revId": "b478ada9924b4a89489ee504f64105c6f8152a91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f1d4391_c0391806",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-19T23:00:46Z",
+      "side": 1,
+      "message": "Dito, do find() and all only if nNatNum is within bounds.",
+      "revId": "b478ada9924b4a89489ee504f64105c6f8152a91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
