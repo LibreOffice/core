@@ -26,7 +26,6 @@ namespace sw
 {
 namespace sidebarwindows
 {
-
 /// Similar to the VCL scrollbar, but instrumented with Writer-specific details for LOK.
 class SidebarScrollBar : public ScrollBar
 {
@@ -38,11 +37,11 @@ protected:
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
     void MouseMove(const MouseEvent& rMouseEvent) override;
     void MouseButtonUp(const MouseEvent& rMouseEvent) override;
+
 public:
     SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle, SwView& rView);
     ~SidebarScrollBar() override;
 };
-
 }
 }
 

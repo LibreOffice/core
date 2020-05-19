@@ -25,9 +25,10 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
 // Parses a string like: Value = (any) { (long) 19098 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE, Name = "adj"
-void lcl_parseAdjustmentValue(std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
+void lcl_parseAdjustmentValue(
+    std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues,
+    const OString& rValue)
 {
     sal_Int32 nIndex = 0;
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
@@ -38,23 +39,26 @@ void lcl_parseAdjustmentValue(std::vector<drawing::EnhancedCustomShapeAdjustment
         static const char aValuePrefix[] = "Value = (any) { (long) ";
         if (aToken.startsWith(aNamePrefix))
         {
-            OString aName = aToken.copy(strlen(aNamePrefix), aToken.getLength() - strlen(aNamePrefix) - strlen("\""));
+            OString aName = aToken.copy(strlen(aNamePrefix),
+                                        aToken.getLength() - strlen(aNamePrefix) - strlen("\""));
             aAdjustmentValue.Name = OUString::fromUtf8(aName);
         }
         else if (aToken.startsWith(aValuePrefix))
         {
-            OString aValue = aToken.copy(strlen(aValuePrefix), aToken.getLength() - strlen(aValuePrefix) - strlen(" }"));
+            OString aValue = aToken.copy(strlen(aValuePrefix),
+                                         aToken.getLength() - strlen(aValuePrefix) - strlen(" }"));
             aAdjustmentValue.Value <<= aValue.toInt32();
         }
         else if (!aToken.startsWith("State = "))
             SAL_WARN("oox", "lcl_parseAdjustmentValue: unexpected prefix: " << aToken);
-    }
-    while (nIndex >= 0);
+    } while (nIndex >= 0);
     rAdjustmentValues.push_back(aAdjustmentValue);
 }
 
 // Parses a string like: { Value = (any) { (long) 19098 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE, Name = "adj" }, { Value = ..., State = ..., Name = ... }
-void lcl_parseAdjustmentValues(std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
+void lcl_parseAdjustmentValues(
+    std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues,
+    const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
@@ -71,33 +75,39 @@ void lcl_parseAdjustmentValues(std::vector<drawing::EnhancedCustomShapeAdjustmen
             nLevel--;
             if (!nLevel)
             {
-                lcl_parseAdjustmentValue(rAdjustmentValues, rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },")));
+                lcl_parseAdjustmentValue(
+                    rAdjustmentValues,
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },")));
             }
         }
     }
 }
 
-drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterPair(const OString& rValue)
+drawing::EnhancedCustomShapeParameterPair
+lcl_parseEnhancedCustomShapeParameterPair(const OString& rValue)
 {
     drawing::EnhancedCustomShapeParameterPair aPair;
     // We expect the following here: First.Value, First.Type, Second.Value, Second.Type
-    static const char aExpectedFVPrefix[] = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
+    static const char aExpectedFVPrefix[]
+        = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     assert(rValue.startsWith(aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
     aPair.First.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedFTPrefix[] = ", Type = (short) ";
-    assert(nIndex>=0 && rValue.match(aExpectedFTPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedFTPrefix, nIndex));
     nIndex += strlen(aExpectedFTPrefix);
     aPair.First.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
 
-    static const char aExpectedSVPrefix[] = ", Second = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
-    assert(nIndex>=0 && rValue.match(aExpectedSVPrefix, nIndex));
+    static const char aExpectedSVPrefix[] = ", Second = "
+                                            "(com.sun.star.drawing.EnhancedCustomShapeParameter) { "
+                                            "Value = (any) { (long) ";
+    assert(nIndex >= 0 && rValue.match(aExpectedSVPrefix, nIndex));
     nIndex += strlen(aExpectedSVPrefix);
     aPair.Second.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedSTPrefix[] = ", Type = (short) ";
-    assert(nIndex>=0 && rValue.match(aExpectedSTPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedSTPrefix, nIndex));
     nIndex += strlen(aExpectedSTPrefix);
     aPair.Second.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
     return aPair;
@@ -113,7 +123,7 @@ drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OS
     aSegment.Command = static_cast<sal_Int16>(rValue.getToken(0, ',', nIndex).toInt32());
 
     static const char aExpectedCountPrefix[] = " Count = (short) ";
-    assert(nIndex>=0 && rValue.match(aExpectedCountPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedCountPrefix, nIndex));
     nIndex += strlen(aExpectedCountPrefix);
     aSegment.Count = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
     return aSegment;
@@ -129,17 +139,17 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     aRectangle.X = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedYPrefix[] = " Y = (long) ";
-    assert(nIndex>=0 && rValue.match(aExpectedYPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedYPrefix, nIndex));
     nIndex += strlen(aExpectedYPrefix);
     aRectangle.Y = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedWidthPrefix[] = " Width = (long) ";
-    assert(nIndex>=0 && rValue.match(aExpectedWidthPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedWidthPrefix, nIndex));
     nIndex += strlen(aExpectedWidthPrefix);
     aRectangle.Width = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    assert(nIndex>=0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
     aRectangle.Height = rValue.copy(nIndex).toInt32();
 
@@ -156,7 +166,7 @@ awt::Size lcl_parseSize(const OString& rValue)
     aSize.Width = rValue.getToken(0, ',', nIndex).toInt32();
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    assert(nIndex>=0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
     aSize.Height = rValue.copy(nIndex).toInt32();
 
@@ -186,27 +196,33 @@ drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(cons
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const char aExpectedPrefix[] = "TopLeft = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
+            static const char aExpectedPrefix[]
+                = "TopLeft = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
                 aTextFrame.TopLeft = lcl_parseEnhancedCustomShapeParameterPair(aToken);
             }
             else
-                SAL_WARN("oox", "lcl_parseEnhancedCustomShapeTextFrame: unexpected token: " << aToken);
+                SAL_WARN("oox",
+                         "lcl_parseEnhancedCustomShapeTextFrame: unexpected token: " << aToken);
             nStart = i + strlen(", ");
         }
     }
 
     OString aToken = rValue.copy(nStart);
-    static const char aExpectedPrefix[] = "BottomRight = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
+    static const char aExpectedPrefix[]
+        = "BottomRight = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
     if (aToken.startsWith(aExpectedPrefix))
     {
-        aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
+        aToken = aToken.copy(strlen(aExpectedPrefix),
+                             aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
         aTextFrame.BottomRight = lcl_parseEnhancedCustomShapeParameterPair(aToken);
     }
     else
-        SAL_WARN("oox", "lcl_parseEnhancedCustomShapeTextFrame: unexpected token at the end: " << aToken);
+        SAL_WARN("oox",
+                 "lcl_parseEnhancedCustomShapeTextFrame: unexpected token at the end: " << aToken);
 
     return aTextFrame;
 }
@@ -235,10 +251,12 @@ void lcl_parseHandlePosition(std::vector<beans::PropertyValue>& rHandle, const O
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const char aExpectedPrefix[] = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
+            static const char aExpectedPrefix[]
+                = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = "Position";
@@ -254,7 +272,8 @@ void lcl_parseHandlePosition(std::vector<beans::PropertyValue>& rHandle, const O
 
 // Parses a string like: Name = "RangeYMaximum", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
+void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OString& rValue,
+                          const OUString& rName)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -275,7 +294,8 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
         }
         else if (rValue[i] == ',' && !bIgnore)
         {
-            static const char aExpectedPrefix[] = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameter) { ";
+            static const char aExpectedPrefix[]
+                = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameter) { ";
             if (rValue.match(aExpectedPrefix, nStart))
             {
                 drawing::EnhancedCustomShapeParameter aParameter;
@@ -287,7 +307,7 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
                 aParameter.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
 
                 static const char aExpectedTPrefix[] = ", Type = (short) ";
-                assert(nIndex>=0 && rValue.match(aExpectedTPrefix, nIndex));
+                assert(nIndex >= 0 && rValue.match(aExpectedTPrefix, nIndex));
                 nIndex += strlen(aExpectedTPrefix);
                 aParameter.Type = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
 
@@ -297,18 +317,20 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
                 rHandle.push_back(aPropertyValue);
             }
             else if (!rValue.match("Name =", nStart) && !rValue.match("Handle =", nStart))
-                SAL_WARN("oox", "lcl_parseHandleRange: unexpected token: " << rValue.copy(nStart, i - nStart));
+                SAL_WARN("oox", "lcl_parseHandleRange: unexpected token: "
+                                    << rValue.copy(nStart, i - nStart));
             nStart = i + strlen(", ");
         }
     }
 }
 
 // Parses a string like: Name = "RefY", Handle = (long) 0, Value = (any) { (long) 0 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
-void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
+void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OString& rValue,
+                        const OUString& rName)
 {
     static const char aPrefix[] = "\", Handle = (long) 0, Value = (any) { (long) ";
-    const sal_Int32 nCheck= SAL_N_ELEMENTS(aPrefix) - 1;
-    const sal_Int32 nStart= SAL_N_ELEMENTS("Name = \"") - 1 + rName.getLength();
+    const sal_Int32 nCheck = SAL_N_ELEMENTS(aPrefix) - 1;
+    const sal_Int32 nStart = SAL_N_ELEMENTS("Name = \"") - 1 + rName.getLength();
 
     if (rValue.copy(nStart, nCheck).equalsL(aPrefix, nCheck))
     {
@@ -372,7 +394,8 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
     return comphelper::containerToSequence(aRet);
 }
 
-void lcl_parseHandles(std::vector< uno::Sequence<beans::PropertyValue> >& rHandles, const OString& rValue)
+void lcl_parseHandles(std::vector<uno::Sequence<beans::PropertyValue>>& rHandles,
+                      const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
@@ -389,7 +412,8 @@ void lcl_parseHandles(std::vector< uno::Sequence<beans::PropertyValue> >& rHandl
             nLevel--;
             if (!nLevel)
             {
-                uno::Sequence<beans::PropertyValue> aHandle = lcl_parseHandle(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },")));
+                uno::Sequence<beans::PropertyValue> aHandle = lcl_parseHandle(
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },")));
                 rHandles.push_back(aHandle);
             }
         }
@@ -410,7 +434,8 @@ void lcl_parseEquations(std::vector<OUString>& rEquations, const OString& rValue
         else if (rValue[i] == '"' && bInString)
         {
             bInString = false;
-            rEquations.push_back(OUString::fromUtf8(rValue.copy(nStart + strlen("\""), i - nStart - strlen("\""))));
+            rEquations.push_back(
+                OUString::fromUtf8(rValue.copy(nStart + strlen("\""), i - nStart - strlen("\""))));
         }
     }
 }
@@ -432,7 +457,8 @@ void lcl_parsePathCoordinateValues(std::vector<beans::PropertyValue>& rPath, con
         {
             nLevel--;
             if (!nLevel)
-                aPairs.push_back(lcl_parseEnhancedCustomShapeParameterPair(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                aPairs.push_back(lcl_parseEnhancedCustomShapeParameterPair(
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -466,10 +492,12 @@ void lcl_parsePathCoordinates(std::vector<beans::PropertyValue>& rPath, const OS
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
+            static const char aExpectedPrefix[]
+                = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathCoordinateValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -496,7 +524,8 @@ void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, const 
         {
             nLevel--;
             if (!nLevel)
-                aSegments.push_back(lcl_parseEnhancedCustomShapeSegment(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                aSegments.push_back(lcl_parseEnhancedCustomShapeSegment(
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -530,10 +559,12 @@ void lcl_parsePathSegments(std::vector<beans::PropertyValue>& rPath, const OStri
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeSegment) { ";
+            static const char aExpectedPrefix[]
+                = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeSegment) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathSegmentValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -560,7 +591,8 @@ void lcl_parsePathTextFrameValues(std::vector<beans::PropertyValue>& rPath, cons
         {
             nLevel--;
             if (!nLevel)
-                aTextFrames.push_back(lcl_parseEnhancedCustomShapeTextFrame(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                aTextFrames.push_back(lcl_parseEnhancedCustomShapeTextFrame(
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -594,10 +626,12 @@ void lcl_parsePathTextFrames(std::vector<beans::PropertyValue>& rPath, const OSt
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeTextFrame) { ";
+            static const char aExpectedPrefix[]
+                = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeTextFrame) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathTextFrameValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -624,7 +658,8 @@ void lcl_parsePathSubViewSizeValues(std::vector<beans::PropertyValue>& rPath, co
         {
             nLevel--;
             if (!nLevel)
-                aSizes.push_back(lcl_parseSize(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                aSizes.push_back(
+                    lcl_parseSize(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -659,7 +694,8 @@ void lcl_parsePathSubViewSize(std::vector<beans::PropertyValue>& rPath, const OS
             static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.awt.Size) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                                     aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathSubViewSizeValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -701,12 +737,10 @@ void lcl_parsePath(std::vector<beans::PropertyValue>& rPath, const OString& rVal
         }
     }
 }
-
 }
 
 namespace oox::drawingml
 {
-
 void CustomShapeProperties::initializePresetDataMap()
 {
     OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-cs-presets");
@@ -728,7 +762,9 @@ void CustomShapeProperties::initializePresetDataMap()
                 bFirst = false;
             else
                 maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
-            aName = OUString::fromUtf8(aLine.copy(strlen(aCommentPrefix), aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
+            aName = OUString::fromUtf8(
+                aLine.copy(strlen(aCommentPrefix),
+                           aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
         }
         else
         {
@@ -738,12 +774,16 @@ void CustomShapeProperties::initializePresetDataMap()
                 if (aLine != "([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) {}")
                 {
                     std::vector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
-                    OString aExpectedPrefix("([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
+                    OString aExpectedPrefix(
+                        "([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
-                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(),
+                                                aLine.getLength() - aExpectedPrefix.getLength()
+                                                    - strlen(" }"));
                     lcl_parseAdjustmentValues(aAdjustmentValues, aValue);
-                    aPropertyMap.setProperty(PROP_AdjustmentValues, comphelper::containerToSequence(aAdjustmentValues));
+                    aPropertyMap.setProperty(PROP_AdjustmentValues,
+                                             comphelper::containerToSequence(aAdjustmentValues));
                 }
                 else
                     aPropertyMap.setProperty(PROP_AdjustmentValues, uno::Sequence<OUString>(0));
@@ -757,9 +797,12 @@ void CustomShapeProperties::initializePresetDataMap()
                     OString aExpectedPrefix("([]string) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
-                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(),
+                                                aLine.getLength() - aExpectedPrefix.getLength()
+                                                    - strlen(" }"));
                     lcl_parseEquations(aEquations, aValue);
-                    aPropertyMap.setProperty(PROP_Equations, comphelper::containerToSequence(aEquations));
+                    aPropertyMap.setProperty(PROP_Equations,
+                                             comphelper::containerToSequence(aEquations));
                 }
                 else
                     aPropertyMap.setProperty(PROP_Equations, uno::Sequence<OUString>(0));
@@ -769,13 +812,16 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine != "([][]com.sun.star.beans.PropertyValue) {}")
                 {
-                    std::vector< uno::Sequence<beans::PropertyValue> > aHandles;
+                    std::vector<uno::Sequence<beans::PropertyValue>> aHandles;
                     OString aExpectedPrefix("([][]com.sun.star.beans.PropertyValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
-                    OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                    OString aValue = aLine.copy(aExpectedPrefix.getLength(),
+                                                aLine.getLength() - aExpectedPrefix.getLength()
+                                                    - strlen(" }"));
                     lcl_parseHandles(aHandles, aValue);
-                    aPropertyMap.setProperty(PROP_Handles, comphelper::containerToSequence(aHandles));
+                    aPropertyMap.setProperty(PROP_Handles,
+                                             comphelper::containerToSequence(aHandles));
                 }
                 else
                     aPropertyMap.setProperty(PROP_Handles, uno::Sequence<OUString>(0));
@@ -788,7 +834,8 @@ void CustomShapeProperties::initializePresetDataMap()
                     aPropertyMap.setProperty(PROP_MirroredX, aLine == "true");
                 }
                 else
-                    SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected MirroredX parameter");
+                    SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected "
+                                    "MirroredX parameter");
             }
             else if (aLine == "MirroredY")
             {
@@ -798,7 +845,8 @@ void CustomShapeProperties::initializePresetDataMap()
                     aPropertyMap.setProperty(PROP_MirroredY, aLine == "true");
                 }
                 else
-                    SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected MirroredY parameter");
+                    SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unexpected "
+                                    "MirroredY parameter");
             }
             else if (aLine == "Path")
             {
@@ -807,7 +855,9 @@ void CustomShapeProperties::initializePresetDataMap()
                 assert(aLine.startsWith(aExpectedPrefix));
 
                 std::vector<beans::PropertyValue> aPathValue;
-                OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                OString aValue
+                    = aLine.copy(aExpectedPrefix.getLength(),
+                                 aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                 lcl_parsePath(aPathValue, aValue);
                 aPropertyMap.setProperty(PROP_Path, comphelper::containerToSequence(aPathValue));
             }
@@ -823,17 +873,19 @@ void CustomShapeProperties::initializePresetDataMap()
                 OString aExpectedPrefix("(com.sun.star.awt.Rectangle) { ");
                 assert(aLine.startsWith(aExpectedPrefix));
 
-                OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                OString aValue
+                    = aLine.copy(aExpectedPrefix.getLength(),
+                                 aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                 aPropertyMap.setProperty(PROP_ViewBox, lcl_parseRectangle(aValue));
             }
             else
-                SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unhandled line: " << aLine);
+                SAL_WARN("oox", "CustomShapeProperties::initializePresetDataMap: unhandled line: "
+                                    << aLine);
         }
         bNotDone = aStream.ReadLine(aLine);
     }
     maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
