@@ -97,7 +97,7 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
     bool                     mbOmitPaint;
-    vcl::Window*             mpParentWindow;
+    VclPtr<vcl::Window>      mxParentWindow;
 
     explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom, vcl::Window* parentWindow ) :
         mnCurrentZoom( nCurrentZoom ),
@@ -109,7 +109,7 @@ struct ScZoomSlider::ScZoomSliderWnd_Impl
         maIncreaseButton(),
         maDecreaseButton(),
         mbOmitPaint( false ),
-        mpParentWindow(parentWindow)
+        mxParentWindow(parentWindow)
         {
         }
 };
@@ -278,7 +278,7 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
 
     // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
-    mpImpl->mpParentWindow->Invalidate();
+    mpImpl->mxParentWindow->Invalidate();
     mpImpl->mbOmitPaint = true;
 
     SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
@@ -313,7 +313,7 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
             mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
 
             // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
-            mpImpl->mpParentWindow->Invalidate();
+            mpImpl->mxParentWindow->Invalidate();
 
             mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
 
@@ -381,7 +381,7 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
 
     if ( !mpImpl->mbOmitPaint )
         // need to invalidate parent since we rely on the toolbox drawing it's fancy gradient background
-        mpImpl->mpParentWindow->Invalidate();
+        mpImpl->mxParentWindow->Invalidate();
 }
 
 void ScZoomSlider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
