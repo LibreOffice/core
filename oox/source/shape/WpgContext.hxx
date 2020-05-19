@@ -17,7 +17,6 @@ namespace oox
 {
 namespace shape
 {
-
 /// Wpg is the drawingML equivalent of v:group.
 class WpgContext final : public oox::core::FragmentHandler2
 {
@@ -25,17 +24,14 @@ public:
     explicit WpgContext(oox::core::FragmentHandler2 const& rParent);
     ~WpgContext() override;
 
-    oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
+    oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken,
+                                                 const oox::AttributeList& rAttribs) override;
 
-    const oox::drawingml::ShapePtr& getShape() const
-    {
-        return mpShape;
-    }
+    const oox::drawingml::ShapePtr& getShape() const { return mpShape; }
 
 private:
     oox::drawingml::ShapePtr mpShape;
 };
-
 }
 }
 

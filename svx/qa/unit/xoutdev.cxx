@@ -40,12 +40,14 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
     test::Directories aDirectories;
     OUString aURL = aDirectories.getURLFromSrc("svx/qa/unit/data/graphic.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension | XOutFlags::UseNativeIfPossible;
+    XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
+                             | XOutFlags::UseNativeIfPossible;
     OUString aTempURL = aTempFile.GetURL();
     XOutBitmap::WriteGraphic(aGraphic, aTempURL, "pdf", eFlags);
 

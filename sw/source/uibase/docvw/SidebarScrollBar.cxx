@@ -18,11 +18,11 @@
 
 namespace sw::sidebarwindows
 {
-
-SidebarScrollBar::SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle, SwView& rView)
-    : ScrollBar(&rSidebarWin, nStyle),
-      m_rSidebarWin(rSidebarWin),
-      m_rView(rView)
+SidebarScrollBar::SidebarScrollBar(sw::annotation::SwAnnotationWin& rSidebarWin, WinBits nStyle,
+                                   SwView& rView)
+    : ScrollBar(&rSidebarWin, nStyle)
+    , m_rSidebarWin(rSidebarWin)
+    , m_rView(rView)
 {
 }
 
@@ -45,7 +45,8 @@ void SidebarScrollBar::LogicInvalidate(const tools::Rectangle* pRectangle)
 
     // Convert from relative twips to absolute ones.
     vcl::Window& rParent = m_rSidebarWin.EditWin();
-    Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(), GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(),
+                  GetOutOffYPixel() - rParent.GetOutOffYPixel());
     rParent.Push(PushFlags::MAPMODE);
     rParent.EnableMapMode();
     aOffset = rParent.PixelToLogic(aOffset);
@@ -57,10 +58,7 @@ void SidebarScrollBar::LogicInvalidate(const tools::Rectangle* pRectangle)
     SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
-void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/)
-{
-    EndTracking();
-}
+void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/) { EndTracking(); }
 
 void SidebarScrollBar::MouseMove(const MouseEvent& rMouseEvent)
 {
@@ -68,10 +66,7 @@ void SidebarScrollBar::MouseMove(const MouseEvent& rMouseEvent)
     Tracking(aEvent);
 }
 
-SidebarScrollBar::~SidebarScrollBar()
-{
-    disposeOnce();
-}
+SidebarScrollBar::~SidebarScrollBar() { disposeOnce(); }
 
 } // end of namespace sw::sidebarwindows
 

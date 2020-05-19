@@ -8373,7 +8373,6 @@ oox/source/drawingml/color.cxx
 oox/source/drawingml/colorchoicecontext.cxx
 oox/source/drawingml/connectorshapecontext.cxx
 oox/source/drawingml/customshapegeometry.cxx
-oox/source/drawingml/customshapepresetdata.cxx
 oox/source/drawingml/customshapeproperties.cxx
 oox/source/drawingml/diagram/constraintlistcontext.cxx
 oox/source/drawingml/diagram/constraintlistcontext.hxx
@@ -8541,15 +8540,11 @@ oox/source/ppt/timenode.cxx
 oox/source/ppt/timenodelistcontext.cxx
 oox/source/ppt/timetargetelementcontext.cxx
 oox/source/ppt/timetargetelementcontext.hxx
-oox/source/shape/LockedCanvasContext.cxx
-oox/source/shape/LockedCanvasContext.hxx
 oox/source/shape/ShapeContextHandler.cxx
 oox/source/shape/ShapeContextHandler.hxx
 oox/source/shape/ShapeDrawingFragmentHandler.cxx
 oox/source/shape/ShapeDrawingFragmentHandler.hxx
 oox/source/shape/ShapeFilterBase.cxx
-oox/source/shape/WpgContext.cxx
-oox/source/shape/WpgContext.hxx
 oox/source/token/namespacemap.cxx
 oox/source/token/propertynames.cxx
 oox/source/token/relationship.cxx
@@ -13319,7 +13314,6 @@ svx/inc/unomlstr.hxx
 svx/inc/xpolyimp.hxx
 svx/qa/unit/svdraw/test_SdrTextObject.cxx
 svx/qa/unit/svx-dialogs-test.cxx
-svx/qa/unit/xoutdev.cxx
 svx/source/accessibility/AccessibleControlShape.cxx
 svx/source/accessibility/AccessibleEmptyEditSource.cxx
 svx/source/accessibility/AccessibleEmptyEditSource.hxx
@@ -14959,7 +14953,6 @@ sw/source/filter/ww8/fields.cxx
 sw/source/filter/ww8/fields.hxx
 sw/source/filter/ww8/needed_cast.hxx
 sw/source/filter/ww8/sortedarray.hxx
-sw/source/filter/ww8/sprmids.hxx
 sw/source/filter/ww8/styles.cxx
 sw/source/filter/ww8/types.hxx
 sw/source/filter/ww8/writerhelper.cxx
@@ -15348,8 +15341,6 @@ sw/source/uibase/docvw/PageBreakWin.cxx
 sw/source/uibase/docvw/PostItMgr.cxx
 sw/source/uibase/docvw/ShadowOverlayObject.cxx
 sw/source/uibase/docvw/ShadowOverlayObject.hxx
-sw/source/uibase/docvw/SidebarScrollBar.cxx
-sw/source/uibase/docvw/SidebarScrollBar.hxx
 sw/source/uibase/docvw/SidebarTxtControl.cxx
 sw/source/uibase/docvw/SidebarTxtControl.hxx
 sw/source/uibase/docvw/SidebarTxtControlAcc.cxx
@@ -18457,7 +18448,6 @@ xmlscript/source/xmlmod_imexp/xmlmod_export.cxx
 xmlscript/source/xmlmod_imexp/xmlmod_import.cxx
 xmlscript/test/imexp.cxx
 xmlsecurity/inc/biginteger.hxx
-xmlsecurity/inc/certificate.hxx
 xmlsecurity/inc/certificatechooser.hxx
 xmlsecurity/inc/certificateviewer.hxx
 xmlsecurity/inc/digitalsignaturesdialog.hxx
@@ -18512,7 +18502,6 @@ xmlsecurity/source/gpg/XMLSecurityContext.cxx
 xmlsecurity/source/gpg/XMLSecurityContext.hxx
 xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx
 xmlsecurity/source/helper/documentsignaturehelper.cxx
-xmlsecurity/source/helper/ooxmlsecexporter.cxx
 xmlsecurity/source/helper/ooxmlsecparser.cxx
 xmlsecurity/source/helper/ooxmlsecparser.hxx
 xmlsecurity/source/helper/xmlsignaturehelper.cxx

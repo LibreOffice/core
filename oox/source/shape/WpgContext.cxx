@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "WpgContext.hxx"
 #include <sal/log.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
@@ -20,7 +19,6 @@ using namespace com::sun::star;
 
 namespace oox::shape
 {
-
 WpgContext::WpgContext(FragmentHandler2 const& rParent)
     : FragmentHandler2(rParent)
 {
@@ -30,43 +28,51 @@ WpgContext::WpgContext(FragmentHandler2 const& rParent)
 
 WpgContext::~WpgContext() = default;
 
-oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& /*rAttribs*/)
+oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken,
+                                                         const oox::AttributeList& /*rAttribs*/)
 {
     switch (getBaseToken(nElementToken))
     {
-    case XML_wgp:
-    case XML_cNvGrpSpPr:
-    case XML_grpSpPr:
-        return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
-    case XML_wsp:
-    {
-        // Don't set default character height, Writer has its own way to set
-        // the default, and if we don't set it here, editeng properly inherits
-        // it.
-        oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
-        return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
-        // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
-        //                                   mpShape, pShape);
-    }
-    case XML_pic:
-        return new oox::drawingml::GraphicShapeContext(*this, mpShape, std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
-    case XML_grpSp:
-    {
-        return new oox::drawingml::ShapeGroupContext(*this, mpShape, std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
-    }
-    case XML_graphicFrame:
-    {
-        auto pShape = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape");
-        pShape->setWps(true);
-        return new oox::drawingml::GraphicalObjectFrameContext(*this, mpShape, pShape, /*bEmbedShapesInChart=*/true);
-    }
-    default:
-        SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
-        break;
+        case XML_wgp:
+        case XML_cNvGrpSpPr:
+        case XML_grpSpPr:
+            return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
+        case XML_wsp:
+        {
+            // Don't set default character height, Writer has its own way to set
+            // the default, and if we don't set it here, editeng properly inherits
+            // it.
+            oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
+                "com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false);
+            return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
+            // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
+            //                                   mpShape, pShape);
+        }
+        case XML_pic:
+            return new oox::drawingml::GraphicShapeContext(
+                *this, mpShape,
+                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
+        case XML_grpSp:
+        {
+            return new oox::drawingml::ShapeGroupContext(
+                *this, mpShape,
+                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
+        }
+        case XML_graphicFrame:
+        {
+            auto pShape = std::make_shared<oox::drawingml::Shape>(
+                "com.sun.star.drawing.GraphicObjectShape");
+            pShape->setWps(true);
+            return new oox::drawingml::GraphicalObjectFrameContext(*this, mpShape, pShape,
+                                                                   /*bEmbedShapesInChart=*/true);
+        }
+        default:
+            SAL_WARN("oox", "WpgContext::createFastChildContext: unhandled element: "
+                                << getBaseToken(nElementToken));
+            break;
     }
     return nullptr;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
