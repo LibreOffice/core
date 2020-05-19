@@ -56,6 +56,8 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
+    void FinishMetaElement();
+
     static void setBuildId(const OUString & rGenerator,
         const css::uno::Reference< css::beans::XPropertySet>& xImportInfo );
 };
