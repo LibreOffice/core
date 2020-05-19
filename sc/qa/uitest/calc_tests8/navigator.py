@@ -81,3 +81,37 @@ class navigator(UITestCase):
 
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()
+
+    def test_tdf98493(self):
+
+        self.ui_test.load_file(get_url_for_data_file("tdf98493.ods"))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWin = xCalcDoc.getChild("grid_window")
+
+        self.assertEqual(get_state_as_dict(xGridWin)["SelectedTable"], "2")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel.executeAction("ROOT", tuple())
+        xContentBox = xNavigatorPanel.getChild('contentbox')
+
+        # tdf#133079, without the fix in place, it would be 8
+        self.assertEqual(len(xContentBox.getChildren()), 1)
+
+        xSheets = xContentBox.getChild('0')
+        self.assertEqual(len(xSheets.getChildren()), 12)
+
+        #key=item position, value=sheet ( there are hidden sheets )
+        results = { '1': '0', '5': '4', '6': '4', '11': '10'}
+
+        for k, v in results.items():
+            xChild = xSheets.getChild(k)
+            xChild.executeAction("DOUBLECLICK", tuple())
+
+            self.assertEqual(get_state_as_dict(xGridWin)["SelectedTable"], v)
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        self.ui_test.close_doc()
