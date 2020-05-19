@@ -233,11 +233,6 @@ short AbstractInsFootNoteDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-short AbstractInsTableDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
 short AbstractJavaEditDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -601,7 +596,9 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 std::unique_ptr<SwTableAutoFormat>& prTAFormat )
 {
-    m_xDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
+    SwInsTableDlg* pDlg = dynamic_cast<SwInsTableDlg*>(m_xDlg.get());
+    if (pDlg)
+        pDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
@@ -1041,9 +1038,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(Sw
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_unique<SwLineNumberingDlg>(rView));
 }
 
-VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
+std::shared_ptr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
 {
-    return VclPtr<AbstractInsTableDlg_Impl>::Create(std::make_unique<SwInsTableDlg>(rView));
+    return std::make_shared<AbstractInsTableDlg_Impl>(std::make_shared<SwInsTableDlg>(rView));
 }
 
 VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
