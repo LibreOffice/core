@@ -152,7 +152,12 @@ public:
     void testTdf123206_customLabelText();
     void testCustomLabelText();
     void testTdf131979();
+<<<<<<< HEAD   (b86933 tdf#132956 Chart view: fix missing plot area)
     void testTdf126076();
+=======
+    void testTdf132076();
+    void testTdf125812();
+>>>>>>> CHANGE (9cbde4 tdf#125812 Chart: fix OOXML export of gradient center)
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -268,7 +273,12 @@ public:
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testTdf131979);
+<<<<<<< HEAD   (b86933 tdf#132956 Chart view: fix missing plot area)
     CPPUNIT_TEST(testTdf126076);
+=======
+    CPPUNIT_TEST(testTdf132076);
+    CPPUNIT_TEST(testTdf125812);
+>>>>>>> CHANGE (9cbde4 tdf#125812 Chart: fix OOXML export of gradient center)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2479,6 +2489,18 @@ void Chart2ExportTest::testTdf126076()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
     // instead of skipping markers
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
+}
+
+void Chart2ExportTest::testTdf125812()
+{
+    load("/chart2/qa/extras/data/odp/", "ellipticalGradientFill.odp");
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/charts/chart", "Impress MS PowerPoint 2007 XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path", "circle");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "l", "50000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "t", "49000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "r", "50000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path/a:fillToRect", "b", "51000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
