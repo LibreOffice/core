@@ -752,6 +752,20 @@ typedef enum
      * }
      */
     LOK_CALLBACK_FORM_FIELD_BUTTON = 49,
+
+    /**
+     * This is Calc specific. Indicates that some or all of the current sheet's
+     * geometry data has changed. Clients must request a full or partial sheet
+     * geometry data set.
+     *
+     * The payload specifies what part of the sheet geometry data has changed.
+     * The payload format is:
+     * 'all|rows|columns [sizes [hidden [filtered [groups]]]]'
+     *
+     * For example, the payload 'rows sizes groups' indicates that the row heights
+     * and row-groups data have changed.
+     */
+    LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY = 50,
 }
 LibreOfficeKitCallbackType;
 
@@ -880,6 +894,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TAB_STOP_LIST";
     case LOK_CALLBACK_FORM_FIELD_BUTTON:
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
+    case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
+        return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
