@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcf0eba5_a7b9bad2",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-19T17:40:23Z",
+      "side": 1,
+      "message": "Some kind of extra documentation here? Not sure what, but this is critical stuff.",
+      "range": {
+        "startLine": 1726,
+        "startChar": 28,
+        "endLine": 1726,
+        "endChar": 43
+      },
+      "revId": "e2456224a7b0459b99d213a31c43731295b08f19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
