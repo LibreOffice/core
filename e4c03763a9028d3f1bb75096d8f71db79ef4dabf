@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45e8fcdc_7509d4fd",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-19T11:02:21Z",
+      "side": 1,
+      "message": "if not modified, restore original DOCX line width to avoid rounding error",
+      "range": {
+        "startLine": 749,
+        "startChar": 7,
+        "endLine": 749,
+        "endChar": 55
+      },
+      "revId": "e4c03763a9028d3f1bb75096d8f71db79ef4dabf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "535570f0_97fce41b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-19T11:02:21Z",
+      "side": 1,
+      "message": "// restore only unmodified value, i.e. the actual line width is the same with rounding error",
+      "range": {
+        "startLine": 760,
+        "startChar": 15,
+        "endLine": 760,
+        "endChar": 80
+      },
+      "revId": "e4c03763a9028d3f1bb75096d8f71db79ef4dabf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a178617f_ad4f984f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-19T11:02:21Z",
+      "side": 1,
+      "message": "keep preset line width",
+      "range": {
+        "startLine": 963,
+        "startChar": 19,
+        "endLine": 963,
+        "endChar": 65
+      },
+      "revId": "e4c03763a9028d3f1bb75096d8f71db79ef4dabf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98d68690_22f0d9a9",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-19T11:02:21Z",
+      "side": 1,
+      "message": "// This was 57240 (different than the original 57150, losing the preset line width)",
+      "revId": "e4c03763a9028d3f1bb75096d8f71db79ef4dabf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
