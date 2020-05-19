@@ -469,7 +469,13 @@ void Transform(void* pInputStream, void* pOutputStream, long nAngle)
     JpegDecompressOwner aDecompressOwner;
     JpegCompressOwner aCompressOwner;
 
-    if (setjmp(aSourceError.setjmp_buffer) || setjmp(aDestinationError.setjmp_buffer))
+    if (setjmp(aSourceError.setjmp_buffer))
+    {
+        jpeg_destroy_decompress(&aSourceInfo);
+        jpeg_destroy_compress(&aDestinationInfo);
+        return;
+    }
+    if (setjmp(aDestinationError.setjmp_buffer))
     {
         jpeg_destroy_decompress(&aSourceInfo);
         jpeg_destroy_compress(&aDestinationInfo);
