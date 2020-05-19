@@ -360,7 +360,7 @@ void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
     }
 }
 
-FreetypeFont* FreetypeManager::CreateFont(LogicalFontInstance* pFontInstance)
+FreetypeFont* FreetypeManager::CreateFont(FreetypeFontInstance* pFontInstance)
 {
     // find a FontInfo matching to the font id
     if (!pFontInstance)
@@ -395,10 +395,6 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const F
 
 FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo* pFI )
 :   mpFontInstance(static_cast<FreetypeFontInstance*>(pFontInstance)),
-    mnRefCount(1),
-    mnBytesUsed( sizeof(FreetypeFont) ),
-    mpPrevGCFont( nullptr ),
-    mpNextGCFont( nullptr ),
     mnCos( 0x10000),
     mnSin( 0 ),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
@@ -411,9 +407,6 @@ FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo*
     mbArtBold(false)
 {
     int nPrioEmbedded = nDefaultPrioEmbedded;
-    // TODO: move update of mpFontInstance into FontEntry class when
-    // it becomes responsible for the FreetypeFont instantiation
-    mpFontInstance->SetFreetypeFont( this );
 
     maFaceFT = pFI->GetFaceFT();
 
@@ -489,11 +482,6 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     return mxFontOptions.get();
 }
 
-void FreetypeFont::ClearFontOptions()
-{
-    mxFontOptions.reset();
-}
-
 const OString& FreetypeFont::GetFontFileName() const
 {
     return mpFontInfo->GetFontFileName();
@@ -516,9 +504,7 @@ FreetypeFont::~FreetypeFont()
 
     mpFontInfo->ReleaseFaceFT();
 
-    mpFontInstance.clear();
-
-    ReleaseFromGarbageCollect();
+    mpFontInstance = nullptr;
 }
 
 void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
@@ -533,7 +519,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 
     FT_Activate_Size( maSizeFT );
 
-    rxTo->ImplCalcLineSpacing(mpFontInstance.get());
+    rxTo->ImplCalcLineSpacing(mpFontInstance);
 
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );

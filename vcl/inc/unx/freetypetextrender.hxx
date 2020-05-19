@@ -22,14 +22,15 @@
 
 #include <textrender.hxx>
 
-class FreetypeFont;
+class FreetypeFontInstance;
 
 // Generic implementation that uses freetype, but DrawTextLayout()
 // still needs implementing (e.g. by Cairo or Skia).
 class VCL_DLLPUBLIC FreeTypeTextRenderImpl : public TextRenderImpl
 {
 protected:
-    FreetypeFont*   mpFreetypeFont[ MAX_FALLBACK ];
+    rtl::Reference<FreetypeFontInstance>
+                            mpFreetypeFont[ MAX_FALLBACK ];
 
     Color           mnTextColor;
 
