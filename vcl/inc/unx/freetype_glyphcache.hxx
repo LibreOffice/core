@@ -106,7 +106,7 @@ class SAL_DLLPUBLIC_RTTI FreetypeFontInstance : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
-    FreetypeFont* mpFreetypeFont;
+    std::unique_ptr<FreetypeFont> mxFreetypeFont;
 
     virtual hb_font_t* ImplInitHbFont() override;
     virtual bool ImplGetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const override;
@@ -117,8 +117,7 @@ protected:
 public:
     virtual ~FreetypeFontInstance() override;
 
-    void SetFreetypeFont(FreetypeFont* p);
-    FreetypeFont* GetFreetypeFont() const { return mpFreetypeFont; }
+    FreetypeFont& GetFreetypeFont() const { return *mxFreetypeFont; }
 
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 };
