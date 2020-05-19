@@ -84,6 +84,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     PropertyMapEntry aImportInfoMap[] =
     {
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
+        { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString("DefaultDocumentSettings"), 0,
           ::cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
