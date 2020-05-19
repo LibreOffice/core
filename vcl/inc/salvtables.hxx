@@ -838,7 +838,7 @@ public:
 
         if (!m_xMenuButton)
             m_xMenuButton
-                = VclPtr<MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+                = VclPtr<::MenuButton>::Create(m_xComboBox, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
 
         m_xMenuButton->SetPopupMenu(pPopup);
         m_xMenuButton->Show(pPopup != nullptr);
