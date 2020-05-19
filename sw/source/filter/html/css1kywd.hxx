@@ -220,6 +220,7 @@ extern const char* const sCSS1_P_page_break_after;
 extern const char* const sCSS1_P_page_break_inside;
 extern const char* const sCSS1_P_size;
 extern const char* const sCSS1_P_widows;
+extern const char* const sCSS1_P_visibility;
 extern const char* const sCSS1_P_orphans;
 //extern const char* const sCSS1_P_marks;
 

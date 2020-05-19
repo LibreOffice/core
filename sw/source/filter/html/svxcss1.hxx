@@ -142,6 +142,8 @@ public:
     SvxCSS1PageBreak m_ePageBreakBefore;
     SvxCSS1PageBreak m_ePageBreakAfter;
 
+    bool m_bVisible = true;
+
     SvxCSS1PropertyInfo();
     SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp );
     ~SvxCSS1PropertyInfo();
