@@ -46,6 +46,30 @@
       "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef7da433_c90d3e36",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-19T08:52:01Z",
+      "side": 1,
+      "message": "so if your motivation was the missing builtin_FILE etc. support in older Clang, the relevant check should be `__clang_major__ \u003e\u003d 9`, as \u003chttps://github.com/llvm/llvm-project/commit/708afb56c125ca4f7db7070e836860076c7eafbc\u003e \"Implement __builtin_LINE() et. al. to support source location capture\" first appeared on the release/9.x branch.\n\nHowever, /home/tdf/lode/opt_private/clang-472c6ef8b0f53061b049039f9775ab127beafbe4 as used by \u003chttps://ci.libreoffice.org//job/lo_ubsan/1631/\u003e is apparently a pre-release version predating that.\n\nSo we should both update that lode Clang build and fix this __clang_major__ check.  Will take care.",
+      "parentUuid": "87c2dd98_77804aa5",
+      "range": {
+        "startLine": 2791,
+        "startChar": 129,
+        "endLine": 2791,
+        "endChar": 149
+      },
+      "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
