@@ -1401,6 +1401,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_CALC_FUNCTION_LIST:
     case LOK_CALLBACK_TAB_STOP_LIST:
     case LOK_CALLBACK_FORM_FIELD_BUTTON:
+    case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
     {
         // TODO: Implement me
         break;

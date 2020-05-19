@@ -553,6 +553,50 @@ bool ScTabViewShell::isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bCol
     return false;
 }
 
+void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(SfxViewShell* pForViewShell, bool bColumns,
+                                                         bool bRows, bool bSizes, bool bHidden, bool bFiltered,
+                                                         bool bGroups, SCTAB nCurrentTabIndex)
+{
+    if (!comphelper::LibreOfficeKit::isActive() ||
+            !comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        return;
+
+    if (!bColumns && !bRows)
+        return;
+
+    bool bAllTypes = bSizes && bHidden && bFiltered && bGroups;
+    bool bAllDims = bColumns && bRows;
+    OString aPayload = bAllDims ? "all" : bColumns ? "columns" : "rows";
+
+    if (!bAllTypes)
+    {
+        if (bSizes)
+            aPayload += " sizes";
+
+        if (bHidden)
+            aPayload += " hidden";
+
+        if (bFiltered)
+            aPayload += " filtered";
+
+        if (bGroups)
+            aPayload += " groups";
+    }
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() &&
+                (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY, aPayload.getStr());
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;
