@@ -533,6 +533,12 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(bool bColumns, SCTAB nCurr
     ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, nCurrentTabIndex);
 }
 
+void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bool bColumns, bool bRows, bool bSizes,
+                                                         bool bHidden, bool bFiltered, bool bGroups,
+                                                         SCTAB nCurrentTabIndex)
+{
+}
+
 bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
 {
     if (comphelper::LibreOfficeKit::isActive())
