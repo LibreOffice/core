@@ -66,14 +66,6 @@ bool SalLayoutGlyphsImpl::IsValid() const
         return false;
     if (empty())
         return false;
-#if (defined UNX && !defined MACOSX && !defined IOS)
-    const FreetypeFontInstance* pFFI = dynamic_cast<FreetypeFontInstance*>(m_rFontInstance.get());
-    if (pFFI && !pFFI->GetFreetypeFont())
-    {
-        m_rFontInstance.clear();
-        return false;
-    }
-#endif
     return true;
 }
 

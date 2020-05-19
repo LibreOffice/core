@@ -39,8 +39,6 @@
 FreeTypeTextRenderImpl::FreeTypeTextRenderImpl()
     : mnTextColor(Color(0x00, 0x00, 0x00)) //black
 {
-    for(FreetypeFont* & rp : mpFreetypeFont)
-        rp = nullptr;
 }
 
 FreeTypeTextRenderImpl::~FreeTypeTextRenderImpl()
@@ -53,51 +51,37 @@ void FreeTypeTextRenderImpl::SetFont(LogicalFontInstance *pEntry, int nFallbackL
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
-        if( mpFreetypeFont[i] != nullptr )
-        {
-            // old server side font is no longer referenced
-            FreetypeManager::get().UncacheFont( *mpFreetypeFont[i] );
-            mpFreetypeFont[i] = nullptr;
-        }
+        // old server side font is no longer referenced
+        mpFreetypeFont[i] = nullptr;
     }
 
     // return early if there is no new font
     if( !pEntry )
         return;
 
-    // handle the request for a non-native X11-font => use the FreetypeManager
-    FreetypeFont* pFreetypeFont = FreetypeManager::get().CacheFont(pEntry);
-    if( pFreetypeFont != nullptr )
-    {
-        // ignore fonts with e.g. corrupted font files
-        if( !pFreetypeFont->TestFont() )
-        {
-            FreetypeManager::get().UncacheFont( *pFreetypeFont );
-            return;
-        }
+    FreetypeFontInstance* pFreetypeFont = static_cast<FreetypeFontInstance*>(pEntry);
+    mpFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
 
-        // register to use the font
-        mpFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
-    }
+    // ignore fonts with e.g. corrupted font files
+    if (!mpFreetypeFont[nFallbackLevel]->GetFreetypeFont().TestFont())
+        mpFreetypeFont[nFallbackLevel] = nullptr;
 }
 
 FontCharMapRef FreeTypeTextRenderImpl::GetFontCharMap() const
 {
-    if( !mpFreetypeFont[0] )
+    if (!mpFreetypeFont[0])
         return nullptr;
-
-    return mpFreetypeFont[0]->GetFontCharMap();
+    return mpFreetypeFont[0]->GetFreetypeFont().GetFontCharMap();
 }
 
 bool FreeTypeTextRenderImpl::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
 {
     if (!mpFreetypeFont[0])
         return false;
-    return mpFreetypeFont[0]->GetFontCapabilities(rGetImplFontCapabilities);
+    return mpFreetypeFont[0]->GetFreetypeFont().GetFontCapabilities(rGetImplFontCapabilities);
 }
 
 // SalGraphics
-
 void
 FreeTypeTextRenderImpl::SetTextColor( Color nColor )
 {
@@ -157,8 +141,8 @@ void FreeTypeTextRenderImpl::GetFontMetric( ImplFontMetricDataRef& rxFontMetric,
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
 
-    if( mpFreetypeFont[nFallbackLevel] != nullptr )
-        mpFreetypeFont[nFallbackLevel]->GetFontMetric(rxFontMetric);
+    if (mpFreetypeFont[nFallbackLevel])
+        mpFreetypeFont[nFallbackLevel]->GetFreetypeFont().GetFontMetric(rxFontMetric);
 }
 
 std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFallbackLevel)
@@ -166,7 +150,7 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
     assert(mpFreetypeFont[nFallbackLevel]);
     if (!mpFreetypeFont[nFallbackLevel])
         return nullptr;
-    return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]->GetFontInstance());
+    return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
 }
 
 #if ENABLE_CAIRO_CANVAS
@@ -177,15 +161,15 @@ SystemFontData FreeTypeTextRenderImpl::GetSysFontData( int nFallbackLevel ) cons
     if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
     if (nFallbackLevel < 0 ) nFallbackLevel = 0;
 
-    if (mpFreetypeFont[nFallbackLevel] != nullptr)
+    if (mpFreetypeFont[nFallbackLevel])
     {
-        const FreetypeFont* rFont = mpFreetypeFont[nFallbackLevel];
-        aSysFontData.nFontId = rFont->GetFtFace();
-        aSysFontData.nFontFlags = rFont->GetLoadFlags();
-        aSysFontData.bFakeBold = rFont->NeedsArtificialBold();
-        aSysFontData.bFakeItalic = rFont->NeedsArtificialItalic();
-        aSysFontData.bAntialias = rFont->GetAntialiasAdvice();
-        aSysFontData.bVerticalCharacterType = rFont->GetFontInstance()->GetFontSelectPattern().mbVertical;
+        FreetypeFont& rFreetypeFont = mpFreetypeFont[nFallbackLevel]->GetFreetypeFont();
+        aSysFontData.nFontId = rFreetypeFont.GetFtFace();
+        aSysFontData.nFontFlags = rFreetypeFont.GetLoadFlags();
+        aSysFontData.bFakeBold = rFreetypeFont.NeedsArtificialBold();
+        aSysFontData.bFakeItalic = rFreetypeFont.NeedsArtificialItalic();
+        aSysFontData.bAntialias = rFreetypeFont.GetAntialiasAdvice();
+        aSysFontData.bVerticalCharacterType = mpFreetypeFont[nFallbackLevel]->GetFontSelectPattern().mbVertical;
     }
 
     return aSysFontData;

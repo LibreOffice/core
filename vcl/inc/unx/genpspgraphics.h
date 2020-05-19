@@ -32,7 +32,7 @@ class PhysicalFontCollection;
 
 namespace psp { struct JobData; class PrinterGfx; }
 
-class FreetypeFont;
+class FreetypeFontInstance;
 class FontAttributes;
 class SalInfoPrinter;
 class ImplFontMetricData;
@@ -42,7 +42,8 @@ class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphics
     psp::JobData*           m_pJobData;
     psp::PrinterGfx*        m_pPrinterGfx;
 
-    FreetypeFont*           m_pFreetypeFont[ MAX_FALLBACK ];
+    rtl::Reference<FreetypeFontInstance>
+                            m_pFreetypeFont[ MAX_FALLBACK ];
 public:
                             GenPspGraphics();
     virtual                ~GenPspGraphics() override;

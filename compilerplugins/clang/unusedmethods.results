@@ -1768,8 +1768,6 @@ vcl/inc/skia/utils.hxx:62
     void SkiaHelper::dump(const class SkBitmap &,const char *)
 vcl/inc/skia/zone.hxx:22
     void SkiaZone::relaxWatchdogTimings()
-vcl/inc/unx/glyphcache.hxx:108
-    void FreetypeManager::ClearFontOptions()
 vcl/inc/unx/gtk/gtkframe.hxx:217
     void ensure_dbus_setup(struct _GdkWindow *,class GtkSalFrame *)
 vcl/inc/unx/saldisp.hxx:377

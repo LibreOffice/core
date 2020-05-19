@@ -96,9 +96,6 @@ ImplFontCache::~ImplFontCache()
 {
     for (const auto & rLFI : maFontInstanceList)
     {
-#if !(defined(_WIN32) || defined(MACOSX) || defined(IOS))
-        FreetypeManager::get().TryGarbageCollectFont(rLFI.second.get());
-#endif
         rLFI.second->mpFontCache = nullptr;
     }
 }
