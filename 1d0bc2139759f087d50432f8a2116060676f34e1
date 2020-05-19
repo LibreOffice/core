@@ -22,6 +22,30 @@
       "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87c2dd98_77804aa5",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-19T08:37:45Z",
+      "side": 1,
+      "message": "that was essentially a guess - one of the buildbots had clang 8 and failed with a similar error, guess we will need to bump it to 10",
+      "parentUuid": "9fd7e742_e959935f",
+      "range": {
+        "startLine": 2791,
+        "startChar": 129,
+        "endLine": 2791,
+        "endChar": 149
+      },
+      "revId": "1d0bc2139759f087d50432f8a2116060676f34e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
