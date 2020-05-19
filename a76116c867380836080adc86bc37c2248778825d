@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a94b989_43654c3e",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-19T07:13:04Z",
+      "side": 1,
+      "message": "Please do not add new \"using\" - we try to remove it from existing files, not add more problems! :-) Thanks.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "a76116c867380836080adc86bc37c2248778825d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
