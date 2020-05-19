@@ -31,21 +31,12 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
                              : nullptr,
                          rUIRoot, rUIFile)
     , m_nWindowId(0)
-    , m_aParentDialog(nullptr)
-    , m_bHasTopLevelDialog(false)
 {
-    vcl::Window* pRoot = get_builder().get_widget_root();
-    if (pRoot && pRoot->GetParent())
-    {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
-        m_nWindowId = m_aParentDialog->GetLOKWindowId();
-        InsertWindowToMap(m_nWindowId);
-    }
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
 {
-    if (m_nWindowId && m_bHasTopLevelDialog)
+    if (m_nWindowId)
         GetLOKWeldWidgetsMap().erase(m_nWindowId);
 }
 
@@ -61,7 +52,6 @@ weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
                                                     const OString& rWidget)
 {
     const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-
     if (it != GetLOKWeldWidgetsMap().end())
     {
         auto widgetIt = it->second.find(rWidget);
@@ -70,15 +60,6 @@ weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(vcl::LOKWindowId nWindowId,
     }
 
     return nullptr;
-}
-
-void JSInstanceBuilder::InsertWindowToMap(int nWindowId)
-{
-    WidgetMap map;
-    auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-    if (it == GetLOKWeldWidgetsMap().end())
-        GetLOKWeldWidgetsMap().insert(
-            std::map<vcl::LOKWindowId, WidgetMap>::value_type(nWindowId, map));
 }
 
 void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
@@ -95,7 +76,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
     m_nWindowId = pDialog->GetLOKWindowId();
 
-    InsertWindowToMap(m_nWindowId);
+    WidgetMap map;
+    GetLOKWeldWidgetsMap().insert(
+        std::map<vcl::LOKWindowId, WidgetMap>::value_type(m_nWindowId, map));
 
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
                                                : nullptr);
@@ -104,7 +87,6 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
         m_xBuilder->drop_ownership(pDialog);
-        m_bHasTopLevelDialog = true;
     }
 
     const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
@@ -124,40 +106,31 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bool bTakeOwnership)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
-    auto pWeldWidget = std::make_unique<JSLabel>(
-        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pLabel, this, bTakeOwnership);
+    auto pWeldWidget = std::make_unique<JSLabel>(m_aOwnedToplevel, pLabel, this, bTakeOwnership);
 
-    if (pWeldWidget)
-        RememberWidget(id, pWeldWidget.get());
-
+    RememberWidget(id, pWeldWidget.get());
     return pWeldWidget;
 }
 
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    auto pWeldWidget = pButton ? std::make_unique<JSButton>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                                 : m_aParentDialog,
-                                                            pButton, this, bTakeOwnership)
-                               : nullptr;
+    auto pWeldWidget
+        = pButton ? std::make_unique<JSButton>(m_aOwnedToplevel, pButton, this, bTakeOwnership)
+                  : nullptr;
 
-    if (pWeldWidget)
-        RememberWidget(id, pWeldWidget.get());
-
+    RememberWidget(id, pWeldWidget.get());
     return pWeldWidget;
 }
 
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
-    auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                               : m_aParentDialog,
-                                                          pEntry, this, bTakeOwnership)
-                              : nullptr;
+    auto pWeldWidget
+        = pEntry ? std::make_unique<JSEntry>(m_aOwnedToplevel, pEntry, this, bTakeOwnership)
+                 : nullptr;
 
-    if (pWeldWidget)
-        RememberWidget(id, pWeldWidget.get());
-
+    RememberWidget(id, pWeldWidget.get());
     return pWeldWidget;
 }
 
@@ -170,22 +143,18 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 
     if (pComboBox)
     {
-        pWeldWidget = std::make_unique<JSComboBox>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                        : m_aParentDialog,
-                                                   pComboBox, this, bTakeOwnership);
+        pWeldWidget
+            = std::make_unique<JSComboBox>(m_aOwnedToplevel, pComboBox, this, bTakeOwnership);
     }
     else
     {
         ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-        pWeldWidget = pListBox ? std::make_unique<JSListBox>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                                  : m_aParentDialog,
-                                                             pListBox, this, bTakeOwnership)
+        pWeldWidget = pListBox ? std::make_unique<JSListBox>(m_aOwnedToplevel, pListBox, this,
+                                                             bTakeOwnership)
                                : nullptr;
     }
 
-    if (pWeldWidget)
-        RememberWidget(id, pWeldWidget.get());
-
+    RememberWidget(id, pWeldWidget.get());
     return pWeldWidget;
 }
 
@@ -193,14 +162,11 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
                                                                  bool bTakeOwnership)
 {
     TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-    auto pWeldWidget = pNotebook ? std::make_unique<JSNotebook>(
-                                       m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                       pNotebook, this, bTakeOwnership)
+    auto pWeldWidget = pNotebook ? std::make_unique<JSNotebook>(m_aOwnedToplevel, pNotebook, this,
+                                                                bTakeOwnership)
                                  : nullptr;
 
-    if (pWeldWidget)
-        RememberWidget(id, pWeldWidget.get());
-
+    RememberWidget(id, pWeldWidget.get());
     return pWeldWidget;
 }
 
@@ -251,12 +217,6 @@ void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
 void JSListBox::remove(int pos)
 {
     SalInstanceComboBoxWithoutEdit::remove(pos);
-    notifyDialogState();
-}
-
-void JSListBox::set_active(int pos)
-{
-    SalInstanceComboBoxWithoutEdit::set_active(pos);
     notifyDialogState();
 }
 
