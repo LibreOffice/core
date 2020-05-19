@@ -1237,6 +1237,7 @@ no-wrap
 NOEMPTY_DUMMY
 nohref
 NOMATCH_DUMMY
+non-whitespace-character-count
 none
 notprsubset
 normal
