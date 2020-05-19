@@ -1237,8 +1237,8 @@ no-wrap
 NOEMPTY_DUMMY
 nohref
 NOMATCH_DUMMY
+non-whitespace-character-count
 none
-notprsubset
 normal
 normals-direction
 normals-kind
@@ -1248,6 +1248,7 @@ notation
 note
 notes
 notin
+notprsubset
 notsubset
 null-date
 null-year
