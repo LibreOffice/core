@@ -54,7 +54,7 @@ namespace drawinglayer
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rSize,
                 double fTransparence,
-                short nBlur,
+                sal_Int32 nBlur,
                 const basegfx::BColor& rColor);
             SdrShadowAttribute();
             SdrShadowAttribute(const SdrShadowAttribute&);
@@ -73,7 +73,7 @@ namespace drawinglayer
             const basegfx::B2DVector& getOffset() const;
             const basegfx::B2DVector& getSize() const;
             double getTransparence() const;
-            short getBlur() const;
+            sal_Int32 getBlur() const;
             const basegfx::BColor& getColor() const;
         };
     } // end of namespace attribute

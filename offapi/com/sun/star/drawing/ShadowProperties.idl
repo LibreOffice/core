@@ -61,7 +61,7 @@ published service ShadowProperties
 
     /** This defines the degree of blur of the shadow in points.
      */
-    [optional,property] short ShadowBlur;
+    [optional,property] long ShadowBlur;
 
 
 };

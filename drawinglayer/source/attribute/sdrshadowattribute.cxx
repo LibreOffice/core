@@ -32,14 +32,14 @@ namespace drawinglayer::attribute
             basegfx::B2DVector                  maOffset;                   // shadow offset 1/100th mm
             basegfx::B2DVector                  maSize;                     // [0.0 .. 2.0]
             double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
-            short                               mnBlur;                     // [0   .. 180], radius of the blur
+            sal_Int32                           mnBlur;                     // [0   .. 180], radius of the blur
             basegfx::BColor                     maColor;                    // color of shadow
 
             ImpSdrShadowAttribute(
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rSize,
                 double fTransparence,
-                short nBlur,
+                sal_Int32 nBlur,
                 const basegfx::BColor& rColor)
             :   maOffset(rOffset),
                 maSize(rSize),
@@ -62,7 +62,7 @@ namespace drawinglayer::attribute
             const basegfx::B2DVector& getOffset() const { return maOffset; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             double getTransparence() const { return mfTransparence; }
-            short getBlur() const { return mnBlur; }
+            sal_Int32 getBlur() const { return mnBlur; }
             const basegfx::BColor& getColor() const { return maColor; }
 
             bool operator==(const ImpSdrShadowAttribute& rCandidate) const
@@ -86,7 +86,7 @@ namespace drawinglayer::attribute
             const basegfx::B2DVector& rOffset,
             const basegfx::B2DVector& rSize,
             double fTransparence,
-            short nBlur,
+            sal_Int32 nBlur,
             const basegfx::BColor& rColor)
         :   mpSdrShadowAttribute(ImpSdrShadowAttribute(
                 rOffset, rSize, fTransparence,nBlur, rColor))
@@ -137,7 +137,7 @@ namespace drawinglayer::attribute
             return mpSdrShadowAttribute->getTransparence();
         }
 
-        short SdrShadowAttribute::getBlur() const
+        sal_Int32 SdrShadowAttribute::getBlur() const
         {
             return mpSdrShadowAttribute->getBlur();
         }
