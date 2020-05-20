@@ -749,16 +749,6 @@ public:
     virtual void set_max_mru_count(int nCount) = 0;
     virtual OUString get_mru_entries() const = 0;
     virtual void set_mru_entries(const OUString& rEntries) = 0;
-
-    // Form Controls List Box related multi-selection support
-    // Only SelectionMode::Single or SelectionMode::Multiple are supported.
-    // SelectionMode::Multiple mode is basically bizarre but in use in
-    // the Form Controls List Box which we seem stuck with
-    virtual void set_selection_mode(SelectionMode eMode) = 0;
-    virtual void scroll_to_row(int pos) = 0;
-    virtual void select(int pos) = 0;
-    virtual void unselect(int pos) = 0;
-    virtual std::vector<int> get_selected_rows() const = 0;
 };
 
 class VCL_DLLPUBLIC TreeIter
