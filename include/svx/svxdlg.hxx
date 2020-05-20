@@ -297,13 +297,14 @@ public:
     virtual long GetCount() const = 0;
 };
 
-class SvxAbstractNewTableDialog : public VclAbstractDialog
+class SvxAbstractNewTableDialog
 {
 protected:
-    virtual ~SvxAbstractNewTableDialog() override = default;
+    virtual ~SvxAbstractNewTableDialog() = default;
 public:
     virtual sal_Int32 getRows() const = 0;
     virtual sal_Int32 getColumns() const = 0;
+    virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
 };
 
 class SvxAbstractInsRowColDlg : public VclAbstractDialog
@@ -454,7 +455,7 @@ public:
 
     virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
 
-    virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) = 0;
+    virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) = 0;
 
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) = 0;
 };
