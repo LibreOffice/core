@@ -98,7 +98,6 @@ enum class SvXMLExportFlags {
     FONTDECLS                = 0x0080,
     EMBEDDED                 = 0x0100,
     PRETTY                   = 0x0400,
-    SAVEBACKWARDCOMPATIBLE   = 0x0800,
     OASIS                    = 0x8000,
     ALL                      = 0x0dff
 };
