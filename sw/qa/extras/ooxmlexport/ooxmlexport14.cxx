@@ -392,6 +392,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121045, "tdf121045.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[5]/w:rPr/w:szCs", "val", "20");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Ensure that width of first tab is close to zero (previous value was ~1000 twips)
+    int nWidth = parseDump("/root/page/body/txt[1]/Text[@nType='PortionType::TabLeft']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_LESS(150, nWidth);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92472, "tdf92472.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
