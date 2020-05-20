@@ -27,7 +27,6 @@
 
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode )
 :   Outliner( pItemPool, nMode ),
-    //mpPaintInfoRec( NULL )
     mpVisualizedPage(nullptr)
 {
 }
