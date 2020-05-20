@@ -107,19 +107,19 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
 
     if ( rControlCommand.Command == "SetList" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "List" )
+            if ( arg.Name == "List" )
             {
                 Sequence< OUString > aList;
                 m_aDropdownMenuList.clear();
                 m_aCurrentSelection.clear();
 
-                rControlCommand.Arguments[i].Value >>= aList;
-                for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
+                arg.Value >>= aList;
+                for ( OUString const & label : std::as_const(aList) )
                 {
                     m_aDropdownMenuList.push_back( DropdownMenuItem() );
-                    m_aDropdownMenuList.back().mLabel = aList[j];
+                    m_aDropdownMenuList.back().mLabel = label;
                 }
 
                 // send notification
@@ -134,13 +134,13 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
     }
     else if ( rControlCommand.Command == "CheckItemPos" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( arg.Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
 
-                rControlCommand.Arguments[i].Value >>= nPos;
+                arg.Value >>= nPos;
                 if ( nPos >= 0 &&
                      ( sal::static_int_cast< sal_uInt32 >(nPos)
                        < m_aDropdownMenuList.size() ) )
@@ -162,15 +162,15 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
         OUString   aText;
         OUString   aTipHelpText;
 
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( arg.Name == "Text" )
             {
-                rControlCommand.Arguments[i].Value >>= aText;
+                arg.Value >>= aText;
             }
-            else if ( rControlCommand.Arguments[i].Name == "TipHelpText" )
+            else if ( arg.Name == "TipHelpText" )
             {
-                rControlCommand.Arguments[i].Value >>= aTipHelpText;
+                arg.Value >>= aTipHelpText;
             }
         }
 
@@ -186,19 +186,19 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
         sal_Int32 nPos(0);
         sal_Int32 nSize = sal_Int32( m_aDropdownMenuList.size() );
         OUString  aText;
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( arg.Name == "Pos" )
             {
                 sal_Int32 nTmpPos = 0;
-                if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
+                if ( arg.Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) && ( nTmpPos < nSize ))
                         nPos = nTmpPos;
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name == "Text" )
-                rControlCommand.Arguments[i].Value >>= aText;
+            else if ( arg.Name == "Text" )
+                arg.Value >>= aText;
         }
 
         std::vector< DropdownMenuItem >::iterator aIter = m_aDropdownMenuList.begin();
@@ -209,12 +209,12 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
     }
     else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( arg.Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
-                if ( rControlCommand.Arguments[i].Value >>= nPos )
+                if ( arg.Value >>= nPos )
                 {
                     if ( nPos < sal_Int32( m_aDropdownMenuList.size() ))
                     {
@@ -227,12 +227,12 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
     }
     else if ( rControlCommand.Command == "RemoveEntryText" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( auto const & arg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( arg.Name == "Text" )
             {
                 OUString aText;
-                if ( rControlCommand.Arguments[i].Value >>= aText )
+                if ( arg.Value >>= aText )
                 {
                     sal_Int32 nSize = sal_Int32( m_aDropdownMenuList.size() );
                     for ( sal_Int32 j = 0; j < nSize; j++ )

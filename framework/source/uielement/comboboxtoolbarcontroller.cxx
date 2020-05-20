@@ -215,12 +215,12 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
 {
     if ( rControlCommand.Command == "SetText" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( rArg.Name == "Text" )
             {
                 OUString aText;
-                rControlCommand.Arguments[i].Value >>= aText;
+                rArg.Value >>= aText;
                 m_pComboBox->set_active_or_entry_text(aText);
 
                 // send notification
@@ -231,16 +231,16 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
     }
     else if ( rControlCommand.Command == "SetList" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "List" )
+            if ( rArg.Name == "List" )
             {
                 Sequence< OUString > aList;
                 m_pComboBox->clear();
 
-                rControlCommand.Arguments[i].Value >>= aList;
-                for (sal_Int32 j = 0; j < aList.getLength(); ++j)
-                    m_pComboBox->append_text(aList[j]);
+                rArg.Value >>= aList;
+                for (OUString const & rName : std::as_const(aList))
+                    m_pComboBox->append_text(rName);
 
                 // send notification
                 uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::makeAny(aList) } };
@@ -255,11 +255,11 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
     else if ( rControlCommand.Command == "AddEntry" )
     {
         OUString   aText;
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( rArg.Name == "Text" )
             {
-                if ( rControlCommand.Arguments[i].Value >>= aText )
+                if ( rArg.Value >>= aText )
                     m_pComboBox->append_text(aText);
                 break;
             }
@@ -269,32 +269,32 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
     {
         sal_Int32 nPos(-1);
         OUString   aText;
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( rArg.Name == "Pos" )
             {
                 sal_Int32 nTmpPos = 0;
-                if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
+                if ( rArg.Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) &&
                         ( nTmpPos < m_pComboBox->get_count() ))
                         nPos = nTmpPos;
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name == "Text" )
-                rControlCommand.Arguments[i].Value >>= aText;
+            else if ( rArg.Name == "Text" )
+                rArg.Value >>= aText;
         }
 
         m_pComboBox->insert_text(nPos, aText);
     }
     else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( rArg.Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
-                if ( rControlCommand.Arguments[i].Value >>= nPos )
+                if ( rArg.Value >>= nPos )
                 {
                     if (0 <= nPos && nPos < m_pComboBox->get_count())
                         m_pComboBox->remove(nPos);
@@ -305,12 +305,12 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
     }
     else if ( rControlCommand.Command == "RemoveEntryText" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text")
+            if ( rArg.Name == "Text")
             {
                 OUString aText;
-                if ( rControlCommand.Arguments[i].Value >>= aText )
+                if ( rArg.Value >>= aText )
                 {
                     auto nPos = m_pComboBox->find_text(aText);
                     if (nPos != -1)
