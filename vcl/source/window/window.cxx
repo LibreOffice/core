@@ -1247,41 +1247,19 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
     OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
-void Window::DrawOutDevDirectCheck(const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics)
+const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const
 {
+    const OutputDevice* pSrcDevChecked;
     if ( this == pSrcDev )
-        pSrcGraphics = nullptr;
+        pSrcDevChecked = nullptr;
+    else if (GetOutDevType() != pSrcDev->GetOutDevType())
+        pSrcDevChecked = pSrcDev;
+    else if (this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow)
+        pSrcDevChecked = nullptr;
     else
-    {
-        if ( GetOutDevType() != pSrcDev->GetOutDevType() )
-        {
-            if ( !pSrcDev->mpGraphics )
-            {
-                if ( !pSrcDev->AcquireGraphics() )
-                    return;
-            }
-            pSrcGraphics = pSrcDev->mpGraphics;
-        }
-        else
-        {
-            if ( this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
-                pSrcGraphics = nullptr;
-            else
-            {
-                if ( !pSrcDev->mpGraphics )
-                {
-                    if ( !pSrcDev->AcquireGraphics() )
-                        return;
-                }
-                pSrcGraphics = pSrcDev->mpGraphics;
+        pSrcDevChecked = pSrcDev;
 
-                if ( !mpGraphics && !AcquireGraphics() )
-                    return;
-                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl.gdi",
-                            "OutputDevice::DrawOutDev(): We need more than one Graphics" );
-            }
-        }
-    }
+    return pSrcDevChecked;
 }
 
 void Window::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )

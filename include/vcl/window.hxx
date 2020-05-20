@@ -753,7 +753,7 @@ protected:
     virtual void                        ImplAdjustNWFSizes();
 
     virtual void                        CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate) override;
-    virtual void                        DrawOutDevDirectCheck(const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics) override;
+    virtual const OutputDevice*         DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const override;
     virtual void                        DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
     virtual void                        ClipToPaintRegion( tools::Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
