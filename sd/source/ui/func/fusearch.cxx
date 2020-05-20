@@ -52,8 +52,8 @@ FuSearch::FuSearch (
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-      pSdOutliner(nullptr),
-      bOwnOutliner(false)
+      m_pSdOutliner(nullptr),
+      m_bOwnOutliner(false)
 {
 }
 
@@ -70,17 +70,17 @@ void FuSearch::DoExecute( SfxRequest& )
 
     if ( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr )
     {
-        bOwnOutliner = true;
-        pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
+        m_bOwnOutliner = true;
+        m_pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
     }
     else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
-        bOwnOutliner = false;
-        pSdOutliner = mpDoc->GetOutliner();
+        m_bOwnOutliner = false;
+        m_pSdOutliner = mpDoc->GetOutliner();
     }
 
-    if (pSdOutliner)
-       pSdOutliner->PrepareSpelling();
+    if (m_pSdOutliner)
+       m_pSdOutliner->PrepareSpelling();
 }
 
 FuSearch::~FuSearch()
@@ -88,11 +88,11 @@ FuSearch::~FuSearch()
     if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=nullptr)
         mpDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if (pSdOutliner)
-        pSdOutliner->EndSpelling();
+    if (m_pSdOutliner)
+        m_pSdOutliner->EndSpelling();
 
-    if (bOwnOutliner)
-        delete pSdOutliner;
+    if (m_bOwnOutliner)
+        delete m_pSdOutliner;
 }
 
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
@@ -105,32 +105,32 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
     if (pViewShell == nullptr)
         return;
 
-    if ( pSdOutliner && dynamic_cast< const DrawViewShell *>( pViewShell ) !=  nullptr && !bOwnOutliner )
+    if (m_pSdOutliner && dynamic_cast<const DrawViewShell*>(pViewShell) && !m_bOwnOutliner)
     {
-        pSdOutliner->EndSpelling();
+        m_pSdOutliner->EndSpelling();
 
-        bOwnOutliner = true;
-        pSdOutliner = new SdOutliner( mpDoc, OutlinerMode::TextObject );
-        pSdOutliner->PrepareSpelling();
+        m_bOwnOutliner = true;
+        m_pSdOutliner = new SdOutliner(mpDoc, OutlinerMode::TextObject);
+        m_pSdOutliner->PrepareSpelling();
     }
-    else if ( pSdOutliner && dynamic_cast< const OutlineViewShell *>( pViewShell ) !=  nullptr && bOwnOutliner )
+    else if (m_pSdOutliner && dynamic_cast<const OutlineViewShell*>(pViewShell) && m_bOwnOutliner)
     {
-        pSdOutliner->EndSpelling();
-        delete pSdOutliner;
+        m_pSdOutliner->EndSpelling();
+        delete m_pSdOutliner;
 
-        bOwnOutliner = false;
-        pSdOutliner = mpDoc->GetOutliner();
-        pSdOutliner->PrepareSpelling();
+        m_bOwnOutliner = false;
+        m_pSdOutliner = mpDoc->GetOutliner();
+        m_pSdOutliner->PrepareSpelling();
     }
 
-    if (pSdOutliner)
+    if (m_pSdOutliner)
     {
-        bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
+        bool bEndSpelling = m_pSdOutliner->StartSearchAndReplace(pSearchItem);
 
         if (bEndSpelling)
         {
-            pSdOutliner->EndSpelling();
-            pSdOutliner->PrepareSpelling();
+            m_pSdOutliner->EndSpelling();
+            m_pSdOutliner->PrepareSpelling();
         }
     }
 }

@@ -39,8 +39,8 @@ public:
 private:
     virtual ~FuSearch() override;
 
-    SdOutliner* pSdOutliner;
-    bool bOwnOutliner;
+    SdOutliner* m_pSdOutliner;
+    bool m_bOwnOutliner;
 
     FuSearch (
         ViewShell* pViewSh,
