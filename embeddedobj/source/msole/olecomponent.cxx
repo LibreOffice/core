@@ -358,9 +358,9 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 
         if ( pBuf && !bAnyIsReady )
         {
-            for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
-                 if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
-                  && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
+            for ( auto const & supportedFormat : std::as_const(m_aSupportedGraphFormats) )
+                 if ( aFlavor.MimeType.match( supportedFormat.MimeType )
+                  && aFlavor.DataType == supportedFormat.DataType
                   && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
             {
                 bAnyIsReady = ConvertBufferToFormat( pBuf.get(), nBufSize, aFormat, aResult );
@@ -376,9 +376,9 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
 bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     // Actually all the required graphical formats must be supported
-    for ( sal_Int32 nInd = 0; nInd < m_aSupportedGraphFormats.getLength(); nInd++ )
-         if ( aFlavor.MimeType.match( m_aSupportedGraphFormats[nInd].MimeType )
-          && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType )
+    for ( auto const & supportedFormat : std::as_const(m_aSupportedGraphFormats) )
+         if ( aFlavor.MimeType.match( supportedFormat.MimeType )
+          && aFlavor.DataType == supportedFormat.DataType )
             return true;
 
     return false;
@@ -1628,8 +1628,8 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
         RetrieveObjectDataFlavors_Impl();
     }
 
-    for ( sal_Int32 nInd = 0; nInd < m_aDataFlavors.getLength(); nInd++ )
-        if ( m_aDataFlavors[nInd].MimeType.equals( aFlavor.MimeType ) && m_aDataFlavors[nInd].DataType == aFlavor.DataType )
+    for ( auto const & supportedFormat : std::as_const(m_aDataFlavors) )
+        if ( supportedFormat.MimeType.equals( aFlavor.MimeType ) && supportedFormat.DataType == aFlavor.DataType )
             return true;
 
     return false;

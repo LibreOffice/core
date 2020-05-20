@@ -91,8 +91,8 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
     uno::Sequence< sal_Int32 > aStates(2);
     aStates[0] = embed::EmbedStates::LOADED;
     aStates[1] = embed::EmbedStates::RUNNING;
-    for ( sal_Int32 nInd = 0; nInd < aVerbList.getLength(); nInd++ )
-        if ( aVerbList[nInd].VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
+    for ( embed::VerbDescriptor const & vd : aVerbList )
+        if ( vd.VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {
             aStates.realloc(3);
             aStates[2] = embed::EmbedStates::ACTIVE;
@@ -275,9 +275,9 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             uno::Sequence< beans::PropertyValue > aFilterData;
             if ( aFilterAnyData >>= aFilterData )
             {
-                for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                    if ( aFilterData[nInd].Name == "DocumentService" )
-                        aFilterData[nInd].Value >>= aDocServiceName;
+                for ( beans::PropertyValue const & prop : std::as_const(aFilterData) )
+                    if ( prop.Name == "DocumentService" )
+                        prop.Value >>= aDocServiceName;
             }
 
             if ( !aDocServiceName.isEmpty() )
