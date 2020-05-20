@@ -109,10 +109,10 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
     uno::Reference< frame::XFrame >   xFrame;
     OUString                   aResourceURL;
 
-    for (sal_Int32 i=0; i < Arguments.getLength(); i++ )
+    for (auto const & arg : Arguments )
     {
         beans::PropertyValue aPropValue;
-        if ( Arguments[i] >>= aPropValue )
+        if ( arg >>= aPropValue )
         {
             if ( aPropValue.Name == "Frame" )
                 aPropValue.Value >>= xFrame;

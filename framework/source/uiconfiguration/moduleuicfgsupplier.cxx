@@ -101,9 +101,8 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
         // Retrieve known modules and insert them into our unordered_map to speed-up access time.
         Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY_THROW );
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
-        const OUString*                pNameSeq   = aNameSeq.getConstArray();
-        for ( sal_Int32 n = 0; n < aNameSeq.getLength(); n++ )
-            m_aModuleToModuleUICfgMgrMap.emplace( pNameSeq[n], Reference< XModuleUIConfigurationManager2 >() );
+        for ( const OUString& rName : aNameSeq )
+            m_aModuleToModuleUICfgMgrMap.emplace( rName, Reference< XModuleUIConfigurationManager2 >() );
     }
     catch(...)
     {
@@ -149,11 +148,11 @@ Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSuppli
         {
             Sequence< PropertyValue > lProps;
             m_xModuleMgr->getByName(sModuleIdentifier) >>= lProps;
-            for (sal_Int32 i=0; i<lProps.getLength(); ++i)
+            for (PropertyValue const & rProp : std::as_const(lProps))
             {
-                if ( lProps[i].Name == "ooSetupFactoryShortName" )
+                if ( rProp.Name == "ooSetupFactoryShortName" )
                 {
-                    lProps[i].Value >>= sShort;
+                    rProp.Value >>= sShort;
                     break;
                 }
             }

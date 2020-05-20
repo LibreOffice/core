@@ -1400,7 +1400,7 @@ void MenuBarManager::FillMenu(
     // Fill menu bar with container contents
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
-        Sequence< PropertyValue > aProp;
+        Sequence< PropertyValue > aProps;
         OUString aCommandURL;
         OUString aLabel;
         OUString aModuleIdentifier( rModuleIdentifier );
@@ -1410,32 +1410,32 @@ void MenuBarManager::FillMenu(
         sal_Int16 nStyle = 0;
         try
         {
-            if ( rItemContainer->getByIndex( n ) >>= aProp )
+            if ( rItemContainer->getByIndex( n ) >>= aProps )
             {
                 bool bShow = true;
                 bool bEnabled = true;
 
-                for ( int i = 0; i < aProp.getLength(); i++ )
+                for ( beans::PropertyValue const & rProp : std::as_const(aProps) )
                 {
-                    OUString aPropName = aProp[i].Name;
+                    OUString aPropName = rProp.Name;
                     if ( aPropName == "CommandURL" )
-                        aProp[i].Value >>= aCommandURL;
+                        rProp.Value >>= aCommandURL;
                     else if ( aPropName == "ItemDescriptorContainer" )
-                        aProp[i].Value >>= xIndexContainer;
+                        rProp.Value >>= xIndexContainer;
                     else if ( aPropName == "Label" )
-                        aProp[i].Value >>= aLabel;
+                        rProp.Value >>= aLabel;
                     else if ( aPropName == "Type" )
-                        aProp[i].Value >>= nType;
+                        rProp.Value >>= nType;
                     else if ( aPropName == "ModuleIdentifier" )
-                        aProp[i].Value >>= aModuleIdentifier;
+                        rProp.Value >>= aModuleIdentifier;
                     else if ( aPropName == "DispatchProvider" )
-                        aProp[i].Value >>= xDispatchProvider;
+                        rProp.Value >>= xDispatchProvider;
                     else if ( aPropName == "Style" )
-                        aProp[i].Value >>= nStyle;
+                        rProp.Value >>= nStyle;
                     else if ( aPropName == "IsVisible" )
-                        aProp[i].Value >>= bShow;
+                        rProp.Value >>= bShow;
                     else if ( aPropName == "Enabled" )
-                        aProp[i].Value >>= bEnabled;
+                        rProp.Value >>= bEnabled;
                 }
 
                 if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, rModuleIdentifier) &&

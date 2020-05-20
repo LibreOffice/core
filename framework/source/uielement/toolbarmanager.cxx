@@ -573,10 +573,10 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
     if ( xIfacDocImgMgr == Event.Source )
         nImageInfo = 0;
 
-    Sequence< OUString > aSeq = xNameAccess->getElementNames();
-    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+    const Sequence< OUString > aSeq = xNameAccess->getElementNames();
+    for ( OUString const & commandName : aSeq )
     {
-        CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
+        CommandToInfoMap::iterator pIter = m_aCommandMap.find( commandName );
         if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
         {
             if (isRemove)
@@ -599,7 +599,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
             else
             {
                 Reference< XGraphic > xGraphic;
-                if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
+                if ( xNameAccess->getByName( commandName ) >>= xGraphic )
                 {
                     Image aImage( xGraphic );
                     setToolBarImage(aImage,pIter);
@@ -983,7 +983,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
-        Sequence< PropertyValue >   aProp;
+        Sequence< PropertyValue >   aProps;
         OUString                    aCommandURL;
         OUString                    aLabel;
         OUString                    aTooltip;
@@ -992,23 +992,23 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
         try
         {
-            if ( rItemContainer->getByIndex( n ) >>= aProp )
+            if ( rItemContainer->getByIndex( n ) >>= aProps )
             {
                 bool bIsVisible( true );
-                for ( int i = 0; i < aProp.getLength(); i++ )
+                for ( PropertyValue const & prop : std::as_const(aProps) )
                 {
-                    if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
-                        aProp[i].Value >>= aCommandURL;
-                    else if ( aProp[i].Name == "Label" )
-                        aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name == "Tooltip" )
-                        aProp[i].Value >>= aTooltip;
-                    else if ( aProp[i].Name == "Type" )
-                        aProp[i].Value >>= nType;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
-                        aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name == "Style" )
-                        aProp[i].Value >>= nStyle;
+                    if ( prop.Name == ITEM_DESCRIPTOR_COMMANDURL )
+                        prop.Value >>= aCommandURL;
+                    else if ( prop.Name == "Label" )
+                        prop.Value >>= aLabel;
+                    else if ( prop.Name == "Tooltip" )
+                        prop.Value >>= aTooltip;
+                    else if ( prop.Name == "Type" )
+                        prop.Value >>= nType;
+                    else if ( prop.Name == ITEM_DESCRIPTOR_VISIBLE )
+                        prop.Value >>= bIsVisible;
+                    else if ( prop.Name == "Style" )
+                        prop.Value >>= nStyle;
                 }
 
                 if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, m_aModuleIdentifier) &&

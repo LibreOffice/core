@@ -63,17 +63,16 @@ namespace svt
         Reference< XInteractionRetry >       xRetry;
 
         const Sequence< Reference< XInteractionContinuation > > lConts = _rxRequest->getContinuations();
-        const Reference< XInteractionContinuation >*            pConts = lConts.getConstArray();
-        for (sal_Int32 i=0; i<lConts.getLength(); ++i)
+        for (const Reference< XInteractionContinuation >& rCont : lConts)
         {
             if (!xAbort.is())
-                xAbort.set(pConts[i], UNO_QUERY);
+                xAbort.set(rCont, UNO_QUERY);
             if (!xApprove.is())
-                xApprove.set(pConts[i], UNO_QUERY);
+                xApprove.set(rCont, UNO_QUERY);
             if (!xDisapprove.is())
-                xDisapprove.set(pConts[i], UNO_QUERY);
+                xDisapprove.set(rCont, UNO_QUERY);
             if (!xRetry.is())
-                xRetry.set(pConts[i], UNO_QUERY);
+                xRetry.set(rCont, UNO_QUERY);
         }
 
         // safe the original request for later analyzing!
