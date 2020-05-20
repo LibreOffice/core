@@ -78,7 +78,7 @@ ComboBoxControl::ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController
     m_xWidget->connect_changed(LINK(this, ComboBoxControl, ModifyHdl));
     m_xWidget->connect_entry_activate(LINK(this, ComboBoxControl, ActivateHdl));
 
-    m_xWidget->set_entry_width_chars(1); // so a smaller that default width can be used by ComboboxToolbarController
+    m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used by ComboboxToolbarController
     SetSizePixel(get_preferred_size());
 }
 
