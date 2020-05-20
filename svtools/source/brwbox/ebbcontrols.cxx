@@ -31,6 +31,7 @@ namespace svt
         : InterimItemWindow(pParent, "svt/ui/combocontrol.ui", "ComboControl")
         , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     {
+        m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
     }
 
     void ComboBoxControl::dispose()
@@ -107,6 +108,7 @@ namespace svt
         : InterimItemWindow(pParent, "svt/ui/listcontrol.ui", "ListControl")
         , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
     {
+        m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
     }
 
     void ListBoxControl::dispose()
