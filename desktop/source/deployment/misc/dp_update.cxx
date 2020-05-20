@@ -100,16 +100,16 @@ void getOwnUpdateInfos(
             uno::Any anyError;
             //It is unclear from the idl if there can be a null reference returned.
             //However all valid information should be the same
-            Sequence<Reference< xml::dom::XElement > >
+            const Sequence<Reference< xml::dom::XElement > >
                 infos(getUpdateInformation(updateInformation, urls, search_id, anyError));
             if (anyError.hasValue())
                 out_errors.emplace_back(inout.second.extension, anyError);
 
-            for (sal_Int32 j = 0; j < infos.getLength(); ++j)
+            for (const Reference< xml::dom::XElement >& element : infos)
             {
                 dp_misc::DescriptionInfoset infoset(
                     xContext,
-                    Reference< xml::dom::XNode >(infos[j], UNO_QUERY_THROW));
+                    Reference< xml::dom::XNode >(element, UNO_QUERY_THROW));
                 if (!infoset.hasDescription())
                     continue;
                 std::optional< OUString > result_id(infoset.getIdentifier());
@@ -120,7 +120,7 @@ void getOwnUpdateInfos(
                 if (*result_id != search_id)
                     continue;
                 inout.second.version = infoset.getVersion();
-                inout.second.info.set(infos[j], UNO_QUERY_THROW);
+                inout.second.info.set(element, UNO_QUERY_THROW);
                 break;
             }
         }
@@ -142,16 +142,16 @@ void getDefaultUpdateInfos(
     OSL_ASSERT(!sDefaultURL.isEmpty());
 
     Any anyError;
-    Sequence< Reference< xml::dom::XElement > >
+    const Sequence< Reference< xml::dom::XElement > >
         infos(
             getUpdateInformation(
                 updateInformation,
                 Sequence< OUString >(&sDefaultURL, 1), OUString(), anyError));
     if (anyError.hasValue())
         out_errors.emplace_back(Reference<deployment::XPackage>(), anyError);
-    for (sal_Int32 i = 0; i < infos.getLength(); ++i)
+    for (const Reference< xml::dom::XElement >& element : infos)
     {
-        Reference< xml::dom::XNode > node(infos[i], UNO_QUERY_THROW);
+        Reference< xml::dom::XNode > node(element, UNO_QUERY_THROW);
         dp_misc::DescriptionInfoset infoset(xContext, node);
         std::optional< OUString > id(infoset.getIdentifier());
         if (!id) {
