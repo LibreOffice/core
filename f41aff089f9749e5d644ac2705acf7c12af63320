@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "548c088e_69f05fdc",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-20T09:20:27Z",
+      "side": 1,
+      "message": "what\u0027s the reason this is not sal_uInt32",
+      "range": {
+        "startLine": 195,
+        "startChar": 9,
+        "endLine": 195,
+        "endChar": 15
+      },
+      "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c24bbf7_e68efcb5",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-20T09:20:27Z",
+      "side": 1,
+      "message": "so here too...",
+      "range": {
+        "startLine": 209,
+        "startChar": 16,
+        "endLine": 209,
+        "endChar": 17
+      },
+      "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be226fb3_b1a3f503",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-20T09:20:27Z",
+      "side": 1,
+      "message": "oh you can just use \"+\" instead of concat",
+      "range": {
+        "startLine": 212,
+        "startChar": 34,
+        "endLine": 212,
+        "endChar": 40
+      },
+      "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
