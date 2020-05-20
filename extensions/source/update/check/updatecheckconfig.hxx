@@ -186,17 +186,17 @@ private:
 template <typename T>
 T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const char * pszName )
 {
-    for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
+    for( css::beans::NamedValue const & nv : rNamedValues )
     {
         // Unfortunately gcc-3.3 does not like Any.get<T>();
-        if( rNamedValues[n].Name.equalsAscii( pszName ) )
+        if( nv.Name.equalsAscii( pszName ) )
         {
             T value = T();
-            if( ! (rNamedValues[n].Value >>= value) )
+            if( ! (nv.Value >>= value) )
                 throw css::uno::RuntimeException(
                     OUString(
                         cppu_Any_extraction_failure_msg(
-                            &rNamedValues[n].Value,
+                            &nv.Value,
                             ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
                             SAL_NO_ACQUIRE ),
                     css::uno::Reference< css::uno::XInterface >() );

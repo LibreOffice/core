@@ -243,7 +243,7 @@ void Interceptor::generateFeatureStateEvent()
 
             }
 
-            for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
+            for(sal_Int32 k = 0; k < aSeq.(); ++k)
             {
                 uno::Reference<frame::XStatusListener>
                     Control(aSeq[k],uno::UNO_QUERY);
@@ -437,7 +437,7 @@ Interceptor::queryDispatches(
     else
         aRet.realloc(Requests.getLength());
 
-    for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
+    for(sal_Int32 i = 0; i < Requests.(); ++i)
         if ( !m_bLink && m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete )
             aRet[i] = static_cast<frame::XDispatch*>(this);
         else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)

@@ -755,9 +755,9 @@ void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > con
     uno::Reference< awt::XControlModel > xModel (xFactory->createInstance (rServiceName), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xPropSet (xModel, uno::UNO_QUERY_THROW);
 
-    for (sal_Int32 i = 0, n = rProps.getLength(); i < n; i++)
+    for (beans::NamedValue const & prop : rProps)
     {
-        xPropSet->setPropertyValue (rProps[i].Name, rProps[i].Value);
+        xPropSet->setPropertyValue (prop.Name, prop.Value);
     }
 
     // @see awt/UnoControlDialogElement.idl
@@ -881,9 +881,9 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
         {
             uno::Sequence< uno::Reference< awt::XWindow > > xChildren = xMsgBoxCtrls->getWindows();
 
-            for ( long i=0; i < xChildren.getLength(); i++ )
+            for ( uno::Reference< awt::XWindow > const & child : xChildren )
             {
-                uno::Reference< awt::XVclWindowPeer > xMsgBoxCtrl( xChildren[i], uno::UNO_QUERY );
+                uno::Reference< awt::XVclWindowPeer > xMsgBoxCtrl( child, uno::UNO_QUERY );
                 if ( xMsgBoxCtrl.is() )
                 {
                     bool bIsDefault = true;
