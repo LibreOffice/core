@@ -657,7 +657,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     // into an svm. slight catch22 here, since strict ODF
                     // conformance _recommends_ svg - then again, most old
                     // ODF consumers are believed to be OOo
-                    if (SvtSaveOptions().GetODFSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+                    if (SvtSaveOptions().GetODFSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012
+                        || SvtSaveOptions().GetODFSaneDefaultVersion() == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
                     {
                         bUseGfxLink = false;
                         aExtension = ".svm";
