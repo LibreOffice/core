@@ -98,6 +98,9 @@ using namespace com::sun::star::uno;
 #include <unistd.h>
 #endif
 
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <vcl/unohelp.hxx>
+
 #if HAVE_FEATURE_SCRIPTING
 
 static void FilterWhiteSpace( OUString& rStr )
@@ -1278,9 +1281,11 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     OUString aSrcStr(aExpStr);
     if (bCaseInsensitive)
     {
-        // FIXME: case insensitivity should not be ASCII-only
-        aSrcStr = aSrcStr.toAsciiUpperCase();
-        aFindStr = aFindStr.toAsciiUpperCase();
+        // tdf#132389 - case-insensitive operation for non-ASCII characters
+        const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        css::uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
+        aSrcStr = xCharClass->toUpper(aSrcStr, 0, aSrcStr.getLength(), rLocale);
+        aFindStr = xCharClass->toUpper(aFindStr, 0, aSrcStr.getLength(), rLocale);
     }
 
     // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
