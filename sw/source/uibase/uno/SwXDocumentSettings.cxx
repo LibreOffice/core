@@ -142,6 +142,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CONTINUOUS_ENDNOTES,
     HANDLE_PROTECT_BOOKMARKS,
     HANDLE_PROTECT_FIELDS,
+    HANDLE_HEADER_SPACING_BELOW_LAST_PARA,
 };
 
 }
@@ -231,6 +232,8 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ContinuousEndnotes"), HANDLE_CONTINUOUS_ENDNOTES, cppu::UnoType<bool>::get(), 0 },
         { OUString("ProtectBookmarks"), HANDLE_PROTECT_BOOKMARKS, cppu::UnoType<bool>::get(), 0 },
         { OUString("ProtectFields"), HANDLE_PROTECT_FIELDS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("HeaderSpacingBelowLastPara"), HANDLE_HEADER_SPACING_BELOW_LAST_PARA, cppu::UnoType<bool>::get(), 0 },
+
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -959,6 +962,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_HEADER_SPACING_BELOW_LAST_PARA:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1431,6 +1444,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::PROTECT_FIELDS);
+        }
+        break;
+        case HANDLE_HEADER_SPACING_BELOW_LAST_PARA:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA);
         }
         break;
         default:
