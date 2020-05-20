@@ -1656,18 +1656,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
                             auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                            bool bPrevParaAutoBefore;
-                            if (isNumberingViaRule)
-                                bPrevParaAutoBefore = false;
-                            else
+                            bool bParaAutoBefore = m_bParaAutoBefore || std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
-                                bPrevParaAutoBefore = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
-                                {
                                     return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
-                                });
-                            }
+                            });
                             // There was a previous textnode and it had the same numbering.
-                            if (m_bParaAutoBefore || bPrevParaAutoBefore)
+                            if (bParaAutoBefore)
                             {
                                 // This before spacing is set to auto, set before space to 0.
                                 auto itParaTopMargin = std::find_if(aProperties.begin(), aProperties.end(), [](const beans::PropertyValue& rValue)
