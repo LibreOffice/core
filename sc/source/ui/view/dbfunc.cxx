@@ -257,6 +257,10 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 
         if (!bCopy)
         {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                false /* bColumns */, true /* bRows */,
+                false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                false /* bGroups */, nTab);
             UpdateScrollBars(ROW_HEADER);
             SelectionChanged();     // for attribute states (filtered rows are ignored)
         }

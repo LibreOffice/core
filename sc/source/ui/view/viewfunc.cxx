@@ -1627,6 +1627,10 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
 
                 if (bInsertRows)
                     ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+
+                ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bInsertCols, bInsertRows, true /* bSizes*/,
+                                                                    true /* bHidden */, true /* bFiltered */,
+                                                                    true /* bGroups */, GetViewData().GetTabNo());
             }
         }
         OUString aStartAddress =  aRange.aStart.GetColRowString();
@@ -1700,11 +1704,17 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == DelCellCmd::Cols)
+            bool bColsDeleted = (eCmd == DelCellCmd::Cols);
+            bool bRowsDeleted = (eCmd == DelCellCmd::Rows);
+            if (bColsDeleted)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
 
-            if (eCmd == DelCellCmd::Rows)
+            if (bRowsDeleted)
                 ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColsDeleted, bRowsDeleted, true /* bSizes*/,
+                                                                true /* bHidden */, true /* bFiltered */,
+                                                                true /* bGroups */, GetViewData().GetTabNo());
         }
     }
     else
@@ -2250,6 +2260,10 @@ void ScViewFunc::SetWidthOrHeight(
     for (const SCTAB& nTab : aMarkData)
         rDoc.UpdatePageBreaks( nTab );
 
+    bool bAffectsVisibility = (eMode != SC_SIZE_ORIGINAL && eMode != SC_SIZE_VISOPT);
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bWidth /* bColumns */, !bWidth /* bRows */,
+            true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
+            false /* bGroups */, nCurTab);
     GetViewData().GetView()->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
     {

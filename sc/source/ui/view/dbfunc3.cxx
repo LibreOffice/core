@@ -94,6 +94,9 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         aFunc.MakeOutline( aRange, bColumns, bRecord, false );
 
         ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns, false /* bSizes*/,
+                                                            false /* bHidden */, false /* bFiltered */,
+                                                            true /* bGroups */, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -111,6 +114,9 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         aFunc.RemoveOutline( aRange, bColumns, bRecord, false );
 
         ScTabViewShell::notifyAllViewsHeaderInvalidation(bColumns, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns, false /* bSizes*/,
+                                                            true /* bHidden */, true /* bFiltered */,
+                                                            true /* bGroups */, GetViewData().GetTabNo());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -191,6 +197,9 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 
     if (bOk)
     {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(true /* bColumns */, true /* bRows */, false /* bSizes*/,
+                                                            true /* bHidden */, true /* bFiltered */,
+                                                            true /* bGroups */, nTab);
         UpdateScrollBars(BOTH_HEADERS);
     }
 }
@@ -225,7 +234,12 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
     bool bOk = aFunc.SelectLevel( nTab, bColumns, nLevel, bRecord, true/*bPaint*/ );
 
     if (bOk)
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns, false /* bSizes*/,
+                                                            true /* bHidden */, true /* bFiltered */,
+                                                            true /* bGroups */, nTab);
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
+    }
 }
 
 // show individual outline groups
@@ -253,7 +267,12 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     aFunc.ShowOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bPaint )
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns, false /* bSizes*/,
+                                                            true /* bHidden */, true /* bFiltered */,
+                                                            true /* bGroups */, nTab);
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
+    }
 }
 
 // hide individual outline groups
@@ -267,7 +286,12 @@ void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
     bool bOk = aFunc.HideOutline( nTab, bColumns, nLevel, nEntry, bRecord, bPaint );
 
     if ( bOk && bPaint )
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns, false /* bSizes*/,
+                                                            true /* bHidden */, true /* bFiltered */,
+                                                            true /* bGroups */, nTab);
         UpdateScrollBars(bColumns ? COLUMN_HEADER : ROW_HEADER);
+    }
 }
 
 // menu status: show/hide marked range
@@ -359,7 +383,12 @@ void ScDBFunc::ShowMarkedOutlines( bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         bool bDone = aFunc.ShowMarkedOutlines( aRange, bRecord );
         if (bDone)
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(true, true,
+                false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                true /* bGroups */, GetViewData().GetTabNo());
             UpdateScrollBars();
+        }
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -376,7 +405,12 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         bool bDone = aFunc.HideMarkedOutlines( aRange, bRecord );
         if (bDone)
+        {
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(true, true,
+                false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                true /* bGroups */, GetViewData().GetTabNo());
             UpdateScrollBars();
+        }
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
