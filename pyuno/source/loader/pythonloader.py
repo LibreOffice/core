@@ -19,7 +19,7 @@
 import uno
 import unohelper
 import sys
-import imp
+import types
 import os
 from com.sun.star.uno import Exception,RuntimeException
 from com.sun.star.loader import XImplementationLoader
@@ -82,7 +82,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                 # did we load the module already ?
                 mod = g_loadedComponents.get( url )
                 if not mod:
-                    mod = imp.new_module("uno_component")
+                    mod = types.ModuleType("uno_component")
 
                     # check for pythonpath.zip beside .py files
                     checkForPythonPathBesideComponent( url[0:url.rfind('/')] )
