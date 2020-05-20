@@ -154,11 +154,6 @@ namespace slideshow::internal
             if (mbFlip)
                 aClipPoly.flip();
 
-            // currently, clipper cannot cope with curves. Subdivide first
-            // AW: Should be no longer necessary; clipping tools are now bezier-safe
-            // if( aClipPoly.areControlPointsUsed() )
-            //    aClipPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aClipPoly);
-
             if( mbSubtractPolygon )
             {
                 // subtract given polygon from background
