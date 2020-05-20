@@ -1744,6 +1744,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 {
     sal_uInt16 nLineHeight = m_pCurr->Height();
     m_pCurr->SetClipping( false );
+    const long nFontSize = GetFnt()->GetActualFont().GetFontHeight() * 2;
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     if ( pGrid && GetInfo().SnapToGrid() )
@@ -1862,8 +1863,15 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nLineHeight;
-                        nTmp /= 100;
+                        if (nLineHeight - nFontSize)
+                        {
+                            nTmp *= nFontSize;
+                            nTmp /= 100;
+                            nTmp += nLineHeight - nFontSize;
+                        }
+                        else
+                            nTmp =  nLineHeight * nTmp / 100;
+
                         if( !nTmp )
                             ++nTmp;
                         nLineHeight = static_cast<sal_uInt16>(nTmp);
