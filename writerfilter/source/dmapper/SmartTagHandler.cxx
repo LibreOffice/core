@@ -35,13 +35,13 @@ OUString lcl_getTypePath(OUString& rType)
 
 namespace writerfilter::dmapper
 {
-
 using namespace ::com::sun::star;
 
-SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xComponentContext, const uno::Reference<text::XTextDocument>& xTextDocument)
-    : LoggedProperties("SmartTagHandler"),
-      m_xComponentContext(std::move(xComponentContext)),
-      m_xDocumentMetadataAccess(xTextDocument, uno::UNO_QUERY)
+SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xComponentContext,
+                                 const uno::Reference<text::XTextDocument>& xTextDocument)
+    : LoggedProperties("SmartTagHandler")
+    , m_xComponentContext(std::move(xComponentContext))
+    , m_xDocumentMetadataAccess(xTextDocument, uno::UNO_QUERY)
 {
 }
 
@@ -51,16 +51,18 @@ void SmartTagHandler::lcl_attribute(Id nId, Value& rValue)
 {
     switch (nId)
     {
-    case NS_ooxml::LN_CT_Attr_name:
-        m_aAttributes.emplace_back(rValue.getString(), OUString());
-        break;
-    case NS_ooxml::LN_CT_Attr_val:
-        if (!m_aAttributes.empty())
-            m_aAttributes.back().second = rValue.getString();
-        break;
-    default:
-        SAL_WARN("writerfilter", "SmartTagHandler::lcl_attribute: unhandled attribute " << nId << " (string value: '"<<rValue.getString()<<"')");
-        break;
+        case NS_ooxml::LN_CT_Attr_name:
+            m_aAttributes.emplace_back(rValue.getString(), OUString());
+            break;
+        case NS_ooxml::LN_CT_Attr_val:
+            if (!m_aAttributes.empty())
+                m_aAttributes.back().second = rValue.getString();
+            break;
+        default:
+            SAL_WARN("writerfilter", "SmartTagHandler::lcl_attribute: unhandled attribute "
+                                         << nId << " (string value: '" << rValue.getString()
+                                         << "')");
+            break;
     }
 }
 
@@ -68,25 +70,19 @@ void SmartTagHandler::lcl_sprm(Sprm& rSprm)
 {
     switch (rSprm.getId())
     {
-    case NS_ooxml::LN_CT_SmartTagPr_attr:
-    {
-        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties)
-            pProperties->resolve(*this);
-        break;
-    }
+        case NS_ooxml::LN_CT_SmartTagPr_attr:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if (pProperties)
+                pProperties->resolve(*this);
+            break;
+        }
     }
 }
 
-void SmartTagHandler::setURI(const OUString& rURI)
-{
-    m_aURI = rURI;
-}
+void SmartTagHandler::setURI(const OUString& rURI) { m_aURI = rURI; }
 
-void SmartTagHandler::setElement(const OUString& rElement)
-{
-    m_aElement = rElement;
-}
+void SmartTagHandler::setElement(const OUString& rElement) { m_aElement = rElement; }
 
 void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
 {
@@ -102,18 +98,22 @@ void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
                 continue;
 
             uno::Reference<rdf::XURI> xType = rdf::URI::create(m_xComponentContext, aTypeNS);
-            uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = m_xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+            uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames
+                = m_xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
             uno::Reference<rdf::XURI> xGraphName;
             if (aGraphNames.hasElements())
                 xGraphName = aGraphNames[0];
             else
             {
-                uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
+                uno::Sequence<uno::Reference<rdf::XURI>> xTypes = { xType };
                 xGraphName = m_xDocumentMetadataAccess->addMetadataFile(aMetadataFilePath, xTypes);
             }
-            uno::Reference<rdf::XNamedGraph> xGraph = m_xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-            uno::Reference<rdf::XURI> xKey = rdf::URI::create(m_xComponentContext, rAttribute.first);
-            uno::Reference<rdf::XLiteral> xValue = rdf::Literal::create(m_xComponentContext, rAttribute.second);
+            uno::Reference<rdf::XNamedGraph> xGraph
+                = m_xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
+            uno::Reference<rdf::XURI> xKey
+                = rdf::URI::create(m_xComponentContext, rAttribute.first);
+            uno::Reference<rdf::XLiteral> xValue
+                = rdf::Literal::create(m_xComponentContext, rAttribute.second);
             xGraph->addStatement(xSubject, xKey, xValue);
         }
 

@@ -13,16 +13,16 @@
 
 namespace writerfilter::dmapper
 {
-
-Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContext> const& xContext,
-        css::uno::Reference<css::io::XInputStream> const& xInputStream,
-        css::uno::Reference<css::lang::XComponent> const& xModel,
-        bool bRepairStorage,
-        SourceDocumentType eDocumentType,
-        utl::MediaDescriptor const& rMediaDesc)
+Stream::Pointer_t
+DomainMapperFactory::createMapper(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                                  css::uno::Reference<css::io::XInputStream> const& xInputStream,
+                                  css::uno::Reference<css::lang::XComponent> const& xModel,
+                                  bool bRepairStorage, SourceDocumentType eDocumentType,
+                                  utl::MediaDescriptor const& rMediaDesc)
 {
 #ifdef DBG_UTIL
-    OUString sURL = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
+    OUString sURL
+        = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
     ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
     if (getenv("SW_DEBUG_WRITERFILTER"))
@@ -30,7 +30,8 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
     TagLogger::getInstance().startDocument();
 #endif
 
-    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, rMediaDesc));
+    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage,
+                                              eDocumentType, rMediaDesc));
 }
 
 } // namespace writerfilter::dmapper

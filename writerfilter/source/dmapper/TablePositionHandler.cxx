@@ -18,13 +18,12 @@
 
 namespace writerfilter::dmapper
 {
-
 using namespace ::com::sun::star;
 
-TablePositionHandler::TablePositionHandler() :
-    LoggedProperties("TablePositionHandler"),
-    m_aVertAnchor("margin"),
-    m_aHorzAnchor("text")
+TablePositionHandler::TablePositionHandler()
+    : LoggedProperties("TablePositionHandler")
+    , m_aVertAnchor("margin")
+    , m_aHorzAnchor("text")
 {
 }
 
@@ -34,49 +33,45 @@ void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
 {
     switch (nId)
     {
-    case NS_ooxml::LN_CT_TblPPr_vertAnchor:
-        m_aVertAnchor = rVal.getString();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_tblpYSpec:
-        m_aYSpec = rVal.getString();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_horzAnchor:
-        m_aHorzAnchor = rVal.getString();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_tblpXSpec:
-        m_aXSpec = rVal.getString();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_tblpY:
-        m_nY = rVal.getInt();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_tblpX:
-        m_nX = rVal.getInt();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_leftFromText:
-        m_nLeftFromText = rVal.getInt();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_rightFromText:
-        m_nRightFromText = rVal.getInt();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_topFromText:
-        m_nTopFromText = rVal.getInt();
-        break;
-    case NS_ooxml::LN_CT_TblPPr_bottomFromText:
-        m_nBottomFromText = rVal.getInt();
-        break;
-    default:
+        case NS_ooxml::LN_CT_TblPPr_vertAnchor:
+            m_aVertAnchor = rVal.getString();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_tblpYSpec:
+            m_aYSpec = rVal.getString();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_horzAnchor:
+            m_aHorzAnchor = rVal.getString();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_tblpXSpec:
+            m_aXSpec = rVal.getString();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_tblpY:
+            m_nY = rVal.getInt();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_tblpX:
+            m_nX = rVal.getInt();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_leftFromText:
+            m_nLeftFromText = rVal.getInt();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_rightFromText:
+            m_nRightFromText = rVal.getInt();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_topFromText:
+            m_nTopFromText = rVal.getInt();
+            break;
+        case NS_ooxml::LN_CT_TblPPr_bottomFromText:
+            m_nBottomFromText = rVal.getInt();
+            break;
+        default:
 #ifdef DBG_UTIL
-        TagLogger::getInstance().element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
-        break;
+            break;
     }
 }
 
-
-void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/)
-{
-}
-
+void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/) {}
 
 uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
@@ -133,7 +128,6 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
         nVertOrient = text::VertOrientation::TOP;
     // TODO There are a few cases we can't map ATM.
 
-
     sal_Int16 nVertOrientRelation;
     if (m_aVertAnchor == "margin")
         nVertOrientRelation = text::RelOrientation::PAGE_PRINT_AREA;
@@ -150,14 +144,11 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     return aFrameProperties.getAsConstPropertyValueList();
 }
 
-bool TablePositionHandler::operator== (const TablePositionHandler& rHandler) const
+bool TablePositionHandler::operator==(const TablePositionHandler& rHandler) const
 {
-    return m_aVertAnchor == rHandler.m_aVertAnchor &&
-           m_aYSpec == rHandler.m_aYSpec &&
-           m_aHorzAnchor == rHandler.m_aHorzAnchor &&
-           m_aXSpec == rHandler.m_aXSpec &&
-           m_nY == rHandler.m_nY &&
-           m_nX == rHandler.m_nX;
+    return m_aVertAnchor == rHandler.m_aVertAnchor && m_aYSpec == rHandler.m_aYSpec
+           && m_aHorzAnchor == rHandler.m_aHorzAnchor && m_aXSpec == rHandler.m_aXSpec
+           && m_nY == rHandler.m_nY && m_nX == rHandler.m_nX;
 }
 
 } // namespace writerfilter::dmapper
