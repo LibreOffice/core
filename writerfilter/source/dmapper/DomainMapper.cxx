@@ -126,6 +126,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
     m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::makeAny(true));
 
+    m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::makeAny(true));
+
     // Initialize RDF metadata, to be able to add statements during the import.
     try
     {
