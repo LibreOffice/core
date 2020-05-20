@@ -322,12 +322,6 @@ namespace vclcanvas
             ::basegfx::B2DPolyPolygon aPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
-            if( aPolyPoly.areControlPointsUsed() )
-            {
-                // AW: Not needed for ApplyLineDashing anymore; should be removed
-                aPolyPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aPolyPoly);
-            }
-
             // apply dashing, if any
             if( strokeAttributes.DashArray.hasElements() )
             {

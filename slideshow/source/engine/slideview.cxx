@@ -134,11 +134,6 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 {
     basegfx::B2DPolyPolygon aClip( rClip );
 
-    // TODO(P2): unnecessary, once XCanvas is correctly handling this
-    // AW: Should be no longer necessary; tools are now bezier-safe
-    if( aClip.areControlPointsUsed() )
-        aClip = basegfx::utils::adaptiveSubdivideByAngle( aClip );
-
     // normalize polygon, preparation for clipping
     // in updateCanvas()
     aClip = basegfx::utils::correctOrientations(aClip);
