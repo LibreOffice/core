@@ -1130,12 +1130,20 @@ namespace svt
         return nullptr;
     }
 
-
     void EditBrowseBox::ResizeController(CellControllerRef const & rController, const tools::Rectangle& rRect)
     {
-        rController->GetWindow().SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
+        Point aPoint(rRect.TopLeft());
+        Size aSize(rRect.GetSize());
+        Control& rControl = rController->GetWindow();
+        auto nMinHeight = rControl.get_preferred_size().Height();
+        if (nMinHeight > aSize.Height())
+        {
+            auto nOffset = (nMinHeight - aSize.Height()) / 2;
+            aPoint.AdjustY(-nOffset);
+            aSize.setHeight(nMinHeight);
+        }
+        rControl.SetPosSizePixel(aPoint, aSize);
     }
-
 
     void EditBrowseBox::InitController(CellControllerRef&, long, sal_uInt16)
     {
