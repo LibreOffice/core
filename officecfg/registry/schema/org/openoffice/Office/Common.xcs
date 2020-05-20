@@ -2374,14 +2374,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>If the  value is "true", then the ODF that is saved by
-            OpenOffice.org will be backward compatible to previous minor
-            versions.</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="LoadPrinter" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Load/Save - General - Load - Load
                printer settings with the document -->
