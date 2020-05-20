@@ -139,6 +139,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Ensure that width of first tab is close to zero (previous value was ~1000 twips)
+    int nWidth = parseDump("/root/page/body/txt[1]/Text[@nType='PortionType::TabLeft']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_LESS(150, nWidth);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
 {
     // tdf#120315 cells of the second column weren't vertically merged
