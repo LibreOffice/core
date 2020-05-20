@@ -127,9 +127,9 @@ namespace {
 /// Just approve the interaction.
 void selectApproved(uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations)
 {
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    for (auto const & c : rContinuations)
     {
-        uno::Reference<task::XInteractionApprove> xApprove(rContinuations[i], uno::UNO_QUERY);
+        uno::Reference<task::XInteractionApprove> xApprove(c, uno::UNO_QUERY);
         if (xApprove.is())
             xApprove->select();
     }
@@ -289,19 +289,19 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
         m_havePassword.reset();
     }
 
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    for (auto const & cont : rContinuations)
     {
         if (m_usePassword)
         {
             if (bIsRequestPasswordToModify)
             {
-                uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
+                uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
                 xIPW2->setPasswordToModify(m_Password);
                 xIPW2->select();
             }
             else
             {
-                uno::Reference<task::XInteractionPassword> const xIPW(rContinuations[i], uno::UNO_QUERY);
+                uno::Reference<task::XInteractionPassword> const xIPW(cont, uno::UNO_QUERY);
                 if (xIPW.is())
                 {
                     xIPW->setPassword(m_Password);
@@ -313,13 +313,13 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
         {
             if (bIsRequestPasswordToModify)
             {
-                uno::Reference<task::XInteractionPassword2> const xIPW2(rContinuations[i], uno::UNO_QUERY);
+                uno::Reference<task::XInteractionPassword2> const xIPW2(cont, uno::UNO_QUERY);
                 xIPW2->setRecommendReadOnly(true);
                 xIPW2->select();
             }
             else
             {
-                uno::Reference<task::XInteractionAbort> const xAbort(rContinuations[i], uno::UNO_QUERY);
+                uno::Reference<task::XInteractionAbort> const xAbort(cont, uno::UNO_QUERY);
                 if (xAbort.is())
                 {
                     xAbort->select();

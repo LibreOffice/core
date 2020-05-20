@@ -133,7 +133,7 @@ Provider::queryDispatches(
 {
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
         Requests.getLength());
-    for (sal_Int32 i = 0; i < s.getLength(); ++i) {
+    for (sal_Int32 i = 0; i < s.(); ++i) {
         s[i] = queryDispatch(
             Requests[i].FeatureURL, Requests[i].FrameName,
             Requests[i].SearchFlags);
