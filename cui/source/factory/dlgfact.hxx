@@ -836,7 +836,7 @@ public:
 
     virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) override;
 
-    virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
+    virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
 
     virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
         vcl::Window* pParent, const OUString& rExtensionId ) override;
