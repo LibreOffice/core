@@ -532,9 +532,17 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
 void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
 {
     SalGraphics* pSrcGraphics;
-    SalGraphics*& pSrcGraphicsRef = pSrcGraphics;
+    if (const OutputDevice* pCheckedSrc = DrawOutDevDirectCheck(pSrcDev))
+    {
+        if (pCheckedSrc && !pCheckedSrc->mpGraphics && !pCheckedSrc->AcquireGraphics())
+            return;
+        pSrcGraphics = pSrcDev->mpGraphics;
+    }
+    else
+        pSrcGraphics = nullptr;
 
-    DrawOutDevDirectCheck(pSrcDev, pSrcGraphicsRef);
+    if (!mpGraphics && !AcquireGraphics())
+        return;
 
     // #102532# Offset only has to be pseudo window offset
     const tools::Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
@@ -552,19 +560,9 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
     }
 }
 
-void OutputDevice::DrawOutDevDirectCheck( const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics )
+const OutputDevice* OutputDevice::DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const
 {
-    if ( this == pSrcDev )
-        pSrcGraphics = nullptr;
-    else
-    {
-        if ( !pSrcDev->mpGraphics )
-        {
-            if ( !pSrcDev->AcquireGraphics() )
-                return;
-        }
-        pSrcGraphics = pSrcDev->mpGraphics;
-    }
+    return this == pSrcDev ? nullptr : pSrcDev;
 }
 
 void OutputDevice::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
