@@ -535,9 +535,9 @@ void disposeBridges(Reference<css::uno::XComponentContext> const & ctx)
     Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(ctx) );
 
     const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
-    for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
+    for (const Reference<css::bridge::XBridge>& bridge : seqBridges)
     {
-        Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
+        Reference<css::lang::XComponent> comp(bridge, UNO_QUERY);
         if (comp.is())
         {
             try {
