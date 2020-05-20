@@ -162,7 +162,7 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
             aSeq);
 
         uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
-        for ( int nInd = 0; nInd < aResArgs.getLength(); nInd++ )
+        for ( int nInd = 0; nInd < aResArgs.(); nInd++ )
             if ( aResArgs[nInd].Name == "MacroExecutionMode" )
             {
                 aResArgs[nInd].Value >>= m_nMacroExecMode;
@@ -920,7 +920,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             {
                 aSeq =
                     m_xDocument->getArgs();
-                for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
+                for(sal_Int32 j = 0; j < aSeq.(); ++j)
                 {
                     if(aSeq[j].Name == "FilterName")
                     {
@@ -939,7 +939,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                     if(xNameAccess.is() &&
                        (xNameAccess->getByName(aFilterName) >>= aSeq))
                     {
-                        for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
+                        for(sal_Int32 j = 0; j < aSeq.(); ++j)
                             if(aSeq[j].Name ==
                                "UIName")
                             {
@@ -1046,7 +1046,7 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
     if ( pRect && m_xDocument.is() )
     {
         uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+        for ( sal_Int32 nInd = 0; nInd < aArgs.(); nInd++ )
             if ( aArgs[nInd].Name == "DocumentBorder" )
             {
                 uno::Sequence< sal_Int32 > aRect;

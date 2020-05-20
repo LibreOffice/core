@@ -81,7 +81,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         OUString( "/UNO/SERVICES")  );
 
             rServices = MainThreadExecutor::impl_staticGetSupportedServiceNames();
-            for( ind = 0; ind < rServices.getLength(); ind++ )
+            for( ind = 0; ind < rServices.(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
             xNewKey = xKey->createKey( OUString("/") +
@@ -89,7 +89,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         OUString( "/UNO/SERVICES")  );
 
             rServices = VCLBitmapCreator::impl_staticGetSupportedServiceNames();
-            for( ind = 0; ind < rServices.getLength(); ind++ )
+            for( ind = 0; ind < rServices.(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
             return sal_True;
