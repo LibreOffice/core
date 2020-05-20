@@ -431,42 +431,27 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    SalTwoRect aPosAry(rOutDev.ImplLogicXToDevicePixel(rSrcPt.X()),
-                       rOutDev.ImplLogicYToDevicePixel(rSrcPt.Y()),
-                       rOutDev.ImplLogicWidthToDevicePixel(rSrcSize.Width()),
-                       rOutDev.ImplLogicHeightToDevicePixel(rSrcSize.Height()),
-                       ImplLogicXToDevicePixel(rDestPt.X()),
-                       ImplLogicYToDevicePixel(rDestPt.Y()),
-                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
-
-    if( mpAlphaVDev )
+    if (rOutDev.mpAlphaVDev)
     {
-        if( rOutDev.mpAlphaVDev )
-        {
-            // alpha-blend source over destination
-            DrawBitmapEx( rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize) );
-        }
-        else
-        {
-            drawOutDevDirect( &rOutDev, aPosAry );
-
-            // #i32109#: make destination rectangle opaque - source has no alpha
-            mpAlphaVDev->ImplFillOpaqueRectangle( tools::Rectangle(rDestPt, rDestSize) );
-        }
+        // alpha-blend source over destination
+        DrawBitmapEx(rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
     }
     else
     {
-        if( rOutDev.mpAlphaVDev )
-        {
-            // alpha-blend source over destination
-            DrawBitmapEx( rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize) );
-        }
-        else
-        {
-            // no alpha at all, neither in source nor destination device
-            drawOutDevDirect( &rOutDev, aPosAry );
-        }
+        SalTwoRect aPosAry(rOutDev.ImplLogicXToDevicePixel(rSrcPt.X()),
+                           rOutDev.ImplLogicYToDevicePixel(rSrcPt.Y()),
+                           rOutDev.ImplLogicWidthToDevicePixel(rSrcSize.Width()),
+                           rOutDev.ImplLogicHeightToDevicePixel(rSrcSize.Height()),
+                           ImplLogicXToDevicePixel(rDestPt.X()),
+                           ImplLogicYToDevicePixel(rDestPt.Y()),
+                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+
+        drawOutDevDirect(&rOutDev, aPosAry);
+
+        // #i32109#: make destination rectangle opaque - source has no alpha
+        if (mpAlphaVDev)
+            mpAlphaVDev->ImplFillOpaqueRectangle(tools::Rectangle(rDestPt, rDestSize));
     }
 }
 
