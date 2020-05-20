@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc5d52a9_4bedb4fd",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-20T10:52:02Z",
+      "side": 1,
+      "message": "Please move \"for\" to the next line to be consistent with our clang-format rules (lines no longer than 100 characters). Thanks.",
+      "range": {
+        "startLine": 854,
+        "startChar": 100,
+        "endLine": 854,
+        "endChar": 103
+      },
+      "revId": "2cbddb9672214cb09dcaf7e255108cd356d99265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
