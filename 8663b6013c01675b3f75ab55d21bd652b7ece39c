@@ -16,6 +16,24 @@
       "revId": "8663b6013c01675b3f75ab55d21bd652b7ece39c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41554e08_0cdc10d2",
+        "filename": "include/xmloff/xmlexp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-05-20T12:55:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9e70b58_f431a379",
+      "revId": "8663b6013c01675b3f75ab55d21bd652b7ece39c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
