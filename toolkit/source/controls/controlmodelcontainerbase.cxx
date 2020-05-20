@@ -753,7 +753,7 @@ sal_Bool SAL_CALL ControlModelContainerBase::getEnabled()
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this, UNO_QUERY);
-    bool bEnabled;
+    bool bEnabled = false;
     xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED)) >>= bEnabled;
     return bEnabled;
 }
