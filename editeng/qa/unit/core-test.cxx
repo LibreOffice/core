@@ -231,8 +231,8 @@ void Test::testConstruction()
 
 bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
 {
-    for (sal_Int32 i = 0, n = rSeq.getLength(); i < n; ++i)
-        if (rSeq[i] == rVal)
+    for (OUString const & s : rSeq)
+        if (s == rVal)
             return true;
 
     return false;
