@@ -473,25 +473,7 @@ bool Scheduler::ProcessTaskScheduling()
 
         // invoke the task
         sal_uInt32 nLockCount = Unlock( true );
-        try
-        {
-            pTask->Invoke();
-        }
-        catch (css::uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
-            std::abort();
-        }
-        catch (std::exception& e)
-        {
-            SAL_WARN("vcl.schedule", "Uncaught " << typeid(e).name() << " " << e.what());
-            std::abort();
-        }
-        catch (...)
-        {
-            SAL_WARN("vcl.schedule", "Uncaught exception during Task::Invoke()!");
-            std::abort();
-        }
+        pTask->Invoke();
         Lock( nLockCount );
         pMostUrgent->mbInScheduler = false;
 
