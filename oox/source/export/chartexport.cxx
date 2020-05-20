@@ -2573,9 +2573,11 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
     pFS->startElement(FSNS(XML_c, XML_txPr));
 
     sal_Int32 nRotation = 0;
+    const char* textWordWrap = nullptr;
+
     if (auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xPropSet, uno::UNO_QUERY))
     {
-        double fMultiplier = 0;
+        double fMultiplier = 0.0;
         // We have at least two possible units of returned value: degrees (e.g., for data labels),
         // and 100ths of degree (e.g., for axes labels). The latter is returned as an Any wrapping
         // a sal_Int32 value (see WrappedTextRotationProperty::convertInnerToOuterValue), while
@@ -2583,8 +2585,15 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
         // use. But testing the service info should be more robust.
         if (xServiceInfo->supportsService("com.sun.star.chart.ChartAxis"))
             fMultiplier = -600.0;
-        else if (xServiceInfo->supportsService("com.sun.star.chart2.DataSeries"))
+        else if (xServiceInfo->supportsService("com.sun.star.chart2.DataSeries") || xServiceInfo->supportsService("com.sun.star.chart2.DataPointProperties"))
+        {
             fMultiplier = -60000.0;
+            bool bTextWordWrap = false;
+            if ((xPropSet->getPropertyValue("TextWordWrap") >>= bTextWordWrap) && bTextWordWrap)
+                textWordWrap = "square";
+            else
+                textWordWrap = "none";
+        }
 
         if (fMultiplier)
         {
@@ -2592,25 +2601,26 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
             uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
             if (aAny.hasValue() && (aAny >>= fTextRotation))
             {
+                fTextRotation *= fMultiplier;
                 // The MS Office UI allows values only in range of [-90,90].
-                if (fTextRotation > 9000.0 && fTextRotation < 27000.0)
+                if (fTextRotation < -5400000.0 && fTextRotation > -16200000.0)
                 {
                     // Reflect the angle if the value is between 90° and 270°
-                    fTextRotation -= 18000.0;
+                    fTextRotation += 10800000.0;
                 }
-                else if (fTextRotation >=27000.0)
+                else if (fTextRotation <= -16200000.0)
                 {
-                    fTextRotation -= 36000.0;
+                    fTextRotation += 21600000.0;
                 }
-                nRotation = std::round(fTextRotation * fMultiplier);
+                nRotation = std::round(fTextRotation);
             }
         }
     }
 
     if (nRotation)
-        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_rot, OString::number(nRotation));
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_rot, OString::number(nRotation), XML_wrap, textWordWrap);
     else
-        pFS->singleElement(FSNS(XML_a, XML_bodyPr));
+        pFS->singleElement(FSNS(XML_a, XML_bodyPr), XML_wrap, textWordWrap);
 
     pFS->singleElement(FSNS(XML_a, XML_lstStyle));
 
