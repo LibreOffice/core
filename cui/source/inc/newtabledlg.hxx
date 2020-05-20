@@ -22,7 +22,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/weld.hxx>
 
-class SvxNewTableDialog : public SvxAbstractNewTableDialog, public weld::GenericDialogController
+class SvxNewTableDialog : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::SpinButton> mxNumColumns;
@@ -30,12 +30,43 @@ private:
 
 public:
     SvxNewTableDialog(weld::Window* pParent);
-    virtual ~SvxNewTableDialog() override;
 
-    virtual short Execute() override;
+    virtual sal_Int32 getRows() const;
+    virtual sal_Int32 getColumns() const;
+};
 
-    virtual sal_Int32 getRows() const override;
-    virtual sal_Int32 getColumns() const override;
+class SvxNewTableDialogWrapper : public SvxAbstractNewTableDialog
+{
+private:
+    std::shared_ptr<weld::DialogController> m_xDlg;
+
+public:
+    SvxNewTableDialogWrapper(weld::Window* pParent)
+    : m_xDlg(std::make_shared<SvxNewTableDialog>(pParent))
+    {}
+
+    virtual std::shared_ptr<weld::DialogController> getDialogController() override
+    {
+        return m_xDlg;
+    }
+
+    virtual sal_Int32 getRows() const override
+    {
+        SvxNewTableDialog* pDlg = dynamic_cast<SvxNewTableDialog*>(m_xDlg.get());
+        if (pDlg)
+            return pDlg->getRows();
+
+        return 0;
+    }
+
+    virtual sal_Int32 getColumns() const override
+    {
+        SvxNewTableDialog* pDlg = dynamic_cast<SvxNewTableDialog*>(m_xDlg.get());
+        if (pDlg)
+            return pDlg->getColumns();
+
+        return 0;
+    }
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
