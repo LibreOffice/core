@@ -537,6 +537,43 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bool bColumns, bool bRo
                                                          bool bHidden, bool bFiltered, bool bGroups,
                                                          SCTAB nCurrentTabIndex)
 {
+    if (!comphelper::LibreOfficeKit::isActive() ||
+            !comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        return;
+
+    if (!bColumns && !bRows)
+        return;
+
+    bool bAllTypes = bSizes && bHidden && bFiltered && bGroups;
+    bool bAllDims = bColumns && bRows;
+    OString aPayload = bAllDims ? "all" : bColumns ? "columns" : "rows";
+
+    if (!bAllTypes)
+    {
+        if (bSizes)
+            aPayload += " sizes";
+
+        if (bHidden)
+            aPayload += " hidden";
+
+        if (bFiltered)
+            aPayload += " filtered";
+
+        if (bGroups)
+            aPayload += " groups";
+    }
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+        {
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY, aPayload.getStr());
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
 }
 
 bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)

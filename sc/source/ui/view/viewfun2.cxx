@@ -175,7 +175,14 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         pDocSh->UpdateOle(&GetViewData());
 
     if (comphelper::LibreOfficeKit::isActive())
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+    {
+        SCTAB nTab = GetViewData().GetTabNo();
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                false /* bColumns */, true /* bRows */,
+                true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
+                false /* bGroups */, nTab);
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+    }
 
     return bAnyChanged;
 }
@@ -224,7 +231,13 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
                                             PaintPartFlags::Grid | PaintPartFlags::Left );
 
     if (comphelper::LibreOfficeKit::isActive())
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                false /* bColumns */, true /* bRows */,
+                true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
+                false /* bGroups */, nTab);
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+    }
 
     return bChanged;
 }

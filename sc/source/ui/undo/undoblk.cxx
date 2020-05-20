@@ -274,11 +274,19 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
+            bool bColumns = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT);
+            bool bRows = (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN);
+            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+            if (bColumns)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, nTab);
 
-            if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER,  pViewShell->GetViewData().GetTabNo());
+            if (bRows)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    bColumns, bRows,
+                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                    true /* bGroups */, nTab);
         }
     }
 }
@@ -535,11 +543,20 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     {
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER,  pViewShell->GetViewData().GetTabNo());
+            bool bColumns = (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft);
+            bool bRows = (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp);
+            SCTAB nTab = pViewShell->GetViewData().GetTabNo();
 
-            if (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER,  pViewShell->GetViewData().GetTabNo());
+            if (bColumns)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, nTab);
+
+            if (bRows)
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    bColumns, bRows,
+                    true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+                    true /* bGroups */, nTab);
         }
 
     }

@@ -100,6 +100,9 @@ void ScUndoDoOutline::Undo()
     else
         pUndoDoc->CopyToDocument(0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, rDoc);
 
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
     pViewShell->UpdateScrollBars();
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
@@ -179,6 +182,10 @@ void ScUndoMakeOutline::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            bColumns /* bColumns */, !bColumns /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
     ScTabViewShell::notifyAllViewsHeaderInvalidation( bColumns, nTab );
 
     EndUndo();
@@ -262,6 +269,9 @@ void ScUndoOutlineLevel::Undo()
 
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(bColumns, !bColumns,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
     pViewShell->UpdateScrollBars();
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
@@ -354,6 +364,9 @@ void ScUndoOutlineBlock::Undo()
 
     rDoc.UpdatePageBreaks( nTab );
 
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(true /* bColumns */, true /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
     pViewShell->UpdateScrollBars();
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
@@ -449,6 +462,10 @@ void ScUndoRemoveAllOutlines::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            true /* bColumns */, true /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, nTab);
     ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, nTab);
 
     EndUndo();
@@ -814,6 +831,10 @@ void ScUndoQuery::Undo()
 
     // invalidate cache positions and update cursor and selection
     pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            false /* bColumns */, true /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            false /* bGroups */, nTab);
     ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
 
     //  Paint
@@ -1332,6 +1353,10 @@ void ScUndoRepeatDB::Undo()
         rDoc.SetRangeName(std::unique_ptr<ScRangeName>(new ScRangeName(*xUndoRange)));
     if (xUndoDB)
         rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
+
+    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(false /* bColumns */, true /* bRows */,
+            false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            false /* bGroups */, nTab);
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
     if ( nVisTab != nTab )
