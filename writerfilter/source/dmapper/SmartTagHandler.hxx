@@ -40,19 +40,18 @@ namespace writerfilter
 {
 namespace dmapper
 {
-
 /// Handler for smart tags, i.e. <w:smartTag> and below.
-class SmartTagHandler
-    : public LoggedProperties
+class SmartTagHandler : public LoggedProperties
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::rdf::XDocumentMetadataAccess> m_xDocumentMetadataAccess;
     OUString m_aURI;
     OUString m_aElement;
-    std::vector< std::pair<OUString, OUString> > m_aAttributes;
+    std::vector<std::pair<OUString, OUString>> m_aAttributes;
 
 public:
-    SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext, const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
+    SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
+                    const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
     ~SmartTagHandler() override;
 
     void lcl_attribute(Id nId, Value& rValue) override;
