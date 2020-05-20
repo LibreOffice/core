@@ -103,6 +103,7 @@ enum class DocumentSettingId
     EMBED_SYSTEM_FONTS,
     APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     CONTINUOUS_ENDNOTES,
+    HEADER_SPACING_BELOW_LAST_PARA,
 };
 
  /** Provides access to settings of a document
