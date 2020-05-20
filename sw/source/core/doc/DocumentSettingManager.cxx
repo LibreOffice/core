@@ -95,7 +95,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
     mbProtectBookmarks(false),
-    mbProtectFields(false)
+    mbProtectFields(false),
+    mbHeaderSpacingBelowLastPara(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -222,6 +223,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONTINUOUS_ENDNOTES: return mbContinuousEndnotes;
         case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -463,6 +465,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::PROTECT_FIELDS:
             mbProtectFields = value;
             break;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
+            mbHeaderSpacingBelowLastPara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -632,8 +637,14 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbEmptyDbFieldHidesPara
     mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
     mbContinuousEndnotes = rSource.mbContinuousEndnotes;
+<<<<<<< HEAD   (7f3145 vcl canvas, don't draw bezier curves as straight lines (tdf#)
     // No mbProtectBookmarks
     // No mbProtectFields
+=======
+    // No mbProtectBookmarks: this is false by default everywhere
+    // No mbProtectFields: this is false by default everywhere
+    mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
+>>>>>>> CHANGE (9b5805 tdf#128195 Keep spacing below last paragraph in header (docx)
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -922,6 +933,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("mbContinuousEndnotes"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbContinuousEndnotes).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mbHeaderSpacingBelowLastPara"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbHeaderSpacingBelowLastPara).getStr()));
     xmlTextWriterEndElement(pWriter);
 
     xmlTextWriterEndElement(pWriter);

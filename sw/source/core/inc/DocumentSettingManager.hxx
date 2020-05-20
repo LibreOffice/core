@@ -164,6 +164,7 @@ class DocumentSettingManager :
     bool mbContinuousEndnotes = false;
     bool mbProtectBookmarks;
     bool mbProtectFields;
+    bool mbHeaderSpacingBelowLastPara;
 
 public:
 
