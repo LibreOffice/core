@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7a85db2_0928f8ea",
+        "filename": "sw/qa/uitest/writer_tests7/tdf132169.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-20T14:39:01Z",
+      "side": 1,
+      "message": "At least my local Linux ASan+UBSan build (which thus executes somewhat slowly) kept failing UITest_writer_tests7 with\n\n  \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n  ERROR: test_tdf132169 (tdf132169.tdf132169)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/sbergman/lo/core/sw/qa/uitest/writer_tests7/tdf132169.py\", line 43, in test_tdf132169\n      xLineMetric \u003d xWriterEdit.getChild(\u0027metricfield\u0027)\n  uno.com.sun.star.uno.RuntimeException: Could not find child with id: metricfield /home/sbergman/lo/core/vcl/source/uitest/uiobject.cxx:450\n\nand happens to succeed if I locally increase the sleep time from 1 to 10.  Is there no better way for a newly written test than to add a random sleep?",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 21
+      },
+      "revId": "05d7dbb911349c0b529c3f3a64223e447958d435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
