@@ -140,6 +140,30 @@
       "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a6d80fe_ea89d0e9",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-20T10:17:28Z",
+      "side": 1,
+      "message": "OUString myThemeName(\"addytesttheme\"); \nmyThemeName +\u003d OUString::number(i);\n\ndoesn\u0027t work? Or not const it?",
+      "parentUuid": "bcbeccd3_218e55ab",
+      "range": {
+        "startLine": 212,
+        "startChar": 34,
+        "endLine": 212,
+        "endChar": 40
+      },
+      "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
