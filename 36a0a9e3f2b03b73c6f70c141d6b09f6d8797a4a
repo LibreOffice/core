@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8930a3f7_cef79d49",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-20T13:07:15Z",
+      "side": 1,
+      "message": "to... avoid losing directly applied status. (Otherwise SetNumRule() just pTextNd-\u003eAddToList() without any property setting at all because pTextNd-\u003eGetNumRule() found it in the style.\n\nIn 6.x, there was direct numbering without any style-numbering, so SetNumRule() didn\u0027t find it anywhere and so bSetItem inserted a new SwNumRuleItem.",
+      "range": {
+        "startLine": 1400,
+        "startChar": 44,
+        "endLine": 1400,
+        "endChar": 87
+      },
+      "revId": "36a0a9e3f2b03b73c6f70c141d6b09f6d8797a4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95da54cd_42a3274a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-05-20T13:07:15Z",
+      "side": 1,
+      "message": "This comment (2018 - from me) is wrong.\n\nSo style-indents DO have priority over style-numbering-indents, but not over direct-numbering-indents.\n\n(My followup cleaning fix can correct this bad comment).",
+      "range": {
+        "startLine": 1410,
+        "startChar": 15,
+        "endLine": 1410,
+        "endChar": 59
+      },
+      "revId": "36a0a9e3f2b03b73c6f70c141d6b09f6d8797a4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
