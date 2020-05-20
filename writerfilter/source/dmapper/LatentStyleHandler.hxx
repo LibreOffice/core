@@ -17,10 +17,8 @@ namespace writerfilter
 {
 namespace dmapper
 {
-
 /// Handler for a latent style (w:lsdException element)
-class LatentStyleHandler
-    : public LoggedProperties
+class LatentStyleHandler : public LoggedProperties
 {
     std::vector<css::beans::PropertyValue> m_aAttributes;
 
