@@ -1328,7 +1328,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         static_cast<ParagraphPropertyMap*>(pContext.get())->SetListId(pList->GetId());
                     }
                     // erase numbering from pStyle if already set
-                    rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    //rContext->Erase(PROP_NUMBERING_STYLE_NAME);
+                    assert( !rContext->isSet(PROP_NUMBERING_STYLE_NAME) && "pStyle doesn't define numbering-style, but para-style" );
 
                     // Indentation can came from:
                     // 1) Paragraph style's numbering's indentation: the current non-style numId has priority over it.
