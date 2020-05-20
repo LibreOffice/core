@@ -177,16 +177,16 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
 {
     if ( rControlCommand.Command == "SetList" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "List" )
+            if ( rArg.Name == "List" )
             {
                 Sequence< OUString > aList;
                 m_pListBoxControl->clear();
 
-                rControlCommand.Arguments[i].Value >>= aList;
-                for (sal_Int32 j = 0; j < aList.getLength(); ++j)
-                    m_pListBoxControl->append_text(aList[j]);
+                rArg.Value >>= aList;
+                for (OUString const & rName : std::as_const(aList))
+                    m_pListBoxControl->append_text(rName);
 
                 m_pListBoxControl->set_active(0);
 
@@ -203,11 +203,11 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
     else if ( rControlCommand.Command == "AddEntry" )
     {
         OUString   aText;
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( rArg.Name == "Text" )
             {
-                if ( rControlCommand.Arguments[i].Value >>= aText )
+                if ( rArg.Value >>= aText )
                     m_pListBoxControl->append_text(aText);
                 break;
             }
@@ -217,32 +217,32 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
     {
         sal_Int32 nPos(-1);
         OUString   aText;
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( rArg.Name == "Pos" )
             {
                 sal_Int32 nTmpPos = 0;
-                if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
+                if ( rArg.Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) &&
                         ( nTmpPos < m_pListBoxControl->get_count() ))
                         nPos = nTmpPos;
                 }
             }
-            else if ( rControlCommand.Arguments[i].Name == "Text" )
-                rControlCommand.Arguments[i].Value >>= aText;
+            else if ( rArg.Name == "Text" )
+                rArg.Value >>= aText;
         }
 
         m_pListBoxControl->insert_text(nPos, aText);
     }
     else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Pos" )
+            if ( rArg.Name == "Pos" )
             {
                 sal_Int32 nPos( -1 );
-                if ( rControlCommand.Arguments[i].Value >>= nPos )
+                if ( rArg.Value >>= nPos )
                 {
                     if ( 0 <= nPos && nPos < m_pListBoxControl->get_count() )
                         m_pListBoxControl->remove(nPos);
@@ -253,12 +253,12 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
     }
     else if ( rControlCommand.Command == "RemoveEntryText" )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        for ( const NamedValue& rArg : rControlCommand.Arguments )
         {
-            if ( rControlCommand.Arguments[i].Name == "Text" )
+            if ( rArg.Name == "Text" )
             {
                 OUString aText;
-                if ( rControlCommand.Arguments[i].Value >>= aText )
+                if ( rArg.Value >>= aText )
                 {
                     auto nPos = m_pListBoxControl->find_text(aText);
                     if (nPos != -1)

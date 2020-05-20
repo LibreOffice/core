@@ -323,7 +323,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
         aDirURL = xFilePicker->getDisplayDirectory( );
         Sequence< OUString > aFileList = xFilePicker->getFiles( );
-        for ( int i = 0; i < aFileList.getLength( ); i++ )
+        for ( int i = 0; i < aFileList.( ); i++ )
         {
             OUString nextPath = aFileList[i];
         }

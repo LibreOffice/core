@@ -473,10 +473,10 @@ namespace XSLT
         }
         xmlSubstituteEntitiesDefault(0);
         m_parameters.clear();
-        for (int i = 0; i < params.getLength(); i++)
+        for (const Any& p : std::as_const(params))
         {
             NamedValue nv;
-            params[i] >>= nv;
+            p >>= nv;
             OString nameUTF8 = OUStringToOString(nv.Name,
                     RTL_TEXTENCODING_UTF8);
             OUString value;

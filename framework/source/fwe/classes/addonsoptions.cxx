@@ -997,8 +997,8 @@ void AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructi
     aMergeMenuBaseNode += m_aPathDelimiter;
 
     // extend the node names to have full path strings
-    for ( sal_Int32 i = 0; i < aSubMenuNodeNames.getLength(); i++ )
-        aSubMenuNodeNames[i] = aMergeMenuBaseNode + aSubMenuNodeNames[i];
+    for ( OUString& rName : aSubMenuNodeNames )
+        rName = aMergeMenuBaseNode + rName;
 
     ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
@@ -1324,8 +1324,8 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_Int32 n = 0; n < aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
+            for ( OUString& rName : aRootSubMenuNodeNames )
+                rName = aSubMenuRootNodeName + rName;
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = true;
@@ -1388,8 +1388,8 @@ bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequ
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
             OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
-            for ( sal_Int32 n = 0; n < aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
+            for ( OUString& rName : aRootSubMenuNodeNames )
+                rName = aSubMenuRootNodeName + rName;
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = true;
@@ -1409,8 +1409,8 @@ void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
     {
         sal_uInt32 nIndex = aTargetSubMenuSeq.getLength();
         aTargetSubMenuSeq.realloc( nIndex + aSourceSubMenuSeq.getLength() );
-        for ( sal_Int32 i = 0; i < aSourceSubMenuSeq.getLength(); i++ )
-            aTargetSubMenuSeq[nIndex++] = aSourceSubMenuSeq[i];
+        for ( Sequence<PropertyValue> const & rSeq : std::as_const(aSourceSubMenuSeq) )
+            aTargetSubMenuSeq[nIndex++] = rSeq;
         rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
     }
 }
