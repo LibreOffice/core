@@ -1390,7 +1390,10 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrame* pPr,
                                    const bool _bConsiderGrid ) const
 {
+<<<<<<< HEAD   (9397ba Resolves: tdf#133985 make ok the default)
     // OD 2004-03-10 #i11860# - use new method <GetPrevFrameForUpperSpaceCalc(..)>
+=======
+>>>>>>> CHANGE (6d1d5b tdf#128195 Keep spacing below last paragraph in header (docx)
     const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_( pPr );
 
     std::unique_ptr<SwBorderAttrAccess> pAccess;
@@ -1695,6 +1698,10 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
     {
         nLowerSpace += CalcAddLowerSpaceAsLastInTableCell( _pAttrs );
     }
+
+    // tdf#128195 Consider para spacing below last paragraph in header
+    if (!m_rThis.IsInFly() && m_rThis.FindFooterOrHeader() && !GetFollow() && !m_rThis.GetIndNext())
+        nLowerSpace += _pAttrs->GetULSpace().GetLower() + _pAttrs->CalcLineSpacing();
 
     return nLowerSpace;
 }

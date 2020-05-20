@@ -1837,6 +1837,14 @@ void SwWW8ImplReader::ImportDop()
     // tdf#117923
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, true);
+<<<<<<< HEAD   (9397ba Resolves: tdf#133985 make ok the default)
+=======
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, true);
+    // tdf#128195
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, true);
+>>>>>>> CHANGE (6d1d5b tdf#128195 Keep spacing below last paragraph in header (docx)
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;

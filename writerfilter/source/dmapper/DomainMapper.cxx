@@ -125,6 +125,12 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
     // Don't load the default style definitions to avoid weird mix
     m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
+<<<<<<< HEAD   (9397ba Resolves: tdf#133985 make ok the default)
+=======
+    m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::makeAny(true));
+    m_pImpl->SetDocumentSettingsProperty("HeaderSpacingBelowLastPara",
+                                         uno::makeAny(true));
+>>>>>>> CHANGE (6d1d5b tdf#128195 Keep spacing below last paragraph in header (docx)
 
     m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::makeAny(true));
 

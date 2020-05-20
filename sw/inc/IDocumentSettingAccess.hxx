@@ -103,6 +103,12 @@ enum class DocumentSettingId
     EMBED_SYSTEM_FONTS,
     APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
     CONTINUOUS_ENDNOTES,
+<<<<<<< HEAD   (9397ba Resolves: tdf#133985 make ok the default)
+=======
+    PROTECT_BOOKMARKS,
+    PROTECT_FIELDS,
+    HEADER_SPACING_BELOW_LAST_PARA,
+>>>>>>> CHANGE (6d1d5b tdf#128195 Keep spacing below last paragraph in header (docx)
 };
 
  /** Provides access to settings of a document

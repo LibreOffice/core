@@ -161,6 +161,12 @@ class DocumentSettingManager :
     bool mbDisableOffPagePositioning; // tdf#112443
     bool mbEmptyDbFieldHidesPara;
     bool mbContinuousEndnotes = false;
+<<<<<<< HEAD   (9397ba Resolves: tdf#133985 make ok the default)
+=======
+    bool mbProtectBookmarks;
+    bool mbProtectFields;
+    bool mbHeaderSpacingBelowLastPara;
+>>>>>>> CHANGE (6d1d5b tdf#128195 Keep spacing below last paragraph in header (docx)
 
 public:
 
