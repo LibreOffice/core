@@ -2,6 +2,7 @@
 #include <sal/log.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
+#include <vcl/tabpage.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
