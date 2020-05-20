@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f9b43e1_16d3a537",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-20T08:14:29Z",
+      "side": 1,
+      "message": "We don\u0027t need this function, because WriteOutline() has already had own logic to process InteropGrabBag.",
+      "revId": "b3299257e130307f620c6c08ebf1b1634cdd7c7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e2b9b5_9e314ff9",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-20T08:14:29Z",
+      "side": 1,
+      "message": "Could you give some explanation, please? For example:\n\n// This was 57240 (it differs from the original 57150, losing the preset line width)",
+      "revId": "b3299257e130307f620c6c08ebf1b1634cdd7c7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
