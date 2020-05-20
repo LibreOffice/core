@@ -169,12 +169,8 @@ void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependA
     sal_uInt32 nActionNumber(pDependAction->GetActionNumber());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(nActionNumber));
 
-    // #i80033# save old "dependence" element if backward compatibility is requested,
-    // correct "dependency" element otherwise
-    const bool bSaveBackwardsCompatible = bool( rExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
     SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE,
-        bSaveBackwardsCompatible ? XML_DEPENDENCE : XML_DEPENDENCY,
-        true, true);
+        XML_DEPENDENCY, true, true);
 }
 
 void ScChangeTrackingExportHelper::WriteDependings(const ScChangeAction* pAction)

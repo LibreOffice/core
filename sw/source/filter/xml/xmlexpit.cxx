@@ -106,7 +106,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
     }
 }
 
-void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
+void SvXMLExportItemMapper::exportXML(const SvXMLExport&,
                                  SvXMLAttributeList& rAttrList,
                                  const SfxPoolItem& rItem,
                                  const SvXMLItemMapEntry& rEntry,
@@ -122,13 +122,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             bool bAddAttribute = true;
             if( rEntry.nNameSpace == XML_NAMESPACE_STYLE )
             {
-                if( !(rExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE ) ||
-                    !QueryXMLValue(rItem, aValue,
-                    static_cast< sal_uInt16 >( rEntry.nMemberId & MID_SW_FLAG_MASK ),
-                    rUnitConverter ) )
-                {
-                    bAddAttribute = false;
-                }
+                bAddAttribute = false;
             }
             else
             {
