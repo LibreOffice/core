@@ -105,6 +105,7 @@ enum class DocumentSettingId
     CONTINUOUS_ENDNOTES,
     PROTECT_BOOKMARKS,
     PROTECT_FIELDS,
+    HEADER_SPACING_BELOW_LAST_PARA,
 };
 
  /** Provides access to settings of a document

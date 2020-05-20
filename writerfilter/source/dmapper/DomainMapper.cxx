@@ -125,6 +125,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     // Don't load the default style definitions to avoid weird mix
     m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
     m_pImpl->SetDocumentSettingsProperty("MsWordCompTrailingBlanks", uno::makeAny(true));
+    m_pImpl->SetDocumentSettingsProperty("HeaderSpacingBelowLastPara",
+                                         uno::makeAny(true));
 
     // Initialize RDF metadata, to be able to add statements during the import.
     try

@@ -1843,6 +1843,9 @@ void SwWW8ImplReader::ImportDop()
         DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, true);
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, true);
+    // tdf#128195
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA, true);
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;

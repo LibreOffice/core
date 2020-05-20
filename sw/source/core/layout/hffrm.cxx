@@ -33,6 +33,7 @@
 #include <objectformatter.hxx>
 #include <ndindex.hxx>
 #include <sal/log.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 static SwTwips lcl_GetFrameMinHeight(const SwLayoutFrame & rFrame)
 {
@@ -652,6 +653,9 @@ bool SwHeadFootFrame::GetEatSpacing() const
 {
     const SwFrameFormat * pFormat = GetFormat();
     OSL_ENSURE(pFormat, "SwHeadFootFrame: no format?");
+
+    if (pFormat->getIDocumentSettingAccess().get(DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA))
+        return false;
 
     return pFormat->GetHeaderAndFooterEatSpacing().GetValue();
 }

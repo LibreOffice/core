@@ -95,7 +95,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbLastBrowseMode( false ),
     mbDisableOffPagePositioning ( false ),
     mbProtectBookmarks(false),
-    mbProtectFields(false)
+    mbProtectFields(false),
+    mbHeaderSpacingBelowLastPara(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -222,6 +223,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONTINUOUS_ENDNOTES: return mbContinuousEndnotes;
         case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -463,6 +465,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::PROTECT_FIELDS:
             mbProtectFields = value;
             break;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
+            mbHeaderSpacingBelowLastPara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -634,6 +639,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbContinuousEndnotes = rSource.mbContinuousEndnotes;
     // No mbProtectBookmarks
     // No mbProtectFields
+    mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
