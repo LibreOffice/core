@@ -87,12 +87,12 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
         rControlCommand.Command == "SetImage") )
         return;
 
-    for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+    for ( const NamedValue& rArg : rControlCommand.Arguments )
     {
-        if ( rControlCommand.Arguments[i].Name == "URL" )
+        if ( rArg.Name == "URL" )
         {
             OUString aURL;
-            rControlCommand.Arguments[i].Value >>= aURL;
+            rArg.Value >>= aURL;
 
             SubstituteVariables( aURL );
 

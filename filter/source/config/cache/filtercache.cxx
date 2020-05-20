@@ -2061,9 +2061,8 @@ void FilterCache::impl_readOldFormat()
             css::uno::Reference< css::container::XNameAccess > xSet;
             xCfg->getByName(TYPES_SET) >>= xSet;
             const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
-            const OUString*                      pItems = lItems.getConstArray();
-            for (sal_Int32 i=0; i<lItems.getLength(); ++i)
-                m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
+            for (const OUString& rName : lItems)
+                m_lTypes[rName] = impl_readOldItem(xSet, E_TYPE, rName);
         }
 
         OUString FILTER_SET("Filters");
@@ -2073,9 +2072,8 @@ void FilterCache::impl_readOldFormat()
             css::uno::Reference< css::container::XNameAccess > xSet;
             xCfg->getByName(FILTER_SET) >>= xSet;
             const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
-            const OUString*                      pItems = lItems.getConstArray();
-            for (sal_Int32 i=0; i<lItems.getLength(); ++i)
-                m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
+            for (const OUString& rName : lItems)
+                m_lFilters[rName] = impl_readOldItem(xSet, E_FILTER, rName);
         }
     }
     /* corrupt filter addon? Because it's external (optional) code... we can ignore it. Addon won't work then...

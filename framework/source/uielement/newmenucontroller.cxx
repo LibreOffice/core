@@ -466,11 +466,11 @@ void NewMenuController::impl_setPopupMenu()
 
             if ( xModuleManager->getByName( m_aModuleIdentifier ) >>= aSeq )
             {
-                for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
+                for ( PropertyValue const & prop : std::as_const(aSeq) )
                 {
-                    if ( aSeq[y].Name == "ooSetupFactoryEmptyDocumentURL" )
+                    if ( prop.Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
-                        aSeq[y].Value >>= m_aEmptyDocURL;
+                        prop.Value >>= m_aEmptyDocURL;
                         break;
                     }
                 }

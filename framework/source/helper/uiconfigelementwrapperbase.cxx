@@ -114,10 +114,10 @@ void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aAr
     if ( m_bInitialized )
         return;
 
-    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    for ( const Any& rArg : aArguments )
     {
         PropertyValue aPropValue;
-        if ( aArguments[n] >>= aPropValue )
+        if ( rArg >>= aPropValue )
         {
             if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGSOURCE )
                 setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGSOURCE, aPropValue.Value );

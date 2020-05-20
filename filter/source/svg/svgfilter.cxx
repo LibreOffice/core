@@ -112,12 +112,12 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if(mxSrcDoc.is())
     {
-        for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+        for (const PropertyValue& rProp : rDescriptor)
         {
-            if (rDescriptor[nInd].Name == "FilterName")
+            if (rProp.Name == "FilterName")
             {
                 OUString sFilterName;
-                rDescriptor[nInd].Value >>= sFilterName;
+                rProp.Value >>= sFilterName;
                 if(sFilterName == "impress_svg_Export")
                 {
                     mbImpressFilter = true;
@@ -374,17 +374,17 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         bool bPageProvided = comphelper::LibreOfficeKit::isActive();
         sal_Int32 nPageToExport = -1;
 
-        for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+        for( const PropertyValue& rProp : rDescriptor )
         {
-            if (rDescriptor[nInd].Name == "SelectionOnly")
+            if (rProp.Name == "SelectionOnly")
             {
                 // #i124608# extract single selection wanted from dialog return values
-                rDescriptor[nInd].Value >>= bSelectionOnly;
+                rProp.Value >>= bSelectionOnly;
                 bPageProvided = false;
             }
-            else if (rDescriptor[nInd].Name == "PagePos")
+            else if (rProp.Name == "PagePos")
             {
-                rDescriptor[nInd].Value >>= nPageToExport;
+                rProp.Value >>= nPageToExport;
                 bPageProvided = true;
             }
         }
@@ -404,20 +404,20 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             // * traverse Impress resources to find slide preview pane, grab selection from there
             // * otherwise, fallback to current slide
             //
-            uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
+            const uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
                 xConfigController->getCurrentConfiguration()->getResources(
                     uno::Reference<drawing::framework::XResourceId>(),
                     "",
                     drawing::framework::AnchorBindingMode_INDIRECT));
 
-            for( sal_Int32 i=0; i<aResIds.getLength(); ++i )
+            for( const uno::Reference<drawing::framework::XResourceId>& rResId : aResIds )
             {
                 // can we somehow obtain the slidesorter from the Impress framework?
-                if( aResIds[i]->getResourceURL() == "private:resource/view/SlideSorter" )
+                if( rResId->getResourceURL() == "private:resource/view/SlideSorter" )
                 {
                     // got it, grab current selection from there
                     uno::Reference<drawing::framework::XResource> xRes(
-                        xConfigController->getResource(aResIds[i]));
+                        xConfigController->getResource(rResId));
 
                     uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
                         xRes,
@@ -548,11 +548,11 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
 {
     bool bSelectionOnly = false;
 
-    for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+    for (const PropertyValue& rProp : rDescriptor)
     {
-        if (rDescriptor[nInd].Name == "SelectionOnly")
+        if (rProp.Name == "SelectionOnly")
         {
-            rDescriptor[nInd].Value >>= bSelectionOnly;
+            rProp.Value >>= bSelectionOnly;
             break;
         }
     }

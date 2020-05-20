@@ -39,10 +39,8 @@ void lcl_ConvertSequenceToValues(
     bool bOwnerDraw = false;
     bool bMandatory = true;
 
-    PropertyValue aPropVal;
-    for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
+    for ( PropertyValue const & aPropVal : rSequence )
     {
-        aPropVal = rSequence[i];
         if ( aPropVal.Name == "URL" )
             aPropVal.Value >>= rItem.aCommandURL;
         else if ( aPropVal.Name == "Title" )
@@ -163,10 +161,10 @@ bool StatusbarMerger::ConvertSeqSeqToVector(
     const Sequence< Sequence< PropertyValue > > &rSequence,
     AddonStatusbarItemContainer& rContainer )
 {
-    for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
+    for ( auto const & i : rSequence )
     {
         AddonStatusbarItem aStatusBarItem;
-        lcl_ConvertSequenceToValues( rSequence[i], aStatusBarItem );
+        lcl_ConvertSequenceToValues( i, aStatusBarItem );
         rContainer.push_back( aStatusBarItem );
     }
 

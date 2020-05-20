@@ -233,9 +233,9 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     else if (args.hasElements())
     {
         NamedValue v;
-        for (int i = 0; i < args.getLength(); i++)
+        for (const Any& rArg : args)
         {
-            if (args[i] >>= v)
+            if (rArg >>= v)
             {
                 if ( v.Name == "SessionManagerName" )
                     v.Value >>= aSMgr;
