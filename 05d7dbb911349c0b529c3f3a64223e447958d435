@@ -22,6 +22,30 @@
       "revId": "05d7dbb911349c0b529c3f3a64223e447958d435",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4959372_00d648bd",
+        "filename": "sw/qa/uitest/writer_tests7/tdf132169.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-05-20T14:58:39Z",
+      "side": 1,
+      "message": "Hi Stephan,\nI tried different approaches, including\n\nxToolkit \u003d self.xContext.ServiceManager.createInstance(\u0027com.sun.star.awt.Toolkit\u0027)\nxToolkit.processEventsToIdle()\n\nbut the only one that worked was the time.sleep, but yeah, not a good solution for slower machines. I would love to see a better way of doing it but I can\u0027t think of any at the moment",
+      "parentUuid": "f7a85db2_0928f8ea",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 21
+      },
+      "revId": "05d7dbb911349c0b529c3f3a64223e447958d435",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
