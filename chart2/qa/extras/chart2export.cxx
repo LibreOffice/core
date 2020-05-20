@@ -153,6 +153,8 @@ public:
     void testCustomLabelText();
     void testTdf131979();
     void testTdf126076();
+    void testTdf133190();
+    void testTdf133191();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -269,6 +271,8 @@ public:
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testTdf131979);
     CPPUNIT_TEST(testTdf126076);
+    CPPUNIT_TEST(testTdf133190);
+    CPPUNIT_TEST(testTdf133191);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2479,6 +2483,27 @@ void Chart2ExportTest::testTdf126076()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
     // instead of skipping markers
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
+}
+
+void Chart2ExportTest::testTdf133190()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf133190_tdf133191.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Test word wrap of data point label
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:txPr/a:bodyPr", "wrap", "none");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:txPr/a:bodyPr", "wrap", "square");
+}
+
+void Chart2ExportTest::testTdf133191()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf133190_tdf133191.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Test rotation of data point label
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:txPr/a:bodyPr", "rot", "-4500000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
