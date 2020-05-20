@@ -95,15 +95,15 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                                     aMedDescr,
                                     lObjArgs );
 
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    for ( beans::PropertyValue const & prop : lObjArgs )
     {
-        if ( lObjArgs[nInd].Name == "CloneFrom" )
+        if ( prop.Name == "CloneFrom" )
         {
             try
             {
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 uno::Reference < embed::XEmbeddedObject > xNew( xResult, uno::UNO_QUERY );
-                lObjArgs[nInd].Value >>= xObj;
+                prop.Value >>= xObj;
                 if ( xObj.is() )
                     xNew->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
             }
