@@ -39,6 +39,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlap)
     CPPUNIT_ASSERT_GREATEREQUAL(nFlyBottom, nTableTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf128195)
+{
+    // Load a document that has two paragraphs in the header.
+    // The second paragraph should have its bottom spacing applied.
+    load(DATA_DIRECTORY, "tdf128195.docx");
+    sal_Int32 nTxtHeight = parseDump("//header/txt[2]/infos/bounds", "height").toInt32();
+    sal_Int32 nTxtBottom = parseDump("//header/txt[2]/infos/bounds", "bottom").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2269), nTxtHeight);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3529), nTxtBottom);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
 {
     // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
