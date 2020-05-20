@@ -33,8 +33,6 @@ SbiGlobals* GetSbData()
 SbiGlobals::SbiGlobals()
 {
     pInst = nullptr;
-    pSbFac = nullptr;
-    pUnoFac = nullptr;
     pTypeFac = nullptr;
     pClassFac = nullptr;
     pOLEFac = nullptr;
@@ -48,17 +46,10 @@ SbiGlobals::SbiGlobals()
     bCompilerError = false;
     bGlobalInitErr = false;
     bRunInit = false;
-    pTransliterationWrapper = nullptr;
     bBlockCompilerError = false;
-    pAppBasMgr = nullptr;
     pMSOMacroRuntimLib = nullptr;
 }
 
-SbiGlobals::~SbiGlobals()
-{
-    pSbFac.reset();
-    pUnoFac.reset();
-    pTransliterationWrapper.reset();
-}
+SbiGlobals::~SbiGlobals() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

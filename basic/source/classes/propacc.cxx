@@ -44,15 +44,10 @@ static bool SbCompare_UString_PropertyValue_Impl(PropertyValue const & lhs, cons
 }
 
 
-SbPropertyValues::SbPropertyValues()
-{
-}
+SbPropertyValues::SbPropertyValues() = default;
 
 
-SbPropertyValues::~SbPropertyValues()
-{
-    m_xInfo.clear();
-}
+SbPropertyValues::~SbPropertyValues() = default;
 
 Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo()
 {
