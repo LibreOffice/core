@@ -3439,7 +3439,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }
             Cancel();
-            rReq.Ignore ();
+            rReq.Done(); // Mark task as done to auto-update the state of each buttons tdf#132816
         }
         break;
 
