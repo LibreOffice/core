@@ -261,10 +261,8 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     sal_Int32 const nMax = 2;
 #endif
 
-    for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
+    for ( uno::Sequence< uno::Reference< deployment::XPackage > > const & xPackageList : std::as_const(xAllPackages) )
     {
-        uno::Sequence< uno::Reference< deployment::XPackage > > xPackageList = xAllPackages[i];
-
         for ( sal_Int32 j = 0; (j<nMax) && (j < xPackageList.getLength()); ++j )
         {
             uno::Reference< deployment::XPackage > xPackage = xPackageList[j];

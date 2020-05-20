@@ -366,10 +366,9 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     {
         std::vector< OUString > deps;
         deps.reserve(depExc.UnsatisfiedDependencies.getLength());
-        for (sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i)
+        for (auto const & i : std::as_const(depExc.UnsatisfiedDependencies))
         {
-            deps.push_back(
-                dp_misc::Dependencies::getErrorText( depExc.UnsatisfiedDependencies[i]) );
+            deps.push_back( dp_misc::Dependencies::getErrorText(i) );
         }
         {
             SolarMutexGuard guard;
