@@ -256,7 +256,6 @@ public:
     OUString                                            msPackageURIScheme;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool                                                mbOutlineStyleAsNormalListStyle;
-    bool                                                mbSaveBackwardCompatibleODF;
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
@@ -291,7 +290,6 @@ SvXMLExport_Impl::SvXMLExport_Impl()
 :    mxUriReferenceFactory( uri::UriReferenceFactory::create(comphelper::getProcessComponentContext()) ),
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbOutlineStyleAsNormalListStyle( false ),
-    mbSaveBackwardCompatibleODF( true ),
     mDepth( 0 ),
     mbExportTextNumberElement( false ),
     mbNullDateInitialized( false )
@@ -410,14 +408,6 @@ void SvXMLExport::InitCtor_()
 
     // Determine model type (#i51726#)
     DetermineModelType_();
-
-    // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
-    if( getExportFlags() & SvXMLExportFlags::OASIS )
-    {
-        mpImpl->mbSaveBackwardCompatibleODF =
-            officecfg::Office::Common::Save::Document::
-            SaveBackwardCompatibleODF::get( comphelper::getProcessComponentContext() );
-    }
 }
 
 // Shapes in Writer cannot be named via context menu (#i51726#)
@@ -609,11 +599,6 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             }
         }
     }
-
-    if ( mpImpl->mbSaveBackwardCompatibleODF )
-        mnExportFlags |= SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE;
-    else
-        mnExportFlags &= ~SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE;
 
     // namespaces for user defined attributes
     Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );

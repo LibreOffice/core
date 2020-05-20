@@ -505,11 +505,6 @@
     </prop>
   </node>
   <node oor:name="Save">
-    <node oor:name="Document">
-      <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
-        <value>false</value>
-      </prop>
-    </node>
     <node oor:name="ODF">
       <prop oor:name="DefaultVersion" oor:type="xs:short">
         <value>3</value>

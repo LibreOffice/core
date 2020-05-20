@@ -2351,9 +2351,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                               XML_FRAME, bCreateNewline, true );
 
-    const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
-
-    if (!bIsEmptyPresObj || bSaveBackwardsCompatible)
+    if (!bIsEmptyPresObj)
     {
         uno::Reference<graphic::XGraphic> xGraphic;
         OUString sOutMimeType;
@@ -2866,9 +2864,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
     SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                               XML_FRAME, bCreateNewline, true );
 
-    const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
-
-    if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
+    if (!bIsEmptyPresObj)
     {
         if (pAttrList)
         {
