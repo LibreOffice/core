@@ -243,10 +243,9 @@ void Interceptor::generateFeatureStateEvent()
 
             }
 
-            for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
+            for(uno::Reference<uno::XInterface> const & k : std::as_const(aSeq))
             {
-                uno::Reference<frame::XStatusListener>
-                    Control(aSeq[k],uno::UNO_QUERY);
+                uno::Reference<frame::XStatusListener> Control(k,uno::UNO_QUERY);
                 if(Control.is())
                     Control->statusChanged(aStateEvent);
 
@@ -437,18 +436,18 @@ Interceptor::queryDispatches(
     else
         aRet.realloc(Requests.getLength());
 
-    for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
-        if ( !m_bLink && m_aInterceptedURL[0] == Requests[i].FeatureURL.Complete )
+    for(frame::DispatchDescriptor const & dd : Requests)
+        if ( !m_bLink && m_aInterceptedURL[0] == dd.FeatureURL.Complete )
             aRet[i] = static_cast<frame::XDispatch*>(this);
-        else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)
+        else if(m_aInterceptedURL[1] == dd.FeatureURL.Complete)
             aRet[i] = nullptr;
-        else if( !m_bLink && m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete )
+        else if( !m_bLink && m_aInterceptedURL[2] == dd.FeatureURL.Complete )
             aRet[i] = static_cast<frame::XDispatch*>(this);
-        else if( !m_bLink && m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete )
+        else if( !m_bLink && m_aInterceptedURL[3] == dd.FeatureURL.Complete )
             aRet[i] = static_cast<frame::XDispatch*>(this);
-        else if( !m_bLink && m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete )
+        else if( !m_bLink && m_aInterceptedURL[4] == dd.FeatureURL.Complete )
             aRet[i] = static_cast<frame::XDispatch*>(this);
-        else if(m_aInterceptedURL[5] == Requests[i].FeatureURL.Complete)
+        else if(m_aInterceptedURL[5] == dd.FeatureURL.Complete)
             aRet[i] = static_cast<frame::XDispatch*>(this);
 
     return aRet;

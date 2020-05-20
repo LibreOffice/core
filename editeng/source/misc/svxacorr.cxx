@@ -502,10 +502,9 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
             uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
                 = i18n::OrdinalSuffix::create(comphelper::getProcessComponentContext());
 
-            uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
-            for (sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++)
+            const uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
+            for (OUString const & sSuffix : aSuffixes)
             {
-                OUString sSuffix(aSuffixes[nSuff]);
                 OUString sEnd = rTxt.copy(nNumEnd + 1, nEndPos - nNumEnd - 1);
 
                 if (sSuffix == sEnd)
