@@ -161,11 +161,11 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
             0,
             aSeq);
 
-        uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
-        for ( int nInd = 0; nInd < aResArgs.getLength(); nInd++ )
-            if ( aResArgs[nInd].Name == "MacroExecutionMode" )
+        const uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
+        for ( beans::PropertyValue const & prop : aResArgs )
+            if ( prop.Name == "MacroExecutionMode" )
             {
-                aResArgs[nInd].Value >>= m_nMacroExecMode;
+                prop.Value >>= m_nMacroExecMode;
                 break;
             }
     }
@@ -918,13 +918,12 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             uno::Sequence<beans::PropertyValue> aSeq;
             if(m_xDocument.is())
             {
-                aSeq =
-                    m_xDocument->getArgs();
-                for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
+                aSeq = m_xDocument->getArgs();
+                for(beans::PropertyValue const & prop : std::as_const(aSeq))
                 {
-                    if(aSeq[j].Name == "FilterName")
+                    if(prop.Name == "FilterName")
                     {
-                        aSeq[j].Value >>= aFilterName;
+                        prop.Value >>= aFilterName;
                         break;
                     }
                 }
@@ -939,11 +938,10 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                     if(xNameAccess.is() &&
                        (xNameAccess->getByName(aFilterName) >>= aSeq))
                     {
-                        for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
-                            if(aSeq[j].Name ==
-                               "UIName")
+                        for(beans::PropertyValue const & prop : std::as_const(aSeq))
+                            if(prop.Name == "UIName")
                             {
-                                aSeq[j].Value >>= m_aFilterName;
+                                prop.Value >>= m_aFilterName;
                                 break;
                             }
                     }
@@ -1045,12 +1043,12 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
     if ( pRect && m_xDocument.is() )
     {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name == "DocumentBorder" )
+        const uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( beans::PropertyValue const & prop : aArgs )
+            if ( prop.Name == "DocumentBorder" )
             {
                 uno::Sequence< sal_Int32 > aRect;
-                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
+                if ( ( prop.Value >>= aRect ) && aRect.getLength() == 4 )
                 {
                     pRect->left   = aRect[0];
                     pRect->top    = aRect[1];

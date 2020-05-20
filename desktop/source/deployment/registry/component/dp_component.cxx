@@ -1105,30 +1105,30 @@ void extractComponentData(
     if (!registryName.endsWith("/")) {
         prefix += RTL_CONSTASCII_LENGTH("/");
     }
-    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    const css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
         keys(registry->openKeys());
     css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
         context->getServiceManager(), css::uno::UNO_SET_THROW);
-    for (sal_Int32 i = 0; i < keys.getLength(); ++i) {
-        OUString name(keys[i]->getKeyName().copy(prefix));
+    for (css::uno::Reference< css::registry::XRegistryKey > const & key : keys) {
+        OUString name(key->getKeyName().copy(prefix));
         data->implementationNames.push_back(name);
         css::uno::Reference< css::registry::XRegistryKey > singletons(
-            keys[i]->openKey("UNO/SINGLETONS"));
+            key->openKey("UNO/SINGLETONS"));
         if (singletons.is()) {
-            sal_Int32 prefix2 = keys[i]->getKeyName().getLength() +
+            sal_Int32 prefix2 = key->getKeyName().getLength() +
                 RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
-            css::uno::Sequence<
+            const css::uno::Sequence<
                 css::uno::Reference< css::registry::XRegistryKey > >
                 singletonKeys(singletons->openKeys());
-            for (sal_Int32 j = 0; j < singletonKeys.getLength(); ++j) {
+            for (css::uno::Reference< css::registry::XRegistryKey > const & singletonKey : singletonKeys) {
                 data->singletons.emplace_back(
-                        singletonKeys[j]->getKeyName().copy(prefix2), name);
+                        singletonKey->getKeyName().copy(prefix2), name);
             }
         }
         if (factories != nullptr) {
             factories->push_back(
                 componentLoader->activate(
-                    name, OUString(), componentUrl, keys[i]));
+                    name, OUString(), componentUrl, key));
         }
     }
 }
