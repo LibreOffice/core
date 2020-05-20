@@ -561,7 +561,7 @@ protected:
 
     virtual tools::Rectangle    SetBackgroundComponentBounds();
 
-    virtual void                DrawOutDevDirectCheck( const OutputDevice* pSrcDev, SalGraphics*& pSrcGraphics );
+    virtual const OutputDevice* DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const;
 
     virtual void                DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics );
 
