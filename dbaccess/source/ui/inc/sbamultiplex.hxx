@@ -264,11 +264,10 @@ namespace dbaui
     sal_Int32 classname::getOverallLen() const                                              \
     {                                                                                       \
         sal_Int32 nLen = 0;                                                                 \
-        css::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes();   \
-        const OUString* pContained = aContained.getConstArray();                            \
-        for (   sal_Int32 i=0; i<aContained.getLength(); ++i, ++pContained)                 \
+        const css::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes(); \
+        for ( OUString const & s : aContained)                 \
         {                                                                                   \
-            ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(*pContained);  \
+            ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(s);  \
             if (!pListeners)                                                                \
                 continue;                                                                   \
             nLen += pListeners->getLength();                                                \
