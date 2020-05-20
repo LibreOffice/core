@@ -91,7 +91,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbSubtractFlys(false),
     mApplyParagraphMarkFormatToNumbering(false),
     mbLastBrowseMode( false ),
-    mbDisableOffPagePositioning ( false )
+    mbDisableOffPagePositioning ( false ),
+    mbHeaderSpacingBelowLastPara(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -217,6 +218,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA: return mbEmptyDbFieldHidesPara;
         case DocumentSettingId::CONTINUOUS_ENDNOTES:
             return mbContinuousEndnotes;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -452,6 +454,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::CONTINUOUS_ENDNOTES:
             mbContinuousEndnotes = value;
             break;
+        case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
+            mbHeaderSpacingBelowLastPara = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -595,6 +600,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbSubtractFlys = rSource.mbSubtractFlys;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
     mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
+    mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
