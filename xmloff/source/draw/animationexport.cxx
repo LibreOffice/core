@@ -1015,20 +1015,10 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             double fTemp = xIter->getIterateInterval();
             if( fTemp )
             {
-                if( !( mxExport->getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE ) )
-                {
-                    // issue 146582
-                    OUStringBuffer buf;
-                    ::sax::Converter::convertDuration(buf, fTemp / (24*60*60));
-                    mxExport->AddAttribute( XML_NAMESPACE_ANIMATION,
-                            XML_ITERATE_INTERVAL, buf.makeStringAndClear());
-                }
-                else
-                {
-                    sTmp.append( fTemp );
-                    sTmp.append( 's' );
-                    mxExport->AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
-                }
+                OUStringBuffer buf;
+                ::sax::Converter::convertDuration(buf, fTemp / (24*60*60));
+                mxExport->AddAttribute( XML_NAMESPACE_ANIMATION,
+                        XML_ITERATE_INTERVAL, buf.makeStringAndClear());
             }
         }
 
