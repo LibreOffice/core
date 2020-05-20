@@ -654,7 +654,9 @@ class SvxSetItem;
 #define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
 #define SID_INSERT_GRIDCONTROL                          ( SID_SVX_START + 753 )
 #define SID_PARAGRAPH_CHANGE_STATE                      ( SID_SVX_START + 754 )
-//FREE
+
+#define SID_ATTR_SHADOW_BLUR                            ( SID_SVX_START + 755 )
+
 //FREE
 //FREE
 //FREE
