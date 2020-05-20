@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c0875bb_835ee5a4",
+        "filename": "vcl/source/gdi/print2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-20T08:54:21Z",
+      "side": 1,
+      "message": "double ;;",
+      "range": {
+        "startLine": 748,
+        "startChar": 46,
+        "endLine": 748,
+        "endChar": 48
+      },
+      "revId": "f5638f8f8d8378bb2e084e4ce14b1ecb2f102d0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
