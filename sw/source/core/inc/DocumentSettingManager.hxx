@@ -161,6 +161,7 @@ class DocumentSettingManager :
     bool mbDisableOffPagePositioning; // tdf#112443
     bool mbEmptyDbFieldHidesPara;
     bool mbContinuousEndnotes = false;
+    bool mbHeaderSpacingBelowLastPara;
 
 public:
 
