@@ -31,9 +31,6 @@
 
 SbiImage::SbiImage()
 {
-    pStrings   = nullptr;
-    pCode      = nullptr;
-    pLegacyPCode = nullptr;
     nFlags     = SbiImageFlags::NONE;
     nStringSize= 0;
     nCodeSize  = 0;
@@ -47,10 +44,7 @@ SbiImage::SbiImage()
     nStringOff = 0;
 }
 
-SbiImage::~SbiImage()
-{
-    Clear();
-}
+SbiImage::~SbiImage() = default;
 
 void SbiImage::Clear()
 {
