@@ -4129,7 +4129,7 @@ SfxVoidItem SaveBackground SID_SAVE_BACKGROUND
 
 SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
@@ -4145,7 +4145,7 @@ SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 ]
 SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
