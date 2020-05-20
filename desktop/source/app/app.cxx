@@ -342,18 +342,6 @@ OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
     return DpResId(STR_BOOTSTRAP_ERR_CANNOT_START) + "\n" + aErrorMessage;
 }
 
-OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
-{
-    OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS);
-    if ( !aInternalErrMsg.isEmpty() )
-    {
-        aDiagnosticMessage += "\n\n"
-                           + DpResId(STR_INTERNAL_ERRMSG)
-                           + aInternalErrMsg;
-    }
-    return aDiagnosticMessage;
-}
-
 
 // shows a simple error box with the given message ... but exits from these process !
 // Fatal errors can't be solved by the process ... nor any recovery can help.
@@ -1271,248 +1259,235 @@ int Desktop::Main()
     Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
 
     Reference< XDesktop2 > xDesktop;
-    try
-    {
-        RegisterServices(xContext);
 
-        SetSplashScreenProgress(25);
+    RegisterServices(xContext);
+
+    SetSplashScreenProgress(25);
 
 #if HAVE_FEATURE_DESKTOP
-        // check user installation directory for lockfile so we can be sure
-        // there is no other instance using our data files from a remote host
+    // check user installation directory for lockfile so we can be sure
+    // there is no other instance using our data files from a remote host
 
-        bool bMustLockProfile = ( getenv( "SAL_NOLOCK_PROFILE" ) == nullptr );
-        if ( bMustLockProfile )
+    bool bMustLockProfile = ( getenv( "SAL_NOLOCK_PROFILE" ) == nullptr );
+    if ( bMustLockProfile )
+    {
+        m_xLockfile.reset(new Lockfile);
+
+        if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
+             !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
         {
-            m_xLockfile.reset(new Lockfile);
-
-            if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
-                 !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
-            {
-                // Lockfile exists, and user clicked 'no'
-                return EXIT_FAILURE;
-            }
+            // Lockfile exists, and user clicked 'no'
+            return EXIT_FAILURE;
         }
+    }
 
-        // check if accessibility is enabled but not working and allow to quit
-        if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
-        {
-            if( !InitAccessBridge() )
-                return EXIT_FAILURE;
-        }
+    // check if accessibility is enabled but not working and allow to quit
+    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+    {
+        if( !InitAccessBridge() )
+            return EXIT_FAILURE;
+    }
 #endif
 
-        // terminate if requested...
-        if( rCmdLineArgs.IsTerminateAfterInit() )
-            return EXIT_SUCCESS;
+    // terminate if requested...
+    if( rCmdLineArgs.IsTerminateAfterInit() )
+        return EXIT_SUCCESS;
 
-        //  Read the common configuration items for optimization purpose
-        if ( !InitializeConfiguration() )
-            return EXIT_FAILURE;
+    //  Read the common configuration items for optimization purpose
+    if ( !InitializeConfiguration() )
+        return EXIT_FAILURE;
 
 #if HAVE_FEATURE_UPDATE_MAR
-        const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
-        if (pUpdaterTestEnable || officecfg::Office::Update::Update::Enabled::get())
+    const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
+    if (pUpdaterTestEnable || officecfg::Office::Update::Update::Enabled::get())
+    {
+        // check if we just updated
+        const char* pUpdaterRunning = std::getenv("LIBO_UPDATER_TEST_RUNNING");
+        bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get() || pUpdaterRunning;
+        if (bUpdateRunning)
         {
-            // check if we just updated
-            const char* pUpdaterRunning = std::getenv("LIBO_UPDATER_TEST_RUNNING");
-            bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get() || pUpdaterRunning;
-            if (bUpdateRunning)
+            OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
+            OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
+
+            OUString aBuildID = Updater::getBuildID();
+            if (aOldBuildID == aBuildID)
             {
-                OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
-                OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
-
-                OUString aBuildID = Updater::getBuildID();
-                if (aOldBuildID == aBuildID)
-                {
-                    Updater::log("Old and new Build ID are the same. No Updating took place.");
-                }
-                else
-                {
-                    if (!aSeeAlso.isEmpty())
-                    {
-                        SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
-                                Reference< css::system::XSystemShellExecute > xSystemShell(
-                        SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-
-                        xSystemShell->execute( aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY );
-                    }
-                }
-
-                // reset all the configuration values,
-                // all values need to be read before this code
-                std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                        comphelper::ConfigurationChanges::create());
-                officecfg::Office::Update::Update::UpdateRunning::set(false, batch);
-                officecfg::Office::Update::Update::SeeAlso::set(OUString(), batch);
-                officecfg::Office::Update::Update::OldBuildID::set(OUString(), batch);
-                batch->commit();
-
-                Updater::removeUpdateFiles();
-            }
-
-            osl::DirectoryItem aUpdateFile;
-            osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
-
-            const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
-            const char* pForcedUpdateCheck = std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK");
-            if (pUpdaterTestUpdate || aUpdateFile.is())
-            {
-                OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
-                rtl::Bootstrap::expandMacros(aBuildID);
-                std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                        comphelper::ConfigurationChanges::create());
-                officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
-                officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
-                batch->commit();
-
-                // make sure the change is written to the configuration before we start the update
-                css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);
-                xFlushable->flush();
-                // avoid the old oosplash staying around
-                CloseSplashScreen();
-                bool bSuccess = update();
-                if (bSuccess)
-                    return EXIT_SUCCESS;
-            }
-            else if (isTimeForUpdateCheck() || pForcedUpdateCheck)
-            {
-                sal_uInt64 nNow = tools::Time::GetSystemTicks();
-                Updater::log("Update Check Time: " + OUString::number(nNow));
-                std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                        comphelper::ConfigurationChanges::create());
-                officecfg::Office::Update::Update::LastUpdateTime::set(nNow, batch);
-                batch->commit();
-                m_aUpdateThread = std::thread(update_checker);
-            }
-        }
-#endif
-
-        SetSplashScreenProgress(30);
-
-        // create title string
-        OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
-
-#ifdef DBG_UTIL
-        //include buildid in non product builds
-        aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
-#endif
-
-        SetDisplayName( aTitle );
-        SetSplashScreenProgress(35);
-        pExecGlobals->pPathOptions.reset( new SvtPathOptions);
-        SetSplashScreenProgress(40);
-
-        xDesktop = css::frame::Desktop::create( xContext );
-
-        // create service for loading SFX (still needed in startup)
-        pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
-            ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_SET_THROW );
-
-        /* ensure existence of a default window that messages can be dispatched to
-           This is for the benefit of testtool which uses PostUserEvent extensively
-           and else can deadlock while creating this window from another thread while
-           the main thread is not yet in the event loop.
-        */
-        Application::GetDefaultDevice();
-
-#if HAVE_FEATURE_EXTENSIONS
-        // Check if bundled or shared extensions were added /removed
-        // and process those extensions (has to be done before checking
-        // the extension dependencies!
-        SynchronizeExtensionRepositories(m_bCleanedExtensionCache, this);
-        bool bAbort = CheckExtensionDependencies();
-        if ( bAbort )
-            return EXIT_FAILURE;
-
-        if (inst_fin == userinstall::CREATED)
-        {
-            Migration::migrateSettingsIfNecessary();
-        }
-#endif
-
-        // keep a language options instance...
-        pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(true));
-
-        css::document::DocumentEvent aEvent;
-        aEvent.EventName = "OnStartApp";
-        pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
-
-        SetSplashScreenProgress(50);
-
-        // Backing Component
-        bool bCrashed            = false;
-        bool bExistsRecoveryData = false;
-        bool bExistsSessionData  = false;
-
-        impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
-
-        OUString pidfileName = rCmdLineArgs.GetPidfileName();
-        if ( !pidfileName.isEmpty() )
-        {
-            OUString pidfileURL;
-
-            if ( osl_getFileURLFromSystemPath(pidfileName.pData, &pidfileURL.pData) == osl_File_E_None )
-            {
-                osl::File pidfile( pidfileURL );
-                osl::FileBase::RC rc;
-
-                osl::File::remove( pidfileURL );
-                if ( (rc = pidfile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) ) == osl::File::E_None )
-                {
-                    OString pid( OString::number( GETPID() ) );
-                    sal_uInt64 written = 0;
-                    if ( pidfile.write(pid.getStr(), pid.getLength(), written) != osl::File::E_None )
-                    {
-                        SAL_WARN("desktop.app", "cannot write pidfile " << pidfile.getURL());
-                    }
-                    pidfile.close();
-                }
-                else
-                {
-                    SAL_WARN("desktop.app", "cannot open pidfile " << pidfile.getURL() << rc);
-                }
+                Updater::log("Old and new Build ID are the same. No Updating took place.");
             }
             else
             {
-                SAL_WARN("desktop.app", "cannot get pidfile URL from path" << pidfileName);
+                if (!aSeeAlso.isEmpty())
+                {
+                    SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
+                            Reference< css::system::XSystemShellExecute > xSystemShell(
+                    SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+
+                    xSystemShell->execute( aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY );
+                }
             }
+
+            // reset all the configuration values,
+            // all values need to be read before this code
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+            officecfg::Office::Update::Update::UpdateRunning::set(false, batch);
+            officecfg::Office::Update::Update::SeeAlso::set(OUString(), batch);
+            officecfg::Office::Update::Update::OldBuildID::set(OUString(), batch);
+            batch->commit();
+
+            Updater::removeUpdateFiles();
         }
 
-        if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
-        {
-            // Ensure that we use not the system file dialogs as
-            // headless mode relies on Application::EnableHeadlessMode()
-            // which does only work for VCL dialogs!!
-            SvtMiscOptions aMiscOptions;
-            pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
-            aMiscOptions.SetUseSystemFileDialog( false );
-        }
+        osl::DirectoryItem aUpdateFile;
+        osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
 
-        pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(
-            true);
-        if ( !pExecGlobals->bRestartRequested )
+        const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
+        const char* pForcedUpdateCheck = std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK");
+        if (pUpdaterTestUpdate || aUpdateFile.is())
         {
-            if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
-                (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
-                (!bExistsRecoveryData                                                  ) &&
-                (!bExistsSessionData                                                   ) &&
-                (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))
+            OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
+            rtl::Bootstrap::expandMacros(aBuildID);
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+            officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
+            officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
+            batch->commit();
+
+            // make sure the change is written to the configuration before we start the update
+            css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);
+            xFlushable->flush();
+            // avoid the old oosplash staying around
+            CloseSplashScreen();
+            bool bSuccess = update();
+            if (bSuccess)
+                return EXIT_SUCCESS;
+        }
+        else if (isTimeForUpdateCheck() || pForcedUpdateCheck)
+        {
+            sal_uInt64 nNow = tools::Time::GetSystemTicks();
+            Updater::log("Update Check Time: " + OUString::number(nNow));
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+            officecfg::Office::Update::Update::LastUpdateTime::set(nNow, batch);
+            batch->commit();
+            m_aUpdateThread = std::thread(update_checker);
+        }
+    }
+#endif
+
+    SetSplashScreenProgress(30);
+
+    // create title string
+    OUString aTitle(ReplaceStringHookProc(RID_APPTITLE));
+#ifdef DBG_UTIL
+    //include buildid in non product builds
+    aTitle += " [" + utl::Bootstrap::getBuildIdData("development") + "]";
+#endif
+
+    SetDisplayName( aTitle );
+    SetSplashScreenProgress(35);
+    pExecGlobals->pPathOptions.reset( new SvtPathOptions);
+    SetSplashScreenProgress(40);
+
+    xDesktop = css::frame::Desktop::create( xContext );
+
+    // create service for loading SFX (still needed in startup)
+    pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
+        ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_SET_THROW );
+
+    /* ensure existence of a default window that messages can be dispatched to
+       This is for the benefit of testtool which uses PostUserEvent extensively
+       and else can deadlock while creating this window from another thread while
+       the main thread is not yet in the event loop.
+    */
+    Application::GetDefaultDevice();
+
+#if HAVE_FEATURE_EXTENSIONS
+    // Check if bundled or shared extensions were added /removed
+    // and process those extensions (has to be done before checking
+    // the extension dependencies!
+    SynchronizeExtensionRepositories(m_bCleanedExtensionCache, this);
+    bool bAbort = CheckExtensionDependencies();
+    if ( bAbort )
+        return EXIT_FAILURE;
+
+    if (inst_fin == userinstall::CREATED)
+    {
+        Migration::migrateSettingsIfNecessary();
+    }
+#endif
+
+    // keep a language options instance...
+    pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(true));
+
+    css::document::DocumentEvent aEvent;
+    aEvent.EventName = "OnStartApp";
+    pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
+
+    SetSplashScreenProgress(50);
+
+    // Backing Component
+    bool bCrashed            = false;
+    bool bExistsRecoveryData = false;
+    bool bExistsSessionData  = false;
+
+    impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
+
+    OUString pidfileName = rCmdLineArgs.GetPidfileName();
+    if ( !pidfileName.isEmpty() )
+    {
+        OUString pidfileURL;
+
+        if ( osl_getFileURLFromSystemPath(pidfileName.pData, &pidfileURL.pData) == osl_File_E_None )
+        {
+            osl::File pidfile( pidfileURL );
+            osl::FileBase::RC rc;
+
+            osl::File::remove( pidfileURL );
+            if ( (rc = pidfile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) ) == osl::File::E_None )
             {
-                 ShowBackingComponent(this);
+                OString pid( OString::number( GETPID() ) );
+                sal_uInt64 written = 0;
+                if ( pidfile.write(pid.getStr(), pid.getLength(), written) != osl::File::E_None )
+                {
+                    SAL_WARN("desktop.app", "cannot write pidfile " << pidfile.getURL());
+                }
+                pidfile.close();
+            }
+            else
+            {
+                SAL_WARN("desktop.app", "cannot open pidfile " << pidfile.getURL() << rc);
             }
         }
+        else
+        {
+            SAL_WARN("desktop.app", "cannot get pidfile URL from path" << pidfileName);
+        }
     }
-    catch ( const css::lang::WrappedTargetException& wte )
+
+    if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
     {
-        css::uno::Exception te;
-        wte.TargetException >>= te;
-        FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
+        // Ensure that we use not the system file dialogs as
+        // headless mode relies on Application::EnableHeadlessMode()
+        // which does only work for VCL dialogs!!
+        SvtMiscOptions aMiscOptions;
+        pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+        aMiscOptions.SetUseSystemFileDialog( false );
     }
-    catch ( const css::uno::Exception& e )
+
+    pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(true);
+    if ( !pExecGlobals->bRestartRequested )
     {
-        FatalError( MakeStartupErrorMessage(e.Message) );
+        if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
+            (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
+            (!bExistsRecoveryData                                                  ) &&
+            (!bExistsSessionData                                                   ) &&
+            (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))
+        {
+             ShowBackingComponent(this);
+        }
     }
+
     SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
@@ -1540,16 +1515,9 @@ int Desktop::Main()
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
 
-        try
-        {
-            if ( xDesktop.is() )
-                xDesktop->addTerminateListener( new RequestHandlerController );
-            SetSplashScreenProgress(100);
-        }
-        catch ( const css::uno::Exception& e )
-        {
-            FatalError( MakeStartupErrorMessage(e.Message) );
-        }
+        if ( xDesktop.is() )
+            xDesktop->addTerminateListener( new RequestHandlerController );
+        SetSplashScreenProgress(100);
 
         // FIXME: move this somewhere sensible.
 #if HAVE_FEATURE_OPENCL
@@ -1578,55 +1546,23 @@ int Desktop::Main()
         }
 
         // call Application::Execute to process messages in vcl message loop
-#ifndef IOS
-        try
-#endif
-        {
 #if HAVE_FEATURE_JAVA
-            // The JavaContext contains an interaction handler which is used when
-            // the creation of a Java Virtual Machine fails
-            css::uno::ContextLayer layer2(
-                new svt::JavaContext( css::uno::getCurrentContext() ) );
+        // The JavaContext contains an interaction handler which is used when
+        // the creation of a Java Virtual Machine fails
+        css::uno::ContextLayer layer2(
+            new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
-            // check whether the shutdown is caused by restart just before entering the Execute
-            pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
+        // check whether the shutdown is caused by restart just before entering the Execute
+        pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
                 xRestartManager->isRestartRequested(true);
 
-            if ( !pExecGlobals->bRestartRequested )
-            {
-                // if this run of the office is triggered by restart, some additional actions should be done
-                DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
+        if ( !pExecGlobals->bRestartRequested )
+        {
+            // if this run of the office is triggered by restart, some additional actions should be done
+            DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
-                Execute();
-            }
+            Execute();
         }
-#ifndef IOS
-        catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
-        {
-            RequestHandler::SetDowning();
-            FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
-        }
-        catch(const css::configuration::CorruptedConfigurationException& exAnyCfg)
-        {
-            RequestHandler::SetDowning();
-            FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
-        }
-        catch( const css::uno::Exception& exUNO)
-        {
-            RequestHandler::SetDowning();
-            FatalError( exUNO.Message);
-        }
-        catch( const std::exception& exSTD)
-        {
-            RequestHandler::SetDowning();
-            FatalError(o3tl::runtimeToOUString(exSTD.what()));
-        }
-        catch( ...)
-        {
-            RequestHandler::SetDowning();
-            FatalError( "Caught Unknown Exception: Aborting!");
-        }
-#endif
     }
     else
     {
@@ -1906,33 +1842,33 @@ class ExitTimer : public Timer
 IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
 {
     try {
-        // #i114963#
-        // Enable IPC thread before OpenClients
-        //
-        // This is because it is possible for another client to connect during the OpenClients() call.
-        // This can happen on Windows when document is printed (not opened) and another client wants to print (when printing multiple documents).
-        // If the IPC thread is enabled after OpenClients, then the client will not be processed because the application will exit after printing. i.e RequestHandler::AreRequestsPending() will always return false
-        //
-        // ALSO:
-        //
-        // Multiple clients may request simultaneous connections.
-        // When this server closes down it attempts to recreate the pipe (in RequestHandler::Disable()).
-        // It's possible that the client has a pending connection request.
-        // When the IPC thread is not running, this connection locks (because maPipe.accept()) is never called
-        RequestHandler::SetReady(true);
-        OpenClients();
+    // #i114963#
+    // Enable IPC thread before OpenClients
+    //
+    // This is because it is possible for another client to connect during the OpenClients() call.
+    // This can happen on Windows when document is printed (not opened) and another client wants to print (when printing multiple documents).
+    // If the IPC thread is enabled after OpenClients, then the client will not be processed because the application will exit after printing. i.e RequestHandler::AreRequestsPending() will always return false
+    //
+    // ALSO:
+    //
+    // Multiple clients may request simultaneous connections.
+    // When this server closes down it attempts to recreate the pipe (in RequestHandler::Disable()).
+    // It's possible that the client has a pending connection request.
+    // When the IPC thread is not running, this connection locks (because maPipe.accept()) is never called
+    RequestHandler::SetReady(true);
+    OpenClients();
 
-        CloseSplashScreen();
-        CheckFirstRun( );
+    CloseSplashScreen();
+    CheckFirstRun( );
 #ifdef _WIN32
-        // Registers a COM class factory of the service manager with the windows operating system.
-        Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-        xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
-        xSMgr->createInstance("com.sun.star.comp.ole.EmbedServer");
+    // Registers a COM class factory of the service manager with the windows operating system.
+    Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
+    xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
+    xSMgr->createInstance("com.sun.star.comp.ole.EmbedServer");
 #endif
-        const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
-        if (pExitPostStartup && *pExitPostStartup)
-            new ExitTimer();
+    const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
+    if (pExitPostStartup && *pExitPostStartup)
+        new ExitTimer();
     } catch (const css::uno::Exception &e) {
         Application::Abort( "UNO exception during client open: " + e.Message );
     }
