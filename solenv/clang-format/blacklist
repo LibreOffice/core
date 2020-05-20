@@ -17658,8 +17658,6 @@ winaccessibility/source/service/AccTreeEventListener.cxx
 winaccessibility/source/service/AccWindowEventListener.cxx
 winaccessibility/source/service/ResIDGenerator.cxx
 winaccessibility/source/service/msaaservice_impl.cxx
-writerfilter/inc/dmapper/DomainMapperFactory.hxx
-writerfilter/inc/dmapper/GraphicZOrderHelper.hxx
 writerfilter/inc/dmapper/resourcemodel.hxx
 writerfilter/inc/ooxml/OOXMLDocument.hxx
 writerfilter/inc/ooxml/QNameToString.hxx
@@ -17691,8 +17689,6 @@ writerfilter/source/dmapper/GraphicHelpers.cxx
 writerfilter/source/dmapper/GraphicHelpers.hxx
 writerfilter/source/dmapper/GraphicImport.cxx
 writerfilter/source/dmapper/GraphicImport.hxx
-writerfilter/source/dmapper/LatentStyleHandler.cxx
-writerfilter/source/dmapper/LatentStyleHandler.hxx
 writerfilter/source/dmapper/LoggedResources.cxx
 writerfilter/source/dmapper/LoggedResources.hxx
 writerfilter/source/dmapper/MeasureHandler.cxx
@@ -17715,17 +17711,12 @@ writerfilter/source/dmapper/SectionColumnHandler.cxx
 writerfilter/source/dmapper/SectionColumnHandler.hxx
 writerfilter/source/dmapper/SettingsTable.cxx
 writerfilter/source/dmapper/SettingsTable.hxx
-writerfilter/source/dmapper/SmartTagHandler.cxx
-writerfilter/source/dmapper/SmartTagHandler.hxx
 writerfilter/source/dmapper/StyleSheetTable.cxx
 writerfilter/source/dmapper/StyleSheetTable.hxx
 writerfilter/source/dmapper/TDefTableHandler.cxx
 writerfilter/source/dmapper/TDefTableHandler.hxx
 writerfilter/source/dmapper/TableData.hxx
-writerfilter/source/dmapper/TableManager.cxx
 writerfilter/source/dmapper/TableManager.hxx
-writerfilter/source/dmapper/TablePositionHandler.cxx
-writerfilter/source/dmapper/TablePositionHandler.hxx
 writerfilter/source/dmapper/TablePropertiesHandler.cxx
 writerfilter/source/dmapper/TablePropertiesHandler.hxx
 writerfilter/source/dmapper/TagLogger.cxx
@@ -17740,7 +17731,6 @@ writerfilter/source/dmapper/TrackChangesHandler.cxx
 writerfilter/source/dmapper/TrackChangesHandler.hxx
 writerfilter/source/dmapper/WrapPolygonHandler.cxx
 writerfilter/source/dmapper/WrapPolygonHandler.hxx
-writerfilter/source/dmapper/domainmapperfactory.cxx
 writerfilter/source/dmapper/util.cxx
 writerfilter/source/dmapper/util.hxx
 writerfilter/source/ooxml/Handler.cxx

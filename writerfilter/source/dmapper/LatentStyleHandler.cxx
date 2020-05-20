@@ -12,11 +12,10 @@
 
 namespace writerfilter::dmapper
 {
-
 using namespace ::com::sun::star;
 
-LatentStyleHandler::LatentStyleHandler() :
-    LoggedProperties("LatentStyleHandler")
+LatentStyleHandler::LatentStyleHandler()
+    : LoggedProperties("LatentStyleHandler")
 {
 }
 
@@ -28,30 +27,30 @@ void LatentStyleHandler::lcl_attribute(Id nId, Value& rVal)
     bool bFound = true;
     switch (nId)
     {
-    case NS_ooxml::LN_CT_LsdException_name:
-        aValue.Name = "name";
-        break;
-    case NS_ooxml::LN_CT_LsdException_locked:
-        aValue.Name = "locked";
-        break;
-    case NS_ooxml::LN_CT_LsdException_uiPriority:
-        aValue.Name = "uiPriority";
-        break;
-    case NS_ooxml::LN_CT_LsdException_semiHidden:
-        aValue.Name = "semiHidden";
-        break;
-    case NS_ooxml::LN_CT_LsdException_unhideWhenUsed:
-        aValue.Name = "unhideWhenUsed";
-        break;
-    case NS_ooxml::LN_CT_LsdException_qFormat:
-        aValue.Name = "qFormat";
-        break;
-    default:
-        bFound = false;
+        case NS_ooxml::LN_CT_LsdException_name:
+            aValue.Name = "name";
+            break;
+        case NS_ooxml::LN_CT_LsdException_locked:
+            aValue.Name = "locked";
+            break;
+        case NS_ooxml::LN_CT_LsdException_uiPriority:
+            aValue.Name = "uiPriority";
+            break;
+        case NS_ooxml::LN_CT_LsdException_semiHidden:
+            aValue.Name = "semiHidden";
+            break;
+        case NS_ooxml::LN_CT_LsdException_unhideWhenUsed:
+            aValue.Name = "unhideWhenUsed";
+            break;
+        case NS_ooxml::LN_CT_LsdException_qFormat:
+            aValue.Name = "qFormat";
+            break;
+        default:
+            bFound = false;
 #ifdef DBG_UTIL
-        TagLogger::getInstance().element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
-        break;
+            break;
     }
     if (bFound)
     {
@@ -60,10 +59,7 @@ void LatentStyleHandler::lcl_attribute(Id nId, Value& rVal)
     }
 }
 
-
-void LatentStyleHandler::lcl_sprm(Sprm& /*rSprm*/)
-{
-}
+void LatentStyleHandler::lcl_sprm(Sprm& /*rSprm*/) {}
 
 const std::vector<beans::PropertyValue>& LatentStyleHandler::getAttributes() const
 {

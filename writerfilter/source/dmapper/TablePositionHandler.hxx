@@ -29,10 +29,8 @@ namespace writerfilter
 {
 namespace dmapper
 {
-
 /// Handler for floating table positioning
-class TablePositionHandler
-    : public LoggedProperties
+class TablePositionHandler : public LoggedProperties
 {
     OUString m_aVertAnchor;
     OUString m_aYSpec;
@@ -50,47 +48,17 @@ class TablePositionHandler
     void lcl_sprm(Sprm& sprm) override;
 
 public:
-    sal_Int32 getY() const
-    {
-        return m_nY;
-    }
-    sal_Int32 getX() const
-    {
-        return m_nX;
-    }
-    sal_Int32 getLeftFromText() const
-    {
-        return m_nLeftFromText;
-    }
-    sal_Int32 getRightFromText() const
-    {
-        return m_nRightFromText;
-    }
-    sal_Int32 getTopFromText() const
-    {
-        return m_nTopFromText;
-    }
-    sal_Int32 getBottomFromText() const
-    {
-        return m_nBottomFromText;
-    }
+    sal_Int32 getY() const { return m_nY; }
+    sal_Int32 getX() const { return m_nX; }
+    sal_Int32 getLeftFromText() const { return m_nLeftFromText; }
+    sal_Int32 getRightFromText() const { return m_nRightFromText; }
+    sal_Int32 getTopFromText() const { return m_nTopFromText; }
+    sal_Int32 getBottomFromText() const { return m_nBottomFromText; }
 
-    const OUString& getVertAnchor() const
-    {
-        return m_aVertAnchor;
-    }
-    const OUString& getYSpec() const
-    {
-        return m_aYSpec;
-    }
-    const OUString& getHorzAnchor() const
-    {
-        return m_aHorzAnchor;
-    }
-    const OUString& getXSpec() const
-    {
-        return m_aXSpec;
-    }
+    const OUString& getVertAnchor() const { return m_aVertAnchor; }
+    const OUString& getYSpec() const { return m_aYSpec; }
+    const OUString& getHorzAnchor() const { return m_aHorzAnchor; }
+    const OUString& getXSpec() const { return m_aXSpec; }
 
     TablePositionHandler();
     ~TablePositionHandler() override;
@@ -103,7 +71,7 @@ public:
       */
     css::uno::Sequence<css::beans::PropertyValue> getTablePosition() const;
 
-    bool operator== (const TablePositionHandler& rHandler) const;
+    bool operator==(const TablePositionHandler& rHandler) const;
 };
 
 using TablePositionHandlerPtr = tools::SvRef<TablePositionHandler>;
