@@ -98,13 +98,12 @@ enum class SvXMLExportFlags {
     FONTDECLS                = 0x0080,
     EMBEDDED                 = 0x0100,
     PRETTY                   = 0x0400,
-    SAVEBACKWARDCOMPATIBLE   = 0x0800,
     OASIS                    = 0x8000,
-    ALL                      = 0x0dff
+    ALL                      = 0x04ff
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x8dff> {};
+    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x84ff> {};
 }
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
