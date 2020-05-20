@@ -923,16 +923,6 @@ public:
 
     virtual void set_mru_entries(const OUString&) override;
 
-    virtual void set_selection_mode(SelectionMode eMode) override;
-
-    virtual void scroll_to_row(int nRow) override;
-
-    virtual void select(int pos) override;
-
-    virtual void unselect(int pos) override;
-
-    virtual std::vector<int> get_selected_rows() const override;
-
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
     virtual ~SalInstanceComboBoxWithoutEdit() override;
@@ -1002,16 +992,6 @@ public:
     virtual OUString get_mru_entries() const override;
 
     virtual void set_mru_entries(const OUString& rEntries) override;
-
-    virtual void set_selection_mode(SelectionMode eMode) override;
-
-    virtual void scroll_to_row(int nRow) override;
-
-    virtual void select(int pos) override;
-
-    virtual void unselect(int pos) override;
-
-    virtual std::vector<int> get_selected_rows() const override;
 
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
