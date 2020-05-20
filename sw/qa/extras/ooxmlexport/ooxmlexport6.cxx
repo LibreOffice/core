@@ -23,6 +23,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -952,6 +953,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
     // check no explicit pctHeight has been exported, all we care
     // about at this point is that it's not 255000
     assertXPath(pXmlDoc, "//wp14:pctHeight", 0);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf107119, "tdf107119.docx")
+{
+    uno::Reference<beans::XPropertySet> XPropsWrap(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(XPropsWrap, "Surround"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
