@@ -874,11 +874,11 @@ void HeaderBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         ImplDrawItem(rRenderContext, i, (i == nCurItemPos), &rRect);
 }
 
-void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
                       DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 

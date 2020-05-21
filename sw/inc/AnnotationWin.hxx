@@ -176,7 +176,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-        virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
+        virtual void    Draw(OutputDevice* pDev, const Point&, DrawFlags) override;
         virtual void KeyInput(const KeyEvent& rKeyEvt) override;
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
         virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;

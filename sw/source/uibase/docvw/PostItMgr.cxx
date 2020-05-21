@@ -963,8 +963,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
         if (!pPostIt)
             continue;
         Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
-        Size aSize(pPostIt->PixelToLogic(pPostIt->GetSizePixel()));
-        pPostIt->Draw(pOutDev, aPoint, aSize, DrawFlags::NONE);
+        pPostIt->Draw(pOutDev, aPoint, DrawFlags::NONE);
     }
 }
 

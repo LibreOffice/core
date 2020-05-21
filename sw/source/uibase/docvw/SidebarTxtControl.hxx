@@ -67,7 +67,7 @@ class SidebarTextControl : public Control
 
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-        virtual void Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;
+        virtual void Draw(OutputDevice* pDev, const Point&, DrawFlags) override;
 };
 
 } // end of namespace sw::sidebarwindows

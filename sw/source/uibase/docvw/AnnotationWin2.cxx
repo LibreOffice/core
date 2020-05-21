@@ -257,52 +257,52 @@ void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint
     mpSidebarTextControl->Pop();
 }
 
-void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, DrawFlags nInFlags)
+void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFlags)
 {
+    Size aSz = pDev->PixelToLogic(GetSizePixel());
+
     if (mpMetadataAuthor->IsVisible() )
     {
         pDev->SetFillColor(mColorDark);
         pDev->SetLineColor();
-        pDev->DrawRect( tools::Rectangle( rPt, rSz ) );
+        pDev->DrawRect( tools::Rectangle( rPt, aSz ) );
     }
 
     if (mpMetadataAuthor->IsVisible())
     {
         vcl::Font aOrigFont(mpMetadataAuthor->GetControlFont());
-        Size aSize(PixelToLogic(mpMetadataAuthor->GetSizePixel()));
         Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
         aPos += rPt;
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataAuthor->SetControlFont( aFont );
-        mpMetadataAuthor->Draw(pDev, aPos, aSize, nInFlags);
+        mpMetadataAuthor->Draw(pDev, aPos, nInFlags);
         mpMetadataAuthor->SetControlFont( aOrigFont );
     }
 
     if (mpMetadataDate->IsVisible())
     {
         vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-        Size aSize(PixelToLogic(mpMetadataDate->GetSizePixel()));
         Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
         aPos += rPt;
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataDate->SetControlFont( aFont );
-        mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
         mpMetadataDate->SetControlFont( aOrigFont );
     }
 
     if (mpMetadataResolved->IsVisible())
     {
         vcl::Font aOrigFont(mpMetadataResolved->GetControlFont());
-        Size aSize(PixelToLogic(mpMetadataResolved->GetSizePixel()));
         Point aPos(PixelToLogic(mpMetadataResolved->GetPosPixel()));
         aPos += rPt;
         vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataResolved->SetControlFont( aFont );
-        mpMetadataResolved->Draw(pDev, aPos, aSize, nInFlags);
         mpMetadataResolved->SetControlFont( aOrigFont );
     }
 
-    mpSidebarTextControl->Draw(pDev, rPt, rSz, nInFlags);
+    Size aOrigSize(mpSidebarTextControl->GetSizePixel());
+    mpSidebarTextControl->SetSizePixel(aSz);
+    mpSidebarTextControl->Draw(pDev, rPt, nInFlags);
+    mpSidebarTextControl->SetSizePixel(aOrigSize);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
@@ -322,7 +322,6 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz
     Color aOrigBg( mpMetadataDate->GetControlBackground() );
     OUString sOrigText(mpMetadataDate->GetText());
 
-    Size aSize(PixelToLogic(mpMenuButton->GetSizePixel()));
     Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
     aPos += rPt;
 
@@ -330,12 +329,14 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz
     mpMetadataDate->SetControlFont( aFont );
     mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
     mpMetadataDate->SetText("...");
-    mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
+    aOrigSize = mpMetadataDate->GetSizePixel();
+    mpMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());
+    mpMetadataDate->Draw(pDev, aPos, nInFlags);
+    mpMetadataDate->SetSizePixel(aOrigSize);
 
     mpMetadataDate->SetText(sOrigText);
     mpMetadataDate->SetControlFont( aOrigFont );
     mpMetadataDate->SetControlBackground( aOrigBg );
-
 }
 
 void SwAnnotationWin::KeyInput(const KeyEvent& rKeyEvent)

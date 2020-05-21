@@ -64,12 +64,8 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY )
         if (pTabPage && pDev)
         {
             ::Point aPos( nX, nY );
-            ::Size  aSize = pTabPage->GetSizePixel();
-
             aPos  = pDev->PixelToLogic( aPos );
-            aSize = pDev->PixelToLogic( aSize );
-
-            pTabPage->Draw( pDev, aPos, aSize, DrawFlags::NONE );
+            pTabPage->Draw( pDev, aPos, DrawFlags::NONE );
         }
     }
 

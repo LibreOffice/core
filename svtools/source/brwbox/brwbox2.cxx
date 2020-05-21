@@ -631,14 +631,13 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
 }
 
-
-void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
+void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
 {
     // we need pixel coordinates
-    Size aRealSize = pDev->LogicToPixel(rSize);
+    Size aRealSize = GetSizePixel();
     Point aRealPos = pDev->LogicToPixel(rPos);
 
-    if ((rSize.Width() < 3) || (rSize.Height() < 3))
+    if ((aRealSize.Width() < 3) || (aRealSize.Height() < 3))
         // we want to have two pixels frame ...
         return;
 
@@ -712,9 +711,11 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
         // the header's draw expects logic coordinates, again
         aHeaderPos = pDev->PixelToLogic(aHeaderPos);
-        aHeaderSize = pDev->PixelToLogic(aHeaderSize);
 
-        pBar->Draw(pDev, aHeaderPos, aHeaderSize, nFlags);
+        Size aOrigSize(pBar->GetSizePixel());
+        pBar->SetSizePixel(aHeaderSize);
+        pBar->Draw(pDev, aHeaderPos, nFlags);
+        pBar->SetSizePixel(aOrigSize);
 
         // draw the "upper left cell" (the intersection between the header bar and the handle column)
         if (pFirstCol && (pFirstCol->GetId() == 0) && (pFirstCol->Width() > 4))
@@ -770,7 +771,6 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
     pDev->Pop();
 }
-
 
 void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice)
 {
