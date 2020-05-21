@@ -1499,8 +1499,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     }
 
     // insert the default formats in the format map, from root parent to system language
-    typedef ::std::map< sal_uInt16, sal_uInt16 > XclReuseMap;
-    XclReuseMap aReuseMap;
+    std::map< sal_uInt16, sal_uInt16 > aReuseMap;
     for( XclBuiltInVec::reverse_iterator aVIt = aBuiltInVec.rbegin(), aVEnd = aBuiltInVec.rend(); aVIt != aVEnd; ++aVIt )
     {
         // put LANGUAGE_SYSTEM for all entries in default table

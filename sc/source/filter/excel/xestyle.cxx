@@ -294,13 +294,13 @@ private:
 private:
     typedef std::vector< std::unique_ptr<XclListColor> >     XclListColorList;
     typedef std::shared_ptr< XclListColorList > XclListColorListRef;
-    typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
-    typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
 
     const XclDefaultPalette& mrDefPal;      /// The default palette for the current BIFF version.
     XclListColorListRef mxColorList;        /// Working color list.
-    XclColorIdDataVec   maColorIdDataVec;   /// Data of all CIDs.
-    XclPaletteColorVec  maPalette;          /// Contains resulting colors to export.
+    std::vector< XclColorIdData >
+                        maColorIdDataVec;   /// Data of all CIDs.
+    std::vector< XclPaletteColor >
+                        maPalette;          /// Contains resulting colors to export.
     sal_uInt32          mnLastIdx;          /// Last insertion index for search opt.
 };
 

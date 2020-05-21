@@ -52,13 +52,12 @@ struct SwRedlineDataParent
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
-typedef std::vector<std::unique_ptr<SwRedlineDataChild>> SwRedlineDataChildArr;
-
 class SW_DLLPUBLIC SwRedlineAcceptDlg final
 {
     std::shared_ptr<weld::Window> m_xParentDlg;
     std::vector<std::unique_ptr<SwRedlineDataParent>> m_RedlineParents;
-    SwRedlineDataChildArr   m_RedlineChildren;
+    std::vector<std::unique_ptr<SwRedlineDataChild>>
+                            m_RedlineChildren;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
     Timer                   m_aSelectTimer;
     OUString                m_sInserted;

@@ -238,8 +238,7 @@ namespace sw
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
         SwPosition const*const pCpyStt = &rCpyPam;
 
-        typedef std::vector< const ::sw::mark::IMark* > mark_vector_t;
-        mark_vector_t vMarksToCopy;
+        std::vector< const ::sw::mark::IMark* > vMarksToCopy;
         for ( IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getAllMarksBegin();
               ppMark != pSrcMarkAccess->getAllMarksEnd();
               ++ppMark )

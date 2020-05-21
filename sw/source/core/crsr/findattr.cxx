@@ -49,8 +49,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-typedef o3tl::sorted_vector<SwFormat*> SwpFormats;
-
 // Special case for SvxFontItem: only compare the name
 static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 {
@@ -1049,7 +1047,7 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
     bool bFirst = true;
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwContentNode * pNode;
-    SwpFormats aFormatArr;
+    o3tl::sorted_vector<SwFormat*> aFormatArr;
 
     // check which text/char attributes are searched
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );

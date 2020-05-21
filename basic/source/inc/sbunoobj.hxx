@@ -359,16 +359,11 @@ public:
     virtual void Clear() override;
 };
 
-typedef std::unordered_map< OUString, css::uno::Any > VBAConstantsHash;
-
-typedef std::vector< OUString > VBAConstantsVector;
-
 class VBAConstantHelper
 {
 private:
-
-    VBAConstantsVector aConstCache;
-    VBAConstantsHash aConstHash;
+    std::vector< OUString > aConstCache;
+    std::unordered_map< OUString, css::uno::Any > aConstHash;
     bool isInited;
     VBAConstantHelper():isInited( false ) {}
     VBAConstantHelper(const VBAConstantHelper&) = delete;

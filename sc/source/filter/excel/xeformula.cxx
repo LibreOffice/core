@@ -100,7 +100,6 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
 }
 
 typedef std::shared_ptr< XclExpOperandList > XclExpOperandListRef;
-typedef std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
 /** Encapsulates all data needed for a call to an external function (macro, add-in). */
 struct XclExpExtFuncData
@@ -270,7 +269,8 @@ struct XclExpCompData
 
     ScfUInt8Vec         maTokVec;           /// Byte vector containing token data.
     ScfUInt8Vec         maExtDataVec;       /// Byte vector containing extended data (arrays, stacked NLRs).
-    XclExpOperandListVector maOpListVec;    /// Formula structure, maps operators to their operands.
+    std::vector< XclExpOperandListRef >
+                        maOpListVec;    /// Formula structure, maps operators to their operands.
     ScfUInt16Vec        maOpPosStack;       /// Stack with positions of operand tokens waiting for an operator.
     bool                mbStopAtSep;        /// True = Stop subexpression creation at an ocSep token.
     bool                mbVolatile;         /// True = Formula contains volatile function.
@@ -454,12 +454,12 @@ private:
 private:
     typedef std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
     typedef std::shared_ptr< XclExpCompData >             XclExpCompDataRef;
-    typedef std::vector< XclExpCompDataRef >              XclExpCompDataVector;
 
     XclExpCompConfigMap maCfgMap;       /// Compiler configuration map for all formula types.
     XclFunctionProvider maFuncProv;     /// Excel function data provider.
     XclExpCompDataRef   mxData;         /// Working data for current formula.
-    XclExpCompDataVector maDataStack;   /// Stack for working data, when compiler is called recursively.
+    std::vector< XclExpCompDataRef >
+                        maDataStack;   /// Stack for working data, when compiler is called recursively.
     const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
     const SCCOL         mnMaxAbsCol;    /// Maximum column index.
     const SCROW         mnMaxAbsRow;    /// Maximum row index.

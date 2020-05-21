@@ -122,10 +122,10 @@ private:
         explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( ExcTabBufFlags::NONE ) {}
     };
 
-    typedef ::std::vector< XclExpTabInfoEntry > XclExpTabInfoVec;
     typedef ::std::vector< SCTAB >              ScTabVec;
 
-    XclExpTabInfoVec    maTabInfoVec;       /// Array of Calc sheet index information.
+    std::vector< XclExpTabInfoEntry >
+                        maTabInfoVec;       /// Array of Calc sheet index information.
 
     SCTAB               mnScCnt;            /// Count of Calc sheets.
     sal_uInt16          mnXclCnt;           /// Count of Excel sheets to be exported.

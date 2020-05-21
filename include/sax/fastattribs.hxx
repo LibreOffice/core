@@ -47,8 +47,6 @@ struct UnknownAttribute
     void FillAttribute( css::xml::Attribute* pAttrib ) const;
 };
 
-typedef std::vector< UnknownAttribute > UnknownAttributeList;
-
 /// A native C++ interface to tokenisation
 class SAX_DLLPUBLIC FastTokenHandlerBase :
         public cppu::WeakImplHelper< css::xml::sax::XFastTokenHandler >
@@ -200,7 +198,7 @@ private:
     // maAttributeValues[0] == 0
     std::vector< sal_Int32 > maAttributeValues;
     std::vector< sal_Int32 > maAttributeTokens;
-    UnknownAttributeList maUnknownAttributes;
+    std::vector< UnknownAttribute > maUnknownAttributes;
     FastTokenHandlerBase * mpTokenHandler;
 };
 

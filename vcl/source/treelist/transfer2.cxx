@@ -314,12 +314,9 @@ struct TDataCntnrEntry_Impl
 
 }
 
-typedef ::std::vector< TDataCntnrEntry_Impl > TDataCntnrEntryList;
-
-
 struct TransferDataContainer_Impl
 {
-    TDataCntnrEntryList aFmtList;
+    std::vector< TDataCntnrEntry_Impl > aFmtList;
     Link<sal_Int8,void> aFinshedLnk;
     std::unique_ptr<INetBookmark> pBookmk;
 

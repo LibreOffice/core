@@ -138,8 +138,6 @@ private:
 
     int getExtensionLayer(bool shared) const;
 
-    typedef o3tl::sorted_vector< RootAccess * > WeakRootSet;
-
     typedef
         config_map<
             css::uno::Reference<
@@ -153,7 +151,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >
         context_;
     Data data_;
-    WeakRootSet roots_;
+    o3tl::sorted_vector< RootAccess * > roots_;
     ExternalServices externalServices_;
     rtl::Reference< WriteThread > writeThread_;
     int sharedExtensionLayer_;

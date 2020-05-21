@@ -1067,7 +1067,6 @@ private:
 //            Storage-Reader
 
 typedef std::set<WW8_CP> cp_set;
-typedef std::vector<WW8_CP> cp_vector;
 
 class SwWW8ImplReader
 {
@@ -1376,7 +1375,7 @@ private:
     bool m_bCareLastParaEndInToc;
     cp_set m_aTOXEndCps;
 
-    cp_vector m_aEndParaPos;
+    std::vector<WW8_CP> m_aEndParaPos;
     WW8_CP m_aCurrAttrCP;
     bool m_bOnLoadingMain:1;
     bool m_bNotifyMacroEventRead:1;

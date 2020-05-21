@@ -515,15 +515,14 @@ private:
     sal_uInt16          ReadRawData( void* pData, sal_uInt16 nBytes );
 
 private:
-    typedef ::std::vector< XclImpStreamPos > XclImpStreamPosStack;
-
     SvStream&           mrStrm;         /// Reference to the system input stream.
     const XclImpRoot&   mrRoot;         /// Filter root data.
 
     XclImpDecrypterRef  mxDecrypter;    /// Provides methods to decrypt data.
 
     XclImpStreamPos     maFirstRec;     /// Start position of current record.
-    XclImpStreamPosStack maPosStack;    /// Stack for record positions.
+    std::vector< XclImpStreamPos >
+                        maPosStack;    /// Stack for record positions.
 
     XclImpStreamPos     maGlobPos;      /// User defined position elsewhere in stream.
     sal_uInt16          mnGlobRecId;    /// Record ID for user defined position.

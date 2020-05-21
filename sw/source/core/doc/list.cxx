@@ -75,8 +75,7 @@ class SwListImpl
             tListTreeForRange(std::unique_ptr<SwNodeNum> p1, std::unique_ptr<SwNodeNum> p2, std::unique_ptr<SwPaM> p3)
                 : pRoot(std::move(p1)), pRootRLHidden(std::move(p2)), pSection(std::move(p3)) {}
         };
-        typedef std::vector<tListTreeForRange> tListTrees;
-        tListTrees maListTrees;
+        std::vector<tListTreeForRange> maListTrees;
 
         int mnMarkedListLevel;
 

@@ -1605,11 +1605,8 @@ struct IgnoreCaseCompare
 void XclImpXFBuffer::CreateUserStyles()
 {
     // calculate final names of all styles
-    typedef ::std::map< OUString, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
-    typedef ::std::vector< XclImpStyle* > XclImpStyleVector;
-
-    CellStyleNameMap aCellStyles;
-    XclImpStyleVector aConflictNameStyles;
+    std::map< OUString, XclImpStyle*, IgnoreCaseCompare > aCellStyles;
+    std::vector< XclImpStyle* > aConflictNameStyles;
 
     /*  First, reserve style names that are built-in in Calc. This causes that
         imported cell styles get different unused names and thus do not try to

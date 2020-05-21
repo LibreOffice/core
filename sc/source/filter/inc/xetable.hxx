@@ -264,8 +264,7 @@ private:
     XclExpTableopRef    TryCreate( const ScAddress& rScPos, const XclMultipleOpRefs& rRefs );
 
 private:
-    typedef XclExpRecordList< XclExpTableop > XclExpTableopList;
-    XclExpTableopList   maTableopList;  /// List of all TABLEOP records.
+    XclExpRecordList< XclExpTableop > maTableopList;  /// List of all TABLEOP records.
 };
 
 // Cell records
@@ -590,10 +589,10 @@ private:
         bool                mbHidden;           /// true = Group in this level is hidden.
         explicit     XclExpLevelInfo() : mnScEndPos( 0 ), mbHidden( false ) {}
     };
-    typedef ::std::vector< XclExpLevelInfo > XclExpLevelInfoVec;
 
     const ScOutlineArray* mpScOLArray;      /// Pointer to Calc outline array.
-    XclExpLevelInfoVec  maLevelInfos;       /// Info for current row and all levels.
+    std::vector< XclExpLevelInfo >
+                        maLevelInfos;       /// Info for current row and all levels.
     sal_uInt8           mnCurrLevel;        /// Highest level of an open group for current position.
     bool                mbCurrCollapse;     /// true = Collapsed group ends at current position.
 };
@@ -883,9 +882,8 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    typedef XclExpRecordList< XclExpCellBase > XclExpCellList;
-
-    XclExpCellList      maCellList;         /// List of cell records for this row.
+    XclExpRecordList< XclExpCellBase >
+                        maCellList;         /// List of cell records for this row.
     sal_uInt32          mnXclRow;           /// Excel row index of this row.
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.

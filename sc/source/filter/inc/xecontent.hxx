@@ -239,9 +239,8 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    typedef XclExpRecordList< XclExpRecord > XclExpCFList;
-
-    XclExpCFList        maCFList;       /// List of CF records.
+    XclExpRecordList< XclExpRecord >
+                        maCFList;       /// List of CF records.
     XclRangeList        maXclRanges;    /// Cell ranges for this conditional format.
     OUString            msSeqRef;       /// OOXML Sequence of References
 };

@@ -742,7 +742,6 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    typedef XclExpRecordList< XclExpChDataFormat > XclExpChDataFormatList;
 
 private:
     XclChSeries         maData;             /// Contents of the CHSERIES record.
@@ -751,7 +750,8 @@ private:
     XclExpChSourceLinkRef mxCategLink;      /// Link data for series category names.
     XclExpChSourceLinkRef mxBubbleLink;     /// Link data for series bubble sizes.
     XclExpChDataFormatRef mxSeriesFmt;      /// CHDATAFORMAT group for series format.
-    XclExpChDataFormatList maPointFmts;     /// CHDATAFORMAT groups for data point formats.
+    XclExpRecordList< XclExpChDataFormat >
+                          maPointFmts;     /// CHDATAFORMAT groups for data point formats.
     XclExpChSerTrendLineRef mxTrendLine;    /// Trend line settings (CHSERTRENDLINE record).
     XclExpChSerErrorBarRef mxErrorBar;      /// Error bar settings (CHSERERRORBAR record).
     sal_uInt16          mnGroupIdx;         /// Chart type group (CHTYPEGROUP group) this series is assigned to.
@@ -925,7 +925,6 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
-    typedef ::std::map<sal_uInt16, std::unique_ptr<XclExpChLineFormat>> XclExpChLineFormatMap;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclExpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
@@ -935,7 +934,8 @@ private:
     XclExpChLegendRef   mxLegend;           /// Chart legend (CHLEGEND group).
     XclExpChDropBarRef  mxUpBar;            /// White dropbars (CHDROPBAR group).
     XclExpChDropBarRef  mxDownBar;          /// Black dropbars (CHDROPBAR group).
-    XclExpChLineFormatMap m_ChartLines;     /// Global line formats (CHCHARTLINE group).
+    std::map<sal_uInt16, std::unique_ptr<XclExpChLineFormat>>
+                        m_ChartLines;     /// Global line formats (CHCHARTLINE group).
 };
 
 typedef rtl::Reference< XclExpChTypeGroup > XclExpChTypeGroupRef;
@@ -1102,8 +1102,6 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    typedef XclExpRecordList< XclExpChTypeGroup > XclExpChTypeGroupList;
-
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
     XclExpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
     XclExpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
@@ -1113,7 +1111,8 @@ private:
     XclExpChTextRef     mxYAxisTitle;       /// The Y axis title (CHTEXT group).
     XclExpChTextRef     mxZAxisTitle;       /// The Z axis title (CHTEXT group).
     XclExpChFrameRef    mxPlotFrame;        /// Plot area (CHPLOTFRAME group).
-    XclExpChTypeGroupList maTypeGroups;     /// Chart type groups (CHTYPEGROUP group).
+    XclExpRecordList< XclExpChTypeGroup >
+                        maTypeGroups;     /// Chart type groups (CHTYPEGROUP group).
 };
 
 typedef std::shared_ptr< XclExpChAxesSet > XclExpChAxesSetRef;
@@ -1150,7 +1149,6 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >  XclExpChSeriesList;
-    typedef XclExpRecordList< XclExpChText >    XclExpChTextList;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclExpChSeriesList  maSeries;           /// List of series data (CHSERIES groups).
@@ -1159,7 +1157,8 @@ private:
     XclExpChAxesSetRef  mxPrimAxesSet;      /// Primary axes set (CHAXESSET group).
     XclExpChAxesSetRef  mxSecnAxesSet;      /// Secondary axes set (CHAXESSET group).
     XclExpChTextRef     mxTitle;            /// Chart title (CHTEXT group).
-    XclExpChTextList    maLabels;           /// Data point labels (CHTEXT groups).
+    XclExpRecordList< XclExpChText >
+                        maLabels;           /// Data point labels (CHTEXT groups).
 };
 
 /** Represents the group of DFF and OBJ records containing all drawing shapes

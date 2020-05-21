@@ -36,8 +36,6 @@ struct TableEdge
     TableEdge() : mnStart(0), mnEnd(0), meState(Empty) {}
 };
 
-typedef std::vector< TableEdge > TableEdgeVector;
-
 class TableEdgeHdl : public SdrHdl
 {
 public:
@@ -61,7 +59,7 @@ protected:
 private:
     bool mbHorizontal;
     sal_Int32 mnMin, mnMax;
-    TableEdgeVector maEdges;
+    std::vector< TableEdge > maEdges;
 };
 
 class TableBorderHdl : public SdrHdl

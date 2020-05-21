@@ -175,7 +175,6 @@ private:
 
     /** Stores cell range address and settings of a table operation. */
     typedef std::pair< ScRange, DataTableModel > TableOperation;
-    typedef ::std::vector< TableOperation > TableOperationVector;
 
     /** Stores information about a range of rows with equal cell formatting. */
     struct XfIdRowRange
@@ -189,7 +188,6 @@ private:
     };
 
     typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
-    typedef ::std::map< XfIdNumFmtKey, ScRangeList > XfIdRangeListMap;
 
     struct RowRangeStyle
     {
@@ -221,13 +219,15 @@ private:
     ColStyles           maStylesPerColumn;      /// Stores cell styles by column ( in row ranges )
     CellBlockBuffer     maCellBlocks;           /// Manages all open cell blocks.
     ArrayFormulaVector  maArrayFormulas;        /// All array formulas in the sheet.
-    TableOperationVector maTableOperations;      /// All table operations in the sheet.
+    std::vector< TableOperation >
+                        maTableOperations;      /// All table operations in the sheet.
     ::std::map< BinAddress, ApiTokenSequence >
                         maSharedFormulas;       /// Maps shared formula base address to defined name token index.
     ScAddress           maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
     ScAddress           maSharedBaseAddr;       /// Base address of the pending shared formula.
     XfIdRowRange        maXfIdRowRange;         /// Cached XF identifier for a range of rows.
-    XfIdRangeListMap    maXfIdRangeLists;       /// Collected XF identifiers for cell rangelists.
+    std::map< XfIdNumFmtKey, ScRangeList >
+                        maXfIdRangeLists;       /// Collected XF identifiers for cell rangelists.
     MergedRangeVector   maMergedRanges;         /// Merged cell ranges.
     MergedRangeVector   maCenterFillRanges;     /// Merged cell ranges from 'center across' or 'fill' alignment.
     bool                mbPendingSharedFmla;    /// True = maSharedFmlaAddr and maSharedBaseAddr are valid.

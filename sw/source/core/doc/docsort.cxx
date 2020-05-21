@@ -61,9 +61,6 @@ LocaleDataWrapper*  SwSortElement::pLclData = nullptr;
 
 // List of all sorted elements
 
-typedef std::multiset<SwSortTextElement> SwSortTextElements;
-typedef std::multiset<SwSortBoxElement> SwSortBoxElements;
-
 /// Construct a SortElement for the Sort
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox const * pFltBx )
@@ -372,7 +369,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     SwNodeIndex aStart(pStart->nNode);
     SwSortElement::Init( this, rOpt );
-    SwSortTextElements aSortSet;
+    std::multiset<SwSortTextElement> aSortSet;
     while( aStart <= pEnd->nNode )
     {
         // Iterate over a selected range
@@ -551,7 +548,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // Sort SortList by Key
     SwSortElement::Init( this, rOpt, &aFlatBox );
-    SwSortBoxElements aSortList;
+    std::multiset<SwSortBoxElement> aSortList;
 
     // When sorting, do not include the first row if the HeaderLine is repeated
     for( sal_uInt16 i = static_cast<sal_uInt16>(nStart); i < nCount; ++i)

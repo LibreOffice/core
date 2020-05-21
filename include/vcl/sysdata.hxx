@@ -222,12 +222,10 @@ struct SystemFontData
 
 #endif // ENABLE_CAIRO_CANVAS
 
-typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
-
 struct SystemTextLayoutData
 {
-    SystemGlyphDataVector rGlyphData;    // glyph data
-    int                   orientation;   // Text orientation
+    std::vector<SystemGlyphData> rGlyphData;    // glyph data
+    int orientation;   // Text orientation
 };
 
 #endif // INCLUDED_VCL_SYSDATA_HXX

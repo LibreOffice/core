@@ -100,10 +100,10 @@ public:
 
 private:
     typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
-    typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
 
     std::vector< XclExpStringRef > maStringVector;   /// List of unique strings (in SST ID order).
-    XclExpHashTab       maHashTab;      /// Hashed table that manages string pointers.
+    std::vector< XclExpHashVec >
+                        maHashTab;      /// Hashed table that manages string pointers.
     sal_uInt32          mnTotal;        /// Total count of strings (including doubles).
     sal_uInt32          mnSize;         /// Size of the SST (count of unique strings).
 };

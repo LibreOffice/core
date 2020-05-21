@@ -233,8 +233,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 
         if( !bFormatSet )
         {
-            typedef std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
-            tNumberformatFrequency aKeyMap;
+            std::map< sal_Int32, sal_Int32 > aKeyMap;
             bool bNumberFormatKeyFoundViaAttachedData = false;
 
             try

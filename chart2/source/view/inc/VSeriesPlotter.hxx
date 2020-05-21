@@ -61,8 +61,7 @@ public:
 
 private:
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex;
-    typedef std::map< tFullAxisIndex, sal_Int32 > tNumberFormatMap;
-    tNumberFormatMap m_aNumberFormatMap;
+    std::map< tFullAxisIndex, sal_Int32 > m_aNumberFormatMap;
 };
 
 /**
