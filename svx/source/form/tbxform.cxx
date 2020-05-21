@@ -23,9 +23,9 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
-#include <labelitemwindow.hxx>
 
 #include <svx/dialmgr.hxx>
+#include <svx/labelitemwindow.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 #include <tbxform.hxx>
@@ -155,46 +155,6 @@ SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 
 SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 {
-}
-
-LabelItemWindow::LabelItemWindow(vcl::Window *pParent, const OUString& rLabel)
-    : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
-    , m_xLabel(m_xBuilder->weld_label("label"))
-{
-    m_xLabel->set_label(rLabel);
-
-    SetOptimalSize();
-
-    m_xLabel->set_toolbar_background();
-}
-
-void LabelItemWindow::SetOptimalSize()
-{
-    Size aSize(m_xLabel->get_preferred_size());
-    aSize.AdjustWidth(12);
-
-    SetSizePixel(aSize);
-}
-
-void LabelItemWindow::set_label(const OUString& rLabel)
-{
-    m_xLabel->set_label(rLabel);
-}
-
-OUString LabelItemWindow::get_label() const
-{
-    return m_xLabel->get_label();
-}
-
-void LabelItemWindow::dispose()
-{
-    m_xLabel.reset();
-    InterimItemWindow::dispose();
-}
-
-LabelItemWindow::~LabelItemWindow()
-{
-    disposeOnce();
 }
 
 VclPtr<InterimItemWindow> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
