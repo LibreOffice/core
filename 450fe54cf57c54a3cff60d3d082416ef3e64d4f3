@@ -16,6 +16,24 @@
       "revId": "450fe54cf57c54a3cff60d3d082416ef3e64d4f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efc7d67e_a602f74e",
+        "filename": "vcl/unx/generic/glyphs/freetype_glyphcache.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-21T13:40:48Z",
+      "side": 1,
+      "message": "It appears not to be a refcount on FreetypeFontInfo itself in the sense that this FreetypeFontInfo is deleted when the refcount hits zero, its apparently a refcount on the maFaceFT and mpFontFile resource that it hands out",
+      "parentUuid": "1c9d9c3b_6afe390d",
+      "revId": "450fe54cf57c54a3cff60d3d082416ef3e64d4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
