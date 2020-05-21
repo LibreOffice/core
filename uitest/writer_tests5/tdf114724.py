@@ -25,6 +25,10 @@ class tdf114724(UITestCase):
         xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
         xNavigatorPanel.executeAction("ROOT", tuple())
 
+        xContentTree = xNavigatorPanel.getChild('contenttree')
+        #Check the content has changed
+        self.assertEqual(len(xContentTree.getChildren()), 1)
+
         xWriterEdit.executeAction("FOCUS", tuple())
         time.sleep(2)
         self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
