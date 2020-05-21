@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_htmlexport, \
     sal \
     sfx \
     sot \
+    svl \
     svt \
     sw \
     test \

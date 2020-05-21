@@ -207,7 +207,6 @@ struct SwHTMLTextCollOutputInfo
     bool bParaPossible;         // a </P> may be output additionally
     bool bOutPara;              // a </P> is supposed to be output
     bool bOutDiv;               // write a </DIV>
-    bool bOutLi = false;        // write a </li>
 
     SwHTMLTextCollOutputInfo() :
         bInNumBulList( false ),
@@ -763,14 +762,8 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         html.start(OOO_STRING_SVTOOLS_HTML_li);
         if( USHRT_MAX != nNumStart )
             html.attribute(OOO_STRING_SVTOOLS_HTML_O_value, OString::number(nNumStart));
-        if (rHWrt.mbXHTML)
-        {
-            rWrt.Strm().WriteCharPtr(">");
-            rInfo.bOutLi = true;
-        }
-        else
-            // Finish the opening element, but don't close it.
-            html.characters(OString());
+        // Finish the opening element, but don't close it.
+        html.characters(OString());
     }
 
     if( rHWrt.m_nDefListLvl > 0 && !bForceDL )
@@ -1023,11 +1016,7 @@ void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
         rHWrt.m_bLFPossible = true;
     }
 
-    if (rInfo.bOutLi)
-        HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), rHWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li,
-                                   false);
-
-    // if necessary, close a bulleted or numbered list
+    // if necessary, close the list item, then close a bulleted or numbered list
     if( rInfo.bInNumBulList )
     {
         rHWrt.FillNextNumInfo();

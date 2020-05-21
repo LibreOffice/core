@@ -24,6 +24,9 @@
 #include <swmodule.hxx>
 #include <swdll.hxx>
 #include <usrpref.hxx>
+#include <wrtsh.hxx>
+#include <ndtxt.hxx>
+#include <paratr.hxx>
 
 #include <test/htmltesttools.hxx>
 #include <tools/urlobj.hxx>
@@ -35,6 +38,7 @@
 #include <svtools/rtftoken.h>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sot/storage.hxx>
+#include <svl/eitem.hxx>
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -1076,6 +1080,55 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     // i.e. we didn't handle the case when the ole1 payload was not an ole2 container. Note how the
     // expected value is the same as nData above + 4 bytes, since this data is length-prefixed.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(39409), pOleNative->GetSize());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
+{
+    // Create a document with 3 list items: A, B&C and D.
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("A");
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    {
+        // Enable numbering.
+        sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+        SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+    }
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("B");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("C");
+    {
+        // C is in the same list item as B.
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetCountedInList(false);
+    }
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("D");
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[1]/reqif-xhtml:p", "A");
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[1]", "B");
+    // Without the accompanying fix in place, this test would have failed with:
+    // XPath '//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[2]' not found
+    // i.e. </li> was writen before "C", not after "C", so "C" was not in the 2nd list item.
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[2]", "C");
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[3]/reqif-xhtml:p", "D");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
