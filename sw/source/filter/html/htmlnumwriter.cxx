@@ -279,8 +279,18 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
 {
     SwHTMLNumRuleInfo& rInfo = rWrt.GetNumInfo();
     bool bSameRule = rNextInfo.GetNumRule() == rInfo.GetNumRule();
-    if( bSameRule && rNextInfo.GetDepth() >= rInfo.GetDepth() &&
-        !rNextInfo.IsRestart() )
+    bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart();
+
+    if (rWrt.mbXHTML)
+    {
+        if (bListEnd || (!bListEnd && rNextInfo.IsNumbered()))
+        {
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(),
+                                       rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li, false);
+        }
+    }
+
+    if (!bListEnd)
     {
         return rWrt;
     }
