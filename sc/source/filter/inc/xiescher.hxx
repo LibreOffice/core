@@ -1026,11 +1026,11 @@ private:
 private:
     typedef std::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
     typedef std::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
-    typedef std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     tools::SvRef<SotStorageStream> mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
-    XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.
+    std::vector< XclImpDffConvDataRef >
+                        maDataStack;     /// Stack for registered drawing managers.
     sal_uInt32          mnOleImpFlags;      /// Application OLE import settings.
     sal_Int32           mnDefTextMargin;    /// Default margin in text boxes.
     bool mbNotifyMacroEventRead;            /// If we have already seen a macro event

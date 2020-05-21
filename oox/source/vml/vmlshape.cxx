@@ -1028,9 +1028,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
 
         // Bezier paths may consist of one or more sub-paths
-        typedef ::std::vector< ::std::vector< awt::Point > > SubPathList;
         typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
-        SubPathList aCoordLists;
+        std::vector< ::std::vector< awt::Point > > aCoordLists;
         FlagsList aFlagLists;
         sal_Int32 nIndex = 0;
 

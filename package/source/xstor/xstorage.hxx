@@ -92,8 +92,6 @@ public:
     SotElement_Impl(const OUString& rName, bool bStor, bool bNew);
 };
 
-typedef ::std::vector< SotElement_Impl* > SotElementVector_Impl;
-
 // Main storage implementation
 
 class OStorage;
@@ -133,7 +131,7 @@ struct OStorage_Impl
     }
 
     std::unordered_map<OUString, std::vector<SotElement_Impl*>> m_aChildrenMap;
-    SotElementVector_Impl                         m_aDeletedVector;
+    std::vector< SotElement_Impl* > m_aDeletedVector;
 
     css::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
 

@@ -1753,8 +1753,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     }
 
     // put XF indexes into passed vector, collect use count of all different widths
-    typedef ::std::map< sal_uInt16, sal_uInt16 > XclExpWidthMap;
-    XclExpWidthMap aWidthMap;
+    std::map< sal_uInt16, sal_uInt16 > aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
     for( nPos = 0, nSize = maColInfos.GetSize(); nPos < nSize; ++nPos )
@@ -1946,8 +1945,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     // *** Find default row format *** ----------------------------------------
 
     // find most used XF index in the row
-    typedef ::std::map< sal_uInt16, size_t > XclExpXFIndexMap;
-    XclExpXFIndexMap aIndexMap;
+    std::map< sal_uInt16, size_t > aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     size_t nMaxXFCount = 0;
     const size_t nHalfIndexes = aXFIndexes.size() / 2;
@@ -2234,16 +2232,14 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 
     // *** Default row format *** ---------------------------------------------
 
-    typedef ::std::map< XclExpDefaultRowData, size_t > XclExpDefRowDataMap;
-    XclExpDefRowDataMap aDefRowMap;
+    std::map< XclExpDefaultRowData, size_t > aDefRowMap;
 
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
     // if the row is hidden, then row xml must be created even if it not contain cells
     XclExpRow* pPrev = nullptr;
-    typedef std::vector< XclExpRow* > XclRepeatedRows;
-    XclRepeatedRows aRepeated;
+    std::vector< XclExpRow* > aRepeated;
     for (const auto& rEntry : maRowMap)
     {
         const RowRef& rRow = rEntry.second;

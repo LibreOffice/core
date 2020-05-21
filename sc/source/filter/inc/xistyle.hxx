@@ -659,14 +659,12 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine );
 
 private:
-    typedef std::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
-    typedef ::std::vector< XclImpHyperlinkRange >      XclImpHyperlinkVector;
 
-    XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
-    XclImpHyperlinkVector maHyperlinks;     /// Maps URLs to hyperlink cells.
-    ScRangeList         maMergeList;        /// List of merged cell ranges.
+    std::vector< std::shared_ptr< XclImpXFRangeColumn > >
+                        maColumns;        /// Array of column XF index buffers.
+    std::vector< std::pair< XclRange, OUString > >
+                        maHyperlinks;     /// Maps URLs to hyperlink cells.
+    ScRangeList         maMergeList;      /// List of merged cell ranges.
 };
 
 #endif

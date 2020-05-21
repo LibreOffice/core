@@ -146,8 +146,6 @@ typedef std::unordered_map<
 typedef std::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash > t_Mapping2Entry;
 
-typedef set< uno_getMappingFunc > t_CallbackSet;
-
 namespace {
 
 struct MappingsData
@@ -157,7 +155,8 @@ struct MappingsData
     t_Mapping2Entry     aMapping2Entry;
 
     Mutex               aCallbacksMutex;
-    t_CallbackSet       aCallbacks;
+    set< uno_getMappingFunc >
+                        aCallbacks;
 
     Mutex               aNegativeLibsMutex;
     set<OUString>       aNegativeLibs;

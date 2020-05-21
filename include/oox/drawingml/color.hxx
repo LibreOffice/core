@@ -142,10 +142,10 @@ private:
 
         explicit            Transformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
     };
-    typedef ::std::vector< Transformation > TransformVec;
 
     mutable ColorMode   meMode;         /// Current color mode.
-    mutable TransformVec maTransforms;  /// Color transformations.
+    mutable std::vector< Transformation >
+                        maTransforms;  /// Color transformations.
     mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, palette index, system token, or final RGB.
     mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.

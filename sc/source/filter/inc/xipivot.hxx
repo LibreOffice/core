@@ -279,14 +279,13 @@ private:
     void                ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
 
 private:
-    typedef ::std::vector< XclImpPTItemRef >    XclImpPTItemVec;
 
     const XclImpPivotTable& mrPTable;       /// Parent pivot table containing this field.
     XclPTFieldInfo      maFieldInfo;        /// General field info (SXVD record).
     XclPTFieldExtInfo   maFieldExtInfo;     /// Extended field info (SXVDEX record).
     XclPTPageFieldInfo  maPageInfo;         /// Page field info (entry from SXPI record).
     std::vector< XclPTDataFieldInfo > maDataInfoVector;  /// Vector of extended data field info (SXDI records).
-    XclImpPTItemVec     maItems;            /// List of all items of this field.
+    std::vector< XclImpPTItemRef >    maItems;           /// List of all items of this field.
 };
 
 typedef std::shared_ptr< XclImpPTField > XclImpPTFieldRef;
@@ -343,15 +342,14 @@ public:
     void                ApplyFieldInfo();
 
 private:
-    typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;
-
     XclImpPivotCacheRef mxPCache;           /// Pivot cache containing field/item names.
 
     XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclPTViewEx9Info    maPTViewEx9Info;     /// (SXVIEWEX9 record)
     XclPTAddl           maPTAddlInfo;
-    XclImpPTFieldVec    maFields;           /// Vector containing all fields.
+    std::vector< XclImpPTFieldRef >
+                        maFields;           /// Vector containing all fields.
     XclImpPTFieldRef    mxCurrField;        /// Current field for importing additional info.
     ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
@@ -422,11 +420,9 @@ public:
     void                MaybeRefreshPivotTables();
 
 private:
-    typedef ::std::vector< XclImpPivotCacheRef >    XclImpPivotCacheVec;
-    typedef ::std::vector< XclImpPivotTableRef >    XclImpPivotTableVec;
 
-    XclImpPivotCacheVec maPCaches;          /// List of all pivot caches.
-    XclImpPivotTableVec maPTables;          /// List of all pivot tables.
+    std::vector< XclImpPivotCacheRef >  maPCaches; /// List of all pivot caches.
+    std::vector< XclImpPivotTableRef >  maPTables; /// List of all pivot tables.
 };
 
 #endif

@@ -52,9 +52,6 @@ using namespace ::com::sun::star;
 namespace writerfilter::dmapper
 {
 
-typedef ::std::map< OUString, OUString> StringPairMap_t;
-
-
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierD()
         ,bIsDefaultStyle(false)
@@ -1348,7 +1345,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     }
 
     // create a map only once
-    static const StringPairMap_t StyleNameMap{
+    static const std::map< OUString, OUString> StyleNameMap {
         { "Normal", "Standard" },
         { "heading 1", "Heading 1" },
         { "heading 2", "Heading 2" },

@@ -1833,7 +1833,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 
     if ( !bNewAnimationsUsed )
     {
-        tAnimationVector aAnimationsOnThisPage;
+        std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > aAnimationsOnThisPage;
 
         // add effects from page in correct order
         SdrObjListIter aSdrIter( pPage, SdrIterMode::Flat );

@@ -177,11 +177,10 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     also handles one instance of the SysLocale options
  */
 
-typedef ::std::vector< SvNumberFormatter* > SvNumberFormatterList_impl;
-
 class SvNumberFormatterRegistry_Impl : public utl::ConfigurationListener
 {
-    SvNumberFormatterList_impl  aFormatters;
+    std::vector< SvNumberFormatter* >
+                                aFormatters;
     SvtSysLocaleOptions         aSysLocaleOptions;
     LanguageType                eSysLanguage;
 

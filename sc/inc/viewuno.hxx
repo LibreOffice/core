@@ -142,20 +142,19 @@ class ScTabViewObj final : public ScViewPaneBase,
                      public css::sheet::XSelectedSheetsSupplier
 {
 private:
-    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener> > XRangeSelectionListenerVector;
-    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener> > XRangeSelectionChangeListenerVector;
-    typedef std::vector<css::uno::Reference<css::view::XSelectionChangeListener> > XSelectionChangeListenerVector;
-    typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > XViewPropertyChangeListenerVector;
-    typedef std::vector<css::uno::Reference<css::awt::XEnhancedMouseClickHandler> > XMouseClickHandlerVector;
-    typedef std::vector<css::uno::Reference<css::sheet::XActivationEventListener> > XActivationEventListenerVector;
-
     SfxItemPropertySet                      aPropSet;
-    XSelectionChangeListenerVector          aSelectionChgListeners;
-    XRangeSelectionListenerVector           aRangeSelListeners;
-    XRangeSelectionChangeListenerVector     aRangeChgListeners;
-    XViewPropertyChangeListenerVector       aPropertyChgListeners;
-    XMouseClickHandlerVector                aMouseClickHandlers;
-    XActivationEventListenerVector          aActivationListeners;
+    std::vector<css::uno::Reference<css::view::XSelectionChangeListener> >
+                                            aSelectionChgListeners;
+    std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener> >
+                                            aRangeSelListeners;
+    std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener> >
+                                            aRangeChgListeners;
+    std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> >
+                                            aPropertyChgListeners;
+    std::vector<css::uno::Reference<css::awt::XEnhancedMouseClickHandler> >
+                                            aMouseClickHandlers;
+    std::vector<css::uno::Reference<css::sheet::XActivationEventListener> >
+                                            aActivationListeners;
     SCTAB                                   nPreviousTab;
     bool                                    bDrawSelModeSet;
     bool                                    bFilteredRangeSelection;

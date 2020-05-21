@@ -2422,8 +2422,7 @@ void XclExpChTypeGroup::ConvertSeries(
     Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
     if( xSeriesCont.is() )
     {
-        typedef ::std::vector< Reference< XDataSeries > > XDataSeriesVec;
-        XDataSeriesVec aSeriesVec;
+        std::vector< Reference< XDataSeries > > aSeriesVec;
 
         // copy data series attached to the current axes set to the vector
         const Sequence< Reference< XDataSeries > > aSeriesSeq = xSeriesCont->getDataSeries();

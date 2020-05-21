@@ -76,10 +76,9 @@ public:
 
 private:
     typedef std::shared_ptr< XclImpCrn > XclImpCrnRef;
-    typedef std::vector< XclImpCrnRef > XclImpCrnList;
 
-    XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
-    OUString            maTabName;      /// Name of the external sheet.
+    std::vector< XclImpCrnRef > maCrnList;      /// List of CRN records (cached cell values).
+    OUString                    maTabName;      /// Name of the external sheet.
 };
 
 }
@@ -126,11 +125,11 @@ public:
     svl::SharedStringPool& GetSharedStringPool();
 
 private:
-    typedef std::vector< std::unique_ptr<XclImpSupbookTab> >  XclImpSupbookTabList;
-    typedef std::vector< std::unique_ptr<XclImpExtName> >     XclImpExtNameList;
 
-    XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
-    XclImpExtNameList   maExtNameList;      /// All external names of the document.
+    std::vector< std::unique_ptr<XclImpSupbookTab> >
+                        maSupbTabList;     /// All sheet names of the document.
+    std::vector< std::unique_ptr<XclImpExtName> >
+                        maExtNameList;      /// All external names of the document.
     OUString            maXclUrl;           /// URL of the external document (Excel mode).
     XclSupbookType      meType;             /// Type of the supbook record.
     sal_uInt16          mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
@@ -212,10 +211,10 @@ private:
 
 private:
     typedef std::vector< XclImpXti >  XclImpXtiVector;
-    typedef std::vector< std::unique_ptr<XclImpSupbook> > XclImpSupbookList;
 
     XclImpXtiVector     maXtiList;          /// List of all XTI structures.
-    XclImpSupbookList   maSupbookList;      /// List of external documents.
+    std::vector< std::unique_ptr<XclImpSupbook> >
+                        maSupbookList;      /// List of external documents.
 };
 
 // *** Implementation ***

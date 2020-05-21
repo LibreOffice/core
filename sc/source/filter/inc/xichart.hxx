@@ -1064,7 +1064,6 @@ private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
     typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChDropBar>> XclImpChDropBarMap;
     typedef ::std::map<sal_uInt16, XclImpChLineFormat> XclImpChLineFormatMap;
-    typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclImpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
@@ -1076,7 +1075,8 @@ private:
     XclImpChDropBarMap  m_DropBars;         /// Dropbars (CHDROPBAR group).
     XclImpChLineFormatMap m_ChartLines;     /// Global line formats (CHCHARTLINE group).
     XclImpChDataFormatRef mxGroupFmt;       /// Default format for all series (CHDATAFORMAT group).
-    UInt16Set           maUnusedFormats;    /// Contains unused format indexes for automatic colors.
+    std::set< sal_uInt16 >
+                        maUnusedFormats;    /// Contains unused format indexes for automatic colors.
 };
 
 typedef std::shared_ptr< XclImpChTypeGroup > XclImpChTypeGroupRef;

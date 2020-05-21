@@ -77,9 +77,8 @@ private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
     static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
 
-    typedef ::std::vector< css::uno::Sequence< sal_Int8 > > TokenNameVector;
-
-    TokenNameVector     maTokenNames;
+    std::vector< css::uno::Sequence< sal_Int8 > >
+                        maTokenNames;
     sal_Int32           mnAlphaTokens[26];
 };
 

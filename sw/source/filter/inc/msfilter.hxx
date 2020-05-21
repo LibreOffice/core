@@ -279,13 +279,12 @@ namespace sw
         class InsertedTablesManager
         {
         public:
-            typedef std::map<std::unique_ptr<InsertedTableListener>, SwNodeIndex*> TableMap;
             void DelAndMakeTableFrames();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             explicit InsertedTablesManager(const SwDoc &rDoc);
         private:
             bool mbHasRoot;
-            TableMap maTables;
+            std::map<std::unique_ptr<InsertedTableListener>, SwNodeIndex*> maTables;
         };
 
         class RedlineStack

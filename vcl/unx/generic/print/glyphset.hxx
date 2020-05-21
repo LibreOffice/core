@@ -44,9 +44,7 @@ private:
     OString             maBaseName;
 
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
-    typedef std::vector< glyph_map_t > glyph_list_t;
-
-    glyph_list_t        maGlyphList;
+    std::vector< glyph_map_t > maGlyphList;
 
     OString     GetGlyphSetName (sal_Int32 nGlyphSetID);
 

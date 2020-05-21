@@ -196,7 +196,6 @@ private:    // types
         sal_uInt16          mnMaxLineHt;    /// Maximum font height for the current text line.
         explicit            XclImpHFPortionInfo();
     };
-    typedef ::std::vector< XclImpHFPortionInfo > XclImpHFPortionInfoVec;
 
 private:
     /** Returns the current edit engine text object. */
@@ -238,7 +237,8 @@ private:
 
 private:
     EditEngine&         mrEE;               /// The header/footer edit engine.
-    XclImpHFPortionInfoVec maInfos;         /// Edit engine text objects for all portions.
+    std::vector< XclImpHFPortionInfo >
+                        maInfos;         /// Edit engine text objects for all portions.
     OUStringBuffer      maCurrText;         /// Current text to insert into edit engine.
     XclFontDataPtr      mxFontData;         /// Font data of current text.
     XclImpHFPortion     meCurrObj;          /// The current portion.

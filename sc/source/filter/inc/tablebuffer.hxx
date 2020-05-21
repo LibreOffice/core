@@ -115,12 +115,10 @@ private:
 
 private:
     typedef RefVector< Table >           TableVector;
-    typedef RefMap< sal_Int32, Table >   TableIdMap;
-    typedef RefMap< OUString, Table >    TableNameMap;
 
     TableVector         maTables;
-    TableIdMap          maIdTables;
-    TableNameMap        maNameTables;
+    RefMap< sal_Int32, Table >  maIdTables;
+    RefMap< OUString, Table >   maNameTables;
 };
 
 } // namespace xls

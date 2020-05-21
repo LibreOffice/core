@@ -58,11 +58,10 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 };
 
-typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
-
 class SwAutoCompleteWord_Impl
 {
-    SwAutoCompleteClientVector  m_aClientVector;
+    std::vector<SwAutoCompleteClient>
+                                m_aClientVector;
     SwAutoCompleteWord&         m_rAutoCompleteWord;
 public:
     explicit SwAutoCompleteWord_Impl(SwAutoCompleteWord& rParent) :
@@ -71,14 +70,13 @@ public:
     void RemoveDocument(const SwDoc& rDoc);
 };
 
-typedef std::vector<const SwDoc*> SwDocPtrVector;
 class SwAutoCompleteString
     : public editeng::IAutoCompleteString
 {
 #if OSL_DEBUG_LEVEL > 0
     static sal_uLong s_nSwAutoCompleteStringCount;
 #endif
-    SwDocPtrVector m_aSourceDocs;
+    std::vector<const SwDoc*> m_aSourceDocs;
     public:
         SwAutoCompleteString(const OUString& rStr, sal_Int32 nLen);
 

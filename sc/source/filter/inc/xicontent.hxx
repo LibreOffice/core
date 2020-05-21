@@ -159,8 +159,8 @@ public:
     void                Apply();
 
 private:
-    typedef std::vector< std::unique_ptr<XclImpCondFormat> > XclImpCondFmtList;
-    XclImpCondFmtList   maCondFmtList;      /// List with all conditional formatting.
+    std::vector< std::unique_ptr<XclImpCondFormat> >
+                        maCondFmtList;      /// List with all conditional formatting.
 };
 
 // Data Validation ============================================================

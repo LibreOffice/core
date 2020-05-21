@@ -587,11 +587,11 @@ public:
 class XclExpChangeTrack : protected XclExpRoot
 {
     typedef std::vector<std::unique_ptr<ExcRecord>> RecListType;
-    typedef std::vector<std::unique_ptr<XclExpChTrTabIdBuffer>> TabIdBufferType;
     RecListType maRecList;           // list of "Revision Log" stream records
     std::stack<XclExpChTrAction*> aActionStack;
     XclExpChTrTabIdBuffer*        pTabIdBuffer;
-    TabIdBufferType maBuffers;
+    std::vector<std::unique_ptr<XclExpChTrTabIdBuffer>>
+                                  maBuffers;
 
     ScDocumentUniquePtr         xTempDoc;           // empty document
 

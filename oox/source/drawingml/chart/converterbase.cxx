@@ -138,10 +138,9 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 struct ConverterData
 {
-    typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
-
     ObjectFormatter     maFormatter;
-    TitleMap            maTitles;
+    std::map< TitleKey, TitleLayoutInfo >
+                        maTitles;
     XmlFilterBase&      mrFilter;
     ChartConverter&     mrConverter;
     Reference< XChartDocument > mxDoc;

@@ -147,17 +147,13 @@ public:
     virtual void SaveXml(XclExpXmlStream& rStrm) override;
 
 private:
-    typedef XclExpRecordList< XclExpExtNameBase >   XclExpExtNameList;
-
-private:
     /** Returns the 1-based (Excel-like) list index of the external name or 0, if not found. */
     sal_uInt16          GetIndex( const OUString& rName ) const;
     /** Appends the passed newly crested external name.
         @return  The 1-based (Excel-like) list index of the appended name. */
     sal_uInt16          AppendNew( XclExpExtNameBase* pExtName );
 
-private:
-    XclExpExtNameList   maNameList;     /// The list with all EXTERNNAME records.
+    XclExpRecordList< XclExpExtNameBase >  maNameList;     /// The list with all EXTERNNAME records.
 };
 
 // Cached external cells ======================================================
@@ -453,7 +449,6 @@ public:
         void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
                                 { mnSupbook = nSupbook; mnSBTab = nSBTab; }
     };
-    typedef ::std::vector< XclExpSBIndex > XclExpSBIndexVec;
 
 private:
     typedef XclExpRecordList< XclExpSupbook >   XclExpSupbookList;
@@ -479,7 +474,8 @@ private:
 
 private:
     XclExpSupbookList   maSupbookList;      /// List of all SUPBOOK records.
-    XclExpSBIndexVec    maSBIndexVec;       /// SUPBOOK and sheet name index for each Excel sheet.
+    std::vector< XclExpSBIndex >
+                        maSBIndexVec;       /// SUPBOOK and sheet name index for each Excel sheet.
     sal_uInt16          mnOwnDocSB;         /// Index to SUPBOOK for own document.
     sal_uInt16          mnAddInSB;          /// Index to add-in SUPBOOK.
 };
@@ -657,10 +653,9 @@ private:
     sal_uInt16          InsertXti( const XclExpXti& rXti );
 
 private:
-    typedef ::std::vector< XclExpXti > XclExpXtiVec;
 
-    XclExpSupbookBuffer maSBBuffer;     /// List of all SUPBOOK records.
-    XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
+    XclExpSupbookBuffer       maSBBuffer;     /// List of all SUPBOOK records.
+    std::vector< XclExpXti >  maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
 };
 
 }

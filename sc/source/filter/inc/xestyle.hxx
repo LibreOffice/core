@@ -629,7 +629,6 @@ public:
 private:
     typedef XclExpRecordList< XclExpXF >    XclExpXFList;
     typedef XclExpXFList::RecordRefType     XclExpXFRef;
-    typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
 
 private:
     /** Returns the XF ID of the cell XF containing the passed format. */
@@ -709,7 +708,8 @@ private:
     XclExpXFList        maXFList;           /// List of all XF records.
     std::map<FindKey, std::vector<sal_uInt32>>
                         maXFFindMap;        /// map of itemset to vector of positions, to speed up find
-    XclExpStyleList     maStyleList;        /// List of all STYLE records.
+    XclExpRecordList< XclExpStyle >
+                        maStyleList;        /// List of all STYLE records.
     XclExpBuiltInMap    maBuiltInMap;       /// Contained elements describe built-in XFs.
     ScfUInt16Vec        maXFIndexVec;       /// Maps XF IDs to XF indexes.
     ScfUInt16Vec        maStyleIndexes;     /// Maps XF IDs to OOXML Style indexes

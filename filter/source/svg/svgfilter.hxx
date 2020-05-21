@@ -168,8 +168,6 @@ public:
     typedef std::unordered_map< OUString, UCharSet >                               UCharSetMap;
     typedef std::unordered_map< Reference< XInterface >, UCharSetMap >             UCharSetMapMap;
 
-    typedef std::unordered_map< Reference< XInterface >, OUString >                UOStringMap;
-
     typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap > MetaBitmapActionSet;
 
 private:
@@ -206,7 +204,8 @@ private:
     OUString                            msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
     Reference< XInterface >             mCreateOjectsCurrentMasterPage;
-    UOStringMap                         mTextShapeIdListMap;
+    std::unordered_map< Reference< XInterface >, OUString >
+                                        mTextShapeIdListMap;
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
     std::vector< Reference< css::drawing::XDrawPage > > mMasterPageTargets;
