@@ -6,7 +6,6 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import time
 from uitest.path import get_srcdir_url
 
 def get_url_for_data_file(file_name):
@@ -25,21 +24,24 @@ class tdf114724(UITestCase):
         xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
         xNavigatorPanel.executeAction("ROOT", tuple())
 
-        xContentTree = xNavigatorPanel.getChild('contenttree')
-        #Check the content has changed
-        self.assertEqual(len(xContentTree.getChildren()), 1)
-
         xWriterEdit.executeAction("FOCUS", tuple())
-        time.sleep(2)
+
+        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "Headings")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "Headings")
         self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
         for _ in range(0,3):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-            time.sleep(2)
-            self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+
+        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 4")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 4")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+
         for _ in range(0,3):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            time.sleep(2)
-            self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+
+        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 1")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 1")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
 
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()

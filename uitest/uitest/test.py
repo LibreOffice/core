@@ -48,6 +48,24 @@ class UITest(object):
             if component is not None:
                 return component
 
+    def wait_until_child_is_available(self, parent, childName):
+        time_ = 0
+        while time_ < MAX_WAIT:
+            if childName in parent.getChildren():
+                break
+            else:
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
+    def wait_until_property_is_updated(self, element, propertyName, value):
+        time_ = 0
+        while time_ < MAX_WAIT:
+            if get_state_as_dict(element)[propertyName] == value:
+                break
+            else:
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
     def load_file(self, url):
         desktop = self.get_desktop()
         with EventListener(self._xContext, "OnLoad") as event:
