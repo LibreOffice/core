@@ -3095,9 +3095,8 @@ bool DrawingML::WriteCustomGeometry(
 
     if ( pGeometrySeq )
     {
-        for( int i = 0; i < pGeometrySeq->getLength(); ++i )
+        for( const beans::PropertyValue& rProp : *pGeometrySeq )
         {
-            const beans::PropertyValue& rProp = (*pGeometrySeq)[ i ];
             if ( rProp.Name == "Path" )
             {
                 uno::Sequence<beans::PropertyValue> aPathProp;
