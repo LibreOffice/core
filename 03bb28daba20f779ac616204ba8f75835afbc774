@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cbb1340_ddf15854",
+        "filename": "svtools/source/brwbox/ebbcontrols.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-05-21T11:44:26Z",
+      "side": 1,
+      "message": "typo (for “than”)?",
+      "range": {
+        "startLine": 34,
+        "startChar": 64,
+        "endLine": 34,
+        "endChar": 65
+      },
+      "revId": "03bb28daba20f779ac616204ba8f75835afbc774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
