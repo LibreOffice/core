@@ -1545,7 +1545,7 @@ public:
     bool    IsNativeWidgetEnabled() const;
 
     // a helper method for a Control's Draw method
-    void PaintToDevice( ::OutputDevice* pDevice, const Point& rPos, const Size& rSize );
+    void PaintToDevice( ::OutputDevice* pDevice, const Point& rPos );
 
     /* tdf#119390 set parent to default window. Typically for use in advance of destroying
      * a floating windows which has the current focus so focus will revert to the main
