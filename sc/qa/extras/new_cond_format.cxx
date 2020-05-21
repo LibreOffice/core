@@ -113,12 +113,12 @@ void ScConditionalFormatTest::testCondFormatListFormats()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init());
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    const uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormats.getLength());
-    for (sal_Int32 i = 0, n = xCondFormats.getLength(); i < n; ++i)
+    for (auto const & cf : xCondFormats)
     {
-        CPPUNIT_ASSERT(xCondFormats[i].is());
+        CPPUNIT_ASSERT(cf.is());
     }
 }
 

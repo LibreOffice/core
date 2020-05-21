@@ -82,9 +82,9 @@ public:
         if (handlePasswordRequest(rContinuations, aRequest))
             return true;
 
-        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        for (auto const & cont : rContinuations)
         {
-            css::uno::Reference<css::task::XInteractionApprove> xApprove(rContinuations[i], css::uno::UNO_QUERY);
+            css::uno::Reference<css::task::XInteractionApprove> xApprove(cont, css::uno::UNO_QUERY);
             if (xApprove.is())
                 xApprove->select();
         }
@@ -121,23 +121,23 @@ public:
         }
         mbPasswordRequested = true;
 
-        for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+        for (auto const & cont : rContinuations)
         {
             if (mode == css::task::PasswordRequestMode_PASSWORD_REENTER)
             {   // cancel re-enter of wrong password, to avoid infinite loop
-                css::uno::Reference<css::task::XInteractionAbort> const xAbort(rContinuations[i], css::uno::UNO_QUERY);
+                css::uno::Reference<css::task::XInteractionAbort> const xAbort(cont, css::uno::UNO_QUERY);
                 if (xAbort.is())
                     xAbort->select();
             }
             else if (bIsRequestPasswordToModify)
             {
-                css::uno::Reference<css::task::XInteractionPassword2> const xIPW2(rContinuations[i], css::uno::UNO_QUERY);
+                css::uno::Reference<css::task::XInteractionPassword2> const xIPW2(cont, css::uno::UNO_QUERY);
                 xIPW2->setPasswordToModify(msPassword);
                 xIPW2->select();
             }
             else
             {
-                css::uno::Reference<css::task::XInteractionPassword> const xIPW(rContinuations[i], css::uno::UNO_QUERY);
+                css::uno::Reference<css::task::XInteractionPassword> const xIPW(cont, css::uno::UNO_QUERY);
                 if (xIPW.is())
                 {
                     xIPW->setPassword(msPassword);

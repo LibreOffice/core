@@ -597,9 +597,9 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OU
     OUStringBuffer sRep;
     sRep.append( aItems[ 0 ] );
 
-    for( sal_Int32 i = 1, end = aItems.getLength(); i < end; ++i )
+    for( const OUString& rItem : aItems )
     {
-        sRep.append( " " ).append( aItems[ i ] );
+        sRep.append( " " ).append( rItem );
     }
 
     writeElement( pDoc, nXmlElement, sRep.makeStringAndClear() );
