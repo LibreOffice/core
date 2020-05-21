@@ -29,6 +29,8 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_gallery_test, \
 	tl \
 	svl \
 	sfx \
+	unotest \
+	test \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,svx_gallery_test,boost_headers))

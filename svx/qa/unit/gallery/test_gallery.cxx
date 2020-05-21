@@ -6,6 +6,7 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
+#include <test/bootstrapfixture.hxx>
 
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
@@ -21,7 +22,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-class GalleryObjTest : public CppUnit::TestFixture
+class GalleryObjTest : public test::BootstrapFixture
 {
 public:
     void TestCreateTheme();
@@ -297,15 +298,21 @@ void GalleryObjTest::TestInsertGalleryObject()
     SfxApplication::GetOrCreate();
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), pGalleryTheme->GetObjectCount());
-    /*CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme", pGalleryTheme->InsertURL(INetURLObject("desert.jpg")));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(), static_cast<sal_uInt32>(1));
 
-    CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme", pGalleryTheme->InsertURL(INetURLObject("mountain.jpg")));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object count", pGalleryTheme->GetObjectCount(), static_cast<sal_uInt32>(2));
+    OUString imageList[] = { "galtest1.png", "galtest2.png", "galtest3.jpg" };
 
-    std::unique_ptr<SgaObject>  pObj = pGalleryTheme->AcquireObject(0);
-    CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid",pObj->IsValid());*/
-
+    for (sal_uInt32 i = 0; i < (sizeof(imageList) / sizeof(imageList[0])); i++)
+    {
+        OUString imageNameFromList(imageList[i]);
+        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+                      + imageNameFromList);
+        CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
+                               pGalleryTheme->InsertURL(INetURLObject(aURL)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(),
+                                     i + 1);
+        std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(i);
+        CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid", pObj->IsValid());
+    }
     pGallery->ReleaseTheme(pGalleryTheme, aListener);
 }
 
