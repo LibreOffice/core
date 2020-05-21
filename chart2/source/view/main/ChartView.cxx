@@ -628,19 +628,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 bool SeriesPlotterContainer::isCategoryPositionShifted(
     const chart2::ScaleData& rSourceScale, bool bHasComplexCategories )
 {
-    if (rSourceScale.AxisType == AxisType::CATEGORY && rSourceScale.ShiftedCategoryPosition)
-        return true;
-
-    if (rSourceScale.AxisType == AxisType::CATEGORY && bHasComplexCategories)
-        return true;
+    if (rSourceScale.AxisType == AxisType::CATEGORY)
+        return bHasComplexCategories || rSourceScale.ShiftedCategoryPosition;
 
     if (rSourceScale.AxisType == AxisType::DATE)
-        return true;
+        return rSourceScale.ShiftedCategoryPosition;
 
-    if (rSourceScale.AxisType == AxisType::SERIES)
-        return true;
-
-    return false;
+    return rSourceScale.AxisType == AxisType::SERIES;
 }
 
 void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
