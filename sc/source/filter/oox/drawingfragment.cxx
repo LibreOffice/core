@@ -257,14 +257,29 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor )
             {
-                // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'editAs="oneCell"'
-                if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
-                        mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
+                    auto rot = mxShape->getRotation();
+                    if ((rot >= 45 * PER_DEGREE && rot < 135 * PER_DEGREE) || (rot >= 225 * PER_DEGREE && rot < 315 * PER_DEGREE))
+                    {
+                        // When rotating a shape in MSO within the range of degrees given above, MSO changes the
+                        // cells in which the shape is anchored. The new position of the anchors are always calculated
+                        // using a 90 degrees rotation anticlockwise.
+                        // There is an important result of this operation: the top left point of the shape changes,
+                        // it will be another vertex.
+                        // Now we need to create the anchor rectangle with this in mind.
+                        // We get the new (x, y) coords, then swap width with height.
+                        // To get the new coords we reflect the rectangle in the line y = x. (This will return the
+                        // correct vertex, which is the actual top left one.)
+                        auto nHalfWidth = aShapeRectEmu.Width / 2;
+                        auto nHalfHeight = aShapeRectEmu.Height / 2;
+                        aShapeRectEmu.X = aShapeRectEmu.X + nHalfWidth - nHalfHeight;
+                        aShapeRectEmu.Y = aShapeRectEmu.Y + nHalfHeight - nHalfWidth;
+                        std::swap(aShapeRectEmu.Width, aShapeRectEmu.Height);
+                    }
+
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
                     Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
