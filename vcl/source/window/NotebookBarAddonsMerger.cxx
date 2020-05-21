@@ -43,24 +43,24 @@ static const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
 static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
                                     AddonNotebookBarItem& aAddonNotebookBarItem)
 {
-    for (int nIdx = 0; nIdx < pExtension.getLength(); nIdx++)
+    for (const auto& i : pExtension)
     {
-        if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_URL)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sCommandURL;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_TITLE)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sLabel;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_IMAGEID)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sImageIdentifier;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_CONTEXT)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sContext;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_TARGET)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sTarget;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_CONTROLTYPE)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sControlType;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_WIDTH)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.nWidth;
-        else if (pExtension[nIdx].Name == MERGE_NOTEBOOKBAR_STYLE)
-            pExtension[nIdx].Value >>= aAddonNotebookBarItem.sStyle;
+        if (i.Name == MERGE_NOTEBOOKBAR_URL)
+            i.Value >>= aAddonNotebookBarItem.sCommandURL;
+        else if (i.Name == MERGE_NOTEBOOKBAR_TITLE)
+            i.Value >>= aAddonNotebookBarItem.sLabel;
+        else if (i.Name == MERGE_NOTEBOOKBAR_IMAGEID)
+            i.Value >>= aAddonNotebookBarItem.sImageIdentifier;
+        else if (i.Name == MERGE_NOTEBOOKBAR_CONTEXT)
+            i.Value >>= aAddonNotebookBarItem.sContext;
+        else if (i.Name == MERGE_NOTEBOOKBAR_TARGET)
+            i.Value >>= aAddonNotebookBarItem.sTarget;
+        else if (i.Name == MERGE_NOTEBOOKBAR_CONTROLTYPE)
+            i.Value >>= aAddonNotebookBarItem.sControlType;
+        else if (i.Name == MERGE_NOTEBOOKBAR_WIDTH)
+            i.Value >>= aAddonNotebookBarItem.nWidth;
+        else if (i.Name == MERGE_NOTEBOOKBAR_STYLE)
+            i.Value >>= aAddonNotebookBarItem.sStyle;
     }
 }
 
@@ -124,7 +124,8 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
     {
         aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
 
-        for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
+        for (const css::uno::Sequence<css::beans::PropertyValue>& pExtension :
+             std::as_const(aExtension))
         {
             VclPtr<vcl::Window> pOptionalParent;
             pOptionalParent = VclPtr<OptionalBox>::Create(pParent);
@@ -139,7 +140,6 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
             pFunction(pNotebookbarToolBox, pOptionalParent, rMap);
 
             AddonNotebookBarItem aAddonNotebookBarItem;
-            const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
 
             CreateNotebookBarToolBox(pNotebookbarToolBox, m_xFrame, aAddonNotebookBarItem,
