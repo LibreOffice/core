@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c9d9c3b_6afe390d",
+        "filename": "vcl/unx/generic/glyphs/freetype_glyphcache.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-21T13:16:33Z",
+      "side": 1,
+      "message": "it\u0027s rather weird to have this thing have an internal ref-count __and__ be held by std::shared_ptr. But that\u0027s probably not your fault. If you don\u0027t fix this, I may just make it into a salhelper::SimpleReferenceObject subclass, and hold it by rtl::Reference.",
+      "revId": "450fe54cf57c54a3cff60d3d082416ef3e64d4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
