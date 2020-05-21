@@ -9,6 +9,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/virdev.hxx>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID)
@@ -94,6 +95,14 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
     pToolBox->KeyInput(rKEvt);
 
     return true;
+}
+
+void InterimItemWindow::ImplPaintToDevice(OutputDevice* pDevice, const Point& rPos)
+{
+    VclPtr<VirtualDevice> xSurface(VclPtr<VirtualDevice>::Create(*pDevice, DeviceFormat::DEFAULT));
+    m_xContainer->draw(*xSurface);
+    Size aSize(xSurface->GetOutputSize());
+    pDevice->DrawOutDev(rPos, aSize, Point(), aSize, *xSurface);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
