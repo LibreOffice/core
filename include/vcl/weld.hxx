@@ -272,6 +272,9 @@ public:
     virtual void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink)
         = 0;
 
+    // render the widget to an output device
+    virtual void draw(VirtualDevice& rOutput) = 0;
+
     virtual ~Widget() {}
 };
 
@@ -461,8 +464,6 @@ public:
 
     virtual void resize_to_request() = 0;
 
-    // render the dialog for a screenshot
-    virtual void draw(VirtualDevice& rOutput) = 0;
     // collect positions of widgets and their help ids for screenshot purposes
     virtual ScreenShotCollection collect_screenshot_data() = 0;
 };
