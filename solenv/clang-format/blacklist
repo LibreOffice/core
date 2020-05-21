@@ -7111,7 +7111,6 @@ include/toolkit/controls/unocontrols.hxx
 include/toolkit/helper/accessiblefactory.hxx
 include/toolkit/helper/convert.hxx
 include/toolkit/helper/emptyfontdescriptor.hxx
-include/toolkit/helper/formpdfexport.hxx
 include/toolkit/helper/listenermultiplexer.hxx
 include/toolkit/helper/macros.hxx
 include/toolkit/helper/mutexandbroadcasthelper.hxx
@@ -15803,6 +15802,7 @@ toolkit/inc/controls/unocontrolcontainer.hxx
 toolkit/inc/controls/unocontrolcontainermodel.hxx
 toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/btndlg.hxx
+toolkit/inc/helper/formpdfexport.hxx
 toolkit/inc/helper/imagealign.hxx
 toolkit/inc/helper/scrollabledialog.hxx
 toolkit/inc/helper/tkresmgr.hxx
