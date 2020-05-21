@@ -257,14 +257,43 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape && mxAnchor )
             {
-                // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'editAs="oneCell"'
-                if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
-                        mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
+                    const sal_Int32 aRotation = mxShape->getRotation();
+                    if ((aRotation >= 45  * PER_DEGREE && aRotation < 135 * PER_DEGREE)
+                     || (aRotation >= 225 * PER_DEGREE && aRotation < 315 * PER_DEGREE))
+                    {
+                        // When rotating any shape in MSO Excel within the range of degrees given above,
+                        // Excel changes the cells in which the shape is anchored. The new position of
+                        // the anchors are always calculated using a 90 degrees rotation anticlockwise.
+                        // There is an important result of this operation: the top left point of the shape changes,
+                        // it will be another vertex.
+                        // The anchor position is given in the xml file, it is in the xdr:from and xdr:to elements.
+                        // Let's see what happens in time order:
+                        // We create a shape in Excel, the anchor position is in a given cell, then the rotation happens
+                        // as mentioned above, and excel recalculates the cells in which the anchors are positioned.
+                        // This new cell is exported into the xml elements xdr:from and xdr:to, when Excel exports the document!
+                        // Thus, if we have a 90 degrees rotation and an already rotated point from which we base
+                        // our calculations here in LO, the result is an incorrect 180 degrees rotation.
+                        // Now, we need to create the bounding rectangle of the shape with this in mind.
+                        // (Important to mention that at this point we don't talk about rotations at all, this bounding
+                        // rectangle contains the original not-rotated shape. Rotation happens later in the code.)
+                        // We get the new (x, y) coords, then swap width with height.
+                        // To get the new coords we reflect the rectangle in the line y = x. (This will return the
+                        // correct vertex, which is the actual top left one.)
+                        // Another fact that appears to be true in Excel is that there are only 2 of possible anchor
+                        // positions for a shape that is only rotated (and not resized for example).
+                        // The first position happens in the set of degrees {[45, 135) U [225, 315)} and the second
+                        // set is all the other angles. The two sets partition the circle (of all rotations: 360 degrees).
+                        sal_Int64 nHalfWidth = aShapeRectEmu.Width / 2;
+                        sal_Int64 nHalfHeight = aShapeRectEmu.Height / 2;
+                        aShapeRectEmu.X = aShapeRectEmu.X + nHalfWidth - nHalfHeight;
+                        aShapeRectEmu.Y = aShapeRectEmu.Y + nHalfHeight - nHalfWidth;
+                        std::swap(aShapeRectEmu.Width, aShapeRectEmu.Height);
+                    }
+
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
                     Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
