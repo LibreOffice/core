@@ -52,7 +52,6 @@ namespace drawinglayer::primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DContainer and Primitive3DReference
     typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
-    typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
 
     class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::deque< Primitive3DReference >
     {
