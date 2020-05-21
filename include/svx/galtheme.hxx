@@ -126,7 +126,7 @@ public:
 
     bool                        InsertObject(const SgaObject& rObj, sal_uInt32 nPos = SAL_MAX_UINT32);
     void                        RemoveObject(sal_uInt32 nPos);
-    SAL_DLLPRIVATE bool         ChangeObjectPos(sal_uInt32 nOldPos, sal_uInt32 nNewPos);
+    bool                        ChangeObjectPos(sal_uInt32 nOldPos, sal_uInt32 nNewPos);
 
     const OUString&             GetName() const;
 
