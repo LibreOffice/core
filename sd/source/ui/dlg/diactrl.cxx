@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
+#include <svl/intitem.hxx>
 
 #include <strings.hrc>
 

@@ -89,6 +89,7 @@
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>

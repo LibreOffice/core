@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
