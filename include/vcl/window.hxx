@@ -722,7 +722,7 @@ private:
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
 
-    SAL_DLLPRIVATE void                 ImplPaintToDevice( ::OutputDevice* pTargetOutDev, const Point& rPos );
+    virtual void                        ImplPaintToDevice( ::OutputDevice* pTargetOutDev, const Point& rPos );
 
     SAL_DLLPRIVATE css::uno::Reference< css::rendering::XCanvas >
                                         ImplGetCanvas( bool bSpriteCanvas ) const;

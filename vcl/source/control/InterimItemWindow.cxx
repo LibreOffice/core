@@ -9,6 +9,9 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/virdev.hxx>
+#include <salobj.hxx>
+#include <window.h>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID)
@@ -94,6 +97,19 @@ bool InterimItemWindow::ChildKeyInput(const KeyEvent& rKEvt)
     pToolBox->KeyInput(rKEvt);
 
     return true;
+}
+
+void InterimItemWindow::ImplPaintToDevice(OutputDevice* pDevice, const Point& rPos)
+{
+    VclPtr<VirtualDevice> xSurface(VclPtr<VirtualDevice>::Create(*pDevice, DeviceFormat::DEFAULT));
+    vcl::Window* pChild = m_xVclContentArea->GetWindow(GetWindowType::FirstChild);
+    SalObject* pSysObj = pChild ? pChild->ImplGetWindowImpl()->mpSysObj : nullptr;
+    // ideally we should reset visibility back to its original state afterwards
+    if (pSysObj)
+        pSysObj->Show(true);
+    m_xContainer->draw(*xSurface);
+    Size aSize(xSurface->GetOutputSize());
+    pDevice->DrawOutDev(rPos, aSize, Point(), aSize, *xSurface);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
