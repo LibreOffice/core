@@ -23,6 +23,7 @@
 #include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
+#include <comphelper/lok.hxx>
 
 #define ROW_COL_PROD 16384
 
@@ -75,7 +76,11 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     , m_xInsertBtn(m_xBuilder->weld_button("ok"))
     , m_xLbFormat(m_xBuilder->weld_tree_view("formatlbinstable"))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "previewinstable", m_aWndPreview))
+    , m_xStyleFrame(m_xBuilder->weld_frame("stylesframe"))
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xStyleFrame->hide();
+
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);
     m_xLbFormat->set_size_request(nWidth, nHeight);
