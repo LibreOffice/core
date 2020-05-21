@@ -288,12 +288,10 @@ namespace frm
         return bDone || Control::EventNotify(_rNEvt);
     }
 
-
-    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, DrawFlags /*_nFlags*/ )
+    void RichTextControl::Draw( OutputDevice* _pDev, const Point& _rPos, DrawFlags /*_nFlags*/ )
     {
-        m_pImpl->Draw( _pDev, _rPos, _rSize );
+        m_pImpl->Draw( _pDev, _rPos, _pDev->PixelToLogic(GetSizePixel()) );
     }
-
 
     EditView& RichTextControl::getView()
     {

@@ -2217,12 +2217,8 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
         if ( pTabPage )
         {
             Point aPos( nX, nY );
-            Size  aSize = pWindow->GetSizePixel();
-
-            aPos  = pDev->PixelToLogic( aPos );
-            aSize = pDev->PixelToLogic( aSize );
-
-            pTabPage->Draw( pDev, aPos, aSize, DrawFlags::NONE );
+            aPos = pDev->PixelToLogic( aPos );
+            pTabPage->Draw( pDev, aPos, DrawFlags::NONE );
             return;
         }
 
@@ -2269,8 +2265,6 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
         }
         else if ( pDev )
         {
-            Size aSz = pWindow->GetSizePixel();
-            aSz = pDev->PixelToLogic( aSz );
             Point aP = pDev->PixelToLogic( aPos );
 
             vcl::PDFExtOutDevData* pPDFExport   = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
@@ -2279,7 +2273,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
                                || ( pPDFExport != nullptr );
             if ( bDrawSimple )
             {
-                pWindow->Draw( pDev, aP, aSz, DrawFlags::NoControls );
+                pWindow->Draw( pDev, aP, DrawFlags::NoControls );
             }
             else
             {

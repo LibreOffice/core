@@ -370,7 +370,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSize */, DrawFlags nFlags )
+void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
 {
     Point aPos  = pDev->LogicToPixel( rPos );
 

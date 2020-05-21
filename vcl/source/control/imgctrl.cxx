@@ -149,10 +149,10 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 }
 
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
-    const Size      aSize = pDev->LogicToPixel( rSize );
+    const Size      aSize = GetSizePixel();
     tools::Rectangle aRect( aPos, aSize );
 
     pDev->Push();

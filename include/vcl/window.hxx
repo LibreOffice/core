@@ -786,7 +786,7 @@ public:
     using OutputDevice::Erase;
     void                                Erase(vcl::RenderContext& rRenderContext);
 
-    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags );
+    virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, DrawFlags nFlags );
     virtual void                        Move();
     virtual void                        Resize();
     virtual void                        Activate();

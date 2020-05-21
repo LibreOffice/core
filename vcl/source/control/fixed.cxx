@@ -199,13 +199,13 @@ void FixedText::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
 }
 
-void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
                       DrawFlags nFlags )
 {
     ApplySettings(*pDev);
 
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
@@ -590,7 +590,7 @@ void FixedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     ImplDraw(rRenderContext);
 }
 
-void FixedLine::Draw( OutputDevice*, const Point&, const Size&, DrawFlags )
+void FixedLine::Draw( OutputDevice*, const Point&, DrawFlags )
 {
 }
 
@@ -719,11 +719,11 @@ void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }
 
-void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
                         DrawFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
 
     pDev->Push();
@@ -866,11 +866,11 @@ Size FixedImage::GetOptimalSize() const
     return maImage.GetSizePixel();
 }
 
-void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void FixedImage::Draw( OutputDevice* pDev, const Point& rPos,
                        DrawFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
 
     pDev->Push();

@@ -1288,11 +1288,11 @@ void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     ImplDrawPushButton(rRenderContext);
 }
 
-void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
                        DrawFlags nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
@@ -2349,14 +2349,14 @@ void RadioButton::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
     ImplDrawRadioButton(rRenderContext);
 }
 
-void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
                         DrawFlags nFlags )
 {
     if ( !maImage )
     {
         MapMode     aResMapMode( MapUnit::Map100thMM );
         Point       aPos  = pDev->LogicToPixel( rPos );
-        Size        aSize = pDev->LogicToPixel( rSize );
+        Size        aSize = GetSizePixel();
         Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
         Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
         Size        aBrd2Size = pDev->LogicToPixel( Size( 60, 60 ), aResMapMode );
@@ -3197,12 +3197,12 @@ void CheckBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     ImplDrawCheckBox(rRenderContext);
 }
 
-void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
+void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
                      DrawFlags nFlags )
 {
     MapMode     aResMapMode( MapUnit::Map100thMM );
     Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Size        aSize = GetSizePixel();
     Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
     Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
     Size        aBrd2Size = pDev->LogicToPixel( Size( 30, 30 ), aResMapMode );

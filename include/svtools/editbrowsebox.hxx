@@ -285,7 +285,7 @@ namespace svt
         virtual void GetFocus() override;
         virtual bool PreNotify(NotifyEvent& rEvt) override;
         virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rClientRect) override;
-        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+        virtual void Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
         virtual void DataChanged( const DataChangedEvent& _rEvent ) override;
         virtual void Resize() override;

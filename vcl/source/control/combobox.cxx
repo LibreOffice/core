@@ -1145,12 +1145,12 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
+void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
 {
     m_pImpl->m_pImplLB->GetMainWindow()->ApplySettings(*pDev);
 
     Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
+    Size aSize = GetSizePixel();
     vcl::Font aFont = m_pImpl->m_pImplLB->GetMainWindow()->GetDrawPixelFont( pDev );
 
     pDev->Push();
@@ -1187,7 +1187,10 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
-        m_pImpl->m_pSubEdit->Draw( pDev, aPos, Size( aSize.Width(), nEditHeight ), nFlags );
+        Size aOrigSize(m_pImpl->m_pSubEdit->GetSizePixel());
+        m_pImpl->m_pSubEdit->SetSizePixel(Size(aSize.Width(), nEditHeight));
+        m_pImpl->m_pSubEdit->Draw( pDev, aPos, nFlags );
+        m_pImpl->m_pSubEdit->SetSizePixel(aOrigSize);
 
         // Second, draw the listbox
         if ( GetStyle() & WB_CENTER )
@@ -1242,10 +1245,12 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     // Call Edit::Draw after restoring the MapMode...
     if ( IsDropDownBox() )
     {
-        m_pImpl->m_pSubEdit->Draw( pDev, rPos, rSize, nFlags );
+        Size aOrigSize(m_pImpl->m_pSubEdit->GetSizePixel());
+        m_pImpl->m_pSubEdit->SetSizePixel(GetSizePixel());
+        m_pImpl->m_pSubEdit->Draw( pDev, rPos, nFlags );
+        m_pImpl->m_pSubEdit->SetSizePixel(aOrigSize);
         // DD-Button ?
     }
-
 }
 
 void ComboBox::SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink)
