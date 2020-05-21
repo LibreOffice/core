@@ -25,6 +25,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/drawingml/shape.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -39,6 +40,7 @@ ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper const & rPar
         const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pGroupShapePtr )
 {
+    mpShapePtr->setCxn(true); // If this is xdr:cxnSp.
 }
 
 ConnectorShapeContext::~ConnectorShapeContext()

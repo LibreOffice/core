@@ -239,6 +239,9 @@ public:
 
     void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
 
+    void setCxn(bool isUsed) { mbCxn = isUsed; }
+    bool isCxn() { return mbCxn; }
+
 protected:
 
     enum FrameType
@@ -333,6 +336,8 @@ protected:
     Color                       maFontRefColorForNodes;
 
     FrameType                   meFrameType; ///< Type for graphic frame shapes.
+
+    bool                        mbCxn = false; // This is to flag that cxnSp element is read in.
 
 private:
 
