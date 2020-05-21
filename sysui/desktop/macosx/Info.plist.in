@@ -1836,14 +1836,12 @@
     </array>
     <key>CFBundleExecutable</key>
     <string>soffice</string>
-    <key>CFBundleGetInfoString</key>
-    <string>@PRODUCTNAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
     <key>CFBundleIconFile</key>
     <string>main.icns</string>
     <key>CFBundleShortVersionString</key>
-    <string>@MACOSX_BUNDLE_SHORTVERSION@</string>
+    <string>@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@</string>
     <key>CFBundleVersion</key>
-    <string>@MACOSX_BUNDLE_SHORTVERSION@</string>
+    <string>@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
     <key>CFBundleIdentifier</key>
     <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
     <key>CFBundleInfoDictionaryVersion</key>
