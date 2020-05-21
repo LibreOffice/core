@@ -745,6 +745,8 @@
                     <string>application/msword</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text-template.icns</string>
         </dict>
         <!-- OOXML wordprocessing -->
         <dict>
@@ -768,6 +770,8 @@
                     <string>application/vnd.openxmlformats-officedocument.wordprocessingml.document</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -791,6 +795,8 @@
                     <string>application/vnd.ms-word.document.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -813,6 +819,8 @@
                     <string>application/vnd.openxmlformats-officedocument.wordprocessingml.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -836,6 +844,8 @@
                     <string>application/vnd.ms-word.template.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text-template.icns</string>
         </dict>
 
         <!-- OOXML spreadsheet -->
@@ -860,6 +870,8 @@
                     <string>application/vnd.openxmlformats-officedocument.spreadsheetml.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -883,6 +895,8 @@
                     <string>application/vnd.ms-excel.template.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -905,6 +919,8 @@
                     <string>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -928,6 +944,8 @@
                     <string>application/vnd.ms-excel.sheet.binary.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -951,6 +969,8 @@
                     <string>application/vnd.ms-excel.sheet.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
 
         <!-- OOXML presentation -->
@@ -975,6 +995,8 @@
                     <string>application/vnd.openxmlformats-officedocument.presentationml.presentation</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -998,6 +1020,8 @@
                     <string>application/vnd.ms-powerpoint.presentation.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1021,6 +1045,8 @@
                     <string>application/vnd.openxmlformats-officedocument.presentationml.template</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation-template.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1044,6 +1070,8 @@
                     <string>application/vnd.ms-powerpoint.template.macroEnabled.12</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>presentation-template.icns</string>
         </dict>
 
         <!-- Others -->
@@ -1068,6 +1096,8 @@
                     <string>application/vnd.wordperfect</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1090,6 +1120,8 @@
                     <string>application/x-aportisdoc</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1112,6 +1144,8 @@
                     <string>application/x-hwp</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1134,6 +1168,8 @@
                     <string>application/vnd.ms-works</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1156,6 +1192,8 @@
                     <string>application/x-mswrite</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>text.icns</string>
         </dict>
 
         <dict>
@@ -1179,6 +1217,8 @@
                     <string>application/x-dif-document</string> <!-- ??? -->
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1202,6 +1242,8 @@
                     <string>text/spreadsheet</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1225,6 +1267,8 @@
                     <string>text/csv</string> <!-- ??? -->
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1247,6 +1291,8 @@
                     <string>application/x-dbase</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>database.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1273,6 +1319,8 @@
                     <string>application/vnd.lotus-1-2-3</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>spreadsheet.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1296,6 +1344,8 @@
                     <string>image/cgm</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1319,6 +1369,8 @@
                     <string>image/vnd.dxf</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1342,6 +1394,8 @@
                     <string>image/x-emf</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1365,6 +1419,8 @@
                     <string>image/x-wmf</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1394,6 +1450,8 @@
                     <string>image/x-cdr</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1428,6 +1486,8 @@
                     <string>application/vnd.visio</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
         <dict>
             <key>UTTypeConformsTo</key>
@@ -1450,6 +1510,8 @@
                     <string>application/x-mspublisher</string>
                 </array>
             </dict>
+            <key>UTTypeIconFile</key>
+            <string>drawing.icns</string>
         </dict>
     </array>
 
