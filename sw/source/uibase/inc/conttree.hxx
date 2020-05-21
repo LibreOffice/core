@@ -247,6 +247,11 @@ public:
         m_xTreeView->grab_focus();
     }
 
+    OUString get_selected_text() const
+    {
+        return m_xTreeView->get_selected_text();
+    }
+
     int count_selected_rows() const
     {
         return m_xTreeView->count_selected_rows();

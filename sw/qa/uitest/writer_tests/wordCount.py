@@ -10,7 +10,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.debug import sleep
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.path import get_srcdir_url
-import time
 
 def get_url_for_data_file(file_name):
     return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
@@ -276,25 +275,17 @@ class writerWordCount(UITestCase):
         self.xUITest.executeCommand(".uno:GoRight")
         self.xUITest.executeCommand(".uno:WordLeftSel")
 
-        #need to wait, because Word count dialog is already open and it takes time to refresh the counter
-        timeout = time.time() + 3
-        while get_state_as_dict(xselectwords)["Text"] != "1" and time.time() < timeout:
-            sleep(0.1)
-
+        #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
         #Expected result : Words 1 & Characters 4 #Actual result : Words 0 & Characters 0
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "1")
+        self.assertEqualWithTimeout(xselectwords, {'Text': '1'})
         self.assertEqual(get_state_as_dict(xselectchars)["Text"], "4")
 
         #4. Click after "At nunc" then <Shift><Home>
         self.xUITest.executeCommand(".uno:StartOfParaSel")
 
-        #need to wait, because Word count dialog is already open and it takes time to refresh the counter
-        timeout = time.time() + 3
-        while get_state_as_dict(xselectwords)["Text"] != "2" and time.time() < timeout:
-            sleep(0.1)
-
+        #needs to wait, because Word count dialog is already open and it takes time to refresh the counter
         #Expected result : Words 2 & Characters 7 & excluding space 6  #Actual result : Words 0 & Characters 0
-        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "2")
+        self.assertEqualWithTimeout(xselectwords, {'Text': '2'})
         self.assertEqual(get_state_as_dict(xselectchars)["Text"], "7")
 
         self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "6")

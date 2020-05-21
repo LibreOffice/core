@@ -8,12 +8,28 @@
 import signal
 import unittest
 import time
+from uitest.config import DEFAULT_SLEEP
+from uitest.config import MAX_WAIT
+from uitest.uihelper.common import get_state_as_dict
 
 from uitest.test import UITest
 
 from libreoffice.connection import PersistentConnection, OfficeConnection
 
-class UITestCase(unittest.TestCase):
+class CustomAssertions:
+    def assertEqualWithTimeout(self, element, values):
+        time_ = 0
+        for key, value in values.items():
+            while time_ < MAX_WAIT:
+                if get_state_as_dict(element)[key] == value:
+                    break
+                else:
+                    time_ += DEFAULT_SLEEP
+                    time.sleep(DEFAULT_SLEEP)
+
+            self.assertEqual(get_state_as_dict(element)[key], value)
+
+class UITestCase(unittest.TestCase, CustomAssertions):
 
     def __init__(self, test_name, opts):
         unittest.TestCase.__init__(self, test_name)

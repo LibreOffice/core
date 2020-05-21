@@ -48,6 +48,17 @@ class UITest(object):
             if component is not None:
                 return component
 
+    def get_child_with_timeout(self, parent, childName):
+        time_ = 0
+        while time_ < MAX_WAIT:
+            if childName in parent.getChildren():
+                break
+            else:
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+
+        return parent.getChild(childName)
+
     def load_file(self, url):
         desktop = self.get_desktop()
         with EventListener(self._xContext, "OnLoad") as event:
