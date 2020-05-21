@@ -152,10 +152,8 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bBulletFound=false;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "BulletChar")
         {
             // should be 'o'.
@@ -173,10 +171,8 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
                 uno::UNO_QUERY);
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "NumberingType")
         {
             printf("style is %d\n", rProp.Value.get<sal_Int16>());

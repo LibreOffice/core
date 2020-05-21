@@ -172,11 +172,11 @@ DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
         return;
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
+    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), "CustomShapeGeometry");
     OUString aType;
-    for (int i = 0; i < aProps.getLength(); ++i)
-        if (aProps[i].Name == "Type")
-            aType = aProps[i].Value.get<OUString>();
+    for (beans::PropertyValue const & prop : aProps)
+        if (prop.Name == "Type")
+            aType = prop.Value.get<OUString>();
     // This was exported as borderCallout90, which is an invalid drawingML preset shape string.
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
@@ -467,14 +467,14 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 
     // finally check the embedded files are present in the zipped document
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSheetFiles = 0;
     int nImageFiles = 0;
-    for (int i=0; i<names.getLength(); i++)
+    for (OUString const & n : names)
     {
-        if(names[i].startsWith("word/embeddings/oleObject"))
+        if(n.startsWith("word/embeddings/oleObject"))
             nSheetFiles++;
-        if(names[i].startsWith("word/media/image"))
+        if(n.startsWith("word/media/image"))
             nImageFiles++;
     }
     CPPUNIT_ASSERT_EQUAL(2, nSheetFiles);

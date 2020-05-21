@@ -410,19 +410,17 @@ DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
      * xray oCoordinates(1).Second.Value ' 102
      */
 
-    uno::Sequence<beans::PropertyValue> aProps
+    const uno::Sequence<beans::PropertyValue> aProps
         = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1), "CustomShapeGeometry");
     uno::Sequence<beans::PropertyValue> aPathProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& rProp : aProps)
     {
-        const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             rProp.Value >>= aPathProps;
     }
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-    for (int i = 0; i < aPathProps.getLength(); ++i)
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
     {
-        const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")
             rProp.Value >>= aPairs;
     }
@@ -540,10 +538,8 @@ DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "NumberingType")
             nNumberingType = rProp.Value.get<sal_Int16>();
         else if (rProp.Name == "GraphicBitmap")
@@ -669,10 +665,8 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     OUString aListFormat;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "ListFormat")
             aListFormat = rProp.Value.get<OUString>();
     }
@@ -1282,9 +1276,9 @@ DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& prop : std::as_const(aProps))
     {
-        if (aProps[i].Name == "BulletChar")
+        if (prop.Name == "BulletChar")
             return;
     }
     CPPUNIT_FAIL("no BulletChar property");
@@ -1310,12 +1304,12 @@ DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
                                                     uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& prop : std::as_const(aProps))
     {
-        if (aProps[i].Name == "Adjust")
+        if (prop.Name == "Adjust")
         {
             sal_Int16 nValue = 0;
-            CPPUNIT_ASSERT(aProps[i].Value >>= nValue);
+            CPPUNIT_ASSERT(prop.Value >>= nValue);
             CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
             return;
         }

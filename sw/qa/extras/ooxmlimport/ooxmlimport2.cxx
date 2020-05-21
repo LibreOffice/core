@@ -539,12 +539,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const& prop : std::as_const(aProps))
     {
-        if (aProps[i].Name == "NumberingType")
+        if (prop.Name == "NumberingType")
         {
-            CPPUNIT_ASSERT_EQUAL(style::NumberingType::CIRCLE_NUMBER,
-                                 aProps[i].Value.get<sal_Int16>());
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::CIRCLE_NUMBER, prop.Value.get<sal_Int16>());
             return;
         }
     }

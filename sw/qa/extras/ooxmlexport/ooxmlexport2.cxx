@@ -574,10 +574,8 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
     uno::Reference<awt::XBitmap> xBitmap;
     sal_Int16 nNumberingType = -1;
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "NumberingType")
             nNumberingType = rProp.Value.get<sal_Int16>();
         else if (rProp.Name == "GraphicBitmap")
@@ -643,10 +641,10 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     // 1st problem: last character was missing
     CPPUNIT_ASSERT_EQUAL(OUString("SAMPLE"), xShape->getString());
 
-    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
+    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
     bool bFound = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
-        if (aProps[i].Name == "TextPath")
+    for (beans::PropertyValue const & prop : aProps)
+        if (prop.Name == "TextPath")
             bFound = true;
     // 2nd problem: v:textpath wasn't imported
     CPPUNIT_ASSERT_EQUAL(true, bFound);
@@ -910,9 +908,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "BulletChar")
         {
             CPPUNIT_ASSERT_EQUAL(OUString("\x0", 1, RTL_TEXTENCODING_ASCII_US), rProp.Value.get<OUString>());
@@ -1057,10 +1054,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
 {
     // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
     uno::Reference<drawing::XShape> xArrow = getShape(1);
-    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
-    for (int i = 0; i < aProps.getLength(); ++i)
+    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
+    for (beans::PropertyValue const & rProp : aProps)
     {
-        const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "MirroredY")
         {
             CPPUNIT_ASSERT_EQUAL( true, rProp.Value.get<bool>() );

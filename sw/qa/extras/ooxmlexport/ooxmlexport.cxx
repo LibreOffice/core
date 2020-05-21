@@ -896,10 +896,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bFound = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "GraphicSize")
         {
             // Height of the graphic was too large: 4382 after import, then 2485 after roundtrip.
