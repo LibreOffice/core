@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-30 12:39:28 using:
+ Generated on 2020-05-21 16:43:16 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -86,6 +86,7 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/EnumContext.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
@@ -339,7 +340,6 @@
 #include <svl/urihelper.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/InterimItemWindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <svx/svxdllapi.h>
 
 class XLineWidthItem;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 

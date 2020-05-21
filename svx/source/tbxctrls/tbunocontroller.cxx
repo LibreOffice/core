@@ -39,7 +39,7 @@
 
 #include <memory>
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <boost/property_tree/ptree.hpp>
 

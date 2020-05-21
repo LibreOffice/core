@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_INC_TBXFORM_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 class SvxFmAbsRecWin final : public InterimItemWindow
 {

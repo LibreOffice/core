@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace chart

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 namespace svt
 {

@@ -18,8 +18,10 @@
  */
 
 #include <vcl/fieldvalues.hxx>
-#include <svl/intitem.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <svl/intitem.hxx>
 
 #include <strings.hrc>
 

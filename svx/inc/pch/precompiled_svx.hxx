@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-26 15:54:56 using:
+ Generated on 2020-05-21 16:43:20 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -73,6 +73,7 @@
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
@@ -157,6 +158,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -211,6 +213,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -287,6 +290,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -321,7 +325,6 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/InterimItemWindow.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/popupwindowcontroller.hxx>
@@ -332,6 +335,7 @@
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>

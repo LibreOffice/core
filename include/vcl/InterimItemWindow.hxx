@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include <svtools/svtdllapi.h>
-#include <vcl/layout.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/ctrl.hxx>
 #include <vcl/weld.hxx>
 
-class SVT_DLLPUBLIC InterimItemWindow : public Control
+class VCL_DLLPUBLIC InterimItemWindow : public Control
 {
 public:
     virtual ~InterimItemWindow() override;

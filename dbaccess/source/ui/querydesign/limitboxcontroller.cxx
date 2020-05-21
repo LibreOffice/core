@@ -16,7 +16,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

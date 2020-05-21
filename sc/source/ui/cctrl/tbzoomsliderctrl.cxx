@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <tbzoomsliderctrl.hxx>
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>

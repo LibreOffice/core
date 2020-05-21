@@ -29,7 +29,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/vclmedit.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
