@@ -370,7 +370,6 @@
 #include <fmprop.hxx>
 #include <fmservs.hxx>
 #include <helpids.h>
-#include <labelitemwindow.hxx>
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
@@ -394,6 +393,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>
+#include <svx/labelitemwindow.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rotmodit.hxx>
