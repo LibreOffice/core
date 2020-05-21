@@ -195,7 +195,8 @@
       constructor="XMLMetaExportComponent_get_implementation">
     <service name="com.sun.star.document.XMLOasisMetaExporter"/>
   </implementation>
-  <implementation name="XMLMetaExportOOo">
+  <implementation name="XMLMetaExportOOo"
+    constructor="XMLMetaExportOOo_get_implementation">
     <service name="com.sun.star.document.XMLMetaExporter"/>
   </implementation>
   <implementation name="XMLMetaImportComponent"

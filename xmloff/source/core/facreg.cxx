@@ -54,11 +54,8 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
-        // meta import/export OOo
-        SINGLEFACTORY( XMLMetaExportOOO )
-
         // auto text import/export
-        else SINGLEFACTORY( XMLAutoTextEventExport )
+        SINGLEFACTORY( XMLAutoTextEventExport )
         else SINGLEFACTORY( XMLAutoTextEventImport )
         else SINGLEFACTORY( XMLAutoTextEventExportOOO )
 

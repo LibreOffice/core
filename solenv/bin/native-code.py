@@ -290,6 +290,7 @@ core_constructor_list = [
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # xmloff/util/xo.component
     "XMLMetaExportComponent_get_implementation",
+    "XMLMetaExportOOo_get_implementation",
     "XMLMetaImportComponent_get_implementation",
     "XMLVersionListPersistence_get_implementation",
     "com_sun_star_comp_Impress_XMLOasisImporter_get_implementation",
