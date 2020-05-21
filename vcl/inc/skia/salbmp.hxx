@@ -60,6 +60,7 @@ public:
     virtual bool InterpretAs8Bit() override;
     virtual bool ConvertToGreyscale() override;
 
+    const BitmapPalette& Palette() const { return mPalette; }
     // Returns the contents as SkImage (possibly GPU-backed).
     const sk_sp<SkImage>& GetSkImage() const;
 
