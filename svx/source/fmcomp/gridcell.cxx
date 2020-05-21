@@ -946,7 +946,6 @@ void DbCellControl::AlignControl(sal_Int16 nAlignment)
         lcl_implAlign( m_pPainter, nAlignmentBit );
 }
 
-
 void DbCellControl::PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect )
 {
     if ( m_pPainter->GetParent() == &_rDev )
@@ -970,9 +969,11 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRe
         m_pPainter->SetParentUpdateMode( true );
     }
     else
-        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), DrawFlags::NONE );
+    {
+        m_pPainter->SetSizePixel( _rRect.GetSize() );
+        m_pPainter->Draw( &_rDev, _rRect.TopLeft(), DrawFlags::NONE );
+    }
 }
-
 
 void DbCellControl::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {

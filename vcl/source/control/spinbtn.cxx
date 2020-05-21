@@ -120,10 +120,10 @@ void SpinButton::Resize()
     Invalidate();
 }
 
-void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags)
+void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, DrawFlags nFlags)
 {
     Point aPos  = pDev->LogicToPixel(rPos);
-    Size aSize = pDev->LogicToPixel(rSize);
+    Size aSize = GetSizePixel();
 
     pDev->Push();
     pDev->SetMapMode();

@@ -228,12 +228,10 @@ namespace svt
             pBox->SetZoom(GetZoom());
     }
 
-
-    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
+    void CheckBoxControl::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     {
-        pBox->Draw(pDev,rPos,rSize,nFlags);
+        pBox->Draw(pDev, rPos, nFlags);
     }
-
 
     void CheckBoxControl::GetFocus()
     {

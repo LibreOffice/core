@@ -952,16 +952,16 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer, void )
     }
 }
 
-void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags)
+void SpinField::Draw(OutputDevice* pDev, const Point& rPos, DrawFlags nFlags)
 {
-    Edit::Draw(pDev, rPos, rSize, nFlags);
+    Edit::Draw(pDev, rPos, nFlags);
 
     WinBits nFieldStyle = GetStyle();
     if ( (nFlags & DrawFlags::NoControls ) || !( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
         return;
 
     Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
+    Size aSize = GetSizePixel();
     AllSettings aOldSettings = pDev->GetSettings();
 
     pDev->Push();
