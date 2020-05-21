@@ -6,6 +6,7 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
+#include <test/bootstrapfixture.hxx>
 
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
@@ -21,7 +22,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-class GalleryObjTest : public CppUnit::TestFixture
+class GalleryObjTest : public test::BootstrapFixture
 {
 public:
     void TestCreateTheme();
@@ -31,6 +32,9 @@ public:
     void TestThemeCount();
     void TestGalleryThemeEntry();
     void TestInsertGalleryObject();
+    void TestRemoveGalleryObject();
+    void TestChangePositionGalleryObject();
+    void TestGetThemeNameFromGalleryTheme();
 
     CPPUNIT_TEST_SUITE(GalleryObjTest);
 
@@ -41,6 +45,9 @@ public:
     CPPUNIT_TEST(TestThemeCount);
     CPPUNIT_TEST(TestGalleryThemeEntry);
     CPPUNIT_TEST(TestInsertGalleryObject);
+    CPPUNIT_TEST(TestRemoveGalleryObject);
+    CPPUNIT_TEST(TestChangePositionGalleryObject);
+    CPPUNIT_TEST(TestGetThemeNameFromGalleryTheme);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -292,11 +299,177 @@ void GalleryObjTest::TestInsertGalleryObject()
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
 
-    // Insert Objects Into Theme
+    // Create Sfx Instance
     SfxListener aListener;
     SfxApplication::GetOrCreate();
+
+    // Insert Objects Into Theme
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), pGalleryTheme->GetObjectCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
+                                 pGalleryTheme->GetObjectCount());
+
+    std::vector<OUString> imageList{ "galtest1.png", "galtest2.png", "galtest3.jpg" };
+
+    for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
+    {
+        OUString imageNameFromList(imageList[i]);
+        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+                      + imageNameFromList);
+        CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
+                               pGalleryTheme->InsertURL(INetURLObject(aURL)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(),
+                                     i + 1);
+        std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(i);
+        CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid", pObj->IsValid());
+    }
+    pGallery->ReleaseTheme(pGalleryTheme, aListener);
+}
+
+void GalleryObjTest::TestRemoveGalleryObject()
+{
+    // Create theme
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+    const OUString myThemeName = "addytesttheme";
+    CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+    CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+
+    // Create Sfx Instance
+    SfxListener aListener;
+    SfxApplication::GetOrCreate();
+
+    // Insert Objects Into Theme
+    GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
+                                 pGalleryTheme->GetObjectCount());
+
+    std::vector<OUString> imageList{ "galtest1.png", "galtest2.png", "galtest3.jpg" };
+
+    for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
+    {
+        OUString imageNameFromList(imageList[i]);
+        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+                      + imageNameFromList);
+        CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
+                               pGalleryTheme->InsertURL(INetURLObject(aURL)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(),
+                                     i + 1);
+        std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(i);
+        CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid", pObj->IsValid());
+    }
+
+    for (sal_uInt32 i = static_cast<sal_uInt32>(imageList.size()); i > 0; i--)
+    {
+        std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(i - 1);
+        CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid", pObj->IsValid());
+        pGalleryTheme->RemoveObject(i - 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(),
+                                     i - 1);
+    }
+
+    pGallery->ReleaseTheme(pGalleryTheme, aListener);
+}
+
+void GalleryObjTest::TestChangePositionGalleryObject()
+{
+    // Create theme
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+    const OUString myThemeName = "addytesttheme";
+    CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+    CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+
+    // Create Sfx Instance
+    SfxListener aListener;
+    SfxApplication::GetOrCreate();
+
+    // Insert Objects Into Theme
+    GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
+                                 pGalleryTheme->GetObjectCount());
+
+    OUString imageList[] = { "galtest1.png", "galtest2.png", "galtest3.jpg" };
+
+    for (sal_uInt32 i = 0; i < (sizeof(imageList) / sizeof(imageList[0])); i++)
+    {
+        OUString imageNameFromList(imageList[i]);
+        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+                      + imageNameFromList);
+        CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
+                               pGalleryTheme->InsertURL(INetURLObject(aURL)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Inconsistent object Count", pGalleryTheme->GetObjectCount(),
+                                     i + 1);
+        std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(i);
+        CPPUNIT_ASSERT_MESSAGE("Acquired Object Invalid", pObj->IsValid());
+    }
+
+    CPPUNIT_ASSERT(pGalleryTheme->ChangeObjectPos(1, 3));
+    std::unique_ptr<SgaObject> pObj = pGalleryTheme->AcquireObject(0);
+    INetURLObject aURL = pObj->GetURL();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failure to change object position", imageList[0],
+                                 aURL.GetLastName());
+
+    pObj = pGalleryTheme->AcquireObject(1);
+    aURL = pObj->GetURL();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failure to change object position", imageList[2],
+                                 aURL.GetLastName());
+
+    pObj = pGalleryTheme->AcquireObject(2);
+    aURL = pObj->GetURL();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failure to change object position", imageList[1],
+                                 aURL.GetLastName());
+
+    pGallery->ReleaseTheme(pGalleryTheme, aListener);
+}
+
+void GalleryObjTest::TestGetThemeNameFromGalleryTheme()
+{
+    // Create theme
+    std::unique_ptr<utl::TempFile> pTempDir;
+    pTempDir.reset(new utl::TempFile(nullptr, true));
+    CPPUNIT_ASSERT_MESSAGE("Could not create valid temporary directory", pTempDir->IsValid());
+    pTempDir->EnableKillingFile();
+    const OUString aGalleryURL = pTempDir->GetURL();
+
+    // Check if directory exists
+    CPPUNIT_ASSERT_MESSAGE("Could not create temporary directory",
+                           comphelper::DirectoryHelper::dirExists(aGalleryURL));
+
+    std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
+    CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
+    const OUString myThemeName = "addytesttheme";
+    CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
+    CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
+
+    // Create Sfx Instance
+    SfxListener aListener;
+    SfxApplication::GetOrCreate();
+
+    GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
+                                 pGalleryTheme->GetObjectCount());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme name not matching", myThemeName, pGalleryTheme->GetName());
 
     pGallery->ReleaseTheme(pGalleryTheme, aListener);
 }
