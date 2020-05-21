@@ -2347,6 +2347,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123268)
                 41);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf133005)
+{
+    SwDoc* pDoc = createDoc("tdf133005.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    sal_Int32 nXChartWall = getXPath(pXmlDoc,
+                                     "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                     "push[1]/push[1]/polyline[1]/point[2]",
+                                     "x")
+                                .toInt32();
+    sal_Int32 nXColumn = getXPath(pXmlDoc,
+                                  "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
+                                  "push[1]/push[42]/polypolygon/polygon/point[1]",
+                                  "x")
+                             .toInt32();
+
+    // This failed, if the value axis doesn't appear inside category.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nXChartWall, nXColumn, 5);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
 {
     SwDoc* pDoc = createDoc("tdf115630.docx");
