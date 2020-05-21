@@ -74,7 +74,6 @@ public:
     class PaneDescriptor
     {
     public:
-        typedef ::std::function<std::shared_ptr<PresenterSprite> ()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;

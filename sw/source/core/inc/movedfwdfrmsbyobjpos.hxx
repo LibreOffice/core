@@ -28,7 +28,6 @@ class SwTextFrame;
 class SwRowFrame;
 
 typedef std::map< const SwTextNode*, const sal_uInt32 > NodeMap;
-typedef NodeMap::value_type NodeMapEntry;
 
 class SwMovedFwdFramesByObjPos
 {

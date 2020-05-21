@@ -193,7 +193,6 @@ public:
 class GtkSalTimer;
 class GtkInstance final : public SvpSalInstance
 {
-    typedef SvpSalInstance Superclass_t;
 public:
             GtkInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~GtkInstance() override;
