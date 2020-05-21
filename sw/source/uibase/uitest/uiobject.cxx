@@ -147,7 +147,10 @@ void SwNavigationPIUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
     if (rAction == "ROOT")
+    {
+        mxSwNavigationPI->m_xContentTree->grab_focus();
         mxSwNavigationPI->ToolBoxSelectHdl("root");
+    }
     else
         WindowUIObject::execute(rAction, rParameters);
 }
