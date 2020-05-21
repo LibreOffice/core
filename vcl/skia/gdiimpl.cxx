@@ -1276,7 +1276,10 @@ static sk_sp<SkImage> mergeBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBit
     if (!blockCaching)
     {
         OStringBuffer keyBuf;
-        keyBuf.append("0x")
+        keyBuf.append(targetSize.Width())
+            .append("x")
+            .append(targetSize.Height())
+            .append("_0x")
             .append(reinterpret_cast<sal_IntPtr>(&bitmap), 16)
             .append("_0x")
             .append(reinterpret_cast<sal_IntPtr>(alphaBitmap), 16)
@@ -1288,7 +1291,10 @@ static sk_sp<SkImage> mergeBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBit
         key = keyBuf.makeStringAndClear();
         image = SkiaHelper::findCachedImage(key);
         if (image)
+        {
+            assert(image->width() == targetSize.Width() && image->height() == targetSize.Height());
             return image;
+        }
     }
     // Combine bitmap + alpha bitmap into one temporary bitmap with alpha.
     // If scaling is needed, first apply the alpha, then scale, otherwise the scaling might affect the alpha values.
