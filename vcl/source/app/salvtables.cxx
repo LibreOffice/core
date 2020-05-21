@@ -36,7 +36,7 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <svimpbox.hxx>
-#include <messagedialog.hxx>
+#include <vcl/messagedialog.hxx>
 #include <treeglue.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/configmgr.hxx>
