@@ -33,6 +33,9 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
+
+private:
+    virtual void ImplPaintToDevice(OutputDevice* pTargetOutDev, const Point& rPos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
