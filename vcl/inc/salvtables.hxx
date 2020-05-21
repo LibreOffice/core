@@ -390,6 +390,8 @@ public:
 
     virtual void set_highlight_background() override;
 
+    virtual void draw(VirtualDevice& rOutput) override;
+
     SystemWindow* getSystemWindow();
 };
 
