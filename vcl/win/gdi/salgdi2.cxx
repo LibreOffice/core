@@ -43,6 +43,7 @@
 #include <config_features.h>
 #if HAVE_FEATURE_SKIA
 #include <skia/win/gdiimpl.hxx>
+#include <skia/salbmp.hxx>
 #endif
 
 
@@ -113,6 +114,10 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     {
         aBitmapPalette = pGLSalBitmap->GetBitmapPalette();
     }
+#if HAVE_FEATURE_SKIA
+    if(SkiaSalBitmap* pSkiaSalBitmap = dynamic_cast<SkiaSalBitmap*>(&rSalBitmap))
+        aBitmapPalette = pSkiaSalBitmap->Palette();
+#endif
 
     BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BitmapAccessMode::Read);
 
@@ -121,13 +126,19 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
     sal_uInt8* pSource(pRead->mpBits);
     sal_uInt8* pDestination(pWrite->mpBits);
+    long readRowChange = pRead->mnScanlineSize;
+    if(pRead->mnFormat & ScanlineFormat::TopDown)
+    {
+        pSource += pRead->mnScanlineSize * (pRead->mnHeight - 1);
+        readRowChange = -readRowChange;
+    }
 
     std::unique_ptr<ColorScanlineConverter> pConverter;
 
-    if (pRead->mnFormat == ScanlineFormat::N24BitTcRgb)
+    if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N24BitTcRgb)
         pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb,
                                                     3, pRead->mnScanlineSize));
-    else if (pRead->mnFormat == ScanlineFormat::N32BitTcRgba)
+    else if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N32BitTcRgba)
         pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba,
                                                     4, pRead->mnScanlineSize));
     if (pConverter)
@@ -135,7 +146,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
         for (long y = 0; y < pRead->mnHeight; y++)
         {
             pConverter->convertScanline(pSource, pDestination);
-            pSource += pRead->mnScanlineSize;
+            pSource += readRowChange;
             pDestination += pWrite->mnScanlineSize;
         }
     }
@@ -144,7 +155,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
         for (long y = 0; y < pRead->mnHeight; y++)
         {
             memcpy(pDestination, pSource, pRead->mnScanlineSize);
-            pSource += pRead->mnScanlineSize;
+            pSource += readRowChange;
             pDestination += pWrite->mnScanlineSize;
         }
     }
