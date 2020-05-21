@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/timer.hxx>
 #include <cppuhelper/implbase.hxx>
