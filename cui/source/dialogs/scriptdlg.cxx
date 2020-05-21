@@ -936,7 +936,7 @@ void SvxScriptOrgDialog::deleteEntry(weld::TreeIter& rEntry)
 {
     bool result = false;
     Reference< browse::XBrowseNode > node = getBrowseNode(rEntry);
-    // ISSUE L10N string & can we centre list?
+    // ISSUE L10N string & can we center list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                    VclMessageType::Question, VclButtonsType::YesNo, aQuery));
