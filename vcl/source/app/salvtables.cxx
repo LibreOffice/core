@@ -1135,6 +1135,12 @@ std::unique_ptr<weld::Container> SalInstanceWidget::weld_parent() const
     return std::make_unique<SalInstanceContainer>(pParent, m_pBuilder, false);
 }
 
+void SalInstanceWidget::draw(VirtualDevice& rOutput)
+{
+    rOutput.SetOutputSizePixel(m_xWidget->GetSizePixel());
+    m_xWidget->PaintToDevice(&rOutput, Point());
+}
+
 namespace
 {
 class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box

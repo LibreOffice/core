@@ -3065,6 +3065,39 @@ public:
         xRet->SetBackground(COL_TRANSPARENT);
         return xRet;
     }
+
+    virtual void draw(VirtualDevice& rOutput) override
+    {
+        // detect if we have to manually setup its size
+        bool bAlreadyRealized = gtk_widget_get_realized(m_pWidget);
+        // has to be visible for draw to work
+        bool bAlreadyVisible = gtk_widget_get_visible(m_pWidget);
+        if (!bAlreadyVisible)
+            gtk_widget_show(m_pWidget);
+
+        GtkAllocation allocation;
+
+        if (!bAlreadyRealized)
+            gtk_widget_realize(m_pWidget);
+
+        gtk_widget_get_allocation(m_pWidget, &allocation);
+
+        if (!bAlreadyRealized)
+            gtk_widget_size_allocate(m_pWidget, &allocation);
+
+        rOutput.SetOutputSizePixel(Size(allocation.width, allocation.height));
+        cairo_surface_t* pSurface = get_underlying_cairo_surface(rOutput);
+        cairo_t* cr = cairo_create(pSurface);
+
+        gtk_widget_draw(m_pWidget, cr);
+
+        cairo_destroy(cr);
+
+        if (!bAlreadyVisible)
+            gtk_widget_hide(m_pWidget);
+        if (!bAlreadyRealized)
+            gtk_widget_unrealize(m_pWidget);
+    }
 };
 
 }
