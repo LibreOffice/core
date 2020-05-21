@@ -257,14 +257,24 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor )
             {
-                // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'editAs="oneCell"'
-                if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
-                        mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
+                    auto rot = mxShape->getRotation();
+                    if (mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL
+                        && ((rot >= 45 * PER_DEGREE && rot < 135 * PER_DEGREE)
+                            || (rot >= 225 * PER_DEGREE && rot < 315 * PER_DEGREE)))
+                    {
+                        auto half_w = aShapeRectEmu.Width / 2;
+                        auto half_h = aShapeRectEmu.Height / 2;
+                        auto x0 = aShapeRectEmu.X + half_w;
+                        auto y0 = aShapeRectEmu.Y + half_h;
+                        aShapeRectEmu.X = x0 - half_h;
+                        aShapeRectEmu.Y = y0 - half_w;
+                        std::swap(aShapeRectEmu.Width, aShapeRectEmu.Height);
+                    }
+
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
                     Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
