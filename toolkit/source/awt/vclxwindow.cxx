@@ -2286,7 +2286,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
                 bool bOldNW =pWindow->IsNativeWidgetEnabled();
                 if( bOldNW )
                     pWindow->EnableNativeWidget(false);
-                pWindow->PaintToDevice( pDev, aP, aSz );
+                pWindow->PaintToDevice( pDev, aP );
                 if( bOldNW )
                     pWindow->EnableNativeWidget();
             }
