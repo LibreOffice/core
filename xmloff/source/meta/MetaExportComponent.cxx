@@ -168,12 +168,6 @@ void XMLMetaExportComponent::ExportAutoStyles_() {}
 void XMLMetaExportComponent::ExportMasterStyles_() {}
 void XMLMetaExportComponent::ExportContent_() {}
 
-uno::Sequence< OUString > XMLMetaExportOOO_getSupportedServiceNames()
-    throw()
-{
-    return uno::Sequence< OUString > { "com.sun.star.document.XMLMetaExporter" };
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
@@ -182,15 +176,12 @@ XMLMetaExportComponent_get_implementation(
     return cppu::acquire(new XMLMetaExportComponent(context, "XMLMetaExportComponent", SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
-OUString XMLMetaExportOOO_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+XMLMetaExportOOo_get_implementation(css::uno::XComponentContext* context,
+                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return "XMLMetaExportOOo";
-}
-
-uno::Reference< uno::XInterface > XMLMetaExportOOO_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META));
+    return cppu::acquire(
+        new XMLMetaExportComponent(context, "XMLMetaExportOOo", SvXMLExportFlags::META));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

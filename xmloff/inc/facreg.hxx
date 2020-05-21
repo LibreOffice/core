@@ -31,13 +31,6 @@ namespace com::sun::star {
     namespace uno { class XInterface; }
 }
 
-// meta export OOo
-OUString XMLMetaExportOOO_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLMetaExportOOO_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLMetaExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // writer autotext event export
 OUString XMLAutoTextEventExport_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLAutoTextEventExport_getSupportedServiceNames() throw();
