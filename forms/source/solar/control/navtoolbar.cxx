@@ -27,6 +27,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
+#include <svx/labelitemwindow.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -301,29 +303,11 @@ namespace frm
                         static_cast< RecordPositionInput* >( pItemWindow )->setDispatcher( m_pDispatcher );
                     }
                     else if ( LID_RECORD_FILLER == pSupportedFeatures->nId )
-                    {
-                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_CENTER | WB_VCENTER );
-                        pItemWindow->SetBackground(Wallpaper(COL_TRANSPARENT));
-                    }
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, getLabelString(RID_STR_LABEL_OF));
                     else
-                    {
-                        pItemWindow = VclPtr<FixedText>::Create( m_pToolbar, WB_VCENTER );
-                        pItemWindow->SetBackground();
-                        pItemWindow->SetPaintTransparent(true);
-                    }
+                        pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, getLabelString(RID_STR_LABEL_RECORD));
+
                     m_aChildWins.emplace_back(pItemWindow );
-
-                    switch ( pSupportedFeatures->nId )
-                    {
-                    case LID_RECORD_LABEL:
-                        pItemWindow->SetText( getLabelString( RID_STR_LABEL_RECORD ) );
-                        break;
-
-                    case LID_RECORD_FILLER:
-                        pItemWindow->SetText( getLabelString( RID_STR_LABEL_OF ) );
-                        break;
-                    }
-
                     m_pToolbar->SetItemWindow( pSupportedFeatures->nId, pItemWindow );
                 }
             }
@@ -642,7 +626,6 @@ namespace frm
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
     }
 
-
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled )
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
@@ -660,12 +643,10 @@ namespace frm
         SetBorderStyle( WindowBorderStyle::MONO );
     }
 
-
     void RecordPositionInput::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
     }
-
 
     void RecordPositionInput::FirePosition( bool _bForce )
     {
