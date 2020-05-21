@@ -77,6 +77,7 @@
 
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
+#include <cellsuno.hxx>
 
 namespace com::sun::star::frame { class XModel; }
 
@@ -257,6 +258,7 @@ public:
     void testAutoheight2Rows();
     void testXLSDefColWidth();
     void testPreviewMissingObjLink();
+    void testShapeRotationImport();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -405,6 +407,7 @@ public:
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
     CPPUNIT_TEST(testPreviewMissingObjLink);
+    CPPUNIT_TEST(testShapeRotationImport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4443,6 +4446,58 @@ void ScFiltersTest::testPreviewMissingObjLink()
     CPPUNIT_ASSERT_MESSAGE("the ole object links to a missing file, but we should retain its preview", pGraphic);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testShapeRotationImport()
+{
+    // Incorrectly calculated bounding rectangles caused shapes to appear as if there were extra or missing rotations.
+    // Hence, we check the sizes of these rectangles.
+    ScDocShellRef xDocSh = loadDoc("testShapeRotationImport.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testShapeRotationImport.xlsx", xDocSh.is());
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
+
+    // The expected values are in the map below. Note that some of the angles are outside of the set which contains
+    // the value of the wrong angles. This is to check the border cases and one value on both sides.
+    // Additionally, the bounding rectangle at the degrees 45 and 225 will be the same size as it would be without this
+    // fix. Because at those degress the bounding rect is a square, swapping width with height does nothing.
+    std::map<sal_Int32, std::map<std::string, sal_Int32>> valMap
+    {
+        {  4400, { { "x",  7110 }, { "y", 35660 }, { "width", 1450 }, { "height", 1416 } }},
+        {  4500, { { "x",  4767 }, { "y", 35146 }, { "width", 1428 }, { "height", 1428 } }},
+        {  4600, { { "x",  1949 }, { "y", 34982 }, { "width", 1420 }, { "height", 1453 } }},
+        { 13400, { { "x", 12529 }, { "y", 26676 }, { "width", 1416 }, { "height", 1450 } }},
+        { 13500, { { "x",  9563 }, { "y", 26247 }, { "width", 1428 }, { "height", 1428 } }},
+        { 13600, { { "x",  7161 }, { "y", 26641 }, { "width", 1453 }, { "height", 1420 } }},
+        { 22400, { { "x", 13221 }, { "y", 12796 }, { "width", 1450 }, { "height", 1416 } }},
+        { 22500, { { "x", 10061 }, { "y", 12661 }, { "width", 1428 }, { "height", 1428 } }},
+        { 22600, { { "x",  6558 }, { "y", 12755 }, { "width", 1420 }, { "height", 1453 } }},
+        { 31400, { { "x",  7917 }, { "y",  1438 }, { "width", 1279 }, { "height", 1308 } }},
+        { 31500, { { "x",  4254 }, { "y",  1551 }, { "width", 1289 }, { "height", 1289 } }},
+        { 31600, { { "x",  1800 }, { "y",  2154 }, { "width", 1311 }, { "height", 1283 } }},
+    };
+
+    for (sal_Int32 ind = 0; ind < 12; ++ind)
+    {
+        uno::Reference< drawing::XShape > xShape(xPage->getByIndex(ind), uno::UNO_QUERY_THROW);
+        uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
+        auto propsetinfo = xShapeProperties->getPropertySetInfo();
+
+        auto rect = xShapeProperties->getPropertyValue("BoundRect");
+        awt::Rectangle aTmpRect;
+        rect >>= aTmpRect;
+
+        auto nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
+        sal_Int32 nRot = nRotProp.get<sal_Int32>();
+
+        CPPUNIT_ASSERT(valMap.find(nRot) != valMap.end());
+        CPPUNIT_ASSERT_EQUAL(valMap[nRot]["x"],      aTmpRect.X);
+        CPPUNIT_ASSERT_EQUAL(valMap[nRot]["y"],      aTmpRect.Y);
+        CPPUNIT_ASSERT_EQUAL(valMap[nRot]["width"],  aTmpRect.Width);
+        CPPUNIT_ASSERT_EQUAL(valMap[nRot]["height"], aTmpRect.Height);
+    }
 }
 
 ScFiltersTest::ScFiltersTest()
