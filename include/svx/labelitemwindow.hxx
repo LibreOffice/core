@@ -10,8 +10,9 @@
 #pragma once
 
 #include <svtools/InterimItemWindow.hxx>
+#include <svx/svxdllapi.h>
 
-class LabelItemWindow final : public InterimItemWindow
+class SVX_DLLPUBLIC LabelItemWindow final : public InterimItemWindow
 {
 private:
     std::unique_ptr<weld::Label> m_xLabel;
