@@ -191,7 +191,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
                         m_bShowAxisOrigin = true;
 
-                    if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
+                    if ( nDimensionIndex == 0 && ( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::DATE ) )
                     {
                         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
                         if (pModel)
