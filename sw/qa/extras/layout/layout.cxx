@@ -2347,6 +2347,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123268)
                 41);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf133005)
+{
+    SwDoc* pDoc = createDoc("tdf133005.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nX = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2278
+    // - Actual  : 3895
+    // - Delta:  : 50
+    // i.e. value axis appeared between categories.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2278, nX, 50);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
 {
     SwDoc* pDoc = createDoc("tdf115630.docx");
