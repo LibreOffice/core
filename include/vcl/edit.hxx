@@ -157,7 +157,7 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;

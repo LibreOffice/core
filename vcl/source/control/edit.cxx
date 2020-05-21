@@ -1733,12 +1733,12 @@ void Edit::Resize()
     }
 }
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
+void Edit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
 {
     ApplySettings(*pDev);
 
     Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
+    Size aSize = GetSizePixel();
     vcl::Font aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
@@ -1817,7 +1817,10 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
 
     if ( GetSubEdit() )
     {
-        GetSubEdit()->Draw( pDev, rPos, rSize, nFlags );
+        Size aOrigSize(GetSubEdit()->GetSizePixel());
+        GetSubEdit()->SetSizePixel(GetSizePixel());
+        GetSubEdit()->Draw(pDev, rPos, nFlags);
+        GetSubEdit()->SetSizePixel(aOrigSize);
     }
 }
 

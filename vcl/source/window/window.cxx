@@ -1821,7 +1821,7 @@ void Window::KeyUp( const KeyEvent& rKEvt )
         mpWindowImpl->mbKeyUp = true;
 }
 
-void Window::Draw( OutputDevice*, const Point&, const Size&, DrawFlags )
+void Window::Draw( OutputDevice*, const Point&, DrawFlags )
 {
 }
 

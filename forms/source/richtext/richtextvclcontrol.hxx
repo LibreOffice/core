@@ -97,7 +97,7 @@ namespace frm
               EditView& getView();
 
         // Window overridables
-        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, DrawFlags _nFlags ) override;
+        virtual void        Draw( OutputDevice* _pDev, const Point& _rPos, DrawFlags _nFlags ) override;
 
     protected:
         // Window overridables

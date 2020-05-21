@@ -141,10 +141,10 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
     }
 }
 
-void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags )
+void TabPage::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags )
 {
     Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = pDev->LogicToPixel( rSize );
+    Size aSize = GetSizePixel();
 
     Wallpaper aWallpaper = GetBackground();
     if ( !aWallpaper.IsBitmap() )

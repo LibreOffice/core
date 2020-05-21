@@ -58,7 +58,7 @@ public:
     Edit&           GetEdit() { return *maEdit; }
     PushButton&     GetButton() { return *maButton; }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
+    void            Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
 
     void            SetText( const OUString& rStr ) override;
     OUString        GetText() const override;
