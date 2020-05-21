@@ -881,7 +881,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
         {
             uno::Sequence< uno::Reference< awt::XWindow > > xChildren = xMsgBoxCtrls->getWindows();
 
-            for ( uno::Reference< awt::XWindow > const & child : xChildren )
+            for ( uno::Reference< awt::XWindow > const & child : std::as_const(xChildren) )
             {
                 uno::Reference< awt::XVclWindowPeer > xMsgBoxCtrl( child, uno::UNO_QUERY );
                 if ( xMsgBoxCtrl.is() )
