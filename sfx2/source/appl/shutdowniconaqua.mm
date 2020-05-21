@@ -192,17 +192,17 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
             css::uno::Sequence< css::beans::PropertyValue >& rPickListEntry = aHistoryList[i];
             RecentMenuEntry aRecentFile;
 
-            for ( int j = 0; j < rPickListEntry.getLength(); j++ )
+            for ( const css::beans::PropertyValue& rProp : rPickListEntry )
             {
-                css::uno::Any a = rPickListEntry[j].Value;
+                const css::uno::Any& a = rProp.Value;
 
-                if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
+                if ( rProp.Name == HISTORY_PROPERTYNAME_URL )
                     a >>= aRecentFile.aURL;
-                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
+                else if ( rProp.Name == HISTORY_PROPERTYNAME_FILTER )
                     a >>= aRecentFile.aFilter;
-                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
+                else if ( rProp.Name == HISTORY_PROPERTYNAME_TITLE )
                     a >>= aRecentFile.aTitle;
-                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
+                else if ( rProp.Name == HISTORY_PROPERTYNAME_PASSWORD )
                     a >>= aRecentFile.aPassword;
             }
 

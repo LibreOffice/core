@@ -275,18 +275,18 @@ void CSmplMailClient::assembleCommandLine(
         rCommandArgs.push_back(to);
     }
 
-    Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
-    for (int i = 0; i < ccRecipients.getLength(); i++)
+    const Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
+    for (OUString const & s : ccRecipients)
     {
         rCommandArgs.push_back(CC);
-        rCommandArgs.push_back(ccRecipients[i]);
+        rCommandArgs.push_back(s);
     }
 
-    Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
-    for (int i = 0; i < bccRecipients.getLength(); i++)
+    const Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
+    for (OUString const & s : bccRecipients)
     {
         rCommandArgs.push_back(BCC);
-        rCommandArgs.push_back(bccRecipients[i]);
+        rCommandArgs.push_back(s);
     }
 
     OUString from = xSimpleMailMessage->getOriginator();

@@ -1303,10 +1303,8 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    for (int i = 0; i < aProps.getLength(); ++i)
+    for (beans::PropertyValue const & rProp : std::as_const(aProps))
     {
-        const beans::PropertyValue& rProp = aProps[i];
-
         if (rProp.Name == "BulletChar")
         {
             // the bulletChar has to be 0x2d!
@@ -1325,10 +1323,8 @@ DECLARE_OOXMLIMPORT_TEST( testTdf106606, "tdf106606.docx" )
         uno::Sequence<beans::PropertyValue>     aProps;
         xLevels->getByIndex( 0 ) >>= aProps; // 1st level
 
-        for ( int i = 0; i < aProps.getLength(); ++i )
+        for ( beans::PropertyValue const & rProp : std::as_const(aProps))
         {
-            const beans::PropertyValue& rProp = aProps[i];
-
             // If the image was prematurely removed from cache when processed for previous numbering list, then the sequence hasn't the property.
             if ( rProp.Name == "GraphicBitmap" )
                 return true;

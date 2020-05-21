@@ -191,20 +191,20 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
     uno::Sequence<beans::PropertyValue> aLatentStyles;
-    for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
-        if (aGrabBag[i].Name == "latentStyles")
-            aGrabBag[i].Value >>= aLatentStyles;
+    for (beans::PropertyValue const & prop : std::as_const(aGrabBag))
+        if (prop.Name == "latentStyles")
+            prop.Value >>= aLatentStyles;
     CPPUNIT_ASSERT(aLatentStyles.getLength()); // document should have latent styles
 
     // Check latent style default attributes
     OUString aCount;
     uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
-    for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
+    for (beans::PropertyValue const & prop : std::as_const(aLatentStyles))
     {
-        if (aLatentStyles[i].Name == "count")
-            aCount = aLatentStyles[i].Value.get<OUString>();
-        else if (aLatentStyles[i].Name == "lsdExceptions")
-            aLatentStyles[i].Value >>= aLatentStyleExceptions;
+        if (prop.Name == "count")
+            aCount = prop.Value.get<OUString>();
+        else if (prop.Name == "lsdExceptions")
+            prop.Value >>= aLatentStyleExceptions;
     }
     CPPUNIT_ASSERT_EQUAL(OUString("371"), aCount); // This check the "count" attribute.
 
@@ -212,9 +212,9 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     uno::Sequence<beans::PropertyValue> aLatentStyleException;
     aLatentStyleExceptions[0].Value >>= aLatentStyleException;
     OUString aName;
-    for (sal_Int32 i = 0; i < aLatentStyleException.getLength(); ++i)
-        if (aLatentStyleException[i].Name == "name")
-            aName = aLatentStyleException[i].Value.get<OUString>();
+    for (beans::PropertyValue const & prop : std::as_const(aLatentStyleException))
+        if (prop.Name == "name")
+            aName = prop.Value.get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
 
     // This numbering style wasn't roundtripped.
@@ -420,13 +420,13 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bTheme = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
     {
-      if (aGrabBag[i].Name == "OOXTheme")
+      if (prop.Name == "OOXTheme")
       {
         bTheme = true;
         uno::Reference<xml::dom::XDocument> aThemeDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(prop.Value >>= aThemeDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
       }
     }
@@ -442,42 +442,42 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
     bool bData = false, bLayout = false, bQStyle = false, bColor = false, bDrawing = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
     {
-      if (aGrabBag[i].Name == "OOXData")
+      if (prop.Name == "OOXData")
       {
         bData = true;
         uno::Reference<xml::dom::XDocument> aDataDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDataDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(prop.Value >>= aDataDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == "OOXLayout")
+      else if (prop.Name == "OOXLayout")
       {
         bLayout = true;
         uno::Reference<xml::dom::XDocument> aLayoutDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aLayoutDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(prop.Value >>= aLayoutDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == "OOXStyle")
+      else if (prop.Name == "OOXStyle")
       {
         bQStyle = true;
         uno::Reference<xml::dom::XDocument> aStyleDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aStyleDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(prop.Value >>= aStyleDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == "OOXColor")
+      else if (prop.Name == "OOXColor")
       {
         bColor = true;
         uno::Reference<xml::dom::XDocument> aColorDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aColorDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(prop.Value >>= aColorDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == "OOXDrawing")
+      else if (prop.Name == "OOXDrawing")
       {
         bDrawing = true;
         uno::Sequence< uno::Any > diagramDrawing;
         uno::Reference<xml::dom::XDocument> aDrawingDom;
-        CPPUNIT_ASSERT(aGrabBag[i].Value >>= diagramDrawing);
+        CPPUNIT_ASSERT(prop.Value >>= diagramDrawing);
         CPPUNIT_ASSERT(diagramDrawing[0] >>= aDrawingDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aDrawingDom.get()); // Reference not empty
       }
@@ -530,14 +530,14 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool CustomXml = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    for(beans::PropertyValue const & prop : std::as_const(aGrabBag))
     {
-        if (aGrabBag[i].Name == "OOXCustomXml" || aGrabBag[i].Name == "OOXCustomXmlProps")
+        if (prop.Name == "OOXCustomXml" || prop.Name == "OOXCustomXmlProps")
         {
             CustomXml = true;
             uno::Reference<xml::dom::XDocument> aCustomXmlDom;
             uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
-            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aCustomXmlDomList); // PropertyValue of proper type
+            CPPUNIT_ASSERT(prop.Value >>= aCustomXmlDomList); // PropertyValue of proper type
             sal_Int32 length = aCustomXmlDomList.getLength();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);
             aCustomXmlDom = aCustomXmlDomList[0];
