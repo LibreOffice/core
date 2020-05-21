@@ -57,7 +57,7 @@
 #include <iconview.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
-#include <messagedialog.hxx>
+#include <vcl/messagedialog.hxx>
 #include <OptionalBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
