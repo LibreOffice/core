@@ -257,10 +257,14 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor )
             {
-                // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'editAs="oneCell"'
-                if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
-                        mxShape->setRotation(0);
+                // Rotation is decided by the orientation of the shape that is determined
+                // by the anchor position given by 'editAs="oneCell"'.
+                // We need to distinguish between xdr:Sp and xdr:cxnSp. Setting the rotation to
+                // 0 in xdr:cxnSp leads to incorrectly rotated shapes.
+                if (mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL && !mxShape->isCxn())
+                {
+                    mxShape->setRotation(0);
+                }
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )

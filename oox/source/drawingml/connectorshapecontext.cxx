@@ -39,6 +39,7 @@ ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper const & rPar
         const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pGroupShapePtr )
 {
+    mpShapePtr->setCxn(true); // If this is xdr:cxnSp.
 }
 
 ConnectorShapeContext::~ConnectorShapeContext()
