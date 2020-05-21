@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

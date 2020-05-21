@@ -18,7 +18,7 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

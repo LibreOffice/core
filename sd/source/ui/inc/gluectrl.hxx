@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 enum class SdrEscapeDirection;

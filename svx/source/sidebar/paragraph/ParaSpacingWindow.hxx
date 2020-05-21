@@ -20,7 +20,7 @@
 
 #include <editeng/ulspitem.hxx>
 #include <vcl/EnumContext.hxx>
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <svx/relfld.hxx>
 
 using namespace com::sun::star;
