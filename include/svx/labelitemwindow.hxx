@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <svtools/InterimItemWindow.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <svx/svxdllapi.h>
 
 class SVXCORE_DLLPUBLIC LabelItemWindow final : public InterimItemWindow
