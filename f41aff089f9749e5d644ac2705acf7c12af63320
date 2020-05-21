@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "81902a07_77ab1dac",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-05-21T16:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da26ed66_df39f7da",
+      "range": {
+        "startLine": 209,
+        "startChar": 16,
+        "endLine": 209,
+        "endChar": 17
+      },
+      "revId": "f41aff089f9749e5d644ac2705acf7c12af63320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be226fb3_b1a3f503",
         "filename": "svx/qa/unit/gallery/test_gallery.cxx",
         "patchSetId": 7
