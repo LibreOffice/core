@@ -23,29 +23,39 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <tools/helpers.hxx>
+#include <tools/UnitConversion.hxx>
 
-namespace tools
-{
-class cm2TwipsTest : public CppUnit::TestFixture
+class UnitConversionTest : public CppUnit::TestFixture
 {
 public:
-    void testConvert()
+    void testSanitiseMm100ToTwip()
     {
-        sal_Int32 nActual = sanitiseMm100ToTwip(255);
-        sal_Int32 nExpected = 145;
-        CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
-
-        nActual = sanitiseMm100ToTwip(-255);
-        nExpected = -145;
-        CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(145), sanitiseMm100ToTwip(255));
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(-145), sanitiseMm100ToTwip(-255));
     }
 
-    CPPUNIT_TEST_SUITE(cm2TwipsTest);
-    CPPUNIT_TEST(testConvert);
+    void testConvertMm100ToTwip()
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(145), convertMm100ToTwip(255));
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(-145), convertMm100ToTwip(-255));
+    }
+
+    void testConvertPointToMm100()
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(599.72, convertPointToMm100(17.0), 1E-2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(600), convertPointToMm100(sal_Int64(17)));
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(22930.55, convertPointToMm100(650.0), 1E-2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(22931), convertPointToMm100(sal_Int64(650)));
+    }
+
+    CPPUNIT_TEST_SUITE(UnitConversionTest);
+    CPPUNIT_TEST(testSanitiseMm100ToTwip);
+    CPPUNIT_TEST(testConvertMm100ToTwip);
+    CPPUNIT_TEST(testConvertPointToMm100);
     CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(cm2TwipsTest);
-} // namespace tools
+CPPUNIT_TEST_SUITE_REGISTRATION(UnitConversionTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
