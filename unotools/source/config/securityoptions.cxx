@@ -997,11 +997,9 @@ bool SvtSecurityOptions::isUntrustedReferer(OUString const & referer) const {
 
 bool SvtSecurityOptions::isTrustedLocationUri(OUString const & uri) const {
     MutexGuard g(GetInitMutex());
-    for (sal_Int32 i = 0; i != m_pImpl->m_seqSecureURLs.getLength();
-         ++i)
+    for (const auto & url : std::as_const(m_pImpl->m_seqSecureURLs))
     {
-        if (UCBContentHelper::IsSubPath(
-                m_pImpl->m_seqSecureURLs[i], uri))
+        if (UCBContentHelper::IsSubPath(url, uri))
         {
             return true;
         }

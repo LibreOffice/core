@@ -1006,19 +1006,18 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
     // prepend a "selection" checkbox if the properties have such a selection in PrintContent
     bool bAddSelectionCheckBox = false, bSelectionBoxEnabled = false, bSelectionBoxChecked = false;
 
-    for( int i = 0; i < rOptions.getLength(); i++ )
+    for( const PropertyValue & prop : rOptions )
     {
         Sequence< beans::PropertyValue > aOptProp;
-        rOptions[i].Value >>= aOptProp;
+        prop.Value >>= aOptProp;
 
         OUString aCtrlType;
         OUString aPropertyName;
         Sequence< OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
         sal_Int32 aSelectionChecked = 0;
-        for( int n = 0; n < aOptProp.getLength(); n++ )
+        for( const beans::PropertyValue& rEntry : aOptProp )
         {
-            const beans::PropertyValue& rEntry( aOptProp[ n ] );
             if( rEntry.Name == "ControlType" )
             {
                 rEntry.Value >>= aCtrlType;
@@ -1051,10 +1050,10 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         }
     }
 
-    for( int i = 0; i < rOptions.getLength(); i++ )
+    for( const PropertyValue & prop : rOptions )
     {
         Sequence< beans::PropertyValue > aOptProp;
-        rOptions[i].Value >>= aOptProp;
+        prop.Value >>= aOptProp;
 
         // extract ui element
         OUString aCtrlType;
@@ -1067,9 +1066,8 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         long nAttachOffset = 0;
         bool bIgnore = false;
 
-        for( int n = 0; n < aOptProp.getLength(); n++ )
+        for( const beans::PropertyValue& rEntry : aOptProp )
         {
-            const beans::PropertyValue& rEntry( aOptProp[ n ] );
             if( rEntry.Name == "Text" )
             {
                 rEntry.Value >>= aText;

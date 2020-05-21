@@ -315,8 +315,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
         AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
-            for ( int index = 0; index < relationMemberOf.TargetSet.getLength(); index++ ) {
-                Reference < XAccessible > rMateAccessible( relationMemberOf.TargetSet[index], UNO_QUERY );
+            for ( const auto& i : relationMemberOf.TargetSet ) {
+                Reference < XAccessible > rMateAccessible( i, UNO_QUERY );
                 if ( rMateAccessible.is() ) {
                     Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
                     if ( rMateAccessibleContext.is() ) {
@@ -1046,11 +1046,13 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                 if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType::SUB_WINDOW_OF )) {
                     // we have a valid relation to the parent element
                     AccessibleRelation relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
-                    for ( int i = 0; i < relation.TargetSet.getLength() && !hitChild.is(); i++ ) {
-                        Reference < XAccessible > rxAccessible ( relation.TargetSet [ i ], UNO_QUERY );
+                    for ( const auto & i : relation.TargetSet ) {
+                        Reference < XAccessible > rxAccessible ( i, UNO_QUERY );
                         if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
                             // hit test for children of parent
                             hitChild = hitTestRunner ( hitPoint, rxAccessible -> getAccessibleContext() );
+                            if (hitChild.is())
+                                break;
                         }
                     }
                 }
