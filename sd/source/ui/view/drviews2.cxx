@@ -543,16 +543,6 @@ public:
         OUString sColor;
         const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
-        {
-            double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
-            // FIXME: different units...
-            int nPow = 100;
-            int nValue = fValue * nPow;
-
-            XLineWidthItem aItem(nValue);
-            pArgs->Put(aItem);
-        }
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
         {
             sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
