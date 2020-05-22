@@ -417,6 +417,7 @@ template class ScCompressedArray< SCROW, CRFlags>;             // flags, base cl
 template class ScBitMaskCompressedArray< SCROW, CRFlags>;      // flags
 template class ScCompressedArray< SCCOL, sal_uInt16>;
 template class ScCompressedArray< SCCOL, CRFlags>;
+template class ScCompressedArray< SCROW, sal_uInt16>;
 template class ScBitMaskCompressedArray< SCCOL, CRFlags>;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
