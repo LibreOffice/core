@@ -585,7 +585,7 @@ DownloadThread::run()
 
 #ifdef _WIN32
     CoUninitialize();
-    CoInitialize( nullptr );
+    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 #endif
 
     while( schedule() )

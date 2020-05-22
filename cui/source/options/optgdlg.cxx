@@ -473,7 +473,7 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
 #if defined(_WIN32)
 IMPL_STATIC_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 {
-    const bool bUninit = SUCCEEDED(CoInitialize(nullptr));
+    const bool bUninit = SUCCEEDED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED));
     IApplicationAssociationRegistrationUI* pIf = nullptr;
     HRESULT res = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, nullptr,
                                    CLSCTX_INPROC_SERVER, IID_IApplicationAssociationRegistrationUI,

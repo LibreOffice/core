@@ -33,7 +33,7 @@ HRESULT doTest();
 int main(int /*argc*/, char** /*argv*/)
 {
     HRESULT hr;
-    if( FAILED( hr=CoInitialize(NULL)))
+    if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
     {
         printf("CoInitialize failed \n");
         return -1;

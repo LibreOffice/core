@@ -42,7 +42,7 @@ OUString PromptNew(long hWnd)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitialize( nullptr );
+    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 
     // Instantiate DataLinks object.
     hr = CoCreateInstance(
@@ -96,7 +96,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitialize( nullptr );
+    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 
     hr = CoCreateInstance(CLSID_CADOConnection,
                 nullptr,
