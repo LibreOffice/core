@@ -256,7 +256,6 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
             ScMyStylesMap::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            OSL_ENSURE(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "too many columns");
             for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
