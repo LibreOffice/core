@@ -26,8 +26,10 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {
     int nMin, nMax;
     rField.get_range(nMin, nMax, FieldUnit::TWIP);
+    int nValue = rField.get_value(FieldUnit::TWIP);
     nMin = rField.denormalize(nMin);
     nMax = rField.denormalize(nMax);
+    nValue = rField.denormalize(nValue);
 
     if (!bAll)
     {
@@ -78,6 +80,8 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
         nMax = rField.normalize(nMax);
         rField.set_range(nMin, nMax, FieldUnit::TWIP);
     }
+
+    rField.set_value(rField.normalize(nValue), FieldUnit::TWIP);
 }
 
 void SetMetricValue(weld::MetricSpinButton& rField, int nCoreValue, MapUnit eUnit)
