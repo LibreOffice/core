@@ -58,7 +58,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/messagedialog.hxx>
+#include <messagedialog.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
