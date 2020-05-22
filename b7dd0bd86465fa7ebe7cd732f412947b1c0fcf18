@@ -22,6 +22,30 @@
       "revId": "b7dd0bd86465fa7ebe7cd732f412947b1c0fcf18",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "761cad8c_c5cd1346",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-22T18:24:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bebbc206_feff0d17",
+      "range": {
+        "startLine": 171,
+        "startChar": 24,
+        "endLine": 174,
+        "endChar": 27
+      },
+      "revId": "b7dd0bd86465fa7ebe7cd732f412947b1c0fcf18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
