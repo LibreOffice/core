@@ -4512,9 +4512,10 @@ bool GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
 
 void GtkSalFrame::nopaint_container_resize_children(GtkContainer *pContainer)
 {
+    bool bOrigSalObjectSetPosSize = m_bSalObjectSetPosSize;
     m_bSalObjectSetPosSize = true;
     gtk_container_resize_children(pContainer);
-    m_bSalObjectSetPosSize = false;
+    m_bSalObjectSetPosSize = bOrigSalObjectSetPosSize;
 }
 
 GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
