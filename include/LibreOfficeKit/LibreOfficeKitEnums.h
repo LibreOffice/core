@@ -737,7 +737,12 @@ typedef enum
      * {
      *      "action": "show",
      *      "type": "drop-down",
-     *      "textArea": "1418, 3906, 3111, 919"
+     *      "textArea": "1418, 3906, 3111, 919",
+     *      "params": {
+     *           "items": ["January", "February", "July"],
+     *           "selected": "2",
+     *           "placeholder": "No items specified"
+     *      }
      * }
      *
      * or
