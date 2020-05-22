@@ -44,8 +44,6 @@ private:
 
     static OUString GetVersionString();
     static OUString GetBuildString();
-    static OUString GetEnvString();
-    static OUString GetUIString();
     static OUString GetLocaleString();
     static OUString GetMiscString();
 
