@@ -41,6 +41,7 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/scheduler.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -668,7 +669,8 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             while(true)
             {
                 //time for other slots is needed
-                Application::Reschedule( true );
+                Scheduler::ProcessEventsToIdle();
+
                 bool bFailed = false;
                 try
                 {
