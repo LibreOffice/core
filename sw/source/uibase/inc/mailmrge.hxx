@@ -70,6 +70,7 @@ class SwMailMergeDlg : public SfxDialogController
     std::unique_ptr<weld::RadioButton> m_xFileRB;
 
     std::unique_ptr<weld::CheckButton> m_xSingleJobsCB;
+    std::unique_ptr<weld::CheckButton> m_xPasswordCB;
 
     std::unique_ptr<weld::Label> m_xSaveMergedDocumentFT;
     std::unique_ptr<weld::RadioButton> m_xSaveSingleDocRB;
@@ -79,6 +80,8 @@ class SwMailMergeDlg : public SfxDialogController
 
     std::unique_ptr<weld::Label> m_xColumnFT;
     std::unique_ptr<weld::ComboBox> m_xColumnLB;
+    std::unique_ptr<weld::Label> m_xPasswordFT;
+    std::unique_ptr<weld::ComboBox> m_xPasswordLB;
     std::unique_ptr<weld::Label> m_xPathFT;
     std::unique_ptr<weld::Entry> m_xPathED;
     std::unique_ptr<weld::Button> m_xPathPB;
@@ -104,6 +107,7 @@ class SwMailMergeDlg : public SfxDialogController
     DECL_LINK( FilenameHdl, weld::ToggleButton&, void );
     DECL_LINK( ModifyHdl, weld::SpinButton&, void );
     DECL_LINK( SaveTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( FileFormatHdl, weld::ComboBox&, void );
 
     bool            ExecQryShell();
     bool            AskUserFilename() const;
@@ -122,7 +126,9 @@ public:
 
     bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
     bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }
+    bool IsFileEncyrptedFromDataBase() const { return m_xPasswordCB->get_active(); }
     OUString GetColumnName() const { return m_xColumnLB->get_active_text(); }
+    OUString GetPasswordColumnName() const { return m_xPasswordLB->get_active_text(); }
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
