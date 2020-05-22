@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4f426fc_d151f159",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-22T12:14:23Z",
+      "side": 1,
+      "message": "(Selectively) removing this line we can fix tdf#76817 immediately. The known corner case tdf#50774 test file is bad already without this, too. (Instead of \"2.1\", Writer shows \"1.1\", after removing this line, \".1\").",
+      "range": {
+        "startLine": 1393,
+        "startChar": 15,
+        "endLine": 1393,
+        "endChar": 109
+      },
+      "revId": "5fced2a9bb572a0215416f1192856b7ee33a5a7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
