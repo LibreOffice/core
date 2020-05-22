@@ -783,7 +783,7 @@ void ScColumn::GetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nMinHeight, SCROW nMinStart )
 {
     ScDocument* pDocument = GetDoc();
-    ScFlatUInt16RowSegments& rHeights = rCxt.getHeightArray();
+    RowHeightsArray& rHeights = rCxt.getHeightArray();
     ScAttrIterator aIter( pAttrArray.get(), nStartRow, nEndRow, pDocument->GetDefPattern() );
 
     SCROW nStart = -1;
@@ -883,7 +883,20 @@ void ScColumn::GetOptimalHeight(
                     nStdEnd = (nMinStart>0) ? nMinStart-1 : 0;
 
                 if (nStart <= nStdEnd)
-                    rHeights.setValueIf(nStart, nStdEnd, nDefHeight, [=](sal_uInt16 nRowHeight){ return nDefHeight > nRowHeight; });
+                {
+                    SCROW nRow = nStart;
+                    for (;;)
+                    {
+                        if (nRow >= rHeights.GetLastPos() || nRow >= nStdEnd)
+                            break;
+                        size_t nIndex = -1;
+                        SCROW nRangeEnd;
+                        sal_uInt16 nRangeHeight = rHeights.GetValue(nRow, nIndex, nRangeEnd);
+                        if (nRangeHeight < nDefHeight)
+                            rHeights.SetValue(nStart, std::min(nRangeEnd, nStdEnd), nDefHeight);
+                        nRow = nRangeEnd + 1;
+                    }
+                }
 
                 if ( bStdOnly )
                 {
@@ -903,22 +916,22 @@ void ScColumn::GetOptimalHeight(
                             {
                                 if ( nCjkHeight == 0 )
                                     nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
-                                if (nCjkHeight > rHeights.getValue(nRow))
-                                    rHeights.setValue(nRow, nRow, nCjkHeight);
+                                if (nCjkHeight > rHeights.GetValue(nRow))
+                                    rHeights.SetValue(nRow, nRow, nCjkHeight);
                             }
                             else if ( nScript == SvtScriptType::COMPLEX )
                             {
                                 if ( nCtlHeight == 0 )
                                     nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
-                                if (nCtlHeight > rHeights.getValue(nRow))
-                                    rHeights.setValue(nRow, nRow, nCtlHeight);
+                                if (nCtlHeight > rHeights.GetValue(nRow))
+                                    rHeights.SetValue(nRow, nRow, nCtlHeight);
                             }
                             else
                             {
                                 if ( nLatHeight == 0 )
                                     nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
-                                if (nLatHeight > rHeights.getValue(nRow))
-                                    rHeights.setValue(nRow, nRow, nLatHeight);
+                                if (nLatHeight > rHeights.GetValue(nRow))
+                                    rHeights.SetValue(nRow, nRow, nLatHeight);
                             }
                         }
                     }
@@ -945,8 +958,8 @@ void ScColumn::GetOptimalHeight(
                                                    rCxt.getZoomX(), rCxt.getZoomY(), false, aOptions,
                                                    &pPattern) / rCxt.getPPTY(),
                                     double(std::numeric_limits<sal_uInt16>::max())));
-                            if (nHeight > rHeights.getValue(nRow))
-                                rHeights.setValue(nRow, nRow, nHeight);
+                            if (nHeight > rHeights.GetValue(nRow))
+                                rHeights.SetValue(nRow, nRow, nHeight);
                             // Pattern changed due to calculation? => sync.
                             if (pPattern != pOldPattern)
                             {
