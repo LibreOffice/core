@@ -121,7 +121,66 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                                const OUString& rTableName,
                                sal_Int32 nCommandType,
                                const uno::Reference< XConnection>& _xConnection,
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
                                Sequence< Any > const * pSelection) :
+=======
+                               Sequence< Any > const * pSelection)
+    : SfxDialogController(pParent, "modules/swriter/ui/mailmerge.ui", "MailmergeDialog")
+    , pImpl(new SwMailMergeDlg_Impl)
+    , rSh(rShell)
+    , nMergeType(DBMGR_MERGE_EMAIL)
+    , m_xBeamerWin(m_xBuilder->weld_container("beamer"))
+    , m_xAllRB(m_xBuilder->weld_radio_button("all"))
+    , m_xMarkedRB(m_xBuilder->weld_radio_button("selected"))
+    , m_xFromRB(m_xBuilder->weld_radio_button("rbfrom"))
+    , m_xFromNF(m_xBuilder->weld_spin_button("from"))
+    , m_xToNF(m_xBuilder->weld_spin_button("to"))
+    , m_xPrinterRB(m_xBuilder->weld_radio_button("printer"))
+    , m_xMailingRB(m_xBuilder->weld_radio_button("electronic"))
+    , m_xFileRB(m_xBuilder->weld_radio_button("file"))
+    , m_xSingleJobsCB(m_xBuilder->weld_check_button("singlejobs"))
+    , m_xPasswordCB(m_xBuilder->weld_check_button("passwd-check"))
+    , m_xSaveMergedDocumentFT(m_xBuilder->weld_label("savemergeddoclabel"))
+    , m_xSaveSingleDocRB(m_xBuilder->weld_radio_button("singledocument"))
+    , m_xSaveIndividualRB(m_xBuilder->weld_radio_button("individualdocuments"))
+    , m_xGenerateFromDataBaseCB(m_xBuilder->weld_check_button("generate"))
+    , m_xColumnFT(m_xBuilder->weld_label("fieldlabel"))
+    , m_xColumnLB(m_xBuilder->weld_combo_box("field"))
+    , m_xPasswordFT(m_xBuilder->weld_label("passwd-label"))
+    , m_xPasswordLB(m_xBuilder->weld_combo_box("passwd-combobox"))
+    , m_xPathFT(m_xBuilder->weld_label("pathlabel"))
+    , m_xPathED(m_xBuilder->weld_entry("path"))
+    , m_xPathPB(m_xBuilder->weld_button("pathpb"))
+    , m_xFilterFT(m_xBuilder->weld_label("fileformatlabel"))
+    , m_xFilterLB(m_xBuilder->weld_combo_box("fileformat"))
+    , m_xAddressFieldLB(m_xBuilder->weld_combo_box("address"))
+    , m_xSubjectFT(m_xBuilder->weld_label("subjectlabel"))
+    , m_xSubjectED(m_xBuilder->weld_entry("subject"))
+    , m_xFormatFT(m_xBuilder->weld_label("mailformatlabel"))
+    , m_xAttachFT(m_xBuilder->weld_label("attachmentslabel"))
+    , m_xAttachED(m_xBuilder->weld_entry("attachments"))
+    , m_xAttachPB(m_xBuilder->weld_button("attach"))
+    , m_xFormatHtmlCB(m_xBuilder->weld_check_button("html"))
+    , m_xFormatRtfCB(m_xBuilder->weld_check_button("rtf"))
+    , m_xFormatSwCB(m_xBuilder->weld_check_button("swriter"))
+    , m_xOkBTN(m_xBuilder->weld_button("ok"))
+{
+    m_xSingleJobsCB->hide(); // not supported in since cws printerpullpages anymore
+    //task #97066# mailing of form letters is currently not supported
+    m_xMailingRB->hide();
+    m_xSubjectFT->hide();
+    m_xSubjectED->hide();
+    m_xFormatFT->hide();
+    m_xFormatSwCB->hide();
+    m_xFormatHtmlCB->hide();
+    m_xFormatRtfCB->hide();
+    m_xAttachFT->hide();
+    m_xAttachED->hide();
+    m_xAttachPB->hide();
+    m_xPasswordCB->hide();
+    m_xPasswordFT->hide();
+    m_xPasswordLB->hide();
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
     SvxStandardDialog(pParent, "MailmergeDialog", "modules/swriter/ui/mailmerge.ui"),
 
@@ -270,19 +329,38 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pSaveIndividualRB->SetClickHdl( aLk );
     aLk.Call( m_pSaveSingleDocRB );
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     Link<Edit&,void> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
     m_pFromNF->SetModifyHdl(aLk2);
     m_pToNF->SetModifyHdl(aLk2);
     m_pFromNF->SetMax(SAL_MAX_INT32);
     m_pToNF->SetMax(SAL_MAX_INT32);
+=======
+    m_xFilterLB->connect_changed(LINK(this, SwMailMergeDlg, FileFormatHdl));
+
+    Link<weld::SpinButton&,void> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
+    m_xFromNF->connect_value_changed(aLk2);
+    m_xToNF->connect_value_changed(aLk2);
+    m_xFromNF->set_max(SAL_MAX_INT32);
+    m_xToNF->set_max(SAL_MAX_INT32);
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
     SwDBManager* pDBManager = rSh.GetDBManager();
     if(_xConnection.is())
         SwDBManager::GetColumnNames(m_pAddressFieldLB, _xConnection, rTableName);
     else
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         pDBManager->GetColumnNames(m_pAddressFieldLB, rSourceName, rTableName);
     for(sal_Int32 nEntry = 0; nEntry < m_pAddressFieldLB->GetEntryCount(); ++nEntry)
         m_pColumnLB->InsertEntry(m_pAddressFieldLB->GetEntry(nEntry));
+=======
+        pDBManager->GetColumnNames(*m_xAddressFieldLB, rSourceName, rTableName);
+    for(sal_Int32 nEntry = 0, nEntryCount = m_xAddressFieldLB->get_count(); nEntry < nEntryCount; ++nEntry)
+    {
+        m_xColumnLB->append_text(m_xAddressFieldLB->get_text(nEntry));
+        m_xPasswordLB->append_text(m_xAddressFieldLB->get_text(nEntry));
+    }
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
     m_pAddressFieldLB->SelectEntry("EMAIL");
 
@@ -297,15 +375,37 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     else
         m_pPathED->SetText(aURL.GetFull());
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     if (!bColumn ) {
         m_pColumnLB->SelectEntry("NAME");
     } else
         m_pColumnLB->SelectEntry(pModOpt->GetNameFromColumn());
+=======
+    if (!bColumn )
+    {
+        m_xColumnLB->set_active_text("NAME");
+        m_xPasswordLB->set_active_text("PASSWORD");
+    }
+    else
+    {
+        m_xColumnLB->set_active_text(pModOpt->GetNameFromColumn());
+        m_xPasswordLB->set_active_text(pModOpt->GetPasswordFromColumn());
+    }
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     if (m_pAddressFieldLB->GetSelectedEntryCount() == 0)
         m_pAddressFieldLB->SelectEntryPos(0);
     if (m_pColumnLB->GetSelectedEntryCount() == 0)
         m_pColumnLB->SelectEntryPos(0);
+=======
+    if (m_xAddressFieldLB->get_active() == -1)
+        m_xAddressFieldLB->set_active(0);
+    if (m_xColumnLB->get_active() == -1)
+        m_xColumnLB->set_active(0);
+    if (m_xPasswordLB->get_active() == -1)
+        m_xPasswordLB->set_active(0);
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
     const bool bEnable = m_aSelection.getLength() != 0;
     m_pMarkedRB->Enable(bEnable);
@@ -429,6 +529,7 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )
     if( !bPrint ) {
         SaveTypeHdl( m_pSaveSingleDocRB->IsChecked() ? m_pSaveSingleDocRB : m_pSaveIndividualRB );
     } else {
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         m_pPathFT->Enable(false);
         m_pPathED->Enable(false);
         m_pPathPB->Enable(false);
@@ -437,6 +538,19 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )
         m_pFilterFT->Enable(false);
         m_pFilterLB->Enable(false);
         m_pGenerateFromDataBaseCB->Enable(false);
+=======
+        m_xPathFT->set_sensitive(false);
+        m_xPathED->set_sensitive(false);
+        m_xPathPB->set_sensitive(false);
+        m_xColumnFT->set_sensitive(false);
+        m_xColumnLB->set_sensitive(false);
+        m_xFilterFT->set_sensitive(false);
+        m_xFilterLB->set_sensitive(false);
+        m_xGenerateFromDataBaseCB->set_sensitive(false);
+        m_xPasswordCB->set_sensitive( false );
+        m_xPasswordFT->set_sensitive( false );
+        m_xPasswordLB->set_sensitive( false );
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
     }
 }
 
@@ -444,6 +558,7 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, Button*,  pBtn, void )
 {
     bool bIndividual = pBtn == m_pSaveIndividualRB;
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     m_pGenerateFromDataBaseCB->Enable( bIndividual );
     if( bIndividual ) {
         FilenameHdl( m_pGenerateFromDataBaseCB );
@@ -455,11 +570,31 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, Button*,  pBtn, void )
         m_pPathPB->Enable( false );
         m_pFilterFT->Enable( false );
         m_pFilterLB->Enable( false );
+=======
+    m_xGenerateFromDataBaseCB->set_sensitive( bIndividual );
+    if( bIndividual )
+    {
+        FilenameHdl(*m_xGenerateFromDataBaseCB);
+    }
+    else
+    {
+        m_xColumnFT->set_sensitive(false);
+        m_xColumnLB->set_sensitive(false);
+        m_xPathFT->set_sensitive( false );
+        m_xPathED->set_sensitive( false );
+        m_xPathPB->set_sensitive( false );
+        m_xFilterFT->set_sensitive( false );
+        m_xFilterLB->set_sensitive( false );
+        m_xPasswordCB->set_sensitive( false );
+        m_xPasswordFT->set_sensitive( false );
+        m_xPasswordLB->set_sensitive( false );
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
     }
 }
 
 IMPL_LINK( SwMailMergeDlg, FilenameHdl, Button*, pBox, void )
 {
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pColumnFT->Enable( bEnable );
     m_pColumnLB->Enable(bEnable);
@@ -468,6 +603,47 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, Button*, pBox, void )
     m_pPathPB->Enable( bEnable );
     m_pFilterFT->Enable( bEnable );
     m_pFilterLB->Enable( bEnable );
+=======
+    bool bEnable = rBox.get_active();
+    m_xColumnFT->set_sensitive( bEnable );
+    m_xColumnLB->set_sensitive(bEnable);
+    m_xPathFT->set_sensitive( bEnable );
+    m_xPathED->set_sensitive(bEnable);
+    m_xPathPB->set_sensitive( bEnable );
+    m_xFilterFT->set_sensitive( bEnable );
+    m_xFilterLB->set_sensitive( bEnable );
+
+    if(m_xFilterLB->get_active_id() == "writer_pdf_Export")
+    {
+        m_xPasswordCB->show();
+        m_xPasswordFT->show();
+        m_xPasswordLB->show();
+
+        m_xPasswordCB->set_sensitive( bEnable );
+        m_xPasswordFT->set_sensitive( bEnable );
+        m_xPasswordLB->set_sensitive( bEnable );
+    }
+}
+
+IMPL_LINK_NOARG( SwMailMergeDlg, FileFormatHdl, weld::ComboBox&, void )
+{
+    if(m_xFilterLB->get_active_id() == "writer_pdf_Export")
+    {
+        m_xPasswordCB->show();
+        m_xPasswordFT->show();
+        m_xPasswordLB->show();
+
+        m_xPasswordCB->set_sensitive( true );
+        m_xPasswordFT->set_sensitive( true );
+        m_xPasswordLB->set_sensitive( true );
+    }
+    else
+    {
+        m_xPasswordCB->hide();
+        m_xPasswordFT->hide();
+        m_xPasswordLB->hide();
+    }
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 }
 
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl, Edit&, void)
@@ -506,16 +682,31 @@ bool SwMailMergeDlg::ExecQryShell()
     else {
         nMergeType = DBMGR_MERGE_FILE;
         pModOpt->SetMailingPath( GetURLfromPath() );
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
+=======
+        pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
+        pModOpt->SetIsFileEncyrptedFromColumn(m_xPasswordCB->get_active());
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         if (!AskUserFilename()) {
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectedEntry());
             if( m_pFilterLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
                 m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectedEntryData());
+=======
+        if (!AskUserFilename())
+        {
+            pModOpt->SetNameFromColumn(m_xColumnLB->get_active_text());
+            pModOpt->SetPasswordFromColumn(m_xPasswordLB->get_active_text());
+            if (m_xFilterLB->get_active() != -1)
+                m_sSaveFilter = m_xFilterLB->get_active_id();
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
             pModOpt->SetNameFromColumn(OUString());
+            pModOpt->SetPasswordFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
             m_sFilename = SwMailMergeHelper::CallSaveAsDialog(GetFrameWeld(), sFilter);

@@ -645,9 +645,19 @@ bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
     return pDlg->IsGenerateFromDataBase();
 }
 
+bool AbstractMailMergeDlg_Impl::IsFileEncyrptedFromDataBase() const
+{
+    return m_xDlg->IsFileEncyrptedFromDataBase();
+}
+
 OUString AbstractMailMergeDlg_Impl::GetColumnName() const
 {
     return pDlg->GetColumnName();
+}
+
+OUString AbstractMailMergeDlg_Impl::GetPasswordColumnName() const
+{
+    return m_xDlg->GetPasswordColumnName();
 }
 
 OUString AbstractMailMergeDlg_Impl::GetTargetURL() const

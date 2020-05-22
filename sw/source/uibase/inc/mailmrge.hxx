@@ -111,7 +111,60 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK( ModifyHdl, Edit&, void );
     DECL_LINK( SaveTypeHdl, Button*, void );
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     virtual void    Apply() override;
+=======
+    std::unique_ptr<weld::RadioButton> m_xAllRB;
+    std::unique_ptr<weld::RadioButton> m_xMarkedRB;
+    std::unique_ptr<weld::RadioButton> m_xFromRB;
+    std::unique_ptr<weld::SpinButton> m_xFromNF;
+    std::unique_ptr<weld::SpinButton> m_xToNF;
+
+    std::unique_ptr<weld::RadioButton> m_xPrinterRB;
+    std::unique_ptr<weld::RadioButton> m_xMailingRB;
+    std::unique_ptr<weld::RadioButton> m_xFileRB;
+
+    std::unique_ptr<weld::CheckButton> m_xSingleJobsCB;
+    std::unique_ptr<weld::CheckButton> m_xPasswordCB;
+
+    std::unique_ptr<weld::Label> m_xSaveMergedDocumentFT;
+    std::unique_ptr<weld::RadioButton> m_xSaveSingleDocRB;
+    std::unique_ptr<weld::RadioButton> m_xSaveIndividualRB;
+
+    std::unique_ptr<weld::CheckButton> m_xGenerateFromDataBaseCB;
+
+    std::unique_ptr<weld::Label> m_xColumnFT;
+    std::unique_ptr<weld::ComboBox> m_xColumnLB;
+    std::unique_ptr<weld::Label> m_xPasswordFT;
+    std::unique_ptr<weld::ComboBox> m_xPasswordLB;
+    std::unique_ptr<weld::Label> m_xPathFT;
+    std::unique_ptr<weld::Entry> m_xPathED;
+    std::unique_ptr<weld::Button> m_xPathPB;
+    std::unique_ptr<weld::Label> m_xFilterFT;
+    std::unique_ptr<weld::ComboBox> m_xFilterLB;
+
+    std::unique_ptr<weld::ComboBox> m_xAddressFieldLB;
+    std::unique_ptr<weld::Label> m_xSubjectFT;
+    std::unique_ptr<weld::Entry> m_xSubjectED;
+    std::unique_ptr<weld::Label> m_xFormatFT;
+    std::unique_ptr<weld::Label> m_xAttachFT;
+    std::unique_ptr<weld::Entry> m_xAttachED;
+    std::unique_ptr<weld::Button> m_xAttachPB;
+    std::unique_ptr<weld::CheckButton> m_xFormatHtmlCB;
+    std::unique_ptr<weld::CheckButton> m_xFormatRtfCB;
+    std::unique_ptr<weld::CheckButton> m_xFormatSwCB;
+
+    std::unique_ptr<weld::Button> m_xOkBTN;
+
+    DECL_LINK( ButtonHdl, weld::Button&, void );
+    DECL_LINK( InsertPathHdl, weld::Button&, void );
+    DECL_LINK( OutputTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( FilenameHdl, weld::ToggleButton&, void );
+    DECL_LINK( ModifyHdl, weld::SpinButton&, void );
+    DECL_LINK( SaveTypeHdl, weld::ToggleButton&, void );
+    DECL_LINK( FileFormatHdl, weld::ComboBox&, void );
+
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
     bool            ExecQryShell();
     bool            AskUserFilename() const;
     OUString        GetURLfromPath() const;
@@ -128,9 +181,17 @@ public:
 
     DBManagerOptions GetMergeType() { return nMergeType; }
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
     bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
     OUString GetColumnName() const { return m_pColumnLB->GetSelectedEntry(); }
+=======
+    bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
+    bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }
+    bool IsFileEncyrptedFromDataBase() const { return m_xPasswordCB->get_active(); }
+    OUString GetColumnName() const { return m_xColumnLB->get_active_text(); }
+    OUString GetPasswordColumnName() const { return m_xPasswordLB->get_active_text(); }
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}

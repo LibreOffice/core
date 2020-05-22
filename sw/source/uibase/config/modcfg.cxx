@@ -1187,6 +1187,7 @@ SwMiscConfig::SwMiscConfig() :
     m_bNumAlignSize(true),
     m_bSinglePrintJob(false),
     m_bIsNameFromColumn(true),
+    m_bIsPasswordFromColumn(false),
     m_bAskForMailMergeInPrint(true),
     m_nMailingFormats(MailTextFormats::NONE)
 {
@@ -1218,11 +1219,17 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
             "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
             "FormLetter/FileOutput/FileName/Generation",//10
             "FormLetter/PrintOutput/AskForMerge"        //11
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
             pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
+=======
+            "FormLetter/FileOutput/FilePassword/FromDatabaseField",  // 12
+            "FormLetter/FileOutput/FilePassword/Generation",//13
+    };
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
     return aNames;
 }
 
@@ -1253,6 +1260,8 @@ void SwMiscConfig::ImplCommit()
             case 9 : pValues[nProp] <<= m_sMailName;        break;
             case 10: pValues[nProp] <<= m_bIsNameFromColumn; break;
             case 11: pValues[nProp] <<= m_bAskForMailMergeInPrint; break;
+            case 12: pValues[nProp] <<= m_sPasswordFromColumn; break;
+            case 13: pValues[nProp] <<= m_bIsPasswordFromColumn; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -1285,6 +1294,8 @@ void SwMiscConfig::Load()
                 case 9 : pValues[nProp] >>= sTmp; m_sMailName = sTmp;     break;
                 case 10: m_bIsNameFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 11: pValues[nProp] >>= m_bAskForMailMergeInPrint; break;
+                case 12: m_bIsPasswordFromColumn = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 13: pValues[nProp] >>= sTmp; m_sPasswordFromColumn = sTmp; break;
             }
         }
     }

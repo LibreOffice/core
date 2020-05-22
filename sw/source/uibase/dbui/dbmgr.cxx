@@ -990,6 +990,30 @@ static void lcl_PreparePrinterOptions(
     }
 }
 
+static void lcl_PrepareSaveFilterDataOptions(
+    const uno::Sequence< beans::PropertyValue >& rInSaveFilterDataptions,
+    uno::Sequence< beans::PropertyValue >& rOutSaveFilterDataOptions,
+    const OUString& sPassword)
+{
+    const sal_Int32 nOffset = 2;
+    rOutSaveFilterDataOptions.realloc( nOffset );
+    rOutSaveFilterDataOptions[ 0 ].Name = "EncryptFile";
+    rOutSaveFilterDataOptions[ 0 ].Value <<= true;
+    rOutSaveFilterDataOptions[ 1 ].Name = "DocumentOpenPassword";
+    rOutSaveFilterDataOptions[ 1 ].Value <<= sPassword;
+
+    // copy other options
+    sal_Int32 nIndex = nOffset;
+    for( const beans::PropertyValue& rOption : rInSaveFilterDataptions)
+    {
+         rOutSaveFilterDataOptions.realloc( nIndex + 1 );
+         rOutSaveFilterDataOptions[ nIndex ].Name = rOption.Name;
+         rOutSaveFilterDataOptions[ nIndex++ ].Value = rOption.Value ;
+    }
+
+}
+
+
 static SfxObjectShell* lcl_CreateWorkingDocument(
     // input
     const WorkingDocType aType, const SwWrtShell &rSourceWrtShell,
@@ -1189,10 +1213,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
 
     uno::Reference< beans::XPropertySet > xColumnProp;
+    uno::Reference< beans::XPropertySet > xPasswordColumnProp;
 
     // Check for (mandatory) email or (optional) filename column
     SwDBFormatData aColumnDBFormat;
     bool bColumnName = !rMergeDescriptor.sDBcolumn.isEmpty();
+    bool bPasswordColumnName = !rMergeDescriptor.sDBPasswordColumn.isEmpty();
+
     if( ! bColumnName )
     {
         if( bMT_EMAIL )
@@ -1207,8 +1234,19 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
         aCol >>= xColumnProp;
 
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         aColumnDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
         aColumnDBFormat.aNullDate  = pImpl->pMergeData->aNullDate;
+=======
+        if(bPasswordColumnName)
+        {
+            aCol = xCols->getByName( rMergeDescriptor.sDBPasswordColumn );
+            aCol >>= xPasswordColumnProp;
+        }
+
+        aColumnDBFormat.xFormatter = m_pImpl->pMergeData->xFormatter;
+        aColumnDBFormat.aNullDate  = m_pImpl->pMergeData->aNullDate;
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
 
         if( bMT_EMAIL )
         {
@@ -1422,6 +1460,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             }
 
+            OUString sPasswordColumnData;
+            uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions( rMergeDescriptor.aSaveToFilterData );
+
+            if( bMT_EMAIL || bPasswordColumnName )
+            {
+                sPasswordColumnData = GetDBField( xPasswordColumnProp, aColumnDBFormat );
+                lcl_PrepareSaveFilterDataOptions( rMergeDescriptor.aSaveToFilterData, aSaveToFilterDataOptions, sPasswordColumnData );
+            }
+
             if( IsMergeOk() )
             {
                 std::unique_ptr< INetURLObject > aTempFileURL;
@@ -1549,8 +1596,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     // save merged document
                     OUString sFileURL;
                     if( !lcl_SaveDoc( aTempFileURL.get(), pStoreToFilter, pStoreToFilterOptions,
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
                                       &rMergeDescriptor.aSaveToFilterData, bIsPDFexport,
                                       xWorkDocSh, *pWorkShell, &sFileURL ) )
+=======
+                                    &aSaveToFilterDataOptions, bIsPDFexport,
+                                    xWorkDocSh, *pWorkShell, &sFileURL ) )
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
                     {
                         m_aMergeStatus = MergeStatus::Error;
                     }
@@ -3082,10 +3134,24 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
         aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
         aMergeDesc.bPrefixIsFilename = aMergeDesc.bCreateSingleFile;
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
         aMergeDesc.sPrefix = pImpl->pMergeDialog->GetTargetURL();
         if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
+=======
+        aMergeDesc.sPrefix = m_pImpl->pMergeDialog->GetTargetURL();
+
+        if(!aMergeDesc.bCreateSingleFile)
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
         {
+<<<<<<< HEAD   (3c60b9 Fix sending reference marks for current selection)
             aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
+=======
+            if(m_pImpl->pMergeDialog->IsGenerateFromDataBase())
+                aMergeDesc.sDBcolumn = m_pImpl->pMergeDialog->GetColumnName();
+
+            if(m_pImpl->pMergeDialog->IsFileEncyrptedFromDataBase())
+                aMergeDesc.sDBPasswordColumn = m_pImpl->pMergeDialog->GetPasswordColumnName();
+>>>>>>> CHANGE (983db9 Add an option to create encyrpted PDF files with mailmerge.)
         }
 
         Merge( aMergeDesc );
