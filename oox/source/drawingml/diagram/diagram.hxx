@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <vector>
 
 #include <rtl/ustring.hxx>
 
@@ -111,12 +112,15 @@ typedef std::map<OUString,DiagramStyle> DiagramQStyleMap;
 
 struct DiagramColor
 {
-    oox::drawingml::Color maFillColor;
-    oox::drawingml::Color maLineColor;
-    oox::drawingml::Color maEffectColor;
-    oox::drawingml::Color maTextFillColor;
-    oox::drawingml::Color maTextLineColor;
-    oox::drawingml::Color maTextEffectColor;
+    std::vector<oox::drawingml::Color> maFillColors;
+    std::vector<oox::drawingml::Color> maLineColors;
+    std::vector<oox::drawingml::Color> maEffectColors;
+    std::vector<oox::drawingml::Color> maTextFillColors;
+    std::vector<oox::drawingml::Color> maTextLineColors;
+    std::vector<oox::drawingml::Color> maTextEffectColors;
+
+    static const oox::drawingml::Color&
+    getColorByIndex(const std::vector<oox::drawingml::Color>& rColors, sal_Int32 nIndex);
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
