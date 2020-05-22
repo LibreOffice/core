@@ -149,6 +149,31 @@ ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor
     return nullptr;
 }
 
+ColorsContext::ColorsContext(ContextHandler2Helper const& rParent, std::vector<Color>& rColors)
+    : ContextHandler2(rParent)
+    , mrColors(rColors)
+{
+}
+
+::oox::core::ContextHandlerRef ColorsContext::onCreateContext(sal_Int32 nElement,
+                                                              const AttributeList&)
+{
+    switch (nElement)
+    {
+        case A_TOKEN(scrgbClr):
+        case A_TOKEN(srgbClr):
+        case A_TOKEN(hslClr):
+        case A_TOKEN(sysClr):
+        case A_TOKEN(schemeClr):
+        case A_TOKEN(prstClr):
+        {
+            mrColors.emplace_back();
+            return new ColorValueContext(*this, mrColors.back());
+        }
+    }
+    return nullptr;
+}
+
 } // namespace drawingml
 } // namespace oox
 

@@ -260,7 +260,8 @@ public:
         { mpNodeShapes.push_back(pShape); }
 
     bool setupShape( const ShapePtr& rShape,
-                     const dgm::Point* pPresNode ) const;
+                     const dgm::Point* pPresNode,
+                     sal_Int32 nCurrIdx ) const;
 
     const LayoutNode* getParentLayoutNode() const;
 
