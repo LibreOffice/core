@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "871fd926_970306ac",
+        "filename": "vcl/source/window/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-22T07:30:45Z",
+      "side": 0,
+      "message": "Both forms are ok, see https://www.merriam-webster.com/words-at-play/canceled-or-cancelled",
+      "range": {
+        "startLine": 929,
+        "startChar": 26,
+        "endLine": 929,
+        "endChar": 35
+      },
+      "revId": "defdbb87a67e2a48ecebf28d71e9b9576ef67c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
