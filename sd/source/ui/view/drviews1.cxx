@@ -757,20 +757,26 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
  */
 bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
 {
-    SdPage* pPage = GetDoc()->GetSdPage(nPage, PageKind::Standard);
-    if (pPage)
-    {
-        if (nSelect == 0)
-            pPage->SetSelected(false); // Deselect.
-        else if (nSelect == 1)
-            pPage->SetSelected(true); // Select.
-        else
-            pPage->SetSelected(!pPage->IsSelected()); // Toggle.
+    auto &pageSelector = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(this->GetViewShellBase())->GetSlideSorter().GetController().GetPageSelector();
 
-        return true;
+    if (nSelect == 0)
+    {
+        pageSelector.DeselectPage(nPage);  // Deselect.
+    }
+    else if (nSelect == 1)
+    {
+        pageSelector.SelectPage(nPage);    // Select.
+    }
+    else
+    {
+        // Toggle.
+        if (pageSelector.IsPageSelected(nPage))
+            pageSelector.DeselectPage(nPage);  // Deselect.
+        else
+            pageSelector.SelectPage(nPage);    // Select.
     }
 
-    return false;
+    return true;
 }
 
 bool DrawViewShell::IsSelected(sal_uInt16 nPage)
