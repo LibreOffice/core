@@ -83,8 +83,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pBuildLabel->hide();
   }
 
-  m_pEnvLabel->set_label(GetEnvString());
-  m_pUILabel->set_label(GetUIString());
+  m_pEnvLabel->set_label(Application::GetHWOSConfInfo(1));
+  m_pUILabel->set_label(Application::GetHWOSConfInfo(2));
   m_pLocaleLabel->set_label(GetLocaleString());
   m_pMiscLabel->set_label(GetMiscString());
   m_pCopyrightLabel->set_label(GetCopyrightString());
@@ -168,9 +168,6 @@ OUString AboutDialog::GetBuildString() {
 
   return sBuildId;
 }
-
-OUString AboutDialog::GetEnvString() { return Application::GetHWOSConfInfo(1); }
-OUString AboutDialog::GetUIString() { return Application::GetHWOSConfInfo(2); }
 
 OUString AboutDialog::GetLocaleString() {
 
