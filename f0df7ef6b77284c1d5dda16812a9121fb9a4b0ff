@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d0496a_1314d05c",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-22T07:26:21Z",
+      "side": 1,
+      "message": "this would need to be changed to !\u003d too, no?",
+      "range": {
+        "startLine": 96,
+        "startChar": 98,
+        "endLine": 96,
+        "endChar": 100
+      },
+      "revId": "f0df7ef6b77284c1d5dda16812a9121fb9a4b0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
