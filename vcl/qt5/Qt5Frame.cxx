@@ -1130,6 +1130,9 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     }
     style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
 
+    // Icon theme
+    style.SetPreferredIconTheme(toOUString(QIcon::themeName()));
+
     // Scroll bar size
     style.SetScrollBarSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent));
     style.SetMinThumbSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin));
