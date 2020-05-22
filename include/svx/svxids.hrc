@@ -326,7 +326,6 @@ class SvxSetItem;
 #define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 200 )
 #define SID_FRAME_LINESTYLE                             TypedWhichId<SvxLineItem>( SID_SVX_START + 201 )
 #define SID_FRAME_LINECOLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 202 )
-#define SID_ATTR_LINE_WIDTH_ARG                         ( SID_SVX_START + 203 )
 #define SID_FILL_GRADIENT_JSON                          ( SID_SVX_START + 204 )
 #define SID_SEARCHDLG_SEARCHSTRINGS                     ( SID_SVX_START + 215 )
 #define SID_SEARCHDLG_REPLACESTRINGS                    ( SID_SVX_START + 216 )
