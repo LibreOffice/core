@@ -2520,7 +2520,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             {
                 const size_t nCurIdx = rSh.GetCurPageDesc();
                 const SwPageDesc& rPageDesc = rSh.GetPageDesc( nCurIdx );
-                // Temporary view, because the shell does not need to be valid after the dialogue
+                // Temporary view, because the shell does not need to be valid after the dialog
                 // for example disable header
                 SwView& rTempView = GetView();
 

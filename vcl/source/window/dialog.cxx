@@ -926,7 +926,7 @@ bool Dialog::ImplStartExecute()
             SAL_INFO(
                 "vcl",
                 "Dialog \"" << ImplGetDialogText(this)
-                    << "\"cancelled in silent mode");
+                    << "\"canceled in silent mode");
             return false;
         default: // default cannot happen
         case DialogCancelMode::Fatal:
@@ -1101,7 +1101,7 @@ void Dialog::EndDialog( long nResult )
 
         RemoveFromDlgList();
 
-        // set focus to previous modal dialogue if it is modal for
+        // set focus to previous modal dialog if it is modal for
         // the same frame parent (or NULL)
         ImplSVData* pSVData = ImplGetSVData();
         if (!pSVData->mpWinData->mpExecuteDialogs.empty())
