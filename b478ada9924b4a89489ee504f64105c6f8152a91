@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9df9cda0_6aaf90fa",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "as I wrote below, it was fixed... I believe",
+      "parentUuid": "64dea665_df2c842f",
+      "revId": "b478ada9924b4a89489ee504f64105c6f8152a91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f1d4391_c0391806",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-05-19T23:00:46Z",
       "side": 1,
       "message": "Dito, do find() and all only if nNatNum is within bounds.",
+      "revId": "b478ada9924b4a89489ee504f64105c6f8152a91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a03f3a0_b3eec384",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "Oh, I\u0027ve overlooked your comment... sorry, will fix soon",
+      "parentUuid": "6f1d4391_c0391806",
       "revId": "b478ada9924b4a89489ee504f64105c6f8152a91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "08ceecce_faf7f2a1",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "fixed at patchset 5",
+      "parentUuid": "fa7c7a9b_7290c523",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ec8c9f9_50b5774b",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2020-05-18T19:55:43Z",
       "side": 1,
       "message": "We already have the iterator here, why not use it instead of doing another lookup with at()?",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04887afe_992112cb",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "Oh... fixed to \"it-\u003esecond[]\"",
+      "parentUuid": "7ec8c9f9_50b5774b",
       "revId": "313474e551b42c34255ba248151f6f2599bcea75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa4f0828_6e122063",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "according to tdf#130140, the specification in Korean might be changed.\nI have been touch to DaeHyun Sung, the original submitter of the issue, and he is asking the Korean community if his proposal is reasonable.  I can wait for the conclusion then amending this change, or I can also make another commit.\nAs for the Chinese language, I haven\u0027t heard any requests to change it, but I\u0027ll ask my friends in Taiwan.",
+      "parentUuid": "d9a45bde_026357ee",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30aa1b77_84999c66",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "617ae493_788e90ec",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "30aa1b77_84999c66",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8195321d_e5669d4f",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2020-05-18T19:55:43Z",
       "side": 1,
       "message": "Same, we already have the iterator here, why not use it instead of doing another lookup with at()?",
+      "revId": "313474e551b42c34255ba248151f6f2599bcea75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "580db1a4_683bed09",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000585
+      },
+      "writtenOn": "2020-05-22T07:19:07Z",
+      "side": 1,
+      "message": "same, fixed",
+      "parentUuid": "8195321d_e5669d4f",
       "revId": "313474e551b42c34255ba248151f6f2599bcea75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
