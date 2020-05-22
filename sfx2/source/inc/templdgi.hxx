@@ -207,6 +207,9 @@ protected:
     void SaveFactoryStyleFilter( SfxObjectShell const * i_pObjSh, sal_Int32 i_nFilter );
     SfxObjectShell* SaveSelection();
 
+    void PrepareMenu(const Point& rPos);
+    void ShowMenu(const CommandEvent& rCEvt);
+
 public:
 
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, vcl::Window*, weld::Builder* pBuilder);

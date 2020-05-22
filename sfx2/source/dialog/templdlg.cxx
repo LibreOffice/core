@@ -318,13 +318,38 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupFlatMenuHdl, const CommandEvent&, r
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    PrepareMenu(rCEvt.GetMousePosPixel());
+
     if (mxFmtLb->count_selected_rows() <= 0)
     {
         EnableEdit(false);
         EnableDel(false);
     }
 
-    return PopupTreeMenuHdl(rCEvt);
+    ShowMenu(rCEvt);
+
+    return true;
+}
+
+void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
+{
+    weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
+    std::unique_ptr<weld::TreeIter> xIter(pTreeView->make_iterator());
+    if (pTreeView->get_dest_row_at_pos(rPos, xIter.get()) && !pTreeView->is_selected(*xIter))
+    {
+        pTreeView->unselect_all();
+        pTreeView->select(*xIter);
+        FmtSelectHdl(*pTreeView);
+    }
+}
+
+void SfxCommonTemplateDialog_Impl::ShowMenu(const CommandEvent& rCEvt)
+{
+    CreateContextMenu();
+
+    weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
+    OString sCommand(mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
+    MenuSelect(sCommand);
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
@@ -332,11 +357,9 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, r
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    CreateContextMenu();
+    PrepareMenu(rCEvt.GetMousePosPixel());
 
-    weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
-    OString sCommand(mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1))));
-    MenuSelect(sCommand);
+    ShowMenu(rCEvt);
 
     return true;
 }
