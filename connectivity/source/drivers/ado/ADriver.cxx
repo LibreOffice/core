@@ -58,7 +58,7 @@ ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _
 ODriver::~ODriver()
 {
     CoUninitialize();
-    CoInitialize(nullptr);
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 }
 
 void ODriver::disposing()

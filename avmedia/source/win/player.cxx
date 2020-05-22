@@ -80,7 +80,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mbLooping( false ),
     mbAddWindow( true )
 {
-    ::CoInitialize( nullptr );
+    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 }
 
 

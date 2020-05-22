@@ -72,9 +72,9 @@ void printSequence( Sequence<Any>& val);
 extern "C" int SAL_CALL main( int , char **)
 {
     HRESULT hr;
-    if( FAILED( hr=CoInitialize(NULL)))
+    if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
     {
-        _tprintf(_T("CoInitialize failed \n"));
+        _tprintf(_T("CoInitializeEx failed \n"));
         return -1;
     }
 

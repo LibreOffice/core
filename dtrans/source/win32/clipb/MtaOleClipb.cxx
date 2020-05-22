@@ -179,14 +179,14 @@ class CAutoComInit
 {
 public:
    /*
-       to be safe we call CoInitialize
+       to be safe we call CoInitializeEx
        although it is not necessary if
        the calling thread was created
        using osl_CreateThread because
-       this function calls CoInitialize
+       this function calls CoInitializeEx
        for every thread it creates
     */
-    CAutoComInit( ) : m_hResult( CoInitialize( nullptr ) )
+    CAutoComInit( ) : m_hResult( CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED ) )
     {
         if ( S_OK == m_hResult )
             OSL_FAIL(
