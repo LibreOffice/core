@@ -713,6 +713,17 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xMenuIconBox->hide();
     }
 
+#if !HAVE_FEATURE_SKIA || !defined(_WIN32)
+    // Duplicated also in UpdateSkiaStatus().
+    // For now Skia is used mainly on Windows, hide the controls everywhere else.
+    // It can also be used on Linux, but only with the rarely used 'gen' backend.
+    m_xUseSkia->hide();
+    m_xForceSkia->hide();
+    m_xForceSkiaRaster->hide();
+    m_xSkiaStatusEnabled->hide();
+    m_xSkiaStatusDisabled->hide();
+#endif
+
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
     m_xForceSkia->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaToggled));
@@ -1107,10 +1118,12 @@ void OfaViewTabPage::UpdateSkiaStatus()
 {
     if (Application::GetToolkitName() == "gtk3")
         return;
+#if HAVE_FEATURE_SKIA && defined(_WIN32)
     // Easier than a custom translation string.
     bool bEnabled = SkiaHelper::isVCLSkiaEnabled();
     m_xSkiaStatusEnabled->set_visible(bEnabled);
     m_xSkiaStatusDisabled->set_visible(!bEnabled);
+#endif
 }
 
 struct LanguageConfig_Impl
