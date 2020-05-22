@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <bitmaps.hlst>
-#include <vcl/messagedialog.hxx>
+#include <messagedialog.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
