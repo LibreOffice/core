@@ -166,7 +166,11 @@ OUString getImageFromFileName(const OUString& aFile)
                     }
 
                     if( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aImageName, aImageName) )
+                    {
+                        osl_closeFile(hOut);
+                        osl_freeProcessHandle(hProcess);
                         return aImageName;
+                    }
                 }
             }
 
