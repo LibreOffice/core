@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82c2e810_ea14dce9",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-22T08:20:40Z",
+      "side": 1,
+      "message": "aFile is const OUString\u0026 ...",
+      "range": {
+        "startLine": 170,
+        "startChar": 24,
+        "endLine": 170,
+        "endChar": 29
+      },
+      "revId": "50c7eaa56a50250dead24f884b025d5c5af0593d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
