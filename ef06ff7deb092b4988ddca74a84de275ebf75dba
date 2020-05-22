@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fae0473_0cf451e3",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-22T13:20:47Z",
+      "side": 1,
+      "message": "Maybe use\n\n    comphelper::ScopeGuard g([hOut, hProcess] {\n        osl_closeFile(hOut);\n        osl_freeProcessHandle(hProcess);\n    });\n\non line 141?",
+      "range": {
+        "startLine": 170,
+        "startChar": 24,
+        "endLine": 171,
+        "endChar": 56
+      },
+      "revId": "ef06ff7deb092b4988ddca74a84de275ebf75dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
