@@ -58,6 +58,13 @@
 #include <drawview.hxx>
 #include <svx/bmpmask.hxx>
 #include <LayerTabBar.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsInsertionIndicatorHandler.hxx>
+#include <svx/svdedtv.hxx>
 
 #include <svx/svditer.hxx>
 
@@ -79,10 +86,10 @@ void DrawViewShell::DeleteActualPage()
 
     try
     {
-        Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
-        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
-        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
-        xPages->remove( xPage );
+        sd::slidesorter::SlideSorter &mrSlideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(this->GetViewShellBase())->GetSlideSorter();
+
+        mrSlideSorter.GetView().EndTextEditAllViews();
+        mrSlideSorter.GetController().GetSelectionManager()->DeleteSelectedPages();
     }
     catch( Exception& )
     {
