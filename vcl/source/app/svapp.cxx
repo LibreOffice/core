@@ -1140,10 +1140,15 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
 
+    const auto appendDetails = [&aDetails](const OUStringLiteral& sep, auto&& val) {
+        if (!aDetails.isEmpty() && sep.getLength())
+            aDetails.append(sep);
+        aDetails.append(std::move(val));
+    };
+
     if (bSelection != hwUI) {
-        aDetails.append( VclResId(SV_APP_CPUTHREADS) );
-        aDetails.append( static_cast<sal_Int32>(std::thread::hardware_concurrency()) );
-        aDetails.append( "; " );
+        appendDetails("; ", VclResId(SV_APP_CPUTHREADS)
+                                + OUString::number(std::thread::hardware_concurrency()));
 
         OUString aVersion;
         if ( pSVData && pSVData->mpDefInst )
@@ -1151,23 +1156,21 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
         else
             aVersion = "-";
 
-        aDetails.append( VclResId(SV_APP_OSVERSION) );
-        aDetails.append( aVersion );
-        aDetails.append( "; " );
+        appendDetails("; ", VclResId(SV_APP_OSVERSION) + aVersion);
     }
 
     if (bSelection != hwEnv) {
-        aDetails.append( VclResId(SV_APP_UIRENDER) );
+        appendDetails("; ", VclResId(SV_APP_UIRENDER));
 #if HAVE_FEATURE_SKIA
         if ( SkiaHelper::isVCLSkiaEnabled() )
         {
             switch(SkiaHelper::renderMethodToUse())
             {
                 case SkiaHelper::RenderVulkan:
-                    aDetails.append( VclResId(SV_APP_SKIA_VULKAN) );
+                    appendDetails("", VclResId(SV_APP_SKIA_VULKAN));
                     break;
                 case SkiaHelper::RenderRaster:
-                    aDetails.append( VclResId(SV_APP_SKIA_RASTER) );
+                    appendDetails("", VclResId(SV_APP_SKIA_RASTER));
                     break;
             }
         }
@@ -1175,16 +1178,13 @@ OUString Application::GetHWOSConfInfo(const int bSelection)
 #endif
 #if HAVE_FEATURE_OPENGL
         if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-            aDetails.append( VclResId(SV_APP_GL) );
+            appendDetails("", VclResId(SV_APP_GL));
         else
 #endif
-            aDetails.append( VclResId(SV_APP_DEFAULT) );
-        aDetails.append( "; " );
+            appendDetails("", VclResId(SV_APP_DEFAULT));
 
 #if (defined LINUX || defined _WIN32 || defined MACOSX)
-        aDetails.append( SV_APP_VCLBACKEND );
-        aDetails.append( GetToolkitName() );
-        aDetails.append( "; " );
+        appendDetails("; ", SV_APP_VCLBACKEND + GetToolkitName());
 #endif
     }
 
