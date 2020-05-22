@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/scopeguard.hxx>
 #include <config_folders.h>
 
 #include "updatecheck.hxx"
@@ -166,12 +167,19 @@ OUString getImageFromFileName(const OUString& aFile)
                     }
 
                     if( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aImageName, aImageName) )
+                    {
+                        comphelper::ScopeGuard g([hOut, hProcess] () {
+                            osl_closeFile(hOut);
+                            osl_freeProcessHandle(hProcess);
+                        });
                         return aImageName;
+                    }
                 }
             }
-
-            osl_closeFile(hOut);
-            osl_freeProcessHandle(hProcess);
+            comphelper::ScopeGuard g([hOut, hProcess] () {
+                osl_closeFile(hOut);
+                osl_freeProcessHandle(hProcess);
+            });
         }
     }
 #endif
