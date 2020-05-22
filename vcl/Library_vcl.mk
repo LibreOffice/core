@@ -462,6 +462,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/uitest/uno/uiobject_uno \
     vcl/source/uitest/uno/uitest_uno \
     vcl/backendtest/outputdevice/bitmap \
+    vcl/backendtest/outputdevice/clip \
     vcl/backendtest/outputdevice/common \
     vcl/backendtest/outputdevice/gradient \
     vcl/backendtest/outputdevice/line \

@@ -200,6 +200,18 @@ public:
     Bitmap setupRadialGradient();
 };
 
+class VCL_DLLPUBLIC OutputDeviceTestClip : public OutputDeviceTestCommon
+{
+public:
+    Bitmap setupClipRectangle();
+    Bitmap setupClipPolygon();
+    Bitmap setupClipPolyPolygon();
+    Bitmap setupClipB2DPolyPolygon();
+
+    static TestResult checkClip(Bitmap& rBitmap);
+};
+
+
 }} // end namespace vcl::test
 
 #endif
