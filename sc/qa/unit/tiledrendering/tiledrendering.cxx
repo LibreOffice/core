@@ -203,6 +203,11 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    // Without a zoom reset the docshell "output-factor" computed in ScModelObj::initializeForTiledRendering is not
+    // reflected in view-data nPPTX without an explicit CalcPPT() call.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (pViewData)
+        pViewData->RefreshZoom();
     return pModelObj;
 }
 
