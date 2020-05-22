@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6f3520_a5df58d2",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-22T16:30:33Z",
+      "side": 1,
+      "message": "the variable\u0027s scope needs to cover all places where its destructor shall do its work (i.e., it needs to be moved up so that it also covers the above `return aImageName;`)",
+      "revId": "5924029f3f9eab7bb601a0df4c5fa1ae25b0d4af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
