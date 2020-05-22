@@ -90,6 +90,10 @@ class SwMailMergeDlg : public SvxStandardDialog
     VclPtr<CheckBox>        m_pFormatRtfCB;
     VclPtr<CheckBox>        m_pFormatSwCB;
 
+    VclPtr<CheckBox>        m_pPasswordCB;
+    VclPtr<FixedText>       m_pPasswordFT;
+    VclPtr<ListBox>         m_pPasswordLB;
+
     VclPtr<OKButton>        m_pOkBTN;
 
     std::unique_ptr<SwMailMergeDlg_Impl> pImpl;
@@ -110,6 +114,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     DECL_LINK( FilenameHdl, Button*, void );
     DECL_LINK( ModifyHdl, Edit&, void );
     DECL_LINK( SaveTypeHdl, Button*, void );
+    DECL_LINK( FileFormatHdl, ListBox&, void );
 
     virtual void    Apply() override;
     bool            ExecQryShell();
@@ -130,7 +135,9 @@ public:
 
     bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
+    bool IsFileEncyrptedFromDataBase() const { return m_pPasswordCB->IsChecked(); }
     OUString GetColumnName() const { return m_pColumnLB->GetSelectedEntry(); }
+    OUString GetPasswordColumnName() const { return m_pPasswordLB->GetSelectedEntry(); }
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
