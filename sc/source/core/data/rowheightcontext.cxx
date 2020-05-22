@@ -33,11 +33,6 @@ void RowHeightContext::setForceAutoSize( bool b )
     mbForceAutoSize = b;
 }
 
-ScFlatUInt16RowSegments& RowHeightContext::getHeightArray()
-{
-    return maHeights;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
