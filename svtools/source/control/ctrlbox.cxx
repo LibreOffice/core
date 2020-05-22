@@ -795,8 +795,7 @@ void FontNameBox::set_active_or_entry_text(const OUString& rText)
     const int nFound = m_xComboBox->find_text(rText);
     if (nFound != -1)
         m_xComboBox->set_active(nFound);
-    else
-        m_xComboBox->set_entry_text(rText);
+    m_xComboBox->set_entry_text(rText);
 }
 
 FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
@@ -984,8 +983,7 @@ void FontSizeBox::set_active_or_entry_text(const OUString& rText)
     const int nFound = m_xComboBox->find_text(rText);
     if (nFound != -1)
         m_xComboBox->set_active(nFound);
-    else
-        m_xComboBox->set_entry_text(rText);
+    m_xComboBox->set_entry_text(rText);
 }
 
 IMPL_LINK(FontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
