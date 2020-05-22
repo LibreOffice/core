@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bebbc206_feff0d17",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-22T17:09:47Z",
+      "side": 1,
+      "message": "Sorry for confusion,\n\nwhat I meant was pasting a single instance of this code on line 141 (as I mentioned), and remove all the other places where the handles are freed. That would be using RAII for the cleanup: we have a local object, which destructor is always called - according to C++ rules - whenever we leave its scope (including using return in any place; or even when an exception is thrown). The ScopeGuard is a class designed just for that - to call its dtor with useful cleanup. So we declare what to call in the dtor, and let compiler to call it in appropriate code paths itself.\n\nThe code would look like\n\n        if( osl_Process_E_None \u003d\u003d rc )\n        {\n            // Create a guard to ensure correct cleanup in its dtor in any case\n            comphelper::ScopeGuard g([hOut, hProcess] () {\n                osl_closeFile(hOut);\n                osl_freeProcessHandle(hProcess);\n            });\n\n            oslProcessInfo aInfo;\n            aInfo.Size \u003d sizeof(oslProcessInfo);\n\n            if( osl_Process_E_None \u003d\u003d osl_getProcessInfo(hProcess, osl_Process_EXITCODE, \u0026aInfo) )\n            {\n                if( 0 \u003d\u003d aInfo.Code )\n                {\n                    ...\n\n                    if( osl::FileBase::E_None \u003d\u003d osl::FileBase::getFileURLFromSystemPath(aImageName, aImageName) )\n                    {\n                        return aImageName;\n                    }\n                }\n            }\n        }",
+      "range": {
+        "startLine": 171,
+        "startChar": 24,
+        "endLine": 174,
+        "endChar": 27
+      },
+      "revId": "b7dd0bd86465fa7ebe7cd732f412947b1c0fcf18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
