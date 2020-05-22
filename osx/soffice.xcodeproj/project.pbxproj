@@ -160,6 +160,17 @@
 		BE2DAD301831490400A4D2F7 /* vectortoken.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectortoken.cxx; path = ../formula/source/core/api/vectortoken.cxx; sourceTree = "<group>"; };
 		BE40143A182BEB7200731FA1 /* formulagroup.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroup.cxx; path = ../sc/source/core/tool/formulagroup.cxx; sourceTree = "<group>"; };
 		BE40143B182C36B000731FA1 /* clkernelthread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clkernelthread.cxx; path = ../sc/source/core/tool/clkernelthread.cxx; sourceTree = "<group>"; };
+		BE493241247820D50013BCD6 /* xmlsec_init.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlsec_init.cxx; path = ../xmlsecurity/source/xmlsec/xmlsec_init.cxx; sourceTree = "<group>"; };
+		BE493242247820D50013BCD6 /* certificateextension_certextn.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = certificateextension_certextn.hxx; path = ../xmlsecurity/source/xmlsec/certificateextension_certextn.hxx; sourceTree = "<group>"; };
+		BE493243247820D50013BCD6 /* xmlelementwrapper_xmlsecimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlelementwrapper_xmlsecimpl.cxx; path = ../xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.cxx; sourceTree = "<group>"; };
+		BE493244247820D50013BCD6 /* biginteger.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = biginteger.cxx; path = ../xmlsecurity/source/xmlsec/biginteger.cxx; sourceTree = "<group>"; };
+		BE493245247820D50013BCD6 /* errorcallback.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = errorcallback.cxx; path = ../xmlsecurity/source/xmlsec/errorcallback.cxx; sourceTree = "<group>"; };
+		BE493246247820D50013BCD6 /* xmldocumentwrapper_xmlsecimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmldocumentwrapper_xmlsecimpl.cxx; path = ../xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl.cxx; sourceTree = "<group>"; };
+		BE493247247820D50013BCD6 /* xmlelementwrapper_xmlsecimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = xmlelementwrapper_xmlsecimpl.hxx; path = ../xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl.hxx; sourceTree = "<group>"; };
+		BE493248247820D50013BCD6 /* saxhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = saxhelper.cxx; path = ../xmlsecurity/source/xmlsec/saxhelper.cxx; sourceTree = "<group>"; };
+		BE493249247820D50013BCD6 /* certificateextension_certextn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = certificateextension_certextn.cxx; path = ../xmlsecurity/source/xmlsec/certificateextension_certextn.cxx; sourceTree = "<group>"; };
+		BE49324A247820D50013BCD6 /* xmlstreamio.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlstreamio.cxx; path = ../xmlsecurity/source/xmlsec/xmlstreamio.cxx; sourceTree = "<group>"; };
+		BE49324B247820D50013BCD6 /* certificateextension_xmlsecimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = certificateextension_xmlsecimpl.hxx; path = ../xmlsecurity/source/xmlsec/certificateextension_xmlsecimpl.hxx; sourceTree = "<group>"; };
 		BE60B5771DB7D80200D3E1E4 /* a11yactionwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yactionwrapper.mm; path = ../vcl/osx/a11yactionwrapper.mm; sourceTree = "<group>"; };
 		BE60B5781DB7D80200D3E1E4 /* a11ycomponentwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ycomponentwrapper.mm; path = ../vcl/osx/a11ycomponentwrapper.mm; sourceTree = "<group>"; };
 		BE60B5791DB7D80200D3E1E4 /* a11yfactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yfactory.mm; path = ../vcl/osx/a11yfactory.mm; sourceTree = "<group>"; };
@@ -823,6 +834,32 @@
 			name = formula;
 			sourceTree = "<group>";
 		};
+		BE49323F247820A10013BCD6 /* xmlsecurity */ = {
+			isa = PBXGroup;
+			children = (
+				BE493240247820B50013BCD6 /* xmlsec */,
+			);
+			name = xmlsecurity;
+			sourceTree = "<group>";
+		};
+		BE493240247820B50013BCD6 /* xmlsec */ = {
+			isa = PBXGroup;
+			children = (
+				BE493244247820D50013BCD6 /* biginteger.cxx */,
+				BE493249247820D50013BCD6 /* certificateextension_certextn.cxx */,
+				BE493242247820D50013BCD6 /* certificateextension_certextn.hxx */,
+				BE49324B247820D50013BCD6 /* certificateextension_xmlsecimpl.hxx */,
+				BE493245247820D50013BCD6 /* errorcallback.cxx */,
+				BE493248247820D50013BCD6 /* saxhelper.cxx */,
+				BE493246247820D50013BCD6 /* xmldocumentwrapper_xmlsecimpl.cxx */,
+				BE493243247820D50013BCD6 /* xmlelementwrapper_xmlsecimpl.cxx */,
+				BE493247247820D50013BCD6 /* xmlelementwrapper_xmlsecimpl.hxx */,
+				BE493241247820D50013BCD6 /* xmlsec_init.cxx */,
+				BE49324A247820D50013BCD6 /* xmlstreamio.cxx */,
+			);
+			name = xmlsec;
+			sourceTree = "<group>";
+		};
 		BE60B5761DB7D76C00D3E1E4 /* osx */ = {
 			isa = PBXGroup;
 			children = (
@@ -1366,6 +1403,7 @@
 				BEBF3E8D246AD70C00415E87 /* ucb */,
 				BEDCC8F02460807C00FB02BD /* unotools */,
 				BE82BE5A18298E2E00A447B5 /* vcl */,
+				BE49323F247820A10013BCD6 /* xmlsecurity */,
 			);
 			sourceTree = "<group>";
 		};
