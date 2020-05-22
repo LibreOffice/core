@@ -198,12 +198,8 @@ void PageFormatPanel::NotifyItemUpdate(
             if (eFUnit != meFUnit)
             {
                 meFUnit = eFUnit;
-                auto nHeight = mxPaperHeight->GetCoreValue(meUnit);
                 mxPaperHeight->SetFieldUnit(meFUnit);
-                mxPaperHeight->SetMetricValue(nHeight, meUnit);
-                auto nWidth = mxPaperWidth->GetCoreValue(meUnit);
                 mxPaperWidth->SetFieldUnit(meFUnit);
-                mxPaperWidth->SetMetricValue(nWidth, meUnit);
                 SetMarginFieldUnit();
                 UpdateMarginBox();
             }
