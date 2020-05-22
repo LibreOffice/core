@@ -507,7 +507,9 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const override;
     virtual bool IsSaveSingleDoc() const override;
     virtual bool IsGenerateFromDataBase() const override;
+    virtual bool IsFileEncyrptedFromDataBase() const override;
     virtual OUString GetColumnName() const override;
+    virtual OUString GetPasswordColumnName() const override;
     virtual OUString GetTargetURL() const override;
 };
 

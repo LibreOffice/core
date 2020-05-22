@@ -990,6 +990,30 @@ static void lcl_PreparePrinterOptions(
     }
 }
 
+static void lcl_PrepareSaveFilterDataOptions(
+    const uno::Sequence< beans::PropertyValue >& rInSaveFilterDataptions,
+    uno::Sequence< beans::PropertyValue >& rOutSaveFilterDataOptions,
+    const OUString& sPassword)
+{
+    const sal_Int32 nOffset = 2;
+    rOutSaveFilterDataOptions.realloc( nOffset );
+    rOutSaveFilterDataOptions[ 0 ].Name = "EncryptFile";
+    rOutSaveFilterDataOptions[ 0 ].Value <<= true;
+    rOutSaveFilterDataOptions[ 1 ].Name = "DocumentOpenPassword";
+    rOutSaveFilterDataOptions[ 1 ].Value <<= sPassword;
+
+    // copy other options
+    sal_Int32 nIndex = nOffset;
+    for( const beans::PropertyValue& rOption : rInSaveFilterDataptions)
+    {
+         rOutSaveFilterDataOptions.realloc( nIndex + 1 );
+         rOutSaveFilterDataOptions[ nIndex ].Name = rOption.Name;
+         rOutSaveFilterDataOptions[ nIndex++ ].Value = rOption.Value ;
+    }
+
+}
+
+
 static SfxObjectShell* lcl_CreateWorkingDocument(
     // input
     const WorkingDocType aType, const SwWrtShell &rSourceWrtShell,
@@ -1189,10 +1213,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     rtl_TextEncoding                    sMailEncoding = ::osl_getThreadTextEncoding();
 
     uno::Reference< beans::XPropertySet > xColumnProp;
+    uno::Reference< beans::XPropertySet > xPasswordColumnProp;
 
     // Check for (mandatory) email or (optional) filename column
     SwDBFormatData aColumnDBFormat;
     bool bColumnName = !rMergeDescriptor.sDBcolumn.isEmpty();
+    bool bPasswordColumnName = !rMergeDescriptor.sDBPasswordColumn.isEmpty();
+
     if( ! bColumnName )
     {
         if( bMT_EMAIL )
@@ -1206,6 +1233,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             return false;
         uno::Any aCol = xCols->getByName( rMergeDescriptor.sDBcolumn );
         aCol >>= xColumnProp;
+
+        if(bPasswordColumnName)
+        {
+            aCol = xCols->getByName( rMergeDescriptor.sDBPasswordColumn );
+            aCol >>= xPasswordColumnProp;
+        }
 
         aColumnDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
         aColumnDBFormat.aNullDate  = pImpl->pMergeData->aNullDate;
@@ -1422,6 +1455,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             }
 
+            OUString sPasswordColumnData;
+            uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions( rMergeDescriptor.aSaveToFilterData );
+
+            if( bMT_EMAIL || bPasswordColumnName )
+            {
+                sPasswordColumnData = GetDBField( xPasswordColumnProp, aColumnDBFormat );
+                lcl_PrepareSaveFilterDataOptions( rMergeDescriptor.aSaveToFilterData, aSaveToFilterDataOptions, sPasswordColumnData );
+            }
+
             if( IsMergeOk() )
             {
                 std::unique_ptr< INetURLObject > aTempFileURL;
@@ -1549,7 +1591,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     // save merged document
                     OUString sFileURL;
                     if( !lcl_SaveDoc( aTempFileURL.get(), pStoreToFilter, pStoreToFilterOptions,
-                                      &rMergeDescriptor.aSaveToFilterData, bIsPDFexport,
+                                      &aSaveToFilterDataOptions, bIsPDFexport,
                                       xWorkDocSh, *pWorkShell, &sFileURL ) )
                     {
                         m_aMergeStatus = MergeStatus::Error;
@@ -3083,9 +3125,14 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
         aMergeDesc.bPrefixIsFilename = aMergeDesc.bCreateSingleFile;
         aMergeDesc.sPrefix = pImpl->pMergeDialog->GetTargetURL();
-        if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
+
+        if( !aMergeDesc.bCreateSingleFile )
         {
-            aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
+            if(pImpl->pMergeDialog->IsGenerateFromDataBase())
+                aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
+
+            if(pImpl->pMergeDialog->IsFileEncyrptedFromDataBase())
+                aMergeDesc.sDBPasswordColumn = pImpl->pMergeDialog->GetPasswordColumnName();
         }
 
         Merge( aMergeDesc );

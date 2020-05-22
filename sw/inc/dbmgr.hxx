@@ -202,6 +202,10 @@ struct SwMergeDescriptor
      */
     OUString                                            sDBcolumn;
 
+    /** DB column to fetch password
+     */
+    OUString                                            sDBPasswordColumn;
+
     /** @} */
 
     /**

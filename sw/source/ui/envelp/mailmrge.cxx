@@ -170,6 +170,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     get(m_pFormatRtfCB, "rtf");
     get(m_pFormatSwCB, "swriter");
 
+    get(m_pPasswordCB, "passwd-check");
+    get(m_pPasswordFT, "passwd-label");
+    get(m_pPasswordLB, "passwd-combobox");
+
     get(m_pOkBTN, "ok");
 
     m_pSingleJobsCB->Show(false); // not supported in since cws printerpullpages anymore
@@ -184,6 +188,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pAttachFT->Show(false);
     m_pAttachED->Show(false);
     m_pAttachPB->Show(false);
+    m_pPasswordCB->Show(false);
+    m_pPasswordFT->Show(false);
+    m_pPasswordLB->Show(false);
 
     Point aMailPos = m_pMailingRB->GetPosPixel();
     Point aFilePos = m_pFileRB->GetPosPixel();
@@ -276,13 +283,21 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pFromNF->SetMax(SAL_MAX_INT32);
     m_pToNF->SetMax(SAL_MAX_INT32);
 
+    Link<ListBox&,void> aLk3 = LINK(this, SwMailMergeDlg, FileFormatHdl);
+    m_pFilterLB->SetSelectHdl(aLk3);
+
     SwDBManager* pDBManager = rSh.GetDBManager();
+
     if(_xConnection.is())
         SwDBManager::GetColumnNames(m_pAddressFieldLB, _xConnection, rTableName);
     else
         pDBManager->GetColumnNames(m_pAddressFieldLB, rSourceName, rTableName);
+
     for(sal_Int32 nEntry = 0; nEntry < m_pAddressFieldLB->GetEntryCount(); ++nEntry)
+    {
         m_pColumnLB->InsertEntry(m_pAddressFieldLB->GetEntry(nEntry));
+        m_pPasswordLB->InsertEntry(m_pAddressFieldLB->GetEntry(nEntry));
+    }
 
     m_pAddressFieldLB->SelectEntry("EMAIL");
 
@@ -297,15 +312,23 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     else
         m_pPathED->SetText(aURL.GetFull());
 
-    if (!bColumn ) {
+    if (!bColumn )
+    {
         m_pColumnLB->SelectEntry("NAME");
-    } else
+        m_pPasswordLB->SelectEntry("PASSWORD");
+    }
+    else
+    {
         m_pColumnLB->SelectEntry(pModOpt->GetNameFromColumn());
+        m_pPasswordLB->SelectEntry(pModOpt->GetPasswordFromColumn());
+    }
 
     if (m_pAddressFieldLB->GetSelectedEntryCount() == 0)
         m_pAddressFieldLB->SelectEntryPos(0);
     if (m_pColumnLB->GetSelectedEntryCount() == 0)
         m_pColumnLB->SelectEntryPos(0);
+    if (m_pPasswordLB->GetSelectedEntryCount() == 0)
+        m_pPasswordLB->SelectEntryPos(0);
 
     const bool bEnable = m_aSelection.getLength() != 0;
     m_pMarkedRB->Enable(bEnable);
@@ -437,6 +460,9 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, Button *, pBtn, void )
         m_pFilterFT->Enable(false);
         m_pFilterLB->Enable(false);
         m_pGenerateFromDataBaseCB->Enable(false);
+        m_pPasswordCB->Enable(false);
+        m_pPasswordFT->Enable(false);
+        m_pPasswordLB->Enable(false);
     }
 }
 
@@ -455,6 +481,9 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, Button*,  pBtn, void )
         m_pPathPB->Enable( false );
         m_pFilterFT->Enable( false );
         m_pFilterLB->Enable( false );
+        m_pPasswordCB->Enable(false);
+        m_pPasswordFT->Enable(false);
+        m_pPasswordLB->Enable(false);
     }
 }
 
@@ -468,6 +497,29 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, Button*, pBox, void )
     m_pPathPB->Enable( bEnable );
     m_pFilterFT->Enable( bEnable );
     m_pFilterLB->Enable( bEnable );
+
+    if(m_pFilterLB->GetSelectedEntry() == "PDF - Portable Document Format")
+    {
+        m_pPasswordCB->Show(true);
+        m_pPasswordFT->Show(true);
+        m_pPasswordLB->Show(true);
+        m_pPasswordCB->Enable(true);
+        m_pPasswordFT->Enable(true);
+        m_pPasswordLB->Enable(true);
+    }
+}
+
+IMPL_LINK_NOARG( SwMailMergeDlg, FileFormatHdl, ListBox&, void )
+{
+    OUString sSelectedFilter = m_pFilterLB->GetSelectedEntry();
+    bool bEnable = sSelectedFilter == "PDF - Portable Document Format";
+
+    m_pPasswordCB->Show(bEnable);
+    m_pPasswordFT->Show(bEnable);
+    m_pPasswordLB->Show(bEnable);
+    m_pPasswordCB->Enable(bEnable);
+    m_pPasswordFT->Enable(bEnable);
+    m_pPasswordLB->Enable(bEnable);
 }
 
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl, Edit&, void)
@@ -507,15 +559,18 @@ bool SwMailMergeDlg::ExecQryShell()
         nMergeType = DBMGR_MERGE_FILE;
         pModOpt->SetMailingPath( GetURLfromPath() );
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
+        pModOpt->SetIsFileEncyrptedFromColumn(m_pPasswordCB->IsChecked());
 
         if (!AskUserFilename()) {
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectedEntry());
+            pModOpt->SetPasswordFromColumn(m_pPasswordLB->GetSelectedEntry());
             if( m_pFilterLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
                 m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectedEntryData());
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
             pModOpt->SetNameFromColumn(OUString());
+            pModOpt->SetPasswordFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
             m_sFilename = SwMailMergeHelper::CallSaveAsDialog(GetFrameWeld(), sFilter);
