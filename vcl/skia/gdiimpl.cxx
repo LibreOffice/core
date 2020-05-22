@@ -415,20 +415,14 @@ void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Regio
 {
     SkiaZone zone;
     SkPath path;
-    // Handle polygons last, since rectangle->polygon area conversions
-    // are problematic (see addPolygonToPath() comment).
-    if (region.getRegionBand())
-    {
-        RectangleVector rectangles;
-        region.GetRegionRectangles(rectangles);
-        for (const tools::Rectangle& rectangle : rectangles)
-            path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
-                                          rectangle.GetHeight()));
-    }
-    else if (!region.IsEmpty())
-    {
-        addPolyPolygonToPath(region.GetAsB2DPolyPolygon(), path);
-    }
+    // Always use region rectangles, regardless of what the region uses internally.
+    // That's what other VCL backends do, and trying to use addPolyPolygonToPath()
+    // in case a polygon is used leads to off-by-one errors such as tdf#133208.
+    RectangleVector rectangles;
+    region.GetRegionRectangles(rectangles);
+    for (const tools::Rectangle& rectangle : rectangles)
+        path.addRect(SkRect::MakeXYWH(rectangle.getX(), rectangle.getY(), rectangle.GetWidth(),
+                                      rectangle.GetHeight()));
     path.setFillType(SkPathFillType::kEvenOdd);
     canvas->clipPath(path);
 }

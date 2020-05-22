@@ -455,6 +455,46 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testClipRectangle()
+    {
+        vcl::test::OutputDeviceTestClip aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClipRectangle();
+        auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
+        exportImage("09-01_clip_rectangle_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testClipPolygon()
+    {
+        vcl::test::OutputDeviceTestClip aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClipPolygon();
+        auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
+        exportImage("09-02_clip_polygon_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testClipPolyPolygon()
+    {
+        vcl::test::OutputDeviceTestClip aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
+        auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
+        exportImage("09-03_clip_polypolygon_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testClipB2DPolyPolygon()
+    {
+        vcl::test::OutputDeviceTestClip aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
+        auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
+        exportImage("09-04_clip_b2dpolypolygon_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -529,6 +569,11 @@ public:
     CPPUNIT_TEST(testDrawMask);
     CPPUNIT_TEST(testDrawBlend);
     CPPUNIT_TEST(testDrawXor);
+
+    CPPUNIT_TEST(testClipRectangle);
+    CPPUNIT_TEST(testClipPolygon);
+    CPPUNIT_TEST(testClipPolyPolygon);
+    CPPUNIT_TEST(testClipB2DPolyPolygon);
 
     CPPUNIT_TEST(testTdf124848);
 
