@@ -46,6 +46,30 @@
       "revId": "ef06ff7deb092b4988ddca74a84de275ebf75dba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c0a1885_fb2c1137",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-22T16:31:54Z",
+      "side": 1,
+      "message": "Note the line number where I suggested it ;-) - that would eliminate freeing it in lines 170-171 and 177-178...",
+      "parentUuid": "f0a02e6a_84da63a6",
+      "range": {
+        "startLine": 170,
+        "startChar": 24,
+        "endLine": 171,
+        "endChar": 56
+      },
+      "revId": "ef06ff7deb092b4988ddca74a84de275ebf75dba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
