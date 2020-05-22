@@ -321,9 +321,11 @@ void loadDiagram( ShapePtr const & pShape,
     if( !pData->getExtDrawings().empty() )
     {
         const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find("node0");
-        if( aColor != pDiagram->getColors().end() )
+        if( aColor != pDiagram->getColors().end() && !aColor->second.maTextFillColors.empty())
         {
-            pShape->setFontRefColorForNodes(aColor->second.maTextFillColor);
+            // TODO(F1): well, actually, there might be *several* color
+            // definitions in it, after all it's called list.
+            pShape->setFontRefColorForNodes(DiagramColor::getColorByIndex(aColor->second.maTextFillColors, -1));
         }
     }
 
@@ -425,6 +427,17 @@ void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
         child->addShape(rFilter, rFilter.getCurrentTheme(), xShapes, aTransformation, pShape->getFillProperties());
 }
 
+const oox::drawingml::Color&
+DiagramColor::getColorByIndex(const std::vector<oox::drawingml::Color>& rColors, sal_Int32 nIndex)
+{
+    assert(!rColors.empty());
+    if (nIndex == -1)
+    {
+        return rColors[rColors.size() - 1];
+    }
+
+    return rColors[nIndex % rColors.size()];
+}
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

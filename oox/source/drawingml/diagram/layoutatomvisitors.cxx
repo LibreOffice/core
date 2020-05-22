@@ -73,7 +73,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     {
         // reuse existing shape
         ShapePtr pShape = rAtom.getExistingShape();
-        if (rAtom.setupShape(pShape, pNewNode))
+        if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
         {
             pShape->setInternalName(rAtom.getName());
             rAtom.addNodeShape(pShape);
@@ -92,7 +92,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                 "oox.drawingml",
                 "processing shape type " << (pShape->getCustomShapeProperties()->getShapePresetType()));
 
-            if (rAtom.setupShape(pShape, pNewNode))
+            if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
             {
                 pShape->setInternalName(rAtom.getName());
                 pCurrParent->addChild(pShape);

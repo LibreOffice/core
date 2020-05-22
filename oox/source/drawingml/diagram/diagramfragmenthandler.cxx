@@ -196,21 +196,18 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
             {
                 // the actual colors - defer to color fragment handlers.
 
-                // TODO(F1): well, actually, there might be *several* color
-                // definitions in it, after all it's called list. But
-                // apparently ColorContext doesn't handle that anyway...
                 case DGM_TOKEN(fillClrLst):
-                    return new ColorContext( *this, maColorEntry.maFillColor );
+                    return new ColorsContext( *this, maColorEntry.maFillColors );
                 case DGM_TOKEN(linClrLst):
-                    return new ColorContext( *this, maColorEntry.maLineColor );
+                    return new ColorsContext( *this, maColorEntry.maLineColors );
                 case DGM_TOKEN(effectClrLst):
-                    return new ColorContext( *this, maColorEntry.maEffectColor );
+                    return new ColorsContext( *this, maColorEntry.maEffectColors );
                 case DGM_TOKEN(txFillClrLst):
-                    return new ColorContext( *this, maColorEntry.maTextFillColor );
+                    return new ColorsContext( *this, maColorEntry.maTextFillColors );
                 case DGM_TOKEN(txLinClrLst):
-                    return new ColorContext( *this, maColorEntry.maTextLineColor );
+                    return new ColorsContext( *this, maColorEntry.maTextLineColors );
                 case DGM_TOKEN(txEffectClrLst):
-                    return new ColorContext( *this, maColorEntry.maTextEffectColor );
+                    return new ColorsContext( *this, maColorEntry.maTextEffectColors );
             }
             break;
         }

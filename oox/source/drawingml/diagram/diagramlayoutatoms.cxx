@@ -1275,7 +1275,7 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode ) const
+bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode, sal_Int32 nCurrIdx ) const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -1413,15 +1413,17 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
         if( aColor != mrDgm.getColors().end() )
         {
+            // Take the nth color from the color list in case we are the nth shape in a
+            // <dgm:forEach> loop.
             const DiagramColor& rColor=aColor->second;
-            if( rColor.maFillColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = rColor.maFillColor;
-            if( rColor.maLineColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = rColor.maLineColor;
-            if( rColor.maEffectColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = rColor.maEffectColor;
-            if( rColor.maTextFillColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
+            if( !rColor.maFillColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = DiagramColor::getColorByIndex(rColor.maFillColors, nCurrIdx);
+            if( !rColor.maLineColors.empty() )
+                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = DiagramColor::getColorByIndex(rColor.maLineColors, nCurrIdx);
+            if( !rColor.maEffectColors.empty() )
+                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = DiagramColor::getColorByIndex(rColor.maEffectColors, nCurrIdx);
+            if( !rColor.maTextFillColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = DiagramColor::getColorByIndex(rColor.maTextFillColors, nCurrIdx);
         }
     }
 

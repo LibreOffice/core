@@ -105,6 +105,7 @@ public:
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
+    void testFillColorList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -149,6 +150,7 @@ public:
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
+    CPPUNIT_TEST(testFillColorList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1451,6 +1453,23 @@ void SdImportTestSmartArt::testOrgChart2()
 
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeD1->getPosition().X + xShapeD1->getSize().Width, xShapeC4->getPosition().X);
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFillColorList()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/fill-color-list.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 0);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
+    sal_Int32 nFillColor = 0;
+    xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 12603469 (0xc0504d)
+    // - Actual  : 16225862 (0xf79646)
+    // i.e. the background of the "A" shape was orange-ish, rather than red-ish.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xC0504D), nFillColor);
     xDocShRef->DoClose();
 }
 
