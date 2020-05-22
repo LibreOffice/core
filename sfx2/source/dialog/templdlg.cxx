@@ -276,6 +276,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, CustomRenderHdl, weld::TreeView::render_
 {
     vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
+    ::tools::Rectangle aRect(rRect.TopLeft(), Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
@@ -299,16 +300,16 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, CustomRenderHdl, weld::TreeView::render_
         if (pStyleSheet)
         {
             rRenderContext.Push(PushFlags::ALL);
-            sal_Int32 nSize = rRect.GetHeight();
+            sal_Int32 nSize = aRect.GetHeight();
             std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
                 pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
-            bSuccess = pStylePreviewRenderer->recalculate() && pStylePreviewRenderer->render(rRect);
+            bSuccess = pStylePreviewRenderer->recalculate() && pStylePreviewRenderer->render(aRect);
             rRenderContext.Pop();
         }
     }
 
     if (!bSuccess)
-        rRenderContext.DrawText(rRect, rId, DrawTextFlags::Left | DrawTextFlags::VCenter);
+        rRenderContext.DrawText(aRect, rId, DrawTextFlags::Left | DrawTextFlags::VCenter);
 
     rRenderContext.Pop();
 }
