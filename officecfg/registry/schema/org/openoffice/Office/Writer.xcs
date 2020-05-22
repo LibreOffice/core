@@ -6193,6 +6193,24 @@
             </info>
           </prop>
         </group>
+        <group oor:name="FilePassword">
+          <info>
+            <desc>Specifies how the file password is built.</desc>
+          </info>
+          <prop oor:name="Generation" oor:type="xs:boolean" oor:nillable="false" >
+            <!--UI hints: Form letter - File output - Generate file password from - Database field-->
+            <info>
+              <desc>Determines if the file password is generated from a database field.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="FromDatabaseField" oor:type="xs:string" oor:nillable="false">
+            <info>
+              <desc>Specifies the column name to be used as file password.</desc>
+            </info>
+            <value/>
+          </prop>
+        </group>
       </group>
     </group>
     <group oor:name="Misc">
