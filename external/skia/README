@@ -21,7 +21,13 @@ And review differences for BUILD.gn and relevant files in gn/ :
 git diff chrome/mYY..chrome/mXX ./BUILD.gn ./gn
 
 
-GrContext sharing
-=================
+Debugging Skia:
+===============
+
+Note that Skia is always built optimized, unless you use --enable-skia=debug.
+
+
+GrContext sharing:
+==================
 
 For details about the share-grcontext patch, see vcl/skia/README.

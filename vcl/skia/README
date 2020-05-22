@@ -18,6 +18,47 @@ Skia supports several methods to draw:
 
 There are more (OpenGL, Metal on Mac, etc.), but (as of now) they are not supported by VCL.
 
+Logging:
+========
+
+Run LO with 'SAL_LOG=+INFO.vcl.skia' to get log information about Skia including
+tracing each drawing operation. If you want log information without drawing operations,
+use 'SAL_LOG=+INFO.vcl.skia-INFO.vcl.skia.trace'.
+
+Debugging:
+==========
+
+Both SkiaSalBitmap and SkiaSalGraphicsImpl have a dump() method that writes a PNG
+with the current contents. There is also SkiaHelper::dump() for dumping contents
+of SkBitmap, SkImage and SkSurface.
+
+If there is a drawing problem, you can use something like the following piece of code
+to dump an image after each relevant operation (or do it in postDraw() if you don't
+know which operation is responsible). You can then find the relevant image
+and match it with the responsible operation (run LO with 'SAL_LOG=+INFO.vcl.skia').
+
+    static int cnt = 0;
+    ++cnt;
+    char buf[100];
+    sprintf(buf,"/tmp/a%05d.png", cnt);
+    SAL_DEBUG("CNT:" << cnt);
+    if(cnt > 4000) // skip some initial drawing operations
+        dump(buf);
+
+
+Testing:
+========
+
+Currently unittests always use the 'headless' VCL backend. Use something like the following
+to run VCL unittests with Skia (and possibly skip slowcheck):
+
+SAL_SKIA=raster SAL_ENABLESKIA=1 SAL_USE_VCLPLUGIN=gen make vcl.build vcl.unitcheck vcl.slowcheck
+
+You can also use 'visualbackendtest' to visually check some operations. Use something like:
+
+SAL_SKIA=raster SAL_ENABLESKIA=1 SAL_USE_VCLPLUGIN=gen [srcdir]/bin/run visualbackendtest
+
+
 GrContext sharing:
 ==================
 
