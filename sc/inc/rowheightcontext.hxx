@@ -16,13 +16,16 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 
-#include "segmenttree.hxx"
+#include "compressedarray.hxx"
+#include "types.hxx"
+
+using RowHeightsArray = ScCompressedArray<SCROW, sal_uInt16>;
 
 namespace sc {
 
 class SC_DLLPUBLIC RowHeightContext
 {
-    ScFlatUInt16RowSegments maHeights;
+    RowHeightsArray maHeights;
 
     double mfPPTX;
     double mfPPTY;
@@ -53,7 +56,7 @@ public:
     void setForceAutoSize( bool b );
     bool isForceAutoSize() const { return mbForceAutoSize;}
 
-    ScFlatUInt16RowSegments& getHeightArray();
+    RowHeightsArray& getHeightArray() { return maHeights; }
 };
 
 }
