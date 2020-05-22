@@ -244,7 +244,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
             const Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
             if( aSeqs.getLength() != aNewSequences.getLength() )
             {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 for( auto const & j : aSeqs )
                 {
                     assert( (j == xValuesY || j == xValuesX || j == xValuesSize) && "All sequences should be used" );
