@@ -90,6 +90,7 @@
                     <property name="label" translatable="yes" context="optdefaultpage|jumbo_sheets">_Enable very large spreadsheets (16m rows, 16384 cols)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="use_underline">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
                   </object>
