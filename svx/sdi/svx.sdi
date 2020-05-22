@@ -5635,7 +5635,7 @@ SvxLineItem LineStyle SID_FRAME_LINESTYLE
 
 // SID_ATTR_LINE_WIDTH_ARG is used by online: i.e. loleaflet/src/control/Control.JSDialogBuilder.js
 XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH
-(SvxDoubleItem Width SID_ATTR_LINE_WIDTH_ARG, XLineWidthItem LineWidth SID_ATTR_LINE_WIDTH)
+
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
