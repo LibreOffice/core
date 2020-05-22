@@ -129,12 +129,15 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     , m_xMailingRB(m_xBuilder->weld_radio_button("electronic"))
     , m_xFileRB(m_xBuilder->weld_radio_button("file"))
     , m_xSingleJobsCB(m_xBuilder->weld_check_button("singlejobs"))
+    , m_xPasswordCB(m_xBuilder->weld_check_button("passwd-check"))
     , m_xSaveMergedDocumentFT(m_xBuilder->weld_label("savemergeddoclabel"))
     , m_xSaveSingleDocRB(m_xBuilder->weld_radio_button("singledocument"))
     , m_xSaveIndividualRB(m_xBuilder->weld_radio_button("individualdocuments"))
     , m_xGenerateFromDataBaseCB(m_xBuilder->weld_check_button("generate"))
     , m_xColumnFT(m_xBuilder->weld_label("fieldlabel"))
     , m_xColumnLB(m_xBuilder->weld_combo_box("field"))
+    , m_xPasswordFT(m_xBuilder->weld_label("passwd-label"))
+    , m_xPasswordLB(m_xBuilder->weld_combo_box("passwd-combobox"))
     , m_xPathFT(m_xBuilder->weld_label("pathlabel"))
     , m_xPathED(m_xBuilder->weld_entry("path"))
     , m_xPathPB(m_xBuilder->weld_button("pathpb"))
@@ -164,6 +167,9 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     m_xAttachFT->hide();
     m_xAttachED->hide();
     m_xAttachPB->hide();
+    m_xPasswordCB->hide();
+    m_xPasswordFT->hide();
+    m_xPasswordLB->hide();
 
     uno::Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
     if(pSelection) {
@@ -241,6 +247,8 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     m_xSaveIndividualRB->connect_toggled(LINK(this, SwMailMergeDlg, SaveTypeHdl));
     SaveTypeHdl(*m_xSaveSingleDocRB);
 
+    m_xFilterLB->connect_changed(LINK(this, SwMailMergeDlg, FileFormatHdl));
+
     Link<weld::SpinButton&,void> aLk2 = LINK(this, SwMailMergeDlg, ModifyHdl);
     m_xFromNF->connect_value_changed(aLk2);
     m_xToNF->connect_value_changed(aLk2);
@@ -253,7 +261,10 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     else
         pDBManager->GetColumnNames(*m_xAddressFieldLB, rSourceName, rTableName);
     for(sal_Int32 nEntry = 0, nEntryCount = m_xAddressFieldLB->get_count(); nEntry < nEntryCount; ++nEntry)
+    {
         m_xColumnLB->append_text(m_xAddressFieldLB->get_text(nEntry));
+        m_xPasswordLB->append_text(m_xAddressFieldLB->get_text(nEntry));
+    }
 
     m_xAddressFieldLB->set_active_text("EMAIL");
 
@@ -268,15 +279,23 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
     else
         m_xPathED->set_text(aURL.GetFull());
 
-    if (!bColumn ) {
+    if (!bColumn )
+    {
         m_xColumnLB->set_active_text("NAME");
-    } else
+        m_xPasswordLB->set_active_text("PASSWORD");
+    }
+    else
+    {
         m_xColumnLB->set_active_text(pModOpt->GetNameFromColumn());
+        m_xPasswordLB->set_active_text(pModOpt->GetPasswordFromColumn());
+    }
 
     if (m_xAddressFieldLB->get_active() == -1)
         m_xAddressFieldLB->set_active(0);
     if (m_xColumnLB->get_active() == -1)
         m_xColumnLB->set_active(0);
+    if (m_xPasswordLB->get_active() == -1)
+        m_xPasswordLB->set_active(0);
 
     const bool bEnable = m_aSelection.hasElements();
     m_xMarkedRB->set_sensitive(bEnable);
@@ -355,6 +374,9 @@ IMPL_LINK_NOARG(SwMailMergeDlg, OutputTypeHdl, weld::ToggleButton&, void)
         m_xFilterFT->set_sensitive(false);
         m_xFilterLB->set_sensitive(false);
         m_xGenerateFromDataBaseCB->set_sensitive(false);
+        m_xPasswordCB->set_sensitive( false );
+        m_xPasswordFT->set_sensitive( false );
+        m_xPasswordLB->set_sensitive( false );
     }
 }
 
@@ -363,9 +385,12 @@ IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::ToggleButton&, void)
     bool bIndividual = m_xSaveIndividualRB->get_active();
 
     m_xGenerateFromDataBaseCB->set_sensitive( bIndividual );
-    if( bIndividual ) {
+    if( bIndividual )
+    {
         FilenameHdl(*m_xGenerateFromDataBaseCB);
-    } else {
+    }
+    else
+    {
         m_xColumnFT->set_sensitive(false);
         m_xColumnLB->set_sensitive(false);
         m_xPathFT->set_sensitive( false );
@@ -373,6 +398,9 @@ IMPL_LINK_NOARG(SwMailMergeDlg, SaveTypeHdl, weld::ToggleButton&, void)
         m_xPathPB->set_sensitive( false );
         m_xFilterFT->set_sensitive( false );
         m_xFilterLB->set_sensitive( false );
+        m_xPasswordCB->set_sensitive( false );
+        m_xPasswordFT->set_sensitive( false );
+        m_xPasswordLB->set_sensitive( false );
     }
 }
 
@@ -386,6 +414,37 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, weld::ToggleButton&, rBox, void )
     m_xPathPB->set_sensitive( bEnable );
     m_xFilterFT->set_sensitive( bEnable );
     m_xFilterLB->set_sensitive( bEnable );
+
+    if(m_xFilterLB->get_active_id() == "writer_pdf_Export")
+    {
+        m_xPasswordCB->show();
+        m_xPasswordFT->show();
+        m_xPasswordLB->show();
+
+        m_xPasswordCB->set_sensitive( bEnable );
+        m_xPasswordFT->set_sensitive( bEnable );
+        m_xPasswordLB->set_sensitive( bEnable );
+    }
+}
+
+IMPL_LINK_NOARG( SwMailMergeDlg, FileFormatHdl, weld::ComboBox&, void )
+{
+    if(m_xFilterLB->get_active_id() == "writer_pdf_Export")
+    {
+        m_xPasswordCB->show();
+        m_xPasswordFT->show();
+        m_xPasswordLB->show();
+
+        m_xPasswordCB->set_sensitive( true );
+        m_xPasswordFT->set_sensitive( true );
+        m_xPasswordLB->set_sensitive( true );
+    }
+    else
+    {
+        m_xPasswordCB->hide();
+        m_xPasswordFT->hide();
+        m_xPasswordLB->hide();
+    }
 }
 
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl, weld::SpinButton&, void)
@@ -425,15 +484,19 @@ bool SwMailMergeDlg::ExecQryShell()
         nMergeType = DBMGR_MERGE_FILE;
         pModOpt->SetMailingPath( GetURLfromPath() );
         pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
+        pModOpt->SetIsFileEncyrptedFromColumn(m_xPasswordCB->get_active());
 
-        if (!AskUserFilename()) {
+        if (!AskUserFilename())
+        {
             pModOpt->SetNameFromColumn(m_xColumnLB->get_active_text());
+            pModOpt->SetPasswordFromColumn(m_xPasswordLB->get_active_text());
             if (m_xFilterLB->get_active() != -1)
                 m_sSaveFilter = m_xFilterLB->get_active_id();
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
             pModOpt->SetNameFromColumn(OUString());
+            pModOpt->SetPasswordFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
             m_sFilename = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
