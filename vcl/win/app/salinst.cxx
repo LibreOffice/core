@@ -310,7 +310,7 @@ SalData::SalData()
     SetSalData( this );
     initNWF();
 
-    CoInitialize(nullptr); // put main thread in Single Threaded Apartment (STA)
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); // put main thread in Single Threaded Apartment (STA)
     static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 }

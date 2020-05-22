@@ -92,7 +92,7 @@ public:
             {
                 CoInitializeGuard()
                 {
-                    if (FAILED(CoInitialize(nullptr)))
+                    if (FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)))
                         throw css::uno::RuntimeException();
                 }
                 ~CoInitializeGuard() { CoUninitialize(); }

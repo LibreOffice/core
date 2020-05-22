@@ -156,7 +156,7 @@ CSysShExec::CSysShExec( const css::uno::Reference< css::uno::XComponentContext >
      * Once this changed, we can remove the uninitialize call.
      */
     CoUninitialize();
-    CoInitialize( nullptr );
+    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 }
 
 namespace

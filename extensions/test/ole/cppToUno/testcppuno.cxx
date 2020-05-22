@@ -51,9 +51,9 @@ bool incrementMultidimensionalIndex(
 int SAL_CALL main( int /*argc*/, char** /*argv*/ )
 {
     HRESULT hr;
-    if( FAILED( hr=CoInitialize(NULL)))
+    if( FAILED( hr=CoInitializeEx(NULL, COINIT_APARTMENTTHREADED)))
     {
-        printf("CoInitialize failed \n");
+        printf("CoInitializeEx failed \n");
         return -1;
     }
 
