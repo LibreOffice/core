@@ -65,6 +65,11 @@ public:
         D   aValue;
             DataEntry() {}  //! uninitialized
     };
+    struct RangeData
+    {
+        A mnRow1, mnRow2;
+        D maValue;
+    };
 
     /** Construct with nMaxAccess=MAXROW, for example. */
                                 ScCompressedArray( A nMaxAccess,
@@ -81,6 +86,10 @@ public:
     /** Get value for a row, and it's region end row */
     [[nodiscard]]
     const D&                    GetValue( A nPos, size_t& nIndex, A& nEnd ) const;
+
+    /** Get range data for a row, i.e. value and start and end rows with that value */
+    [[nodiscard]]
+    RangeData                   GetRangeData( A nPos ) const;
 
     /** Get next value and it's region end row. If nIndex<nCount, nIndex is
         incremented first. If the resulting nIndex>=nCount, the value of the
@@ -147,6 +156,17 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
     nIndex = Search( nPos);
     nEnd = pData[nIndex].nEnd;
     return pData[nIndex].aValue;
+}
+
+template< typename A, typename D >
+typename ScCompressedArray<A,D>::RangeData ScCompressedArray<A,D>::GetRangeData( A nPos ) const
+{
+    size_t nIndex = Search( nPos);
+    RangeData aData;
+    aData.mnRow1 = nIndex == 0 ? 0 : pData[nIndex - 1].nEnd + 1;
+    aData.mnRow2 = pData[nIndex].nEnd;
+    aData.maValue = pData[nIndex].aValue;
+    return aData;
 }
 
 template< typename A, typename D >
