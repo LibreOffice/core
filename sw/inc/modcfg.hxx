@@ -182,9 +182,11 @@ class SAL_DLLPUBLIC_RTTI SwMiscConfig final : public utl::ConfigItem
     bool        m_bNumAlignSize;              // Numbering/Graphic/KeepRatio
     bool        m_bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
     bool        m_bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
+    bool        m_bIsPasswordFromColumn;      // FormLetter/FileOutput/FilePassword/Generation
     bool        m_bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
     MailTextFormats m_nMailingFormats;            // FormLetter/MailingOutput/Formats
     OUString    m_sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
+    OUString    m_sPasswordFromColumn;        // FormLetter/FileOutput/FilePassword/FromDatabaseField (string!)
     OUString    m_sMailingPath;               // FormLetter/FileOutput/Path
     OUString    m_sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
@@ -337,6 +339,17 @@ public:
 
     const OUString& GetNameFromColumn() const       { return m_aMiscConfig.m_sNameFromColumn; }
     void        SetNameFromColumn( const OUString& rSet )       { m_aMiscConfig.m_sNameFromColumn = rSet;
+                                                                  m_aMiscConfig.SetModified();}
+
+    bool        IsFileEncyrptedFromColumn() const        { return m_aMiscConfig.m_bIsPasswordFromColumn;}
+    void        SetIsFileEncyrptedFromColumn( bool bSet )
+                        {
+                            m_aMiscConfig.SetModified();
+                            m_aMiscConfig.m_bIsPasswordFromColumn = bSet;
+                        }
+
+    const OUString& GetPasswordFromColumn() const       { return m_aMiscConfig.m_sPasswordFromColumn; }
+    void        SetPasswordFromColumn( const OUString& rSet )       { m_aMiscConfig.m_sPasswordFromColumn = rSet;
                                                                   m_aMiscConfig.SetModified();}
 
     const OUString& GetMailingPath() const          { return m_aMiscConfig.m_sMailingPath; }
