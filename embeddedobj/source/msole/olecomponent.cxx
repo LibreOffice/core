@@ -477,6 +477,7 @@ OleComponent::~OleComponent()
     m_pNativeImpl->m_aFormatsList.clear();
 
     delete m_pNativeImpl;
+    OleUninitialize();
 }
 
 void OleComponent::Dispose()
