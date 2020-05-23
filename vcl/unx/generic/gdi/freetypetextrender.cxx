@@ -153,29 +153,6 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
     return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]);
 }
 
-#if ENABLE_CAIRO_CANVAS
-SystemFontData FreeTypeTextRenderImpl::GetSysFontData( int nFallbackLevel ) const
-{
-    SystemFontData aSysFontData;
-
-    if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
-    if (nFallbackLevel < 0 ) nFallbackLevel = 0;
-
-    if (mpFreetypeFont[nFallbackLevel])
-    {
-        FreetypeFont& rFreetypeFont = mpFreetypeFont[nFallbackLevel]->GetFreetypeFont();
-        aSysFontData.nFontId = rFreetypeFont.GetFtFace();
-        aSysFontData.nFontFlags = rFreetypeFont.GetLoadFlags();
-        aSysFontData.bFakeBold = rFreetypeFont.NeedsArtificialBold();
-        aSysFontData.bFakeItalic = rFreetypeFont.NeedsArtificialItalic();
-        aSysFontData.bAntialias = rFreetypeFont.GetAntialiasAdvice();
-        aSysFontData.bVerticalCharacterType = mpFreetypeFont[nFallbackLevel]->GetFontSelectPattern().mbVertical;
-    }
-
-    return aSysFontData;
-}
-#endif
-
 bool FreeTypeTextRenderImpl::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,

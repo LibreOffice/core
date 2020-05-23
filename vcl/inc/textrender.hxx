@@ -22,8 +22,6 @@
 
 #include "salgdi.hxx"
 
-#include <config_cairo_canvas.h>
-
 class ImplLayoutArgs;
 class ImplFontMetricData;
 class PhysicalFontCollection;
@@ -64,9 +62,6 @@ public:
     virtual std::unique_ptr<GenericSalLayout>
                                     GetTextLayout(int nFallbackLevel) = 0;
     virtual void                    DrawTextLayout(const GenericSalLayout&, const SalGraphics&) = 0;
-#if ENABLE_CAIRO_CANVAS
-    virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const = 0;
-#endif // ENABLE_CAIRO_CANVAS
 };
 
 #endif

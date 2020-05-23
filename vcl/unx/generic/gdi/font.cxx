@@ -80,15 +80,6 @@ std::unique_ptr<GenericSalLayout> X11SalGraphics::GetTextLayout(int nFallbackLev
     return mxTextRenderImpl->GetTextLayout(nFallbackLevel);
 }
 
-#if ENABLE_CAIRO_CANVAS
-
-SystemFontData X11SalGraphics::GetSysFontData( int nFallbackLevel ) const
-{
-    return mxTextRenderImpl->GetSysFontData(nFallbackLevel);
-}
-
-#endif
-
 bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
