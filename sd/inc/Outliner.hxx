@@ -51,7 +51,11 @@ struct SearchSelection
      */
     OString const m_aRectangles;
 
-    SearchSelection(int nPage, const OString& rRectangles);
+    SearchSelection(int nPage, const OString& rRectangles)
+        : m_nPage(nPage)
+        , m_aRectangles(rRectangles)
+    {
+    }
 
     bool operator==(const SearchSelection& rOther) const
     {
