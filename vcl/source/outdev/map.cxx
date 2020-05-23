@@ -770,6 +770,14 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     ImplInvalidateViewTransform();
 }
 
+void OutputDevice::SetMetafileMapMode(const MapMode& rNewMapMode, bool bIsRecord)
+{
+    if (bIsRecord)
+        SetRelativeMapMode(rNewMapMode);
+    else
+        SetMapMode(rNewMapMode);
+}
+
 void OutputDevice::ImplInitMapModeObjects() {}
 
 void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
