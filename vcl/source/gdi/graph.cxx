@@ -50,24 +50,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     pOutDev->SetFillColor();
 
     // On the printer a black rectangle and on the screen one with 3D effect
-    if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-        pOutDev->SetLineColor( COL_BLACK );
-    else
-    {
-        aBorderRect.AdjustLeft(nPixel );
-        aBorderRect.AdjustTop(nPixel );
-
-        pOutDev->SetLineColor( COL_LIGHTGRAY );
-        pOutDev->DrawRect( aBorderRect );
-
-        aBorderRect.AdjustLeft( -nPixel );
-        aBorderRect.AdjustTop( -nPixel );
-        aBorderRect.AdjustRight( -nPixel );
-        aBorderRect.AdjustBottom( -nPixel );
-        pOutDev->SetLineColor( COL_GRAY );
-    }
-
-    pOutDev->DrawRect( aBorderRect );
+    pOutDev->DrawBorder(aBorderRect);
 
     aPoint.AdjustX(nPixelWidth + 2*nPixel );
     aPoint.AdjustY(nPixelWidth + 2*nPixel );

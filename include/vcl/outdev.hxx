@@ -699,6 +699,9 @@ private:
     SAL_DLLPRIVATE void         SetDeviceClipRegion( const vcl::Region* pRegion );
     ///@}
 
+public:
+    virtual void                DrawBorder(tools::Rectangle aBorderRect);
+
 
     /** @name Pixel functions
      */
