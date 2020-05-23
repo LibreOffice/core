@@ -2254,67 +2254,6 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
     return aStr;
 }
 
-/** OutputDevice::GetSysTextLayoutData
- *
- * @param rStartPt Start point of the text
- * @param rStr Text string that will be transformed into layout of glyphs
- * @param nIndex Position in the string from where layout will be done
- * @param nLen Length of the string
- * @param pDXAry Custom layout adjustment data
- *
- * Export finalized glyph layout data as platform independent SystemTextLayoutData
- * (see vcl/inc/vcl/sysdata.hxx)
- *
- * Only parameters rStartPt and rStr are mandatory, the rest is optional
- * (default values will be used)
- *
- * @return SystemTextLayoutData
- **/
-SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-                                                        const long* pDXAry) const
-{
-    if( (nLen < 0) || (nIndex + nLen >= rStr.getLength()))
-    {
-        nLen = rStr.getLength() - nIndex;
-    }
-
-    SystemTextLayoutData aSysLayoutData;
-    aSysLayoutData.rGlyphData.reserve( 256 );
-    aSysLayoutData.orientation = 0;
-
-    if ( mpMetaFile )
-    {
-        if (pDXAry)
-            mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
-        else
-            mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
-    }
-
-    if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
-
-    std::unique_ptr<SalLayout> pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
-
-    if ( !pLayout ) return aSysLayoutData;
-
-    // setup glyphs
-    Point aPos;
-    const GlyphItem* pGlyph;
-    int nStart = 0;
-    SystemGlyphData aSystemGlyph;
-    while (pLayout->GetNextGlyph(&pGlyph, aPos, nStart, nullptr, &aSystemGlyph.fallbacklevel))
-    {
-        aSystemGlyph.index = pGlyph->glyphId();
-        aSystemGlyph.x = aPos.X();
-        aSystemGlyph.y = aPos.Y();
-        aSysLayoutData.rGlyphData.push_back(aSystemGlyph);
-    }
-
-    // Get font data
-    aSysLayoutData.orientation = pLayout->GetOrientation();
-
-    return aSysLayoutData;
-}
-
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
