@@ -50,6 +50,11 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <txtfrm.hxx>
+#include <ndtxt.hxx>
+#include <node.hxx>
+
 #define TEXT_PADDING 5
 #define BOX_DISTANCE 10
 #define BUTTON_WIDTH 18
@@ -513,6 +518,279 @@ IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
     }
     else
         Invalidate();
+
+    if (IsVisible() && m_nFadeRate > 0 && m_nFadeRate < 100)
+        m_aFadeTimer.Start();
+}
+
+SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin, const SwFrame *pFrame) :
+    SwFrameMenuButtonBase(pEditWin, pFrame),
+    m_aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/outlineheadingmenu.ui", ""),
+    m_pPopupMenu(m_aBuilder.get_menu("menu")),
+    m_bIsAppearing(false),
+    m_nFadeRate(100),
+    m_nDelayAppearing(0),
+    m_bDestroyed(false)
+{
+    SetSizePixel(Size(BUTTON_WIDTH, GetFontMetric(GetFont()).GetLineHeight() + TEXT_PADDING * 2));
+
+    SetPopupMenu(m_pPopupMenu);
+
+    m_aFadeTimer.SetTimeout(50);
+    m_aFadeTimer.SetInvokeHandler(LINK(this, SwOutlineContentVisibilityWin, FadeHandler));
+}
+
+SwOutlineContentVisibilityWin::~SwOutlineContentVisibilityWin()
+{
+    disposeOnce();
+}
+
+void SwOutlineContentVisibilityWin::dispose()
+{
+    m_bDestroyed = true;
+    m_aFadeTimer.Stop();
+
+    m_pPopupMenu.clear();
+    m_aBuilder.disposeBuilder();
+
+    SwFrameMenuButtonBase::dispose();
+}
+
+void SwOutlineContentVisibilityWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+{
+    //MenuButton::Paint(rRenderContext, tools::Rectangle());
+    //return;
+
+    // much of below is taken from SwHeaderFooterWin::Paint
+
+    // Use pixels for the rest of the drawing
+    SetMapMode(MapMode(MapUnit::MapPixel));
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+
+    aSeq.clear();
+
+    const double nRadius = 3;
+    const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+
+    B2DPolygon aPolygon;
+
+    {
+        B2DPoint aCorner(aRect.Left(), aRect.Top());
+        B2DPoint aStart(aRect.Left() + nRadius, aRect.Top());
+        B2DPoint aEnd(aRect.Left(), aRect.Top() + nRadius);
+        aPolygon.append(aStart);
+        aPolygon.appendBezierSegment(
+                interpolate(aStart, aCorner, nKappa),
+                interpolate(aEnd, aCorner, nKappa),
+                aEnd);
+    }
+
+    {
+        B2DPoint aCorner( aRect.Left(), aRect.Bottom() );
+        B2DPoint aStart( aRect.Left(), aRect.Bottom() - nRadius );
+        B2DPoint aEnd( aRect.Left() + nRadius, aRect.Bottom() );
+        aPolygon.append( aStart );
+        aPolygon.appendBezierSegment(
+                interpolate( aStart, aCorner, nKappa ),
+                interpolate( aEnd, aCorner, nKappa ),
+                aEnd );
+    }
+
+    {
+        B2DPoint aCorner( aRect.Right(), aRect.Bottom() );
+        B2DPoint aStart( aRect.Right() - nRadius, aRect.Bottom() );
+        B2DPoint aEnd( aRect.Right(), aRect.Bottom() - nRadius );
+        aPolygon.append( aStart );
+        aPolygon.appendBezierSegment(
+                interpolate( aStart, aCorner, nKappa ),
+                interpolate( aEnd, aCorner, nKappa ),
+                aEnd );
+    }
+
+    {
+        B2DPoint aCorner(aRect.Right(), aRect.Top());
+        B2DPoint aStart(aRect.Right(), aRect.Top() + nRadius);
+        B2DPoint aEnd(aRect.Right() - nRadius, aRect.Top());
+        aPolygon.append(aStart);
+        aPolygon.appendBezierSegment(
+                interpolate(aStart, aCorner, nKappa),
+                interpolate(aEnd, aCorner, nKappa),
+                aEnd);
+    }
+
+    aPolygon.setClosed(true);
+
+    // Colors
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();  // todo: SwViewOption::GetOutlineButtonColor()
+    basegfx::BColor aFillColor = lcl_GetFillColor(aLineColor);
+    basegfx::BColor aLighterColor = lcl_GetLighterGradientColor(aFillColor);
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if (rSettings.GetHighContrastMode())
+    {
+        aFillColor = rSettings.GetDialogColor().getBColor();
+        aLineColor = rSettings.GetDialogTextColor().getBColor();
+
+        aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor)));
+    }
+    else
+    {
+        B2DRectangle aGradientRect = vcl::unotools::b2DRectangleFromRectangle(aRect);
+        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, 0.0, aLighterColor, aFillColor, 10);
+        aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs)));
+    }
+
+    // Create the border lines primitive
+    aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aLineColor)));
+
+    // Create the 'arrow' primitive
+    B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),
+                           B2DSize(aRect.Right(), aRect.getHeight()));
+
+    B2DPolygon aSign;
+    // Create the v polygon
+    B2DPoint aLeft(aSignArea.getMinX() + 2.0, aSignArea.getCenterY());
+    B2DPoint aRight(aSignArea.getMaxX(), aSignArea.getCenterY());
+    B2DPoint aBottom((aLeft.getX() + aRight.getX()) / 2.0, aLeft.getY() + 4.0);
+    aSign.append(aLeft);
+    aSign.append(aRight);
+    aSign.append(aBottom);
+    aSign.setClosed(true);
+
+    BColor aSignColor = COL_BLACK.getBColor();
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        aSignColor = COL_WHITE.getBColor();
+
+    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference(
+                                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aSign), aSignColor)) );
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+
+    drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
+    double nFadeRate = double(m_nFadeRate) / 100.0;
+
+    const basegfx::BColorModifierSharedPtr aBColorModifier =
+        std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
+                                                1.0 - nFadeRate);
+
+    aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(aSeq, aBColorModifier));
+
+    pProcessor->process(aGhostedSeq);
+}
+
+void SwOutlineContentVisibilityWin::Set()
+{
+    const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(GetFrame());
+    const SwTextNode* pTextNode = pTextFrame->GetTextNodeFirst();
+    SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
+    rSh.GetNodes().GetOutLineNds().Seek_Entry(static_cast<SwNode *>(const_cast<SwTextNode*>(pTextNode)), &m_nOutlinePos);
+    assert(m_nOutlinePos != SwOutlineNodes::npos);
+
+    // determine need for toggle all menu item
+    SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+    int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos);
+    m_pPopupMenu->EnableItem(m_pPopupMenu->GetItemId("toggleall"),
+                             m_nOutlinePos + 1 < nOutlineNodesCount && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos + 1) > nLevel);
+
+    // Set the position of the window
+    SwRect aSwRect = GetFrame()->getFrameArea(); // not far in margin
+    //SwRect aSwRect = GetFrame()->GetPaintArea(); // far in margin
+    Point aPxPt(GetEditWin()->GetOutDev()->LogicToPixel(aSwRect.BottomLeft()));
+    aPxPt.AdjustX(-GetSizePixel().getWidth() - 2);
+    aPxPt.AdjustY(-GetSizePixel().getHeight());
+    SetPosPixel(aPxPt);
+}
+
+void SwOutlineContentVisibilityWin::ShowAll(bool bShow)
+{
+    Fade(bShow);
+    if (!bShow)
+        GrabFocusToDocument();
+}
+
+bool SwOutlineContentVisibilityWin::Contains(const Point &rDocPt) const
+{
+    ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
+    if (aRect.IsInside(rDocPt))
+        return true;
+    return false;
+}
+
+void SwOutlineContentVisibilityWin::Fade(bool bFadeIn)
+{
+    m_bIsAppearing = bFadeIn;
+    if (bFadeIn)
+        m_nDelayAppearing = 0;
+
+    if (!m_bDestroyed && m_aFadeTimer.IsActive())
+        m_aFadeTimer.Stop();
+    if (!m_bDestroyed)
+        m_aFadeTimer.Start();
+}
+
+void SwOutlineContentVisibilityWin::ExecuteCommand(const OString& rIdent)
+{
+    SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
+    if (rIdent == "toggle")
+    {
+        rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
+        rSh.GotoOutline(m_nOutlinePos);
+    }
+    else if (rIdent == "toggleall")
+    {
+        SwOutlineNodes::size_type nPos = m_nOutlinePos;
+        SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+        int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+        bool bFold = rSh.IsOutlineContentFolded(nPos);
+        do
+        {
+            if (rSh.IsOutlineContentFolded(nPos) == bFold)
+                rSh.ToggleOutlineContentVisibility(nPos);
+        } while (++nPos < nOutlineNodesCount && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
+        rSh.GotoOutline(m_nOutlinePos);
+    }
+}
+
+void SwOutlineContentVisibilityWin::SetReadonly(bool bReadonly)
+{
+    ShowAll(!bReadonly);
+}
+
+void SwOutlineContentVisibilityWin::Select()
+{
+    ExecuteCommand(GetCurItemIdent());
+}
+
+IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, FadeHandler, Timer *, void)
+{
+    const int TICKS_BEFORE_WE_APPEAR = 10;
+    if (m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR)
+    {
+        ++m_nDelayAppearing;
+        m_aFadeTimer.Start();
+        return;
+    }
+
+    if (m_bIsAppearing && m_nFadeRate > 0)
+        m_nFadeRate -= 25;
+    else if (!m_bIsAppearing && m_nFadeRate < 100)
+        m_nFadeRate += 25;
+
+    if (m_nFadeRate != 100 && !IsVisible())
+        Show();
+    else if (m_nFadeRate == 100 && IsVisible())
+        Hide();
+    else
+         Invalidate();
 
     if (IsVisible() && m_nFadeRate > 0 && m_nFadeRate < 100)
         m_aFadeTimer.Start();

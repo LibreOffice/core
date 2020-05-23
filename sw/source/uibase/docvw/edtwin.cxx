@@ -139,6 +139,10 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -3796,6 +3800,27 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
+    static SwContentFrame* pFrameWasOutline = nullptr;
+    SwContentAtPos aSwContentAtPos(IsAttrAtPos::Outline);
+    if (GetView().GetWrtShell().GetContentAtPos(PixelToLogic(rMEvt.GetPosPixel()), aSwContentAtPos))
+    {
+        if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
+        {
+            SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
+            if (pContentFrame != pFrameWasOutline)
+            {
+                GetFrameControlsManager().HideControls(FrameControlType::Outline);
+                GetFrameControlsManager().SetOutlineContentVisibilityControl(pContentFrame);
+                pFrameWasOutline = pContentFrame;
+            }
+        }
+    }
+    else if (pFrameWasOutline)
+    {
+        GetFrameControlsManager().HideControls(FrameControlType::Outline);
+        pFrameWasOutline = nullptr;
+    }
+
     //ignore key modifiers for format paintbrush
     {
         bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
@@ -3844,6 +3869,12 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     const Point aOldPt( rSh.VisArea().Pos() );
     const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
+
+    if (pFrameWasOutline && !bInsWin)
+    {
+        GetFrameControlsManager().HideControls(FrameControlType::Outline);
+        pFrameWasOutline = nullptr;
+    }
 
     if( m_pShadCursor && !bInsWin )
     {
@@ -5157,6 +5188,7 @@ void SwEditWin::GetFocus()
 
 void SwEditWin::LoseFocus()
 {
+    GetFrameControlsManager().HideControls(FrameControlType::Outline);
     if (m_rView.GetWrtShellPtr())
         m_rView.GetWrtShell().InvalidateAccessibleFocus();
     Window::LoseFocus();
@@ -5166,6 +5198,7 @@ void SwEditWin::LoseFocus()
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
+    GetFrameControlsManager().HideControls(FrameControlType::Outline);
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
     if ( !m_rView.GetViewFrame() )
