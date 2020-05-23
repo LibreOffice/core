@@ -257,33 +257,6 @@ namespace cairocanvas
     }
 
   /**
-   * TextLayout::isCairoRenderable
-   *
-   * Features currently not supported by Cairo (VCL rendering is used as fallback):
-   * - vertical glyphs
-   *
-   * @return true, if text/font can be rendered with cairo
-   **/
-    bool TextLayout::isCairoRenderable(SystemFontData aSysFontData) const
-    {
-#if defined CAIRO_HAS_FT_FONT
-        // is font usable?
-        if (!aSysFontData.nFontId)
-            return false;
-#endif
-
-        // vertical glyph rendering is not supported in cairo for now
-        if (aSysFontData.bVerticalCharacterType)
-        {
-            SAL_WARN("canvas.cairo", ":cairocanvas::TextLayout::isCairoRenderable(): Vertical Character Style not supported");
-            return false;
-        }
-
-        return true;
-    }
-
-
-  /**
    * TextLayout::draw
    *
    * Cairo-based text rendering. Draw text directly on the cairo surface with cairo fonts.
