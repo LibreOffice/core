@@ -100,6 +100,8 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
+#include <frmtool.hxx>
+
 using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
@@ -1981,6 +1983,68 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if(auto pFormat = pType->FindFormatForField(pPostIt))
             pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
     }
+}
+
+bool SwWrtShell::IsOutlineContentFolded(const size_t nPos)
+{
+    const SwNodes& rNodes = GetDoc()->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    assert(nPos < rOutlineNodes.size());
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+    {
+        SwNode* pNd = &aIdx.GetNode();
+        if (pNd->IsContentNode() && pNd->GetContentNode()->getLayoutFrame(GetLayout()) != nullptr)
+            return false;
+    }
+
+    return true;
+}
+
+void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos)
+{
+    const SwNodes& rNodes = GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+
+    assert(nPos < rOutlineNodes.size());
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    if (IsOutlineContentFolded(nPos))
+    {
+        // unfold
+        const SwNodeIndex aIdx(*pSttNd, 1);
+        MakeFrames(GetDoc(), aIdx, *pEndNd);
+    }
+    else
+    {
+        // fold
+        for (SwNodeIndex aIdx(*pSttNd, 1); &aIdx.GetNode() != pEndNd; aIdx++)
+        {
+            SwNode* pNd = &aIdx.GetNode();
+            if (pNd->IsContentNode())
+                pNd->GetContentNode()->DelFrames(nullptr);
+            else if (pNd->IsTableNode())
+                pNd->GetTableNode()->DelFrames(nullptr);
+            else if (pNd->IsSectionNode())
+                pNd->GetSectionNode()->DelFrames(nullptr);
+        }
+    }
+    InvalidateLayout(true);
+    GetWin()->Invalidate();
+    bool bIsModified = IsModified();
+    SetModified();
+    if (!bIsModified)
+        ResetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

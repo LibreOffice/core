@@ -139,6 +139,10 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include <IDocumentOutlineNodes.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -3796,6 +3800,29 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
+    if (GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        SwContentAtPos aSwContentAtPos(IsAttrAtPos::Outline);
+        if (GetView().GetWrtShell().GetContentAtPos(PixelToLogic(rMEvt.GetPosPixel()), aSwContentAtPos))
+        {
+            if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
+            {
+                SwContentFrame* pContentFrame = aSwContentAtPos.aFnd.pNode->GetTextNode()->getLayoutFrame(nullptr);
+                if (pContentFrame != m_pSavedOutlineFrame)
+                {
+                    GetFrameControlsManager().HideControls(FrameControlType::Outline);
+                    GetFrameControlsManager().SetOutlineContentVisibilityButton(pContentFrame);
+                    m_pSavedOutlineFrame = pContentFrame;
+                }
+            }
+        }
+        else if (m_pSavedOutlineFrame)
+        {
+            GetFrameControlsManager().HideControls(FrameControlType::Outline);
+            m_pSavedOutlineFrame = nullptr;
+        }
+    }
+
     //ignore key modifiers for format paintbrush
     {
         bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
@@ -3844,6 +3871,12 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     const Point aOldPt( rSh.VisArea().Pos() );
     const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
+
+    if (m_pSavedOutlineFrame && !bInsWin)
+    {
+        GetFrameControlsManager().HideControls(FrameControlType::Outline);
+        m_pSavedOutlineFrame = nullptr;
+    }
 
     if( m_pShadCursor && !bInsWin )
     {
@@ -5273,6 +5306,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     case CommandEventId::Wheel:
     case CommandEventId::StartAutoScroll:
     case CommandEventId::AutoScroll:
+            if (m_pSavedOutlineFrame && GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                GetFrameControlsManager().HideControls(FrameControlType::Outline);
+                m_pSavedOutlineFrame = nullptr;
+            }
             m_pShadCursor.reset();
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
