@@ -262,7 +262,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="SETNO-nospin">
+                              <object class="GtkEntry" id="SETNO">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>

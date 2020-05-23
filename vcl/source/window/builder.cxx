@@ -2017,9 +2017,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         OUString sUnit = extractUnit(sPattern);
 
-        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK;
-        if (!id.endsWith("-nospin"))
-            nBits |= WB_SPIN | WB_REPEAT;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK|WB_SPIN|WB_REPEAT;
 
         if (sPattern.isEmpty())
         {

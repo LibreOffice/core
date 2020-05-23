@@ -237,7 +237,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="pageedit-nospin">
+                          <object class="GtkEntry" id="pageedit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="width_chars">3</property>

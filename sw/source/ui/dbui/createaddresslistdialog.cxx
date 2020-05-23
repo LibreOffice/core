@@ -216,7 +216,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     , m_xCustomizePB(m_xBuilder->weld_button("CUSTOMIZE"))
     , m_xStartPB(m_xBuilder->weld_button("START"))
     , m_xPrevPB(m_xBuilder->weld_button("PREV"))
-    , m_xSetNoED(m_xBuilder->weld_entry("SETNO-nospin"))
+    , m_xSetNoED(m_xBuilder->weld_entry("SETNO"))
     , m_xSetNoNF(m_xBuilder->weld_spin_button("SETNO"))
     , m_xNextPB(m_xBuilder->weld_button("NEXT"))
     , m_xEndPB(m_xBuilder->weld_button("END"))

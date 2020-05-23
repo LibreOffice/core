@@ -220,7 +220,7 @@
                         <property name="can_focus">False</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="pass-nospin">
+                          <object class="GtkSpinButton" id="pass">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
@@ -236,7 +236,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="managebreakpoints|label2">Pass count:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">pass-nospin</property>
+                            <property name="mnemonic_widget">pass</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
