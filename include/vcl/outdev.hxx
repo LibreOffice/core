@@ -533,6 +533,8 @@ public:
 
     ///@}
 
+public:
+    virtual Size GetButtonBorderSize() { return Size(1, 1); };
 
     /** @name Direct OutputDevice drawing functions
      */
