@@ -944,11 +944,6 @@ css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
     return css::uno::Any();
 }
 
-SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
-{
-    return SystemFontData();
-}
-
 #endif // ENABLE_CAIRO_CANVAS
 
 bool GenPspGraphics::supportsOperation( OutDevSupportType ) const

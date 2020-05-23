@@ -92,7 +92,6 @@ public:
                                                         const Size& rSize) const override;
     virtual css::uno::Any GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface,
                                                  const basegfx::B2ISize& rSize) const override;
-    virtual SystemFontData GetSysFontData(int nFallbacklevel) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
     // GDI

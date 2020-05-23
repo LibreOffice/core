@@ -278,23 +278,6 @@ bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities
     return mpGraphics->GetFontCapabilities(rFontCapabilities);
 }
 
-#if ENABLE_CAIRO_CANVAS
-
-SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
-{
-    SystemFontData aSysFontData;
-
-    if (!mpGraphics)
-        (void) AcquireGraphics();
-
-    if (mpGraphics)
-        aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
-
-    return aSysFontData;
-}
-
-#endif // ENABLE_CAIRO_CANVAS
-
 void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine,
                                         tools::Rectangle& rRect1, tools::Rectangle& rRect2,
                                         long& rYOff, long& rWidth,

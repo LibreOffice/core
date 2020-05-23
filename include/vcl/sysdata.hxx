@@ -185,35 +185,6 @@ struct SystemWindowData
 #endif
 };
 
-#if ENABLE_CAIRO_CANVAS
-
-struct SystemFontData
-{
-#if defined( UNX )
-    void*           nFontId;        // native font id
-    int             nFontFlags;     // native font flags
-#endif
-    bool            bFakeBold;      // Does this font need faking the bold style
-    bool            bFakeItalic;    // Does this font need faking the italic style
-    bool            bAntialias;     // Should this font be antialiased
-    bool            bVerticalCharacterType;      // Is the font using vertical character type
-
-    SystemFontData()
-        :
-#if defined( UNX )
-        nFontId( nullptr ),
-        nFontFlags( 0 ),
-#endif
-        bFakeBold( false ),
-        bFakeItalic( false ),
-        bAntialias( true ),
-        bVerticalCharacterType( false )
-    {
-    }
-};
-
-#endif // ENABLE_CAIRO_CANVAS
-
 #endif // INCLUDED_VCL_SYSDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
