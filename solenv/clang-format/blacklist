@@ -6459,7 +6459,6 @@ include/sfx2/tbxctrl.hxx
 include/sfx2/templatedlg.hxx
 include/sfx2/templatelocalview.hxx
 include/sfx2/templateproperties.hxx
-include/sfx2/templdlg.hxx
 include/sfx2/thumbnailview.hxx
 include/sfx2/titledockwin.hxx
 include/sfx2/tplpitem.hxx
@@ -9417,7 +9416,6 @@ sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/scoutlineobj.cxx
 sc/qa/extras/scsubtotalfieldobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
-sc/qa/extras/sctablesheetsobj.cxx
 sc/qa/extras/sctabviewobj.cxx
 sc/qa/perf/scperfobj.cxx
 sc/qa/unit/bugfix-test.cxx
@@ -9441,7 +9439,6 @@ sc/qa/unit/functions_test.hxx
 sc/qa/unit/functions_test_old.cxx
 sc/qa/unit/functions_text.cxx
 sc/qa/unit/helper/csv_handler.hxx
-sc/qa/unit/helper/debughelper.hxx
 sc/qa/unit/helper/qahelper.cxx
 sc/qa/unit/helper/qahelper.hxx
 sc/qa/unit/helper/shared_test_impl.hxx
@@ -15452,7 +15449,6 @@ sw/source/uibase/inc/javaedit.hxx
 sw/source/uibase/inc/label.hxx
 sw/source/uibase/inc/labelcfg.hxx
 sw/source/uibase/inc/labimg.hxx
-sw/source/uibase/inc/labimp.hxx
 sw/source/uibase/inc/labrec.hxx
 sw/source/uibase/inc/langhelper.hxx
 sw/source/uibase/inc/listsh.hxx
