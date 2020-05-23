@@ -240,6 +240,11 @@ public:
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
+    void DrawBorder(tools::Rectangle aBorderRect) override
+    {
+        SetLineColor(COL_BLACK);
+        DrawRect(aBorderRect);
+    }
 
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
