@@ -58,6 +58,7 @@
 #include <drawview.hxx>
 #include <svx/bmpmask.hxx>
 #include <LayerTabBar.hxx>
+#include <SlideSorterViewShell.hxx>
 
 #include <svx/svditer.hxx>
 
@@ -73,16 +74,21 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
-    sal_uInt16          nPage = maTabControl->GetCurPagePos();
-
     mpDrawView->SdrEndTextEdit();
 
     try
     {
+        sd::slidesorter::SharedPageSelection selectedSlides = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetPageSelection();
         Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
-        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
-        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
-        xPages->remove( xPage );
+        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
+
+        GetView()->BegUndo(SdResId(STR_UNDO_DELETEPAGES));
+        for (auto selectedSlide: *selectedSlides)
+        {
+            Reference< XDrawPage > xPage( xPages->getByIndex( maTabControl->GetPagePos(selectedSlide->getPageId()) ), UNO_QUERY_THROW );
+            xPages->remove( xPage );
+        }
+        GetView()->EndUndo();
     }
     catch( Exception& )
     {
