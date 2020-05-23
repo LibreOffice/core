@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9971ea2f_be78a925",
+        "filename": "embeddedobj/source/msole/olecomponent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-23T11:04:04Z",
+      "side": 1,
+      "message": "https://docs.microsoft.com/en-us/windows/win32/api/ole2/nf-ole2-oleinitialize\n\n\"each successful call to OleInitialize, including those that return S_FALSE, must be balanced by a corresponding call to OleUninitialize\"\n\nSo only successful calls need that. We store success status in m_bOleInitialized (but incorrectly; proper check would be like `m_bOleInitialized \u003d SUCCEEDED(hr);`) - so need to check it\u0027t true here to call OleUninitialize.",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 19
+      },
+      "revId": "15fc9a66b1bbc83146e8a816312cb254291ca581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
