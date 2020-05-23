@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.2 -->
+<interface domain="sw">
+  <requires lib="gtk+" version="3.18"/>
+  <object class="GtkMenu" id="menu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="toggle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="outlineheadingmenu|toggle">Toggle Outline Content Visibility</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="toggleall">
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="outlineheadingmenu|toggleall">Toggle Outline Content Visibility Include Subheadings</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
+</interface>
