@@ -150,15 +150,12 @@ namespace cairocanvas
     {
     private:
         VclPtr<OutputDevice> mpVirtualDevice;
-        cairo_t *mpCairo;
         bool mbMappingWasEnabled;
     public:
-        DeviceSettingsGuard(OutputDevice *pVirtualDevice, cairo_t *pCairo)
+        DeviceSettingsGuard(OutputDevice *pVirtualDevice)
             : mpVirtualDevice(pVirtualDevice)
-            , mpCairo(pCairo)
             , mbMappingWasEnabled(mpVirtualDevice->IsMapModeEnabled())
         {
-            cairo_save(mpCairo);
             mpVirtualDevice->Push();
             mpVirtualDevice->EnableMapMode(false);
         }
@@ -167,7 +164,6 @@ namespace cairocanvas
         {
             mpVirtualDevice->EnableMapMode(mbMappingWasEnabled);
             mpVirtualDevice->Pop();
-            cairo_restore(mpCairo);
         }
     };
 
@@ -209,17 +205,6 @@ namespace cairocanvas
         return true;
     }
 
-    //set the clip of the rOutDev to the cairo surface
-    void CanvasHelper::clip_cairo_from_dev(::OutputDevice const & rOutDev)
-    {
-        vcl::Region aRegion(rOutDev.GetClipRegion());
-        if (!aRegion.IsEmpty() && !aRegion.IsNull())
-        {
-            doPolyPolygonImplementation(aRegion.GetAsB2DPolyPolygon(), Clip, mpCairo.get(),
-                                        nullptr, mpSurfaceProvider, rendering::FillRule_EVEN_ODD);
-        }
-    }
-
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pOwner,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,
@@ -240,13 +225,8 @@ namespace cairocanvas
 
         if( mpVirtualDevice )
         {
-            DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
+            DeviceSettingsGuard aGuard(mpVirtualDevice.get());
 
-#if defined CAIRO_HAS_WIN32_SURFACE
-            // FIXME: Some kind of work-around...
-            cairo_rectangle (mpCairo.get(), 0, 0, 0, 0);
-            cairo_fill(mpCairo.get());
-#endif
             ::Point aOutpos;
             if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xFont ) )
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
@@ -273,8 +253,6 @@ namespace cairocanvas
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
-            clip_cairo_from_dev(*mpVirtualDevice);
-
             rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
             pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
         }
@@ -299,13 +277,8 @@ namespace cairocanvas
 
             if( mpVirtualDevice )
             {
-                DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
+                DeviceSettingsGuard aGuard(mpVirtualDevice.get());
 
-#if defined CAIRO_HAS_WIN32_SURFACE
-                // FIXME: Some kind of work-around...
-                cairo_rectangle(mpCairo.get(), 0, 0, 0, 0);
-                cairo_fill(mpCairo.get());
-#endif
                 // TODO(T3): Race condition. We're taking the font
                 // from xLayoutedText, and then calling draw() at it,
                 // without exclusive access. Move setupTextOutput(),
@@ -314,8 +287,6 @@ namespace cairocanvas
                 ::Point aOutpos;
                 if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
                     return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
-
-                clip_cairo_from_dev(*mpVirtualDevice);
 
                 // TODO(F2): What about the offset scalings?
                 pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
