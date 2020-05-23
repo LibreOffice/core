@@ -22,7 +22,6 @@
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <headless/svpgdi.hxx>
-#include <config_cairo_canvas.h>
 #include <impfontmetricdata.hxx>
 #include <sallayout.hxx>
 
@@ -108,14 +107,5 @@ void SvpSalGraphics::SetTextColor( Color nColor )
 {
     m_aTextRenderImpl.SetTextColor(nColor);
 }
-
-#if ENABLE_CAIRO_CANVAS
-
-SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
-{
-    return m_aTextRenderImpl.GetSysFontData(nFallbacklevel);
-}
-
-#endif // ENABLE_CAIRO_CANVAS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

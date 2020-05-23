@@ -104,11 +104,6 @@ css::uno::Any Qt5Graphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSu
     return css::uno::Any();
 }
 
-SystemFontData Qt5Graphics::GetSysFontData(int /*nFallbacklevel*/) const
-{
-    return SystemFontData();
-}
-
 #endif
 
 void Qt5Graphics::handleDamage(const tools::Rectangle& rDamagedRegion)
