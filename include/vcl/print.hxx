@@ -271,6 +271,8 @@ public:
     virtual                     ~Printer() override;
     virtual void                dispose() override;
 
+    virtual void SetMetafileMapMode(const MapMode& rNewMapMode, bool) override { SetMapMode(rNewMapMode); }
+
     static const std::vector< OUString >&
                                 GetPrinterQueues();
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );

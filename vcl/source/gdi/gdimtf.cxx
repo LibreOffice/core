@@ -502,10 +502,8 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
 
     pOut->Push();
 
-    if ( pMtf && pMtf->IsRecord() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
-        pOut->SetRelativeMapMode( aDrawMap );
-    else
-        pOut->SetMapMode( aDrawMap );
+    bool bIsRecord = (pMtf && pMtf->IsRecord());
+    pOut->SetMetafileMapMode(aDrawMap, bIsRecord);
 
     // #i23407# Set backwards-compatible text language and layout mode
     // This is necessary, since old metafiles don't even know of these
