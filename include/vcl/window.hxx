@@ -773,6 +773,7 @@ public:
 
     Color                               GetBackgroundColor() const override;
 
+    size_t                              GetSyncCount() const override { return 0x000000ff; }
     virtual void                        EnableRTL ( bool bEnable = true ) override;
     virtual void                        MouseMove( const MouseEvent& rMEvt );
     virtual void                        MouseButtonDown( const MouseEvent& rMEvt );

@@ -349,7 +349,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
     {
         MetaAction* pAction = GetCurAction();
         const size_t nObjCount = m_aList.size();
-        size_t  nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
+        size_t  nSyncCount = pOut->GetSyncCount();
 
         if( nPos > nObjCount )
             nPos = nObjCount;

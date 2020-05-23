@@ -455,6 +455,8 @@ public:
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
 
+    virtual size_t               GetSyncCount() const { return 0xffffffff; }
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.
