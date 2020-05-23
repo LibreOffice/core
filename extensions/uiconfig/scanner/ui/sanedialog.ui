@@ -612,7 +612,7 @@
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes" context="sanedialog|vectorLabel">Vector element</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">vectorSpinbutton-nospin</property>
+                                <property name="mnemonic_widget">vectorSpinbutton</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -621,7 +621,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="vectorSpinbutton-nospin">
+                              <object class="GtkSpinButton" id="vectorSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>

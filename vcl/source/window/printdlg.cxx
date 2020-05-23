@@ -543,7 +543,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mxNumPagesText(m_xBuilder->weld_label("totalnumpages"))
     , mxPreview(new PrintPreviewWindow(this))
     , mxPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", *mxPreview))
-    , mxPageEdit(m_xBuilder->weld_entry("pageedit-nospin"))
+    , mxPageEdit(m_xBuilder->weld_entry("pageedit"))
     , mxPagesBtn(m_xBuilder->weld_radio_button("pagespersheetbtn"))
     , mxBrochureBtn(m_xBuilder->weld_radio_button("brochure"))
     , mxPagesBoxTitleTxt(m_xBuilder->weld_label("pagespersheettxt"))
