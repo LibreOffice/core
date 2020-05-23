@@ -2621,6 +2621,10 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
             mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
             mnLOKEndHeaderCol, mnLOKEndHeaderRow);
 
+    ScRangeProvider aRangeProvider(rRectangle, /* bInPixels */ false, aViewData,
+                                   /* nEnlargeX */ 2, /* nEnlargeY */ 2);
+    const ScRange& rCellRange = aRangeProvider.getCellRange();
+
     /// *** start collecting ROWS ***
 
     /// 1) compute start and end rows
@@ -2629,17 +2633,9 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     {
         SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
         long nEndHeightPx = 0;
-        long nRectTopPx = rRectangle.Top() * aViewData.GetPPTX();
-        long nRectBottomPx = rRectangle.Bottom() * aViewData.GetPPTY();
-
-        const auto& rTopNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectTopPx);
-        const auto& rBottomNearest = aViewData.GetLOKHeightHelper().getNearestByPosition(nRectBottomPx);
-
-        ScBoundsProvider aBoundingRowsProvider(aViewData, nTab, /*bColumnHeader: */ false);
-        aBoundingRowsProvider.Compute(rTopNearest, rBottomNearest, nRectTopPx, nRectBottomPx);
-        aBoundingRowsProvider.EnlargeBy(2);
-        aBoundingRowsProvider.GetStartIndexAndPosition(nStartRow, nStartHeightPx);
-        aBoundingRowsProvider.GetEndIndexAndPosition(nEndRow, nEndHeightPx);
+        nStartRow = rCellRange.aStart.Row();
+        nEndRow = rCellRange.aEnd.Row();
+        aRangeProvider.getRowPositions(nStartHeightPx, nEndHeightPx);
 
         aViewData.GetLOKHeightHelper().removeByIndex(mnLOKStartHeaderRow);
         aViewData.GetLOKHeightHelper().removeByIndex(mnLOKEndHeaderRow);
@@ -2773,17 +2769,9 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     {
         SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
         long nEndWidthPx = 0;
-        long nRectLeftPx = rRectangle.Left() * aViewData.GetPPTX();
-        long nRectRightPx = rRectangle.Right() * aViewData.GetPPTY();
-
-        const auto& rLeftNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectLeftPx);
-        const auto& rRightNearest = aViewData.GetLOKWidthHelper().getNearestByPosition(nRectRightPx);
-
-        ScBoundsProvider aBoundingColsProvider(aViewData, nTab, /*bColumnHeader: */ true);
-        aBoundingColsProvider.Compute(rLeftNearest, rRightNearest, nRectLeftPx, nRectRightPx);
-        aBoundingColsProvider.EnlargeBy(2);
-        aBoundingColsProvider.GetStartIndexAndPosition(nStartCol, nStartWidthPx);
-        aBoundingColsProvider.GetEndIndexAndPosition(nEndCol, nEndWidthPx);
+        nStartCol = rCellRange.aStart.Col();
+        nEndCol = rCellRange.aEnd.Col();
+        aRangeProvider.getColPositions(nStartWidthPx, nEndWidthPx);
 
         aViewData.GetLOKWidthHelper().removeByIndex(mnLOKStartHeaderCol);
         aViewData.GetLOKWidthHelper().removeByIndex(mnLOKEndHeaderCol);
