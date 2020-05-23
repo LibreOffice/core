@@ -257,9 +257,6 @@ namespace cairocanvas
         ::cairo::CairoSharedPtr     mpCairo;
         ::cairo::SurfaceSharedPtr   mpSurface;
         ::basegfx::B2ISize maSize;
-
-        void clip_cairo_from_dev(::OutputDevice const & rOutDev);
-
     };
 
     /// also needed from SpriteHelper
