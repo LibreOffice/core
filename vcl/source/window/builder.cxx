@@ -2309,12 +2309,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         extractBuffer(id, rMap);
 
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
-        if (m_bLegacy)
-        {
-            OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-            if (!sBorder.isEmpty())
-                nWinStyle |= WB_BORDER;
-        }
         //VclMultiLineEdit manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         if (pRealParent != pParent)
