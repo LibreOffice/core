@@ -56,7 +56,6 @@ struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
 struct SystemFontData;
-struct SystemTextLayoutData;
 class ImplFontCache;
 class PhysicalFontCollection;
 class ImplDeviceFontList;
@@ -1330,10 +1329,6 @@ private:
     ///@{
 
 public:
-
-    SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex, sal_Int32 nLen,
-                                                      const long* pDXAry ) const;
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
