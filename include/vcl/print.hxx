@@ -241,6 +241,7 @@ public:
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
     virtual Size                GetButtonBorderSize() override;
+    virtual Color               GetMonochromeButtonColor() override { return COL_LIGHTGRAY; }
 
     bool                        IsScreenComp() const override { return false; }
 

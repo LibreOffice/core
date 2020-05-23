@@ -537,6 +537,7 @@ public:
 
 public:
     virtual Size GetButtonBorderSize() { return Size(1, 1); };
+    virtual Color GetMonochromeButtonColor() { return COL_WHITE; }
 
     /** @name Direct OutputDevice drawing functions
      */

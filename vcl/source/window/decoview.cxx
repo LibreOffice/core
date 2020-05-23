@@ -509,10 +509,7 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
         }
 
         // Hack: in monochrome mode on printers we like to have grey buttons
-        if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-            pDev->SetFillColor( COL_LIGHTGRAY );
-        else
-            pDev->SetFillColor( COL_WHITE );
+        pDev->SetFillColor(pDev->GetMonochromeButtonColor());
         pDev->DrawRect( aFillRect );
     }
     else
