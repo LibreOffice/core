@@ -922,14 +922,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:optional>
         <!-- TODO: no proposal for loext:glow* -->
         <rng:optional>
-          <rng:attribute name="loext:glow">
-            <rng:choice>
-              <rng:value>visible</rng:value>
-              <rng:value>hidden</rng:value>
-            </rng:choice>
-          </rng:attribute>
-        </rng:optional>
-        <rng:optional>
           <rng:attribute name="loext:glow-radius">
             <rng:ref name="length"/>
           </rng:attribute>

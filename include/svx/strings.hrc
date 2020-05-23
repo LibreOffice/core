@@ -512,7 +512,6 @@
 #define SIP_SA_GRAFINVERT                                   NC_("SIP_SA_GRAFINVERT", "Invert")
 #define SIP_SA_GRAFMODE                                     NC_("SIP_SA_GRAFMODE", "Image mode")
 #define SIP_SA_GRAFCROP                                     NC_("SIP_SA_GRAFCROP", "Crop")
-#define SIP_SA_GLOW                                         NC_("SIP_SA_GLOW", "Glow effect")
 #define SIP_SA_GLOW_RAD                                     NC_("SIP_SA_GLOW_RAD", "Radius of glow effect")
 #define SIP_SA_GLOW_COLOR                                   NC_("SIP_SA_GLOW_COLOR", "Color of glow effect")
 #define SIP_SA_GLOW_TRANSPARENCY                            NC_("SIP_SA_GLOW_TRANSPARENCY", "Transparency of glow effect")

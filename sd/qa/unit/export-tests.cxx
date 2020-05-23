@@ -1247,9 +1247,6 @@ void SdExportTest::testGlow()
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
 
     // Check glow properties
-    bool bGlowEffect = false;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffect") >>= bGlowEffect);
-    CPPUNIT_ASSERT(bGlowEffect);
     sal_Int32 nGlowEffectRad = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRad") >>= nGlowEffectRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nGlowEffectRad); // 15 pt = 529.166... mm/100
@@ -1267,10 +1264,6 @@ void SdExportTest::testGlow()
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
                 "family", "graphic");
     // check loext graphic attributes
-    assertXPath(
-        pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
-        "glow", "visible");
     assertXPath(
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
