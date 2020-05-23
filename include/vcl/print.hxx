@@ -241,6 +241,7 @@ public:
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
     virtual Size                GetButtonBorderSize() override;
+    virtual Color               GetMonochromeButtonColor() override { return COL_LIGHTGRAY; }
 
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
