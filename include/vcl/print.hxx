@@ -241,6 +241,8 @@ public:
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
 
+    bool                        IsScreenComp() const override { return false; }
+
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                     const Point& rDestPt, const Size& rDestSize,
