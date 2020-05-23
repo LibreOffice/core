@@ -185,14 +185,6 @@ struct SystemWindowData
 #endif
 };
 
-struct SystemGlyphData
-{
-    sal_uInt32           index;
-    double               x;
-    double               y;
-    int                  fallbacklevel;
-};
-
 #if ENABLE_CAIRO_CANVAS
 
 struct SystemFontData
@@ -221,14 +213,6 @@ struct SystemFontData
 };
 
 #endif // ENABLE_CAIRO_CANVAS
-
-typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
-
-struct SystemTextLayoutData
-{
-    SystemGlyphDataVector rGlyphData;    // glyph data
-    int                   orientation;   // Text orientation
-};
 
 #endif // INCLUDED_VCL_SYSDATA_HXX
 
