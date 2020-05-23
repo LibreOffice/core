@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -93,34 +92,6 @@
 #define STR_NO_TABLE_OBJECT                         NC_("STR_NO_TABLE_OBJECT", "The given object is no table object.")
 #define STR_INVALID_COMPOSITION_TYPE                NC_("STR_INVALID_COMPOSITION_TYPE", "Invalid composition type - need a value from com.sun.star.sdb.tools.CompositionType.")
 #define STR_INVALID_COMMAND_TYPE                    NC_("STR_INVALID_COMMAND_TYPE", "Invalid command type - only TABLE and QUERY from com.sun.star.sdb.CommandType are allowed.")
-
-#define STR_STATE_CLOSE_SUB_DOCS                    NC_("STR_STATE_CLOSE_SUB_DOCS", "Prepare")
-#define STR_STATE_BACKUP_DBDOC                      NC_("STR_STATE_BACKUP_DBDOC", "Backup Document")
-#define STR_STATE_MIGRATE                           NC_("STR_STATE_MIGRATE", "Migrate")
-#define STR_STATE_SUMMARY                           NC_("STR_STATE_SUMMARY", "Summary")
-// To translators: This refers to a form document inside a database document.
-#define STR_FORM                                    NC_("STR_FORM", "Form '$name$'")
-// To translators: This refers to a report document inside a database document.
-#define STR_REPORT                                  NC_("STR_REPORT", "Report '$name$'")
-#define STR_OVERALL_PROGRESS                        NC_("STR_OVERALL_PROGRESS", "document $current$ of $overall$")
-#define STR_DATABASE_DOCUMENT                       NC_("STR_DATABASE_DOCUMENT", "Database Document")
-#define STR_SAVED_COPY_TO                           NC_("STR_SAVED_COPY_TO", "saved copy to $location$")
-#define STR_MOVED_LIBRARY                           NC_("STR_MOVED_LIBRARY", "migrated $type$ library '$old$' to '$new$'")
-#define STR_LIBRARY_TYPE_AND_NAME                   NC_("STR_LIBRARY_TYPE_AND_NAME", "$type$ library '$library$'")
-#define STR_MIGRATING_LIBS                          NC_("STR_MIGRATING_LIBS", "migrating libraries ...")
-#define STR_OOO_BASIC                               NC_("STR_OOO_BASIC", "Basic")
-#define STR_JAVA_SCRIPT                             NC_("STR_JAVA_SCRIPT", "JavaScript")
-#define STR_BEAN_SHELL                              NC_("STR_BEAN_SHELL", "BeanShell")
-#define STR_JAVA                                    NC_("STR_JAVA", "Java")
-#define STR_PYTHON                                  NC_("STR_PYTHON", "Python")
-#define STR_DIALOG                                  NC_("STR_DIALOG", "dialog")
-#define STR_ERRORS                                  NC_("STR_ERRORS", "Error(s)")
-#define STR_WARNINGS                                NC_("STR_WARNINGS", "Warnings")
-#define STR_EXCEPTION                               NC_("STR_EXCEPTION", "caught exception:")
-#define STR_INVALID_BACKUP_LOCATION                 NC_("STR_INVALID_BACKUP_LOCATION", "You need to choose a backup location other than the document location itself.")
-#define STR_INVALID_NUMBER_ARGS                     NC_("STR_INVALID_NUMBER_ARGS", "Invalid number of initialization arguments. Expected 1.")
-#define STR_NO_DATABASE                             NC_("STR_NO_DATABASE", "No database document found in the initialization arguments.")
-#define STR_NOT_READONLY                            NC_("STR_NOT_READONLY", "Not applicable to read-only documents.")
 
 #define STR_QUERY_UNDO_TABWINSHOW                   NC_("STR_QUERY_UNDO_TABWINSHOW", "Add Table Window" )
 #define STR_QUERY_UNDO_MOVETABWIN                   NC_("STR_QUERY_UNDO_MOVETABWIN", "Move table window" )
@@ -270,7 +241,6 @@
 #define STR_DEFAULT_VALUE                           NC_("STR_DEFAULT_VALUE", "~Default value" )
 #define STR_HELP_BOOL_DEFAULT                       NC_("STR_HELP_BOOL_DEFAULT", "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value, select the empty string.")
 #define STR_HELP_DEFAULT_VALUE                      NC_("STR_HELP_DEFAULT_VALUE", "Enter a default value for this field.\n\nWhen you later enter data in the table, this string will be used in each new record for the field selected. It should, therefore, correspond to the cell format that needs to be entered below." )
-#define STR_HELP_FIELD_REQUIRED                     NC_("STR_HELP_FIELD_REQUIRED", "Activate this option if this field cannot contain NULL values, i.e. the user must always enter data." )
 #define STR_HELP_TEXT_LENGTH                        NC_("STR_HELP_TEXT_LENGTH", "Enter the maximum text length permitted." )
 #define STR_HELP_NUMERIC_TYPE                       NC_("STR_HELP_NUMERIC_TYPE", "Enter the number format." )
 #define STR_HELP_LENGTH                             NC_("STR_HELP_LENGTH", "Determine the length data can have in this field.\n\nIf decimal fields, then the maximum length of the number to be entered, if binary fields, then the length of the data block.\nThe value will be corrected accordingly when it exceeds the maximum for this database." )

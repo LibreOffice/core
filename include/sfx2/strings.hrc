@@ -57,8 +57,6 @@
 #define STR_QRYTEMPL_UPDATE_BTN                 NC_("STR_QRYTEMPL_UPDATE_BTN", "~Update Styles")
 #define STR_QRYTEMPL_KEEP_BTN                   NC_("STR_QRYTEMPL_KEEP_BTN", "~Keep Old Styles")
 #define STR_ACTION_REFRESH                      NC_("STR_ACTION_REFRESH", "Refresh")
-// leave ending space
-#define STR_ACTION_DEFAULT                      NC_("STR_ACTION_DEFAULT", "Reset Default Template ")
 #define STR_CATEGORY_NEW                        NC_("STR_CATEGORY_NEW", "New Category")
 #define STR_CATEGORY_DELETE                     NC_("STR_CATEGORY_DELETE", "Delete Category")
 #define STR_CATEGORY_SELECT                     NC_("STR_CATEGORY_SELECT", "Select Category")

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Search for unused constants in header files.
 #
@@ -9,6 +9,7 @@
 
 import subprocess
 import sys
+import re
 
 exclusionSet = set([
     # List of RID constants where we compute a value using a base before calling one of the RESSTR methods
@@ -98,19 +99,20 @@ def in_exclusion_set( a ):
     return False;
 
 # find defines, excluding the externals folder
-a = subprocess.Popen("git grep -hP '^#define\s+\w+\s+' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen("git grep -hP '^#define\s+\w\w\w\w+\s*' -- \"[!e][!x][!t]*\" | sort -u", stdout=subprocess.PIPE, shell=True)
 
+name_re = re.compile("#define\s+(\w+)")
 with a.stdout as txt:
     for line in txt:
-        idx1 = line.find("#define ")
-        idx2 = line.find(" ", idx1 + 9)
-        idName = line[idx1+8 : idx2].strip()
+        idName = name_re.match(line).group(1)
         if idName.startswith("INCLUDED_"): continue
         # the various _START and _END constants are normally unused outside of the .hrc and .src files, and that's fine
         if idName.endswith("_START"): continue
         if idName.endswith("_BEGIN"): continue
         if idName.endswith("_END"): continue
         if idName == "RID_SVX_FIRSTFREE": continue
+        if idName == "": continue
+        if idName.startswith("__com"): continue # these are the include/header macros for the UNO stuff
         if in_exclusion_set(idName): continue
         # search for the constant
         b = subprocess.Popen(["git", "grep", "-w", idName], stdout=subprocess.PIPE)
@@ -158,7 +160,7 @@ with a.stdout as txt:
                 if "svx/source/tbxctrls/extrusioncontrols.hrc:" in line2 and idName.startswith("FROM_"): found_reason_to_exclude = True
                 # if we see more than a few lines then it's probably one of the BASE/START/BEGIN things
                 cnt = cnt + 1
-                if cnt > 4: found_reason_to_exclude = True
+                if cnt > 2: found_reason_to_exclude = True
         if not found_reason_to_exclude:
             print(idName)
             # otherwise the previous line of output will be incorrectly mixed into the below git output, because of buffering

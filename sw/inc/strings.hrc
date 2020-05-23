@@ -240,10 +240,6 @@
 #define STR_LOAD_HTML_DOC                       NC_("STR_LOAD_HTML_DOC", "Name and Path of the HTML Document")
 #define STR_JAVA_EDIT                           NC_("STR_JAVA_EDIT", "Edit Script")
 #define STR_BOOKMARK_DEF_NAME                   NC_("STR_BOOKMARK_DEF_NAME", "Bookmark")
-#define STR_BOOKMARK_NAME                       NC_("STR_BOOKMARK_NAME", "Name")
-#define STR_BOOKMARK_TEXT                       NC_("STR_BOOKMARK_TEXT", "Text")
-#define STR_BOOKMARK_HIDDEN                     NC_("STR_BOOKMARK_HIDDEN", "Hidden")
-#define STR_BOOKMARK_CONDITION                  NC_("STR_BOOKMARK_CONDITION", "Condition")
 #define STR_BOOKMARK_YES                        NC_("STR_BOOKMARK_YES", "Yes")
 #define STR_BOOKMARK_NO                         NC_("STR_BOOKMARK_NO", "No")
 #define STR_BOOKMARK_FORBIDDENCHARS             NC_("STR_BOOKMARK_FORBIDDENCHARS", "Forbidden characters:")
@@ -678,7 +674,6 @@
 #define STR_BROKEN_LINK                         NC_("STR_BROKEN_LINK", "File not found: ")
 
 #define STR_RESOLVED                            NC_("STR_RESOLVED", "RESOLVED")
-#define STR_PROTECTED                           NC_("STR_PROTECTED", "Protected")
 
 #define STR_MARGIN_TOOLTIP_LEFT                 NC_("STR_MARGIN_TOOLTIP_LEFT", "Left: ")
 #define STR_MARGIN_TOOLTIP_RIGHT                NC_("STR_MARGIN_TOOLTIP_RIGHT", ". Right: ")
@@ -1054,8 +1049,6 @@
 #define STR_COLS                                NC_("STR_COLS", "Columns")
 #define STR_ROWS                                NC_("STR_ROWS", "Rows")
 
-#define STR_SERVICE_UNAVAILABLE                 NC_("STR_SERVICE_UNAVAILABLE", "The following service is not available: ")
-
 #define STR_WORDCOUNT_HINT                      NC_("STR_WORDCOUNT_HINT", "Word and character count. Click to open Word Count dialog.")
 #define STR_VIEWLAYOUT_ONE                      NC_("STR_VIEWLAYOUT_ONE", "Single-page view")
 #define STR_VIEWLAYOUT_MULTI                    NC_("STR_VIEWLAYOUT_MULTI", "Multiple-page view")
@@ -1346,11 +1339,6 @@
 #define STR_SENDER_TOKENS                       NC_("STR_SENDER_TOKENS", "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;")
 
 #define STR_TBL_FORMULA                         NC_("STR_TBL_FORMULA", "Text formula")
-
-#define STR_MENU_ZOOM                           NC_("STR_MENU_ZOOM", "~Zoom")
-#define STR_MENU_UP                             NC_("STR_MENU_UP", "~Upwards")
-#define STR_MENU_DOWN                           NC_("STR_MENU_DOWN", "Do~wnwards")
-
 
 #define STR_DROP_DOWN_EMPTY_LIST                NC_("STR_DROP_DOWN_EMPTY_LIST", "No Item specified")
 
