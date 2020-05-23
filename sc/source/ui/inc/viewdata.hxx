@@ -503,6 +503,7 @@ public:
 
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
+    bool            GetMergeSizePrintTwips( SCCOL nX, SCROW nY, long& rSizeXTwips, long& rSizeYTwips ) const;
     void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         SCCOL& rPosX, SCROW& rPosY,
                                         bool bTestMerge = true, bool bRepair = false );
@@ -603,10 +604,13 @@ public:
                                 bool bAllowNeg = false ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const;
+    /// returns the position (top-left corner) of the requested cell in print twips coordinates.
+    Point           GetPrintTwipsPos( SCCOL nCol, SCROW nRow ) const;
 
     /// return json for our cursor position.
     OString         describeCellCursor() const { return describeCellCursorAt(GetCurX(), GetCurY()); }
-    OString         describeCellCursorAt( SCCOL nCol, SCROW nRow ) const;
+    OString         describeCellCursorInPrintTwips() const { return describeCellCursorAt(GetCurX(), GetCurY(), false); }
+    OString         describeCellCursorAt( SCCOL nCol, SCROW nRow, bool bPixelAligned = true ) const;
 
     SCCOL           CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
     SCROW           CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
