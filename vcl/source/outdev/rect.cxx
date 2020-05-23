@@ -29,6 +29,25 @@
 
 #include <salgdi.hxx>
 
+void OutputDevice::DrawBorder(tools::Rectangle aBorderRect)
+{
+    sal_uInt16 nPixel = static_cast<sal_uInt16>(PixelToLogic(Size(1, 1)).Width());
+
+    aBorderRect.AdjustLeft(nPixel);
+    aBorderRect.AdjustTop(nPixel);
+
+    SetLineColor(COL_LIGHTGRAY);
+    DrawRect(aBorderRect);
+
+    aBorderRect.AdjustLeft(-nPixel);
+    aBorderRect.AdjustTop(-nPixel);
+    aBorderRect.AdjustRight(-nPixel);
+    aBorderRect.AdjustBottom(-nPixel);
+    SetLineColor(COL_GRAY);
+
+    DrawRect(aBorderRect);
+}
+
 void OutputDevice::DrawRect( const tools::Rectangle& rRect )
 {
     assert(!is_double_buffered_window());

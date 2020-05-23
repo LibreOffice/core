@@ -237,6 +237,12 @@ public:
 
     bool                        IsScreenComp() const override { return false; }
 
+    void DrawBorder(tools::Rectangle aBorderRect) override
+    {
+        SetLineColor(COL_BLACK);
+        DrawRect(aBorderRect);
+    }
+
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                     const Point& rDestPt, const Size& rDestSize,
