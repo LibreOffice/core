@@ -46,13 +46,18 @@ struct SearchSelection
 {
     /// 0-based index of the page that has the selection.
     int m_nPage;
+
     /**
      * List of selection rectangles in twips -- multiple rectangles only in
      * case the selection spans over more layout lines.
      */
     OString m_aRectangles;
 
-    SearchSelection(int nPage, const OString& rRectangles);
+    SearchSelection(int nPage, const OString& rRectangles)
+        : m_nPage(nPage)
+        , m_aRectangles(rRectangles)
+    {
+    }
 
     bool operator==(const SearchSelection& rOther) const
     {
