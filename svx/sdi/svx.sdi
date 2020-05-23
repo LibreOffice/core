@@ -12256,23 +12256,6 @@ SfxVoidItem AccessibilityCheck SID_ACCESSIBILITY_CHECK
     GroupId = SfxGroupId::Modify;
 ]
 
-SdrOnOffItem Glow SID_ATTR_GLOW
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Document;
-]
-
 XColorItem GlowColor SID_ATTR_GLOW_COLOR
 
 [

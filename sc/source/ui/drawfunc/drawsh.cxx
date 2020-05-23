@@ -389,7 +389,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_ATTR_GLOW:
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:

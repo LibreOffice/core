@@ -3110,9 +3110,6 @@ void SdImportTest::testShapeGlowEffectPPTXImpoer()
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-glow-effect.pptx"), PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
-    bool bHasGlow = false;
-    xShape->getPropertyValue("GlowEffect") >>= bHasGlow;
-    CPPUNIT_ASSERT(bHasGlow);
     sal_Int32 nRadius = -1;
     xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 139700 EMU = 388.0556 mm/100

@@ -27,12 +27,10 @@ GlowPropertyPanel::GlowPropertyPanel(vcl::Window* pParent,
                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                      SfxBindings* pBindings)
     : PanelLayout(pParent, "GlowPropertyPanel", "svx/ui/sidebarglow.ui", rxFrame)
-    , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
     , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
     , mpBindings(pBindings)
-    , mxShowGlow(m_xBuilder->weld_check_button("SHOW_GLOW"))
     , mxGlowRadius(m_xBuilder->weld_metric_spin_button("LB_GLOW_RADIUS", FieldUnit::POINT))
     , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"), GetFrameWeld()))
     , mxGlowTransparency(
@@ -48,7 +46,6 @@ GlowPropertyPanel::~GlowPropertyPanel() { disposeOnce(); }
 
 void GlowPropertyPanel::dispose()
 {
-    mxShowGlow.reset();
     mxFTRadius.reset();
     mxGlowRadius.reset();
     mxFTColor.reset();
@@ -56,7 +53,6 @@ void GlowPropertyPanel::dispose()
     mxFTTransparency.reset();
     mxGlowTransparency.reset();
 
-    maGlowController.dispose();
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
     maGlowTransparencyController.dispose();
@@ -65,18 +61,10 @@ void GlowPropertyPanel::dispose()
 
 void GlowPropertyPanel::Initialize()
 {
-    mxShowGlow->set_state(TRISTATE_FALSE);
-    mxShowGlow->connect_toggled(LINK(this, GlowPropertyPanel, ClickGlowHdl));
     mxLBGlowColor->SetSelectHdl(LINK(this, GlowPropertyPanel, ModifyGlowColorHdl));
     mxGlowRadius->connect_value_changed(LINK(this, GlowPropertyPanel, ModifyGlowRadiusHdl));
     mxGlowTransparency->connect_value_changed(
         LINK(this, GlowPropertyPanel, ModifyGlowTransparencyHdl));
-}
-
-IMPL_LINK_NOARG(GlowPropertyPanel, ClickGlowHdl, weld::ToggleButton&, void)
-{
-    SdrOnOffItem aItem(SDRATTR_GLOW, mxShowGlow->get_state() != TRISTATE_FALSE);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW, SfxCallMode::RECORD, { &aItem });
 }
 
 IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowColorHdl, ColorListBox&, void)
@@ -101,11 +89,9 @@ IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinBu
 
 void GlowPropertyPanel::UpdateControls()
 {
-    const bool bEnabled = mxShowGlow->get_state() != TRISTATE_FALSE;
-    mxGlowRadius->set_sensitive(bEnabled);
+    const bool bEnabled = mxGlowRadius->get_value(FieldUnit::MM_100TH) != 0;
     mxLBGlowColor->set_sensitive(bEnabled);
     mxGlowTransparency->set_sensitive(bEnabled);
-    mxFTRadius->set_sensitive(bEnabled);
     mxFTColor->set_sensitive(bEnabled);
     mxFTTransparency->set_sensitive(bEnabled);
 }
@@ -115,22 +101,6 @@ void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
 {
     switch (nSID)
     {
-        case SID_ATTR_GLOW:
-        {
-            if (eState >= SfxItemState::DEFAULT)
-            {
-                const SdrOnOffItem* pItem = dynamic_cast<const SdrOnOffItem*>(pState);
-                if (pItem)
-                {
-                    if (pItem->GetValue())
-                        mxShowGlow->set_state(TRISTATE_TRUE);
-                    else
-                        mxShowGlow->set_state(TRISTATE_FALSE);
-                }
-            }
-        }
-        break;
-
         case SID_ATTR_GLOW_COLOR:
         {
             if (eState >= SfxItemState::DEFAULT)

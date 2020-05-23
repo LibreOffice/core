@@ -437,7 +437,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_KERNING:
             case SID_ATTR_CHAR_CASEMAP:
-            case SID_ATTR_GLOW:
             case SID_ATTR_GLOW_COLOR:
             case SID_ATTR_GLOW_RADIUS:
             case SID_ATTR_GLOW_TRANSPARENCY:
