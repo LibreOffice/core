@@ -253,7 +253,6 @@
 #define STR_UndoMergeModel                                  NC_("STR_UndoMergeModel", "Insert document")
 #define STR_UndoNewLayer                                    NC_("STR_UndoNewLayer", "Insert Layer")
 #define STR_UndoDelLayer                                    NC_("STR_UndoDelLayer", "Delete layer")
-#define STR_UndoMovLayer                                    NC_("STR_UndoMovLayer", "Change order of layers")
 // Undo/Redo for setting object's name (#i73249#)
 #define STR_UndoObjName                                     NC_("STR_UndoObjName", "Change object name of %1 to")
 #define STR_UndoObjTitle                                    NC_("STR_UndoObjTitle", "Change object title of %1")
@@ -963,7 +962,6 @@
 #define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT                NC_("RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT", "Yellow Accent")
 
 #define RID_SVXSTR_GALLERYPROPS_GALTHEME                    NC_("RID_SVXSTR_GALLERYPROPS_GALTHEME", "Gallery Theme")
-#define RID_SVXSTR_GALLERY_PREVIEW                          NC_("RID_SVXSTR_GALLERY_PREVIEW", "Preview")
 #define RID_SVXSTR_SUCCESSRECOV                             NC_("RID_SVXSTR_SUCCESSRECOV", "Successfully recovered")
 #define RID_SVXSTR_ORIGDOCRECOV                             NC_("RID_SVXSTR_ORIGDOCRECOV", "Original document recovered")
 #define RID_SVXSTR_RECOVFAILED                              NC_("RID_SVXSTR_RECOVFAILED", "Recovery failed")
@@ -990,7 +988,6 @@
 
 #define RID_SVXSTR_GALLERY_FILTER                           NC_("RID_SVXSTR_GALLERY_FILTER", "Graphics filter")
 #define RID_SVXSTR_GALLERY_NEWTHEME                         NC_("RID_SVXSTR_GALLERY_NEWTHEME", "New Theme")
-#define RID_SVXSTR_GALLERY_TITLE                            NC_("RID_SVXSTR_GALLERY_TITLE", "Title")
 
 #define RID_GALLERYSTR_THEME_3D                             NC_("RID_GALLERYSTR_THEME_3D", "3D Effects")
 #define RID_GALLERYSTR_THEME_ANIMATIONS                     NC_("RID_GALLERYSTR_THEME_ANIMATIONS", "Animations")
@@ -1099,12 +1096,6 @@
 #define RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT            NC_("RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT", "Apply Fontwork Alignment")
 #define RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING    NC_("RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING", "Apply Fontwork Character Spacing")
 
-#define RID_SVXSTR_A11Y_3D_MATERIAL_COLOR                   NC_("RID_SVXSTR_A11Y_3D_MATERIAL_COLOR", "3D material color")
-#define RID_SVXSTR_A11Y_FILLSTYLE_NONE                      NC_("RID_SVXSTR_A11Y_FILLSTYLE_NONE", "None")
-#define RID_SVXSTR_A11Y_FILLSTYLE_SOLID                     NC_("RID_SVXSTR_A11Y_FILLSTYLE_SOLID", "Solid")
-#define RID_SVXSTR_A11Y_FILLSTYLE_HATCH                     NC_("RID_SVXSTR_A11Y_FILLSTYLE_HATCH", "With hatching")
-#define RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT                  NC_("RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT", "Gradient")
-#define RID_SVXSTR_A11Y_FILLSTYLE_BITMAP                    NC_("RID_SVXSTR_A11Y_FILLSTYLE_BITMAP", "Bitmap")
 #define RID_SVXSTR_A11Y_WITH                                NC_("RID_SVXSTR_A11Y_WITH", "with")
 #define RID_SVXSTR_A11Y_STYLE                               NC_("RID_SVXSTR_A11Y_STYLE", "Style")
 #define RID_SVXSTR_A11Y_AND                                 NC_("RID_SVXSTR_A11Y_AND", "and")

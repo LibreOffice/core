@@ -103,7 +103,6 @@
 #define RID_STR_RUN                         NC_("RID_STR_RUN", "Run")
 #define RID_STR_RECORD                      NC_("RID_STR_RECORD", "~Save")
 #define RID_BASICIDE_OBJCAT                 NC_("RID_BASICIDE_OBJCAT", "Object Catalog")
-#define RID_STR_TLB_MACROS                  NC_("RID_STR_TLB_MACROS", "Objects Tree")
 // Property Browser Headline ----------------------------------------------------------------
 #define RID_STR_BRWTITLE_PROPERTIES         NC_("RID_STR_BRWTITLE_PROPERTIES", "Properties: ")
 #define RID_STR_BRWTITLE_NO_PROPERTIES      NC_("RID_STR_BRWTITLE_NO_PROPERTIES", "No Control marked")

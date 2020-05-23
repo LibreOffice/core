@@ -84,7 +84,6 @@
 #define RID_SVXSTR_MYMACROS                         NC_("RID_SVXSTR_MYMACROS", "My Macros")
 #define RID_SVXSTR_PRODMACROS                       NC_("RID_SVXSTR_PRODMACROS", "%PRODUCTNAME Macros")
 #define RID_SVXSTR_NOMACRODESC                      NC_("RID_SVXSTR_NOMACRODESC", "There is no description available for this macro.")
-#define RID_SVXSTR_SELECTOR_ADD_COMMANDS            NC_("RID_SVXSTR_SELECTOR_ADD_COMMANDS", "Add Commands")
 #define RID_SVXSTR_SELECTOR_RUN                     NC_("RID_SVXSTR_SELECTOR_RUN", "Run")
 #define RID_SVXSTR_ROW                              NC_("RID_SVXSTR_ROW", "Insert Rows")
 // tdf#119293 Labels depending on row/col
@@ -322,7 +321,6 @@
 #define RID_SVXSTR_CHARNAME_FONT                    NC_("RID_SVXSTR_CHARNAME_FONT", "Font:")
 #define RID_SVXSTR_CHARNAME_STYLE                   NC_("RID_SVXSTR_CHARNAME_STYLE", "Style:")
 #define RID_SVXSTR_CHARNAME_TYPEFACE                NC_("RID_SVXSTR_CHARNAME_TYPEFACE", "Typeface:")
-#define RID_SVXSTR_CHARNAME_HIGHLIGHTING            NC_("RID_SVXSTR_CHARNAME_HIGHLIGHTING", "Highlight Color")
 #define RID_SVXSTR_USE_REPLACE                      NC_("RID_SVXSTR_USE_REPLACE", "Use replacement table")
 #define RID_SVXSTR_CPTL_STT_WORD                    NC_("RID_SVXSTR_CPTL_STT_WORD", "Correct TWo INitial CApitals")
 #define RID_SVXSTR_CPTL_STT_SENT                    NC_("RID_SVXSTR_CPTL_STT_SENT", "Capitalize first letter of every sentence")
@@ -348,13 +346,6 @@
 #define RID_SVXSTR_DIMENSION_LINE                   NC_("RID_SVXSTR_DIMENSION_LINE", "Dimension line")
 #define RID_SVXSTR_STARTQUOTE                       NC_("RID_SVXSTR_STARTQUOTE", "Start Quote")
 #define RID_SVXSTR_ENDQUOTE                         NC_("RID_SVXSTR_ENDQUOTE", "End Quote")
-
-#define RID_SVXSTR_SELECTEDPERSONA                  NC_("RID_SVXSTR_SELECTEDPERSONA", "Selected Theme: ")
-#define RID_SVXSTR_SEARCHING                        NC_("RID_SVXSTR_SEARCHING", "Searching, please wait...")
-#define RID_SVXSTR_SEARCHERROR                      NC_("RID_SVXSTR_SEARCHERROR", "Cannot open %1, please try again later.")
-#define RID_SVXSTR_NORESULTS                        NC_("RID_SVXSTR_NORESULTS", "No results found.")
-#define RID_SVXSTR_APPLYPERSONA                     NC_("RID_SVXSTR_APPLYPERSONA", "Applying Theme...")
-#define RID_SVXSTR_INVALIDPERSONAURL                NC_("RID_SVXSTR_INVALIDPERSONAURL", "Please enter a valid theme address or a search term.")
 
 #define RID_SVXSTR_TABLE_PRESET_NONE                NC_("RID_SVXSTR_TABLE_PRESET_NONE", "Set No Borders")
 #define RID_SVXSTR_TABLE_PRESET_ONLYOUTER           NC_("RID_SVXSTR_TABLE_PRESET_ONLYOUTER", "Set Outer Border Only")
