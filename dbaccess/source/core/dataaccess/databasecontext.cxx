@@ -209,8 +209,7 @@ Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentCont
 
 Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static()
 {
-    Sequence<OUString> aSNS { "com.sun.star.sdb.DatabaseContext" };
-    return aSNS;
+    return { "com.sun.star.sdb.DatabaseContext" };
 }
 
 // XServiceInfo

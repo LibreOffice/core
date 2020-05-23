@@ -386,8 +386,7 @@ OUString SAL_CALL getImplementationName() {
 
 css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "test.cppuhelper.propertysetmixin.CppSupplier") };
-    return s;
+    return { "test.cppuhelper.propertysetmixin.CppSupplier" };
 }
 
 cppu::ImplementationEntry entries[] = {

@@ -64,8 +64,7 @@ OUString SAL_CALL OEvoabResultSet::getImplementationName(  )
 
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aSupported { "com.sun.star.sdbc.ResultSet" };
-    return aSupported;
+    return { "com.sun.star.sdbc.ResultSet" };
 }
 
 sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName )

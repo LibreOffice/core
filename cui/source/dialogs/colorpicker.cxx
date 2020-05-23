@@ -1252,8 +1252,7 @@ Reference< XInterface > ColorPicker_createInstance( Reference< XComponentContext
 
 Sequence< OUString > ColorPicker_getSupportedServiceNames()
 {
-    Sequence< OUString > seq { "com.sun.star.ui.dialogs.ColorPicker" };
-    return seq;
+    return { "com.sun.star.ui.dialogs.ColorPicker" };
 }
 
 static const OUStringLiteral gsColorKey( "Color" );

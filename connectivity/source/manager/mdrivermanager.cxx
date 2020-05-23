@@ -536,8 +536,7 @@ OUString OSDBCDriverManager::getImplementationName_static(  )
 
 Sequence< OUString > OSDBCDriverManager::getSupportedServiceNames_static(  )
 {
-    Sequence< OUString > aSupported { getSingletonName_static() };
-    return aSupported;
+    return { getSingletonName_static() };
 }
 
 

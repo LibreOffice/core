@@ -85,8 +85,7 @@ Sequence< OUString > OEvoabDriver::getSupportedServiceNames_Static(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
-    return aSNS;
+    return Sequence<OUString>{ "com.sun.star.sdbc.Driver" };
 }
 
 OUString SAL_CALL OEvoabDriver::getImplementationName(  )

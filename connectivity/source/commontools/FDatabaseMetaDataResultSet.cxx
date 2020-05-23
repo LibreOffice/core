@@ -840,8 +840,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
     Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  )
     {
-        Sequence<OUString> aSNS { "com.sun.star.sdbc.ResultSet" };
-        return aSNS;
+        return Sequence<OUString>{ "com.sun.star.sdbc.ResultSet" };
     }
 
     OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  )

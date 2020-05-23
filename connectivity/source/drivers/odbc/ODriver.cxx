@@ -66,8 +66,7 @@ OUString ODBCDriver::getImplementationName_Static(  )
 
 Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  )
 {
-    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
-    return aSNS;
+    return { "com.sun.star.sdbc.Driver" };
 }
 
 
