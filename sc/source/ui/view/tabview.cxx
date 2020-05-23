@@ -2669,45 +2669,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     /// 2) if we are approaching current max tiled row, signal a size changed event
     ///    and invalidate the involved area
-
-    if (nEndRow > aViewData.GetMaxTiledRow() - nVisibleRows)
-    {
-        ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
-        Size aOldSize(0, 0);
-        if (pModelObj)
-            aOldSize = pModelObj->getDocumentSize();
-
-        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, long(MAXTILEDROW)));
-
-        Size aNewSize(0, 0);
-        if (pModelObj)
-            aNewSize = pModelObj->getDocumentSize();
-
-        SAL_INFO("sc.lok.header", "Row Header: a new height: " << aNewSize.Height());
-        if (pDocSh)
-        {
-            // New area extended to the bottom of the sheet after last row
-            // excluding overlapping area with aNewColArea
-            tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
-
-            // Only invalidate if spreadsheet extended to the bottom
-            if (aNewRowArea.getHeight())
-            {
-                UpdateSelectionOverlay();
-                SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
-            }
-
-            // Provide size in the payload, so clients don't have to
-            // call lok::Document::getDocumentSize().
-            std::stringstream ss;
-            ss << aNewSize.Width() << ", " << aNewSize.Height();
-            OString sSize = ss.str().c_str();
-            ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
-            SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
-        }
-    }
-
+    lcl_ExtendTiledDimension(/* bColumn */ false, nEndRow, nVisibleRows, *this, aViewData);
 
     /// 3) create string data for rows
 
@@ -2802,46 +2764,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     /// 2) if we are approaching current max tiled column, signal a size changed event
     ///    and invalidate the involved area
-
-    if (nEndCol > aViewData.GetMaxTiledCol() - nVisibleCols)
-    {
-        ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel() ) : nullptr;
-        Size aOldSize(0, 0);
-        if (pModelObj)
-            aOldSize = pModelObj->getDocumentSize();
-
-        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, long(pDoc->MaxCol())));
-
-        Size aNewSize(0, 0);
-        if (pModelObj)
-            aNewSize = pModelObj->getDocumentSize();
-
-        if (pDocSh)
-        {
-            // New area extended to the right of the sheet after last column
-            // including overlapping area with aNewRowArea
-            tools::Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
-
-            // Only invalidate if spreadsheet extended to the bottom
-            if (aNewColArea.getWidth())
-            {
-                UpdateSelectionOverlay();
-                SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
-            }
-
-            if (aOldSize != aNewSize)
-            {
-                // Provide size in the payload, so clients don't have to
-                // call lok::Document::getDocumentSize().
-                std::stringstream ss;
-                ss << aNewSize.Width() << ", " << aNewSize.Height();
-                OString sSize = ss.str().c_str();
-                ScModelObj* pModel = comphelper::getUnoTunnelImplementation<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
-            }
-        }
-    }
+    lcl_ExtendTiledDimension(/* bColumn */ true, nEndCol, nVisibleCols, *this, aViewData);
 
     /// 3) create string data for columns
     OStringBuffer aColGroupsBuffer = "\"columnGroups\": [\n";
