@@ -224,9 +224,7 @@ Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
-
-    return aSNS;
+    return { "com.sun.star.sdbc.Driver" };
 }
 
 OUString SAL_CALL MacabDriver::getImplementationName(  )

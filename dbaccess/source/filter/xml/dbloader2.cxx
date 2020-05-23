@@ -201,8 +201,7 @@ Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
 // ORegistryServiceManager_Static
 Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  )
 {
-    Sequence<OUString> aSNS { "com.sun.star.document.ExtendedTypeDetection" };
-    return aSNS;
+    return { "com.sun.star.document.ExtendedTypeDetection" };
 }
 
 } // namespace dbaxml

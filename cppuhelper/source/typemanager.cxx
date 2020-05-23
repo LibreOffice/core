@@ -1899,8 +1899,7 @@ sal_Bool cppuhelper::TypeManager::supportsService(
 css::uno::Sequence< OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> names { "com.sun.star.reflection.TypeDescriptionManager" }; //TODO
-    return names;
+    return { "com.sun.star.reflection.TypeDescriptionManager" }; //TODO
 }
 
 css::uno::Any cppuhelper::TypeManager::getByHierarchicalName(
