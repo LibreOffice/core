@@ -127,6 +127,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 
     std::unique_ptr<SwFrameControlsManager> m_pFrameControlsManager;
 
+    SwFrame* m_pSavedOutlineFrame = nullptr;
+
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
     inline void     EnterArea();

@@ -336,6 +336,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_USE_HEADERFOOTERMENU:
               aBool.SetValue( pOpt->IsUseHeaderFooterMenu() );
             break;
+            case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
+              aBool.SetValue( pOpt->IsShowOutlineContentVisibilityButton() );
+            break;
         }
 
         if( nWhich )
@@ -581,6 +584,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsUseHeaderFooterMenu();
 
         pOpt->SetUseHeaderFooterMenu( bFlag );
+        break;
+
+    case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowOutlineContentVisibilityButton();
+
+        pOpt->SetShowOutlineContentVisibilityButton( bFlag );
         break;
 
     default:
