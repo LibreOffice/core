@@ -932,7 +932,6 @@ namespace xmloff::token {
         TOKEN( "gcd",                             XML_GCD ),
         TOKEN( "generator",                       XML_GENERATOR ),
         TOKEN( "geq",                             XML_GEQ ),
-        TOKEN( "glow",                            XML_GLOW ),
         TOKEN( "glow-radius",                     XML_GLOW_RADIUS ),
         TOKEN( "glow-color",                      XML_GLOW_COLOR ),
         TOKEN( "glow-transparency",               XML_GLOW_TRANSPARENCY ),

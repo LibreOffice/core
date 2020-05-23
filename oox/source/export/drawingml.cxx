@@ -3756,8 +3756,12 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         if( GetProperty( rXPropSet, "Shadow" ) )
             mAny >>= bHasShadow;
         bool bHasEffects = bHasShadow;
-        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffect"))
-            mAny >>= bHasEffects;
+        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffectRad"))
+        {
+            sal_Int32 rad = 0;
+            mAny >>= rad;
+            bHasEffects = rad > 0;
+        }
         if (!bHasEffects && GetProperty(rXPropSet, "SoftEdgeRad"))
         {
             sal_Int32 rad = 0;
@@ -3867,13 +3871,11 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
 void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 {
-    bool hasGlow = false;
-    rXPropSet->getPropertyValue("GlowEffect") >>= hasGlow;
-    if(!hasGlow)
-        return;
-
     sal_Int32 nRad = 0;
     rXPropSet->getPropertyValue("GlowEffectRad") >>= nRad;
+    if (!nRad)
+        return;
+
     Sequence< PropertyValue > aGlowAttribs(1);
     aGlowAttribs[0].Name = "rad";
     aGlowAttribs[0].Value <<= oox::drawingml::convertHmmToEmu(nRad);

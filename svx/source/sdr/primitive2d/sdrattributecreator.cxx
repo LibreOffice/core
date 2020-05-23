@@ -215,10 +215,9 @@ namespace drawinglayer
 
         attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
         {
-            const bool bGlow(rSet.Get(SDRATTR_GLOW).GetValue());
-            if (!bGlow)
-                return attribute::SdrGlowAttribute();
             sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
+            if (!nRadius)
+                return attribute::SdrGlowAttribute();
             Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
             sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
             if (nTransparency)

@@ -210,7 +210,6 @@
     { OUString("FontWorkShadowTransparence"),XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
 
 #define GLOW_PROPERTIES \
-    { OUString("GlowEffect"),                     SDRATTR_GLOW,             cppu::UnoType<bool>::get(),           0,      0}, \
     { OUString{"GlowEffectRad"},                  SDRATTR_GLOW_RAD,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
     { OUString{"GlowEffectColor"},                SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { OUString{"GlowEffectTransparency"},         SDRATTR_GLOW_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0 },

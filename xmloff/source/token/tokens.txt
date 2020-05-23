@@ -847,7 +847,6 @@ gap-width
 gcd
 generator
 geq
-glow
 glow-radius
 glow-color
 glow-transparency
