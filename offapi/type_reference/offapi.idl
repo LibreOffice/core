@@ -15337,6 +15337,8 @@ module com {
      [property, optional] boolean HideWhitespace;
      [property, optional] boolean ShowInlineTooltips;
      [property, optional] boolean UseHeaderFooterMenu;
+     [property, optional] boolean ShowBookmarks;
+     [property, optional] boolean ShowOutlineContentVisibilityButton;
     };
     published constants WritingMode2 {
      const short BT_LR = 5;

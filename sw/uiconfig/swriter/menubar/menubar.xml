@@ -744,6 +744,7 @@
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FootnoteDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowOutlineContentVisibilityButton"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MailMergeWizard"/>
       <menu:menuitem menu:id=".uno:BibliographyComponent" menu:style="text"/>
