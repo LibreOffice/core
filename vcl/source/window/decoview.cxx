@@ -480,15 +480,7 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
 
         ImplDrawDPILineRect( pDev, aFillRect, &aBlackColor );
 
-        Size aBrdSize( 1, 1 );
-        if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-        {
-            aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), MapMode(MapUnit::Map100thMM) );
-            if ( !aBrdSize.Width() )
-                aBrdSize.setWidth( 1 );
-            if ( !aBrdSize.Height() )
-                aBrdSize.setHeight( 1 );
-        }
+        Size aBrdSize(pDev->GetButtonBorderSize());
 
         pDev->SetLineColor();
         pDev->SetFillColor( aBlackColor );

@@ -946,6 +946,19 @@ void Printer::dispose()
     OutputDevice::dispose();
 }
 
+Size Printer::GetButtonBorderSize()
+{
+    Size aBrdSize(LogicToPixel(Size(20, 20), MapMode(MapUnit::Map100thMM)));
+
+    if (!aBrdSize.Width())
+        aBrdSize.setWidth(1);
+
+    if (!aBrdSize.Height())
+        aBrdSize.setHeight(1);
+
+    return aBrdSize;
+}
+
 sal_uInt32 Printer::GetCapabilities( PrinterCapType nType ) const
 {
     if ( IsDisplayPrinter() )
