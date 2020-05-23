@@ -2210,33 +2210,66 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     return Point( nScrPosX, nScrPosY );
 }
 
-OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY) const
+Point ScViewData::GetPrintTwipsPos(SCCOL nCol, SCROW nRow) const
 {
-    Point aScrPos = GetScrPos( nX, nY, SC_SPLIT_BOTTOMRIGHT, true );
+    // hidden ones are given 0 sizes by these by default.
+    // TODO: rewrite this to loop over spans (matters for jumbosheets).
+    long nPosX = nCol ? pDoc->GetColWidth(0, nCol - 1, nTabNo) : 0;
+    // This is now fast as it loops over spans.
+    long nPosY = nRow ? pDoc->GetRowHeight(0, nRow - 1, nTabNo) : 0;
+    // TODO: adjust for RTL layout case.
 
-    long nSizeXPix;
-    long nSizeYPix;
-    GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
+    return Point(nPosX, nPosY);
+}
 
-    double fPPTX = GetPPTX();
-    double fPPTY = GetPPTY();
+OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned) const
+{
+    const bool bPosSizeInPixels = bPixelAligned;
+    Point aCellPos = bPosSizeInPixels ? GetScrPos( nX, nY, SC_SPLIT_BOTTOMRIGHT, true ) :
+            GetPrintTwipsPos(nX, nY);
 
-    // make it a slim cell cursor, but not empty
-    if (nSizeXPix == 0)
-        nSizeXPix = 1;
-
-    if (nSizeYPix == 0)
-        nSizeYPix = 1;
-
-    long nPosXTw = rtl::math::round(aScrPos.getX() / fPPTX);
-    long nPosYTw = rtl::math::round(aScrPos.getY() / fPPTY);
-    // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
-    long nSizeXTw = rtl::math::round(nSizeXPix / fPPTX) - 1;
-    long nSizeYTw = rtl::math::round(nSizeYPix / fPPTY) - 1;
+    long nSizeX;
+    long nSizeY;
+    if (bPosSizeInPixels)
+        GetMergeSizePixel( nX, nY, nSizeX, nSizeY );
+    else
+        GetMergeSizePrintTwips(nX, nY, nSizeX, nSizeY);
 
     std::stringstream ss;
-    ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
-       << nX << ", " << nY;
+    if (bPosSizeInPixels)
+    {
+        double fPPTX = GetPPTX();
+        double fPPTY = GetPPTY();
+
+        // make it a slim cell cursor, but not empty
+        if (nSizeX == 0)
+            nSizeX = 1;
+
+        if (nSizeY == 0)
+            nSizeY = 1;
+
+        long nPosXTw = rtl::math::round(aCellPos.getX() / fPPTX);
+        long nPosYTw = rtl::math::round(aCellPos.getY() / fPPTY);
+        // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
+        long nSizeXTw = rtl::math::round(nSizeX / fPPTX) - 1;
+        long nSizeYTw = rtl::math::round(nSizeY / fPPTY) - 1;
+
+        ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
+            << nX << ", " << nY;
+    }
+    else
+    {
+        // make it a slim cell cursor, but not empty
+        if (nSizeX == 0)
+            nSizeX = TWIPS_PER_PIXEL;
+        if (nSizeY == 0)
+            nSizeY = TWIPS_PER_PIXEL;
+
+        ss << aCellPos.getX() << ", " << aCellPos.getY()
+            // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
+            << ", " << nSizeX - 1 << ", " << nSizeY - 1 << ", "
+            << nX << ", " << nY;
+    }
 
     return ss.str().c_str();
 }
@@ -2375,6 +2408,22 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         rSizeYPix = ToPixel( pDoc->GetRowHeight( nY, nTabNo ), nPPTY );
         return false;
     }
+}
+
+bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, long& rSizeXTwips, long& rSizeYTwips) const
+{
+    const ScMergeAttr* pMerge = pDoc->GetAttr(nX, nY, nTabNo, ATTR_MERGE);
+    SCCOL nCountX = pMerge->GetColMerge();
+    if (!nCountX)
+        nCountX = 1;
+    rSizeXTwips = pDoc->GetColWidth(nX, nX + nCountX - 1, nTabNo);
+
+    SCROW nCountY = pMerge->GetRowMerge();
+    if (!nCountY)
+        nCountY = 1;
+    rSizeYTwips = pDoc->GetRowHeight(nY, nY + nCountY - 1, nTabNo);
+
+    return (nCountX > 1 || nCountY > 1);
 }
 
 void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
