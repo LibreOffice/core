@@ -81,17 +81,6 @@ using namespace ::com::sun::star::linguistic2;
 
 class SfxStyleSheetPool;
 
-namespace sd {
-
-SearchSelection::SearchSelection(int nPage, const OString& rRectangles)
-    : m_nPage(nPage),
-    m_aRectangles(rRectangles)
-{
-}
-
-} // end of namespace sd
-
-
 class SdOutliner::Implementation
 {
 public:
