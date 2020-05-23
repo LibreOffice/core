@@ -20,10 +20,14 @@ constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
     return (n >= 0) ? (n * 72 + 63) / 127 : (n * 72 - 63) / 127;
 }
 
+constexpr sal_Int64 convertPointToTwip(sal_Int64 nNumber) { return nNumber * 20; }
+
 constexpr sal_Int64 convertPointToMm100(sal_Int64 nNumber)
 {
-    return convertTwipToMm100(nNumber * 20);
+    return convertTwipToMm100(convertPointToTwip(nNumber));
 }
+
+constexpr double convertPointToTwip(double fNumber) { return fNumber * 20.0; }
 
 constexpr double convertPointToMm100(double fNumber) { return fNumber * 35.27777777778; }
 
