@@ -95,6 +95,7 @@ SwElemItem::SwElemItem() :
     m_bDrawing            =
     m_bNotes              = false;
     m_bShowInlineTooltips = true;
+    m_bShowOutlineContentVisibilityButton =
     m_bFieldHiddenText =
     m_bShowHiddenPara  = false;
 }
@@ -111,6 +112,7 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     m_bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
     m_bNotes              = rVOpt.IsPostIts();
     m_bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
+    m_bShowOutlineContentVisibilityButton = rVOpt.IsShowOutlineContentVisibilityButton();
     m_bFieldHiddenText = rVOpt.IsShowHiddenField();
     m_bShowHiddenPara  = rVOpt.IsShowHiddenPara();
 }
@@ -135,6 +137,7 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 m_bDrawing              == rItem.m_bDrawing            &&
                 m_bNotes                == rItem.m_bNotes              &&
                 m_bShowInlineTooltips   == rItem.m_bShowInlineTooltips &&
+                m_bShowOutlineContentVisibilityButton == rItem.m_bShowOutlineContentVisibilityButton &&
                 m_bFieldHiddenText == rItem.m_bFieldHiddenText &&
                 m_bShowHiddenPara  == rItem.m_bShowHiddenPara);
 }
@@ -151,6 +154,7 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetControl    (m_bDrawing           );
     rVOpt.SetPostIts    (m_bNotes             );
     rVOpt.SetShowInlineTooltips( m_bShowInlineTooltips );
+    rVOpt.SetShowOutlineContentVisibilityButton(m_bShowOutlineContentVisibilityButton);
     rVOpt.SetShowHiddenField(m_bFieldHiddenText );
     rVOpt.SetShowHiddenPara(m_bShowHiddenPara );
 }

@@ -284,6 +284,12 @@ published service ViewSettings
      */
     [optional, property] boolean ShowBookmarks;
 
+    /** If this property is `TRUE`, the outline content visibility toggle button is shown.
+
+        @since LibreOffice 7.1
+    */
+    [optional, property] boolean ShowOutlineContentVisibilityButton;
+
 };
 
 }; }; }; };

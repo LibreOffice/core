@@ -970,5 +970,13 @@ interface BaseTextEditView
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 
+    FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+    ]
+
 }
 
