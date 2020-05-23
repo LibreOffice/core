@@ -158,15 +158,11 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     }
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
-    mbScreenComp    = true;
 
     if (meFormat == DeviceFormat::BITMASK)
         SetAntialiasing( AntialiasingFlags::DisableText );
 
-    if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-        mbScreenComp = false;
-    else if ( pOutDev->IsVirtual() )
-        mbScreenComp = static_cast<const VirtualDevice*>(pOutDev)->mbScreenComp;
+    mbScreenComp    = pOutDev->IsScreenComp();
 
     mbDevOutput     = true;
     mxFontCollection = pSVData->maGDIData.mxScreenFontList;
