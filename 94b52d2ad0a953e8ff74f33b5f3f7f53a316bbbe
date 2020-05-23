@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53b6d1f5_54e51558",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-05-23T14:53:59Z",
+      "side": 1,
+      "message": "Better have a relative value here, or better - check that indent is the same with 2nd line?",
+      "revId": "94b52d2ad0a953e8ff74f33b5f3f7f53a316bbbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
