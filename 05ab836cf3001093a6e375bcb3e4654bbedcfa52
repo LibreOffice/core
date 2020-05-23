@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7961777c_12ec5749",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-23T07:44:54Z",
+      "side": 1,
+      "message": "It shouldn\u0027t matter in practice, but this now tries to close hOut and hProcess (which should still be null then, and for which osl_closeFile and osl_freeProcessHandle will happen to do nothing) also when osl_executeProcess_WithRedirectedIO failed.",
+      "revId": "05ab836cf3001093a6e375bcb3e4654bbedcfa52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
