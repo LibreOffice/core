@@ -240,6 +240,7 @@ public:
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
+    virtual Size                GetButtonBorderSize() override;
 
     bool                        IsScreenComp() const override { return false; }
 
