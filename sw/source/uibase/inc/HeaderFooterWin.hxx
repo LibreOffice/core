@@ -68,6 +68,44 @@ private:
     DECL_LINK( FadeHandler, Timer *, void );
 };
 
+class SwOutlineContentVisibilityWin : public SwFrameMenuButtonBase
+{
+    VclBuilder            m_aBuilder;
+    VclPtr<PopupMenu>     m_pPopupMenu;
+    bool                  m_bIsAppearing;
+    int                   m_nFadeRate;
+    int                   m_nDelayAppearing; ///< Before we show the control, let it transparent for a few timer ticks to avoid appearing with every mouse over.
+    Timer                 m_aFadeTimer;
+    bool                  m_bDestroyed;
+
+    size_t m_nOutlinePos;
+
+public:
+    SwOutlineContentVisibilityWin(SwEditWin *pEditWin, const SwFrame *pFrame);
+    virtual ~SwOutlineContentVisibilityWin() override;
+    virtual void dispose() override;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    virtual void Select() override;
+
+    void Set();
+
+    virtual void ShowAll(bool bShow) override;
+    virtual bool Contains(const Point &rDocPt) const override;
+
+    void ExecuteCommand(const OString &rIdent);
+
+    void SetReadonly(bool bReadonly) override;
+
+    void Fade(bool bFadeIn);
+
+private:
+    /// Hide the button (used when the popup menu is closed by clicking outside)
+    DECL_LINK(HideHandler, Menu *, bool);
+    DECL_LINK(FadeHandler, Timer *, void);
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
