@@ -445,7 +445,7 @@ static struct hash* hash_create(unsigned int size)
     struct hash* hash;
 
     assert(size > 0);
-    hash = calloc(1, sizeof(struct hash));
+    hash = (struct hash*)(calloc(1, sizeof(struct hash)));
     if(hash)
     {
         size += (size >> 2) + 1; /* ~ 75% load factor */
@@ -495,7 +495,7 @@ static void hash_resize(struct hash* hash)
     {
         return;
     }
-    array = calloc(hash->size + 1, sizeof(struct hash_elem*));
+    array = (struct hash_elem**)calloc(hash->size + 1, sizeof(struct hash_elem*));
     if(array)
     {
         hash->load_limit = hash->size - (hash->size >> 2);
@@ -555,7 +555,7 @@ static int hash_store(struct hash* hash, const char* key, int key_len)
 
     if(!hash_elem)
     {
-        hash_elem = pool_alloc(hash->elems_pool);
+        hash_elem = (struct hash_elem*)pool_alloc(hash->elems_pool);
         if(hash_elem)
         {
             hash_elem->key = key;
@@ -634,7 +634,7 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
         fd = open(name, FILE_O_RDONLY | FILE_O_BINARY);
         if (!(fd == -1))
         {
-            buffer = malloc((size_t)(*size + 1));
+            buffer = (char*)malloc((size_t)(*size + 1));
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
             if (buffer != NULL)
             {
@@ -1143,7 +1143,7 @@ int main(int argc, char** argv)
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
     work_dir_len = strlen(work_dir);
-    phony_content_buffer = malloc(PHONY_TARGET_BUFFER);
+    phony_content_buffer = (char*)malloc(PHONY_TARGET_BUFFER);
     assert(phony_content_buffer); // Don't handle OOM conditions
     strcpy(phony_content_buffer, work_dir);
     phony_content_buffer[work_dir_len] = '/';
