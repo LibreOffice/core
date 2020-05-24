@@ -197,14 +197,14 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 sal_uInt16 nVal = pItem->GetValue();
                 mnCategorySelected = nVal;
                 mxLbCategory->set_active(nVal);
-                if( nVal < 4 ||  // General, Number, Percent and Currency
-                    nVal == 6 || // scientific also
-                    nVal == 7 )  // fraction
+                if (nVal < 8 &&  // General, Number, Percent, Currency, Time, Scientific, Fraction
+                    nVal != 4 )  // not Date
                 {
                     bool bIsScientific ( nVal == 6 );// For scientific, Thousand separator is replaced by Engineering notation
                     bool bIsFraction ( nVal == 7 );  // For fraction, Decimal places is replaced by Denominator places
-                    mxBtnThousand->set_visible(!bIsScientific);
-                    mxBtnThousand->set_sensitive(!bIsScientific);
+                    bool bIsTime ( nVal == 5 );  // For Time, Decimal places and NegRed available
+                    mxBtnThousand->set_visible( !bIsScientific );
+                    mxBtnThousand->set_sensitive( !bIsScientific && !bIsTime );
                     mxBtnThousand->set_active(false);
                     mxBtnEngineering->set_visible(bIsScientific);
                     mxBtnEngineering->set_sensitive(bIsScientific);
@@ -218,8 +218,8 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mxEdDecimals->set_visible(!bIsFraction);
                     mxFtDecimals->set_sensitive(!bIsFraction);
                     mxEdDecimals->set_sensitive(!bIsFraction);
-                    mxFtLeadZeroes->set_sensitive(true);
-                    mxEdLeadZeroes->set_sensitive(true);
+                    mxFtLeadZeroes->set_sensitive( !bIsTime );
+                    mxEdLeadZeroes->set_sensitive( !bIsTime );
                 }
                 else
                     DisableControls();
