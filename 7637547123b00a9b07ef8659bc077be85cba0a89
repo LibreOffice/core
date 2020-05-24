@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e462a721_47d9c179",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-24T08:07:41Z",
+      "side": 0,
+      "message": "This is the variable called \"g\" (from \"quard\") that I was talking about.\n\nIn https://gerrit.libreoffice.org/c/core/+/94658, I wrote initially:\n\n\u003e Maybe use ... on line 141?\n\nThe line 141 was referring to the original file, where no additional #include was present - so you may see that it\u0027s the line with \"oslProcessInfo aInfo;\".\n\nLater I added:\n\n\u003e The code would look like\n\u003e\n\u003e        if( osl_Process_E_None \u003d\u003d rc )\n\u003e        {\n\u003e            // Create a guard to ensure correct cleanup in its dtor in any case\n\u003e            comphelper::ScopeGuard g([hOut, hProcess] () {\n\u003e                osl_closeFile(hOut);\n\u003e                osl_freeProcessHandle(hProcess);\n\u003e            });\n\u003e            oslProcessInfo aInfo;\n\n... so that the creation was happening inside the if block. So I honestly don\u0027t understand where I was unclear.",
+      "range": {
+        "startLine": 141,
+        "startChar": 31,
+        "endLine": 141,
+        "endChar": 32
+      },
+      "revId": "7637547123b00a9b07ef8659bc077be85cba0a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
