@@ -149,6 +149,8 @@ namespace vcl
         void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
         void            ShowRoadmap(bool bShow);
 
+        FactoryFunction GetUITestFactory() const override;
+
     protected:
 
         /// to override to create new pages
