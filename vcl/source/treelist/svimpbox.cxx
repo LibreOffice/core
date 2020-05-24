@@ -598,8 +598,6 @@ void SvImpLBox::RecalcFocusRect()
 
 
 //  Sets cursor. When using SingleSelection, the selection is adjusted.
-
-
 void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
 {
     SvViewDataEntry* pViewDataNewCur = nullptr;
@@ -2023,7 +2021,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
 
-    if( (rMEvt.GetClicks() % 2) == 0 )
+    if( (rMEvt.GetClicks() % 2) == 0)
     {
         m_nFlags &= ~LBoxFlags::StartEditTimer;
         m_pView->pHdlEntry = pEntry;
@@ -2087,6 +2085,9 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
         m_aEditClickPos = rMEvt.GetPosPixel();
         m_aEditIdle.Start();
     }
+
+    if (m_pView->mbActivateOnSingleClick)
+        m_pView->DoubleClickHdl();
 }
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
@@ -2426,15 +2427,9 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RETURN:
-            if( m_bSubLstOpRet && IsExpandable() )
-            {
-                if( m_pView->IsExpanded( m_pCursor ) )
-                    m_pView->Collapse( m_pCursor );
-                else
-                    m_pView->Expand( m_pCursor );
-            }
-            else
-                bKeyUsed = false;
+            if (m_pView->mbActivateOnSingleClick)
+                m_pView->DoubleClickHdl();
+            bKeyUsed = false;
             break;
 
         case KEY_F2:
