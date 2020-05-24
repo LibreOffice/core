@@ -126,6 +126,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/exponentialsmoothingdialog \
 	sc/uiconfig/scalc/ui/filldlg \
+	sc/uiconfig/scalc/ui/filterlist \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/formulacalculationoptions \
