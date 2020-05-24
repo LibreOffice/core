@@ -171,6 +171,55 @@
 		BE493249247820D50013BCD6 /* certificateextension_certextn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = certificateextension_certextn.cxx; path = ../xmlsecurity/source/xmlsec/certificateextension_certextn.cxx; sourceTree = "<group>"; };
 		BE49324A247820D50013BCD6 /* xmlstreamio.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlstreamio.cxx; path = ../xmlsecurity/source/xmlsec/xmlstreamio.cxx; sourceTree = "<group>"; };
 		BE49324B247820D50013BCD6 /* certificateextension_xmlsecimpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = certificateextension_xmlsecimpl.hxx; path = ../xmlsecurity/source/xmlsec/certificateextension_xmlsecimpl.hxx; sourceTree = "<group>"; };
+		BE49324E2478ECB10013BCD6 /* helpinterceptor.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = helpinterceptor.hxx; path = ../sfx2/source/appl/helpinterceptor.hxx; sourceTree = "<group>"; };
+		BE49324F2478ECB10013BCD6 /* fwkhelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fwkhelper.cxx; path = ../sfx2/source/appl/fwkhelper.cxx; sourceTree = "<group>"; };
+		BE4932502478ECB10013BCD6 /* appbaslib.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appbaslib.cxx; path = ../sfx2/source/appl/appbaslib.cxx; sourceTree = "<group>"; };
+		BE4932512478ECB10013BCD6 /* lnkbase2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lnkbase2.cxx; path = ../sfx2/source/appl/lnkbase2.cxx; sourceTree = "<group>"; };
+		BE4932522478ECB10013BCD6 /* shutdownicon.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = shutdownicon.hxx; path = ../sfx2/source/appl/shutdownicon.hxx; sourceTree = "<group>"; };
+		BE4932532478ECB10013BCD6 /* appmain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appmain.cxx; path = ../sfx2/source/appl/appmain.cxx; sourceTree = "<group>"; };
+		BE4932542478ECB10013BCD6 /* childwinimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = childwinimpl.cxx; path = ../sfx2/source/appl/childwinimpl.cxx; sourceTree = "<group>"; };
+		BE4932552478ECB10013BCD6 /* childwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = childwin.cxx; path = ../sfx2/source/appl/childwin.cxx; sourceTree = "<group>"; };
+		BE4932562478ECB20013BCD6 /* appreg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appreg.cxx; path = ../sfx2/source/appl/appreg.cxx; sourceTree = "<group>"; };
+		BE4932572478ECB20013BCD6 /* getbasctlfunction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = getbasctlfunction.cxx; path = ../sfx2/source/appl/getbasctlfunction.cxx; sourceTree = "<group>"; };
+		BE4932582478ECB20013BCD6 /* module.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = module.cxx; path = ../sfx2/source/appl/module.cxx; sourceTree = "<group>"; };
+		BE4932592478ECB20013BCD6 /* helpdispatch.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = helpdispatch.hxx; path = ../sfx2/source/appl/helpdispatch.hxx; sourceTree = "<group>"; };
+		BE49325A2478ECB20013BCD6 /* appopen.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appopen.cxx; path = ../sfx2/source/appl/appopen.cxx; sourceTree = "<group>"; };
+		BE49325B2478ECB20013BCD6 /* shellimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shellimpl.cxx; path = ../sfx2/source/appl/shellimpl.cxx; sourceTree = "<group>"; };
+		BE49325C2478ECB20013BCD6 /* impldde.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impldde.cxx; path = ../sfx2/source/appl/impldde.cxx; sourceTree = "<group>"; };
+		BE49325D2478ECB20013BCD6 /* helpdispatch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpdispatch.cxx; path = ../sfx2/source/appl/helpdispatch.cxx; sourceTree = "<group>"; };
+		BE49325E2478ECB20013BCD6 /* macroloader.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = macroloader.cxx; path = ../sfx2/source/appl/macroloader.cxx; sourceTree = "<group>"; };
+		BE49325F2478ECB20013BCD6 /* helpinterceptor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpinterceptor.cxx; path = ../sfx2/source/appl/helpinterceptor.cxx; sourceTree = "<group>"; };
+		BE4932602478ECB20013BCD6 /* impldde.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = impldde.hxx; path = ../sfx2/source/appl/impldde.hxx; sourceTree = "<group>"; };
+		BE4932612478ECB20013BCD6 /* appuno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appuno.cxx; path = ../sfx2/source/appl/appuno.cxx; sourceTree = "<group>"; };
+		BE4932622478ECB20013BCD6 /* shutdowniconaqua.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = shutdowniconaqua.mm; path = ../sfx2/source/appl/shutdowniconaqua.mm; sourceTree = "<group>"; };
+		BE4932632478ECB20013BCD6 /* fileobj.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = fileobj.hxx; path = ../sfx2/source/appl/fileobj.hxx; sourceTree = "<group>"; };
+		BE4932642478ECB20013BCD6 /* appbas.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appbas.cxx; path = ../sfx2/source/appl/appbas.cxx; sourceTree = "<group>"; };
+		BE4932652478ECB20013BCD6 /* xpackcreator.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xpackcreator.cxx; path = ../sfx2/source/appl/xpackcreator.cxx; sourceTree = "<group>"; };
+		BE4932662478ECB20013BCD6 /* appdde.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appdde.cxx; path = ../sfx2/source/appl/appdde.cxx; sourceTree = "<group>"; };
+		BE4932672478ECB20013BCD6 /* newhelp.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = newhelp.hxx; path = ../sfx2/source/appl/newhelp.hxx; sourceTree = "<group>"; };
+		BE4932682478ECB20013BCD6 /* sfxhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sfxhelp.cxx; path = ../sfx2/source/appl/sfxhelp.cxx; sourceTree = "<group>"; };
+		BE4932692478ECB20013BCD6 /* linkmgr2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkmgr2.cxx; path = ../sfx2/source/appl/linkmgr2.cxx; sourceTree = "<group>"; };
+		BE49326A2478ECB20013BCD6 /* appmisc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appmisc.cxx; path = ../sfx2/source/appl/appmisc.cxx; sourceTree = "<group>"; };
+		BE49326B2478ECB20013BCD6 /* linksrc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linksrc.cxx; path = ../sfx2/source/appl/linksrc.cxx; sourceTree = "<group>"; };
+		BE49326C2478ECB20013BCD6 /* app.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = app.cxx; path = ../sfx2/source/appl/app.cxx; sourceTree = "<group>"; };
+		BE49326D2478ECB20013BCD6 /* fileobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fileobj.cxx; path = ../sfx2/source/appl/fileobj.cxx; sourceTree = "<group>"; };
+		BE49326E2478ECB20013BCD6 /* appserv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appserv.cxx; path = ../sfx2/source/appl/appserv.cxx; sourceTree = "<group>"; };
+		BE49326F2478ECB20013BCD6 /* flatpak.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = flatpak.cxx; path = ../sfx2/source/appl/flatpak.cxx; sourceTree = "<group>"; };
+		BE4932702478ECB30013BCD6 /* shutdowniconw32.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shutdowniconw32.cxx; path = ../sfx2/source/appl/shutdowniconw32.cxx; sourceTree = "<group>"; };
+		BE4932712478ECB30013BCD6 /* appinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appinit.cxx; path = ../sfx2/source/appl/appinit.cxx; sourceTree = "<group>"; };
+		BE4932722478ECB30013BCD6 /* workwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = workwin.cxx; path = ../sfx2/source/appl/workwin.cxx; sourceTree = "<group>"; };
+		BE4932732478ECB30013BCD6 /* appcfg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appcfg.cxx; path = ../sfx2/source/appl/appcfg.cxx; sourceTree = "<group>"; };
+		BE4932742478ECB30013BCD6 /* appdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appdata.cxx; path = ../sfx2/source/appl/appdata.cxx; sourceTree = "<group>"; };
+		BE4932752478ECB30013BCD6 /* newhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = newhelp.cxx; path = ../sfx2/source/appl/newhelp.cxx; sourceTree = "<group>"; };
+		BE4932762478ECB30013BCD6 /* preventduplicateinteraction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = preventduplicateinteraction.cxx; path = ../sfx2/source/appl/preventduplicateinteraction.cxx; sourceTree = "<group>"; };
+		BE4932772478ECB30013BCD6 /* sfxpicklist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sfxpicklist.cxx; path = ../sfx2/source/appl/sfxpicklist.cxx; sourceTree = "<group>"; };
+		BE4932782478ECB30013BCD6 /* appdispatchprovider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appdispatchprovider.cxx; path = ../sfx2/source/appl/appdispatchprovider.cxx; sourceTree = "<group>"; };
+		BE4932792478ECB30013BCD6 /* shutdownicon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shutdownicon.cxx; path = ../sfx2/source/appl/shutdownicon.cxx; sourceTree = "<group>"; };
+		BE49327A2478ECB30013BCD6 /* appchild.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appchild.cxx; path = ../sfx2/source/appl/appchild.cxx; sourceTree = "<group>"; };
+		BE49327B2478ECB30013BCD6 /* appquit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = appquit.cxx; path = ../sfx2/source/appl/appquit.cxx; sourceTree = "<group>"; };
+		BE49327C2478ECB30013BCD6 /* opengrf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = opengrf.cxx; path = ../sfx2/source/appl/opengrf.cxx; sourceTree = "<group>"; };
+		BE49327D2478ECB30013BCD6 /* openuriexternally.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = openuriexternally.cxx; path = ../sfx2/source/appl/openuriexternally.cxx; sourceTree = "<group>"; };
+		BE49327E2478ECB30013BCD6 /* getbasctlfunction.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = getbasctlfunction.hxx; path = ../sfx2/source/appl/getbasctlfunction.hxx; sourceTree = "<group>"; };
 		BE60B5771DB7D80200D3E1E4 /* a11yactionwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yactionwrapper.mm; path = ../vcl/osx/a11yactionwrapper.mm; sourceTree = "<group>"; };
 		BE60B5781DB7D80200D3E1E4 /* a11ycomponentwrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11ycomponentwrapper.mm; path = ../vcl/osx/a11ycomponentwrapper.mm; sourceTree = "<group>"; };
 		BE60B5791DB7D80200D3E1E4 /* a11yfactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = a11yfactory.mm; path = ../vcl/osx/a11yfactory.mm; sourceTree = "<group>"; };
@@ -860,6 +909,70 @@
 			name = xmlsec;
 			sourceTree = "<group>";
 		};
+		BE49324C2478EC840013BCD6 /* sfx2 */ = {
+			isa = PBXGroup;
+			children = (
+				BE49324D2478EC950013BCD6 /* appl */,
+			);
+			name = sfx2;
+			sourceTree = "<group>";
+		};
+		BE49324D2478EC950013BCD6 /* appl */ = {
+			isa = PBXGroup;
+			children = (
+				BE49326C2478ECB20013BCD6 /* app.cxx */,
+				BE4932642478ECB20013BCD6 /* appbas.cxx */,
+				BE4932502478ECB10013BCD6 /* appbaslib.cxx */,
+				BE4932732478ECB30013BCD6 /* appcfg.cxx */,
+				BE49327A2478ECB30013BCD6 /* appchild.cxx */,
+				BE4932742478ECB30013BCD6 /* appdata.cxx */,
+				BE4932662478ECB20013BCD6 /* appdde.cxx */,
+				BE4932782478ECB30013BCD6 /* appdispatchprovider.cxx */,
+				BE4932712478ECB30013BCD6 /* appinit.cxx */,
+				BE4932532478ECB10013BCD6 /* appmain.cxx */,
+				BE49326A2478ECB20013BCD6 /* appmisc.cxx */,
+				BE49325A2478ECB20013BCD6 /* appopen.cxx */,
+				BE49327B2478ECB30013BCD6 /* appquit.cxx */,
+				BE4932562478ECB20013BCD6 /* appreg.cxx */,
+				BE49326E2478ECB20013BCD6 /* appserv.cxx */,
+				BE4932612478ECB20013BCD6 /* appuno.cxx */,
+				BE4932552478ECB10013BCD6 /* childwin.cxx */,
+				BE4932542478ECB10013BCD6 /* childwinimpl.cxx */,
+				BE49326D2478ECB20013BCD6 /* fileobj.cxx */,
+				BE4932632478ECB20013BCD6 /* fileobj.hxx */,
+				BE49326F2478ECB20013BCD6 /* flatpak.cxx */,
+				BE49324F2478ECB10013BCD6 /* fwkhelper.cxx */,
+				BE4932572478ECB20013BCD6 /* getbasctlfunction.cxx */,
+				BE49327E2478ECB30013BCD6 /* getbasctlfunction.hxx */,
+				BE49325D2478ECB20013BCD6 /* helpdispatch.cxx */,
+				BE4932592478ECB20013BCD6 /* helpdispatch.hxx */,
+				BE49325F2478ECB20013BCD6 /* helpinterceptor.cxx */,
+				BE49324E2478ECB10013BCD6 /* helpinterceptor.hxx */,
+				BE49325C2478ECB20013BCD6 /* impldde.cxx */,
+				BE4932602478ECB20013BCD6 /* impldde.hxx */,
+				BE4932692478ECB20013BCD6 /* linkmgr2.cxx */,
+				BE49326B2478ECB20013BCD6 /* linksrc.cxx */,
+				BE4932512478ECB10013BCD6 /* lnkbase2.cxx */,
+				BE49325E2478ECB20013BCD6 /* macroloader.cxx */,
+				BE4932582478ECB20013BCD6 /* module.cxx */,
+				BE4932752478ECB30013BCD6 /* newhelp.cxx */,
+				BE4932672478ECB20013BCD6 /* newhelp.hxx */,
+				BE49327C2478ECB30013BCD6 /* opengrf.cxx */,
+				BE49327D2478ECB30013BCD6 /* openuriexternally.cxx */,
+				BE4932762478ECB30013BCD6 /* preventduplicateinteraction.cxx */,
+				BE4932682478ECB20013BCD6 /* sfxhelp.cxx */,
+				BE4932772478ECB30013BCD6 /* sfxpicklist.cxx */,
+				BE49325B2478ECB20013BCD6 /* shellimpl.cxx */,
+				BE4932792478ECB30013BCD6 /* shutdownicon.cxx */,
+				BE4932522478ECB10013BCD6 /* shutdownicon.hxx */,
+				BE4932622478ECB20013BCD6 /* shutdowniconaqua.mm */,
+				BE4932702478ECB30013BCD6 /* shutdowniconw32.cxx */,
+				BE4932722478ECB30013BCD6 /* workwin.cxx */,
+				BE4932652478ECB20013BCD6 /* xpackcreator.cxx */,
+			);
+			name = appl;
+			sourceTree = "<group>";
+		};
 		BE60B5761DB7D76C00D3E1E4 /* osx */ = {
 			isa = PBXGroup;
 			children = (
@@ -1399,6 +1512,7 @@
 				BEBF3E2A2465886A00415E87 /* sal */,
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
+				BE49324C2478EC840013BCD6 /* sfx2 */,
 				BEBF3E662465907000415E87 /* sw */,
 				BEBF3E8D246AD70C00415E87 /* ucb */,
 				BEDCC8F02460807C00FB02BD /* unotools */,
