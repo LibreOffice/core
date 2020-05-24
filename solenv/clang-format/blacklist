@@ -9252,7 +9252,6 @@ sc/inc/dptabres.hxx
 sc/inc/dptabsrc.hxx
 sc/inc/dputil.hxx
 sc/inc/dragdata.hxx
-sc/inc/drawpage.hxx
 sc/inc/drdefuno.hxx
 sc/inc/drwlayer.hxx
 sc/inc/editdataarray.hxx
@@ -9282,7 +9281,6 @@ sc/inc/funcdesc.hxx
 sc/inc/funcuno.hxx
 sc/inc/generalfunction.hxx
 sc/inc/global.hxx
-sc/inc/globalnames.hxx
 sc/inc/grouparealistener.hxx
 sc/inc/helpids.h
 sc/inc/hints.hxx
@@ -9337,7 +9335,6 @@ sc/inc/refhint.hxx
 sc/inc/refreshtimer.hxx
 sc/inc/refreshtimerprotector.hxx
 sc/inc/reftokenhelper.hxx
-sc/inc/refupdatecontext.hxx
 sc/inc/reordermap.hxx
 sc/inc/rowheightcontext.hxx
 sc/inc/scabstdlg.hxx
@@ -9358,7 +9355,6 @@ sc/inc/sheetdata.hxx
 sc/inc/sheetevents.hxx
 sc/inc/shellids.hxx
 sc/inc/simpleformulacalc.hxx
-sc/inc/simplerangelist.hxx
 sc/inc/sortparam.hxx
 sc/inc/spellcheckcontext.hxx
 sc/inc/srchuno.hxx
@@ -9383,7 +9379,6 @@ sc/inc/tokenstringcontext.hxx
 sc/inc/tokenuno.hxx
 sc/inc/typedstrdata.hxx
 sc/inc/types.hxx
-sc/inc/undorangename.hxx
 sc/inc/unitconv.hxx
 sc/inc/unonames.hxx
 sc/inc/unoreflist.hxx
@@ -9394,7 +9389,6 @@ sc/inc/validat.hxx
 sc/inc/viewopti.hxx
 sc/inc/viewuno.hxx
 sc/inc/waitoff.hxx
-sc/inc/warnpassword.hxx
 sc/inc/xmlwrap.hxx
 sc/inc/zforauto.hxx
 sc/qa/extras/check_data_pilot_field.cxx
@@ -9406,7 +9400,6 @@ sc/qa/extras/new_cond_format.cxx
 sc/qa/extras/recordchanges-test.cxx
 sc/qa/extras/regression-test.cxx
 sc/qa/extras/scannotationsobj.cxx
-sc/qa/extras/scarealinkobj.cxx
 sc/qa/extras/sccellcursorobj.cxx
 sc/qa/extras/sccellrangesobj.cxx
 sc/qa/extras/scdatabaserangeobj.cxx
@@ -9416,11 +9409,9 @@ sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/scoutlineobj.cxx
 sc/qa/extras/scsubtotalfieldobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
-sc/qa/extras/sctabviewobj.cxx
 sc/qa/perf/scperfobj.cxx
 sc/qa/unit/bugfix-test.cxx
 sc/qa/unit/copy_paste_test.cxx
-sc/qa/unit/datacache.cxx
 sc/qa/unit/dataproviders_test.cxx
 sc/qa/unit/datatransformation_test.cxx
 sc/qa/unit/filters-test.cxx
@@ -9448,7 +9439,6 @@ sc/qa/unit/helper/xpath.hxx
 sc/qa/unit/mark_test.cxx
 sc/qa/unit/opencl-test.cxx
 sc/qa/unit/parallelism.cxx
-sc/qa/unit/pivottable_filters_test.cxx
 sc/qa/unit/range.cxx
 sc/qa/unit/rangelst_test.cxx
 sc/qa/unit/screenshots/screenshots.cxx
@@ -9457,7 +9447,6 @@ sc/qa/unit/subsequent_filters-test.cxx
 sc/qa/unit/test_ScChartListenerCollection.cxx
 sc/qa/unit/tiledrendering/tiledrendering.cxx
 sc/qa/unit/ucalc.cxx
-sc/qa/unit/ucalc.hxx
 sc/qa/unit/ucalc_column.cxx
 sc/qa/unit/ucalc_condformat.cxx
 sc/qa/unit/ucalc_formula.cxx
@@ -9824,7 +9813,6 @@ sc/source/filter/inc/numberformatsbuffer.hxx
 sc/source/filter/inc/ooxformulaparser.hxx
 sc/source/filter/inc/op.h
 sc/source/filter/inc/optab.h
-sc/source/filter/inc/orcusfiltersimpl.hxx
 sc/source/filter/inc/orcusinterface.hxx
 sc/source/filter/inc/otlnbuff.hxx
 sc/source/filter/inc/pagesettings.hxx
@@ -9842,7 +9830,6 @@ sc/source/filter/inc/richstring.hxx
 sc/source/filter/inc/richstringcontext.hxx
 sc/source/filter/inc/root.hxx
 sc/source/filter/inc/rtfexp.hxx
-sc/source/filter/inc/rtfimp.hxx
 sc/source/filter/inc/rtfparse.hxx
 sc/source/filter/inc/scenariobuffer.hxx
 sc/source/filter/inc/scenariocontext.hxx
@@ -9994,7 +9981,6 @@ sc/source/filter/oox/worksheethelper.cxx
 sc/source/filter/oox/worksheetsettings.cxx
 sc/source/filter/orcus/filterdetect.cxx
 sc/source/filter/orcus/interface.cxx
-sc/source/filter/orcus/orcusfiltersimpl.cxx
 sc/source/filter/orcus/xmlcontext.cxx
 sc/source/filter/qpro/qpro.cxx
 sc/source/filter/qpro/qproform.cxx
@@ -10168,7 +10154,6 @@ sc/source/ui/app/scdll.cxx
 sc/source/ui/app/scmod.cxx
 sc/source/ui/app/seltrans.cxx
 sc/source/ui/app/transobj.cxx
-sc/source/ui/app/typemap.cxx
 sc/source/ui/app/uiitems.cxx
 sc/source/ui/attrdlg/attrdlg.cxx
 sc/source/ui/attrdlg/scabstdlg.cxx
@@ -10275,7 +10260,6 @@ sc/source/ui/drawfunc/fupoor.cxx
 sc/source/ui/drawfunc/fusel.cxx
 sc/source/ui/drawfunc/fusel2.cxx
 sc/source/ui/drawfunc/futext.cxx
-sc/source/ui/drawfunc/futext2.cxx
 sc/source/ui/drawfunc/futext3.cxx
 sc/source/ui/drawfunc/graphsh.cxx
 sc/source/ui/drawfunc/mediash.cxx
@@ -10314,9 +10298,7 @@ sc/source/ui/inc/IAnyRefDialog.hxx
 sc/source/ui/inc/MatrixComparisonGenerator.hxx
 sc/source/ui/inc/MovingAverageDialog.hxx
 sc/source/ui/inc/PivotLayoutDialog.hxx
-sc/source/ui/inc/PivotLayoutTreeList.hxx
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx
-sc/source/ui/inc/PivotLayoutTreeListData.hxx
 sc/source/ui/inc/PivotLayoutTreeListLabel.hxx
 sc/source/ui/inc/RandomNumberGeneratorDialog.hxx
 sc/source/ui/inc/RegressionDialog.hxx
@@ -10332,7 +10314,6 @@ sc/source/ui/inc/areasave.hxx
 sc/source/ui/inc/areasdlg.hxx
 sc/source/ui/inc/asciiopt.hxx
 sc/source/ui/inc/attrdlg.hxx
-sc/source/ui/inc/auditsh.hxx
 sc/source/ui/inc/autofmt.hxx
 sc/source/ui/inc/autostyl.hxx
 sc/source/ui/inc/cbutton.hxx
@@ -10342,7 +10323,6 @@ sc/source/ui/inc/chartsh.hxx
 sc/source/ui/inc/checklistmenu.hxx
 sc/source/ui/inc/client.hxx
 sc/source/ui/inc/cliputil.hxx
-sc/source/ui/inc/colorformat.hxx
 sc/source/ui/inc/colrowba.hxx
 sc/source/ui/inc/condformatdlg.hxx
 sc/source/ui/inc/condformatdlgentry.hxx
@@ -10353,22 +10333,18 @@ sc/source/ui/inc/condformatuno.hxx
 sc/source/ui/inc/conflictsdlg.hxx
 sc/source/ui/inc/consdlg.hxx
 sc/source/ui/inc/content.hxx
-sc/source/ui/inc/corodlg.hxx
-sc/source/ui/inc/crdlg.hxx
 sc/source/ui/inc/crnrdlg.hxx
 sc/source/ui/inc/csvcontrol.hxx
 sc/source/ui/inc/csvgrid.hxx
 sc/source/ui/inc/csvruler.hxx
 sc/source/ui/inc/csvsplits.hxx
 sc/source/ui/inc/csvtablebox.hxx
-sc/source/ui/inc/dapidata.hxx
 sc/source/ui/inc/dapitype.hxx
 sc/source/ui/inc/datafdlg.hxx
 sc/source/ui/inc/dataprovider.hxx
 sc/source/ui/inc/dataproviderdlg.hxx
 sc/source/ui/inc/datastream.hxx
 sc/source/ui/inc/datastreamdlg.hxx
-sc/source/ui/inc/datatableview.hxx
 sc/source/ui/inc/datatransformation.hxx
 sc/source/ui/inc/dbdocfun.hxx
 sc/source/ui/inc/dbfunc.hxx
@@ -10382,12 +10358,10 @@ sc/source/ui/inc/dpgroupdlg.hxx
 sc/source/ui/inc/drawsh.hxx
 sc/source/ui/inc/drawutil.hxx
 sc/source/ui/inc/drawview.hxx
-sc/source/ui/inc/drformsh.hxx
 sc/source/ui/inc/drtxtob.hxx
 sc/source/ui/inc/drwtrans.hxx
 sc/source/ui/inc/dwfunctr.hxx
 sc/source/ui/inc/editable.hxx
-sc/source/ui/inc/editfield.hxx
 sc/source/ui/inc/editsh.hxx
 sc/source/ui/inc/filldlg.hxx
 sc/source/ui/inc/filtdlg.hxx
@@ -10420,24 +10394,18 @@ sc/source/ui/inc/inputwin.hxx
 sc/source/ui/inc/inscodlg.hxx
 sc/source/ui/inc/instbdlg.hxx
 sc/source/ui/inc/invmerge.hxx
-sc/source/ui/inc/lbseldlg.hxx
 sc/source/ui/inc/linkarea.hxx
 sc/source/ui/inc/lnktrans.hxx
-sc/source/ui/inc/mediash.hxx
-sc/source/ui/inc/mergecellsdialog.hxx
 sc/source/ui/inc/msgpool.hxx
 sc/source/ui/inc/mtrindlg.hxx
 sc/source/ui/inc/mvtabdlg.hxx
-sc/source/ui/inc/namecrea.hxx
 sc/source/ui/inc/namedefdlg.hxx
 sc/source/ui/inc/namedlg.hxx
 sc/source/ui/inc/namemgrtable.hxx
-sc/source/ui/inc/namepast.hxx
 sc/source/ui/inc/navcitem.hxx
 sc/source/ui/inc/navipi.hxx
 sc/source/ui/inc/navsett.hxx
 sc/source/ui/inc/notemark.hxx
-sc/source/ui/inc/oleobjsh.hxx
 sc/source/ui/inc/olinefun.hxx
 sc/source/ui/inc/olinewin.hxx
 sc/source/ui/inc/opredlin.hxx
@@ -10447,8 +10415,6 @@ sc/source/ui/inc/overlayobject.hxx
 sc/source/ui/inc/pagedata.hxx
 sc/source/ui/inc/pfiltdlg.hxx
 sc/source/ui/inc/pfuncache.hxx
-sc/source/ui/inc/pgbrksh.hxx
-sc/source/ui/inc/pivotsh.hxx
 sc/source/ui/inc/pntlock.hxx
 sc/source/ui/inc/preview.hxx
 sc/source/ui/inc/prevloc.hxx
@@ -10486,7 +10452,6 @@ sc/source/ui/inc/spelleng.hxx
 sc/source/ui/inc/spellparam.hxx
 sc/source/ui/inc/strindlg.hxx
 sc/source/ui/inc/styledlg.hxx
-sc/source/ui/inc/subtdlg.hxx
 sc/source/ui/inc/tabbgcolordlg.hxx
 sc/source/ui/inc/tabcont.hxx
 sc/source/ui/inc/tabopdlg.hxx
@@ -10528,8 +10493,6 @@ sc/source/ui/inc/validate.hxx
 sc/source/ui/inc/viewdata.hxx
 sc/source/ui/inc/viewfunc.hxx
 sc/source/ui/inc/viewutil.hxx
-sc/source/ui/inc/warnbox.hxx
-sc/source/ui/inc/xmlsourcedlg.hxx
 sc/source/ui/miscdlgs/acredlin.cxx
 sc/source/ui/miscdlgs/anyrefdg.cxx
 sc/source/ui/miscdlgs/autofmt.cxx
@@ -10579,7 +10542,6 @@ sc/source/ui/navipi/navcitem.cxx
 sc/source/ui/navipi/navipi.cxx
 sc/source/ui/navipi/scenwnd.cxx
 sc/source/ui/optdlg/calcoptionsdlg.cxx
-sc/source/ui/optdlg/calcoptionsdlg.hxx
 sc/source/ui/optdlg/opredlin.cxx
 sc/source/ui/optdlg/tpcalc.cxx
 sc/source/ui/optdlg/tpcompatibility.cxx
@@ -10599,9 +10561,7 @@ sc/source/ui/sidebar/AlignmentPropertyPanel.hxx
 sc/source/ui/sidebar/CellAppearancePropertyPanel.cxx
 sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx
 sc/source/ui/sidebar/CellBorderStyleControl.cxx
-sc/source/ui/sidebar/CellBorderStyleControl.hxx
 sc/source/ui/sidebar/CellLineStyleControl.cxx
-sc/source/ui/sidebar/CellLineStyleControl.hxx
 sc/source/ui/sidebar/CellLineStyleValueSet.cxx
 sc/source/ui/sidebar/CellLineStyleValueSet.hxx
 sc/source/ui/sidebar/NumberFormatControl.cxx

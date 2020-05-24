@@ -27,6 +27,7 @@ class FormulaGrammarSwitch
 {
     ScDocument* mpDoc;
     formula::FormulaGrammar::Grammar meOldGrammar;
+
 public:
     FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar);
     ~FormulaGrammarSwitch();
@@ -43,15 +44,21 @@ public:
     };
 
     static ScDocShell* findLoadedDocShellByName(const OUString& rName);
-    static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p, const RangeNameDef* pEnd);
+    static bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
+                                 const RangeNameDef* pEnd);
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void clearSheet(ScDocument* pDoc, SCTAB nTab);
-    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
+    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
+                                bool bCreateUndo);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
-    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
-    static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
-    static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc);
+    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                              ScDocument* pClipDoc);
+    static void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
+                                     ScDocument* pClipDoc,
+                                     InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
+    static ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
+                                        ScDocumentUniquePtr pUndoDoc);
 
     /**
      * Enable or disable expand reference options which controls how
@@ -61,18 +68,18 @@ public:
 
     static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 
-    void checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal );
+    void checkPrecisionAsShown(OUString& rCode, double fValue, double fExpectedRoundVal);
 
-    static ScRange insertRangeData(
-        ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData );
+    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
+                                   const std::vector<std::vector<const char*>>& rData);
 
-    template<size_t Size>
-    static ScRange insertRangeData(
-        ScDocument* pDoc, const ScAddress& rPos, const char* aData[][Size], size_t nRowCount )
+    template <size_t Size>
+    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
+                                   const char* aData[][Size], size_t nRowCount)
     {
         ScRange aRange(rPos);
-        aRange.aEnd.SetCol(rPos.Col()+Size-1);
-        aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+        aRange.aEnd.SetCol(rPos.Col() + Size - 1);
+        aRange.aEnd.SetRow(rPos.Row() + nRowCount - 1);
 
         clearRange(pDoc, aRange);
 
@@ -105,9 +112,9 @@ public:
     ScDocShell& getDocShell();
 
     /** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
-    void getNewDocShell( ScDocShellRef& rDocShellRef );
+    void getNewDocShell(ScDocShellRef& rDocShellRef);
     /** Close such new ScDocShell. */
-    void closeDocShell( ScDocShellRef& rDocShellRef );
+    void closeDocShell(ScDocShellRef& rDocShellRef);
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -174,7 +181,7 @@ public:
     void testFormulaRefUpdateNameExpandRef2();
     void testFormulaRefUpdateNameDeleteRow();
     void testFormulaRefUpdateNameCopySheet();
-    void testFormulaRefUpdateNameCopySheetCheckTab( SCTAB Tab, bool bCheckNames );
+    void testFormulaRefUpdateNameCopySheetCheckTab(SCTAB Tab, bool bCheckNames);
     void testFormulaRefUpdateSheetLocalMove();
     void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
@@ -872,7 +879,7 @@ public:
 
 private:
     std::unique_ptr<TestImpl> m_pImpl;
-    ScDocument *m_pDoc;
+    ScDocument* m_pDoc;
 };
 
 #endif

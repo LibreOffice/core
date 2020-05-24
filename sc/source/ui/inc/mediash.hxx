@@ -28,7 +28,7 @@ class SfxModule;
 
 #include "drawsh.hxx"
 
-class ScMediaShell: public ScDrawShell
+class ScMediaShell : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_MEDIA_SHELL)
@@ -42,7 +42,7 @@ public:
     virtual ~ScMediaShell() override;
 
     void ExecuteMedia(const SfxRequest& rReq);
-    void GetMediaState(SfxItemSet &rSet);
+    void GetMediaState(SfxItemSet& rSet);
 };
 
 #endif

@@ -31,7 +31,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xCbObject;
     std::unique_ptr<weld::ComboBox> m_xLbType;
 
-    void    FillObjects();
+    void FillObjects();
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
 
@@ -39,7 +39,7 @@ public:
     ScDataPilotDatabaseDlg(weld::Window* pParent);
     virtual ~ScDataPilotDatabaseDlg() override;
 
-    void    GetValues( ScImportSourceDesc& rDesc );
+    void GetValues(ScImportSourceDesc& rDesc);
 };
 
 #endif

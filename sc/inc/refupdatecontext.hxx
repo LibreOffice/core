@@ -19,8 +19,8 @@
 
 class ScDocument;
 
-namespace sc {
-
+namespace sc
+{
 struct ColumnBlockPosition;
 class ColumnBlockPositionSet;
 
@@ -86,7 +86,7 @@ struct RefUpdateContext
     bool isInserted() const;
     bool isDeleted() const;
 
-    void setBlockPositionReference( ColumnBlockPositionSet* blockPos );
+    void setBlockPositionReference(ColumnBlockPositionSet* blockPos);
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
@@ -159,7 +159,6 @@ struct SetFormulaDirtyContext
 
     SetFormulaDirtyContext();
 };
-
 }
 
 #endif

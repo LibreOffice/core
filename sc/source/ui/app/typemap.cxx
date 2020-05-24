@@ -88,7 +88,7 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
 
-#define avmedia_MediaItem           ::avmedia::MediaItem
+#define avmedia_MediaItem ::avmedia::MediaItem
 
 #ifdef DISABLE_DYNLOADING
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */

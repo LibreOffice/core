@@ -86,7 +86,9 @@ uno::Reference<uno::XInterface> ScAreaLinkObj::init()
                                              uno::UNO_QUERY_THROW);
 
     table::CellAddress aCellAddress(1, 2, 3);
-    xLinks->insertAtPosition(aCellAddress, m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/scarealinkobj.ods"), "a2:b5", "", "");
+    xLinks->insertAtPosition(
+        aCellAddress, m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/scarealinkobj.ods"),
+        "a2:b5", "", "");
 
     uno::Reference<sheet::XAreaLink> xLink(xLinks->getByIndex(0), uno::UNO_QUERY_THROW);
     return xLink;

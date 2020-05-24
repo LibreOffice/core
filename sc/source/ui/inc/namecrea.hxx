@@ -29,8 +29,9 @@ class ScNameCreateDlg final : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xLeftBox;
     std::unique_ptr<weld::CheckButton> m_xBottomBox;
     std::unique_ptr<weld::CheckButton> m_xRightBox;
+
 public:
-    ScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags);
+    ScNameCreateDlg(weld::Window* pParent, CreateNameFlags nFlags);
     virtual ~ScNameCreateDlg() override;
     CreateNameFlags GetFlags() const;
 };

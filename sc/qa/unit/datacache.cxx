@@ -20,7 +20,6 @@
 class ScCacheTest : public CppUnit::TestFixture
 {
 public:
-
     void testCacheSimple();
     void testCacheString();
     void testCacheFormula();
@@ -106,7 +105,7 @@ void ScCacheTest::testCacheFormula()
     aNewDoc.InsertTab(0, "test");
     aNewDoc.RestoreTabFromCache(0, aStrm);
 
-    std::vector<OUString> aFormulas = {"=B1", "=B2", "=B3", "=B4", "=B5", "=B1"};
+    std::vector<OUString> aFormulas = { "=B1", "=B2", "=B3", "=B4", "=B5", "=B1" };
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
     {
         OUString aFormula;

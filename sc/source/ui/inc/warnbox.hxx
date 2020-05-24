@@ -27,6 +27,7 @@
 class ScReplaceWarnBox : public weld::MessageDialogController
 {
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
+
 public:
     ScReplaceWarnBox(weld::Window* pParent);
 

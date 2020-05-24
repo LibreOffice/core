@@ -43,7 +43,7 @@ private:
     std::map<OUString, std::unique_ptr<ScRangeName>> m_RangeMap;
 
 public:
-    ScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell);
+    ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell);
 
     virtual ~ScNamePasteDlg() override;
 

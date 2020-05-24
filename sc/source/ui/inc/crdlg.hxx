@@ -27,6 +27,7 @@ class ScColOrRowDlg : public weld::GenericDialogController
 public:
     ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, const OUString& rStrLabel);
     virtual ~ScColOrRowDlg() override;
+
 private:
     std::unique_ptr<weld::Frame> m_xFrame;
     std::unique_ptr<weld::RadioButton> m_xBtnRows;
