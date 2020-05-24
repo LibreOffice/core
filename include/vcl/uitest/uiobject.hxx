@@ -16,6 +16,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/dllapi.h>
+#include <wizdlg.hxx>
 
 #include <set>
 
@@ -33,6 +34,7 @@ class SvTreeListEntry;
 class SpinButton;
 class SpinField;
 class VclMultiLineEdit;
+class RoadmapWizard;
 
 typedef std::map<const OUString, OUString> StringMap;
 
@@ -455,6 +457,27 @@ private:
     VclPtr<SvTreeListBox> mxTreeList;
 
     SvTreeListEntry* const mpEntry;
+};
+
+class RoadmapWizardUIObject final : public WindowUIObject
+{
+    VclPtr<vcl::RoadmapWizard> mxRoadmapWizard;
+
+public:
+
+    RoadmapWizardUIObject(const VclPtr<vcl::RoadmapWizard>& xRoadmapWizard);
+    virtual ~RoadmapWizardUIObject() override;
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const;
 };
 
 #endif

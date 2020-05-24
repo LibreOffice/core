@@ -31,6 +31,7 @@
 #include <set>
 
 #include "wizimpldata.hxx"
+#include <vcl/uitest/uiobject.hxx>
 
 namespace vcl
 {
@@ -840,6 +841,11 @@ namespace vcl
     int RoadmapWizard::GetCurrentRoadmapItemID() const
     {
         return m_xRoadmapImpl->pRoadmap->GetCurrentRoadmapItemID();
+    }
+
+    FactoryFunction RoadmapWizard::GetUITestFactory() const
+    {
+        return RoadmapWizardUIObject::create;
     }
 
 }   // namespace vcl

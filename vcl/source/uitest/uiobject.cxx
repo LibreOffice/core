@@ -1455,6 +1455,51 @@ std::unique_ptr<UIObject> TabControlUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new TabControlUIObject(pTabControl));
 }
 
+RoadmapWizardUIObject::RoadmapWizardUIObject(const VclPtr<vcl::RoadmapWizard>& xRoadmapWizard):
+    WindowUIObject(xRoadmapWizard),
+    mxRoadmapWizard(xRoadmapWizard)
+{
+}
 
+RoadmapWizardUIObject::~RoadmapWizardUIObject()
+{
+}
+
+void RoadmapWizardUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            sal_uInt32 nPos = itr->second.toUInt32();
+            mxRoadmapWizard->SelectRoadmapItemByID(nPos);
+        }
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap RoadmapWizardUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    aMap["CurrentStep"] = OUString::number(mxRoadmapWizard->GetCurrentRoadmapItemID());
+
+    return aMap;
+}
+
+OUString RoadmapWizardUIObject::get_name() const
+{
+    return "RoadmapWizardUIObject";
+}
+
+std::unique_ptr<UIObject> RoadmapWizardUIObject::create(vcl::Window* pWindow)
+{
+    vcl::RoadmapWizard* pRoadmapWizard = dynamic_cast<vcl::RoadmapWizard*>(pWindow);
+    assert(pRoadmapWizard);
+    return std::unique_ptr<UIObject>(new RoadmapWizardUIObject(pRoadmapWizard));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
