@@ -1165,7 +1165,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 LanguageType eLanguage = pEntry->GetLanguage();
                 SvNumFormatType eType = pEntry->GetType();
 
-                //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY/SCIENTIFIC/FRACTION
+                //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY/SCIENTIFIC/FRACTION/TIME
                 //In sidebar, users can fire SID_NUMBER_FORMAT command by operating the related UI controls before they are disable
                 if(!(eType == SvNumFormatType::ALL
                      || eType == SvNumFormatType::NUMBER
@@ -1176,6 +1176,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                      || eType == (SvNumFormatType::CURRENCY | SvNumFormatType::DEFINED)
                      || eType == SvNumFormatType::SCIENTIFIC
                      || eType == (SvNumFormatType::SCIENTIFIC | SvNumFormatType::DEFINED)
+                     || eType == SvNumFormatType::TIME
+                     || eType == (SvNumFormatType::TIME | SvNumFormatType::DEFINED)
                      || eType == SvNumFormatType::FRACTION
                      || eType == (SvNumFormatType::FRACTION | SvNumFormatType::DEFINED)))
                     pEntry = nullptr;
