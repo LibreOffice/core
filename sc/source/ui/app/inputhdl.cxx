@@ -434,6 +434,25 @@ ReferenceMark ScInputHandler::GetReferenceMark( ScViewData& rViewData, ScDocShel
 {
     ScSplitPos eWhich = rViewData.GetActivePart();
 
+    // This method is LOK specific.
+    if (comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    {
+        SCCOL nCol1 = nX1, nCol2 = nX2;
+        SCROW nRow1 = nY1, nRow2 = nY2;
+        PutInOrder(nCol1, nCol2);
+        PutInOrder(nRow1, nRow2);
+        if (nCol1 == nCol2 && nRow1 == nRow2)
+            pDocSh->GetDocument().ExtendMerge(nCol1, nRow1, nCol2, nRow2, nTab);
+
+        Point aTopLeft = rViewData.GetPrintTwipsPos(nCol1, nRow1);
+        Point aBottomRight = rViewData.GetPrintTwipsPos(nCol2 + 1, nRow2 + 1);
+        long nSizeX = aBottomRight.X() - aTopLeft.X() - 1;
+        long nSizeY = aBottomRight.Y() - aTopLeft.Y() - 1;
+
+        return ReferenceMark(aTopLeft.X(), aTopLeft.Y(), nSizeX, nSizeY, nTab, rColor);
+    }
+
     Point aScrPos = rViewData.GetScrPos( nX1, nY1, eWhich );
     long nScrX = aScrPos.X();
     long nScrY = aScrPos.Y();
