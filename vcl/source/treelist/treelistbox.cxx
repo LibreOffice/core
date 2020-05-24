@@ -456,7 +456,6 @@ bool SvTreeListBox::DoubleClickHdl()
     return !aDoubleClickHdl.IsSet() || aDoubleClickHdl.Call(this);
 }
 
-
 bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 nAction )
 {
     if ( pSource == this )
