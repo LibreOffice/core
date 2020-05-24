@@ -501,16 +501,6 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
                 aText = OUString( pMBString, nLength, osl_getThreadTextEncoding() );
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    else
-    {
-        SAL_WARN("vcl.app", "XIMStatusDataType "
-                << ((call_data->type == XIMBitmapType) ?
-                    "XIMBitmapType" :
-                    OString::number(call_data->type))
-                << " not supported.");
-    }
-#endif
 }
 
 // vii. destroy callbacks: internally disable all IC/IM calls
