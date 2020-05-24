@@ -316,12 +316,14 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
     if (i != mvPostItFields.end())
     {
         std::unique_ptr<SwSidebarItem> p = std::move(*i);
-        if (GetActiveSidebarWin() == p->pPostIt)
-            SetActiveSidebarWin(nullptr);
         // tdf#120487 remove from list before dispose, so comment window
         // won't be recreated due to the entry still in the list if focus
         // transferring from the pPostIt triggers relayout of postits
+        // tdf#133348 remove from list before calling SetActiveSidebarWin
+        // so GetNextPostIt won't deal with mvPostItFields containing empty unique_ptr
         mvPostItFields.erase(i);
+        if (GetActiveSidebarWin() == p->pPostIt)
+            SetActiveSidebarWin(nullptr);
         p->pPostIt.disposeAndClear();
     }
     mbLayout = true;
