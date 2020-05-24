@@ -1442,6 +1442,10 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
                 {
                     if( ( nRequestFormat == format.mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( format.MimeType ) )
                     {
+                        // Our own thread may handle the nested IDataObject::GetData call,
+                        // and try to acquire solar mutex
+                        SolarMutexReleaser r;
+
                         if (xTransfer2.is())
                             aRet = xTransfer2->getTransferData2(format, rDestDoc);
                         else
@@ -1455,6 +1459,10 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
 
             if( !aRet.hasValue() )
             {
+                // Our own thread may handle the nested IDataObject::GetData call,
+                // and try to acquire solar mutex
+                SolarMutexReleaser r;
+
                 if (xTransfer2.is())
                     aRet = xTransfer2->getTransferData2(rFlavor, rDestDoc);
                 else
