@@ -18,10 +18,9 @@
  */
 
 #ifdef _WIN32
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
+#include <prewin.h>
+#include <ole2.h>
+#include <postwin.h>
 #endif
 
 #ifdef UNX
@@ -389,6 +388,9 @@ SAL_IMPLEMENT_MAIN()
         _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
 #endif
+
+        // Tests may use e.g. OLE or clipboard; initialize COM and appropriate concurrency early
+        OleInitialize(nullptr);
 #endif
 
         std::vector<CppUnit::Protector *> protectors;
