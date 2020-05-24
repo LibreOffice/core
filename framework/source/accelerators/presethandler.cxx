@@ -350,7 +350,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     OUStringBuffer sRelPathBuf(1024);
     OUString       sRelPathShare;
-    OUString       sRelPathNoLang;
     OUString       sRelPathUser;
     switch(eConfigType)
     {
@@ -407,7 +406,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     // Non-localized global share
     xNoLang = xShare;
-    sRelPathNoLang = sRelPathShare;
 
     if (
         (rLanguageTag != LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)) && // localized level?
