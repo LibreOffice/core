@@ -2006,7 +2006,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
 
-    if( (rMEvt.GetClicks() % 2) == 0 )
+    if( (rMEvt.GetClicks() % 2) == 0 || m_pView->mbActivateOnSingleClick )
     {
         m_nFlags &= ~LBoxFlags::StartEditTimer;
         m_pView->pHdlEntry = pEntry;
