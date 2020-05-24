@@ -43,7 +43,7 @@ public:
         SCCOL mnCol2;
         explicit Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
-    typedef std::shared_ptr< ::std::list<Range> > RangeListRef;
+    typedef std::shared_ptr<::std::list<Range>> RangeListRef;
     typedef ::std::map<SCTAB, RangeListRef> TabType;
 
     ScSimpleRangeList();

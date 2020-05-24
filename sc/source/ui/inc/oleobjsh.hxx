@@ -28,7 +28,7 @@ class SfxModule;
 
 #include "drawsh.hxx"
 
-class ScOleObjectShell: public ScDrawShell
+class ScOleObjectShell : public ScDrawShell
 {
 public:
     SFX_DECL_INTERFACE(SCID_OLEOBJECT_SHELL)
@@ -40,7 +40,6 @@ private:
 public:
     ScOleObjectShell(ScViewData* pData);
     virtual ~ScOleObjectShell() override;
-
 };
 
 #endif

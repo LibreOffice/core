@@ -18,7 +18,7 @@
 class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
 private:
-    std::vector<std::unique_ptr<ScItemValue> > maItemValues;
+    std::vector<std::unique_ptr<ScItemValue>> maItemValues;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
@@ -31,6 +31,7 @@ public:
     void FillFields(ScPivotFieldVector& rFieldVector);
 
     virtual void InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget) override;
+
 protected:
     void InsertEntryForItem(const ScItemValue* pItemValue, int nPosition);
 };

@@ -28,12 +28,12 @@ struct CustomCompare
         : mrLbTree(rLbTree)
     {
     }
-    bool operator()(const std::unique_ptr<weld::TreeIter>& lhs, const std::unique_ptr<weld::TreeIter>& rhs) const
+    bool operator()(const std::unique_ptr<weld::TreeIter>& lhs,
+                    const std::unique_ptr<weld::TreeIter>& rhs) const
     {
         return mrLbTree.iter_compare(*lhs, *rhs) == -1;
     }
 };
-
 
 class ScXMLSourceDlg : public ScAnyRefDlgController
 {
@@ -75,7 +75,6 @@ public:
     virtual void Close() override;
 
 private:
-
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
     void TreeItemSelected();

@@ -23,9 +23,8 @@ class ScDocShell;
 class ScUndoAllRangeNames final : public ScSimpleUndo
 {
 public:
-    ScUndoAllRangeNames(ScDocShell* pDocSh,
-        const std::map<OUString, ScRangeName*>& rOldNames,
-        const std::map<OUString, std::unique_ptr<ScRangeName>>& rNewNames);
+    ScUndoAllRangeNames(ScDocShell* pDocSh, const std::map<OUString, ScRangeName*>& rOldNames,
+                        const std::map<OUString, std::unique_ptr<ScRangeName>>& rNewNames);
 
     virtual ~ScUndoAllRangeNames() override;
 

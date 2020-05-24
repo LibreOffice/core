@@ -35,7 +35,7 @@ private:
 
     void AdjustDuplicateCount(ScItemValue* pInputItemValue);
 
-    std::vector<std::unique_ptr<ScItemValue> > maDataItemValues;
+    std::vector<std::unique_ptr<ScItemValue>> maDataItemValues;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

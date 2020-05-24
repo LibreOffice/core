@@ -35,7 +35,6 @@ class ScDataTableColView : public ScHeaderControl
     SCCOL mnCol;
 
 public:
-
     ScDataTableColView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
@@ -55,7 +54,6 @@ class ScDataTableRowView : public ScHeaderControl
     SCROW mnRow;
 
 public:
-
     ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
@@ -93,10 +91,10 @@ class ScDataTableView : public Control
 
     std::unique_ptr<MouseEvent> mpMouseEvent;
 
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
 
 public:
-    ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent);
+    ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent);
 
     void Init(std::shared_ptr<ScDocument> pDoc);
 

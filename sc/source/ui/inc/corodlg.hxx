@@ -26,7 +26,8 @@ class ScColRowLabelDlg : public weld::GenericDialogController
 {
 public:
     ScColRowLabelDlg(weld::Window* pParent, bool bCol, bool bRow)
-        : GenericDialogController(pParent, "modules/scalc/ui/changesourcedialog.ui", "ChangeSourceDialog")
+        : GenericDialogController(pParent, "modules/scalc/ui/changesourcedialog.ui",
+                                  "ChangeSourceDialog")
         , m_xBtnRow(m_xBuilder->weld_check_button("row"))
         , m_xBtnCol(m_xBuilder->weld_check_button("col"))
     {

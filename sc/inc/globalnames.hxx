@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_GLOBALNAMES_HXX
 #define INCLUDED_SC_INC_GLOBALNAMES_HXX
 
-#define STR_DB_LOCAL_NONAME  "__Anonymous_Sheet_DB__"
+#define STR_DB_LOCAL_NONAME "__Anonymous_Sheet_DB__"
 #define STR_DB_GLOBAL_NONAME "__Anonymous_DB__"
 
 #define STR_GLOBAL_RANGE_NAME "__Global_Range_Name__"

@@ -30,7 +30,7 @@ public:
      an encrypted password is imported.
      @return true if yes and false if no. default to true.
    */
-    static bool        WarningOnPassword( SfxMedium& rMedium );
+    static bool WarningOnPassword(SfxMedium& rMedium);
 };
 
 #endif
