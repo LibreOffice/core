@@ -3046,7 +3046,11 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     OUStringBuffer sString;
     using comphelper::string::padToLength;
 
-    if (nLeadingZeros == 0)
+    if (eType & SvNumFormatType::TIME)
+    {
+        sString = pFormat->GetFormatStringForTimePrecision( nPrecision );
+    }
+    else if (nLeadingZeros == 0)
     {
         if (!bThousand)
             sString.append('#');
@@ -3086,7 +3090,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             }
         }
     }
-    if (nPrecision > 0 && eType != SvNumFormatType::FRACTION )
+    if (nPrecision > 0 && eType != SvNumFormatType::FRACTION && !( eType & SvNumFormatType::TIME ) )
     {
         sString.append(GetNumDecimalSep());
         padToLength(sString, sString.getLength() + nPrecision, '0');

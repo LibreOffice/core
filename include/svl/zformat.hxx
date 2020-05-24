@@ -305,6 +305,10 @@ public:
     /// Round fNumber to its fraction representation
     double GetRoundFractionValue ( double fNumber ) const;
 
+    /// Create a format string for time with a new precision
+    OUString GetFormatStringForTimePrecision( int nPrecision ) const;
+
+
     /** If the count of string elements (substrings, ignoring [modifiers] and
         so on) in a subformat code nNumFor (0..3) is equal to the given number.
         Used by ImpSvNumberInputScan::IsNumberFormatMain() to detect a matched

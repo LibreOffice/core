@@ -5848,6 +5848,49 @@ bool SvNumberformat::IsMinuteSecondFormat() const
 #undef HAS_MINUTE_SECOND
 }
 
+OUString SvNumberformat::GetFormatStringForTimePrecision( int nPrecision ) const
+{
+    OUStringBuffer sString;
+    using comphelper::string::padToLength;
+
+    sal_uInt16 nNumForCnt = NumFor[0].GetCount();
+    auto const & rTypeArray = NumFor[0].Info().nTypeArray;
+    for (sal_uInt16 j=0; j < nNumForCnt; ++j)
+    {
+        switch (rTypeArray[j])
+        {
+            case NF_KEY_S :
+            case NF_KEY_SS:
+                sString.append( NumFor[0].Info().sStrArray[j] );
+                if ( j > 0 && rTypeArray[j-1] == NF_SYMBOLTYPE_DEL && j < nNumForCnt-1 )
+                {
+                    j++;
+                    sString.append( NumFor[0].Info().sStrArray[j] );
+                }
+                if (nPrecision > 0)
+                {
+                    sString.append( rLoc().getTime100SecSep() );
+                    padToLength(sString, sString.getLength() + nPrecision, '0');
+                }
+                break;
+            case NF_SYMBOLTYPE_TIME100SECSEP:
+            case NF_SYMBOLTYPE_DIGIT:
+                break;
+            case NF_SYMBOLTYPE_STRING:
+                sString.append( "\"" );
+                [[fallthrough]];
+            default:
+                sString.append( NumFor[0].Info().sStrArray[j] );
+                if (rTypeArray[j] == NF_SYMBOLTYPE_STRING)
+                {
+                    sString.append( "\"" );
+                }
+        }
+    }
+
+    return sString.makeStringAndClear();
+}
+
 const CharClass& SvNumberformat::rChrCls() const
 {
     return rScan.GetChrCls();

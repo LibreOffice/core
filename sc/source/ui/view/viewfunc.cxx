@@ -2709,9 +2709,9 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
     SvNumFormatType nOldType = pOldEntry->GetType();
     if ( SvNumFormatType::ALL == ( nOldType & (
-                SvNumFormatType::NUMBER |  SvNumFormatType::CURRENCY | SvNumFormatType::PERCENT | SvNumFormatType::SCIENTIFIC ) ) )
+                SvNumFormatType::NUMBER |  SvNumFormatType::CURRENCY | SvNumFormatType::PERCENT | SvNumFormatType::SCIENTIFIC | SvNumFormatType::TIME ) ) )
     {
-        //  date, time, fraction, logical, text can not be changed
+        //  date, fraction, logical, text can not be changed
         bError = true;
     }
 
