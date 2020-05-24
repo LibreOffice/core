@@ -24,8 +24,8 @@ public:
     DECL_LINK(SyntaxModifiedHdl, weld::ComboBox&, void);
     DECL_LINK(CurrentDocOnlyHdl, weld::ToggleButton&, void);
 
-    const ScCalcConfig& GetConfig() const { return maConfig;}
-    bool GetWriteCalcConfig() const { return mbWriteConfig;}
+    const ScCalcConfig& GetConfig() const { return maConfig; }
+    bool GetWriteCalcConfig() const { return mbWriteConfig; }
 
 private:
     void CoupleEmptyAsZeroToStringConversion();

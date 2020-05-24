@@ -30,8 +30,8 @@
 
 using namespace com::sun::star;
 
-namespace {
-
+namespace
+{
 uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedium)
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -49,7 +49,7 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 {
     SvStream* pStream = rMedium.GetInStream();
     pStream->Seek(0);
-    static const size_t nReadBuffer = 1024*32;
+    static const size_t nReadBuffer = 1024 * 32;
     OStringBuffer aBuffer((int(nReadBuffer)));
     size_t nRead = 0;
     do
@@ -57,8 +57,7 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
         char pData[nReadBuffer];
         nRead = pStream->ReadBytes(pData, nReadBuffer);
         aBuffer.append(pData, nRead);
-    }
-    while (nRead == nReadBuffer);
+    } while (nRead == nReadBuffer);
 
     try
     {
@@ -72,7 +71,6 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
 
     return true;
 }
-
 }
 
 bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, SfxMedium& rMedium) const
@@ -141,7 +139,8 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
     return true;
 }
 
-std::unique_ptr<ScOrcusXMLContext> ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const OUString& rPath) const
+std::unique_ptr<ScOrcusXMLContext> ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc,
+                                                                        const OUString& rPath) const
 {
     return std::make_unique<ScOrcusXMLContextImpl>(rDoc, rPath);
 }

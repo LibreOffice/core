@@ -47,7 +47,7 @@ public:
 private:
     ScTabViewShell* pViewShell;
 
-    ScDPObject*     GetCurrDPObject();
+    ScDPObject* GetCurrDPObject();
 };
 
 #endif

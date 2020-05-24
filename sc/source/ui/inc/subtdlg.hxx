@@ -27,6 +27,7 @@ class ScSubTotalDlg : public SfxTabDialogController
 public:
     ScSubTotalDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
     virtual ~ScSubTotalDlg() override;
+
 private:
     std::unique_ptr<weld::Button> m_xBtnRemove;
     DECL_LINK(RemoveHdl, weld::Button&, void);

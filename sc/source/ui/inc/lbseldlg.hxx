@@ -30,7 +30,7 @@ private:
     DECL_LINK(DblClkHdl, weld::TreeView&, bool);
 
 public:
-    ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList);
+    ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString>& rEntryList);
     virtual ~ScSelEntryDlg() override;
 
     OUString GetSelectedEntry() const;

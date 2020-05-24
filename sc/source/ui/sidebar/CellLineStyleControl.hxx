@@ -25,8 +25,8 @@
 
 class SfxDispatcher;
 
-namespace sc::sidebar {
-
+namespace sc::sidebar
+{
 class CellLineStylePopup : public WeldToolbarPopup
 {
 private:

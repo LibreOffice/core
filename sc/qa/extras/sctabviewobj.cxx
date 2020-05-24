@@ -49,7 +49,7 @@ class ScTabViewObj : public CalcUnoApiTest,
 public:
     ScTabViewObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0) override;
 
     virtual void setUp() override;
@@ -90,7 +90,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference<lang::XComponent> mxComponent;
 };
 
 ScTabViewObj::ScTabViewObj()
@@ -100,7 +100,7 @@ ScTabViewObj::ScTabViewObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScTabViewObj::init()
+uno::Reference<uno::XInterface> ScTabViewObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);

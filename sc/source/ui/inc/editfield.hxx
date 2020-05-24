@@ -27,6 +27,7 @@ class ScDoubleField
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
+
 public:
     explicit ScDoubleField(std::unique_ptr<weld::Entry> xEntry);
 

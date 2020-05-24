@@ -25,7 +25,7 @@ private:
     SvNumberFormatter* mpNumberFormatter;
 
     ScDocument* mpDoc;
-    ScAddress   maPos;
+    ScAddress maPos;
 
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnCancel;
@@ -55,7 +55,8 @@ private:
     void Init();
 
 public:
-    ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
+    ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc,
+                         const ScAddress& rPos);
     virtual ~ScDataBarSettingsDlg() override;
 
     ScDataBarFormatData* GetData();
@@ -64,4 +65,3 @@ public:
 #endif // INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-

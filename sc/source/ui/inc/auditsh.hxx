@@ -30,7 +30,7 @@ class ScAuditingShell : public SfxShell
 {
 private:
     ScViewData* pViewData;
-    sal_uInt16  nFunction;
+    sal_uInt16 nFunction;
 
 public:
     SFX_DECL_INTERFACE(SCID_AUDITING_SHELL)

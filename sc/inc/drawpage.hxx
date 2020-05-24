@@ -35,7 +35,7 @@ public:
 
     virtual ScDrawPage* CloneSdrPage(SdrModel& rTargetModel) const override;
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
+    virtual css::uno::Reference<css::uno::XInterface> createUnoPage() override;
 };
 
 #endif
