@@ -3094,7 +3094,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     }
     if (eType == SvNumFormatType::PERCENT)
     {
-        sString.append('%');
+        sString.append( pFormat->GetPercentString() );
     }
     else if (eType == SvNumFormatType::SCIENTIFIC)
     {
