@@ -28,10 +28,6 @@ $(eval $(call gb_Executable_add_exception_objects,cppunittester,\
 	sal/cppunittester/cppunittester \
 ))
 
-$(eval $(call gb_Executable_use_system_win32_libs,cppunittester,\
-	ole32 \
-))
-
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Executable_add_ldflags,cppunittester,\
