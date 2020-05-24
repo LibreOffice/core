@@ -118,6 +118,7 @@ private:
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
     std::unique_ptr<weld::Expander> m_xExpander;
 
+    std::unique_ptr<weld::Button> m_xBtnClear;
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
@@ -146,6 +147,7 @@ private:
     DECL_LINK( LbSelectHdl,  weld::ComboBox&, void );
     DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
     DECL_LINK( CheckBoxHdl,  weld::Button&, void );
+    DECL_LINK( BtnClearHdl,  weld::Button&, void );
     DECL_LINK( EndDlgHdl,    weld::Button&, void );
     DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
     DECL_LINK( MoreExpandedHdl, weld::Expander&, void );

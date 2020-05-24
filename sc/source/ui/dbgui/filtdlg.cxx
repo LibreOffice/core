@@ -80,6 +80,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xContents(m_xBuilder->weld_widget("grid"))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
     , m_xExpander(m_xBuilder->weld_expander("more"))
+    , m_xBtnClear(m_xBuilder->weld_button("clear"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
@@ -121,6 +122,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
                                     rArgSet.Get( nWhichQuery ));
 
+    m_xBtnClear->connect_clicked   ( LINK( this, ScFilterDlg, BtnClearHdl ) );
     m_xBtnOk->connect_clicked      ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     m_xBtnCancel->connect_clicked  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     m_xBtnHeader->connect_clicked  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
@@ -629,6 +631,61 @@ bool ScFilterDlg::IsRefInputMode() const
 }
 
 // Handler:
+
+IMPL_LINK( ScFilterDlg, BtnClearHdl, weld::Button&, rBtn, void )
+{
+    if ( &rBtn == m_xBtnClear.get() )
+    {
+        // scroll to the top
+        m_xScrollBar->vadjustment_set_value(0);
+        size_t nOffset = 0;
+        RefreshEditRow( nOffset);
+
+        // clear all conditions
+        m_xLbConnect1->set_active(-1);
+        m_xLbConnect2->set_active(-1);
+        m_xLbConnect3->set_active(-1);
+        m_xLbConnect4->set_active(-1);
+        m_xLbField1->set_active(0);
+        m_xLbField2->set_active(0);
+        m_xLbField3->set_active(0);
+        m_xLbField4->set_active(0);
+        m_xLbCond1->set_active(0);
+        m_xLbCond2->set_active(0);
+        m_xLbCond3->set_active(0);
+        m_xLbCond4->set_active(0);
+        ClearValueList( 1 );
+        ClearValueList( 2 );
+        ClearValueList( 3 );
+        ClearValueList( 4 );
+
+        // disable fields for second row onward
+        m_xLbConnect2->set_sensitive(false);
+        m_xLbConnect3->set_sensitive(false);
+        m_xLbConnect4->set_sensitive(false);
+        m_xLbField2->set_sensitive(false);
+        m_xLbField3->set_sensitive(false);
+        m_xLbField4->set_sensitive(false);
+        m_xLbCond2->set_sensitive(false);
+        m_xLbCond3->set_sensitive(false);
+        m_xLbCond4->set_sensitive(false);
+        m_xEdVal2->set_sensitive(false);
+        m_xEdVal3->set_sensitive(false);
+        m_xEdVal4->set_sensitive(false);
+
+        // clear query data objects
+        SCSIZE nCount = theQueryData.GetEntryCount();
+        if (maRefreshExceptQuery.size() < nCount + 1)
+            maRefreshExceptQuery.resize(nCount + 1, false);
+        for (SCSIZE i = 0; i < nCount; ++i)
+        {
+            theQueryData.GetEntry(i).bDoQuery = false;
+            maRefreshExceptQuery[i] = false;
+            theQueryData.GetEntry(i).nField = static_cast<SCCOL>(0);
+        }
+        maRefreshExceptQuery[0] = true;
+    }
+}
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, weld::Button&, rBtn, void )
 {
