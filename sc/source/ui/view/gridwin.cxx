@@ -5756,8 +5756,13 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
         auto pForTabView = dynamic_cast<const ScTabViewShell *>(pForShell);
         if (!pForTabView)
             return;
-        aCursor = pForTabView->GetViewData().describeCellCursorAt(
-            pViewData->GetCurX(), pViewData->GetCurY()); // our position.
+
+        if (comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+            aCursor = pViewData->describeCellCursorInPrintTwips();
+        else
+            aCursor = pForTabView->GetViewData().describeCellCursorAt(
+                pViewData->GetCurX(), pViewData->GetCurY()); // our position.
     }
     SfxLokHelper::notifyOtherView(pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
 }
@@ -5767,9 +5772,33 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
 // event, and others a cell_view_cursor event.
 //
 // NB. we need to re-construct the cursor details for each other view in their
-// own zoomed co-ordinate system.
+// own zoomed co-ordinate system (but not in scPrintTwipsMsgs mode).
 void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
 {
+    if (comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        // Generate the cursor info string just once and directly send to all.
+        // Calling notifyKitCellViewCursor() would regenerate the
+        // cursor-string unnecessarily.
+        OString aCursor = getCellCursor();
+
+        if (pForShell)
+        {
+            SfxLokHelper::notifyOtherView(pViewShell, pForShell,
+                    LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+        }
+        else
+        {
+            notifyKitCellCursor();
+            SfxLokHelper::notifyOtherViews(pViewShell,
+                    LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+        }
+
+        return;
+    }
+
     if (!pForShell)
     {
         for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
