@@ -2289,6 +2289,33 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
                                               nPrec, rFormatter.GetNumDecimalSep()[0], true );
 }
 
+OUString lcl_GetPercentString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
+{
+    sal_Int32 i;
+    OUStringBuffer aPercentString;
+    for( i = 0; i < nCnt; i++ )
+    {
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_PERCENT )
+        {
+            aPercentString.append( rInfo.sStrArray[i] );
+            bool bStringFound = false;
+            for( i--; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_STRING ; i-- )
+            {
+                if( !bStringFound )
+                {
+                    bStringFound = true;
+                    aPercentString.insert( 0, "\"" );
+                }
+                aPercentString.insert( 0, rInfo.sStrArray[i] );
+            }
+            i = nCnt;
+            if( bStringFound )
+                aPercentString.insert( 0, "\"" );
+      }
+    }
+    return aPercentString.makeStringAndClear();
+}
+
 OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
     sal_Int32 i;
@@ -2361,6 +2388,13 @@ OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInf
     return OUString();
 }
 
+}
+
+OUString SvNumberformat::GetPercentString( sal_uInt16 nNumFor ) const
+{
+    const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    return lcl_GetPercentString( rInfo, nCnt );
 }
 
 OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
