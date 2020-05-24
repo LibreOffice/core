@@ -684,8 +684,14 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
     // a boolean variable like m_bRun...
     while ( pInst->m_bRunClipboardNotifierThread )
     {
+        // process window messages because of CoInitialize
+        MSG Msg;
+        while (PeekMessageW(&Msg, nullptr, 0, 0, PM_REMOVE))
+            DispatchMessageW(&Msg);
+
         // wait for clipboard changed or terminate event
-        WaitForMultipleObjects( 2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE );
+        MsgWaitForMultipleObjects(2, pInst->m_hClipboardChangedNotifierEvents, false, INFINITE,
+                                  QS_ALLINPUT | QS_ALLPOSTMESSAGE);
 
         ClearableMutexGuard aGuard( pInst->m_ClipboardChangedEventCountMutex );
 
