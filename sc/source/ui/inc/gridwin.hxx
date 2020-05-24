@@ -373,6 +373,8 @@ public:
 
     void            UpdateFormulas(SCCOL nX1 = -1, SCROW nY1 = -1, SCCOL nX2 = -1, SCROW nY2 = -1);
 
+    void            ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayoutRTL);
+
     void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow );
     void            DoScenarioMenu( const ScRange& rScenRange );
 
