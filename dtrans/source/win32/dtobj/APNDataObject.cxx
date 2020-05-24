@@ -19,6 +19,7 @@
 
 #include "APNDataObject.hxx"
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 #include <systools/win32/comtools.hxx>
 
@@ -143,7 +144,12 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 
 STDMETHODIMP CAPNDataObject::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
-    HRESULT hr = m_rIDataObjectOrg->GetData( pFormatetc, pmedium );
+    HRESULT hr;
+    {
+        // Our own thread may handle the IDataObjec::GetData call, and try to acquire solar mutex
+        SolarMutexReleaser r;
+        hr = m_rIDataObjectOrg->GetData(pFormatetc, pmedium);
+    }
 
     if (RPC_E_WRONG_THREAD == hr)
     {
