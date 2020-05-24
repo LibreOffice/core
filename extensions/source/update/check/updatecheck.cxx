@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/scopeguard.hxx>
 #include <config_folders.h>
 
 #include "updatecheck.hxx"
@@ -137,12 +136,6 @@ OUString getImageFromFileName(const OUString& aFile)
             nullptr, &hOut, nullptr                                   // [out] File handles for redirected I/O
         );
 
-        // Create a guard to ensure correct cleanup in its dtor in any case
-        comphelper::ScopeGuard g([hOut, hProcess] () {
-            osl_closeFile(hOut);
-            osl_freeProcessHandle(hProcess);
-        });
-
         if( osl_Process_E_None == rc )
         {
             oslProcessInfo aInfo;
@@ -176,6 +169,9 @@ OUString getImageFromFileName(const OUString& aFile)
                         return aImageName;
                 }
             }
+
+            osl_closeFile(hOut);
+            osl_freeProcessHandle(hProcess);
         }
     }
 #endif
