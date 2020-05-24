@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c9687a0_27ebf6db",
+        "filename": "vcl/source/treelist/transfer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-24T11:28:31Z",
+      "side": 1,
+      "message": "IDataObjec -\u003e IDataObject ?",
+      "revId": "81fe2f0bb897f88877b30ce05af0da09754bd64e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62739e06_70fe28f4",
+        "filename": "vcl/source/treelist/transfer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-24T11:28:31Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "81fe2f0bb897f88877b30ce05af0da09754bd64e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
