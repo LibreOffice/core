@@ -1301,7 +1301,7 @@
       </node>
       <node oor:name=".uno:WrapOff" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Wrap Off</value>
+          <value xml:lang="en-US">None</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>15</value>
@@ -1309,7 +1309,7 @@
       </node>
       <node oor:name=".uno:WrapOn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Page Wrap</value>
+          <value xml:lang="en-US">~Parallel</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1333,7 +1333,7 @@
       </node>
       <node oor:name=".uno:WrapThrough" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Wrap Through</value>
+          <value xml:lang="en-US">~Through</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -2281,7 +2281,7 @@
       </node>
       <node oor:name=".uno:WrapIdeal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Optimal Page Wrap</value>
+          <value xml:lang="en-US">~Optimal</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2398,7 +2398,7 @@
       </node>
       <node oor:name=".uno:WrapLeft" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Wrap Left</value>
+          <value xml:lang="en-US">Before</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2411,7 +2411,7 @@
       </node>
       <node oor:name=".uno:WrapRight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Wrap Right</value>
+          <value xml:lang="en-US">After</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

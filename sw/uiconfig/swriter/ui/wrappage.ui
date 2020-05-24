@@ -54,7 +54,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="none">
-                    <property name="label" translatable="yes" context="wrappage|none">_None</property>
+                    <property name="label" translatable="yes" context="wrappage|none">_Wrap Off</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -76,7 +76,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="before">
-                    <property name="label" translatable="yes" context="wrappage|before">Before</property>
+                    <property name="label" translatable="yes" context="wrappage|before">Be_fore</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="after">
-                    <property name="label" translatable="yes" context="wrappage|after">After</property>
+                    <property name="label" translatable="yes" context="wrappage|after">Aft_er</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
