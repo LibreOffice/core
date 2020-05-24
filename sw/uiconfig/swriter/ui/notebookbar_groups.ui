@@ -2283,7 +2283,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapLeft</property>
-        <property name="label" translatable="yes" context="notebookbar_groups|wrapleft">Before</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapleft">Left</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -2292,7 +2292,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapRight</property>
-        <property name="label" translatable="yes" context="notebookbar_groups|wrapright">After</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapright">Right</property>
         <property name="use_underline">True</property>
       </object>
     </child>

@@ -76,7 +76,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="before">
-                    <property name="label" translatable="yes" context="wrappage|before">Before</property>
+                    <property name="label" translatable="yes" context="wrappage|left">Left</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="after">
-                    <property name="label" translatable="yes" context="wrappage|after">After</property>
+                    <property name="label" translatable="yes" context="wrappage|right">Right</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
