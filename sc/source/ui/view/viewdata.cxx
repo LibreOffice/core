@@ -2259,15 +2259,13 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned)
     }
     else
     {
-        // make it a slim cell cursor, but not empty
-        if (nSizeX == 0)
-            nSizeX = TWIPS_PER_PIXEL;
-        if (nSizeY == 0)
-            nSizeY = TWIPS_PER_PIXEL;
-
+        // look at Rectangle( const Point& rLT, const Size& rSize ) for the decrement.
+        if (nSizeX)
+            --nSizeX;
+        if (nSizeY)
+            --nSizeY;
         ss << aCellPos.getX() << ", " << aCellPos.getY()
-            // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
-            << ", " << nSizeX - 1 << ", " << nSizeY - 1 << ", "
+            << ", " << nSizeX << ", " << nSizeY << ", "
             << nX << ", " << nY;
     }
 
