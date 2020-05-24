@@ -141,7 +141,7 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
 static const std::map<LanguageType, std::array<sal_uInt8, 4>> tblDBNumToNatNum
     = { { primary(LANGUAGE_CHINESE),    { 4, 5, 3, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 4, 5, 3, 0 } },
-        { primary(LANGUAGE_KOREAN),     { 1, 2, 3, 9 } } };
+        { primary(LANGUAGE_KOREAN),     { 4, 5, 6, 10 } } };
 
 // static
 sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate )
@@ -153,7 +153,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     {
         if ( nDBNum == 4 && eLang == primary(LANGUAGE_KOREAN) )
         {
-            nNatNum = 9;
+            nNatNum = 10;
         }
         else if ( nDBNum <= 3 )
         {
@@ -176,7 +176,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
 static const std::map<LanguageType, std::array<sal_uInt8, 9>> tblNatNumToDBNum
     = { { primary(LANGUAGE_CHINESE),    { 1, 0, 0, 1, 2, 3, 0, 0, 0 } },
         { primary(LANGUAGE_JAPANESE),   { 1, 2, 3, 1, 2, 3, 1, 2, 0 } },
-        { primary(LANGUAGE_KOREAN),     { 0, 2, 3, 1, 0, 0, 0, 0, 0 } } };
+        { primary(LANGUAGE_KOREAN),     { 1, 2, 3, 1, 2, 3, 1, 2, 4 } } };
 
 // static
 sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate )
@@ -186,7 +186,7 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
     eLang = primary(eLang);    // 10 bit primary language
     if ( bDate )
     {
-        if ( nNatNum == 9 && eLang == primary(LANGUAGE_KOREAN) )
+        if ( nNatNum == 10 && eLang == primary(LANGUAGE_KOREAN) )
         {
             nDBNum = 4;
         }
