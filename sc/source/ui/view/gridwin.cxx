@@ -5727,6 +5727,10 @@ OString ScGridWindow::getCellCursor() const
     if (!mpOOCursors)
         return "EMPTY";
 
+    if (comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        return pViewData->describeCellCursorInPrintTwips();
+
     return pViewData->describeCellCursor();
 }
 
