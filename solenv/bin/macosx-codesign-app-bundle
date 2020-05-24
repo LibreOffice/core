@@ -30,8 +30,7 @@ entitlements=
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # In a sandboxed build executables need the entitlements
     entitlements="--entitlements $BUILDDIR/lo.xcent"
-    # We use --enable-canonical-installation-tree-structure so all
-    # data files in Resources are included in the app bundle signature
+    # All data files are in Resources and included in the app bundle signature
     # through that. I think.
     other_files=''
 else
@@ -144,9 +143,7 @@ done
 
 # Sign the app bundle as a whole which means (re-)signing the
 # CFBundleExecutable from Info.plist, i.e. soffice, plus the contents
-# of the Resources tree (which unless you used
-# --enable-canonical-installation-tree-structure is not much, far from
-# all of our non-code "resources").
+# of the Resources tree.
 #
 # At this stage we also attach the entitlements in the sandboxing case
 #
