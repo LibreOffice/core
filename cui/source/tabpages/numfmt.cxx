@@ -920,6 +920,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_PERCENT:
         case CAT_CURRENCY:
         case CAT_FRACTION:
+        case CAT_TIME:
             m_xFtOptions->set_sensitive(true);
             if ( nCategory == CAT_FRACTION )
             {
@@ -931,8 +932,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
                 m_xFtDecimals->set_sensitive(true);
                 m_xEdDecimals->set_sensitive(true);
             }
-            m_xFtLeadZeroes->set_sensitive(true);
-            m_xEdLeadZeroes->set_sensitive(true);
+            m_xFtLeadZeroes->set_sensitive( nCategory != CAT_TIME );
+            m_xEdLeadZeroes->set_sensitive( nCategory != CAT_TIME );
             m_xBtnNegRed->set_sensitive(true);
             if ( nCategory == CAT_NUMBER && m_xLbFormat->get_selected_index() == 0 )
                 m_xEdDecimals->set_text( "" ); //General format tdf#44399
@@ -941,12 +942,13 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
                     m_xEdDenominator->set_value( nDecimals );
                 else
                     m_xEdDecimals->set_value( nDecimals );
-            m_xEdLeadZeroes->set_value( nZeroes );
+            if ( nCategory != CAT_TIME )
+                m_xEdLeadZeroes->set_value( nZeroes );
             m_xBtnNegRed->set_active( bNegRed );
             if ( nCategory != CAT_SCIENTIFIC )
             {
-                m_xBtnThousand->set_sensitive(true);
-                m_xBtnThousand->set_active( bThousand );
+                m_xBtnThousand->set_sensitive( nCategory != CAT_TIME );
+                m_xBtnThousand->set_active( bThousand && nCategory != CAT_TIME );
             }
             break;
 
@@ -954,7 +956,6 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_USERDEFINED:
         case CAT_TEXT:
         case CAT_DATE:
-        case CAT_TIME:
         case CAT_BOOLEAN:
         default:
             m_xFtOptions->set_sensitive(false);
