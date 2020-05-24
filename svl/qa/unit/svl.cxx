@@ -1510,36 +1510,36 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[DBNum3][$-0411]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
-        // -- Korean: DBNum1 -> NatNum1, DBNum2 -> NatNum2, DBNum3 -> NatNum4, DBNum4 -> NatNum9
+        // -- Korean: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBNum3 -> NatNum6, DBNum4 -> NatNum10
 
-        // DBNum1 -> NatNum1: Korean lower case characters
-        // 一二三四五六七八九
-        sExpected = u"\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d ";
-        sCode = "[NatNum1][$-0412]General\\ ";
+        // DBNum1 -> NatNum4: Korean lower case characters
+        // 一億二千三百四十五万六千七百八十九
+        sExpected = u"\u4e00\u5104\u4e8c\u5343\u4e09\u767e\u56db\u5341\u4e94\u4e07\u516d\u5343\u4e03\u767e\u516b\u5341\u4e5d ";
+        sCode = "[NatNum4][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
         sCode = "[DBNum1][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
-        // DBNum2 -> NatNum2: Korean upper case characters
-        // 壹貳參四伍六七八九
-        sExpected = u"\u58f9\u8cb3\u53c3\u56db\u4f0d\u516d\u4e03\u516b\u4e5d ";
-        sCode = "[NatNum2][$-0412]General\\ ";
+        // DBNum2 -> NatNum5: Korean upper case characters
+        // 壹億貳阡參佰四拾伍萬六阡七佰八拾九
+        sExpected = u"\u58f9\u5104\u8cb3\u9621\u53c3\u4f70\u56db\u62fe\u4f0d\u842c\u516d\u9621\u4e03\u4f70\u516b\u62fe\u4e5d ";
+        sCode = "[NatNum5][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
         sCode = "[DBNum2][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
-        // DBNum3 -> NatNum3: fullwidth Arabic digits
-        // １２３４５６７８９
-        sExpected = u"\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19 ";
-        sCode = "[NatNum3][$-0412]General\\ ";
+        // DBNum3 -> NatNum6: fullwidth Arabic digits
+        // １억２천３백４십５만６천７백８십９
+        sExpected = u"\uff11\uc5b5\uff12\ucc9c\uff13\ubc31\uff14\uc2ed\uff15\ub9cc\uff16\ucc9c\uff17\ubc31\uff18\uc2ed\uff19 ";
+        sCode = "[NatNum6][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
         sCode = "[DBNum3][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
 
         // DBNum4 -> NatNum9: Hangul characters
-        // 일이삼사오육칠팔구
-        sExpected = u"\uc77c\uc774\uc0bc\uc0ac\uc624\uc721\uce60\ud314\uad6c ";
-        sCode = "[NatNum9][$-0412]General\\ ";
+        // 일억이천삼백사십오만육천칠백팔십구
+        sExpected = u"\uc77c\uc5b5\uc774\ucc9c\uc0bc\ubc31\uc0ac\uc2ed\uc624\ub9cc\uc721\ucc9c\uce60\ubc31\ud314\uc2ed\uad6c ";
+        sCode = "[NatNum10][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
         sCode = "[DBNum4][$-0412]General\\ ";
         checkPreviewString(aFormatter, sCode, 123456789, eLang, sExpected);
