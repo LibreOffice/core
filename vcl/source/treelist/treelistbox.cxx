@@ -402,6 +402,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
     mbQuickSearch(false),
+    mbActivateOnSingleClick(false),
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mnDragAction(DND_ACTION_COPYMOVE | DND_ACTION_LINK),
@@ -487,7 +488,6 @@ bool SvTreeListBox::DoubleClickHdl()
 {
     return !aDoubleClickHdl.IsSet() || aDoubleClickHdl.Call(this);
 }
-
 
 bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 nAction )
 {
@@ -3575,6 +3575,10 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "enable-search")
     {
         SetQuickSearch(toBool(rValue));
+    }
+    else if (rKey == "activate-on-single-click")
+    {
+        SetActivateOnSingleClick(toBool(rValue));
     }
     else if (rKey == "reorderable")
     {
