@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ca453e2_0015884c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-24T08:26:08Z",
+      "side": 1,
+      "message": "You compare \"123456789012\" here and \"1234567890\" above - so it isn\u0027t immediately obvious if the results here and there match or not. Why not using the same data for test?",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "b548e945f5c60395a0aaca8902fae964ed79bd0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
