@@ -47,13 +47,14 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const sal_Int32 nItemWidth);
+        const sal_Int32 nItemWidth, bool bSideBar);
 
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         weld::Toolbar& rToolbar,
         weld::Builder& rBuilder,
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        bool bSideBar);
 
 private:
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBarController(
@@ -61,7 +62,7 @@ private:
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::uno::Reference<css::frame::XController>& rxController,
-        const sal_Int32 nWidth);
+        const sal_Int32 nWidth, bool bSideBar);
 };
 
 
