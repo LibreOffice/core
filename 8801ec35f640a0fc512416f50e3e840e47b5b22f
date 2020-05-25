@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3c72a5f_de5baba8",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-25T09:12:08Z",
+      "side": 1,
+      "message": "this could just be std::vector or std::array",
+      "revId": "8801ec35f640a0fc512416f50e3e840e47b5b22f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30eeb74f_e69c02ea",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-25T09:12:08Z",
+      "side": 1,
+      "message": "if you had this as std::vector or std::array, then you wouldn\u0027t need to calculate the size as ugly as this..",
+      "revId": "8801ec35f640a0fc512416f50e3e840e47b5b22f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
