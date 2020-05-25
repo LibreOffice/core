@@ -147,8 +147,8 @@ SwUndoRenameFormat::SwUndoRenameFormat(SwUndoId nUndoId,
                                  const OUString & _sOldName,
                                  const OUString & _sNewName,
                                  SwDoc * _pDoc)
-    : SwUndo(nUndoId, _pDoc), sOldName(_sOldName),
-      sNewName(_sNewName), pDoc(_pDoc)
+    : SwUndo(nUndoId, _pDoc), m_sOldName(_sOldName),
+      m_sNewName(_sNewName), m_pDoc(_pDoc)
 {
 }
 
@@ -158,21 +158,21 @@ SwUndoRenameFormat::~SwUndoRenameFormat()
 
 void SwUndoRenameFormat::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwFormat * pFormat = Find(sNewName);
+    SwFormat * pFormat = Find(m_sNewName);
 
     if (pFormat)
     {
-        pDoc->RenameFormat(*pFormat, sOldName, true);
+        m_pDoc->RenameFormat(*pFormat, m_sOldName, true);
     }
 }
 
 void SwUndoRenameFormat::RedoImpl(::sw::UndoRedoContext &)
 {
-    SwFormat *  pFormat = Find(sOldName);
+    SwFormat *  pFormat = Find(m_sOldName);
 
     if (pFormat)
     {
-        pDoc->RenameFormat(*pFormat, sNewName, true);
+        m_pDoc->RenameFormat(*pFormat, m_sNewName, true);
     }
 }
 
@@ -180,9 +180,9 @@ SwRewriter SwUndoRenameFormat::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UndoArg1, sOldName);
+    aRewriter.AddRule(UndoArg1, m_sOldName);
     aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
-    aRewriter.AddRule(UndoArg3, sNewName);
+    aRewriter.AddRule(UndoArg3, m_sNewName);
 
     return aRewriter;
 }
@@ -260,7 +260,7 @@ SwUndoRenameFormatColl::SwUndoRenameFormatColl(const OUString & sInitOldName,
 
 SwFormat * SwUndoRenameFormatColl::Find(const OUString & rName) const
 {
-    return pDoc->FindTextFormatCollByName(rName);
+    return m_pDoc->FindTextFormatCollByName(rName);
 }
 
 SwUndoCharFormatCreate::SwUndoCharFormatCreate(SwCharFormat * pNewFormat,
@@ -314,7 +314,7 @@ SwUndoRenameCharFormat::SwUndoRenameCharFormat(const OUString & sInitOldName,
 
 SwFormat * SwUndoRenameCharFormat::Find(const OUString & rName) const
 {
-    return pDoc->FindCharFormatByName(rName);
+    return m_pDoc->FindCharFormatByName(rName);
 }
 
 SwUndoFrameFormatCreate::SwUndoFrameFormatCreate(SwFrameFormat * pNewFormat,
@@ -368,7 +368,7 @@ SwUndoRenameFrameFormat::SwUndoRenameFrameFormat(const OUString & sInitOldName,
 
 SwFormat * SwUndoRenameFrameFormat::Find(const OUString & rName) const
 {
-    return pDoc->FindFrameFormatByName(rName);
+    return m_pDoc->FindFrameFormatByName(rName);
 }
 
 SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
@@ -437,28 +437,28 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
 SwUndoNumruleRename::SwUndoNumruleRename(const OUString & _aOldName,
                                          const OUString & _aNewName,
                                          SwDoc * _pDoc)
-    : SwUndo(SwUndoId::NUMRULE_RENAME, _pDoc), aOldName(_aOldName), aNewName(_aNewName),
-      pDoc(_pDoc)
+    : SwUndo(SwUndoId::NUMRULE_RENAME, _pDoc), m_aOldName(_aOldName), m_aNewName(_aNewName),
+      m_pDoc(_pDoc)
 {
 }
 
 void SwUndoNumruleRename::UndoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->RenameNumRule(aNewName, aOldName, true);
+    m_pDoc->RenameNumRule(m_aNewName, m_aOldName, true);
 }
 
 void SwUndoNumruleRename::RedoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->RenameNumRule(aOldName, aNewName, true);
+    m_pDoc->RenameNumRule(m_aOldName, m_aNewName, true);
 }
 
 SwRewriter SwUndoNumruleRename::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UndoArg1, aOldName);
+    aRewriter.AddRule(UndoArg1, m_aOldName);
     aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
-    aRewriter.AddRule(UndoArg3, aNewName);
+    aRewriter.AddRule(UndoArg3, m_aNewName);
 
     return aRewriter;
 }

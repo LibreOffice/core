@@ -31,23 +31,23 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwDoc* pDoc,
                             SwUndoId nUndoId)
     : SwUndo( nUndoId, pDoc ),
-    aNumRule( rNewRule ),
-    pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
+    m_aNumRule( rNewRule ),
+    m_pOldNumRule( new SwNumRule( rOldRule )), m_nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
     : SwUndo( SwUndoId::INSNUM, rPam.GetDoc() ), SwUndRng( rPam ),
-    aNumRule( rRule ),
-    nLRSavePos( 0 )
+    m_aNumRule( rRule ),
+    m_nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
     : SwUndo( SwUndoId::INSNUM, rPos.nNode.GetNode().GetDoc() ),
-    aNumRule( rRule ),
-    sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
+    m_aNumRule( rRule ),
+    m_sReplaceRule( rReplaceRule ), m_nLRSavePos( 0 )
 {
     // No selection!
     m_nEndNode = 0;
@@ -58,15 +58,15 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
 
 SwUndoInsNum::~SwUndoInsNum()
 {
-    pHistory.reset();
-    pOldNumRule.reset();
+    m_pHistory.reset();
+    m_pOldNumRule.reset();
 }
 
 SwRewriter SwUndoInsNum::GetRewriter() const
 {
     SwRewriter aResult;
     if( SwUndoId::INSFMTATTR == GetId() )
-        aResult.AddRule(UndoArg1, aNumRule.GetName());
+        aResult.AddRule(UndoArg1, m_aNumRule.GetName());
     return aResult;
 }
 
@@ -74,19 +74,19 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if( pOldNumRule )
-        rDoc.ChgNumRuleFormats( *pOldNumRule );
+    if( m_pOldNumRule )
+        rDoc.ChgNumRuleFormats( *m_pOldNumRule );
 
-    if( pHistory )
+    if( m_pHistory )
     {
-        if( nLRSavePos )
+        if( m_nLRSavePos )
         {
             // Update immediately so that potential "old" LRSpaces will be valid again.
-            pHistory->TmpRollback( &rDoc, nLRSavePos );
+            m_pHistory->TmpRollback( &rDoc, m_nLRSavePos );
 
         }
-        pHistory->TmpRollback( &rDoc, 0 );
-        pHistory->SetTmpEnd( pHistory->Count() );
+        m_pHistory->TmpRollback( &rDoc, 0 );
+        m_pHistory->SetTmpEnd( m_pHistory->Count() );
     }
 
     if (m_nSttNode)
@@ -99,27 +99,27 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if ( pOldNumRule )
-        rDoc.ChgNumRuleFormats( aNumRule );
-    else if ( pHistory )
+    if ( m_pOldNumRule )
+        rDoc.ChgNumRuleFormats( m_aNumRule );
+    else if ( m_pHistory )
     {
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
-        if( !sReplaceRule.isEmpty() )
+        if( !m_sReplaceRule.isEmpty() )
         {
-            rDoc.ReplaceNumRule( *rPam.GetPoint(), sReplaceRule, aNumRule.GetName() );
+            rDoc.ReplaceNumRule( *rPam.GetPoint(), m_sReplaceRule, m_aNumRule.GetName() );
         }
         else
         {
             // #i42921# - adapt to changed signature
-            rDoc.SetNumRule(rPam, aNumRule, false);
+            rDoc.SetNumRule(rPam, m_aNumRule, false);
         }
     }
 }
 
 void SwUndoInsNum::SetLRSpaceEndPos()
 {
-    if( pHistory )
-        nLRSavePos = pHistory->Count();
+    if( m_pHistory )
+        m_nLRSavePos = m_pHistory->Count();
 }
 
 void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
@@ -127,36 +127,36 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc( rContext.GetDoc() );
     if ( m_nSttNode )
     {
-        if( sReplaceRule.isEmpty() )
+        if( m_sReplaceRule.isEmpty() )
         {
             // #i42921# - adapt to changed signature
-            rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
+            rDoc.SetNumRule(rContext.GetRepeatPaM(), m_aNumRule, false);
         }
     }
     else
     {
-        rDoc.ChgNumRuleFormats( aNumRule );
+        rDoc.ChgNumRuleFormats( m_aNumRule );
     }
 }
 
 SwHistory* SwUndoInsNum::GetHistory()
 {
-    if( !pHistory )
-        pHistory.reset(new SwHistory);
-    return pHistory.get();
+    if( !m_pHistory )
+        m_pHistory.reset(new SwHistory);
+    return m_pHistory.get();
 }
 
 void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 {
-    if( !pOldNumRule )
-        pOldNumRule.reset(new SwNumRule( rOld ));
+    if( !m_pOldNumRule )
+        m_pOldNumRule.reset(new SwNumRule( rOld ));
 }
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( SwUndoId::DELNUM, rPam.GetDoc() ), SwUndRng( rPam )
 {
-    aNodes.reserve( std::min<sal_uLong>(m_nEndNode - m_nSttNode, 255) );
-    pHistory.reset( new SwHistory );
+    m_aNodes.reserve( std::min<sal_uLong>(m_nEndNode - m_nSttNode, 255) );
+    m_pHistory.reset( new SwHistory );
 }
 
 SwUndoDelNum::~SwUndoDelNum()
@@ -167,10 +167,10 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    pHistory->TmpRollback( &rDoc, 0 );
-    pHistory->SetTmpEnd( pHistory->Count() );
+    m_pHistory->TmpRollback( &rDoc, 0 );
+    m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
-    for( const auto& rNode : aNodes )
+    for( const auto& rNode : m_aNodes )
     {
         SwTextNode* pNd = rDoc.GetNodes()[ rNode.index ]->GetTextNode();
         OSL_ENSURE( pNd, "Where has the TextNode gone?" );
@@ -198,7 +198,7 @@ void SwUndoDelNum::AddNode( const SwTextNode& rNd )
 {
     if( rNd.GetNumRule() )
     {
-        aNodes.emplace_back( rNd.GetIndex(), rNd.GetActualListLevel() );
+        m_aNodes.emplace_back( rNd.GetIndex(), rNd.GetActualListLevel() );
     }
 }
 
