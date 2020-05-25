@@ -35,7 +35,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
-    OUString maPassword;
 
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
     const css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
