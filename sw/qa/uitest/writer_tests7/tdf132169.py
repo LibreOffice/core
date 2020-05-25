@@ -42,9 +42,8 @@ class tdf132169(UITestCase):
         xLineMetric = xWriterEdit.getChild('metricfield')
         self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
 
-        props = {"VALUE": "5.0"}
-        actionProps = mkPropertyValues(props)
-        xLineMetric.executeAction("VALUE", actionProps)
+        for i in range(5):
+            xLineMetric.executeAction("UP", tuple())
 
         self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "5.0 pt")
 
