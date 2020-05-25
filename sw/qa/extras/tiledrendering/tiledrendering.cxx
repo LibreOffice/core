@@ -2537,6 +2537,7 @@ void SwTiledRenderingTest::testFieldmark()
 
 void SwTiledRenderingTest::testDropDownFormFieldButton()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
@@ -2610,6 +2611,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButton()
 
 void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field2.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
@@ -2667,6 +2669,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonEditing()
 
 void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field_noselection.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
@@ -2702,6 +2705,7 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
 
 void SwTiledRenderingTest::testDropDownFormFieldButtonNoItem()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field_noitem.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
