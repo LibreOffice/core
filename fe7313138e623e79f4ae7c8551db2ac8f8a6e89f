@@ -16,6 +16,24 @@
       "revId": "fe7313138e623e79f4ae7c8551db2ac8f8a6e89f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135d02e1_c761eb41",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-05-25T20:42:11Z",
+      "side": 1,
+      "message": "I did it with patchset 10. Can you check it?",
+      "parentUuid": "06a14458_5276d3fa",
+      "revId": "fe7313138e623e79f4ae7c8551db2ac8f8a6e89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
