@@ -24,6 +24,8 @@
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <vcl/GraphicAttributes.hxx>
+
 namespace com::sun::star::graphic { class XGraphic; }
 
 // Adjustment defines
@@ -42,103 +44,9 @@ namespace o3tl
     template<> struct typed_flags<GraphicAdjustmentFlags> : is_typed_flags<GraphicAdjustmentFlags, 0x1f> {};
 }
 
-enum class GraphicDrawMode
-{
-    Standard = 0,
-    Greys = 1,
-    Mono = 2,
-    Watermark = 3
-};
-
 class VirtualDevice;
 struct GrfSimpleCacheObj;
 struct ImplTileInfo;
-
-class VCL_DLLPUBLIC GraphicAttr
-{
-private:
-
-    double          mfGamma;
-    BmpMirrorFlags  mnMirrFlags;
-    long            mnLeftCrop;
-    long            mnTopCrop;
-    long            mnRightCrop;
-    long            mnBottomCrop;
-    sal_uInt16      mnRotate10;
-    short           mnContPercent;
-    short           mnLumPercent;
-    short           mnRPercent;
-    short           mnGPercent;
-    short           mnBPercent;
-    bool            mbInvert;
-    sal_uInt8       mcTransparency;
-    GraphicDrawMode meDrawMode;
-
-public:
-
-                    GraphicAttr();
-
-    bool            operator==( const GraphicAttr& rAttr ) const;
-    bool            operator!=( const GraphicAttr& rAttr ) const { return !( *this == rAttr ); }
-
-    void            SetDrawMode( GraphicDrawMode eDrawMode ) { meDrawMode = eDrawMode; }
-    GraphicDrawMode GetDrawMode() const { return meDrawMode; }
-
-    void            SetMirrorFlags( BmpMirrorFlags nMirrFlags ) { mnMirrFlags = nMirrFlags; }
-    BmpMirrorFlags  GetMirrorFlags() const { return mnMirrFlags; }
-
-    void            SetCrop( long nLeft_100TH_MM, long nTop_100TH_MM, long nRight_100TH_MM, long nBottom_100TH_MM )
-                    {
-                        mnLeftCrop = nLeft_100TH_MM; mnTopCrop = nTop_100TH_MM;
-                        mnRightCrop = nRight_100TH_MM; mnBottomCrop = nBottom_100TH_MM;
-                    }
-    long            GetLeftCrop() const { return mnLeftCrop; }
-    long            GetTopCrop() const { return mnTopCrop; }
-    long            GetRightCrop() const { return mnRightCrop; }
-    long            GetBottomCrop() const { return mnBottomCrop; }
-
-    void            SetRotation( sal_uInt16 nRotate10 ) { mnRotate10 = nRotate10; }
-    sal_uInt16      GetRotation() const { return mnRotate10; }
-
-    void            SetLuminance( short nLuminancePercent ) { mnLumPercent = nLuminancePercent; }
-    short           GetLuminance() const { return mnLumPercent; }
-
-    void            SetContrast( short nContrastPercent ) { mnContPercent = nContrastPercent; }
-    short           GetContrast() const { return mnContPercent; }
-
-    void            SetChannelR( short nChannelRPercent ) { mnRPercent = nChannelRPercent; }
-    short           GetChannelR() const { return mnRPercent; }
-
-    void            SetChannelG( short nChannelGPercent ) { mnGPercent = nChannelGPercent; }
-    short           GetChannelG() const { return mnGPercent; }
-
-    void            SetChannelB( short nChannelBPercent ) { mnBPercent = nChannelBPercent; }
-    short           GetChannelB() const { return mnBPercent; }
-
-    void            SetGamma( double fGamma ) { mfGamma = fGamma; }
-    double          GetGamma() const { return mfGamma; }
-
-    void            SetInvert( bool bInvert ) { mbInvert = bInvert; }
-    bool            IsInvert() const { return mbInvert; }
-
-    void            SetTransparency( sal_uInt8 cTransparency ) { mcTransparency = cTransparency; }
-    sal_uInt8       GetTransparency() const { return mcTransparency; }
-
-    bool            IsSpecialDrawMode() const { return( meDrawMode != GraphicDrawMode::Standard ); }
-    bool            IsMirrored() const { return mnMirrFlags != BmpMirrorFlags::NONE; }
-    bool            IsCropped() const
-                    {
-                        return( mnLeftCrop != 0 || mnTopCrop != 0 ||
-                                mnRightCrop != 0 || mnBottomCrop != 0 );
-                    }
-    bool            IsRotated() const { return( ( mnRotate10 % 3600 ) != 0 ); }
-    bool            IsTransparent() const { return( mcTransparency > 0 ); }
-    bool            IsAdjusted() const
-                    {
-                        return( mnLumPercent != 0 || mnContPercent != 0 || mnRPercent != 0 ||
-                                mnGPercent != 0 || mnBPercent != 0 || mfGamma != 1.0 || mbInvert );
-                    }
-};
 
 class VCL_DLLPUBLIC GraphicObject
 {
