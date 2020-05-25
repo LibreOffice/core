@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b7bd9a5_76a97dff",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2296,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-25T18:11:33Z",
+      "side": 1,
+      "message": "Just a nitpick: we (or at least I and some others ;) prefer keywords like if,for,while,... not be immediately followed by a parenthesis (making them look like a function) but have one blank, and in new code not have leading or trailing blanks between opening and closing parentheses, so\n\n    for (i \u003d 0; i \u003c nCnt; i++)\n\nwhich IMHO makes things more legible. No need to change that here, we have a mix sprinkled all over the place, as said, just nitpicking..",
+      "revId": "8aa966f6fbdc8e2b664ca2a90353fc19eb35c1d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
