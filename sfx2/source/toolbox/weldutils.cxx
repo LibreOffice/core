@@ -72,10 +72,12 @@ vcl::ImageType ToolbarUnoDispatcher::GetIconSize() const
 }
 
 ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
-                                           const css::uno::Reference<css::frame::XFrame>& rFrame)
+                                           const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                           bool bSideBar)
     : m_xFrame(rFrame)
     , m_pToolbar(&rToolbar)
     , m_pBuilder(&rBuilder)
+    , m_bSideBar(bSideBar)
 {
     rToolbar.connect_clicked(LINK(this, ToolbarUnoDispatcher, SelectHdl));
     rToolbar.connect_menu_toggled(LINK(this, ToolbarUnoDispatcher, ToggleMenuHdl));
@@ -114,7 +116,7 @@ void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
 {
     css::uno::Reference<css::frame::XToolbarController> xController(
         sfx2::sidebar::ControllerFactory::CreateToolBoxController(*m_pToolbar, *m_pBuilder,
-                                                                  rCommand, m_xFrame));
+                                                                  rCommand, m_xFrame, m_bSideBar));
 
     if (xController.is())
         maControllers.insert(std::make_pair(rCommand, xController));

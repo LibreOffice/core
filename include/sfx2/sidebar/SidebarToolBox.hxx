@@ -62,6 +62,7 @@ protected:
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
     bool mbUseDefaultButtonSize;
+    bool mbSideBar;
 
     DECL_LINK(DropDownClickHandler, ToolBox*, void);
     DECL_LINK(ClickHandler, ToolBox*, void);
@@ -73,7 +74,7 @@ protected:
 
     void CreateController(const sal_uInt16 nItemId,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                          const sal_Int32 nItemWidth);
+                          const sal_Int32 nItemWidth, bool bSideBar);
     void RegisterHandlers();
 };
 

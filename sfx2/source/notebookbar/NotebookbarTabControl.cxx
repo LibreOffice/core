@@ -126,6 +126,7 @@ public:
     : sfx2::sidebar::SidebarToolBox( pParent )
     {
         mbUseDefaultButtonSize = false;
+        mbSideBar = false;
         SetToolboxButtonSize(ToolBoxButtonSize::Small);
     }
 
