@@ -223,6 +223,8 @@ namespace slideshow::internal
                                       "PathAnimation::PathAnimation(): failed to parse SVG:d path" );
                     ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );
+
+                    maPathPoly = aPolyPoly.getB2DPolygon(0);
                 }
 
                 virtual ~PathAnimation() override
