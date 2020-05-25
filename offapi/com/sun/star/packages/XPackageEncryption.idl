@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module packages {
 
 /** Allows to transparently plug-in crypto for PackageStreams.
 
-    @since LibreOffice 6.5
+    @since LibreOffice 7.0
  */
 interface XPackageEncryption: com::sun::star::uno::XInterface
 {
