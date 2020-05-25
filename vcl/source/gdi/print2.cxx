@@ -100,6 +100,25 @@ bool doesRectCoverWithUniformColor(
         rMapModeVDev.IsFillColor());
 }
 
+/** Check whether rCurrRect rectangle fully covers io_rPrevRect - if
+    yes, return true and update o_rBgColor
+ */
+bool checkRect( tools::Rectangle&       io_rPrevRect,
+                       Color&           o_rBgColor,
+                       const tools::Rectangle& rCurrRect,
+                       OutputDevice const &    rMapModeVDev )
+{
+    bool bRet = doesRectCoverWithUniformColor(io_rPrevRect, rCurrRect, rMapModeVDev);
+
+    if( bRet )
+    {
+        io_rPrevRect = rCurrRect;
+        o_rBgColor = rMapModeVDev.GetFillColor();
+    }
+
+    return bRet;
+}
+
 /** #107169# Convert BitmapEx to Bitmap with appropriately blended
     color. Convert MetaTransparentAction to plain polygon,
     appropriately colored
@@ -694,84 +713,72 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             {
                 case MetaActionType::RECT:
                 {
-                    const tools::Rectangle aRect(
-                        static_cast<const MetaRectAction*>(pCurrAct)->GetRect());
-
-                    if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                    if( !checkRect(
+                            aBackgroundComponent.aBounds,
+                            aBackgroundComponent.aBgColor,
+                            static_cast<const MetaRectAction*>(pCurrAct)->GetRect(),
+                            *aMapModeVDev) )
                         bStillBackground=false; // incomplete occlusion of background
-                    }
                     else
-                    {
                         nLastBgAction=nActionNum; // this _is_ background
-                    }
                     break;
                 }
                 case MetaActionType::POLYGON:
                 {
                     const tools::Polygon aPoly(
                         static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
-                    const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                    if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
-                        !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                    if( !basegfx::utils::isRectangle(
+                            aPoly.getB2DPolygon()) ||
+                        !checkRect(
+                            aBackgroundComponent.aBounds,
+                            aBackgroundComponent.aBgColor,
+                            aPoly.GetBoundRect(),
+                            *aMapModeVDev) )
                         bStillBackground=false; // incomplete occlusion of background
-                    }
                     else
-                    {
                         nLastBgAction=nActionNum; // this _is_ background
-                    }
                     break;
                 }
                 case MetaActionType::POLYPOLYGON:
                 {
                     const tools::PolyPolygon aPoly(
                         static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
-                    const tools::Rectangle aRect(aPoly.GetBoundRect());
-
-                    if (aPoly.Count() != 1 ||
-                        !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
-                        !doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                    if( aPoly.Count() != 1 ||
+                        !basegfx::utils::isRectangle(
+                            aPoly[0].getB2DPolygon()) ||
+                        !checkRect(
+                            aBackgroundComponent.aBounds,
+                            aBackgroundComponent.aBgColor,
+                            aPoly.GetBoundRect(),
+                            *aMapModeVDev) )
                         bStillBackground=false; // incomplete occlusion of background
-                    }
                     else
-                    {
                         nLastBgAction=nActionNum; // this _is_ background
-                    }
                     break;
                 }
                 case MetaActionType::WALLPAPER:
                 {
-                    const tools::Rectangle aRect(
-                        static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect());
-
-                    if (!doesRectCoverWithUniformColor(aBackgroundComponent.aBounds, aRect, *aMapModeVDev))
-                    {
-                        aBackgroundComponent.aBounds = aRect;
-                        aBackgroundComponent.aBgColor = aMapModeVDev->GetFillColor();
+                    if( !checkRect(
+                            aBackgroundComponent.aBounds,
+                            aBackgroundComponent.aBgColor,
+                            static_cast<const MetaWallpaperAction*>(pCurrAct)->GetRect(),
+                            *aMapModeVDev) )
                         bStillBackground=false; // incomplete occlusion of background
-                    }
                     else
-                    {
                         nLastBgAction=nActionNum; // this _is_ background
-                    }
                     break;
                 }
                 default:
                 {
-                    if (ImplIsNotTransparent( *pCurrAct, *aMapModeVDev))
-                        bStillBackground=false; // non-transparent action, possibly not uniform
+                    if( ImplIsNotTransparent( *pCurrAct,
+                                              *aMapModeVDev ) )
+                        bStillBackground=false; // non-transparent action, possibly
+                                                // not uniform
                     else
-                        // extend current bounds (next uniform action needs to fully cover this area)
-                        aBackgroundComponent.aBounds.Union(ImplCalcActionBounds(*pCurrAct, *aMapModeVDev));
+                        // extend current bounds (next uniform action
+                        // needs to fully cover this area)
+                        aBackgroundComponent.aBounds.Union(
+                            ImplCalcActionBounds(*pCurrAct, *aMapModeVDev) );
                     break;
                 }
             }
