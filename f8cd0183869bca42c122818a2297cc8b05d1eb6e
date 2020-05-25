@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "907d664c_6cbc5f89",
+        "filename": "svx/qa/unit/gallery/test_gallery.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-25T09:10:04Z",
+      "side": 1,
+      "message": "remove commented code...",
+      "revId": "f8cd0183869bca42c122818a2297cc8b05d1eb6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
