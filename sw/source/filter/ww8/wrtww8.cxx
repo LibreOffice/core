@@ -23,7 +23,10 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/packages/XPackageEncryption.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 #include <algorithm>
 #include <map>
 #include <hintids.hxx>
@@ -87,6 +90,8 @@
 #include "sprmids.hxx"
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"
@@ -3666,6 +3671,106 @@ void WW8Export::PrepareStorage()
 }
 
 ErrCode SwWW8Writer::WriteStorage()
+{
+    tools::SvRef<SotStorage> pOrigStg;
+    uno::Reference< packages::XPackageEncryption > xPackageEncryption;
+    std::shared_ptr<SvStream> pSotStorageStream;
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    if (mpMedium)
+    {
+        // Check for specific encryption requests
+        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mpMedium->GetItemSet(), SID_ENCRYPTIONDATA, false);
+        if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
+        {
+            ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);
+            OUString sCryptoType = aHashData.getUnpackedValueOrDefault("CryptoType", OUString());
+
+            if (sCryptoType.getLength())
+            {
+                uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+                uno::Sequence<uno::Any> aArguments{
+                    uno::makeAny(beans::NamedValue("Binary", uno::makeAny(true))) };
+                xPackageEncryption.set(
+                    xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
+
+                if (xPackageEncryption.is())
+                {
+                    // We have an encryptor
+                    // Create new temporary storage for content
+                    pOrigStg = m_pStg;
+                    pSotStorageStream = std::make_shared<SvMemoryStream>();
+                    m_pStg = new SotStorage(*pSotStorageStream);
+                }
+            }
+        }
+    }
+
+    ErrCode nErrorCode = WriteStorageImpl();
+
+    if (xPackageEncryption.is())
+    {
+        m_pStg->Commit();
+        pSotStorageStream->Seek(0);
+
+        // Encrypt data written into temporary storage
+        xPackageEncryption->setupEncryption(aEncryptionData);
+
+        uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pSotStorageStream.get(), false));
+        uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
+
+        m_pStg = pOrigStg;
+        for (const beans::NamedValue & aStreamData : std::as_const(aStreams))
+        {
+            // To avoid long paths split and open substorages recursively
+            // Splitting paths manually, since comphelper::string::split is trimming special characters like \0x01, \0x09
+            SotStorage * pStorage = m_pStg.get();
+            OUString sFileName;
+            sal_Int32 idx = 0;
+            do
+            {
+                OUString sPathElem = aStreamData.Name.getToken(0, L'/', idx);
+                if (!sPathElem.isEmpty())
+                {
+                    if (idx < 0)
+                    {
+                        sFileName = sPathElem;
+                    }
+                    else
+                    {
+                        pStorage = pStorage->OpenSotStorage(sPathElem);
+                        if (!pStorage)
+                            break;
+                    }
+                }
+            } while (pStorage && idx >= 0);
+
+            if (!pStorage)
+            {
+                nErrorCode = ERRCODE_IO_GENERAL;
+                break;
+            }
+
+            SotStorageStream* pStream = pStorage->OpenSotStream(sFileName);
+            if (!pStream)
+            {
+                nErrorCode = ERRCODE_IO_GENERAL;
+                break;
+            }
+            uno::Sequence<sal_Int8> aStreamContent;
+            aStreamData.Value >>= aStreamContent;
+            size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getArray(), aStreamContent.getLength());
+            if (nBytesWritten != static_cast<size_t>(aStreamContent.getLength()))
+            {
+                nErrorCode = ERRCODE_IO_CANTWRITE;
+                break;
+            }
+        }
+    }
+
+    return nErrorCode;
+}
+ErrCode SwWW8Writer::WriteStorageImpl()
 {
     // #i34818# - update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
