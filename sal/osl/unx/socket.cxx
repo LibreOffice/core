@@ -283,13 +283,13 @@ static sal_Int32 osl_psz_getServicePort (
 static void osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, char* pBuffer, sal_uInt32 BufferSize);
 
-static oslSocket createSocketImpl(int Socket)
+static oslSocket createSocketImpl()
 {
     oslSocket pSocket;
 
     pSocket = static_cast<oslSocket>(calloc(1, sizeof(struct oslSocketImpl)));
 
-    pSocket->m_Socket = Socket;
+    pSocket->m_Socket = OSL_INVALID_SOCKET;
     pSocket->m_nLastError = 0;
     pSocket->m_nRefCount = 1;
 
@@ -1104,7 +1104,7 @@ oslSocket SAL_CALL osl_createSocket(
     oslSocket pSocket;
 
     /* alloc memory */
-    pSocket= createSocketImpl(OSL_INVALID_SOCKET);
+    pSocket= createSocketImpl();
 
     /* create socket */
     pSocket->m_Socket= socket(FAMILY_TO_NATIVE(Family),
@@ -1520,7 +1520,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     }
 
     /* alloc memory */
-    pConnectionSockImpl= createSocketImpl(OSL_INVALID_SOCKET);
+    pConnectionSockImpl= createSocketImpl();
 
     /* set close-on-exec flag */
     if ((Flags = fcntl(Connection, F_GETFD, 0)) != -1)
