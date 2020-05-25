@@ -58,8 +58,6 @@ public:
     /// Access to the Rtf Sdr exporter.
     RtfSdrExport& SdrExporter() const;
 
-    bool SupportsOneColumnBreak() const override { return false; }
-
     bool FieldsQuoted() const override { return true; }
 
     bool AddSectionBreaksForTOX() const override { return false; }

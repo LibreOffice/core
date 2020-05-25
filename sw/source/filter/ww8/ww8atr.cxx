@@ -3867,7 +3867,8 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                 [[fallthrough]];
             case SvxBreak::ColumnAfter:
             case SvxBreak::ColumnBoth:
-                if ( GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 || GetExport().SupportsOneColumnBreak() )
+                if ( GetExport().m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK )
+                     || GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 )
                 {
                     nC = msword::ColumnBreak;
                 }
