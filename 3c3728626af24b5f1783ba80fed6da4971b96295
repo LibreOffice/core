@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf8d49c7_4ce1f9a4",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T08:27:11Z",
+      "side": 1,
+      "message": "I would prefer if one could still override as --with-python\u003dfully-internal on macOS",
+      "revId": "3c3728626af24b5f1783ba80fed6da4971b96295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
