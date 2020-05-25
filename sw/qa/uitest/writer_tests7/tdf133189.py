@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 def change_metric_units(self, unit):
@@ -39,40 +39,51 @@ class tdf133189(UITestCase):
         xPaperOrient = xWriterEdit.getChild('paperorientation')
         xPaperMargin = xWriterEdit.getChild('marginLB')
 
-        props = {"TEXT": 'A4'}
-        actionProps = mkPropertyValues(props)
-        xPaperSize.executeAction("SELECT", actionProps)
-
-        self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "A4")
-        self.assertEqual(get_state_as_dict(xPaperOrient)['SelectEntryText'], "Portrait")
-
-        #change measurement to Centimeter
-        change_metric_units(self, 'Centimeter')
-
-        #wait until the sidebar is updated
-        self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (1.90 cm)")
-
-        # tdf#129267
-        self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (1.90 cm)")
-        self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "A4")
-        self.assertEqual(get_state_as_dict(xPaperOrient)['SelectEntryText'], "Portrait")
-
-        heightValue = float(get_state_as_dict(xPaperHeight)['Value'])
-        widthValue = float(get_state_as_dict(xPaperWidth)['Value'])
-
-        #change measurement again to Inches
+        #change measurement to Inches
         change_metric_units(self, 'Inch')
 
-        #wait until the sidebar is updated
+        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        tabcontrol = xDialog.getChild("tabcontrol")
+        select_pos(tabcontrol, "1")
+
+        xWidth = xDialog.getChild('spinWidth')
+        xHeight = xDialog.getChild('spinHeight')
+
+        props = {"VALUE": '8.0'}
+        actionProps = mkPropertyValues(props)
+
+        xWidth.executeAction("VALUE", actionProps)
+        xHeight.executeAction("VALUE", actionProps)
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
         self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (0.75″)")
-
         self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (0.75″)")
-        self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "A4")
+        self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
+        self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
+        self.ui_test.wait_until_property_is_updated(xPaperOrient, "SelectEntryText", "Portrait")
         self.assertEqual(get_state_as_dict(xPaperOrient)['SelectEntryText'], "Portrait")
+        self.ui_test.wait_until_property_is_updated(xPaperWidth, "Text", "8.00″")
+        self.assertEqual(get_state_as_dict(xPaperWidth)['Text'], "8.00″")
+        self.ui_test.wait_until_property_is_updated(xPaperHeight, "Text", "8.00″")
+        self.assertEqual(get_state_as_dict(xPaperHeight)['Text'], "8.00″")
 
-        # 1 inc = 2.54 cms. Check the elements has been updated
-        self.assertEqual(int(float(get_state_as_dict(xPaperWidth)['Value'])), int(widthValue / 2.54))
-        self.assertEqual(int(float(get_state_as_dict(xPaperHeight)['Value'])), int(heightValue / 2.54))
+        #change measurement again to Centimeters
+        change_metric_units(self, 'Centimeter')
+
+        self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (1.90 cm)")
+        # tdf#129267
+        self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (1.90 cm)")
+        self.ui_test.wait_until_property_is_updated(xPaperSize, "SelectEntryText", "User")
+        self.assertEqual(get_state_as_dict(xPaperSize)['SelectEntryText'], "User")
+        self.ui_test.wait_until_property_is_updated(xPaperOrient, "SelectEntryText", "Portrait")
+        self.assertEqual(get_state_as_dict(xPaperOrient)['SelectEntryText'], "Portrait")
+        self.ui_test.wait_until_property_is_updated(xPaperWidth, "Text", "20.32 cm")
+        self.assertEqual(get_state_as_dict(xPaperWidth)['Text'], "20.32 cm")
+        self.ui_test.wait_until_property_is_updated(xPaperHeight, "Text", "20.32 cm")
+        self.assertEqual(get_state_as_dict(xPaperHeight)['Text'], "20.32 cm")
 
         self.xUITest.executeCommand(".uno:Sidebar")
 
