@@ -5991,13 +5991,24 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    tools::Rectangle aBoundingBox;
-    std::vector<tools::Rectangle> aLogicRects;
+    // If this is true, rRectangles should already in print twips.
+    // If false, rRectangles are in pixels.
+    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
-    aLogicRects = convertPixelToLogical(pViewData, rRectangles, aBoundingBox);
+    tools::Rectangle aBoundingBox;
+    std::vector<tools::Rectangle> aConvertedRects;
+
+    if (bInPrintTwips)
+        std::for_each(rRectangles.begin(), rRectangles.end(),
+                      [&aBoundingBox](const tools::Rectangle& rRect) { aBoundingBox.Union(rRect); });
+    else
+        aConvertedRects = convertPixelToLogical(pViewData, rRectangles, aBoundingBox);
+
+    const std::vector<tools::Rectangle>& rLogicRects = bInPrintTwips ? rRectangles : aConvertedRects;
     if (pLogicRects)
     {
-        *pLogicRects = aLogicRects;
+        *pLogicRects = rLogicRects;
         return;
     }
 
@@ -6005,8 +6016,16 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     OString sBoundingBoxString = "EMPTY";
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
+    OString aRectListString = rectanglesToString(rLogicRects);
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString.getStr());
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, rectanglesToString(aLogicRects).getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString.getStr());
+
+    if (bInPrintTwips)
+    {
+        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+                                       "selection", aRectListString);
+        return;
+    }
 
     for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
          it = SfxViewShell::GetNext(*it))
@@ -6037,6 +6056,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
 void ScGridWindow::updateOtherKitSelections() const
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
     for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
          it = SfxViewShell::GetNext(*it))
@@ -6047,10 +6068,19 @@ void ScGridWindow::updateOtherKitSelections() const
 
         // Fetch pixels & convert for each view separately.
         tools::Rectangle aBoundingBox;
-        std::vector<tools::Rectangle> aPixelRects;
-        GetPixelRectsFor(pOther->GetViewData().GetMarkData() /* theirs */, aPixelRects);
-        auto aOtherLogicRects = convertPixelToLogical(&pViewShell->GetViewData(), aPixelRects, aBoundingBox);
-        OString aRectsString = rectanglesToString(aOtherLogicRects);
+        std::vector<tools::Rectangle> aRects;
+        OString aRectsString;
+        GetRectsAnyFor(pOther->GetViewData().GetMarkData() /* theirs */, aRects, bInPrintTwips);
+        if (bInPrintTwips)
+        {
+            std::for_each(aRects.begin(), aRects.end(),
+                          [&aBoundingBox](const tools::Rectangle& rRect) { aBoundingBox.Union(rRect); });
+            aRectsString = rectanglesToString(aRects);
+        }
+        else
+            aRectsString = rectanglesToString(
+                    convertPixelToLogical(&pViewShell->GetViewData(), aRects, aBoundingBox));
+
         if (it == pViewShell)
         {
             OString sBoundingBoxString = "EMPTY";
@@ -6062,7 +6092,7 @@ void ScGridWindow::updateOtherKitSelections() const
         }
         else
             SfxLokHelper::notifyOtherView(it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
-                                          "selection", aRectsString.getStr());
+                                          "selection", aRectsString);
     }
 }
 
@@ -6260,9 +6290,14 @@ void ScGridWindow::UpdateCursorOverlay()
 
 void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
 {
-    std::vector<tools::Rectangle> aPixelRects;
-    GetSelectionRects(aPixelRects);
-    UpdateKitSelection(aPixelRects, &rLogicRects);
+    std::vector<tools::Rectangle> aRects;
+    if (comphelper::LibreOfficeKit::isActive() &&
+            comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        GetSelectionRectsPrintTwips(aRects);
+    else
+        GetSelectionRects(aRects);
+    UpdateKitSelection(aRects, &rLogicRects);
 }
 
 void ScGridWindow::DeleteSelectionOverlay()
@@ -6278,17 +6313,22 @@ void ScGridWindow::UpdateSelectionOverlay()
         SetMapMode( aDrawMode );
 
     DeleteSelectionOverlay();
-    std::vector<tools::Rectangle> aPixelRects;
-    GetSelectionRects( aPixelRects );
+    std::vector<tools::Rectangle> aRects;
+    if (comphelper::LibreOfficeKit::isActive() &&
+            comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        GetSelectionRectsPrintTwips(aRects);
+    else
+        GetSelectionRects(aRects);
 
-    if (!aPixelRects.empty() && pViewData->IsActive())
+    if (!aRects.empty() && pViewData->IsActive())
     {
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
         if (comphelper::LibreOfficeKit::isActive())
         {
             // notify the LibreOfficeKit too
-            UpdateKitSelection(aPixelRects);
+            UpdateKitSelection(aRects);
         }
         else if (xOverlayManager.is())
         {
@@ -6298,7 +6338,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             SCTAB nTab = pViewData->GetTabNo();
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-            for(const tools::Rectangle & rRA : aPixelRects)
+            for(const tools::Rectangle & rRA : aRects)
             {
                 if (bLayoutRTL)
                 {
