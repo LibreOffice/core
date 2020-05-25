@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc8df874_4ffe6133",
+        "filename": "offapi/UnoApi_offapi.mk",
+        "patchSetId": 16
+      },
+      "lineNbr": 2938,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "please keep this list sorted lexicographically",
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ce7070_87da12fb",
+        "filename": "offapi/com/sun/star/packages/PackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "please copy boilerplate for new files from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "131c4a4f_e7c2003c",
+        "filename": "offapi/com/sun/star/packages/PackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "please add at least some minimal documentation, and a @since tag",
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c883243_3412127e",
+        "filename": "offapi/com/sun/star/packages/XPackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "please copy boilerplate for new files from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184ebd2d_59ab5f32",
+        "filename": "offapi/com/sun/star/packages/XPackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "does it?",
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a66fccd0_29b6cc8d",
+        "filename": "offapi/com/sun/star/packages/XPackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:35:13Z",
+      "side": 1,
+      "message": "that should be \"7.0\"",
+      "range": {
+        "startLine": 33,
+        "startChar": 23,
+        "endLine": 33,
+        "endChar": 26
+      },
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
