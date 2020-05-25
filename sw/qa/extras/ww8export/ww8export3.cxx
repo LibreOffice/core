@@ -496,15 +496,6 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
     }
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf104017, "tdf104017.doc")
-{
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2
-    // - Actual  : 1
-    // i.e. the tables on the two pages were merged together to a single one on export.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
