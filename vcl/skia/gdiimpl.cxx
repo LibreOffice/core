@@ -978,6 +978,9 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+        if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth
+            || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+            paint.setFilterQuality(kHigh_SkFilterQuality);
         getDrawCanvas()->drawImageRect(image,
                                        SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY,
                                                          rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
@@ -1365,9 +1368,12 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
 
     SkPaint aPaint;
     aPaint.setBlendMode(eBlendMode);
+    if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+        aPaint.setFilterQuality(kHigh_SkFilterQuality);
 
     preDraw();
-    SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
+    SAL_INFO("vcl.skia.trace",
+             "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     addXorRegion(aDestinationRect);
     postDraw();
