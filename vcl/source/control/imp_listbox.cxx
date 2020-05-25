@@ -1741,11 +1741,11 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
     else
     {
-        DrawEntry(rRenderContext, nPos, true, true, /*bDrawTextAtImagePos*/false);
+        DrawEntry(rRenderContext, nPos, true, true);
     }
 }
 
-void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
+void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText)
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr(nPos);
     if (!pEntry)
@@ -1816,7 +1816,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             tools::Rectangle aTextRect(Point(gnBorder - mnLeft, nY),
                                 Size(nMaxWidth, nEntryHeight));
 
-            if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
+            if (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled())
             {
                 long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
                 aTextRect.AdjustLeft(nImageWidth + IMG_TXT_DISTANCE );

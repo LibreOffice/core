@@ -89,8 +89,7 @@ public:
 
     // methods using glyph indexing
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
-                                 const PhysicalFontFace** pFallbackFont = nullptr,
-                                 int* const pFallbackLevel = nullptr) const = 0;
+                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 
