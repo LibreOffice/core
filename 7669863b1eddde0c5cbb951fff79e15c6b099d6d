@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93701924_c79c8ecb",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 16
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-05-25T21:47:06Z",
+      "side": 1,
+      "message": "breaks for me on windows. : should likely be $(gb_CLASSPATHSEP)? (and then value should be quoted but it\u0027s already the subst that fails for some reason.. unsing »$(WHITESPACE)« instead of »$(gb_SPACE)« or using »$() $()« makes it work.\n\n  … $(T_MODULENAME)\u003d\"$(subst $(WHITESPACE),$(gb_CLASSPATHSEP),$(strip $(dir $(PACKAGEDIRS))))\" …",
+      "revId": "7669863b1eddde0c5cbb951fff79e15c6b099d6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
