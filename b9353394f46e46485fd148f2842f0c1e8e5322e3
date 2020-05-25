@@ -107,6 +107,30 @@
       "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb699d95_d7cc7495",
+        "filename": "offapi/com/sun/star/packages/XPackageEncryption.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T09:43:08Z",
+      "side": 1,
+      "message": "fixed with \u003c5e975fe97ec9d4c28f7a18e471e1f6cef185d857\u003e \"offapi: 6.5 is now called 7.0\"",
+      "parentUuid": "a66fccd0_29b6cc8d",
+      "range": {
+        "startLine": 33,
+        "startChar": 23,
+        "endLine": 33,
+        "endChar": 26
+      },
+      "revId": "b9353394f46e46485fd148f2842f0c1e8e5322e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
