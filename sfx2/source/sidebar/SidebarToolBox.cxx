@@ -58,7 +58,8 @@ namespace sfx2::sidebar {
 SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
       mbAreHandlersRegistered(false),
-      mbUseDefaultButtonSize(true)
+      mbUseDefaultButtonSize(true),
+      mbSideBar(true)
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
@@ -121,7 +122,7 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
 
     ToolBox::InsertItem(aCommand, rFrame, nBits, rRequestedSize, nPos);
 
-    CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
+    CreateController(GetItemId(aCommand), rFrame, std::max(rRequestedSize.Width(), 0L), mbSideBar);
     RegisterHandlers();
 }
 
@@ -149,13 +150,13 @@ void SidebarToolBox::KeyInput(const KeyEvent& rKEvt)
 void SidebarToolBox::CreateController (
     const sal_uInt16 nItemId,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    const sal_Int32 nItemWidth)
+    const sal_Int32 nItemWidth, bool bSideBar)
 {
     const OUString sCommandName (GetItemCommand(nItemId));
 
     uno::Reference<frame::XToolbarController> xController(sfx2::sidebar::ControllerFactory::CreateToolBoxController(
             this, nItemId, sCommandName, rxFrame, rxFrame->getController(),
-            VCLUnoHelper::GetInterface(this), nItemWidth));
+            VCLUnoHelper::GetInterface(this), nItemWidth, bSideBar));
 
     if (xController.is())
         maControllers.insert(std::make_pair(nItemId, xController));
@@ -315,6 +316,7 @@ public:
     explicit NotebookbarToolBox(vcl::Window* pParentWindow)
     : SidebarToolBox(pParentWindow)
     {
+        mbSideBar = false;
         SetToolboxButtonSize(GetDefaultButtonSize());
     }
 
