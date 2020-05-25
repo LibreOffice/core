@@ -45,7 +45,7 @@ interface XPackageEncryption: com::sun::star::uno::XInterface
      */
     boolean readEncryptionInfo([in] sequence < com::sun::star::beans::NamedValue > rStreams);
 
-    /** Set or refresh encrytion key
+    /** Set or refresh encryption key
 
         @param rPassword
         Optional password to use for generating encryption key.
