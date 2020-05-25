@@ -131,8 +131,6 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const override;
 
-    virtual bool SupportsOneColumnBreak() const override { return true; }
-
     virtual bool FieldsQuoted() const override { return true; }
 
     virtual bool AddSectionBreaksForTOX() const override { return true; }

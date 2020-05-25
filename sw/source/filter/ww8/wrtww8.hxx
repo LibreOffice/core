@@ -677,9 +677,6 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const = 0;
 
-    /// Determines if column break with one column should be exported or not.
-    virtual bool SupportsOneColumnBreak() const = 0;
-
     /// Determines if the import filter already quoted fields or not.
     virtual bool FieldsQuoted() const = 0;
 
@@ -1019,8 +1016,6 @@ public:
     virtual bool PreferPageBreakBefore() const override { return true; }
 
     virtual bool AllowPostponedTextInTable() const override { return false; }
-
-    virtual bool SupportsOneColumnBreak() const override { return false; }
 
     virtual bool FieldsQuoted() const override { return false; }
 
