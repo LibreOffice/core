@@ -2497,17 +2497,28 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
         ScViewData* pViewData = GetViewData();
         if (pViewData && pViewData->GetActiveWin())
         {
-            Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), pViewData->GetActivePart(), true);
-            long nSizeXPix;
-            long nSizeYPix;
-            pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeXPix, nSizeYPix);
-
-            const double fPPTX = pViewData->GetPPTX();
-            const double fPPTY = pViewData->GetPPTY();
-            tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
-
-            aAnnotation.put("cellPos", aRect.toString());
+            bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+            OString aRectString;
+            if (bInPrintTwips)
+            {
+                Point aTopLeft = pViewData->GetPrintTwipsPos(rPos.Col(), rPos.Row());
+                long nSizeX, nSizeY;
+                pViewData->GetMergeSizePrintTwips(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
+                aRectString = tools::Rectangle(aTopLeft, Size(nSizeX, nSizeY)).toString();
+            }
+            else
+            {
+                Point aTopLeft = pViewData->GetScrPos(rPos.Col(), rPos.Row(),
+                        pViewData->GetActivePart(), true);
+                long nSizeXPix, nSizeYPix;
+                pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeXPix, nSizeYPix);
+                const double fPPTX = pViewData->GetPPTX();
+                const double fPPTY = pViewData->GetPPTY();
+                aRectString = tools::Rectangle(Point(aTopLeft.getX() / fPPTX, aTopLeft.getY() / fPPTY),
+                                               Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY)).toString();
+            }
+            aAnnotation.put("cellPos", aRectString);
         }
     }
 
