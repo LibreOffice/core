@@ -28,11 +28,11 @@
 
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
-    SwNumRule aNumRule;
-    std::unique_ptr<SwHistory> pHistory;
-    std::unique_ptr<SwNumRule> pOldNumRule;
-    OUString sReplaceRule;
-    sal_uInt16 nLRSavePos;
+    SwNumRule m_aNumRule;
+    std::unique_ptr<SwHistory> m_pHistory;
+    std::unique_ptr<SwNumRule> m_pOldNumRule;
+    OUString m_sReplaceRule;
+    sal_uInt16 m_nLRSavePos;
 
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
@@ -64,8 +64,8 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
         int level;
         NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
     };
-    std::vector<NodeLevel>     aNodes;
-    std::unique_ptr<SwHistory> pHistory;
+    std::vector<NodeLevel>     m_aNodes;
+    std::unique_ptr<SwHistory> m_pHistory;
 
 public:
     SwUndoDelNum( const SwPaM& rPam );
@@ -77,7 +77,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void AddNode( const SwTextNode& rNd );
-    SwHistory* GetHistory() { return pHistory.get(); }
+    SwHistory* GetHistory() { return m_pHistory.get(); }
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng

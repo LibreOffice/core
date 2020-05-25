@@ -82,8 +82,8 @@ public:
 class SwUndoRenameFormat : public SwUndo
 {
 protected:
-    OUString sOldName, sNewName;
-    SwDoc * pDoc;
+    OUString m_sOldName, m_sNewName;
+    SwDoc * m_pDoc;
 
 public:
     SwUndoRenameFormat(SwUndoId nUndoId, const OUString & sOldName,
@@ -238,8 +238,8 @@ public:
 
 class SwUndoNumruleRename : public SwUndo
 {
-    OUString aOldName, aNewName;
-    SwDoc * pDoc;
+    OUString m_aOldName, m_aNewName;
+    SwDoc * m_pDoc;
 
  public:
     SwUndoNumruleRename(const OUString & aOldName, const OUString & aNewName,
