@@ -6,7 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.path import get_srcdir_url
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 def get_url_for_data_file(file_name):
@@ -42,11 +42,18 @@ class tdf132169(UITestCase):
         xLineMetric = xWriterEdit.getChild('metricfield')
         self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
 
-        props = {"VALUE": "5.0"}
-        actionProps = mkPropertyValues(props)
-        xLineMetric.executeAction("VALUE", actionProps)
+        #Check changing value from dialog also works
+        self.ui_test.execute_dialog_through_command(".uno:FormatLine")
+        xFormatLineDlg = self.xUITest.getTopFocusWindow()
+        xWidth = xFormatLineDlg.getChild('MTR_FLD_LINE_WIDTH')
+        type_text(xWidth, "4.0")
+        xOKBtn = xFormatLineDlg.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
 
-        self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "5.0 pt")
+        self.ui_test.wait_until_property_is_updated(xLineMetric, "Text", "4.0 pt")
+        self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "4.0 pt")
+
+        xLineMetric.executeAction("UP", tuple())
 
         document = self.ui_test.get_component()
         drawPage = document.getDrawPages().getByIndex(0)
