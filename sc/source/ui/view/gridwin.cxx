@@ -1010,7 +1010,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     }
     if (nEntryCount > SC_FILTERLISTBOX_LINES)
         nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
-    nMaxText += 4;          // for Rand
+    nMaxText += 4;          // for margin
     if ( nMaxText > 300 )
         nMaxText = 300;     // do not over do it (Pixel)
 
