@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[1]", "B");
     // Without the accompanying fix in place, this test would have failed with:
     // XPath '//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[2]' not found
-    // i.e. </li> was writen before "C", not after "C", so "C" was not in the 2nd list item.
+    // i.e. </li> was written before "C", not after "C", so "C" was not in the 2nd list item.
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[2]/reqif-xhtml:p[2]", "C");
     assertXPathContent(pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li[3]/reqif-xhtml:p", "D");
 }
