@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "761e6afc_b61fbba4",
+        "filename": "starmath/inc/document.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "typo (extra new line)",
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b1eb104_048d3e59",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 5783,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "clean-up:\n\n                    //output variable for the formula alignment (default inline)\n                    sal_Int8 nAlign(FormulaExportBase::eFormulaAlign::INLINE);",
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "126d7d8c_86cbfed2",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 5802,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "clean-up:\n                        SwPosition const*const pAPos \u003d rFrameFormat.GetAnchor().GetContentAnchor();\n                        if( pAPos )\n                        {\n                            //Get the text node what the formula anchored to\n                            const SwTextNode* pTextNd \u003d pAPos-\u003enNode.GetNode().GetTextNode();\n                            //Formulas in non-empty paragraph only can be inline anchored\n                            if ( pTextNd \u0026\u0026 pTextNd-\u003eLen() \u003d\u003d 1 )\n                            {\n                                //Get the paragraph alignment\n                                auto aParaAdjust \u003d pTextNd-\u003eGetSwAttrSet().GetAdjust().GetAdjust();\n                                //And set the formula according to the paragraph alignment\n                                if (aParaAdjust \u003d\u003d SvxAdjust::Center)\n                                    nAlign \u003d FormulaExportBase::eFormulaAlign::CENTER;\n                                else if (aParaAdjust \u003d\u003d SvxAdjust::Right)\n                                    nAlign \u003d FormulaExportBase::eFormulaAlign::RIGHT;\n                                else // left in the case of left and justified paragraph alignments\n                                    nAlign \u003d FormulaExportBase::eFormulaAlign::LEFT;\n                            }\n                        }",
+      "range": {
+        "startLine": 5785,
+        "startChar": 23,
+        "endLine": 5802,
+        "endChar": 25
+      },
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e07f457b_36c500e1",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 5804,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "typo (missing space)",
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a208311b_bab027be",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 2233,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "typo (removed space)",
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "953d014f_0154def8",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-25T10:55:33Z",
+      "side": 1,
+      "message": "typos (added, removed spaces)",
+      "range": {
+        "startLine": 2268,
+        "startChar": 12,
+        "endLine": 2268,
+        "endChar": 112
+      },
+      "revId": "4576f4235463355ccd144f5ae9d2a76e428f1170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
