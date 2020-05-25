@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <vcl/GraphicObject.hxx>
-
+#include <vcl/GraphicAttributes.hxx>
 
 GraphicAttr::GraphicAttr() :
     mfGamma         ( 1.0 ),
