@@ -8,7 +8,6 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 import time
-from uitest.config import MAX_WAIT
 from uitest.debug import sleep
 from uitest.uihelper.common import select_pos
 
@@ -20,7 +19,7 @@ class autocorrectOptions(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", maxWait=10*MAX_WAIT)
+        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg")
         xDialog = self.xUITest.getTopFocusWindow()
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "0")       #tab replace
