@@ -925,6 +925,8 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
+    bool bMenuAtTop = true;
+
     ScDocument* pDoc = pViewData->GetDocument();
     mpFilterBox.disposeAndClear();
     mpFilterFloat.disposeAndClear();
@@ -935,7 +937,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     {
         nRow = rScenRange.aEnd.Row() + 1;   // Range at very the top -> Button below
         if (nRow>pDoc->MaxRow()) nRow = pDoc->MaxRow();
-        //! Add text height (if it is stored in the View...)
+        bMenuAtTop = false;
     }
 
     SCTAB nTab = pViewData->GetTabNo();
@@ -953,6 +955,12 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
     aCellRect.AdjustTop( -nSizeY );
     aCellRect.AdjustBottom( -(nSizeY - 1) );
+    if (!bMenuAtTop)
+    {
+        Size aButSize = pViewData->GetScenButSize();
+        aCellRect.AdjustBottom(aButSize.Height());
+    }
+
     //  Place the ListBox directly below the black line of the cell grid
     //  (It looks odd if the line gets hidden...)
 
