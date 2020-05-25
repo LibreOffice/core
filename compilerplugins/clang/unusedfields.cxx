@@ -1144,29 +1144,6 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
-{
-    auto const parents = context.getParents(*stmt);
-    auto it = parents.begin();
-
-    if (it == parents.end())
-          return nullptr;
-
-    const Decl *decl = it->get<Decl>();
-    if (decl)
-    {
-        if (isa<VarDecl>(decl))
-            return dyn_cast<FunctionDecl>(decl->getDeclContext());
-        return decl;
-    }
-
-    stmt = it->get<Stmt>();
-    if (stmt)
-        return getFunctionDeclContext(context, stmt);
-
-    return nullptr;
-}
-
 void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr) {
     const FunctionDecl* memberExprParentFunction = getParentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(memberExprParentFunction);
@@ -1180,7 +1157,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
             if (memberExprParentFunction)
                 memberExprParentFunction->dump();
             memberExpr->dump();
-            const Decl *decl = getFunctionDeclContext(compiler.getASTContext(), memberExpr);
+            const Decl *decl = loplugin::getFunctionDeclContext(compiler.getASTContext(), memberExpr);
             if (decl)
                 decl->dump();
             std::cout << "site1" << std::endl;

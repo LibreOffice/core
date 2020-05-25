@@ -200,7 +200,7 @@ Stmt* Plugin::getParentStmt( Stmt* stmt )
     return const_cast<Stmt*>(parentsRange.begin()->get<Stmt>());
 }
 
-static const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
+const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
 {
     auto const parents = context.getParents(*stmt);
     auto it = parents.begin();

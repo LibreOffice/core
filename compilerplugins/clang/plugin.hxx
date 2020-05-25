@@ -309,6 +309,8 @@ bool hasExternalLinkage(VarDecl const * decl);
 bool isSmartPointerType(const clang::Type*);
 bool isSmartPointerType(const Expr*);
 
+const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt);
+
 } // namespace
 
 #endif // COMPILEPLUGIN_H
