@@ -233,7 +233,7 @@ bool Control::EventNotify( NotifyEvent& rNEvt )
             {
                 mbHasControlFocus = true;
                 CompatStateChanged( StateChangedType::ControlFocus );
-                if ( ImplCallEventListenersAndHandler( VclEventId::ControlGetFocus, [this] () { maGetFocusHdl.Call(*this); } ) )
+                if ( ImplCallEventListenersAndHandler( VclEventId::ControlGetFocus, {} ) )
                     // been destroyed within the handler
                     return true;
             }

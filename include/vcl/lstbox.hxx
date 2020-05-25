@@ -87,7 +87,6 @@ private:
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
     Link<ListBox&,void>          maSelectHdl;
-    Link<ListBox&,void>         maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
     bool            mbDDAutoSize : 1;
@@ -186,9 +185,6 @@ public:
     void                SetTopEntry( sal_Int32  nPos );
     sal_Int32           GetTopEntry() const;
 
-    void                SaveValue() { mnSaveValue = GetSelectedEntryPos(); }
-    bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectedEntryPos(); }
-
     /**
      * Removes existing separators, and sets the position of the
      * one and only separator.
@@ -219,7 +215,6 @@ public:
     tools::Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
-    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
