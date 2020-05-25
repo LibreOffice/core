@@ -1245,7 +1245,8 @@ AC_ARG_ENABLE(lto,
 AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],
         [Enables or disables Python support at run-time.
-         Also specifies what Python to use. 'auto' is the default.
+         Also specifies what Python to use. On macOS there is no choice, it
+         is always 'internal'. Otherwise the default is 'auto'.
          'fully-internal' even forces the internal version for uses of Python
          during the build.]))
 
@@ -8773,6 +8774,10 @@ AC_SUBST(XMLLINT)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
+if test $_os = Darwin; then
+    # Don't bother checking, always use "internal"
+    enable_python=internal
+fi
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     if test -n "$PYTHON"; then
         PYTHON_FOR_BUILD=$PYTHON
