@@ -902,7 +902,7 @@ void ListBox::Select()
 
 void ListBox::DoubleClick()
 {
-    ImplCallEventListenersAndHandler( VclEventId::ListboxDoubleClick, [this] () { maDoubleClickHdl.Call(*this); } );
+    ImplCallEventListenersAndHandler( VclEventId::ListboxDoubleClick, {} );
 }
 
 void ListBox::Clear()

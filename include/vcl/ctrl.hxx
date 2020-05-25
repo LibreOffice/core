@@ -38,7 +38,6 @@ protected:
 private:
     bool                    mbHasControlFocus;
     bool                    mbShowAccelerator;
-    Link<Control&,void>     maGetFocusHdl;
     Link<Control&,void>     maLoseFocusHdl;
 
     SAL_DLLPRIVATE void     ImplInitControlData();
@@ -162,7 +161,6 @@ public:
     */
     long ToRelativeLineIndex( long nIndex ) const;
 
-    void            SetGetFocusHdl( const Link<Control&,void>& rLink ) { maGetFocusHdl = rLink; }
     void            SetLoseFocusHdl( const Link<Control&,void>& rLink ) { maLoseFocusHdl = rLink; }
 
     /** determines whether the control currently has the focus
