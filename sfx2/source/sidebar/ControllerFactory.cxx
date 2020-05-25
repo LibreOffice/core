@@ -44,14 +44,14 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     const Reference<frame::XFrame>& rxFrame,
     const Reference<frame::XController>& rxController,
     const Reference<awt::XWindow>& rxParentWindow,
-    const sal_Int32 nWidth)
+    const sal_Int32 nWidth, bool bSideBar)
 {
     Reference<frame::XToolbarController> xController (
         CreateToolBarController(
             VCLUnoHelper::GetInterface(pToolBox),
             rsCommandName,
             rxFrame, rxController,
-            nWidth));
+            nWidth, bSideBar));
 
     bool bFactoryHasController( xController.is() );
 
@@ -141,7 +141,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     weld::Toolbar& rToolbar, weld::Builder& rBuilder,
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
+    const Reference<frame::XFrame>& rxFrame, bool bSideBar)
 {
     css::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar, &rBuilder));
 
@@ -150,7 +150,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
             xWidget,
             rsCommandName,
             rxFrame, rxFrame->getController(),
-            -1));
+            -1, bSideBar));
 
     if (!xController.is())
     {
@@ -204,7 +204,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
     const Reference<frame::XController>& rxController,
-    const sal_Int32 nWidth)
+    const sal_Int32 nWidth, bool bSideBar)
 {
     try
     {
@@ -234,7 +234,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             aPropValue.Name = "IsSidebar";
-            aPropValue.Value <<= true;
+            aPropValue.Value <<= bSideBar;
             aPropertyVector.push_back( makeAny( aPropValue ));
 
             if (nWidth > 0)
