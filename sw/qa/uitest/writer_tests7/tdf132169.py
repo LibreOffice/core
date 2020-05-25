@@ -36,6 +36,8 @@ class tdf132169(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         self.xUITest.executeCommand(".uno:JumpToNextFrame")
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
 
         #wait until the toolbar is available
         self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
@@ -45,6 +47,8 @@ class tdf132169(UITestCase):
         props = {"VALUE": "5.0"}
         actionProps = mkPropertyValues(props)
         xLineMetric.executeAction("VALUE", actionProps)
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+        xToolkit.processEventsToIdle()
 
         self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "5.0 pt")
 
