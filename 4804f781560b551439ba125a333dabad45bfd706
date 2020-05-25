@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a53f390_0fe52d96",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-05-25T08:20:55Z",
+      "side": 1,
+      "message": "I wonder if the normal label shouldn\u0027t stay long and this short version applies to the contextual label. Even if all places are contextual thus seems to make the different versions obsolete it\u0027s worth to keep a more verbose label for the customization dialog.",
+      "range": {
+        "startLine": 1304,
+        "startChar": 34,
+        "endLine": 1304,
+        "endChar": 38
+      },
+      "revId": "4804f781560b551439ba125a333dabad45bfd706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f439117_ac28203b",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_groups.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-05-25T08:20:55Z",
+      "side": 1,
+      "message": "This was intentionally changed not too long ago since \"left\" is not \"before\" for right-to-left languages.",
+      "range": {
+        "startLine": 2286,
+        "startChar": 88,
+        "endLine": 2286,
+        "endChar": 92
+      },
+      "revId": "4804f781560b551439ba125a333dabad45bfd706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
