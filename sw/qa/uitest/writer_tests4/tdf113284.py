@@ -30,6 +30,8 @@ class tdf113284(UITestCase):
     xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
     xOkBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOkBtn)
+    xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+    xToolkit.processEventsToIdle()
 
     self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], str(xPageCount))
     self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
