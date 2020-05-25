@@ -150,6 +150,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/floatingsync \
 	sw/uiconfig/swriter/ui/formatsectiondialog \
 	sw/uiconfig/swriter/ui/formattablepage \
+	sw/uiconfig/swriter/ui/formdropdown \
 	sw/uiconfig/swriter/ui/footendnotedialog \
 	sw/uiconfig/swriter/ui/footnotepage \
 	sw/uiconfig/swriter/ui/footnoteareapage \
