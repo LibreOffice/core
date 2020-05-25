@@ -1903,9 +1903,21 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
     GetPixelRectsFor( pViewData->GetMarkData(), rPixelRects );
 }
 
+void ScGridWindow::GetSelectionRectsPrintTwips(::std::vector< tools::Rectangle >& rRects) const
+{
+    GetRectsAnyFor(pViewData->GetMarkData(), rRects, true);
+}
+
 /// convert rMarkData into pixel rectangles for this view
 void ScGridWindow::GetPixelRectsFor( const ScMarkData &rMarkData,
                                      ::std::vector< tools::Rectangle >& rPixelRects ) const
+{
+    GetRectsAnyFor(rMarkData, rPixelRects, false);
+}
+
+void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
+                                  ::std::vector< tools::Rectangle >& rRects,
+                                  bool bInPrintTwips) const
 {
     ScMarkData aMultiMark( rMarkData );
     aMultiMark.SetMarking( false );
@@ -1978,9 +1990,10 @@ void ScGridWindow::GetPixelRectsFor( const ScMarkData &rMarkData,
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
-    ScInvertMerger aInvert( &rPixelRects );
+    ScInvertMerger aInvert( &rRects );
 
-    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
+    Point aScrPos = bInPrintTwips ? pViewData->GetPrintTwipsPos(nX1, nY1) :
+            pViewData->GetScrPos(nX1, nY1, eWhich);
     long nScrY = aScrPos.Y();
     bool bWasHidden = false;
     for (SCROW nY=nY1; nY<=nY2; nY++)
@@ -2018,11 +2031,16 @@ void ScGridWindow::GetPixelRectsFor( const ScMarkData &rMarkData,
                     nLoopEndX = nX1;
             }
 
-            long nEndY = nScrY + ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
+            const long nHeight = bInPrintTwips ?
+                    nHeightTwips : ScViewData::ToPixel(nHeightTwips, nPPTY);
+            long nEndY = nScrY + nHeight - 1;
             long nScrX = aScrPos.X();
             for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
             {
-                long nWidth = ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
+                long nWidth = pDoc->GetColWidth(nX, nTab);
+                if (!bInPrintTwips)
+                    nWidth = ScViewData::ToPixel(nWidth, nPPTX);
+
                 if ( nWidth > 0 )
                 {
                     long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
@@ -2060,9 +2078,11 @@ void ScGridWindow::GetPixelRectsFor( const ScMarkData &rMarkData,
                             const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
                             if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
                             {
-                                Point aEndPos = pViewData->GetScrPos(
-                                        nThisX + pMerge->GetColMerge(),
-                                        nThisY + pMerge->GetRowMerge(), eWhich );
+                                const SCCOL nEndColMerge = nThisX + pMerge->GetColMerge();
+                                const SCROW nEndRowMerge = nThisY + pMerge->GetRowMerge();
+                                Point aEndPos = bInPrintTwips ?
+                                        pViewData->GetPrintTwipsPos(nEndColMerge, nEndRowMerge) :
+                                        pViewData->GetScrPos(nEndColMerge, nEndRowMerge, eWhich);
                                 if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
                                 {
                                     aInvert.AddRect( tools::Rectangle( nScrX,nScrY,
