@@ -531,7 +531,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
             return;
     }
 
-    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
+    auto parentsRange = getParents(*memberExpr);
     const Stmt* child = memberExpr;
     const Stmt* parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
     // walk up the tree until we find something interesting
@@ -539,7 +539,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
     bool bDump = false;
     auto walkUp = [&]() {
        child = parent;
-       auto parentsRange = compiler.getASTContext().getParents(*parent);
+       auto parentsRange = getParents(*parent);
        parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
     };
     do
@@ -547,7 +547,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
         if (!parent)
         {
             // check if we're inside a CXXCtorInitializer or a VarDecl
-            auto parentsRange = compiler.getASTContext().getParents(*child);
+            auto parentsRange = getParents(*child);
             if ( parentsRange.begin() != parentsRange.end())
             {
                 const Decl* decl = parentsRange.begin()->get<Decl>();
@@ -779,7 +779,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
     if (std::find(insideConditionalCheckOfMemberSet.begin(), insideConditionalCheckOfMemberSet.end(), fieldDecl) != insideConditionalCheckOfMemberSet.end())
         return;
 
-    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
+    auto parentsRange = getParents(*memberExpr);
     const Stmt* child = memberExpr;
     const Stmt* parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
     // walk up the tree until we find something interesting
@@ -787,7 +787,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
     bool bDump = false;
     auto walkUp = [&]() {
        child = parent;
-       auto parentsRange = compiler.getASTContext().getParents(*parent);
+       auto parentsRange = getParents(*parent);
        parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
     };
     do
@@ -796,7 +796,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
         {
             // check if we have an expression like
             //    int& r = m_field;
-            auto parentsRange = compiler.getASTContext().getParents(*child);
+            auto parentsRange = getParents(*child);
             if (parentsRange.begin() != parentsRange.end())
             {
                 auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());
@@ -1157,7 +1157,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
             if (memberExprParentFunction)
                 memberExprParentFunction->dump();
             memberExpr->dump();
-            const Decl *decl = loplugin::getFunctionDeclContext(compiler.getASTContext(), memberExpr);
+            const Decl *decl = getFunctionDeclContext(memberExpr);
             if (decl)
                 decl->dump();
             std::cout << "site1" << std::endl;

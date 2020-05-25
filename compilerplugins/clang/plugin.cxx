@@ -184,9 +184,35 @@ bool Plugin::evaluate(const Expr* expr, APSInt& x)
     return false;
 }
 
+DynTypedNodeList Plugin::getParents(Decl const & decl)
+{
+#if CLANG_VERSION >= 110000
+    if (!parentMapContext_) {
+        parentMapContext_.reset(new ParentMapContext(compiler.getASTContext()));
+        parentMapContext_->setTraversalKind(TK_AsIs);
+    }
+    return parentMapContext_->getParents(decl);
+#else
+    return compiler.getASTContext().getParents(decl);
+#endif
+}
+
+DynTypedNodeList Plugin::getParents(Stmt const & stmt)
+{
+#if CLANG_VERSION >= 110000
+    if (!parentMapContext_) {
+        parentMapContext_.reset(new ParentMapContext(compiler.getASTContext()));
+        parentMapContext_->setTraversalKind(TK_AsIs);
+    }
+    return parentMapContext_->getParents(stmt);
+#else
+    return compiler.getASTContext().getParents(stmt);
+#endif
+}
+
 const Stmt* Plugin::getParentStmt( const Stmt* stmt )
 {
-    auto parentsRange = compiler.getASTContext().getParents(*stmt);
+    auto parentsRange = getParents(*stmt);
     if ( parentsRange.begin() == parentsRange.end())
         return nullptr;
     return parentsRange.begin()->get<Stmt>();
@@ -194,15 +220,15 @@ const Stmt* Plugin::getParentStmt( const Stmt* stmt )
 
 Stmt* Plugin::getParentStmt( Stmt* stmt )
 {
-    auto parentsRange = compiler.getASTContext().getParents(*stmt);
+    auto parentsRange = getParents(*stmt);
     if ( parentsRange.begin() == parentsRange.end())
         return nullptr;
     return const_cast<Stmt*>(parentsRange.begin()->get<Stmt>());
 }
 
-const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
+const Decl* Plugin::getFunctionDeclContext(const Stmt* stmt)
 {
-    auto const parents = context.getParents(*stmt);
+    auto const parents = getParents(*stmt);
     auto it = parents.begin();
 
     if (it == parents.end())
@@ -218,14 +244,14 @@ const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt)
 
     stmt = it->get<Stmt>();
     if (stmt)
-        return getFunctionDeclContext(context, stmt);
+        return getFunctionDeclContext(stmt);
 
     return nullptr;
 }
 
 const FunctionDecl* Plugin::getParentFunctionDecl( const Stmt* stmt )
 {
-    const Decl *decl = getFunctionDeclContext(compiler.getASTContext(), stmt);
+    const Decl *decl = getFunctionDeclContext(stmt);
     if (decl)
         return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
 
