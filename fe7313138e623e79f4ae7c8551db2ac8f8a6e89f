@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06a14458_5276d3fa",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 6208,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-25T11:06:46Z",
+      "side": 1,
+      "message": "That \u003cprop\u003es implicitly default to oor:nillable\u003d\"true\" is considered a historic mistake now.  At least for this boolean prop it would probably be better to explicitly mark it as oor:nillable\u003d\"false\" and provide a suitable default \u003cvalue\u003e here.  (For the below FromDatabaseField string prop, whose value is presumably only relevant when Generation is true, nillable may be appropriate.  An alternative would be to make it non-nillable and use the empty string as default.)",
+      "revId": "fe7313138e623e79f4ae7c8551db2ac8f8a6e89f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
