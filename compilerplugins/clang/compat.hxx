@@ -24,6 +24,12 @@
 
 #include "config_clang.h"
 
+#if CLANG_VERSION >= 110000
+namespace clang { class DynTypedNodeList; }
+#else
+#include "clang/AST/ASTContext.h"
+#endif
+
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
@@ -288,6 +294,12 @@ inline clang::QualType getDeclaredReturnType(clang::FunctionDecl const * decl) {
     return T->castAs<clang::FunctionType>()->getReturnType();
 #endif
 }
+
+#if CLANG_VERSION >= 110000
+using DynTypedNodeList = clang::DynTypedNodeList;
+#else
+using DynTypedNodeList = clang::ASTContext::DynTypedNodeList;
+#endif
 
 }
 
