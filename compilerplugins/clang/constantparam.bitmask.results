@@ -31,16 +31,16 @@ sc/inc/rangeutl.hxx:162
 sc/inc/xmlwrap.hxx:90
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/view/cellsh1.cxx:104
+sc/source/ui/view/cellsh1.cxx:103
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sc/source/ui/view/cellsh1.cxx:127
+sc/source/ui/view/cellsh1.cxx:126
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
 sw/source/core/view/viewsh.cxx:717
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:673
+sw/source/filter/html/swhtml.hxx:678
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
 sw/source/filter/ww8/wrtw8esh.cxx:1545
@@ -51,4 +51,4 @@ xmloff/inc/MetaExportComponent.hxx:32
     enum SvXMLExportFlags nFlags setBits=0x1
 xmloff/source/text/XMLAutoTextEventExport.hxx:51
     void XMLAutoTextEventExport::XMLAutoTextEventExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
-    enum SvXMLExportFlags nFlags setBits=0xdff clearBits=0x200
+    enum SvXMLExportFlags nFlags setBits=0x5ff clearBits=0x200

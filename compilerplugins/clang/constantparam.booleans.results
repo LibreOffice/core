@@ -92,11 +92,11 @@ chart2/qa/extras/charttest.hxx:279
     0
 chart2/qa/extras/charttest.hxx:299
     int getNumberOfDataSeries(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
-    int nCooSys
+    int nChartType
     0
 chart2/qa/extras/charttest.hxx:299
     int getNumberOfDataSeries(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
-    int nChartType
+    int nCooSys
     0
 chart2/qa/extras/charttest.hxx:309
     class com::sun::star::uno::Reference<class com::sun::star::chart2::XDataSeries> getDataSeriesFromDoc(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int,int)
@@ -386,7 +386,7 @@ desktop/source/deployment/gui/dp_gui_updatedialog.hxx:103
     void dp_gui::UpdateDialog::addAdditional(struct dp_gui::UpdateDialog::Index *,_Bool)
     _Bool bEnableCheckBox
     0
-desktop/source/lib/init.cxx:6101
+desktop/source/lib/init.cxx:6105
     struct _LibreOfficeKit * libreofficekit_hook_2(const char *,const char *)
     const char * user_profile_url
     0
@@ -510,11 +510,11 @@ filter/source/graphicfilter/icgm/cgm.hxx:89
     unsigned char CGM::ImplGetByte(unsigned int,unsigned int)
     unsigned int nPrecision
     1
-filter/source/svg/svgfilter.hxx:240
+filter/source/svg/svgfilter.hxx:239
     _Bool SVGFilter::implExportMasterPages(const class std::__debug::vector<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage>, class std::allocator<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> > > &,int,int)
     int nFirstPage
     0
-filter/source/svg/svgfilter.hxx:242
+filter/source/svg/svgfilter.hxx:241
     void SVGFilter::implExportDrawPages(const class std::__debug::vector<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage>, class std::allocator<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> > > &,int,int)
     int nFirstPage
     0
@@ -1056,11 +1056,11 @@ include/sot/stg.hxx:158
     1
 include/sot/stg.hxx:250
     void UCBStorage::UCBStorage(const class ucbhelper::Content &,const class rtl::OUString &,enum StreamMode,_Bool,_Bool)
-    enum StreamMode nMode
+    _Bool bIsRoot
     1
 include/sot/stg.hxx:250
     void UCBStorage::UCBStorage(const class ucbhelper::Content &,const class rtl::OUString &,enum StreamMode,_Bool,_Bool)
-    _Bool bIsRoot
+    enum StreamMode nMode
     1
 include/sot/stg.hxx:250
     void UCBStorage::UCBStorage(const class ucbhelper::Content &,const class rtl::OUString &,enum StreamMode,_Bool,_Bool)
@@ -1380,12 +1380,12 @@ include/test/text/textcontent.hxx:25
     1
 include/test/text/textcontent.hxx:25
     void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
-    const enum com::sun::star::text::TextContentAnchorType aNewTCAT
-    1
-include/test/text/textcontent.hxx:25
-    void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
     const enum com::sun::star::text::WrapTextMode aExpectedWTM
     0
+include/test/text/textcontent.hxx:25
+    void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
+    const enum com::sun::star::text::TextContentAnchorType aNewTCAT
+    1
 include/test/text/textcontent.hxx:25
     void apitest::TextContent::TextContent(const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::TextContentAnchorType,const enum com::sun::star::text::WrapTextMode,const enum com::sun::star::text::WrapTextMode)
     const enum com::sun::star::text::WrapTextMode aNewWTM
@@ -1538,18 +1538,6 @@ include/vcl/BitmapBasicMorphologyFilter.hxx:46
     void BitmapErodeFilter::BitmapErodeFilter(int)
     int nRadius
     1
-include/vcl/combobox.hxx:100
-    void ComboBox::EnableUserDraw(_Bool)
-    _Bool bUserDraw
-    1
-include/vcl/combobox.hxx:102
-    void ComboBox::DrawEntry(const class UserDrawEvent &,_Bool,_Bool)
-    _Bool bDrawText
-    0
-include/vcl/combobox.hxx:102
-    void ComboBox::DrawEntry(const class UserDrawEvent &,_Bool,_Bool)
-    _Bool bDrawTextAtImagePos
-    0
 include/vcl/dibtools.hxx:40
     _Bool ReadDIB(class Bitmap &,class SvStream &,_Bool,_Bool)
     _Bool bMSOFormat
@@ -1638,7 +1626,7 @@ include/vcl/outdev.hxx:1224
     void OutputDevice::RefreshFontData(const _Bool)
     const _Bool bNewFontLists
     1
-include/vcl/outdev.hxx:1365
+include/vcl/outdev.hxx:1352
     _Bool OutputDevice::GetTextIsRTL(const class rtl::OUString &,int,int) const
     int nIndex
     0
@@ -1698,10 +1686,10 @@ include/vcl/toolbox.hxx:443
     void ToolBox::EnableCustomize(_Bool)
     _Bool bEnable
     1
-include/vcl/treelistbox.hxx:648
-    void SvTreeListBox::SetEntryHeight(short,_Bool)
-    _Bool bForce
-    0
+include/vcl/toolkit/combobox.hxx:104
+    void ComboBox::EnableUserDraw(_Bool)
+    _Bool bUserDraw
+    1
 include/vcl/treelistbox.hxx:656
     void SvTreeListBox::MakeVisible(class SvTreeListEntry *,_Bool)
     _Bool bMoveToTop
@@ -1713,6 +1701,10 @@ include/vcl/treelistbox.hxx:682
 include/vcl/treelistbox.hxx:692
     void SvTreeListBox::SetHighlightRange(unsigned short,unsigned short)
     unsigned short nFirstTab
+    0
+include/vcl/vcllayout.hxx:91
+    _Bool SalLayout::GetNextGlyph(const class GlyphItem **,class Point &,int &,const class PhysicalFontFace **,int *const) const
+    int *const pFallbackLevel
     0
 include/vcl/vclptr.hxx:43
     _Bool isIncompleteOrDerivedFromVclReferenceBase(int (*)[sizeof(T)])
@@ -1742,155 +1734,155 @@ include/vcl/vectorgraphicdata.hxx:90
     void VectorGraphicData::VectorGraphicData(const class rtl::OUString &,enum VectorGraphicDataType)
     enum VectorGraphicDataType eVectorDataType
     0
-include/vcl/weld.hxx:318
+include/vcl/weld.hxx:321
     void weld::ScrolledWindow::hadjustment_configure(int,int,int,int,int,int)
     int step_increment
     1
-include/vcl/weld.hxx:337
+include/vcl/weld.hxx:340
     void weld::ScrolledWindow::vadjustment_configure(int,int,int,int,int,int)
     int lower
     0
-include/vcl/weld.hxx:349
+include/vcl/weld.hxx:352
     void weld::ScrolledWindow::vadjustment_set_lower(int)
     int upper
     0
-include/vcl/weld.hxx:937
+include/vcl/weld.hxx:938
     _Bool weld::TreeView::get_text_emphasis(int,int) const
     int col
     0
-include/vcl/weld.hxx:938
+include/vcl/weld.hxx:939
     void weld::TreeView::set_text_align(int,double,int)
     int col
     0
-include/vcl/weld.hxx:1156
+include/vcl/weld.hxx:1157
     void weld::TreeView::set_column_custom_renderer(int,_Bool)
     int nColumn
     0
-include/vcl/weld.hxx:1216
+include/vcl/weld.hxx:1217
     class std::unique_ptr<class weld::TreeIter, struct std::default_delete<class weld::TreeIter> > weld::IconView::make_iterator(const class weld::TreeIter *) const
     const class weld::TreeIter * pOrig
     0
-include/vcl/weld.hxx:2192
+include/vcl/weld.hxx:2193
     class std::unique_ptr<class weld::MessageDialog, struct std::default_delete<class weld::MessageDialog> > weld::Builder::weld_message_dialog(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2195
+include/vcl/weld.hxx:2196
     class std::unique_ptr<class weld::Dialog, struct std::default_delete<class weld::Dialog> > weld::Builder::weld_dialog(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2196
+include/vcl/weld.hxx:2197
     class std::unique_ptr<class weld::Assistant, struct std::default_delete<class weld::Assistant> > weld::Builder::weld_assistant(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2199
+include/vcl/weld.hxx:2200
     class std::unique_ptr<class weld::Widget, struct std::default_delete<class weld::Widget> > weld::Builder::weld_widget(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2200
+include/vcl/weld.hxx:2201
     class std::unique_ptr<class weld::Container, struct std::default_delete<class weld::Container> > weld::Builder::weld_container(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2203
+include/vcl/weld.hxx:2204
     class std::unique_ptr<class weld::Box, struct std::default_delete<class weld::Box> > weld::Builder::weld_box(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2204
+include/vcl/weld.hxx:2205
     class std::unique_ptr<class weld::Paned, struct std::default_delete<class weld::Paned> > weld::Builder::weld_paned(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2205
+include/vcl/weld.hxx:2206
     class std::unique_ptr<class weld::Button, struct std::default_delete<class weld::Button> > weld::Builder::weld_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2206
+include/vcl/weld.hxx:2207
     class std::unique_ptr<class weld::MenuButton, struct std::default_delete<class weld::MenuButton> > weld::Builder::weld_menu_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2210
+include/vcl/weld.hxx:2211
     class std::unique_ptr<class weld::ScrolledWindow, struct std::default_delete<class weld::ScrolledWindow> > weld::Builder::weld_scrolled_window(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2213
+include/vcl/weld.hxx:2214
     class std::unique_ptr<class weld::Notebook, struct std::default_delete<class weld::Notebook> > weld::Builder::weld_notebook(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2218
+include/vcl/weld.hxx:2219
     class std::unique_ptr<class weld::RadioButton, struct std::default_delete<class weld::RadioButton> > weld::Builder::weld_radio_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2221
+include/vcl/weld.hxx:2222
     class std::unique_ptr<class weld::CheckButton, struct std::default_delete<class weld::CheckButton> > weld::Builder::weld_check_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2224
+include/vcl/weld.hxx:2225
     class std::unique_ptr<class weld::LinkButton, struct std::default_delete<class weld::LinkButton> > weld::Builder::weld_link_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2231
+include/vcl/weld.hxx:2232
     class std::unique_ptr<class weld::MetricSpinButton, struct std::default_delete<class weld::MetricSpinButton> > weld::Builder::weld_metric_spin_button(const class rtl::OString &,enum FieldUnit,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2233
+include/vcl/weld.hxx:2234
     class std::unique_ptr<class weld::FormattedSpinButton, struct std::default_delete<class weld::FormattedSpinButton> > weld::Builder::weld_formatted_spin_button(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2235
+include/vcl/weld.hxx:2236
     class std::unique_ptr<class weld::TimeSpinButton, struct std::default_delete<class weld::TimeSpinButton> > weld::Builder::weld_time_spin_button(const class rtl::OString &,enum TimeFieldFormat,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2237
+include/vcl/weld.hxx:2238
     class std::unique_ptr<class weld::ComboBox, struct std::default_delete<class weld::ComboBox> > weld::Builder::weld_combo_box(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2241
+include/vcl/weld.hxx:2242
     class std::unique_ptr<class weld::IconView, struct std::default_delete<class weld::IconView> > weld::Builder::weld_icon_view(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2243
+include/vcl/weld.hxx:2244
     class std::unique_ptr<class weld::Label, struct std::default_delete<class weld::Label> > weld::Builder::weld_label(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2244
+include/vcl/weld.hxx:2245
     class std::unique_ptr<class weld::TextView, struct std::default_delete<class weld::TextView> > weld::Builder::weld_text_view(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2246
+include/vcl/weld.hxx:2247
     class std::unique_ptr<class weld::Expander, struct std::default_delete<class weld::Expander> > weld::Builder::weld_expander(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2249
+include/vcl/weld.hxx:2250
     class std::unique_ptr<class weld::Scale, struct std::default_delete<class weld::Scale> > weld::Builder::weld_scale(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2250
+include/vcl/weld.hxx:2251
     class std::unique_ptr<class weld::ProgressBar, struct std::default_delete<class weld::ProgressBar> > weld::Builder::weld_progress_bar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2253
+include/vcl/weld.hxx:2254
     class std::unique_ptr<class weld::Spinner, struct std::default_delete<class weld::Spinner> > weld::Builder::weld_spinner(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2255
+include/vcl/weld.hxx:2256
     class std::unique_ptr<class weld::Image, struct std::default_delete<class weld::Image> > weld::Builder::weld_image(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2256
+include/vcl/weld.hxx:2257
     class std::unique_ptr<class weld::Calendar, struct std::default_delete<class weld::Calendar> > weld::Builder::weld_calendar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2259
+include/vcl/weld.hxx:2260
     class std::unique_ptr<class weld::DrawingArea, struct std::default_delete<class weld::DrawingArea> > weld::Builder::weld_drawing_area(const class rtl::OString &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class std::function<class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > (class vcl::Window *)>,void *,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2264
+include/vcl/weld.hxx:2265
     class std::unique_ptr<class weld::EntryTreeView, struct std::default_delete<class weld::EntryTreeView> > weld::Builder::weld_entry_tree_view(const class rtl::OString &,const class rtl::OString &,const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
-include/vcl/weld.hxx:2267
+include/vcl/weld.hxx:2268
     class std::unique_ptr<class weld::Menu, struct std::default_delete<class weld::Menu> > weld::Builder::weld_menu(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2268
+include/vcl/weld.hxx:2269
     class std::unique_ptr<class weld::Toolbar, struct std::default_delete<class weld::Toolbar> > weld::Builder::weld_toolbar(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     0
@@ -1898,10 +1890,6 @@ include/vcl/window.hxx:607
     void vcl::Window::ImplSetMouseTransparent(_Bool)
     _Bool bTransparent
     1
-include/vcl/window.hxx:720
-    class tools::Rectangle vcl::Window::ImplGetWindowExtentsRelative(class vcl::Window *,_Bool) const
-    _Bool bClientOnly
-    0
 include/xmloff/numehelp.hxx:92
     void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(class SvXMLExport &,const class rtl::OUString &,const class rtl::OUString &,_Bool,_Bool)
     _Bool bExportTypeAttribute
@@ -2678,7 +2666,7 @@ sc/qa/unit/subsequent_export-test.cxx:1411
     void setEscapement(class ScFieldEditEngine &,int,int,int,short,unsigned char)
     int nPara
     0
-sc/qa/unit/ucalc.hxx:49
+sc/qa/unit/ucalc.hxx:51
     void Test::clearSheet(class ScDocument *,short)
     short nTab
     0
@@ -2828,11 +2816,11 @@ sc/source/filter/inc/xechart.hxx:338
     1
 sc/source/filter/inc/xechart.hxx:366
     void XclExpChFrame::SetAutoFlags(_Bool,_Bool)
-    _Bool bAutoPos
+    _Bool bAutoSize
     0
 sc/source/filter/inc/xechart.hxx:366
     void XclExpChFrame::SetAutoFlags(_Bool,_Bool)
-    _Bool bAutoSize
+    _Bool bAutoPos
     0
 sc/source/filter/inc/xeextlst.hxx:200
     class XclExpExt * XclExtLst::GetItem(enum XclExpExtType)
@@ -2890,11 +2878,11 @@ sc/source/filter/inc/xestyle.hxx:231
     unsigned short XclExpFontBuffer::Insert(const class SfxItemSet &,short,enum XclExpColorType,_Bool)
     enum XclExpColorType eColorType
     0
-sc/source/filter/inc/xetable.hxx:334
+sc/source/filter/inc/xetable.hxx:333
     void XclExpSingleCellBase::XclExpSingleCellBase(unsigned short,unsigned long,const struct XclAddress &,unsigned int)
     unsigned long nContSize
     0
-sc/source/filter/inc/xetable.hxx:337
+sc/source/filter/inc/xetable.hxx:336
     void XclExpSingleCellBase::XclExpSingleCellBase(const class XclExpRoot &,unsigned short,unsigned long,const struct XclAddress &,const class ScPatternAttr *,short,unsigned int)
     short nScript
     1
@@ -3060,16 +3048,16 @@ sc/source/ui/inc/spellparam.hxx:37
     0
 sc/source/ui/inc/spellparam.hxx:40
     void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,int,_Bool)
+    int nOptions
+    0
+sc/source/ui/inc/spellparam.hxx:40
+    void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,int,_Bool)
     _Bool bIsInteractive
     1
 sc/source/ui/inc/spellparam.hxx:40
     void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,int,_Bool)
     enum ScConversionType eConvType
     1
-sc/source/ui/inc/spellparam.hxx:40
-    void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,int,_Bool)
-    int nOptions
-    0
 sc/source/ui/inc/spellparam.hxx:47
     void ScConversionParam::ScConversionParam(enum ScConversionType,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,const class vcl::Font &,int,_Bool)
     _Bool bIsInteractive
@@ -3104,11 +3092,11 @@ sc/source/ui/inc/undoblk.hxx:323
     0
 sc/source/ui/inc/undoblk.hxx:323
     void ScUndoSelectionAttr::ScUndoSelectionAttr(class ScDocShell *,const class ScMarkData &,short,int,short,short,int,short,class std::unique_ptr<class ScDocument, struct o3tl::default_delete<class ScDocument> >,_Bool,const class ScPatternAttr *,const class SvxBoxItem *,const class SvxBoxInfoItem *,const class ScRange *)
-    const class ScRange * pRangeCover
+    const class SvxBoxItem * pNewOuter
     0
 sc/source/ui/inc/undoblk.hxx:323
     void ScUndoSelectionAttr::ScUndoSelectionAttr(class ScDocShell *,const class ScMarkData &,short,int,short,short,int,short,class std::unique_ptr<class ScDocument, struct o3tl::default_delete<class ScDocument> >,_Bool,const class ScPatternAttr *,const class SvxBoxItem *,const class SvxBoxInfoItem *,const class ScRange *)
-    const class SvxBoxItem * pNewOuter
+    const class ScRange * pRangeCover
     0
 sc/source/ui/inc/undotab.hxx:120
     void ScUndoRenameTab::ScUndoRenameTab(class ScDocShell *,short,const class rtl::OUString &,const class rtl::OUString &)
@@ -3260,12 +3248,12 @@ sd/source/ui/inc/DrawDocShell.hxx:64
     0
 sd/source/ui/inc/DrawDocShell.hxx:69
     void sd::DrawDocShell::DrawDocShell(class SdDrawDocument *,enum SfxObjectCreateMode,_Bool,enum DocumentType)
-    _Bool bSdDataObj
-    1
-sd/source/ui/inc/DrawDocShell.hxx:69
-    void sd::DrawDocShell::DrawDocShell(class SdDrawDocument *,enum SfxObjectCreateMode,_Bool,enum DocumentType)
     enum SfxObjectCreateMode eMode
     0
+sd/source/ui/inc/DrawDocShell.hxx:69
+    void sd::DrawDocShell::DrawDocShell(class SdDrawDocument *,enum SfxObjectCreateMode,_Bool,enum DocumentType)
+    _Bool bSdDataObj
+    1
 sd/source/ui/inc/DrawViewShell.hxx:90
     void sd::DrawViewShell::DrawViewShell(class sd::ViewShellBase &,class vcl::Window *,enum PageKind,class sd::FrameView *)
     enum PageKind ePageKind
@@ -3674,7 +3662,7 @@ sw/inc/shellio.hxx:526
     void SwWriter::SwWriter(class SfxMedium &,class SwCursorShell &,_Bool)
     _Bool bWriteAll
     1
-sw/inc/swabstdlg.hxx:293
+sw/inc/swabstdlg.hxx:295
     void AbstractSwSelGlossaryDlg::SelectEntryPos(int)
     int nIdx
     0
@@ -3802,7 +3790,7 @@ sw/source/filter/html/htmltab.cxx:501
     class SwTableLine * HTMLTable::MakeTableLine(class SwTableBox *,unsigned short,unsigned short,unsigned short,unsigned short)
     unsigned short nLeftCol
     0
-sw/source/filter/html/swhtml.hxx:818
+sw/source/filter/html/swhtml.hxx:823
     void SwHTMLParser::BuildTableCell(class HTMLTable *,_Bool,_Bool)
     _Bool bReadOptions
     1
@@ -3854,7 +3842,7 @@ sw/source/filter/ww8/ww8par.cxx:438
     class rtl::OUString (anonymous namespace)::Sttb::getStringAtIndex(unsigned int)
     unsigned int 
     1
-sw/source/filter/ww8/ww8par.hxx:1685
+sw/source/filter/ww8/ww8par.hxx:1684
     _Bool SwWW8ImplReader::SetUpperSpacing(class SwPaM &,int)
     int nSpace
     0
@@ -3878,7 +3866,7 @@ sw/source/filter/ww8/WW8TableInfo.hxx:303
     class ww8::WW8TableNodeInfo * ww8::WW8TableInfo::processTableLine(const class SwTable *,const class SwTableLine *,unsigned int,unsigned int,class ww8::WW8TableNodeInfo *,class std::__debug::map<unsigned int, class ww8::WW8TableNodeInfoInner *, struct std::greater<unsigned int>, class std::allocator<struct std::pair<const unsigned int, class ww8::WW8TableNodeInfoInner *> > > &)
     unsigned int nDepth
     1
-sw/source/filter/xml/xmlfmt.cxx:403
+sw/source/filter/xml/xmlfmt.cxx:405
     void (anonymous namespace)::SwXMLCellStyleContext::XMLPropStyleContext(class SvXMLImport &,unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,class SvXMLStylesContext &,enum XmlStyleFamily,_Bool)
     _Bool 
     0
@@ -3886,7 +3874,7 @@ sw/source/ui/misc/impfnote.hxx:64
     void SwEndNoteOptionPage::SwEndNoteOptionPage(class weld::Container *,class weld::DialogController *,_Bool,const class SfxItemSet &)
     _Bool bEndNote
     0
-sw/source/ui/table/instable.cxx:168
+sw/source/ui/table/instable.cxx:173
     void lcl_SetProperties(class SwTableAutoFormat *,_Bool)
     _Bool bVal
     0
@@ -4022,6 +4010,10 @@ vcl/inc/listbox.hxx:143
     class rtl::OUString ImplEntryList::GetSelectedEntry(int) const
     int nIndex
     0
+vcl/inc/listbox.hxx:278
+    void ImplListBoxWindow::DrawEntry(class OutputDevice &,int,_Bool,_Bool,_Bool)
+    _Bool bDrawTextAtImagePos
+    0
 vcl/inc/listbox.hxx:336
     void ImplListBoxWindow::EnableMouseMoveSelect(_Bool)
     _Bool bMouseMoveSelect
@@ -4078,11 +4070,11 @@ vcl/inc/qt5/Qt5Widget.hxx:47
     _Bool Qt5Widget::handleKeyEvent(class Qt5Frame &,const class QWidget &,class QKeyEvent *,const enum Qt5Widget::ButtonKeyState)
     const enum Qt5Widget::ButtonKeyState 
     1
-vcl/inc/salgdi.hxx:134
+vcl/inc/salgdi.hxx:130
     void SalGraphics::GetFontMetric(class tools::SvRef<class ImplFontMetricData> &,int)
     int nFallbackLevel
     0
-vcl/inc/salgdi.hxx:503
+vcl/inc/salgdi.hxx:497
     void SalGraphics::copyArea(long,long,long,long,long,long,_Bool)
     _Bool bWindowInvalidate
     1
@@ -4128,15 +4120,15 @@ vcl/inc/unx/gtk/glomenu.h:49
     0
 vcl/inc/unx/gtk/gtkprintwrapper.hxx:41
     void vcl::unx::GtkPrintWrapper::print_job_send(struct _GtkPrintJob *,void (*)(struct _GtkPrintJob *, void *, const struct _GError *),void *,void (*)(void *)) const
+    void (*)(void *) dnotify
+    0
+vcl/inc/unx/gtk/gtkprintwrapper.hxx:41
+    void vcl::unx::GtkPrintWrapper::print_job_send(struct _GtkPrintJob *,void (*)(struct _GtkPrintJob *, void *, const struct _GError *),void *,void (*)(void *)) const
     void * user_data
     0
 vcl/inc/unx/gtk/gtkprintwrapper.hxx:41
     void vcl::unx::GtkPrintWrapper::print_job_send(struct _GtkPrintJob *,void (*)(struct _GtkPrintJob *, void *, const struct _GError *),void *,void (*)(void *)) const
     void (*)(struct _GtkPrintJob *, void *, const struct _GError *) callback
-    0
-vcl/inc/unx/gtk/gtkprintwrapper.hxx:41
-    void vcl::unx::GtkPrintWrapper::print_job_send(struct _GtkPrintJob *,void (*)(struct _GtkPrintJob *, void *, const struct _GError *),void *,void (*)(void *)) const
-    void (*)(void *) dnotify
     0
 vcl/inc/unx/gtk/gtkprintwrapper.hxx:60
     void vcl::unx::GtkPrintWrapper::print_unix_dialog_set_support_selection(struct _GtkPrintUnixDialog *,int) const
@@ -4210,11 +4202,11 @@ vcl/qa/cppunit/BitmapTest.cxx:68
     void assertColorsAreSimilar(int,const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,const class BitmapColor &,const class BitmapColor &)
     int maxDifference
     1
-vcl/source/app/salvtables.cxx:1645
+vcl/source/app/salvtables.cxx:1654
     void (anonymous namespace)::SalInstanceAssistant::SalInstanceAssistant(class vcl::RoadmapWizard *,class SalInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
     0
-vcl/source/app/salvtables.cxx:1844
+vcl/source/app/salvtables.cxx:1853
     void (anonymous namespace)::SalInstanceFrame::SalInstanceFrame(class VclFrame *,class SalInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
     0
@@ -4294,19 +4286,19 @@ vcl/unx/generic/print/psputil.hxx:46
     _Bool WritePS(class osl::File *,const char *,unsigned long)
     unsigned long nInLength
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:4719
+vcl/unx/gtk3/gtk3gtkinst.cxx:4763
     void (anonymous namespace)::GtkInstanceMessageDialog::GtkInstanceMessageDialog(struct _GtkMessageDialog *,class (anonymous namespace)::GtkInstanceBuilder *,_Bool)
     _Bool bTakeOwnership
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:4719
+vcl/unx/gtk3/gtk3gtkinst.cxx:4763
     void (anonymous namespace)::GtkInstanceMessageDialog::GtkInstanceMessageDialog(struct _GtkMessageDialog *,class (anonymous namespace)::GtkInstanceBuilder *,_Bool)
     class (anonymous namespace)::GtkInstanceBuilder * pBuilder
     0
-vcl/unx/gtk3/gtk3gtkinst.cxx:11058
+vcl/unx/gtk3/gtk3gtkinst.cxx:11102
     int (anonymous namespace)::GtkInstanceTreeView::starts_with(const class rtl::OUString &,int,int,_Bool)
     int col
     0
-vcl/unx/gtk3/gtk3gtkinst.cxx:13565
+vcl/unx/gtk3/gtk3gtkinst.cxx:13609
     int (anonymous namespace)::GtkInstanceComboBox::find_text_including_mru(const class rtl::OUString &,_Bool) const
     _Bool bSearchMRU
     0
