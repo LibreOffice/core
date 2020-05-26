@@ -241,7 +241,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatEndX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
-    mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
+    mpRowHeights(),
     mpHiddenCols(new ScFlatBoolColSegments(pDoc->MaxCol())),
     mpHiddenRows(new ScFlatBoolRowSegments(pDoc->MaxRow())),
     mpFilteredCols(new ScFlatBoolColSegments(pDoc->MaxCol())),
@@ -280,7 +280,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
 
     if (bRowInfo)
     {
-        mpRowHeights.reset(new ScFlatUInt16RowSegments(pDocument->MaxRow(), ScGlobal::nStdRowHeight));
+        mpRowHeights.reset(new ScCompressedArray<SCROW, sal_uInt16>(pDocument->MaxRow(), ScGlobal::nStdRowHeight));
         pRowFlags.reset(new ScBitMaskCompressedArray<SCROW, CRFlags>( pDocument->MaxRow(), CRFlags::NONE));
     }
 

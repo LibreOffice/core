@@ -183,7 +183,6 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
                 maTabs.push_back(nullptr);
             maTabs.emplace_back( new ScTable(this, nTab, aString) );
         }
-        maTabs[nTab]->SetLoadingMedium(bLoadingMedium);
     }
 }
 

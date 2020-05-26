@@ -194,7 +194,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     bool bRowFound = false;
     long nSizeY = 0;
     ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
-    ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
+    ScCompressedArray<SCROW,sal_uInt16>::RangeData aIterHeights;
     SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
     for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
     {
@@ -205,11 +205,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         long nThisY = 0;
         if (!bThisRowHidden)
         {
-            sal_uInt16 nTmp;
-            const bool bHasHeight = aIterHeights.getValue(nY, nTmp);
-            assert(bHasHeight);
-            if (bHasHeight)
-                nThisY = static_cast<long>(nTmp);
+            aIterHeights = mpRowHeights->GetRangeData(nY);
+            nThisY = static_cast<long>(aIterHeights.maValue);
         }
 
         bool bManualBreak = false;
@@ -259,7 +256,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             // Visible row range.
 
             SCROW nLastHidden = aIterHidden.getLastPos();
-            SCROW nLastHeight = aIterHeights.getLastPos();
+            SCROW nLastHeight = aIterHeights.mnRow2;
             SCROW nLastCommon = ::std::min(nLastHidden, nLastHeight);
             if (nNextManualBreak >= 0)
                 nLastCommon = ::std::min(nLastCommon, nNextManualBreak-1);
@@ -656,21 +653,7 @@ void ScTable::CopyRowHidden(const ScTable& rTable, SCROW nStartRow, SCROW nEndRo
 
 void ScTable::CopyRowHeight(const ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset)
 {
-    SCROW nRow = nStartRow;
-    ScFlatUInt16RowSegments::RangeData aSrcData;
-    while (nRow <= nEndRow)
-    {
-        if (!rSrcTable.mpRowHeights->getRangeData(nRow + nSrcOffset, aSrcData))
-            // Something is wrong !
-            return;
-
-        SCROW nLastRow = aSrcData.mnRow2 - nSrcOffset;
-        if (nLastRow > nEndRow)
-            nLastRow = nEndRow;
-
-        mpRowHeights->setValue(nRow, nLastRow, aSrcData.mnValue);
-        nRow = nLastRow + 1;
-    }
+    mpRowHeights->CopyFrom(*rSrcTable.mpRowHeights, nStartRow, nEndRow, nStartRow + nSrcOffset);
 }
 
 SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const
@@ -755,7 +738,7 @@ sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHidd
 
         if ( !( bHiddenAsZero && aData.mbValue ) )
             // visible row range.
-            nHeight += mpRowHeights->getSumValue(nRow, aData.mnRow2);
+            nHeight += mpRowHeights->GetSumValue(nRow, aData.mnRow2);
 
         nRow = aData.mnRow2 + 1;
     }

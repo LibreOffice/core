@@ -143,7 +143,7 @@ void ScTable::CopyOneCellFromClip(
 
     if (nCol1 == 0 && nCol2 == pDocument->MaxCol() && mpRowHeights)
     {
-        mpRowHeights->setValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
+        mpRowHeights->SetValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
 
         if (pRowFlags && pSrcTab->pRowFlags) {
            if (pSrcTab->pRowFlags->GetValue(nSrcRow) & CRFlags::ManualSize)
@@ -256,12 +256,10 @@ bool ScTable::HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
         return false;
 
-    ScFlatUInt16RowSegments::RangeData aData;
-    if (!mpRowHeights->getRangeData(nRow1, aData))
-        // Search failed.
-        return false;
+    ScCompressedArray<SCROW, sal_uInt16>::RangeData aData =
+        mpRowHeights->GetRangeData(nRow1);
 
-    return nRow2 <= aData.mnRow2;
+    return nRow1 >= aData.mnRow1 && nRow2 <= aData.mnRow2;
 }
 
 void ScTable::SplitFormulaGroups( SCCOL nCol, std::vector<SCROW>& rRows )
