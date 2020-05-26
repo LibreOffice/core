@@ -702,6 +702,7 @@ static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
 }
 
 static const sal_Unicode* lcl_r1c1_get_row(
+                                    const ScSheetLimits& rSheetLimits,
                                     const sal_Unicode* p,
                                     const ScAddress::Details& rDetails,
                                     ScAddress* pAddr, ScRefFlags* nFlags )
@@ -740,7 +741,7 @@ static const sal_Unicode* lcl_r1c1_get_row(
         n--;
     }
 
-    if( n < 0 || n >= MAXROWCOUNT )
+    if( n < 0 || n >= rSheetLimits.GetMaxRowCount() )
         return nullptr;
     pAddr->SetRow( static_cast<SCROW>( n ) );
     *nFlags |= ScRefFlags::ROW_VALID;
@@ -784,13 +785,13 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 
     if( *p == 'R' || *p == 'r' )
     {
-        if( nullptr == (p = lcl_r1c1_get_row( p, rDetails, &r.aStart, &nFlags )) )
+        if( nullptr == (p = lcl_r1c1_get_row( pDoc->GetSheetLimits(), p, rDetails, &r.aStart, &nFlags )) )
             return nBailOutFlags;
 
         if( *p != 'C' && *p != 'c' )    // full row R#
         {
             if( p[0] != ':' || (p[1] != 'R' && p[1] != 'r' ) ||
-                nullptr == (pTmp = lcl_r1c1_get_row( p+1, rDetails, &r.aEnd, &nFlags2 )))
+                nullptr == (pTmp = lcl_r1c1_get_row( pDoc->GetSheetLimits(), p+1, rDetails, &r.aEnd, &nFlags2 )))
             {
                 // Only the initial row number is given, or the second row
                 // number is invalid. Fallback to just the initial R
@@ -827,7 +828,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 
         if( p[0] != ':' ||
             (p[1] != 'R' && p[1] != 'r') ||
-            nullptr == (pTmp = lcl_r1c1_get_row( p+1, rDetails, &r.aEnd, &nFlags2 )) ||
+            nullptr == (pTmp = lcl_r1c1_get_row( pDoc->GetSheetLimits(), p+1, rDetails, &r.aEnd, &nFlags2 )) ||
             (*pTmp != 'C' && *pTmp != 'c') ||
             nullptr == (pTmp = lcl_r1c1_get_col( pTmp, rDetails, &r.aEnd, &nFlags2 )))
         {
@@ -1874,13 +1875,13 @@ void ScRange::ParseRows( const ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
         if ((p[0] == 'R' || p[0] == 'r') &&
-            nullptr != (p = lcl_r1c1_get_row( p, rDetails, &aStart, &ignored )))
+            nullptr != (p = lcl_r1c1_get_row( pDoc->GetSheetLimits(), p, rDetails, &aStart, &ignored )))
         {
             if( p[0] == ':')
             {
                 if( p[1] == 'R' || p[1] == 'r' )
                 {
-                    lcl_r1c1_get_row( p+1, rDetails, &aEnd, &ignored );
+                    lcl_r1c1_get_row( pDoc->GetSheetLimits(), p+1, rDetails, &aEnd, &ignored );
                 }
             }
             else

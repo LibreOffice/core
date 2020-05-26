@@ -240,7 +240,9 @@ public:
 
 }
 
-SingleColumnSpanSet::SingleColumnSpanSet() : maSpans(0, MAXROWCOUNT, false) {}
+SingleColumnSpanSet::SingleColumnSpanSet(ScSheetLimits const & rSheetLimits)
+    : mrSheetLimits(rSheetLimits),
+      maSpans(0, rSheetLimits.GetMaxRowCount(), false) {}
 
 void SingleColumnSpanSet::scan(const ScColumn& rColumn)
 {
@@ -332,7 +334,7 @@ bool SingleColumnSpanSet::empty() const
 {
     // Empty if there's only the 0..rDoc.MaxRow() span with false.
     ColumnSpansType::const_iterator it = maSpans.begin();
-    return (it->first == 0) && !(it->second) && (++it != maSpans.end()) && (it->first == MAXROWCOUNT);
+    return (it->first == 0) && !(it->second) && (++it != maSpans.end()) && (it->first == mrSheetLimits.GetMaxRowCount());
 }
 
 

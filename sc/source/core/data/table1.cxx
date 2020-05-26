@@ -231,7 +231,7 @@ bool SetOptimalHeightsToRows(
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
-    aCol( INITIALCOLCOUNT ),
+    aCol( pDoc->GetSheetLimits(), INITIALCOLCOUNT ),
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
@@ -2617,7 +2617,7 @@ void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const
     // which is bad since that code is not thread-safe.
     SolarMutexGuard aGuard;
     const SCCOL aOldColSize = aCol.size();
-    aCol.resize( static_cast< size_t >( nScCol + 1 ) );
+    aCol.resize( pDocument->GetSheetLimits(), static_cast< size_t >( nScCol + 1 ) );
     for (SCCOL i = aOldColSize; i <= nScCol; i++)
         aCol[i].Init( i, nTab, pDocument, false );
 }
