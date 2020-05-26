@@ -5779,7 +5779,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
 
                     //output variable for the formula alignment (default inline)
                     sal_Int8 nAlign(FormulaExportBase::eFormulaAlign::INLINE);
-                    auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the forumla
+                    auto xObj(rOLENd.GetOLEObj().GetOleRef()); //get the xObject of the formula
 
                     //tdf133030: Export formula position
                     //If we have a formula with inline anchor...
@@ -5788,7 +5788,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                         SwPosition const* const aAPos = rFrameFormat.GetAnchor().GetContentAnchor();
                         if(aAPos)
                         {
-                            //Get the text node what the forumla anchored to
+                            //Get the text node what the formula anchored to
                             const SwTextNode* pTextNode = aAPos->nNode.GetNode().GetTextNode();
                             if(pTextNode && pTextNode->Len() == 1)
                             {
