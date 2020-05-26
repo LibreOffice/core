@@ -119,7 +119,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="spacing">12</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
@@ -195,8 +195,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
@@ -319,8 +319,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
@@ -415,8 +415,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
