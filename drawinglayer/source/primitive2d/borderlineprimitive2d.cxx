@@ -305,18 +305,11 @@ namespace drawinglayer::primitive2d
         ImplPrimitive2DIDBlock(BorderLinePrimitive2D, PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D)
 
         Primitive2DReference tryMergeBorderLinePrimitive2D(
-            const Primitive2DReference& rCandidateA,
-            const Primitive2DReference& rCandidateB)
+            const BorderLinePrimitive2D* pCandidateA,
+            const BorderLinePrimitive2D* pCandidateB)
         {
-            // try to cast to BorderLinePrimitive2D
-            const primitive2d::BorderLinePrimitive2D* pCandidateA = dynamic_cast< const primitive2d::BorderLinePrimitive2D* >(rCandidateA.get());
-            const primitive2d::BorderLinePrimitive2D* pCandidateB = dynamic_cast< const primitive2d::BorderLinePrimitive2D* >(rCandidateB.get());
-
-            // we need a comparable BorderLinePrimitive2D
-            if(nullptr == pCandidateA || nullptr == pCandidateB)
-            {
-                return Primitive2DReference();
-            }
+            assert(pCandidateA);
+            assert(pCandidateB);
 
             // start of candidate has to match end of this
             if(!pCandidateA->getEnd().equal(pCandidateB->getStart()))

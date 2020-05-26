@@ -81,12 +81,6 @@ public:
     bool operator==(const BorderLine& rBorderLine) const;
 };
 
-/// helper to try to merge two instances of BorderLinePrimitive2D. If it was possible,
-/// a merged version is in the returned Primitive2DReference. Lots of preconditions
-/// have to be met to allow that, see implementation (and maybe even expand)
-Primitive2DReference DRAWINGLAYER_DLLPUBLIC tryMergeBorderLinePrimitive2D(
-    const Primitive2DReference& rCandidateA, const Primitive2DReference& rCandidateB);
-
 /** BorderLinePrimitive2D class
 
     This is the basic primitive to build frames around objects, e.g. tables.
@@ -140,6 +134,12 @@ public:
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 };
+
+/// helper to try to merge two instances of BorderLinePrimitive2D. If it was possible,
+/// a merged version is in the returned Primitive2DReference. Lots of preconditions
+/// have to be met to allow that, see implementation (and maybe even expand)
+Primitive2DReference DRAWINGLAYER_DLLPUBLIC tryMergeBorderLinePrimitive2D(
+    const BorderLinePrimitive2D* pCandidateA, const BorderLinePrimitive2D* pCandidateB);
 
 } // end of namespace drawinglayer::primitive2d
 
