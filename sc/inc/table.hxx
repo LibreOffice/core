@@ -177,7 +177,7 @@ private:
     std::unique_ptr<ScTableProtection> pTabProtection;
 
     std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
-    std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
+    std::unique_ptr<ScCompressedArray<SCROW, sal_uInt16>> mpRowHeights;
 
     std::unique_ptr<ScBitMaskCompressedArray<SCCOL, CRFlags>> mpColFlags;
     std::unique_ptr<ScBitMaskCompressedArray< SCROW, CRFlags>> pRowFlags;

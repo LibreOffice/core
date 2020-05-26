@@ -22,6 +22,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <type_traits>
 
 #include "scdllapi.h"
 
@@ -97,6 +98,10 @@ public:
     [[nodiscard]]
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
 
+    template<typename U = D>
+    typename std::enable_if<std::is_integral<U>::value, U>::type
+                                GetSumValue( A nStart, A nEnd ) const;
+
     /** Insert rows before nStart and copy value for inserted rows from
         nStart-1, return that value. */
     const D&                    Insert( A nStart, size_t nCount );
@@ -156,6 +161,25 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
     nIndex = Search( nPos);
     nEnd = pData[nIndex].nEnd;
     return pData[nIndex].aValue;
+}
+
+template< typename A, typename D >
+template<typename U>
+typename std::enable_if<std::is_integral<U>::value, U>::type
+    ScCompressedArray<A,D>::GetSumValue( A nStart, A nEnd ) const
+{
+    size_t nIndex = Search(nStart);
+    D aSum {};
+    while (nIndex < nCount)
+    {
+        auto const & rEntry = pData[nIndex];
+        aSum += (std::min(rEntry.nEnd, nEnd) - nStart + 1) * rEntry.aValue;
+        nStart = rEntry.nEnd + 1;
+        ++nIndex;
+        if (nEnd >= rEntry.nEnd)
+            break;
+    }
+    return aSum;
 }
 
 template< typename A, typename D >
