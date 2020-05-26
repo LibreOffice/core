@@ -4481,38 +4481,34 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
+    sal_Int64 nUpper = 0;
+    sal_Int64 nLower = 0;
+    sal_Int64 nValue = 0;
+    sal_Int64 nSpinSize = 0;
+
     for (auto const& elem : rAdjustment)
     {
         const OString &rKey = elem.first;
         const OUString &rValue = elem.second;
 
         if (rKey == "upper")
-        {
-            sal_Int64 nUpper = rValue.toDouble() * nMul;
-            rTarget.SetMax(nUpper);
-            rTarget.SetLast(nUpper);
-        }
+            nUpper = rValue.toDouble() * nMul;
         else if (rKey == "lower")
-        {
-            sal_Int64 nLower = rValue.toDouble() * nMul;
-            rTarget.SetMin(nLower);
-            rTarget.SetFirst(nLower);
-        }
+            nLower = rValue.toDouble() * nMul;
         else if (rKey == "value")
-        {
-            sal_Int64 nValue = rValue.toDouble() * nMul;
-            rTarget.SetValue(nValue);
-        }
+            nValue = rValue.toDouble() * nMul;
         else if (rKey == "step-increment")
-        {
-            sal_Int64 nSpinSize = rValue.toDouble() * nMul;
-            rTarget.SetSpinSize(nSpinSize);
-        }
+            nSpinSize = rValue.toDouble() * nMul;
         else
-        {
             SAL_INFO("vcl.builder", "unhandled property :" << rKey);
-        }
     }
+
+    rTarget.SetMax(nUpper);
+    rTarget.SetLast(nUpper);
+    rTarget.SetMin(nLower);
+    rTarget.SetFirst(nLower);
+    rTarget.SetValue(nValue);
+    rTarget.SetSpinSize(nSpinSize);
 }
 
 void VclBuilder::mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment)
