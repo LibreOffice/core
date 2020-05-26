@@ -70,7 +70,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ):
                 {
                     nRepeatedRows = std::max( it.toInt32(), sal_Int32(1) );
-                    nRepeatedRows = std::min( nRepeatedRows, MAXROWCOUNT );
+                    nRepeatedRows = std::min( nRepeatedRows, rImport.GetDocument()->GetSheetLimits().GetMaxRowCount() );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
