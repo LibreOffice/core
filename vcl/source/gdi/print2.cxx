@@ -628,11 +628,11 @@ int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent
 
                 if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
                 {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     bStillBackground=false; // incomplete occlusion of background
                 }
                 else
                 {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     nLastBgAction=nActionNum; // this _is_ background
                 }
                 break;
@@ -646,11 +646,11 @@ int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent
                 if (!basegfx::utils::isRectangle(aPoly.getB2DPolygon()) ||
                     !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
                 {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     bStillBackground=false; // incomplete occlusion of background
                 }
                 else
                 {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     nLastBgAction=nActionNum; // this _is_ background
                 }
                 break;
@@ -665,11 +665,11 @@ int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent
                     !basegfx::utils::isRectangle(aPoly[0].getB2DPolygon()) ||
                     !doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
                 {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     bStillBackground=false; // incomplete occlusion of background
                 }
                 else
                 {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     nLastBgAction=nActionNum; // this _is_ background
                 }
                 break;
@@ -681,11 +681,11 @@ int FindIncompletelyOccludedBackground(ConnectedComponents& rBackgroundComponent
 
                 if (!doesRectCoverWithUniformColor(rBackgroundComponent.aBounds, aRect, pMapModeVDev))
                 {
-                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     bStillBackground=false; // incomplete occlusion of background
                 }
                 else
                 {
+                    setComponentsSizeAndColor(rBackgroundComponent, aRect, pMapModeVDev->GetFillColor());
                     nLastBgAction=nActionNum; // this _is_ background
                 }
                 break;
