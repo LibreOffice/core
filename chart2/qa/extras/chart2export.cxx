@@ -154,6 +154,7 @@ public:
     void testTdf131979();
     void testTdf126076();
     void testTdf132076();
+    void testTdf132594();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testTdf131979);
     CPPUNIT_TEST(testTdf126076);
     CPPUNIT_TEST(testTdf132076);
+    CPPUNIT_TEST(testTdf132594);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2499,6 +2501,15 @@ void Chart2ExportTest::testTdf132076()
         assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "formatCode", "dd");
         assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "sourceLinked", "0");
     }
+}
+
+void Chart2ExportTest::testTdf132594()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart_pie2007.xlsx");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:cat", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
