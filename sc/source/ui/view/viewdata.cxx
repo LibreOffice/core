@@ -727,12 +727,14 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
+static const ScSheetLimits gaNoShellSheetLimits(MAXCOL, MAXROW);
+
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPPTX(0.0),
         nPPTY(0.0),
         mpMarkData(pDocSh?
-                   new ScMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol()) :
-                   new ScMarkData(MAXROW, MAXCOL)
+                   new ScMarkData(pDocSh->GetDocument().GetSheetLimits()) :
+                   new ScMarkData(gaNoShellSheetLimits)
                   ),
         pDocShell   ( pDocSh ),
         pDoc        ( nullptr ),
@@ -1260,7 +1262,7 @@ bool ScViewData::SelectionFillDOOM( const ScRange& rRange )
     // arbitrarily increased.
     // We could refine this and take some actual cell size into account,
     // evaluate available memory and what not, but...
-    const sal_Int32 kMax = 23 * 1024 * 1024;    // current MAXROWCOUNT is 1024*1024=1048576
+    const sal_Int32 kMax = 23 * 1024 * 1024;    // current MAXROWCOUNT1 is 1024*1024=1048576
     return (rRange.aEnd.Row() - rRange.aStart.Row() + 1) > (kMax / (rRange.aEnd.Col() - rRange.aStart.Col() + 1));
 }
 

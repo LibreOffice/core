@@ -1834,7 +1834,7 @@ void ScChangeActionContent::PutValueToDoc(
                 aRange.aEnd.IncCol( nC-1 );
             if ( nR > 1 )
                 aRange.aEnd.IncRow( nR-1 );
-            ScMarkData aDestMark(pDoc->MaxRow(), pDoc->MaxCol());
+            ScMarkData aDestMark(pDoc->GetSheetLimits());
             aDestMark.SelectOneTable( aPos.Tab() );
             aDestMark.SetMarkArea( aRange );
             pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),
@@ -1887,9 +1887,9 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
         UpdateRefMode eMode, const ScBigRange& rRange,
         sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz )
 {
-    SCSIZE nOldSlot = ScChangeTrack::ComputeContentSlot( aBigRange.aStart.Row() );
+    SCSIZE nOldSlot = pTrack->ComputeContentSlot( aBigRange.aStart.Row() );
     ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, aBigRange );
-    SCSIZE nNewSlot = ScChangeTrack::ComputeContentSlot( aBigRange.aStart.Row() );
+    SCSIZE nNewSlot = pTrack->ComputeContentSlot( aBigRange.aStart.Row() );
     if ( nNewSlot != nOldSlot )
     {
         RemoveFromSlot();
@@ -2033,15 +2033,18 @@ bool ScChangeActionReject::Reject(ScDocument* /*pDoc*/)
     return false;
 }
 
-const SCROW ScChangeTrack::nContentRowsPerSlot = InitContentRowsPerSlot();
-const SCSIZE ScChangeTrack::nContentSlots =
-    MAXROWCOUNT / InitContentRowsPerSlot() + 2;
+SCSIZE ScChangeTrack::ComputeContentSlot( sal_Int32 nRow ) const
+{
+    if ( nRow < 0 || nRow > pDoc->GetSheetLimits().mnMaxRow )
+        return mnContentSlots - 1;
+    return static_cast< SCSIZE >( nRow / mnContentRowsPerSlot );
+}
 
 SCROW ScChangeTrack::InitContentRowsPerSlot()
 {
     const SCSIZE nMaxSlots = 0xffe0 / sizeof( ScChangeActionContent* ) - 2;
-    SCROW nRowsPerSlot = MAXROWCOUNT / nMaxSlots;
-    if ( nRowsPerSlot * nMaxSlots < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
+    SCROW nRowsPerSlot = pDoc->GetSheetLimits().GetMaxRowCount() / nMaxSlots;
+    if ( nRowsPerSlot * nMaxSlots < sal::static_int_cast<SCSIZE>(pDoc->GetSheetLimits().GetMaxRowCount()) )
         ++nRowsPerSlot;
     return nRowsPerSlot;
 }
@@ -2053,8 +2056,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     Init();
     SC_MOD()->GetUserOptions().AddListener(this);
 
-    ppContentSlots.reset( new ScChangeActionContent* [ nContentSlots ] );
-    memset( ppContentSlots.get(), 0, nContentSlots * sizeof( ScChangeActionContent* ) );
+    ppContentSlots.reset( new ScChangeActionContent* [ mnContentSlots ] );
+    memset( ppContentSlots.get(), 0, mnContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<OUString>& aTempUserCollection) :
@@ -2064,8 +2067,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<OUString>& aTemp
 {
     Init();
     SC_MOD()->GetUserOptions().AddListener(this);
-    ppContentSlots.reset( new ScChangeActionContent* [ nContentSlots ] );
-    memset( ppContentSlots.get(), 0, nContentSlots * sizeof( ScChangeActionContent* ) );
+    ppContentSlots.reset( new ScChangeActionContent* [ mnContentSlots ] );
+    memset( ppContentSlots.get(), 0, mnContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::~ScChangeTrack()
@@ -2076,6 +2079,9 @@ ScChangeTrack::~ScChangeTrack()
 
 void ScChangeTrack::Init()
 {
+    mnContentRowsPerSlot = InitContentRowsPerSlot();
+    mnContentSlots = pDoc->GetSheetLimits().GetMaxRowCount() / InitContentRowsPerSlot() + 2;
+
     pFirst = nullptr;
     pLast = nullptr;
     pFirstGeneratedDelContent = nullptr;

@@ -1188,7 +1188,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         aPattern.GetItemSet().ClearItem( ATTR_HOR_JUSTIFY );    // wasn't removed above if no edit object
         if ( aPattern.GetItemSet().Count() > 0 )
         {
-            ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+            ScMarkData aMark(rDoc.GetSheetLimits());
             aMark.SelectTable( rPos.Tab(), true );
             aMark.SetMarkArea( ScRange( rPos ) );
             ApplyAttributes( aMark, aPattern, bApi );
@@ -1762,7 +1762,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -2267,7 +2267,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -2849,7 +2849,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     ScDocumentUniquePtr pClipDoc(new ScDocument(SCDOCMODE_CLIP));
 
-    ScMarkData aSourceMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aSourceMark(rDoc.GetSheetLimits());
     for (nTab=nStartTab; nTab<=nEndTab; nTab++)
         aSourceMark.SelectTable( nTab, true );      // select source
     aSourceMark.SetMarkArea( rSource );
@@ -2970,7 +2970,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     bool bSourceHeight = false;     // adjust heights?
     if (bCut)
     {
-        ScMarkData aDelMark(rDoc.MaxRow(), rDoc.MaxCol());    // only for tables
+        ScMarkData aDelMark(rDoc.GetSheetLimits());    // only for tables
         for (nTab=nStartTab; nTab<=nEndTab; nTab++)
         {
             rDoc.DeleteAreaTab( nStartCol,nStartRow, nOldEndCol,nOldEndRow, nTab, InsertDeleteFlags::ALL );
@@ -3005,7 +3005,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     ScRange aPasteDest( nDestCol, nDestRow, nDestTab, nDestEndCol, nDestEndRow, nDestEndTab );
 
-    ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aDestMark(rDoc.GetSheetLimits());
     for (nTab=nDestTab; nTab<=nDestEndTab; nTab++)
         aDestMark.SelectTable( nTab, true );        // select destination
     aDestMark.SetMarkArea( aPasteDest );
@@ -3755,7 +3755,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
     if (bRecord)
     {
-        ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+        ScMarkData aMark(rDoc.GetSheetLimits());
         aMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoWidthOrHeight>(
@@ -4191,7 +4191,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -4305,7 +4305,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -4392,7 +4392,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -4536,7 +4536,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -4649,7 +4649,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -4782,7 +4782,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     if (pTabMark)
         aMark = *pTabMark;
     else
@@ -5461,7 +5461,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
         aFormula = aFormula.copy(1, aFormula.getLength()-2);
 
-        ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+        ScMarkData aMark(rDoc.GetSheetLimits());
         aMark.SetMarkArea( rOldRange );
         aMark.SelectTable( nTab, true );
         ScRange aNewRange( rOldRange.aStart, rNewEnd );

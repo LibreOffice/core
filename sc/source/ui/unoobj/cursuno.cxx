@@ -338,7 +338,7 @@ void SAL_CALL ScCellCursorObj::gotoNext()
     aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  always use start of block
 
-    ScMarkData aMark(GetDocument()->MaxRow(), GetDocument()->MaxCol());   // not used with bMarked=FALSE
+    ScMarkData aMark(GetDocument()->GetSheetLimits());   // not used with bMarked=FALSE
     SCCOL nNewX = aCursor.Col();
     SCROW nNewY = aCursor.Row();
     SCTAB nTab  = aCursor.Tab();
@@ -360,7 +360,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious()
     aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  always use start of block
 
-    ScMarkData aMark(GetDocument()->MaxRow(), GetDocument()->MaxCol());   // not used with bMarked=FALSE
+    ScMarkData aMark(GetDocument()->GetSheetLimits());   // not used with bMarked=FALSE
     SCCOL nNewX = aCursor.Col();
     SCROW nNewY = aCursor.Row();
     SCTAB nTab  = aCursor.Tab();

@@ -106,7 +106,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
     SCROW nClipRowLen = nClipRow2 - nClipRow1 + 1;
 
     // Check for non-empty cell ranges in the clip column.
-    sc::SingleColumnSpanSet aSpanSet;
+    sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
     aSpanSet.scan(rClipCol, nClipRow1, nClipRow2);
     sc::SingleColumnSpanSet::SpansType aSpans;
     aSpanSet.getSpans(aSpans);
@@ -160,7 +160,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
         if (nDelFlag & InsertDeleteFlags::CONTENTS)
         {
-            sc::SingleColumnSpanSet aDeletedRows;
+            sc::SingleColumnSpanSet aDeletedRows(GetDoc()->GetSheetLimits());
             DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
             rBroadcastSpans.set(*GetDoc(), nTab, nCol, aDeletedRows, true);
         }
@@ -396,10 +396,10 @@ class ConvertFormulaToValueHandler
     bool mbModified;
 
 public:
-    ConvertFormulaToValueHandler() :
+    ConvertFormulaToValueHandler(ScSheetLimits const & rSheetLimits) :
         mbModified(false)
     {
-        maResValues.reset(MAXROWCOUNT);
+        maResValues.reset(rSheetLimits.GetMaxRowCount());
     }
 
     void operator() ( size_t nRow, const ScFormulaCell* pCell )
@@ -444,7 +444,7 @@ void ScColumn::ConvertFormulaToValue(
     sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 
     // Parse all formulas within the range and store their results into temporary storage.
-    ConvertFormulaToValueHandler aFunc;
+    ConvertFormulaToValueHandler aFunc(GetDoc()->GetSheetLimits());
     sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     if (!aFunc.isModified())
         // No formula cells encountered.

@@ -646,7 +646,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
 
 ScMarkData ScTransferObj::GetSourceMarkData() const
 {
-    ScMarkData aMarkData(m_pDoc->MaxRow(), m_pDoc->MaxCol());
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     ScCellRangesBase* pRangesObj = comphelper::getUnoTunnelImplementation<ScCellRangesBase>( m_xDragSourceRanges );
     if (pRangesObj)
     {
@@ -671,7 +671,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         pDocSh->DoInitNew();
 
         ScDocument& rDestDoc = pDocSh->GetDocument();
-        ScMarkData aDestMark(rDestDoc.MaxRow(), rDestDoc.MaxCol());
+        ScMarkData aDestMark(rDestDoc.GetSheetLimits());
         aDestMark.SelectTable( 0, true );
 
         rDestDoc.SetDocOptions( m_pDoc->GetDocOptions() );   // #i42666#

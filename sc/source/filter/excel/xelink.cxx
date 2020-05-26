@@ -1281,7 +1281,7 @@ XclExpXct::XclExpXct( const XclExpRoot& rRoot, const OUString& rTabName,
         sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef const & xCacheTable ) :
     XclExpRoot( rRoot ),
     mxCacheTable( xCacheTable ),
-    maUsedCells( MAXROW, MAXCOL ),
+    maUsedCells( rRoot.GetDoc().GetSheetLimits() ),
     maBoundRange( ScAddress::INITIALIZE_INVALID ),
     maTabName( rTabName ),
     mnSBTab( nSBTab )

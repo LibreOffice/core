@@ -20,24 +20,27 @@
 #include <markarr.hxx>
 #include <address.hxx>
 #include <rangelst.hxx>
+#include <sheetlimits.hxx>
 #include <vector>
 
 #include <osl/diagnose.h>
 
-ScMarkArray::ScMarkArray(SCROW nMaxRow) :
-    mnMaxRow( nMaxRow )
+ScMarkArray::ScMarkArray(const ScSheetLimits& rLimits) :
+    mrSheetLimits(rLimits)
 {
     Reset(false);
 }
 
 // Move constructor
 ScMarkArray::ScMarkArray( ScMarkArray&& rOther ) noexcept
+    : mrSheetLimits(rOther.mrSheetLimits)
 {
     operator=(std::move(rOther));
 }
 
 // Copy constructor
 ScMarkArray::ScMarkArray( const ScMarkArray & rOther )
+    : mrSheetLimits(rOther.mrSheetLimits)
 {
     operator=(rOther);
 }
@@ -54,7 +57,7 @@ void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
     assert(nNeeded);
     mvData.resize(1);
     mvData.reserve(nNeeded);
-    mvData[0].nRow = mnMaxRow;
+    mvData[0].nRow = mrSheetLimits.mnMaxRow;
     mvData[0].bMarked = bMarked;
 }
 
@@ -104,9 +107,9 @@ bool ScMarkArray::GetMark( SCROW nRow ) const
 
 void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
 {
-    if (ValidRow(nStartRow, mnMaxRow) && ValidRow(nEndRow, mnMaxRow))
+    if (mrSheetLimits.ValidRow(nStartRow) && mrSheetLimits.ValidRow(nEndRow))
     {
-        if ((nStartRow == 0) && (nEndRow == mnMaxRow))
+        if ((nStartRow == 0) && (nEndRow == mrSheetLimits.mnMaxRow))
         {
             Reset(bMarked);
         }
@@ -123,7 +126,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 Search( nStartRow, nIndex );
                 ni = nIndex;
 
-                nInsert = MAXROWCOUNT;
+                nInsert = mrSheetLimits.GetMaxRowCount();
                 if ( mvData[ni].bMarked != bMarked )
                 {
                     if ( ni == 0 || (mvData[ni-1].nRow < nStartRow - 1) )
@@ -140,7 +143,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 if ( ni > 0 && mvData[ni-1].bMarked == bMarked )
                 {   // combine
                     mvData[ni-1].nRow = nEndRow;
-                    nInsert = MAXROWCOUNT;
+                    nInsert = mrSheetLimits.GetMaxRowCount();
                     bCombined = true;
                 }
             }
@@ -167,7 +170,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                         else if ( ni == nInsert )
                             mvData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
-                    nInsert = MAXROWCOUNT;
+                    nInsert = mrSheetLimits.GetMaxRowCount();
                     bCombined = true;
                 }
                 else if ( ni > 0 && ni == nInsert )
@@ -180,7 +183,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                     mvData[ni].nRow = nEndRow;
                     mvData[ni].bMarked = bMarked;
                     ni++;
-                    nInsert = MAXROWCOUNT;
+                    nInsert = mrSheetLimits.GetMaxRowCount();
                 }
                 if ( ni < nj )
                 {   // remove entries
@@ -188,7 +191,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 }
             }
 
-            if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
+            if ( nInsert < sal::static_int_cast<SCSIZE>(mrSheetLimits.GetMaxRowCount()) )
             {   // insert or append new entry
                 if ( nInsert <= mvData.size() )
                 {
@@ -240,7 +243,7 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         if ( mvData[0].bMarked )
         {
             rStartRow = 0;
-            rEndRow = mnMaxRow;
+            rEndRow = mrSheetLimits.mnMaxRow;
             bRet = true;
         }
     }
@@ -254,7 +257,7 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         else
         {
             rStartRow = mvData[0].nRow + 1;
-            rEndRow = mnMaxRow;
+            rEndRow = mrSheetLimits.mnMaxRow;
         }
         bRet = true;
     }
@@ -278,21 +281,19 @@ bool ScMarkArray::operator==( const ScMarkArray& rOther ) const
 ScMarkArray& ScMarkArray::operator=( const ScMarkArray& rOther )
 {
     mvData = rOther.mvData;
-    mnMaxRow = rOther.mnMaxRow;
     return *this;
 }
 
 ScMarkArray& ScMarkArray::operator=(ScMarkArray&& rOther) noexcept
 {
     mvData = std::move(rOther.mvData);
-    mnMaxRow = rOther.mnMaxRow;
     return *this;
 }
 
 SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
 {
     SCROW nRet = nRow;
-    if (ValidRow(nRow, mnMaxRow))
+    if (mrSheetLimits.ValidRow(nRow))
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
@@ -333,7 +334,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
 
 void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
 {
-    if (nOffset == 0 || nStartRow > mnMaxRow)
+    if (nOffset == 0 || nStartRow > mrSheetLimits.mnMaxRow)
         return;
 
     for (size_t i=0; i < mvData.size(); ++i)
@@ -347,9 +348,9 @@ void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
         {
             rEntry.nRow = 0;
         }
-        else if (rEntry.nRow > mnMaxRow)
+        else if (rEntry.nRow > mrSheetLimits.mnMaxRow)
         {
-            rEntry.nRow = mnMaxRow;
+            rEntry.nRow = mrSheetLimits.mnMaxRow;
         }
     }
 }

@@ -471,7 +471,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             pUndoDBData.reset(new ScDBData( *pDBData ));
         }
 
-        ScMarkData aNewMark(rDoc.MaxRow(), rDoc.MaxCol());
+        ScMarkData aNewMark(rDoc.GetSheetLimits());
         aNewMark.SelectOneTable( nTab );
 
         if (bRecord)
@@ -535,7 +535,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                            nEndCol+nFormulaCols, nEndRow, nTab,
                                            InsertDeleteFlags::ATTRIB, false, rDoc);
             // fill formulas
-            ScMarkData aMark(rDoc.MaxRow(), rDoc.MaxCol());
+            ScMarkData aMark(rDoc.GetSheetLimits());
             aMark.SelectOneTable(nTab);
 
             sal_uLong nProgCount = nFormulaCols;

@@ -1188,7 +1188,7 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
     bool bDisallow = true;
 
     ScDocument& rSrcDoc = pSrcShell->GetDocument();
-    ScMarkData aMark(rSrcDoc.MaxRow(), rSrcDoc.MaxCol());
+    ScMarkData aMark(rSrcDoc.GetSheetLimits());
     aMark.SelectTable( rRange.aStart.Tab(), true );
     aMark.SetMarkArea( rRange );
 

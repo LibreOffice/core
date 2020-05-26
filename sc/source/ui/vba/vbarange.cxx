@@ -5308,7 +5308,7 @@ ScVbaRange::setStyle( const uno::Any& _style )
 uno::Reference< excel::XRange >
 ScVbaRange::PreviousNext( bool bIsPrevious )
 {
-    ScMarkData markedRange(getScDocument().MaxRow(), getScDocument().MaxCol());
+    ScMarkData markedRange(getScDocument().GetSheetLimits());
     ScRange refRange;
     RangeHelper thisRange( mxRange );
 
