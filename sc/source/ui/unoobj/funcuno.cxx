@@ -561,7 +561,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                     long nColCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
                     long nRowCount = rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + 1;
 
-                    if ( nStartRow + nRowCount > MAXROWCOUNT )
+                    if ( nStartRow + nRowCount > pDoc->GetSheetLimits().GetMaxRowCount() )
                         bOverflow = true;
                     else
                     {
@@ -589,7 +589,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
     //  execute formula
 
     uno::Any aRet;
-    if ( !bArgErr && !bOverflow && nDocRow <= MAXROWCOUNT )
+    if ( !bArgErr && !bOverflow && nDocRow <= pDoc->GetSheetLimits().GetMaxRowCount() )
     {
         ScAddress aFormulaPos( 0, 0, nTempSheet );
         // GRAM_API doesn't really matter for the token array but fits with
