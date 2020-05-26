@@ -149,7 +149,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     {
         if (mpRowHeights && pRowFlags)
         {
-            mpRowHeights->insertSegment(nStartRow, nSize);
+            mpRowHeights->Insert(nStartRow, nSize);
             CRFlags nNewFlags = pRowFlags->Insert( nStartRow, nSize);
             // only copy manual size flag, clear all others
             if (nNewFlags != CRFlags::NONE && (nNewFlags != CRFlags::ManualSize))
@@ -201,7 +201,7 @@ void ScTable::DeleteRow(
             pRowFlags->Remove( nStartRow, nSize);
 
         if (mpRowHeights)
-            mpRowHeights->removeSegment(nStartRow, nStartRow+nSize);
+            mpRowHeights->Remove(nStartRow, nSize);
 
         if (pOutlineTable)
             if (pOutlineTable->DeleteRow( nStartRow, nSize ))
@@ -1935,11 +1935,6 @@ bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     return bBroadcasted;
 }
 
-void ScTable::SetLoadingMedium(bool bLoading)
-{
-    mpRowHeights->enableTreeSearch(!bLoading);
-}
-
 void ScTable::CalcAll()
 {
     for (SCCOL i=0; i < aCol.size(); i++)
@@ -2194,7 +2189,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                         // Does the rotated cell extend into the visible range?
 
                         SCCOL nTouchedCol = nCol;
-                        long nWidth = static_cast<long>(mpRowHeights->getValue(nRow) * nFactor);
+                        long nWidth = static_cast<long>(mpRowHeights->GetValue(nRow) * nFactor);
                         OSL_ENSURE(nWidth <= 0, "Wrong direction");
                         while ( nWidth < 0 && nTouchedCol > 0 )
                         {
@@ -2989,10 +2984,10 @@ void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
-        sal_uInt16 nOldHeight = mpRowHeights->getValue(nRow);
+        sal_uInt16 nOldHeight = mpRowHeights->GetValue(nRow);
         if ( nNewHeight != nOldHeight )
         {
-            mpRowHeights->setValue(nRow, nRow, nNewHeight);
+            mpRowHeights->SetValue(nRow, nRow, nNewHeight);
             InvalidatePageBreaks();
         }
     }
@@ -3009,27 +3004,25 @@ namespace {
  * specified ranges.
  */
 bool lcl_pixelSizeChanged(
-    ScFlatUInt16RowSegments& rRowHeights, SCROW nStartRow, SCROW nEndRow,
+    RowHeightsArray& rRowHeights, SCROW nStartRow, SCROW nEndRow,
     sal_uInt16 nNewHeight, double nPPTY)
 {
     long nNewPix = static_cast<long>(nNewHeight * nPPTY);
 
-    ScFlatUInt16RowSegments::ForwardIterator aFwdIter(rRowHeights);
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
-        sal_uInt16 nHeight;
-        if (!aFwdIter.getValue(nRow, nHeight))
-            break;
+        ScCompressedArray<SCROW,sal_uInt16>::RangeData aRangeData =
+            rRowHeights.GetRangeData(nRow);
 
-        if (nHeight != nNewHeight)
+        if (aRangeData.maValue != nNewHeight)
         {
-            bool bChanged = (nNewPix != static_cast<long>(nHeight * nPPTY));
+            bool bChanged = (nNewPix != static_cast<long>(aRangeData.maValue * nPPTY));
             if (bChanged)
                 return true;
         }
 
         // Skip ahead to the last position of the current range.
-        nRow = aFwdIter.getLastPos();
+        nRow = aRangeData.mnRow2;
     }
     return false;
 }
@@ -3056,9 +3049,9 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
 
         if (bSingle)
         {
-            ScFlatUInt16RowSegments::RangeData aData;
-            if (mpRowHeights->getRangeData(nStartRow, aData) &&
-                nNewHeight == aData.mnValue && nEndRow <= aData.mnRow2)
+            ScCompressedArray<SCROW, sal_uInt16>::RangeData aData =
+                mpRowHeights->GetRangeData(nStartRow);
+            if (nNewHeight == aData.maValue && nEndRow <= aData.mnRow2)
             {
                 bSingle = false;    // no difference in this range
             }
@@ -3067,7 +3060,7 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
         if (!bSingle || nEndRow - nStartRow < 20)
         {
             bChanged = lcl_pixelSizeChanged(*mpRowHeights, nStartRow, nEndRow, nNewHeight, nPPTY);
-            mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+            mpRowHeights->SetValue(nStartRow, nEndRow, nNewHeight);
         }
         else
         {
@@ -3097,7 +3090,7 @@ void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewH
     if (!nNewHeight)
         nNewHeight = ScGlobal::nStdRowHeight;
 
-    mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
+    mpRowHeights->SetValue(nStartRow, nEndRow, nNewHeight);
 }
 
 void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
@@ -3223,16 +3216,8 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
             return 0;
         else
         {
-            ScFlatUInt16RowSegments::RangeData aData;
-            if (!mpRowHeights->getRangeData(nRow, aData))
-            {
-                if (pStartRow)
-                    *pStartRow = nRow;
-                if (pEndRow)
-                    *pEndRow = nRow;
-                // TODO: What should we return in case the search fails?
-                return 0;
-            }
+            ScCompressedArray<SCROW, sal_uInt16>::RangeData aData =
+                mpRowHeights->GetRangeData(nRow);
 
             // If bHiddenAsZero, pStartRow and pEndRow were initialized to
             // boundaries of a non-hidden segment. Assume that the previous and
@@ -3242,7 +3227,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
                 *pStartRow = (bHiddenAsZero ? std::max( *pStartRow, aData.mnRow1) : aData.mnRow1);
             if (pEndRow)
                 *pEndRow = (bHiddenAsZero ? std::min( *pEndRow, aData.mnRow2) : aData.mnRow2);
-            return aData.mnValue;
+            return aData.maValue;
         }
     }
     else
@@ -3270,7 +3255,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
-                nHeight += mpRowHeights->getSumValue(nRow, nLastRow);
+                nHeight += mpRowHeights->GetSumValue(nRow, nLastRow);
             }
             nRow = nLastRow + 1;
         }
@@ -3299,14 +3284,13 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
                 // #i117315# can't use getSumValue, because individual values must be rounded
                 while (nRow <= nLastRow)
                 {
-                    ScFlatUInt16RowSegments::RangeData aData;
-                    if (!mpRowHeights->getRangeData(nRow, aData))
-                        return nHeight;   // shouldn't happen
+                    ScCompressedArray<SCROW, sal_uInt16>::RangeData aData =
+                        mpRowHeights->GetRangeData(nRow);
 
                     SCROW nSegmentEnd = std::min( nLastRow, aData.mnRow2 );
 
                     // round-down a single height value, multiply resulting (pixel) values
-                    const sal_uLong nOneHeight = static_cast<sal_uLong>( aData.mnValue * fScale );
+                    const sal_uLong nOneHeight = static_cast<sal_uLong>( aData.maValue * fScale );
                     // sometimes scaling results in zero height
                     if (nOneHeight)
                     {
@@ -3348,7 +3332,7 @@ sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if
     OSL_ENSURE(ValidRow(nRow),"wrong row number");
 
     if (ValidRow(nRow) && mpRowHeights)
-        return mpRowHeights->getValue(nRow);
+        return mpRowHeights->GetValue(nRow);
     else
         return ScGlobal::nStdRowHeight;
 }
@@ -3623,8 +3607,18 @@ SCROW ScTable::GetLastChangedRow() const
 
     // Find the last row position where the height is NOT the standard row
     // height.
-    // KOHEI: Test this to make sure it does what it's supposed to.
-    SCROW nLastHeight = mpRowHeights->findLastTrue(ScGlobal::nStdRowHeight);
+    SCROW nLastHeight = mpRowHeights->GetLastPos();
+    while (nLastHeight)
+    {
+        ScCompressedArray<SCROW,sal_uInt16>::RangeData aData =
+            mpRowHeights->GetRangeData(nLastHeight);
+        if (aData.maValue != ScGlobal::nStdRowHeight)
+        {
+            nLastHeight = aData.mnRow2 + 1;
+            break;
+        }
+        nLastHeight = aData.mnRow1 - 1;
+    }
     if (!ValidRow(nLastHeight))
         nLastHeight = 0;
 
@@ -3971,9 +3965,9 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 
     ScFlatBoolRowSegments::RangeData aData;
 
-    ScFlatUInt16RowSegments::RangeData aRowHeightRange;
+    ScCompressedArray<SCROW,sal_uInt16>::RangeData aRowHeightRange;
     aRowHeightRange.mnRow2 = -1;
-    aRowHeightRange.mnValue = 0; // silence MSVC C4701
+    aRowHeightRange.maValue = 0; // silence MSVC C4701
 
     for (SCROW nRow = 0; nRow <= pDocument->MaxRow(); ++nRow)
     {
@@ -3989,13 +3983,9 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
         }
 
         if (aRowHeightRange.mnRow2 < nRow)
-        {
-            if (!mpRowHeights->getRangeData(nRow, aRowHeightRange))
-                // Failed to fetch the range data for whatever reason.
-                break;
-        }
+            aRowHeightRange = mpRowHeights->GetRangeData(nRow);
 
-        nSum += aRowHeightRange.mnValue;
+        nSum += aRowHeightRange.maValue;
 
         if (nSum > nHeight)
         {
