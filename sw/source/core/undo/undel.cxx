@@ -1091,6 +1091,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
+        assert(!m_bDelFullPara || (m_nSectDiff == 0));
         SwNodeIndex const start(rDoc.GetNodes(), m_nSttNode +
             ((m_bDelFullPara || !rDoc.GetNodes()[m_nSttNode]->IsTextNode() || pInsNd)
                  ? 0 : 1));
@@ -1098,7 +1099,28 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // by the start node, or it may be merged by one of the moved nodes,
         // but if it isn't merged, its current frame(s) should be good...
         SwNodeIndex const end(rDoc.GetNodes(), m_bDelFullPara ? delFullParaEndNode : m_nEndNode);
-        ::MakeFrames(&rDoc, start, end);
+        SwNodeIndex curStart(start);
+        sal_uLong i(0);
+        for (SwNodeIndex n = start; n != end; ++n)
+        {
+        // tdf#132236 skip over section end nodes, don't create frames for them
+            if (n.GetNode().IsEndNode()
+                && n.GetNode().StartOfSectionIndex() < start.GetIndex())
+            {   // hope this happens only for sections?
+                assert(n.GetNode().StartOfSectionNode()->IsSectionNode());
+                if (curStart < n)
+                {
+                    ::MakeFrames(&rDoc, curStart, n);
+                    ++i;
+                }
+                curStart = SwNodeIndex(n, +1);
+            }
+        }
+        if (curStart < end)
+        {
+            ::MakeFrames(&rDoc, curStart, end);
+        }
+        (void) i; assert(i <= m_nSectDiff); // not ==, could be start nodes
     }
 
     if (pMovedNode)
