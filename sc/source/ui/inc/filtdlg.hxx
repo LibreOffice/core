@@ -24,6 +24,7 @@
 #include "anyrefdg.hxx"
 #include <queryparam.hxx>
 #include <filterentries.hxx>
+#include <queryentry.hxx>
 
 #include <memory>
 #include <deque>
@@ -84,6 +85,7 @@ private:
     std::vector<weld::ComboBox*> maFieldLbArr;
     std::vector<weld::ComboBox*> maCondLbArr;
     std::vector<weld::ComboBox*> maConnLbArr;
+    std::vector<weld::Button*>   maRemoveBtnArr;
 
     std::deque<bool>   maHasDates;
     std::deque<bool>   maRefreshExceptQuery;
@@ -98,21 +100,25 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbField1;
     std::unique_ptr<weld::ComboBox> m_xLbCond1;
     std::unique_ptr<weld::ComboBox> m_xEdVal1;
+    std::unique_ptr<weld::Button>   m_xBtnRemove1;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect2;
     std::unique_ptr<weld::ComboBox> m_xLbField2;
     std::unique_ptr<weld::ComboBox> m_xLbCond2;
     std::unique_ptr<weld::ComboBox> m_xEdVal2;
+    std::unique_ptr<weld::Button>   m_xBtnRemove2;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect3;
     std::unique_ptr<weld::ComboBox> m_xLbField3;
     std::unique_ptr<weld::ComboBox> m_xLbCond3;
     std::unique_ptr<weld::ComboBox> m_xEdVal3;
+    std::unique_ptr<weld::Button>   m_xBtnRemove3;
 
     std::unique_ptr<weld::ComboBox> m_xLbConnect4;
     std::unique_ptr<weld::ComboBox> m_xLbField4;
     std::unique_ptr<weld::ComboBox> m_xLbCond4;
     std::unique_ptr<weld::ComboBox> m_xEdVal4;
+    std::unique_ptr<weld::Button>   m_xBtnRemove4;
 
     std::unique_ptr<weld::Widget> m_xContents;
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
@@ -142,12 +148,16 @@ private:
     void            ClearValueList  ( size_t nList );
     size_t          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
+    void            SetValString    ( const OUString& rQueryStr,
+                                      const ScQueryEntry::Item& rItem,
+                                      OUString& rValStr );
 
     // Handler:
     DECL_LINK( LbSelectHdl,  weld::ComboBox&, void );
     DECL_LINK( ValModifyHdl, weld::ComboBox&, void );
     DECL_LINK( CheckBoxHdl,  weld::Button&, void );
     DECL_LINK( BtnClearHdl,  weld::Button&, void );
+    DECL_LINK( BtnRemoveHdl, weld::Button&, void );
     DECL_LINK( EndDlgHdl,    weld::Button&, void );
     DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
     DECL_LINK( MoreExpandedHdl, weld::Expander&, void );
