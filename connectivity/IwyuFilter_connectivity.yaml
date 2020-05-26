@@ -71,3 +71,5 @@ blacklist:
     connectivity/source/drivers/odbc/OTools.cxx:
     # OSL_BIGENDIAN is being checked
     - osl/endian.h
+    connectivity/source/drivers/writer/WDatabaseMetaData.cxx:
+    - com/sun/star/text/XTextDocument.hpp

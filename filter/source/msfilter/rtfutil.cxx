@@ -14,7 +14,6 @@
 #include <svtools/rtfkeywd.hxx>
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
-#include <sot/stg.hxx>
 #include <sot/storage.hxx>
 
 namespace

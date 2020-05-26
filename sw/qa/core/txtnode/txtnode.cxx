@@ -9,18 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <comphelper/classids.hxx>
-#include <svtools/embedhlp.hxx>
-#include <svx/svdpage.hxx>
-#include <tools/globname.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/gdimtf.hxx>
-
-#include <wrtsh.hxx>
-#include <fmtanchr.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <drawdoc.hxx>
-#include <dcontact.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/txtnode/data/";
 

@@ -742,3 +742,9 @@ blacklist:
     sw/source/ui/vba/vbatabstops.cxx:
     # Actually needed
     - com/sun/star/beans/XPropertySet.hpp
+    sw/source/filter/rtf/swparrtf.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/ww8/docxtablestyleexport.cxx:
+    - com/sun/star/frame/XModel.hpp
+    sw/source/filter/ww8/rtfexport.cxx:
+    - com/sun/star/frame/XModel.hpp

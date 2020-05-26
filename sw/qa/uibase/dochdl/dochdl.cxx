@@ -9,23 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <vcl/GraphicObject.hxx>
-#include <svx/svdpage.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/adjustitem.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
 #include <vcl/transfer.hxx>
 
-#include <IDocumentContentOperations.hxx>
-#include <cmdid.h>
-#include <fmtanchr.hxx>
-#include <view.hxx>
 #include <wrtsh.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <drawdoc.hxx>
 #include <swdtflvr.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
