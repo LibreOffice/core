@@ -450,6 +450,8 @@ private:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1) override;
 
+    void DuplicateSelectedSlides (SfxRequest& rRequest);
+
     css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
     css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
     rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
