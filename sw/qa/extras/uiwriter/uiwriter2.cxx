@@ -51,6 +51,7 @@
 #include <fmtcntnt.hxx>
 #include <shellio.hxx>
 #include <editeng/fontitem.hxx>
+#include <textboxhelper.hxx>
 
 namespace
 {
@@ -2473,6 +2474,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOfz18563)
     OUString sURL(m_directories.getURLFromSrc("/sw/qa/extras/uiwriter/data2/ofz18563.docx"));
     SvFileStream aFileStream(sURL, StreamMode::READ);
     TestImportDOCX(aFileStream);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf130805)
+{
+    load(DATA_DIRECTORY, "tdf130805.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(sal_uInt8(1)));
+    auto pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    SwTextBoxHelper::create(pShape);
+    auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    auto pTxAnch = pTxBxFrm->GetAnchor().GetContentAnchor();
+    auto pShpAnch = pShape->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pTxAnch);
+    CPPUNIT_ASSERT(pShpAnch);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->nNode, pShpAnch->nNode);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
