@@ -51,9 +51,37 @@ private:
     GraphicDrawMode meDrawMode;
 
 public:
-    GraphicAttr();
+    GraphicAttr()
+        : mfGamma(1.0)
+        , mnMirrFlags(BmpMirrorFlags::NONE)
+        , mnLeftCrop(0)
+        , mnTopCrop(0)
+        , mnRightCrop(0)
+        , mnBottomCrop(0)
+        , mnRotate10(0)
+        , mnContPercent(0)
+        , mnLumPercent(0)
+        , mnRPercent(0)
+        , mnGPercent(0)
+        , mnBPercent(0)
+        , mbInvert(false)
+        , mcAlpha(255)
+        , meDrawMode(GraphicDrawMode::Standard)
+    {
+    }
 
-    bool operator==(const GraphicAttr& rAttr) const;
+    bool operator==(const GraphicAttr& rAttr) const
+    {
+        return mfGamma == rAttr.mfGamma && mnMirrFlags == rAttr.mnMirrFlags
+               && mnLeftCrop == rAttr.mnLeftCrop && mnTopCrop == rAttr.mnTopCrop
+               && mnRightCrop == rAttr.mnRightCrop && mnBottomCrop == rAttr.mnBottomCrop
+               && mnRotate10 == rAttr.mnRotate10 && mnContPercent == rAttr.mnContPercent
+               && mnLumPercent == rAttr.mnLumPercent && mnRPercent == rAttr.mnRPercent
+               && mnGPercent == rAttr.mnGPercent && mnBPercent == rAttr.mnBPercent
+               && mbInvert == rAttr.mbInvert && mcAlpha == rAttr.mcAlpha
+               && meDrawMode == rAttr.meDrawMode;
+    }
+
     bool operator!=(const GraphicAttr& rAttr) const { return !(*this == rAttr); }
 
     void SetDrawMode(GraphicDrawMode eDrawMode) { meDrawMode = eDrawMode; }
