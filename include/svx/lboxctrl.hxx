@@ -37,6 +37,7 @@ public:
     SvxUndoRedoControl(const css::uno::Reference<css::uno::XComponentContext>& rContext);
     virtual ~SvxUndoRedoControl() override;
 
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XServiceInfo
@@ -49,6 +50,10 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     void Do(sal_Int16 nCount);
+
+    void SetText(const OUString& rText);
+
+    void SetInfo(sal_Int32 nCount);
 };
 
 #endif
