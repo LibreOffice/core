@@ -101,7 +101,7 @@ namespace connectivity
     public:
         bool    isQueryAllowed( const OUString& _rQueryName )
         {
-            if ( !m_pForbiddenQueryNames.get() )
+            if ( !m_pForbiddenQueryNames )
                 return true;
             if ( m_pForbiddenQueryNames->find( _rQueryName ) == m_pForbiddenQueryNames->end() )
                 return true;
@@ -123,7 +123,7 @@ namespace connectivity
             :m_rpAllForbiddenNames( _rIteratorImpl.m_pForbiddenQueryNames )
             ,m_sForbiddenQueryName( _rForbiddenQueryName )
         {
-            if ( !m_rpAllForbiddenNames.get() )
+            if ( !m_rpAllForbiddenNames )
                 m_rpAllForbiddenNames = std::make_shared<QueryNameSet>();
             m_rpAllForbiddenNames->insert( m_sForbiddenQueryName );
         }

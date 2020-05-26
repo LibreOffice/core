@@ -141,7 +141,7 @@ ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const A
 
 void WorkbookFragment::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( XLS_TOKEN( definedName ) ) && mxCurrName.get() )
+    if( isCurrentElement( XLS_TOKEN( definedName ) ) && mxCurrName )
         mxCurrName->setFormula( rChars );
 }
 
@@ -422,7 +422,7 @@ void WorkbookFragment::finalizeImport()
                     // create the WorksheetGlobals object
                     WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetSegment, eSheetType, nCalcSheet );
                     OSL_ENSURE( xSheetGlob.get(), "WorkbookFragment::finalizeImport - missing sheet in document" );
-                    if( xSheetGlob.get() )
+                    if( xSheetGlob )
                     {
                         // create the sheet fragment handler
                         ::rtl::Reference< WorksheetFragmentBase > xFragment;

@@ -2536,7 +2536,7 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
 
             // reset fill information
-            if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
+            if (maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
             {
                 SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
                 bool bReset(false);
@@ -2555,7 +2555,7 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         else if(RES_FMT_CHG == nWhich)
         {
             // reset fill information on format change (e.g. style changed)
-            if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
+            if (maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
             {
                 maFillAttributes.reset();
             }
@@ -3517,7 +3517,7 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
     if (supportsFullDrawingLayerFillAttributeSet())
     {
         // create FillAttributes on demand
-        if(!maFillAttributes.get())
+        if(!maFillAttributes)
         {
             const_cast< SwFrameFormat* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetAttrSet());
         }

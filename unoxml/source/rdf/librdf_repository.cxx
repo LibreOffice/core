@@ -480,12 +480,12 @@ sal_Bool SAL_CALL
 librdf_GraphResult::hasMoreElements()
 {
     ::osl::MutexGuard g(m_rMutex);
-    return m_pStream.get() && !librdf_stream_end(m_pStream.get());
+    return m_pStream && !librdf_stream_end(m_pStream.get());
 }
 
 librdf_node* librdf_GraphResult::getContext_Lock() const
 {
-    if (!m_pStream.get() || librdf_stream_end(m_pStream.get()))
+    if (!m_pStream || librdf_stream_end(m_pStream.get()))
         return nullptr;
     librdf_node *pCtxt(
 #if LIBRDF_VERSION >= 10012
@@ -502,7 +502,7 @@ css::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 {
     ::osl::MutexGuard g(m_rMutex);
-    if (m_pStream.get() && librdf_stream_end(m_pStream.get())) {
+    if (m_pStream && librdf_stream_end(m_pStream.get())) {
         throw container::NoSuchElementException();
     }
     librdf_node * pCtxt = getContext_Lock();

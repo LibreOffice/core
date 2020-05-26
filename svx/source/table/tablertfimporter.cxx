@@ -307,7 +307,7 @@ void SdrTableRTFParser::FillTable()
                 RTFCellInfoPtr xCellInfo( (*xColumn)[nIdx] );
 
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() && xCellInfo.get() )
+                if( xCell.is() && xCellInfo )
                 {
                     const SfxPoolItem *pPoolItem = nullptr;
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SfxItemState::SET)

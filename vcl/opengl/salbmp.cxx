@@ -569,7 +569,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
     if( nMode != BitmapAccessMode::Info )
     {
-        if (!mpUserBuffer.get())
+        if (!mpUserBuffer)
         {
             if( !AllocateUserData() )
                 return nullptr;

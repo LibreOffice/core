@@ -505,7 +505,7 @@ SwHTMLParser::~SwHTMLParser()
     DeleteFormImpl();
     m_pFootEndNoteImpl.reset();
 
-    OSL_ENSURE(!m_xTable.get(), "It exists still an open table");
+    OSL_ENSURE(!m_xTable, "It exists still an open table");
     m_pImageMaps.reset();
 
     OSL_ENSURE( m_vPendingStack.empty(),
@@ -1753,7 +1753,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         {
             if( m_nOpenParaToken != HtmlTokenId::NONE )
                 EndPara();
-            OSL_ENSURE(!m_xTable.get(), "table in table not allowed here");
+            OSL_ENSURE(!m_xTable, "table in table not allowed here");
             if( !m_xTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
                 (m_pPam->GetPoint()->nNode.GetIndex() >
                             m_xDoc->GetNodes().GetEndOfExtras().GetIndex() ||

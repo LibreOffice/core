@@ -257,7 +257,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
                 pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT));
         oox::StorageRef xVbaPrjStrg = std::make_shared<::oox::ole::OleStorage>(
             m_xContext, pVBAProjectStream->getDocumentStream(), false);
-        if (xVbaPrjStrg.get() && xVbaPrjStrg->isStorage())
+        if (xVbaPrjStrg && xVbaPrjStrg->isStorage())
         {
             ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, "Writer");
             uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(

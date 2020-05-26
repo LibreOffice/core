@@ -75,10 +75,10 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                 {
                     // TODO: use id to shape map
                     SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                    if ( pMasterPersist.get() && rAttribs.hasAttribute( XML_idx ) )
+                    if ( pMasterPersist && rAttribs.hasAttribute( XML_idx ) )
                         pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
                 }
-                if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
+                if ( !pPlaceholder && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
                 {
                     // inheriting properties from placeholder objects by cloning shape
 
@@ -123,13 +123,13 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                         else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                            if ( pMasterPersist.get() )
+                            if ( pMasterPersist )
                                 pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
                                         pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
                         }
                     }
                 }
-                if ( pPlaceholder.get() )
+                if ( pPlaceholder )
                 {
                     bool bUseText = true;
                     switch( pPlaceholder->getSubType() )

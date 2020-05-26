@@ -3933,7 +3933,7 @@ void SwXAutoStyle::setPropertyValues(
 uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 {
-    if( !mpSet.get() )
+    if( !mpSet )
     {
         throw uno::RuntimeException();
     }
@@ -4131,7 +4131,7 @@ uno::Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
 uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames )
 {
-    if (!mpSet.get())
+    if (!mpSet)
     {
         throw uno::RuntimeException();
     }
@@ -4230,7 +4230,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
 
 uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 {
-    if( !mpSet.get() )
+    if( !mpSet )
         throw uno::RuntimeException();
     SolarMutexGuard aGuard;
     std::vector< beans::PropertyValue > aPropertyVector;

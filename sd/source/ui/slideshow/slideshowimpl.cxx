@@ -1310,7 +1310,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
     stopSound();
     removeShapeEvents();
 
-    if( mpSlideController.get() && mxShow.is() )
+    if( mpSlideController && mxShow.is() )
     {
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(),
                                                     UNO_QUERY_THROW );
@@ -1431,7 +1431,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     SolarMutexGuard aSolarGuard;
 
     WrappedShapeEventImplPtr pEvent = maShapeEventMap[xShape];
-    if( !pEvent.get() )
+    if( !pEvent )
         return;
 
     switch( pEvent->meClickAction )
@@ -1589,7 +1589,7 @@ void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink )
 
 void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 {
-    if( mpSlideController.get() )
+    if( mpSlideController )
     {
         if( mpSlideController->jumpToSlideNumber( nSlideNumber ) )
         {
@@ -1601,7 +1601,7 @@ void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 /** nSlideIndex == -1 displays current slide again */
 void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
 {
-    if( mpSlideController.get() )
+    if( mpSlideController )
     {
         if( (nSlideIndex == -1) || mpSlideController->jumpToSlideIndex( nSlideIndex ) )
         {
@@ -1619,7 +1619,7 @@ void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
 
 sal_Int32 SlideshowImpl::getCurrentSlideNumber() const
 {
-    return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
+    return mpSlideController ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
 sal_Bool SAL_CALL SlideshowImpl::isEndless()
@@ -1736,7 +1736,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_SUBTRACT:
                 // in case the user cancels the presentation, switch to current slide
                 // in edit mode
-                if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+                if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
                 {
                     if( mpSlideController->getCurrentSlideNumber() != -1 )
                         mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
@@ -1763,7 +1763,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             {
                 if( !maCharBuffer.isEmpty() )
                 {
-                    if( mpSlideController.get() )
+                    if( mpSlideController )
                     {
                         if( mpSlideController->jumpToSlideNumber( maCharBuffer.toInt32() - 1 ) )
                             displayCurrentSlide();
@@ -1900,7 +1900,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void 
     case MediaCommand::Stop:
         // in case the user cancels the presentation, switch to current slide
         // in edit mode
-        if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
                 mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
@@ -2157,7 +2157,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         // When in autoplay mode (pps/ppsx), offer editing of the presentation
         // Turn autostart off, else Impress will close when exiting the Presentation
         mpViewShell->GetDoc()->SetExitAfterPresenting(false);
-        if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
             {
@@ -2170,7 +2170,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
     {
         // in case the user cancels the presentation, switch to current slide
         // in edit mode
-        if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+        if( mpSlideController && (ANIMATIONMODE_SHOW == meAnimationMode) )
         {
             if( mpSlideController->getCurrentSlideNumber() != -1 )
             {
@@ -2529,7 +2529,7 @@ Reference< XDrawPage > SAL_CALL SlideshowImpl::getCurrentSlide()
     SolarMutexGuard aSolarGuard;
 
     Reference< XDrawPage > xSlide;
-    if( mxShow.is() && mpSlideController.get() )
+    if( mxShow.is() && mpSlideController )
     {
         sal_Int32 nSlide = getCurrentSlideNumber();
         if( (nSlide >= 0) && (nSlide < mpSlideController->getSlideNumberCount() ) )
@@ -2555,14 +2555,14 @@ sal_Int32 SAL_CALL SlideshowImpl::getNextSlideIndex()
 
 sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex()
 {
-    return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
+    return mpSlideController ? mpSlideController->getCurrentSlideIndex() : -1;
 }
 
 // css::presentation::XSlideShowController:
 
 ::sal_Int32 SAL_CALL SlideshowImpl::getSlideCount()
 {
-    return mpSlideController.get() ? mpSlideController->getSlideIndexCount() : 0;
+    return mpSlideController ? mpSlideController->getSlideIndexCount() : 0;
 }
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index)
@@ -2717,7 +2717,7 @@ void SAL_CALL SlideshowImpl::gotoNextEffect(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !(mxShow.is() && mpSlideController.get() && mpShowWindow) )
+    if( !(mxShow.is() && mpSlideController && mpShowWindow) )
         return;
 
     if( mbIsPaused )
@@ -2743,7 +2743,7 @@ void SAL_CALL SlideshowImpl::gotoPreviousEffect(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !(mxShow.is() && mpSlideController.get() && mpShowWindow) )
+    if( !(mxShow.is() && mpSlideController && mpShowWindow) )
         return;
 
     if( mbIsPaused )
@@ -2765,7 +2765,7 @@ void SAL_CALL SlideshowImpl::gotoFirstSlide(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !(mpShowWindow && mpSlideController.get()) )
+    if( !(mpShowWindow && mpSlideController) )
         return;
 
     if( mbIsPaused )
@@ -2805,7 +2805,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  )
             maInputFreezeTimer.Start();
         }
 
-        if( mpSlideController.get() )
+        if( mpSlideController )
         {
             if( mpSlideController->nextSlide() )
             {
@@ -2862,7 +2862,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !(mxShow.is() && mpSlideController.get()) )
+    if( !(mxShow.is() && mpSlideController) )
         return;
 
     try
@@ -2909,7 +2909,7 @@ void SAL_CALL SlideshowImpl::gotoLastSlide()
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !mpSlideController.get() )
+    if( !mpSlideController )
         return;
 
     if( mbIsPaused )
@@ -2945,7 +2945,7 @@ void SAL_CALL SlideshowImpl::gotoSlide( const Reference< XDrawPage >& xSlide )
 {
     SolarMutexGuard aSolarGuard;
 
-    if( !(mpSlideController.get() && xSlide.is()) )
+    if( !(mpSlideController && xSlide.is()) )
         return;
 
     if( mbIsPaused )

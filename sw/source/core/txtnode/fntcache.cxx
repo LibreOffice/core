@@ -2619,7 +2619,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
                 if( GetFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/true ) )
                 {
-                    if (aFillAttributes.get() && aFillAttributes->isUsed())
+                    if (aFillAttributes && aFillAttributes->isUsed())
                     {
                         // First see if fill attributes provide a color.
                         aColor = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));

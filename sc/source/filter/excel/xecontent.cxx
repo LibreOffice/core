@@ -120,7 +120,7 @@ XclExpSstImpl::XclExpSstImpl() :
 sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 {
     OSL_ENSURE( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
-    if( !xString.get() )
+    if( !xString )
         xString.reset( new XclExpString );
 
     ++mnTotal;
@@ -440,10 +440,10 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // text mark
-    if( !mxTextMark.get() && aUrlObj.HasMark() )
+    if( !mxTextMark && aUrlObj.HasMark() )
         mxTextMark.reset( new XclExpString( aUrlObj.GetMark(), XclStrFlags::ForceUnicode, 255 ) );
 
-    if( mxTextMark.get() )
+    if( mxTextMark )
     {
         aXclStrm    << sal_uInt32( mxTextMark->Len() + 1 );  // string length + 1 trailing zero word
         mxTextMark->WriteBuffer( aXclStrm );                 // NO flags
@@ -739,8 +739,8 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     // *** formula sizes ***
 
-    sal_uInt16 nFmlaSize1 = mxTokArr1.get() ? mxTokArr1->GetSize() : 0;
-    sal_uInt16 nFmlaSize2 = mxTokArr2.get() ? mxTokArr2->GetSize() : 0;
+    sal_uInt16 nFmlaSize1 = mxTokArr1 ? mxTokArr1->GetSize() : 0;
+    sal_uInt16 nFmlaSize2 = mxTokArr2 ? mxTokArr2->GetSize() : 0;
     rStrm << nFmlaSize1 << nFmlaSize2;
 
     // *** formatting blocks ***
@@ -817,9 +817,9 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
 
     // *** formulas ***
 
-    if( mxTokArr1.get() )
+    if( mxTokArr1 )
         mxTokArr1->WriteArray( rStrm );
-    if( mxTokArr2.get() )
+    if( mxTokArr2 )
         mxTokArr2->WriteArray( rStrm );
 }
 
@@ -1830,7 +1830,7 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
     // flags and strings
     rStrm << mnFlags << maPromptTitle << maErrorTitle << maPromptText << maErrorText;
     // condition formulas
-    if( mxString1.get() )
+    if( mxString1 )
         lclWriteDvFormula( rStrm, *mxString1 );
     else
         lclWriteDvFormula( rStrm, mxTokArr1.get() );
@@ -2019,7 +2019,7 @@ XclExpWebQuery::~XclExpWebQuery()
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {
-    OSL_ENSURE( !mbEntireDoc || !mxQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
+    OSL_ENSURE( !mbEntireDoc || !mxQryTables, "XclExpWebQuery::Save - illegal mode" );
     sal_uInt16 nFlags;
 
     // QSI record
@@ -2059,7 +2059,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYSETTINGS record
-    nFlags = mxQryTables.get() ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
+    nFlags = mxQryTables ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
     rStrm.StartRecord( EXC_ID_WQSETT, 28 );
     rStrm   << EXC_ID_WQSETT            // repeated record id ?!?
             << sal_uInt16( 0x0000 )
@@ -2074,7 +2074,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYTABLES record
-    if( mxQryTables.get() )
+    if( mxQryTables )
     {
         rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mxQryTables->GetSize() );
         rStrm   << EXC_ID_WQTABLES          // repeated record id ?!?

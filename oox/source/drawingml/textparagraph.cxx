@@ -52,7 +52,7 @@ TextCharacterProperties TextParagraph::getCharacterStyle (
     TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
 
     TextCharacterProperties aTextCharacterStyle;
-    if (pTextParagraphStyle.get())
+    if (pTextParagraphStyle)
         aTextCharacterStyle.assignUsed(pTextParagraphStyle->getTextCharacterProperties());
     aTextCharacterStyle.assignUsed(rTextStyleProperties);
     aTextCharacterStyle.assignUsed(maProperties.getTextCharacterProperties());
@@ -127,7 +127,7 @@ void TextParagraph::insertAt(
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);
 
         TextParagraphPropertiesPtr pTextParagraphStyle = getParagraphStyle(rTextListStyle);
-        if ( pTextParagraphStyle.get() )
+        if ( pTextParagraphStyle )
         {
             TextParagraphProperties aParaProp;
             aParaProp.apply( *pTextParagraphStyle );

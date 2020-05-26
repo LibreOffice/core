@@ -127,7 +127,7 @@ namespace vclcanvas
             }
 
             explicit OutDevStateKeeper( const OutDevProviderSharedPtr& rOutDev ) :
-                mpOutDev( rOutDev.get() ? &(rOutDev->getOutDev()) : nullptr ),
+                mpOutDev( rOutDev ? &(rOutDev->getOutDev()) : nullptr ),
                 mbMappingWasEnabled( mpOutDev && mpOutDev->IsMapModeEnabled() ),
                 mnAntiAliasing( mpOutDev ? mpOutDev->GetAntialiasing() : AntialiasingFlags::NONE )
             {

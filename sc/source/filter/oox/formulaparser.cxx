@@ -964,7 +964,7 @@ bool FormulaParserImpl::pushDdeLinkOperand( const OUString& rDdeServer, const OU
 
 bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink )
 {
-    if( rxExtName.get() ) switch( rExtLink.getLinkType() )
+    if( rxExtName ) switch( rExtLink.getLinkType() )
     {
         case ExternalLinkType::External:
             return pushEmbeddedRefOperand( *rxExtName, false );
@@ -1419,7 +1419,7 @@ bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
     nCol1 = rStrm.readuInt16();
     nCol2 = rStrm.readuInt16();
     TableRef xTable = getTables().getTable( nTableId );
-    sal_Int32 nTokenIndex = xTable.get() ? xTable->getTokenIndex() : -1;
+    sal_Int32 nTokenIndex = xTable ? xTable->getTokenIndex() : -1;
     if( nTokenIndex >= 0 )
     {
         sal_Int32 nWidth = xTable->getWidth();

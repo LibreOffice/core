@@ -838,7 +838,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 {
     SvMemoryStream aStream;
     SvStream* pStream = nullptr;
-    if (!m_pBinaryData.get())
+    if (!m_pBinaryData)
     {
         pStream = &aStream;
         int b = 0;

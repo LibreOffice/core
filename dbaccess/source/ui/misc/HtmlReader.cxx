@@ -139,7 +139,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                 }
                 break;
             case HtmlTokenId::TABLEROW_ON:
-                if ( !m_pUpdateHelper.get() )
+                if ( !m_pUpdateHelper )
                     m_bError = true;
                 break;
             case HtmlTokenId::TEXTTOKEN:
@@ -176,7 +176,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                 }
                 break;
             case HtmlTokenId::TABLEROW_OFF:
-                if ( !m_pUpdateHelper.get() )
+                if ( !m_pUpdateHelper )
                 {
                     m_bError = true;
                     break;

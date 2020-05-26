@@ -155,7 +155,7 @@ namespace vclcanvas
 
     rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout() const
     {
-        if( !mpOutDevProvider.get() )
+        if( !mpOutDevProvider )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
         rendering::IntegerBitmapLayout aBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );

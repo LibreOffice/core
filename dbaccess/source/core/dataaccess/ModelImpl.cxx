@@ -655,7 +655,7 @@ void ODatabaseModelImpl::dispose()
 
     for (auto const& elem : m_aContainer)
     {
-        if ( elem.get() )
+        if ( elem )
             elem->m_pDataSource = nullptr;
     }
     m_aContainer.clear();
@@ -1113,7 +1113,7 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
     OSL_PRECOND( _eType >= E_FORM && _eType <= E_TABLE, "ODatabaseModelImpl::getObjectContainer: illegal index!" );
     TContentPtr& rContentPtr = m_aContainer[ _eType ];
 
-    if ( !rContentPtr.get() )
+    if ( !rContentPtr )
     {
         rContentPtr = std::make_shared<ODefinitionContainer_Impl>();
         rContentPtr->m_pDataSource = this;

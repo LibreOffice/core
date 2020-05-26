@@ -6179,7 +6179,7 @@ bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rContro
         if ( rSh.IsShowHeaderFooterSeparator( FrameControlType::Header ) )
         {
             SwFrameControlPtr pControl = rMgr.GetControl( FrameControlType::Header, pPageFrame );
-            if ( pControl.get() && pControl->Contains( aPoint ) )
+            if ( pControl && pControl->Contains( aPoint ) )
             {
                 rControl = FrameControlType::Header;
                 return true;
@@ -6189,7 +6189,7 @@ bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rContro
         if ( rSh.IsShowHeaderFooterSeparator( FrameControlType::Footer ) )
         {
             SwFrameControlPtr pControl = rMgr.GetControl( FrameControlType::Footer, pPageFrame );
-            if ( pControl.get() && pControl->Contains( aPoint ) )
+            if ( pControl && pControl->Contains( aPoint ) )
             {
                 rControl = FrameControlType::Footer;
                 return true;

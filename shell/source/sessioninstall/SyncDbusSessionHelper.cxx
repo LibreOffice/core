@@ -177,7 +177,7 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
                      -1, /* timeout */
                      nullptr, /* cancellable */
                      &error.getRef()),GVariantDeleter());
-    if(result.get())
+    if(result)
         o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
 }
 

@@ -351,7 +351,7 @@ bool SwFlyFreeFrame::supportsAutoContour() const
     {
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(GetFormat()->getSdrAllFillAttributesHelper());
 
-        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        if(aFillAttributes && aFillAttributes->isUsed())
         {
             return false;
         }

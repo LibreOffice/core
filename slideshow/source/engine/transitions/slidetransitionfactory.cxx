@@ -924,7 +924,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                 pSoundPlayer,
                 rEventMultiplexer ));
 
-        if( pTransition.get() )
+        if( pTransition )
             return pTransition;
     }
 

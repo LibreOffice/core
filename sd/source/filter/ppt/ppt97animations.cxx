@@ -560,7 +560,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         return;
     }
     ::sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->getSdrPageFromSdrObject())->getMainSequence();
-    if( !pMainSequence.get() )
+    if( !pMainSequence )
     {
         OSL_FAIL("no MainSequence found for ppt import");
         return;
@@ -568,7 +568,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
     const ::sd::CustomAnimationPresets& rPresets( ::sd::CustomAnimationPresets::getCustomAnimationPresets() );
     ::sd::CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( GetPresetId() ) );
-    if( !pPreset.get() )
+    if( !pPreset )
     {
         OSL_FAIL("no suitable preset found for ppt import");
         return;

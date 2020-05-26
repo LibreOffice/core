@@ -262,7 +262,7 @@ void ScCompiler::SetNumberFormatter( SvNumberFormatter* pFormatter )
 
 void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 {
-    if (xMap.get())
+    if (xMap)
     {
         mxSymbols = xMap;
         if (mxSymbols->isEnglish())

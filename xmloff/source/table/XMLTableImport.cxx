@@ -593,7 +593,7 @@ void XMLTableImportContext::EndElement()
 {
     for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
     {
-        if( xInfo.get() ) try
+        if( xInfo ) try
         {
             Reference< XCellRange > xRange( mxTable->getCellRangeByPosition( xInfo->mnStartColumn, xInfo->mnStartRow, xInfo->mnEndColumn, xInfo->mnEndRow ) );
             Reference< XMergeableCellRange > xCursor( mxTable->createCursorByRange( xRange ), UNO_QUERY_THROW );

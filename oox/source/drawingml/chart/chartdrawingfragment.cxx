@@ -175,7 +175,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                     return this;
 
                 case CDR_TOKEN( ext ):
-                    if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );
+                    if( mxAnchor ) mxAnchor->importExt( rAttribs );
                     return nullptr;
             }
         break;
@@ -195,7 +195,7 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
 
 void ChartDrawingFragment::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( CDR_TOKEN( x ), CDR_TOKEN( y ) ) && mxAnchor.get() )
+    if( isCurrentElement( CDR_TOKEN( x ), CDR_TOKEN( y ) ) && mxAnchor )
         mxAnchor->setPos( getCurrentElement(), getParentElement(), rChars );
 }
 
@@ -204,7 +204,7 @@ void ChartDrawingFragment::onEndElement()
     if( !isCurrentElement( CDR_TOKEN( absSizeAnchor ), CDR_TOKEN( relSizeAnchor ) ) )
         return;
 
-    if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+    if( mxDrawPage.is() && mxShape && mxAnchor )
     {
         EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( maChartRectEmu );
         if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )

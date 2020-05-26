@@ -126,13 +126,13 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                                  if ( pMasterPersist.get() )
+                                  if ( pMasterPersist )
                                   {
                                       pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
                                               pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
                                   }
                               }
-                              if ( pPlaceholder.get() )
+                              if ( pPlaceholder )
                               {
                                   SAL_INFO("oox.ppt","shape " << mpShapePtr->getId() <<
                                           " will get shape reference " << pPlaceholder->getId() << " applied");

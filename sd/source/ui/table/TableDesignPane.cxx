@@ -128,7 +128,7 @@ TableDesignWidget::~TableDesignWidget()
 
 static SfxBindings* getBindings( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
+    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
     else
         return nullptr;
@@ -136,7 +136,7 @@ static SfxBindings* getBindings( ViewShellBase const & rBase )
 
 static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
+    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
     else
         return nullptr;
@@ -526,7 +526,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 xCellInfo = rStyle[sdr::table::last_row_style];
             }
 
-            if( !xCellInfo.get() )
+            if( !xCellInfo )
             {
                 // next come first and last column, if used and available
                 if( rSettings.mbUseFirstColumn && (nCol == 0)  )
@@ -539,7 +539,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 }
             }
 
-            if( !xCellInfo.get() )
+            if( !xCellInfo )
             {
                 if( rSettings.mbUseRowBanding )
                 {
@@ -554,7 +554,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 }
             }
 
-            if( !xCellInfo.get() )
+            if( !xCellInfo )
             {
                 if( rSettings.mbUseColumnBanding )
                 {
@@ -569,7 +569,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 }
             }
 
-            if( !xCellInfo.get() )
+            if( !xCellInfo )
             {
                 // use default cell style if non found yet
                 xCellInfo = rStyle[sdr::table::body_style];
@@ -614,7 +614,7 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
             std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
 
             Color aTextColor( COL_AUTO );
-            if( xCellInfo.get() )
+            if( xCellInfo )
             {
                 // fill cell background
                 const ::tools::Rectangle aRect( nX, nY, nX + nCellWidth - 1, nY + nCellHeight - 1 );
@@ -647,7 +647,7 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
         {
             std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
 
-            if( xCellInfo.get() )
+            if( xCellInfo )
             {
                 const Point aPntTL( nX, nY );
                 const Point aPntTR( nX + nCellWidth - 1, nY );
@@ -670,7 +670,7 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
                     {
                         // check border
                         std::shared_ptr< CellInfo > xBorderInfo(aMatrix[(nBorderCol * nPreviewColumns) + nBorderRow]);
-                        if( xBorderInfo.get() )
+                        if( xBorderInfo )
                         {
                             const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder->GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
                             if( pBorderLine2 && pBorderLine2->HasPriority(*pBorderLine) )

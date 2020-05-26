@@ -2859,7 +2859,7 @@ public:
                      bool bReadOpt );
 
     void AddContents( std::unique_ptr<HTMLTableCnts> pNewCnts );
-    bool HasFirstContents() const { return m_xCnts.get(); }
+    bool HasFirstContents() const { return bool(m_xCnts); }
 
     void ClearIsInSection() { m_pCurrCnts = nullptr; }
     bool IsInSection() const { return m_pCurrCnts!=nullptr; }

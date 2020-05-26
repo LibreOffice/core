@@ -249,7 +249,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
         case CURRENT:
             const std::shared_ptr<DrawViewShell> pDrawViewShell(
                 std::dynamic_pointer_cast<DrawViewShell>(rpViewShell));
-            if (pDrawViewShell.get())
+            if (pDrawViewShell)
             {
                 ePageKind = pDrawViewShell->GetPageKind();
                 eEditMode = pDrawViewShell->GetEditMode();
@@ -301,7 +301,7 @@ sal_Int32 OutlinerContainer::GetPageIndex (
     switch (aLocation)
     {
         case CURRENT:
-            if (pDrawViewShell.get())
+            if (pDrawViewShell)
                 nPageIndex = pDrawViewShell->GetCurPagePos();
             else
             {
@@ -346,7 +346,7 @@ IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
     if ( ! mpViewShellWeak.expired())
         pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(rpViewShellWeak.lock());
 
-    if (pDrawViewShell.get())
+    if (pDrawViewShell)
     {
         maPosition.mePageKind = pDrawViewShell->GetPageKind();
         maPosition.meEditMode = pDrawViewShell->GetEditMode();

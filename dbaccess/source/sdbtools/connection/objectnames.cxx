@@ -204,7 +204,7 @@ namespace sdbtools
             :m_pPrimary( _pPrimary )
             ,m_pSecondary( _pSecondary )
         {
-            OSL_ENSURE( m_pPrimary.get() && m_pSecondary.get(), "CombinedNameCheck::CombinedNameCheck: this will crash!" );
+            OSL_ENSURE( m_pPrimary && m_pSecondary, "CombinedNameCheck::CombinedNameCheck: this will crash!" );
         }
 
         // INameValidation

@@ -302,7 +302,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     aPopupMenu[3].Name = "ItemDescriptorContainer";
                     uno::Reference< container::XIndexContainer > xMenuContainer( xSCF->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                     aPopupMenu[3].Value <<= xMenuContainer;
-                    if ( pCust->customizationDataCTB.get() && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
+                    if ( pCust->customizationDataCTB && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
                     SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
                     xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::makeAny( aPopupMenu ) );
@@ -326,7 +326,7 @@ bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarIm
 {
     if ( tbidForTBD == 0x25 )
         return ImportMenu( rWrapper, helper );
-    if ( !customizationDataCTB.get() )
+    if ( !customizationDataCTB )
         return false;
     if ( !customizationDataCTB->IsMenuToolbar() )
     {
@@ -512,7 +512,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     // cmtNil       0x7 No command. See Cid.
     bool bBuiltin = false;
     sal_Int16 cmdId = 0;
-    if  ( cid.get() )
+    if  ( cid )
     {
         const sal_uInt32 nCid = ( *cid & 0xFFFF );
 
@@ -541,7 +541,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         }
     }
 
-    if ( tbcd.get() )
+    if ( tbcd )
     {
         std::vector< css::beans::PropertyValue > props;
         if ( bBuiltin )
@@ -605,7 +605,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
 OUString
 SwTBC::GetCustomText()
 {
-    if ( tbcd.get() )
+    if ( tbcd )
         return tbcd->getGeneralInfo().CustomText();
     return OUString();
 }

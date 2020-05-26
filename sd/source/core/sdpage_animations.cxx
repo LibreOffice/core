@@ -60,7 +60,7 @@ Reference< XAnimationNode > const & SdPage::getAnimationNode()
 void SdPage::setAnimationNode( Reference< XAnimationNode > const & xNode )
 {
     mxAnimationNode = xNode;
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->reset( xNode );
 }
 

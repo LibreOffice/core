@@ -1808,7 +1808,7 @@ void SlideShowImpl::addShapeEventListener(
     }
 
     // add new listener to broadcaster
-    if( aIter->second.get() )
+    if( aIter->second )
         aIter->second->addInterface( xListener );
 
     maEventMultiplexer.notifyShapeListenerAdded(xShape);

@@ -1070,7 +1070,7 @@ CondFormatRuleRef CondFormat::createRule()
 
 void CondFormat::insertRule( CondFormatRuleRef const & xRule )
 {
-    if( xRule.get() && (xRule->getPriority() > 0) )
+    if( xRule && (xRule->getPriority() > 0) )
     {
         OSL_ENSURE( maRules.find( xRule->getPriority() ) == maRules.end(), "CondFormat::insertRule - multiple rules with equal priority" );
         maRules[ xRule->getPriority() ] = xRule;
@@ -1164,12 +1164,12 @@ void CondFormatBuffer::finalizeImport()
 
     for( const auto& rxCondFormat : maCondFormats )
     {
-        if ( rxCondFormat.get())
+        if ( rxCondFormat)
             rxCondFormat->finalizeImport();
     }
     for ( const auto& rxCfRule : maCfRules )
     {
-        if ( rxCfRule.get() )
+        if ( rxCfRule )
             rxCfRule->finalizeImport();
     }
 

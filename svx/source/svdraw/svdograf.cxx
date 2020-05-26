@@ -838,7 +838,7 @@ bool SdrGrafObj::HasGDIMetaFile() const
 
 bool SdrGrafObj::isEmbeddedVectorGraphicData() const
 {
-    return GraphicType::Bitmap == GetGraphicType() && GetGraphic().getVectorGraphicData().get();
+    return GraphicType::Bitmap == GetGraphicType() && GetGraphic().getVectorGraphicData();
 }
 
 GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const

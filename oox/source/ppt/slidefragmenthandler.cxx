@@ -179,7 +179,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
     case PPT_TOKEN( clrMap ):           // CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr =
-                ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr.get() || !mpSlidePersistPtr->getClrMap().get() )
+                ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr || !mpSlidePersistPtr->getClrMap() )
                 ? std::make_shared<oox::drawingml::ClrMap>()
                 : std::make_shared<oox::drawingml::ClrMap>( *mpSlidePersistPtr->getClrMap() );
             ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs, *pClrMapPtr );

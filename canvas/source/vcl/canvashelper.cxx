@@ -867,7 +867,7 @@ namespace vclcanvas
 
     geometry::IntegerSize2D CanvasHelper::getSize()
     {
-        if( !mpOutDevProvider.get() )
+        if( !mpOutDevProvider )
             return geometry::IntegerSize2D(); // we're disposed
 
         return vcl::unotools::integerSize2DFromSize( mpOutDevProvider->getOutDev().GetOutputSizePixel() );
@@ -876,7 +876,7 @@ namespace vclcanvas
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
                                                                         bool                        beFast )
     {
-        if( !mpOutDevProvider.get() || !mpDevice )
+        if( !mpOutDevProvider || !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
@@ -901,7 +901,7 @@ namespace vclcanvas
     uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     rLayout,
                                                      const geometry::IntegerRectangle2D& rect )
     {
-        if( !mpOutDevProvider.get() )
+        if( !mpOutDevProvider )
             return uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
@@ -951,7 +951,7 @@ namespace vclcanvas
     uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                       const geometry::IntegerPoint2D& pos )
     {
-        if( !mpOutDevProvider.get() )
+        if( !mpOutDevProvider )
             return uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
@@ -980,7 +980,7 @@ namespace vclcanvas
 
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
-        if( !mpOutDevProvider.get() )
+        if( !mpOutDevProvider )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
         rendering::IntegerBitmapLayout aBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );

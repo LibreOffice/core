@@ -124,10 +124,10 @@ struct UndoAnimationPathImpl
             return;
 
         std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
-        if( pMainSequence.get() )
+        if( pMainSequence )
         {
             CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
-            if( pEffect.get() )
+            if( pEffect )
             {
                 mnEffectOffset = pMainSequence->getOffsetFromEffect( pEffect );
                 msUndoPath = pEffect->getPath();
@@ -143,7 +143,7 @@ struct UndoAnimationPathImpl
         if( mpPage && (mnEffectOffset >= 0) )
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
-            if( pMainSequence.get() )
+            if( pMainSequence )
                 pEffect = pMainSequence->getEffectFromOffset( mnEffectOffset );
         }
         return pEffect;
@@ -163,7 +163,7 @@ UndoAnimationPath::~UndoAnimationPath()
 void UndoAnimationPath::Undo()
 {
     CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
-    if( pEffect.get() )
+    if( pEffect )
     {
         mpImpl->msRedoPath = pEffect->getPath();
         pEffect->setPath( mpImpl->msUndoPath );
@@ -173,7 +173,7 @@ void UndoAnimationPath::Undo()
 void UndoAnimationPath::Redo()
 {
     CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
-    if( pEffect.get() )
+    if( pEffect )
     {
         pEffect->setPath( mpImpl->msRedoPath );
     }

@@ -3468,7 +3468,7 @@ bool SfxBaseModel::hasValidSignatures() const
 
 void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
 {
-    if (m_pData->m_xGrabBagItem.get())
+    if (m_pData->m_xGrabBagItem)
         m_pData->m_xGrabBagItem->QueryValue(rVal);
     else
         rVal <<= uno::Sequence<beans::PropertyValue>();
@@ -3476,7 +3476,7 @@ void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
 
 void SfxBaseModel::setGrabBagItem(const css::uno::Any& rVal)
 {
-    if (!m_pData->m_xGrabBagItem.get())
+    if (!m_pData->m_xGrabBagItem)
         m_pData->m_xGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     m_pData->m_xGrabBagItem->PutValue(rVal, 0);

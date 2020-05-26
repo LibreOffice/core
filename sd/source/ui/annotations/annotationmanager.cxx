@@ -111,7 +111,7 @@ SfxItemPool* GetAnnotationPool()
 
 static SfxBindings* getBindings( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
+    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
 
     return nullptr;
@@ -119,7 +119,7 @@ static SfxBindings* getBindings( ViewShellBase const & rBase )
 
 static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 {
-    if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
+    if( rBase.GetMainViewShell() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
 
     return nullptr;
@@ -1292,7 +1292,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage const * pPage, bool bForward 
 
 SdPage* AnnotationManagerImpl::GetCurrentPage()
 {
-    if (mrBase.GetMainViewShell().get())
+    if (mrBase.GetMainViewShell())
         return mrBase.GetMainViewShell()->getCurrentPage();
     return nullptr;
 }

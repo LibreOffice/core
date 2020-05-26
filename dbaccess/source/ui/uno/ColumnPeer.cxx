@@ -90,7 +90,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         OUString const sCreateParam("x");
         bool bForce;
         TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
-        if ( !pTypeInfo.get() )
+        if ( !pTypeInfo )
             pTypeInfo = pFieldControl->getDefaultTyp();
 
         m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);

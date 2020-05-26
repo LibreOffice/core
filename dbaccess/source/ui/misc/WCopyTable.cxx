@@ -729,7 +729,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         {
             // add extra column for the primary key
             TOTypeInfoSP pTypeInfo = queryPrimaryKeyType(m_aDestTypeInfo);
-            if ( pTypeInfo.get() )
+            if ( pTypeInfo )
             {
                 if ( m_bAddPKFirstTime )
                 {
@@ -1021,7 +1021,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         // search for type
         bool bForce;
         TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
-        if ( !pTypeInfo.get() )
+        if ( !pTypeInfo )
             pTypeInfo = m_pTypeInfo;
 
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
@@ -1416,7 +1416,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
 
     bool bForce;
     TOTypeInfoSP pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
-    if ( !pType.get() || bForce )
+    if ( !pType || bForce )
     { // no type found so we have to find the correct one ourself
         sal_Int32 nDefaultType = DataType::VARCHAR;
         switch(_pType->nType)
@@ -1492,12 +1492,12 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
                 nDefaultType = DataType::VARCHAR;
         }
         pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,nDefaultType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
-        if ( !pType.get() )
+        if ( !pType )
         {
             _bNotConvert = false;
             OUString const sCreate("x");
             pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,false,bForce);
-            if ( !pType.get() )
+            if ( !pType )
                 pType = m_pTypeInfo;
         }
         else if ( bForce )

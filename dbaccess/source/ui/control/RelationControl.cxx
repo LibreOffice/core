@@ -145,7 +145,7 @@ namespace dbaui
 
     void ORelationControl::lateInit()
     {
-        if ( !m_pConnData.get() )
+        if ( !m_pConnData )
             return;
         m_xSourceDef = m_pConnData->getReferencingTable()->getTable();
         m_xDestDef = m_pConnData->getReferencedTable()->getTable();

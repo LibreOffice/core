@@ -213,7 +213,7 @@ lcl_setAutoStyle(IStyleAccess & rStyleAccess, const uno::Any & rValue,
     std::shared_ptr<SfxItemSet> pStyle = bPara ?
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_PARA ):
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_CHAR );
-    if(!pStyle.get())
+    if(!pStyle)
     {
          throw lang::IllegalArgumentException();
     }

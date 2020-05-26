@@ -164,7 +164,7 @@ namespace svgio::svgreader
         {
             if(GraphicType::Bitmap == rGraphic.GetType())
             {
-                if(rGraphic.getVectorGraphicData().get())
+                if(rGraphic.getVectorGraphicData())
                 {
                     // embedded Svg
                     rEmbedded = rGraphic.getVectorGraphicData()->getPrimitive2DSequence();

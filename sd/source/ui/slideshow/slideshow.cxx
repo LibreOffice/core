@@ -1067,14 +1067,14 @@ void SlideShow::StartInPlacePresentation()
         ::std::shared_ptr<FrameworkHelper> pHelper(FrameworkHelper::Instance(*mpCurrentViewShellBase));
         ::std::shared_ptr<ViewShell> pMainViewShell(pHelper->GetViewShell(FrameworkHelper::msCenterPaneURL));
 
-        if( pMainViewShell.get() )
+        if( pMainViewShell )
             eShell = pMainViewShell->GetShellType();
 
         if( eShell != ViewShell::ST_IMPRESS )
         {
             // Switch temporary to a DrawViewShell which supports the in-place presentation.
 
-            if( pMainViewShell.get() )
+            if( pMainViewShell )
             {
                 FrameView* pFrameView = pMainViewShell->GetFrameView();
                 pFrameView->SetPresentationViewShellId(SID_VIEWSHELL1);
@@ -1107,7 +1107,7 @@ void SlideShow::StartInPlacePresentation()
         return;
 
     bool bSuccess = false;
-    if( mxCurrentSettings.get() && mxCurrentSettings->mbPreview )
+    if( mxCurrentSettings && mxCurrentSettings->mbPreview )
     {
         bSuccess = mxController->startPreview(mxCurrentSettings->mxStartPage, mxCurrentSettings->mxAnimationNode, mxCurrentSettings->mpParentWindow );
     }
@@ -1120,7 +1120,7 @@ void SlideShow::StartInPlacePresentation()
         end();
     else
     {
-        if( mpCurrentViewShellBase && ( !mxCurrentSettings.get() || ( mxCurrentSettings.get() && !mxCurrentSettings->mbPreview ) ) )
+        if( mpCurrentViewShellBase && ( !mxCurrentSettings || ( mxCurrentSettings && !mxCurrentSettings->mbPreview ) ) )
             mpCurrentViewShellBase->GetWindow()->GrabFocus();
     }
 }
@@ -1149,7 +1149,7 @@ void SlideShow::StartFullscreenPresentation( )
     // view shells.
     FrameView* pOriginalFrameView = nullptr;
     ::std::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
-    if (xShell.get())
+    if (xShell)
         pOriginalFrameView = xShell->GetFrameView();
 
     delete mpFullScreenFrameView;

@@ -49,7 +49,7 @@ ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapePtr cons
 , mpMasterShapePtr( pMasterShapePtr )
 , mpShapePtr( pShapePtr )
 {
-    if( mpMasterShapePtr.get() && mpShapePtr.get() )
+    if( mpMasterShapePtr && mpShapePtr )
         mpMasterShapePtr->addChild( mpShapePtr );
 }
 

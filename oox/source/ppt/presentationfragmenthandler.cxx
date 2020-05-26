@@ -274,7 +274,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         }
                     }
 
-                    if ( !pMasterPersistPtr.get() )
+                    if ( !pMasterPersistPtr )
                     {   // masterpersist not found, we have to load it
                         Reference< drawing::XDrawPage > xMasterPage;
                         Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
@@ -336,7 +336,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
             }
 
             // importing slide page
-            if (pMasterPersistPtr.get()) {
+            if (pMasterPersistPtr) {
                 pSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
                 pSlidePersistPtr->setTheme( pMasterPersistPtr->getTheme() );
                 Reference< drawing::XMasterPageTarget > xMasterPageTarget( pSlidePersistPtr->getPage(), UNO_QUERY );
@@ -562,7 +562,7 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
 {
     Reference< drawing::XDrawPage > xSlide( rSlidePersistPtr->getPage() );
     SlidePersistPtr pMasterPersistPtr( rSlidePersistPtr->getMasterPersist() );
-    if ( pMasterPersistPtr.get() )
+    if ( pMasterPersistPtr )
     {
         // Setting "Layout" property adds extra title and outliner preset shapes to the master slide
         Reference< drawing::XDrawPage > xMasterSlide(pMasterPersistPtr->getPage());

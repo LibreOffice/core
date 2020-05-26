@@ -127,7 +127,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_CLICK:
             // try to extract XShape event source
             event2shape();
-            if (pShape.get())
+            if (pShape)
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -143,7 +143,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_DBL_CLICK:
             // try to extract XShape event source
             event2shape();
-            if (pShape.get())
+            if (pShape)
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -159,7 +159,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_MOUSE_ENTER:
             // try to extract XShape event source
             event2shape();
-            if (pShape.get())
+            if (pShape)
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -175,7 +175,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_MOUSE_LEAVE:
             // try to extract XShape event source
             event2shape();
-            if (pShape.get())
+            if (pShape)
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,

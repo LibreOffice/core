@@ -363,7 +363,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         IMapObjectPtr   pIMapObj = pUserData->GetObject();
         bool        bActive = true;
 
-        if ( pIMapObj.get() )
+        if ( pIMapObj )
         {
             aURL = pIMapObj->GetURL();
             aAltText = pIMapObj->GetAltText();

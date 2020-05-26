@@ -1139,7 +1139,7 @@ void SwTextNode::JoinPrev()
 // create an AttrSet with ranges for Frame-/Para/Char-attributes
 void SwTextNode::NewAttrSet( SwAttrPool& rPool )
 {
-    OSL_ENSURE( !mpAttrSet.get(), "AttrSet is set after all" );
+    OSL_ENSURE( !mpAttrSet, "AttrSet is set after all" );
     SwAttrSet aNewAttrSet( rPool, aTextNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -3939,7 +3939,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
         }
 
         // reset fill information on parent style change
-        if(maFillAttributes.get())
+        if(maFillAttributes)
         {
             maFillAttributes.reset();
         }
@@ -5274,7 +5274,7 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
         }
 
         // reset fill information
-        if (maFillAttributes.get() && pNewValue)
+        if (maFillAttributes && pNewValue)
         {
             const sal_uInt16 nWhich = pNewValue->Which();
             bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
@@ -5334,7 +5334,7 @@ SwTextNode::MakeUnoObject()
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTextNode::getSdrAllFillAttributesHelper() const
 {
     // create SdrAllFillAttributesHelper on demand
-    if(!maFillAttributes.get())
+    if(!maFillAttributes)
     {
         const_cast< SwTextNode* >(this)->maFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(GetSwAttrSet());
     }

@@ -61,7 +61,7 @@ ContextHandlerRef CommentsFragment::onCreateContext( sal_Int32 nElement, const A
         case XDR_TOKEN( to ):
             return this;
         case XLS_TOKEN( comment ):
-            if( (nElement == XLS_TOKEN( text )) && mxComment.get() )
+            if( (nElement == XLS_TOKEN( text )) && mxComment )
                 return new RichStringContext( *this, mxComment->createText() );
             if( nElement == XLS_TOKEN( commentPr ) ) { mxComment->importCommentPr( rAttribs ); return this; }
         break;
@@ -99,7 +99,7 @@ ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, Seq
             if( nRecId == BIFF12_ID_COMMENT ) { importComment( rStrm ); return this; }
         break;
         case BIFF12_ID_COMMENT:
-            if( (nRecId == BIFF12_ID_COMMENTTEXT) && mxComment.get() )
+            if( (nRecId == BIFF12_ID_COMMENTTEXT) && mxComment )
                 mxComment->createText()->importString( rStrm, true );
         break;
     }

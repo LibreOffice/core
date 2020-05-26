@@ -109,14 +109,14 @@ private:
             basegfx::B2DPoint aTexCoor(0.0, 0.0);
             getTextureCoor(aTexCoor);
 
-            if(mrProcessor.getGeoTexSvx().get())
+            if(mrProcessor.getGeoTexSvx())
             {
                 // calc color in spot. This may also set to invisible already when
                 // e.g. bitmap textures have transparent parts
                 mrProcessor.getGeoTexSvx()->modifyBColor(aTexCoor, rColor, fOpacity);
             }
 
-            if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx().get())
+            if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx())
             {
                 // calc opacity. Object has a 2nd texture, a transparence texture
                 mrProcessor.getTransparenceGeoTexSvx()->modifyOpacity(aTexCoor, fOpacity);
@@ -125,7 +125,7 @@ private:
 
         if(basegfx::fTools::more(fOpacity, 0.0))
         {
-            if(mrProcessor.getGeoTexSvx().get())
+            if(mrProcessor.getGeoTexSvx())
             {
                 if(mbUseNrm)
                 {
@@ -193,9 +193,9 @@ private:
         mbModifyColor = mrProcessor.getBColorModifierStack().count();
         mbHasTexCoor = SCANLINE_EMPTY_INDEX != rA.getTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getTextureIndex();
         mbHasInvTexCoor = SCANLINE_EMPTY_INDEX != rA.getInverseTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getInverseTextureIndex();
-        const bool bTextureActive(mrProcessor.getGeoTexSvx().get() || mrProcessor.getTransparenceGeoTexSvx().get());
+        const bool bTextureActive(mrProcessor.getGeoTexSvx() || mrProcessor.getTransparenceGeoTexSvx());
         mbUseTex = bTextureActive && (mbHasTexCoor || mbHasInvTexCoor || mrProcessor.getSimpleTextureActive());
-        const bool bUseColorTex(mbUseTex && mrProcessor.getGeoTexSvx().get());
+        const bool bUseColorTex(mbUseTex && mrProcessor.getGeoTexSvx());
         const bool bNeedNrmOrCol(!bUseColorTex || mrProcessor.getModulate());
         mbUseNrm = bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getNormalIndex() && SCANLINE_EMPTY_INDEX != rB.getNormalIndex();
         mbUseCol = !mbUseNrm && bNeedNrmOrCol && SCANLINE_EMPTY_INDEX != rA.getColorIndex() && SCANLINE_EMPTY_INDEX != rB.getColorIndex();

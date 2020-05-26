@@ -1078,7 +1078,7 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
 {
-    if (mpGrabBagItem.get())
+    if (mpGrabBagItem)
         mpGrabBagItem->QueryValue(rVal);
     else
         rVal <<= uno::Sequence<beans::PropertyValue>();
@@ -1086,7 +1086,7 @@ void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
 
 void SwNumRule::SetGrabBagItem(const uno::Any& rVal)
 {
-    if (!mpGrabBagItem.get())
+    if (!mpGrabBagItem)
         mpGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     mpGrabBagItem->PutValue(rVal, 0);

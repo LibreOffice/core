@@ -176,15 +176,15 @@ ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const 
             return this;
 
         case A_TOKEN( latin ):
-            if( mxCharProps.get() )
+            if( mxCharProps )
                 mxCharProps->maLatinFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( ea ):
-            if( mxCharProps.get() )
+            if( mxCharProps )
                 mxCharProps->maAsianFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( cs ):
-            if( mxCharProps.get() )
+            if( mxCharProps )
                 mxCharProps->maComplexFont.setAttributes( rAttribs );
         break;
     }

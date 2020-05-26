@@ -793,7 +793,7 @@ bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
 
 void SfxOleSection::SetProperty( const SfxOlePropertyRef& xProp )
 {
-    if( xProp.get() )
+    if( xProp )
         maPropMap[ xProp->GetPropId() ] = xProp;
 }
 
@@ -1062,7 +1062,7 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
         break;
     }
     // load property contents
-    if( xProp.get() )
+    if( xProp )
     {
         SetError( xProp->Load( rStrm ) );
         maPropMap[ nPropId ] = xProp;

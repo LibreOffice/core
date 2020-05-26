@@ -52,7 +52,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case XLS_TOKEN( rPr ):
-                    if( mxPortion.get() )
+                    if( mxPortion )
                         return new FontContext( *this, mxPortion->createFont() );
                 break;
 
@@ -77,11 +77,11 @@ void RichStringContext::onCharacters( const OUString& rChars )
     if( isCurrentElement( XLS_TOKEN( t ) ) ) switch( getParentElement() )
     {
         case XLS_TOKEN( rPh ):
-            if( mxPhonetic.get() )
+            if( mxPhonetic )
                 mxPhonetic->setText( rChars );
         break;
         default:
-            if( mxPortion.get() )
+            if( mxPortion )
                 mxPortion->setText( rChars );
     }
 }

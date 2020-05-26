@@ -610,7 +610,7 @@ void SwMailMergeWizardExecutor::EndDialogHdl(sal_Int32 nRet)
     default: // finish
         {
             std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pSourceView = xMMConfig.get() ? xMMConfig->GetSourceView() : nullptr;
+            SwView* pSourceView = xMMConfig ? xMMConfig->GetSourceView() : nullptr;
             if(pSourceView)
             {
                 xMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();

@@ -255,7 +255,7 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor )
+            if( mxDrawPage.is() && mxShape && mxAnchor )
             {
                 // Rotation is decided by orientation of shape determined
                 // by the anchor position given by 'editAs="oneCell"'

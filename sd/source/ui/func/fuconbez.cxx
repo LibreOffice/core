@@ -230,7 +230,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         if( pPage )
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
-            if( pMainSequence.get() )
+            if( pMainSequence )
             {
                 Sequence< Any > aTargets;
                 maTargets >>= aTargets;

@@ -100,7 +100,7 @@ void ScRetypePassDlg::SetDesiredHash(ScPasswordHash eHash)
 
 void ScRetypePassDlg::WriteNewDataToDocument(ScDocument& rDoc) const
 {
-    if (mpDocItem.get())
+    if (mpDocItem)
         rDoc.SetDocProtection(mpDocItem.get());
 
     size_t nTabCount = static_cast<size_t>(rDoc.GetTableCount());
@@ -141,7 +141,7 @@ void ScRetypePassDlg::PopulateDialog()
 void ScRetypePassDlg::SetDocData()
 {
     bool bBtnEnabled = false;
-    if (mpDocItem.get() && mpDocItem->isProtected())
+    if (mpDocItem && mpDocItem->isProtected())
     {
         if (mpDocItem->isPasswordEmpty())
             mxTextDocStatus->set_label(maTextNotPassProtected);

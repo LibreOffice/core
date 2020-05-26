@@ -263,7 +263,7 @@ bool OCopyTable::checkAppendData()
                 return false;
             }
 
-            if ( pTypeInfo.get() )
+            if ( pTypeInfo )
                 m_pParent->m_vColumnTypes[i] = pTypeInfo->nType;
             else
                 m_pParent->m_vColumnTypes[i] = DataType::VARCHAR;

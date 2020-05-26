@@ -100,7 +100,7 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 
     // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
     // don't need to initialize things twice.
-    if (mxOpCodeMap.get())
+    if (mxOpCodeMap)
         rCompiler.SetFormulaLanguage( mxOpCodeMap );
     else
     {
@@ -195,7 +195,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         // Need to recreate the symbol map to change English property
         // because the map is const. So for performance reasons set
         // CompileEnglish _before_ OpCodeMap!
-        if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
+        if (mxOpCodeMap && mbEnglish != bOldEnglish)
         {
             ScDocument& rDoc = mpDocShell->GetDocument();
             ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());

@@ -45,7 +45,7 @@ namespace drawinglayer::primitive2d
                     return true;
                 }
 
-                if(!getColorModifier().get() || !rCompare.getColorModifier().get())
+                if(!getColorModifier() || !rCompare.getColorModifier())
                 {
                     return false;
                 }

@@ -473,11 +473,11 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
 void XclImpHFConverter::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId ) const
 {
     ScPageHFItem aHFItem( nWhichId );
-    if( maInfos[ EXC_HF_LEFT ].mxObj.get() )
+    if( maInfos[ EXC_HF_LEFT ].mxObj )
         aHFItem.SetLeftArea( *maInfos[ EXC_HF_LEFT ].mxObj );
-    if( maInfos[ EXC_HF_CENTER ].mxObj.get() )
+    if( maInfos[ EXC_HF_CENTER ].mxObj )
         aHFItem.SetCenterArea( *maInfos[ EXC_HF_CENTER ].mxObj );
-    if( maInfos[ EXC_HF_RIGHT ].mxObj.get() )
+    if( maInfos[ EXC_HF_RIGHT ].mxObj )
         aHFItem.SetRightArea( *maInfos[ EXC_HF_RIGHT ].mxObj );
     rItemSet.Put( aHFItem );
 }
@@ -575,7 +575,7 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
     {
         CreateCurrObject();
         meCurrObj = eNew;
-        if( GetCurrObj().get() )
+        if( GetCurrObj() )
             mrEE.SetText( *GetCurrObj() );
         else
             mrEE.SetText( EMPTY_OUSTRING );

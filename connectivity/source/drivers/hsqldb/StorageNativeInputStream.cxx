@@ -141,7 +141,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stor
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     OSL_ENSURE(pHelper.get(),"No stream helper!");
-    if ( pHelper.get() )
+    if ( pHelper )
     {
         Reference<XInputStream> xIn = pHelper->getInputStream();
         if ( xIn.is() )
@@ -203,7 +203,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     OSL_ENSURE(pHelper.get(),"No stream helper!");
-    Reference<XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference<XInputStream>();
+    Reference<XInputStream> xIn = pHelper ? pHelper->getInputStream() : Reference<XInputStream>();
     if ( xIn.is() )
     {
         try
@@ -246,7 +246,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #endif
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
+    Reference< XInputStream> xIn = pHelper ? pHelper->getInputStream() : Reference< XInputStream>();
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
     jint nBytesRead = 0;
     if ( xIn.is() )

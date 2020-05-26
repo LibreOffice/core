@@ -526,7 +526,7 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
     }
 
     const TableTypeRef& pTableData = rDoc.maTables[itrTabId->second];
-    if (!pTableData.get())
+    if (!pTableData)
     {
         // the table data is not instantiated yet.
         return TokenRef();
@@ -579,7 +579,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     for (size_t nTab = nTabFirstId; nTab <= nTabLastId; ++nTab)
     {
         TableTypeRef pTab = rDoc.maTables[nTab];
-        if (!pTab.get())
+        if (!pTab)
             return TokenArrayRef();
 
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
@@ -781,7 +781,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
         return;
 
     TableTypeRef& pTableData = rDoc.maTables[itrTabName->second];
-    if (!pTableData.get())
+    if (!pTableData)
         pTableData = std::make_shared<Table>();
 
     pTableData->setCell(nCol, nRow, pToken, nFmtIndex);
@@ -819,7 +819,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     for (const auto& rItem : rData)
     {
         TableTypeRef& pTabData = rDoc.maTables[i];
-        if (!pTabData.get())
+        if (!pTabData)
             pTabData = std::make_shared<Table>();
 
         const ScMatrixRef& pMat = rItem.mpRangeData;
@@ -1107,7 +1107,7 @@ bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
 
     for (auto& rxTab : pDocItem->maTables)
     {
-        if (rxTab.get())
+        if (rxTab)
             rxTab->setReferenced(true);
     }
     addCacheDocToReferenced( nFileId);
@@ -1126,7 +1126,7 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
             for (size_t i = nIndex; i < nStop; ++i)
             {
                 TableTypeRef pTab = pDoc->maTables[i];
-                if (pTab.get())
+                if (pTab)
                 {
                     if (!pTab->isReferenced())
                     {
@@ -1152,7 +1152,7 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
             ScExternalRefCache::DocItem& rDocItem = rEntry.second;
             for (auto& rxTab : rDocItem.maTables)
             {
-                if (rxTab.get())
+                if (rxTab)
                     rxTab->setReferenced(true);
             }
         }
@@ -1175,7 +1175,7 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
             for (size_t i=0; i < nTables; ++i)
             {
                 TableTypeRef & xTab = rDocItem.maTables[i];
-                if (xTab.get())
+                if (xTab)
                 {
                     xTab->setReferenced(false);
                     rDocReferenced.maTables[i] = false;
@@ -2041,7 +2041,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
     }
 
     ScExternalRefCache::TokenArrayRef pArray = maRefCache.getRangeNameTokens(nFileId, rName);
-    if (pArray.get())
+    if (pArray)
         // This range name is cached.
         return pArray;
 

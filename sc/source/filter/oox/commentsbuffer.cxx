@@ -157,7 +157,7 @@ void Comment::finalizeImport()
     // BIFF12 stores cell range instead of cell address, use first cell of this range
     OSL_ENSURE( maModel.maRange.aStart == maModel.maRange.aEnd,
         "Comment::finalizeImport - comment anchor should be a single cell" );
-    if( !getAddressConverter().checkCellAddress( maModel.maRange.aStart, true ) || !maModel.mxText.get() )
+    if( !getAddressConverter().checkCellAddress( maModel.maRange.aStart, true ) || !maModel.mxText )
         return;
 
     try

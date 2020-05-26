@@ -954,7 +954,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     pNewAttr = &rNewHint;
                     bDestroyHint = false;
                 }
-                else if ( pNewStyle.get() )
+                else if ( pNewStyle )
                 {
                     pNewAttr = MakeTextAttr( *rNode.GetDoc(), *pNewStyle,
                             nPorStart, nPorEnd );

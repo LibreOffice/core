@@ -279,7 +279,7 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
         }
     }
 
-    if( xCtrlModel.get() )
+    if( xCtrlModel )
     {
         // user form controls are AWT models
         xCtrlModel->setAwtModelMode();
@@ -324,14 +324,14 @@ VbaFormControl::~VbaFormControl()
 
 void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBase& rStrg, const AxClassTable& rClassTable )
 {
-    if( !mxSiteModel.get() )
+    if( !mxSiteModel )
         return;
 
     if( mxSiteModel->isContainer() )
     {
         StorageRef xSubStrg = rStrg.openSubStorage( mxSiteModel->getSubStorageName(), false );
         OSL_ENSURE( xSubStrg.get(), "VbaFormControl::importModelOrStorage - cannot find storage for embedded control" );
-        if( xSubStrg.get() )
+        if( xSubStrg )
             importStorage( *xSubStrg, rClassTable );
     }
     else if( !rInStrm.isEof() )
@@ -344,13 +344,13 @@ void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBa
 
 OUString VbaFormControl::getControlName() const
 {
-    return mxSiteModel.get() ? mxSiteModel->getName() : OUString();
+    return mxSiteModel ? mxSiteModel->getName() : OUString();
 }
 
 void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
         const Reference< XNameContainer >& rxParentNC, const ControlConverter& rConv ) const
 {
-    if( !(rxParentNC.is() && mxSiteModel.get() && mxCtrlModel.get()) )
+    if( !(rxParentNC.is() && mxSiteModel && mxCtrlModel) )
         return;
 
     try
@@ -379,7 +379,7 @@ void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
 void VbaFormControl::importControlModel( BinaryInputStream& rInStrm, const AxClassTable& rClassTable )
 {
     createControlModel( rClassTable );
-    if( mxCtrlModel.get() )
+    if( mxCtrlModel )
         mxCtrlModel->importBinaryModel( rInStrm );
 }
 
@@ -442,7 +442,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             if (elem->getControlType() == API_CONTROL_PAGE)
             {
                 VbaSiteModelRef xPageSiteRef = control->mxSiteModel;
-                if ( xPageSiteRef.get() )
+                if ( xPageSiteRef )
                     idToPage[ xPageSiteRef->getId() ] = control;
             }
             else
@@ -484,7 +484,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
 bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrlModel,
         const ControlConverter& rConv, sal_Int32 nCtrlIndex ) const
 {
-    if( rxCtrlModel.is() && mxSiteModel.get() && mxCtrlModel.get() )
+    if( rxCtrlModel.is() && mxSiteModel && mxCtrlModel )
     {
         const OUString& rCtrlName = mxSiteModel->getName();
         OSL_ENSURE( !rCtrlName.isEmpty(), "VbaFormControl::convertProperties - control without name" );
@@ -524,7 +524,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
 void VbaFormControl::createControlModel( const AxClassTable& rClassTable )
 {
     // derived classes may have created their own control model
-    if( !mxCtrlModel && mxSiteModel.get() )
+    if( !mxCtrlModel && mxSiteModel )
         mxCtrlModel = mxSiteModel->createControlModel( rClassTable );
 }
 
@@ -603,7 +603,7 @@ void VbaFormControl::finalizeEmbeddedControls()
     VbaControlNameInserter aInserter( aControlNames );
     maControls.forEach( aInserter );
     for (auto const& control : maControls)
-        if( control->mxCtrlModel.get() && (control->mxCtrlModel->getControlType() == API_CONTROL_GROUPBOX) )
+        if( control->mxCtrlModel && (control->mxCtrlModel->getControlType() == API_CONTROL_GROUPBOX) )
             control->maControls.forEach( aInserter );
 
     /*  Reprocess the sorted list and collect all option button controls that
@@ -689,13 +689,13 @@ void VbaFormControl::finalizeEmbeddedControls()
 
 void VbaFormControl::moveRelative( const AxPairData& rDistance )
 {
-    if( mxSiteModel.get() )
+    if( mxSiteModel )
         mxSiteModel->moveRelative( rDistance );
 }
 
 void VbaFormControl::moveEmbeddedToAbsoluteParent()
 {
-    if( !(mxSiteModel.get() && !maControls.empty()) )
+    if( !(mxSiteModel && !maControls.empty()) )
         return;
 
     // distance to move is equal to position of this control in its parent
@@ -718,8 +718,8 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
 bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight )
 {
     // sort controls without model to the end
-    sal_Int32 nLeftTabIndex = rxLeft->mxSiteModel.get() ? rxLeft->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
-    sal_Int32 nRightTabIndex = rxRight->mxSiteModel.get() ? rxRight->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
+    sal_Int32 nLeftTabIndex = rxLeft->mxSiteModel ? rxLeft->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
+    sal_Int32 nRightTabIndex = rxRight->mxSiteModel ? rxRight->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
     return nLeftTabIndex < nRightTabIndex;
 }
 

@@ -89,7 +89,7 @@ namespace {
 
 void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double fPosition )
 {
-    if( rxProgressBar.get() )
+    if( rxProgressBar )
         rxProgressBar->setPosition( fPosition );
 }
 
@@ -433,7 +433,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     mxVmlDrawing.reset( new VmlDrawing( *this ) );
 
     // prepare progress bars
-    if( mxProgressBar.get() )
+    if( mxProgressBar )
     {
         mxRowProgress = mxProgressBar->createSegment( 0.5 );
         mxFinalProgress = mxProgressBar->createSegment( 0.5 );

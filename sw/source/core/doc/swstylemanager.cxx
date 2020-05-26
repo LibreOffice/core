@@ -45,7 +45,7 @@ void SwStyleCache::addCompletePool( StylePool& rPool )
 {
     std::unique_ptr<IStylePoolIteratorAccess> pIter = rPool.createIterator();
     std::shared_ptr<SfxItemSet> pStyle = pIter->getNext();
-    while( pStyle.get() )
+    while( pStyle )
     {
         OUString aName( StylePool::nameOf(pStyle) );
         mMap[ aName ] = pStyle;
@@ -129,7 +129,7 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getByName( const OUString& rName,
     if( !rpCache )
         rpCache.reset(new SwStyleCache());
     std::shared_ptr<SfxItemSet> pStyle = rpCache->getByName( rName );
-    if( !pStyle.get() )
+    if( !pStyle )
     {
         // Ok, ok, it's allowed to ask for uncached styles (from UNO) but it should not be done
         // during loading a document
@@ -147,7 +147,7 @@ void SwStyleManager::getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rSt
     // setup <StylePool> iterator, which skips unused styles and ignorable items
     std::unique_ptr<IStylePoolIteratorAccess> pIter = rAutoPool.createIterator( true, true );
     std::shared_ptr<SfxItemSet> pStyle = pIter->getNext();
-    while( pStyle.get() )
+    while( pStyle )
     {
         rStyles.push_back( pStyle );
 

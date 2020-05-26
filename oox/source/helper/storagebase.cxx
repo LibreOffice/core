@@ -126,7 +126,7 @@ StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCrea
         lclSplitFirstElement( aElement, aRemainder, rStorageName );
         if( !aElement.isEmpty() )
             xSubStorage = getSubStorage( aElement, bCreateMissing );
-        if( xSubStorage.get() && !aRemainder.isEmpty() )
+        if( xSubStorage && !aRemainder.isEmpty() )
             xSubStorage = xSubStorage->openSubStorage( aRemainder, bCreateMissing );
     }
     return xSubStorage;
@@ -142,7 +142,7 @@ Reference< XInputStream > StorageBase::openInputStream( const OUString& rStreamN
         if( !aRemainder.isEmpty() )
         {
             StorageRef xSubStorage = getSubStorage( aElement, false );
-            if( xSubStorage.get() )
+            if( xSubStorage )
                 xInStream = xSubStorage->openInputStream( aRemainder );
         }
         else
@@ -170,7 +170,7 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
             if( !aRemainder.isEmpty() )
             {
                 StorageRef xSubStorage = getSubStorage( aElement, true );
-                if( xSubStorage.get() )
+                if( xSubStorage )
                     xOutStream = xSubStorage->openOutputStream( aRemainder );
             }
             else
@@ -194,10 +194,10 @@ void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElemen
         return;
 
     StorageRef xSubStrg = openSubStorage( rElementName, false );
-    if( xSubStrg.get() )
+    if( xSubStrg )
     {
         StorageRef xDestSubStrg = rDestStrg.openSubStorage( rElementName, true );
-        if( xDestSubStrg.get() )
+        if( xDestSubStrg )
             xSubStrg->copyStorageToStorage( *xDestSubStrg );
     }
     else

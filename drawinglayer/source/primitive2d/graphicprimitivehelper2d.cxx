@@ -481,7 +481,7 @@ namespace drawinglayer::primitive2d
                             rGraphic,
                             rTransform);
                     }
-                    else if(rGraphic.getVectorGraphicData().get())
+                    else if(rGraphic.getVectorGraphicData())
                     {
                         // embedded Vector Graphic Data fill, create embed transform
                         const basegfx::B2DRange& rSvgRange(rGraphic.getVectorGraphicData()->getRange());

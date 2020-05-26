@@ -1912,7 +1912,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
 
     // This is a new'ed instance, so we must manage its life cycle here.
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, rRange, nullptr);
-    if (!pArray.get())
+    if (!pArray)
         return;
 
     FormulaTokenArrayPlainIterator aIter(*pArray);

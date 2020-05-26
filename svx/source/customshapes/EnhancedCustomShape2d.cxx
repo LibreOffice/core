@@ -869,7 +869,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
     static sal_uInt32 nLevel = 0;
     if ( nIndex < static_cast<sal_Int32>(vNodesSharedPtr.size()) )
     {
-        if ( vNodesSharedPtr[ nIndex ].get() ) {
+        if ( vNodesSharedPtr[ nIndex ] ) {
             nLevel ++;
             try
             {

@@ -209,7 +209,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 }
 
 ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
-:   meType( rVectorGraphicDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
+:   meType( rVectorGraphicDataPtr ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0 ),
     mbSwapOut( false ),
     mbDummyContext  ( false ),
@@ -344,7 +344,7 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData.get())
+                if(maVectorGraphicData)
                 {
                     if(maVectorGraphicData == rImpGraphic.maVectorGraphicData)
                     {
@@ -489,7 +489,7 @@ bool ImpGraphic::ImplIsTransparent() const
     {
         bRet = maSwapInfo.mbIsTransparent;
     }
-    else if (meType == GraphicType::Bitmap && !maVectorGraphicData.get())
+    else if (meType == GraphicType::Bitmap && !maVectorGraphicData)
     {
         bRet = mpAnimation ? mpAnimation->IsTransparent() : maBitmapEx.IsTransparent();
     }
@@ -505,7 +505,7 @@ bool ImpGraphic::ImplIsAlpha() const
     {
         bRet = maSwapInfo.mbIsAlpha;
     }
-    else if (maVectorGraphicData.get())
+    else if (maVectorGraphicData)
     {
         bRet = true;
     }
@@ -562,7 +562,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+        if(maVectorGraphicData && maBitmapEx.IsEmpty())
         {
             // use maBitmapEx as local buffer for rendered svg
             const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
@@ -671,7 +671,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+        if(maVectorGraphicData && maBitmapEx.IsEmpty())
         {
             // use maBitmapEx as local buffer for rendered svg
             const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
@@ -723,7 +723,7 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
     ensureAvailable();
     if (!maMetaFile.GetActionSize()
-        && maVectorGraphicData.get()
+        && maVectorGraphicData
         && (VectorGraphicDataType::Emf == maVectorGraphicData->getVectorGraphicDataType()
             || VectorGraphicDataType::Wmf == maVectorGraphicData->getVectorGraphicDataType()))
     {
@@ -758,7 +758,7 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
-        if(maVectorGraphicData.get() && !maBitmapEx)
+        if(maVectorGraphicData && !maBitmapEx)
         {
             // use maBitmapEx as local buffer for rendered svg
             pThat->maBitmapEx = getVectorGraphicReplacement();
@@ -814,7 +814,7 @@ Size ImpGraphic::ImplGetPrefSize() const
 
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+                if(maVectorGraphicData && maBitmapEx.IsEmpty())
                 {
                     if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
                     {
@@ -866,7 +866,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
         {
             // used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
-            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+            if(maVectorGraphicData && maBitmapEx.IsEmpty())
             {
                 maExPrefSize = rPrefSize;
             }
@@ -912,7 +912,7 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
 
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+                if(maVectorGraphicData && maBitmapEx.IsEmpty())
                 {
                     // svg not yet buffered in maBitmapEx, return default PrefMapMode
                     aMapMode = MapMode(MapUnit::Map100thMM);
@@ -951,7 +951,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData.get())
+            if(maVectorGraphicData)
             {
                 // ignore for Vector Graphic Data. If this is really used (except the grfcache)
                 // it can be extended by using maBitmapEx as buffer for getVectorGraphicReplacement()
@@ -989,7 +989,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData.get())
+        if(maVectorGraphicData)
         {
             std::pair<VectorGraphicData::State, size_t> tmp(maVectorGraphicData->getSizeBytes());
             if (VectorGraphicData::State::UNPARSED == tmp.first)
@@ -1024,7 +1024,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData.get() && !maBitmapEx)
+            if(maVectorGraphicData && !maBitmapEx)
             {
                 // use maEx as local buffer for rendered svg
                 const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
@@ -1061,7 +1061,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+            if(maVectorGraphicData && maBitmapEx.IsEmpty())
             {
                 // use maEx as local buffer for rendered svg
                 const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
@@ -1208,7 +1208,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     {
         if( meType == GraphicType::Bitmap )
         {
-            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
+            if(maVectorGraphicData && maBitmapEx.IsEmpty())
             {
                 // use maBitmapEx as local buffer for rendered svg
                 maBitmapEx = getVectorGraphicReplacement();
@@ -1820,7 +1820,7 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
 
             case GraphicType::Bitmap:
             {
-                if(rImpGraphic.getVectorGraphicData().get())
+                if(rImpGraphic.getVectorGraphicData())
                 {
                     // stream out Vector Graphic defining data (length, byte array and evtl. path)
                     // this is used e.g. in swapping out graphic data and in transporting it over UNO API
