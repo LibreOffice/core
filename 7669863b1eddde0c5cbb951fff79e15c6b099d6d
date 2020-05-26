@@ -16,6 +16,24 @@
       "revId": "7669863b1eddde0c5cbb951fff79e15c6b099d6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "927c2eb3_119aa0ac",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 16
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-05-26T09:51:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93701924_c79c8ecb",
+      "revId": "7669863b1eddde0c5cbb951fff79e15c6b099d6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
