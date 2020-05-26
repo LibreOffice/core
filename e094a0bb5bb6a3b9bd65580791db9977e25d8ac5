@@ -16,6 +16,24 @@
       "revId": "e094a0bb5bb6a3b9bd65580791db9977e25d8ac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3b19933_11f59ecb",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-26T09:53:47Z",
+      "side": 1,
+      "message": "You are quite right noticing this. And yes, it isn\u0027t required - but it doesn\u0027t hurt here.\n\nThere is a specific about *const reference*. The call to getProperties returns a temporary by value, and if you assigned that to a simple (non-const) reference, that would result in a disaster: the temporary would get destroyed after the expression ended, and the reference would become dangling.\n\nBut C++ rules require a special handling of local const reference in this case: the temporary assigned to a const reference is required to stay as long as the reference is in scope. So if you used non-reference const aPropDetails, you would have a simple variable; if you use const reference, you are still OK here, due to C++ rules.\n\nSee https://herbsutter.com/2008/01/01/gotw-88-a-candidate-for-the-most-important-const/\n\nSo use any variant (ref or non-ref) here as fits you.",
+      "parentUuid": "7c8c995a_1e301b0f",
+      "revId": "e094a0bb5bb6a3b9bd65580791db9977e25d8ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
