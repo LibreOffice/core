@@ -142,7 +142,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc );
 
                 ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
-                ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
+                ScMarkData aDestMark(rDoc.GetSheetLimits());
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoPaste>( pDocSh, aMarkRange, aDestMark,

@@ -30,9 +30,9 @@ XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     maColWidths(0, MAXCOLCOUNT, 0),
     maColFlags(0, MAXCOLCOUNT, ExcColRowFlags::NONE),
-    maRowHeights(0, MAXROWCOUNT, 0),
-    maRowFlags(0, MAXROWCOUNT, ExcColRowFlags::NONE),
-    maHiddenRows(0, MAXROWCOUNT, false),
+    maRowHeights(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), 0),
+    maRowFlags(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), ExcColRowFlags::NONE),
+    maHiddenRows(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), false),
     mnLastScRow( -1 ),
     mnDefWidth( STD_COL_WIDTH ),
     mnDefHeight( ScGlobal::nStdRowHeight ),
@@ -301,7 +301,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         if (!maHiddenRows.search(nLastXLRow, bHidden).second)
             return;
 
-        maHiddenRows.insert_back(nLastXLRow, MAXROWCOUNT, bHidden);
+        maHiddenRows.insert_back(nLastXLRow, GetDoc().GetSheetLimits().GetMaxRowCount(), bHidden);
     }
 
     SCROW nPrevRow = -1;

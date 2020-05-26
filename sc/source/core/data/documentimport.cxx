@@ -634,8 +634,8 @@ class CellStoreInitializer
         sc::CellTextAttrStoreType::iterator miPos;
         SvtScriptType mnScriptNumeric;
 
-        explicit Impl(const SvtScriptType nScriptNumeric)
-            : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
+        explicit Impl(const ScSheetLimits& rSheetLimits, const SvtScriptType nScriptNumeric)
+            : maAttrs(rSheetLimits.GetMaxRowCount()), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
         {}
     };
 
@@ -648,7 +648,7 @@ public:
         mrDocImpl(rDocImpl),
         mnTab(nTab),
         mnCol(nCol),
-        mpImpl(std::make_shared<Impl>(mrDocImpl.mnDefaultScriptNumeric))
+        mpImpl(std::make_shared<Impl>(rDocImpl.mrDoc.GetSheetLimits(), mrDocImpl.mnDefaultScriptNumeric))
     {}
 
     std::shared_ptr<Impl> mpImpl;

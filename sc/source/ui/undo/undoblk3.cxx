@@ -859,7 +859,7 @@ void ScUndoAutoFormat::Redo()
         sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
-            ScMarkData aDestMark(rDoc.MaxRow(), rDoc.MaxCol());
+            ScMarkData aDestMark(rDoc.GetSheetLimits());
             aDestMark.SelectOneTable( nTab );
             aDestMark.SetMarkArea( ScRange( nStartX, nStartY, nTab, nEndX, nEndY, nTab ) );
             aDestMark.MarkToMulti();

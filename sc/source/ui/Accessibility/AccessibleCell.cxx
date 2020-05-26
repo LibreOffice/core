@@ -567,7 +567,7 @@ bool ScAccessibleCell::IsDropdown() const
         if ( nTab+1<nTabCount && mpDoc->IsScenario(nTab+1) && !mpDoc->IsScenario(nTab) )
         {
             SCTAB i;
-            ScMarkData aMarks(mpDoc->MaxRow(), mpDoc->MaxCol());
+            ScMarkData aMarks(mpDoc->GetSheetLimits());
             for (i=nTab+1; i<nTabCount && mpDoc->IsScenario(i); i++)
                 mpDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
             ScRangeList aRanges;

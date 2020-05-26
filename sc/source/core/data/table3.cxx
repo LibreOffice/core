@@ -544,13 +544,13 @@ struct SortedColumn
     SortedColumn(const SortedColumn&) = delete;
     const SortedColumn operator=(const SortedColumn&) = delete;
 
-    explicit SortedColumn( size_t nTopEmptyRows ) :
+    explicit SortedColumn( size_t nTopEmptyRows, const ScSheetLimits& rSheetLimits ) :
         maCells(nTopEmptyRows),
         maCellTextAttrs(nTopEmptyRows),
         maBroadcasters(nTopEmptyRows),
         maCellNotes(nTopEmptyRows),
         maCellDrawObjects(),
-        maPatterns(0, MAXROWCOUNT, nullptr),
+        maPatterns(0, rSheetLimits.GetMaxRowCount(), nullptr),
         miPatternPos(maPatterns.begin()) {}
 
     void setPattern( SCROW nRow, const ScPatternAttr* pPat )
@@ -568,9 +568,9 @@ struct SortedRowFlags
     FlagsType::const_iterator miPosHidden;
     FlagsType::const_iterator miPosFiltered;
 
-    SortedRowFlags() :
-        maRowsHidden(0, MAXROWCOUNT, false),
-        maRowsFiltered(0, MAXROWCOUNT, false),
+    SortedRowFlags(const ScSheetLimits& rSheetLimits) :
+        maRowsHidden(0, rSheetLimits.GetMaxRowCount(), false),
+        maRowsFiltered(0, rSheetLimits.GetMaxRowCount(), false),
         miPosHidden(maRowsHidden.begin()),
         miPosFiltered(maRowsFiltered.begin()) {}
 
@@ -681,14 +681,14 @@ void fillSortedColumnArray(
 
     size_t nColCount = nCol2 - nCol1 + 1;
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
-    SortedRowFlags aRowFlags;
+    SortedRowFlags aRowFlags(pTable->GetDoc().GetSheetLimits());
     aSortedCols.reserve(nColCount);
     for (size_t i = 0; i < nColCount; ++i)
     {
         // In the sorted column container, element positions and row
         // positions must match, else formula cells may mis-behave during
         // grouping.
-        aSortedCols.push_back(std::make_unique<SortedColumn>(nRow1));
+        aSortedCols.push_back(std::make_unique<SortedColumn>(nRow1, pTable->GetDoc().GetSheetLimits()));
     }
 
     for (size_t i = 0; i < pRows->size(); ++i)
@@ -1065,7 +1065,7 @@ void ScTable::SortReorderByRow(
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
-    SortedRowFlags aRowFlags;
+    SortedRowFlags aRowFlags(GetDoc().GetSheetLimits());
     fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress, this);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
@@ -1250,7 +1250,7 @@ void ScTable::SortReorderByRowRefUpdate(
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
     std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
-    SortedRowFlags aRowFlags;
+    SortedRowFlags aRowFlags(GetDoc().GetSheetLimits());
     std::vector<SvtListener*> aListenersDummy;
     fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress, this);
 

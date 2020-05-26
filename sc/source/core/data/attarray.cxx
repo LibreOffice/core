@@ -526,7 +526,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
             bool bSplit = false;
             if ( nStartRow > 0 )
             {
-                nInsert = MAXROWCOUNT;
+                nInsert = pDocument->MaxRow() + 1;
                 if ( mvData[ni].pPattern != pPattern )
                 {
                     if ( ni == 0 || (mvData[ni-1].nEndRow < nStartRow - 1) )
@@ -543,7 +543,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                 if ( ni > 0 && mvData[ni-1].pPattern == pPattern )
                 {   // combine
                     mvData[ni-1].nEndRow = nEndRow;
-                    nInsert = MAXROWCOUNT;
+                    nInsert = pDocument->MaxRow() + 1;
                     bCombined = true;
                 }
             }
@@ -567,7 +567,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                         else if ( ni == nInsert )
                             mvData[ni-1].nEndRow = nStartRow - 1;   // shrink
                     }
-                    nInsert = MAXROWCOUNT;
+                    nInsert = pDocument->MaxRow() + 1;
                     bCombined = true;
                 }
                 else if ( ni > 0 && ni == nInsert )
@@ -589,7 +589,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                     mvData[ni].nEndRow = nEndRow;
                     mvData[ni].pPattern = pPattern;
                     ni++;
-                    nInsert = MAXROWCOUNT;
+                    nInsert = pDocument->MaxRow() + 1;
                 }
                 if ( ni < nj )
                 {   // remove entries
@@ -597,7 +597,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                 }
             }
 
-            if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
+            if ( nInsert < sal::static_int_cast<SCSIZE>(pDocument->MaxRow() + 1) )
             {   // insert or append new entry
                 if ( nInsert <= mvData.size() )
                 {
