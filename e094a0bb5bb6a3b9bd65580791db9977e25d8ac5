@@ -34,6 +34,24 @@
       "revId": "e094a0bb5bb6a3b9bd65580791db9977e25d8ac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe9b28e0_d4db8feb",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-05-26T10:03:50Z",
+      "side": 1,
+      "message": "Thanks a lot. It was very interesting.",
+      "parentUuid": "d3b19933_11f59ecb",
+      "revId": "e094a0bb5bb6a3b9bd65580791db9977e25d8ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
