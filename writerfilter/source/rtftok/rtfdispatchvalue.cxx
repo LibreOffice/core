@@ -17,7 +17,7 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
-#include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <ooxml/resourceids.hxx>
 

@@ -11,14 +11,7 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-
-#include <comphelper/embeddedobjectcontainer.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 

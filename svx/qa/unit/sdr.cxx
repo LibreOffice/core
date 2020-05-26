@@ -11,11 +11,9 @@
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>

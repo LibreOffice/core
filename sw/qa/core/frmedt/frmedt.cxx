@@ -19,7 +19,6 @@
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
 #include <frameformats.hxx>
-#include <pagefrm.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/frmedt/data/";
 

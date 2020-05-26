@@ -198,3 +198,5 @@ blacklist:
     writerperfect/source/writer/EPUBExportFilter.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
+    writerperfect/source/writer/EPUBPackage.cxx:
+    - com/sun/star/embed/XStorage.hpp
