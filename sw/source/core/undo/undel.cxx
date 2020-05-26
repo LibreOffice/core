@@ -1091,6 +1091,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
+        assert(!m_bDelFullPara || (m_nSectDiff == 0));
         SwNodeIndex const start(rDoc.GetNodes(), m_nSttNode +
             ((m_bDelFullPara || !rDoc.GetNodes()[m_nSttNode]->IsTextNode() || pInsNd)
                  ? 0 : 1));
