@@ -170,6 +170,7 @@ public:
     void testTdf125812();
     void testTdf133190();
     void testTdf133191();
+    void testTdf132594();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -303,6 +304,7 @@ public:
     CPPUNIT_TEST(testTdf125812);
     CPPUNIT_TEST(testTdf133190);
     CPPUNIT_TEST(testTdf133191);
+    CPPUNIT_TEST(testTdf132594);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2789,6 +2791,15 @@ void Chart2ExportTest::testTdf133191()
 
     // Test rotation of data point label
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:txPr/a:bodyPr", "rot", "-4500000");
+}
+
+void Chart2ExportTest::testTdf132594()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart_pie2007.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:cat", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
