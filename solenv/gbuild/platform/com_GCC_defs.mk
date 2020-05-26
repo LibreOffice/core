@@ -106,11 +106,12 @@ gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
 gb_COMPILEROPTFLAGS := -O0
 endif
 
-ifeq ($(DISABLE_DYNLOADING),TRUE)
+# Strip out duplicates, which happen a lot with e.g. UNO
+# functions declared in UNO header files.
 gb_CFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
-endif
+
 
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += \
