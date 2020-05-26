@@ -177,7 +177,7 @@ private:
     std::unique_ptr<ScTableProtection> pTabProtection;
 
     std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
-    std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
+    std::unique_ptr<ScCompressedArray<SCROW, sal_uInt16>> mpRowHeights;
 
     std::unique_ptr<ScBitMaskCompressedArray<SCCOL, CRFlags>> mpColFlags;
     std::unique_ptr<ScBitMaskCompressedArray< SCROW, CRFlags>> pRowFlags;
@@ -1198,8 +1198,6 @@ private:
 
     void AttachFormulaCells( sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void DetachFormulaCells( sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-
-    void        SetLoadingMedium(bool bLoading);
 
     SCSIZE      FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2,
                             SCCOL nCol, SCROW nAttrRow1, SCROW nAttrRow2, SCSIZE nArrY,

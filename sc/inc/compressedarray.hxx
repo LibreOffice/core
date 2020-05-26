@@ -22,7 +22,9 @@
 
 #include <cstddef>
 #include <memory>
+#include <type_traits>
 
+#include <o3tl/safeint.hxx>
 #include "scdllapi.h"
 
 /** Compressed array of row (or column) entries, e.g. heights, flags, ...
@@ -97,6 +99,10 @@ public:
     [[nodiscard]]
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
 
+    template<typename U = D>
+    typename std::enable_if<std::is_same<U, sal_uInt16>::value, sal_uInt32>::type
+                                GetSumValue( A nStart, A nEnd ) const;
+
     /** Insert rows before nStart and copy value for inserted rows from
         nStart-1, return that value. */
     const D&                    Insert( A nStart, size_t nCount );
@@ -156,6 +162,33 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
     nIndex = Search( nPos);
     nEnd = pData[nIndex].nEnd;
     return pData[nIndex].aValue;
+}
+
+template< typename A, typename D >
+template<typename U>
+typename std::enable_if<std::is_same<U, sal_uInt16>::value, sal_uInt32>::type
+    ScCompressedArray<A,D>::GetSumValue( A nStart, A nEnd ) const
+{
+    if (nEnd > nStart)
+        return 0;
+    size_t nIndex = Search(nStart);
+    sal_uInt32 nSum = 0;
+    while (nIndex < nCount)
+    {
+        auto const & rEntry = pData[nIndex];
+        if (nStart > rEntry.nEnd)
+            break;
+        sal_uInt32 nRes;
+        if (o3tl::checked_multiply<sal_uInt32>(rEntry.aValue, std::min(rEntry.nEnd, nEnd) - nStart + 1, nRes))
+        {
+            SAL_WARN("sc.core", "row height overflow");
+            nRes = SAL_MAX_INT32;
+        }
+        nSum = o3tl::saturating_add(nSum, nRes);
+        nStart = rEntry.nEnd + 1;
+        ++nIndex;
+    }
+    return nSum;
 }
 
 template< typename A, typename D >

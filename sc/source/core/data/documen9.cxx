@@ -578,13 +578,6 @@ void ScDocument::UpdateFontCharSet()
 void ScDocument::SetLoadingMedium( bool bVal )
 {
     bLoadingMedium = bVal;
-    for (auto& rxTab : maTabs)
-    {
-        if (!rxTab)
-            return;
-
-        rxTab->SetLoadingMedium(bVal);
-    }
 }
 
 void ScDocument::SetImportingXML( bool bVal )
