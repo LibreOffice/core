@@ -797,51 +797,55 @@ namespace drawinglayer::primitive2d
 
                     for(const auto& aCandidatePartial : aPartial)
                     {
-                        if(aRetval.empty())
-                        {
-                            // no local data yet, just add as 1st entry, done
-                            aRetval.append(aCandidatePartial);
-                        }
-                        else
-                        {
-                            bool bDidMerge(false);
+                        bool bDidMerge(false);
 
+                        // This algorithm is O(N^2) and repeated dynamic_cast inside would be quite costly.
+                        // So check first and skip if the primitives aren't BorderLinePrimitive2D.
+                        const drawinglayer::primitive2d::BorderLinePrimitive2D* candidatePartialAsBorder
+                            = dynamic_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D*>(aCandidatePartial.get());
+                        if(candidatePartialAsBorder)
+                        {
                             for(auto& aCandidateRetval : aRetval)
                             {
-                                // try to merge by appending new data to existing data
-                                const drawinglayer::primitive2d::Primitive2DReference aMergeRetvalPartial(
-                                    drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
-                                        aCandidateRetval,
-                                        aCandidatePartial));
-
-                                if(aMergeRetvalPartial.is())
+                                const drawinglayer::primitive2d::BorderLinePrimitive2D* candidateRetvalAsBorder
+                                    = dynamic_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D*>(aCandidateRetval.get());
+                                if(candidateRetvalAsBorder)
                                 {
-                                    // could append, replace existing data with merged data, done
-                                    aCandidateRetval = aMergeRetvalPartial;
-                                    bDidMerge = true;
-                                    break;
-                                }
+                                    // try to merge by appending new data to existing data
+                                    const drawinglayer::primitive2d::Primitive2DReference aMergeRetvalPartial(
+                                        drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
+                                            candidateRetvalAsBorder,
+                                            candidatePartialAsBorder));
 
-                                // try to merge by appending existing data to new data
-                                const drawinglayer::primitive2d::Primitive2DReference aMergePartialRetval(
-                                    drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
-                                        aCandidatePartial,
-                                        aCandidateRetval));
+                                    if(aMergeRetvalPartial.is())
+                                    {
+                                        // could append, replace existing data with merged data, done
+                                        aCandidateRetval = aMergeRetvalPartial;
+                                        bDidMerge = true;
+                                        break;
+                                    }
 
-                                if(aMergePartialRetval.is())
-                                {
-                                    // could append, replace existing data with merged data, done
-                                    aCandidateRetval = aMergePartialRetval;
-                                    bDidMerge = true;
-                                    break;
+                                    // try to merge by appending existing data to new data
+                                    const drawinglayer::primitive2d::Primitive2DReference aMergePartialRetval(
+                                        drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
+                                            candidatePartialAsBorder,
+                                            candidateRetvalAsBorder));
+
+                                    if(aMergePartialRetval.is())
+                                    {
+                                        // could append, replace existing data with merged data, done
+                                        aCandidateRetval = aMergePartialRetval;
+                                        bDidMerge = true;
+                                        break;
+                                    }
                                 }
                             }
+                        }
 
-                            if(!bDidMerge)
-                            {
-                                // no merge after checking all existing data, append as new segment
-                                aRetval.append(aCandidatePartial);
-                            }
+                        if(!bDidMerge)
+                        {
+                            // no merge after checking all existing data, append as new segment
+                            aRetval.append(aCandidatePartial);
                         }
                     }
                 }
