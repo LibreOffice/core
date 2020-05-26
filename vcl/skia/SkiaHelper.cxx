@@ -232,8 +232,8 @@ bool isVCLSkiaEnabled()
 
     /*
      * There are a number of cases that these environment variables cover:
-     *  * SAL_FORCESKIA forces Skia independent of any other option
-     *  * SAL_DISABLESKIA avoids the use of Skia if SAL_FORCESKIA is not set
+     *  * SAL_FORCESKIA forces Skia if disabled by UI options or blacklisted
+     *  * SAL_DISABLESKIA avoids the use of Skia regardless of any option
      */
 
     bSet = true;
@@ -241,7 +241,7 @@ bool isVCLSkiaEnabled()
 
     bool bRet = false;
     bool bSupportsVCLSkia = supportsVCLSkia();
-    if (bForceSkia)
+    if (bForceSkia && bSupportsVCLSkia)
     {
         bRet = true;
         // don't actually block if blacklisted, but log it if enabled, and also get the vendor id
