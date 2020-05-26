@@ -72,16 +72,33 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
-    sal_uInt16          nPage = maTabControl->GetCurPagePos();
-
     mpDrawView->SdrEndTextEdit();
 
     try
     {
         Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
         Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
-        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
-        xPages->remove( xPage );
+        sal_uInt16 nPageCount   = GetDoc()->GetSdPageCount(mePageKind);
+        SdPage* pPage = nullptr;
+        std::vector<Reference<XDrawPage>> pagesToDelete;
+
+        GetView()->BegUndo(SdResId(STR_UNDO_DELETEPAGES));
+
+        for (sal_uInt16 i = 0; i < nPageCount; i++)
+        {
+            pPage = GetDoc()->GetSdPage(i, mePageKind);
+            if(pPage->IsSelected())
+            {
+                Reference< XDrawPage > xPage( xPages->getByIndex( maTabControl->GetPagePos(pPage->getPageId()) ), UNO_QUERY_THROW );
+                pagesToDelete.push_back(xPage);
+            }
+        }
+        for (auto &xPage: pagesToDelete)
+        {
+            xPages->remove(xPage);
+        }
+
+        GetView()->EndUndo();
     }
     catch( Exception& )
     {
