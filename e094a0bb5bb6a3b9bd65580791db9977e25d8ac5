@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c8c995a_1e301b0f",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-05-26T09:45:24Z",
+      "side": 1,
+      "message": "I\u0027m not sure if I need an \u0027\u0026\u0027 here, but I put it.",
+      "revId": "e094a0bb5bb6a3b9bd65580791db9977e25d8ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
