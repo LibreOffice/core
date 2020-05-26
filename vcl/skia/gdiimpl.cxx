@@ -810,7 +810,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     if (pStroke && std::accumulate(pStroke->begin(), pStroke->end(), 0.0) != 0)
     {
         std::vector<SkScalar> intervals;
-        intervals.assign(pStroke->begin(), pStroke->end());
+        // Transform size by the matrix.
+        for (double stroke : *pStroke)
+            intervals.push_back((rObjectToDevice * basegfx::B2DVector(stroke, 0)).getLength());
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals.data(), intervals.size(), 0));
     }
 
