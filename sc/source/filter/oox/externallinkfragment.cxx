@@ -213,7 +213,7 @@ ContextHandlerRef ExternalLinkFragment::onCreateContext( sal_Int32 nElement, con
         case XLS_TOKEN( ddeItem ):
             if( nElement == XLS_TOKEN( values ) )
             {
-                if( mxExtName.get() ) mxExtName->importValues( rAttribs );
+                if( mxExtName ) mxExtName->importValues( rAttribs );
                 return this;
             }
         break;
@@ -246,7 +246,7 @@ void ExternalLinkFragment::onCharacters( const OUString& rChars )
 
 void ExternalLinkFragment::onEndElement()
 {
-    if( isCurrentElement( XLS_TOKEN( value ) ) && mxExtName.get() ) switch( mnResultType )
+    if( isCurrentElement( XLS_TOKEN( value ) ) && mxExtName ) switch( mnResultType )
     {
         case XML_b:
             mxExtName->appendResultValue( maResultValue.toDouble() );
@@ -293,18 +293,18 @@ ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId,
         case BIFF12_ID_EXTERNALNAME:
             switch( nRecId )
             {
-                case BIFF12_ID_EXTERNALNAMEFLAGS:   if( mxExtName.get() ) mxExtName->importExternalNameFlags( rStrm );  break;
-                case BIFF12_ID_DDEITEMVALUES:       if( mxExtName.get() ) mxExtName->importDdeItemValues( rStrm );      return this;
+                case BIFF12_ID_EXTERNALNAMEFLAGS:   if( mxExtName ) mxExtName->importExternalNameFlags( rStrm );  break;
+                case BIFF12_ID_DDEITEMVALUES:       if( mxExtName ) mxExtName->importDdeItemValues( rStrm );      return this;
             }
         break;
 
         case BIFF12_ID_DDEITEMVALUES:
             switch( nRecId )
             {
-                case BIFF12_ID_DDEITEM_BOOL:        if( mxExtName.get() ) mxExtName->importDdeItemBool( rStrm );        break;
-                case BIFF12_ID_DDEITEM_DOUBLE:      if( mxExtName.get() ) mxExtName->importDdeItemDouble( rStrm );      break;
-                case BIFF12_ID_DDEITEM_ERROR:       if( mxExtName.get() ) mxExtName->importDdeItemError( rStrm );       break;
-                case BIFF12_ID_DDEITEM_STRING:      if( mxExtName.get() ) mxExtName->importDdeItemString( rStrm );      break;
+                case BIFF12_ID_DDEITEM_BOOL:        if( mxExtName ) mxExtName->importDdeItemBool( rStrm );        break;
+                case BIFF12_ID_DDEITEM_DOUBLE:      if( mxExtName ) mxExtName->importDdeItemDouble( rStrm );      break;
+                case BIFF12_ID_DDEITEM_ERROR:       if( mxExtName ) mxExtName->importDdeItemError( rStrm );       break;
+                case BIFF12_ID_DDEITEM_STRING:      if( mxExtName ) mxExtName->importDdeItemString( rStrm );      break;
             }
         break;
     }

@@ -155,7 +155,7 @@ PlaceEditDialog::~PlaceEditDialog()
 OUString PlaceEditDialog::GetServerUrl()
 {
     OUString sUrl;
-    if (m_xCurrentDetails.get())
+    if (m_xCurrentDetails)
     {
         INetURLObject aUrl = m_xCurrentDetails->getUrl();
         OUString sUsername = m_xEDUsername->get_text().trim();
@@ -249,7 +249,7 @@ void PlaceEditDialog::InitDetails( )
 
 IMPL_LINK( PlaceEditDialog, OKHdl, weld::Button&, /*rBtn*/, void)
 {
-    if ( !m_xCurrentDetails.get() )
+    if ( !m_xCurrentDetails )
         return;
 
     OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
@@ -353,7 +353,7 @@ void PlaceEditDialog::SelectType(bool bSkipSeparator)
         return;
     }
 
-    if (m_xCurrentDetails.get())
+    if (m_xCurrentDetails)
         m_xCurrentDetails->set_visible(false);
 
     const int nPos = m_xLBServerType->get_active( );

@@ -491,7 +491,7 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
         if( elem != "VBA" )
         {
             StorageRef xSubStrg = rVbaPrjStrg.openSubStorage( elem, false );
-            if( xSubStrg.get() ) try
+            if( xSubStrg ) try
             {
                 // resolve module name from storage name (which equals the module stream name)
                 VbaModule* pModule = maModulesByStrm.get( elem ).get();

@@ -75,7 +75,7 @@ void RichStringPortion::setFontId( sal_Int32 nFontId )
 
 void RichStringPortion::finalizeImport()
 {
-    if( mxFont.get() )
+    if( mxFont )
         mxFont->finalizeImport();
     else if( mnFontId >= 0 )
         mxFont = getStyles().getFont( mnFontId );
@@ -96,7 +96,7 @@ void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace
     if( xRange.is() )
     {
         xRange->setString( maText );
-        if( mxFont.get() )
+        if( mxFont )
         {
             PropertySet aPropSet( xRange );
             mxFont->writeToPropertySet( aPropSet );
@@ -112,7 +112,7 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     rSelection.nStartPara = rSelection.nEndPara;
     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
 
-    const Font* pFontToUse = mxFont.get() ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : nullptr;
+    const Font* pFontToUse = mxFont ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : nullptr;
 
     if ( pFontToUse )
         pFontToUse->fillToItemSet( aItemSet, true );
@@ -145,7 +145,7 @@ void RichStringPortion::writeFontProperties( const Reference<XText>& rxText ) co
 {
     PropertySet aPropSet(rxText);
 
-    if (mxFont.get())
+    if (mxFont)
         mxFont->writeToPropertySet(aPropSet);
 }
 

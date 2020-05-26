@@ -608,7 +608,7 @@ namespace vclcanvas
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
                         gradientFill( mpOutDevProvider->getOutDev(),
-                                      mp2ndOutDevProvider.get() ? &mp2ndOutDevProvider->getOutDev() : nullptr,
+                                      mp2ndOutDevProvider ? &mp2ndOutDevProvider->getOutDev() : nullptr,
                                       rValues,
                                       aColors,
                                       aPolyPoly,

@@ -78,7 +78,7 @@ bool OTableRow::IsPrimaryKey() const
 
 void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, bool _bForce )
 {
-    if ( _pType.get() )
+    if ( _pType )
     {
         if( !m_pActFieldDescr )
         {

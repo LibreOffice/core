@@ -152,7 +152,7 @@ OUString OColumnControlWindow::getAutoIncrementValue() const
 
 TOTypeInfoSP const & OColumnControlWindow::getDefaultTyp() const
 {
-    if ( !m_pTypeInfo.get() )
+    if ( !m_pTypeInfo )
     {
         m_pTypeInfo = std::make_shared<OTypeInfo>();
         m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');

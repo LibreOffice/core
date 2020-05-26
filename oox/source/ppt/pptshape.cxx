@@ -93,15 +93,15 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
     {
         case XML_ctrTitle :
         case XML_title :
-            pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
+            pTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
             break;
         case XML_subTitle :
         case XML_obj :
         case XML_body :
             if ( rSlidePersist.isNotesPage() )
-                pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
+                pTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
             else
-                pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                pTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
             break;
     }
 
@@ -141,7 +141,7 @@ void PPTShape::addShape(
                 case XML_title :
                 {
                     sServiceName = "com.sun.star.presentation.TitleTextShape";
-                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
+                    aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                 }
                 break;
                 case XML_subTitle :
@@ -150,14 +150,14 @@ void PPTShape::addShape(
                         sServiceName = OUString();
                     else {
                         sServiceName = "com.sun.star.presentation.SubtitleShape";
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                        aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                     }
                 }
                 break;
                    case XML_obj :
                 {
                     sServiceName = sOutlinerShapeService;
-                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                    aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                 }
                 break;
                 case XML_body :
@@ -165,12 +165,12 @@ void PPTShape::addShape(
                     if (rSlidePersist.isNotesPage())
                     {
                         sServiceName = "com.sun.star.presentation.NotesShape";
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
+                        aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
                     }
                     else
                     {
                         sServiceName = sOutlinerShapeService;
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                        aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                     }
                 }
                 break;
@@ -246,10 +246,10 @@ void PPTShape::addShape(
         if (mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout)
         {
             oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
-            if (!pPlaceholder.get())
+            if (!pPlaceholder)
                 pPlaceholder = PPTShape::findPlaceholder( mnSubType, 0, getSubTypeIndex(), rSlidePersist.getShapes()->getChildren(), true );
 
-            if (pPlaceholder.get()) {
+            if (pPlaceholder) {
                 if (maSize.Width == 0 || maSize.Height == 0) {
                     awt::Size aSize = maSize;
                     if (maSize.Width == 0)
@@ -270,24 +270,24 @@ void PPTShape::addShape(
         }
 
         // use placeholder index if possible
-        if (mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist().get())
+        if (mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist())
         {
             oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren());
             // TODO: Check if this is required for non-notes slides as well...
-            if (rSlidePersist.isNotesPage() && pPlaceholder.get() && pPlaceholder->getSubType() != getSubType())
+            if (rSlidePersist.isNotesPage() && pPlaceholder && pPlaceholder->getSubType() != getSubType())
                 pPlaceholder.reset();
 
-            if (pPlaceholder.get()) {
+            if (pPlaceholder) {
                 SAL_INFO("oox.ppt","found placeholder with index: " << getSubTypeIndex().get() << " and type: " << lclDebugSubType( mnSubType ));
             }
-            if (pPlaceholder.get()) {
+            if (pPlaceholder) {
                 PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                 TextListStylePtr pNewTextListStyle = std::make_shared<TextListStyle>();
 
                 if (pPlaceholder->getTextBody()) {
 
                     pNewTextListStyle->apply( pPlaceholder->getTextBody()->getTextListStyle() );
-                    if (pPlaceholder->getMasterTextListStyle().get())
+                    if (pPlaceholder->getMasterTextListStyle())
                         pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
 
                     // SAL_INFO("oox.ppt","placeholder body style");
@@ -299,34 +299,34 @@ void PPTShape::addShape(
                     // SAL_INFO("oox.ppt","combined master text list style");
                     // aMasterTextListStyle->dump();
                 }
-                if (pPPTPlaceholder && pPPTPlaceholder->mpPlaceholder.get()) {
+                if (pPPTPlaceholder && pPPTPlaceholder->mpPlaceholder) {
                     SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
                     SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != nullptr) );
                     TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
                     if (pPPTPlaceholder->mpPlaceholder->getTextBody())
                         pNewTextListStyle->apply( pPPTPlaceholder->mpPlaceholder->getTextBody()->getTextListStyle() );
-                    if (pPlaceholderStyle.get()) {
+                    if (pPlaceholderStyle) {
                         pNewTextListStyle->apply( *pPlaceholderStyle );
                         //pPlaceholderStyle->dump();
                     }
                 }
-            } else if (!mpPlaceholder.get()) {
+            } else if (!mpPlaceholder) {
                 aMasterTextListStyle.reset();
             }
-            SAL_INFO("oox.ppt","placeholder id: " << (pPlaceholder.get() ? pPlaceholder->getId() : "not found"));
+            SAL_INFO("oox.ppt","placeholder id: " << (pPlaceholder ? pPlaceholder->getId() : "not found"));
         }
 
         if (!sServiceName.isEmpty())
         {
-            if (!aMasterTextListStyle.get())
+            if (!aMasterTextListStyle)
             {
-                bool isOther = !getTextBody().get() && sServiceName != "com.sun.star.drawing.GroupShape";
+                bool isOther = !getTextBody() && sServiceName != "com.sun.star.drawing.GroupShape";
                 TextListStylePtr aSlideStyle = isOther ? rSlidePersist.getOtherTextStyle() : rSlidePersist.getDefaultTextStyle();
                 // Combine from MasterSlide details as well.
-                if (rSlidePersist.getMasterPersist().get())
+                if (rSlidePersist.getMasterPersist())
                 {
                     aMasterTextListStyle = isOther ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getMasterPersist()->getDefaultTextStyle();
-                    if (aSlideStyle.get())
+                    if (aSlideStyle)
                         aMasterTextListStyle->apply( *aSlideStyle );
                 }
                 else
@@ -335,12 +335,12 @@ void PPTShape::addShape(
                 }
             }
 
-            if( aMasterTextListStyle.get() && getTextBody().get() ) {
+            if( aMasterTextListStyle && getTextBody() ) {
                 TextListStylePtr aCombinedTextListStyle = std::make_shared<TextListStyle>();
 
                 aCombinedTextListStyle->apply( *aMasterTextListStyle );
 
-                if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
+                if( mpPlaceholder && mpPlaceholder->getTextBody() )
                     aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );
                 aCombinedTextListStyle->apply( getTextBody()->getTextListStyle() );
 
@@ -436,7 +436,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
 
         void add(const oox::drawingml::ShapePtr& aShape, sal_Int32 nFirstSubType, sal_Int32 nSecondSubType, const OptValue< sal_Int32 >& oSubTypeIndex)
         {
-            if (!aShape.get())
+            if (!aShape)
                 return;
 
             // get flags
@@ -460,7 +460,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
             // add
             if (aPrioIndex != -1)
             {
-                if (!aChoice.at(aPrioIndex).get())
+                if (!aChoice.at(aPrioIndex))
                 {
                     aChoice.at(aPrioIndex) = aShape;
                 }
@@ -472,7 +472,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
         {
             for (const oox::drawingml::ShapePtr& aShape : aChoice)
             {
-                if (aShape.get())
+                if (aShape)
                 {
                     return aShape;
                 }
@@ -483,7 +483,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
 
         bool hasByPrio(size_t aIndex) const
         {
-            return aChoice.at(aIndex).get();
+            return bool(aChoice.at(aIndex));
         }
 
     private:
@@ -507,7 +507,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
         if (!rChildren.empty())
         {
             const oox::drawingml::ShapePtr aShape = findPlaceholder( nFirstSubType, nSecondSubType, oSubTypeIndex, rChildren, bMasterOnly );
-            if (aShape.get())
+            if (aShape)
             {
                 aPlaceholders.add(aShape, nFirstSubType, nSecondSubType, oSubTypeIndex);
             }
@@ -538,7 +538,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
         aShapePtr = findPlaceholderByIndex( nIdx, rChildren, bMasterOnly );
-        if ( aShapePtr.get() )
+        if ( aShapePtr )
             break;
         ++aRevIter;
     }

@@ -812,7 +812,7 @@ void OTableController::loadData()
             bool bForce;
             OUString const sCreate("x");
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
-            if ( !pTypeInfo.get() )
+            if ( !pTypeInfo )
                 pTypeInfo = m_pTypeInfo;
             pTabEdRow->SetFieldType( pTypeInfo, bForce );
 
@@ -921,7 +921,7 @@ bool OTableController::checkColumns(bool _bNew)
         {
             auto pNewRow = std::make_shared<OTableRow>();
             TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
-            if ( !pTypeInfo.get() )
+            if ( !pTypeInfo )
                 break;
 
             pNewRow->SetFieldType( pTypeInfo );

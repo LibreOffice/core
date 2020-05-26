@@ -265,7 +265,7 @@ void VCLXPrinter::end(  )
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if (mxListener.get())
+    if (mxListener)
     {
         Printer::PrintJob(mxListener, maInitJobSetup);
         mxListener.reset();
@@ -283,7 +283,7 @@ css::uno::Reference< css::awt::XDevice > VCLXPrinter::startPage(  )
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if (mxListener.get())
+    if (mxListener)
     {
         mxListener->StartPage();
     }
@@ -294,7 +294,7 @@ void VCLXPrinter::endPage(  )
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if (mxListener.get())
+    if (mxListener)
     {
         mxListener->EndPage();
     }

@@ -130,7 +130,7 @@ static void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableSty
     std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rPartLineBorders( rTableStylePart.getLineBorders() );
     ::oox::drawingml::ShapeStyleRef& rLineStyleRef = rTableStylePart.getStyleRefs()[ nLineType ];
     std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >::const_iterator aIter( rPartLineBorders.find( nLineType ) );
-    if ( ( aIter != rPartLineBorders.end() ) && aIter->second.get() )
+    if ( ( aIter != rPartLineBorders.end() ) && aIter->second )
         rLineProperties.assignUsed( *aIter->second );
     else if (rLineStyleRef.mnThemedIdx != 0)
     {
@@ -155,7 +155,7 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
                           TableStylePart& rTableStylePart )
 {
     ::oox::drawingml::FillPropertiesPtr& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
-    if ( rPartFillPropertiesPtr.get() )
+    if ( rPartFillPropertiesPtr )
         rFillProperties.assignUsed( *rPartFillPropertiesPtr );
     else
     {
@@ -427,7 +427,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     ::Color nPhClr = API_RGB_TRANSPARENT;
     std::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
     ::oox::drawingml::ShapeStyleRef& rBackgroundFillStyle( rTable.getBackgroundFillStyleRef() );
-    if (rBackgroundFillPropertiesPtr.get())
+    if (rBackgroundFillPropertiesPtr)
         aBgColor = rBackgroundFillPropertiesPtr->getBestSolidColor();
     else if (rBackgroundFillStyle.mnThemedIdx != 0)
     {

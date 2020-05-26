@@ -55,7 +55,7 @@ SwNoTextNode::~SwNoTextNode()
 /// and graphics-attributes.
 void SwNoTextNode::NewAttrSet( SwAttrPool& rPool )
 {
-    OSL_ENSURE( !mpAttrSet.get(), "AttrSet is already set" );
+    OSL_ENSURE( !mpAttrSet, "AttrSet is already set" );
     SwAttrSet aNewAttrSet( rPool, aNoTextNodeSetRange );
 
     // put names of parent style and conditional style:

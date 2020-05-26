@@ -227,7 +227,7 @@ namespace vcl {
 
 bool vcl::Region::IsEmpty() const
 {
-    return !mbIsNull && !mpB2DPolyPolygon.get() && !mpPolyPolygon.get() && !mpRegionBand.get();
+    return !mbIsNull && !mpB2DPolyPolygon && !mpPolyPolygon && !mpRegionBand;
 }
 
 

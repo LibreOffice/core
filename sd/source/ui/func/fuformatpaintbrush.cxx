@@ -163,7 +163,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
 
 bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if( mxItemSet.get() && mpView && mpView->AreObjectsMarked() )
+    if( mxItemSet && mpView && mpView->AreObjectsMarked() )
     {
         bool bNoCharacterFormats = false;
         bool bNoParagraphFormats = false;
@@ -231,7 +231,7 @@ bool FuFormatPaintBrush::HasContentForThisType( SdrInventor nObjectInventor, sal
 void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if( !(mxItemSet.get() && ( rMarkList.GetMarkCount() == 1 )) )
+    if( !(mxItemSet && ( rMarkList.GetMarkCount() == 1 )) )
         return;
 
     SdrObject* pObj( nullptr );

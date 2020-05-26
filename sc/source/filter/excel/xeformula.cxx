@@ -568,7 +568,7 @@ const XclExpCompConfig* XclExpFmlaCompImpl::GetConfigForType( XclFormulaType eTy
 void XclExpFmlaCompImpl::Init( XclFormulaType eType )
 {
     // compiler invoked recursively? - store old working data
-    if( mxData.get() )
+    if( mxData )
         maDataStack.push_back( mxData );
     // new compiler working data structure
     mxData = std::make_shared<XclExpCompData>( GetConfigForType( eType ) );
@@ -2159,7 +2159,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         OUString aName = rTokData.mpScToken->GetString().getString();
         ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, aName );
-        if( xArray.get() )
+        if( xArray )
         {
             // store external cell contents in CRN records
             if( mxData->mpScBasePos )
@@ -2518,7 +2518,7 @@ void XclExpFmlaCompImpl::InsertZeros( sal_uInt16 nInsertPos, sal_uInt16 nInsertS
     if( nInsertPos < mxData->maOpListVec.size() )
         mxData->maOpListVec.insert( mxData->maOpListVec.begin() + nInsertPos, nInsertSize, XclExpOperandListRef() );
     for( auto& rxOpList : mxData->maOpListVec )
-        if( rxOpList.get() )
+        if( rxOpList )
             for( auto& rOp : *rxOpList )
                 if( nInsertPos <= rOp.mnTokPos )
                     rOp.mnTokPos += nInsertSize;

@@ -144,7 +144,7 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
-    if( pDescriptor.get() )
+    if( pDescriptor )
     {
 
         OUString aPropertyValue;

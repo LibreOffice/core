@@ -932,7 +932,7 @@ void FormulaCompiler::InitSymbolsOOXML() const
 void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, FormulaGrammar::Grammar eGrammar,
         NonConstOpCodeMapPtr& rxMap, SeparatorType eSepType) const
 {
-    if ( rxMap.get() )
+    if ( rxMap )
         return;
 
     // not Core

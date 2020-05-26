@@ -106,7 +106,7 @@ bool ExcelFilter::importDocument()
             the class WorkbookHelper, and execute the import filter by constructing
             an instance of WorkbookFragment and loading the file. */
         WorkbookGlobalsRef xBookGlob(WorkbookHelper::constructGlobals(*this));
-        if (xBookGlob.get())
+        if (xBookGlob)
         {
             rtl::Reference<FragmentHandler> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
             bool bRet = importFragment( xWorkbookFragment);

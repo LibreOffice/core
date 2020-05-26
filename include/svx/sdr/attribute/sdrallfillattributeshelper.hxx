@@ -53,7 +53,7 @@ namespace drawinglayer
             ~SdrAllFillAttributesHelper();
 
             bool isUsed() const;
-            bool hasSdrFillAttribute() const { return maFillAttribute.get(); }
+            bool hasSdrFillAttribute() const { return bool(maFillAttribute); }
             bool isTransparent() const;
 
             const drawinglayer::attribute::SdrFillAttribute& getFillAttribute() const;

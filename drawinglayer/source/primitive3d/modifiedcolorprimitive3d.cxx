@@ -45,7 +45,7 @@ namespace drawinglayer::primitive3d
                     return true;
                 }
 
-                if(!getColorModifier().get() || !rCompare.getColorModifier().get())
+                if(!getColorModifier() || !rCompare.getColorModifier())
                 {
                     return false;
                 }

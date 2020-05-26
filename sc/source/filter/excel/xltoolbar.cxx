@@ -252,7 +252,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
 {
     // how to identify built-in-command ?
 //    bool bBuiltin = false;
-    if ( tbcd.get() )
+    if ( tbcd )
     {
         std::vector< css::beans::PropertyValue > props;
         bool bBeginGroup = false;

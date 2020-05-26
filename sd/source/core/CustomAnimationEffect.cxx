@@ -1667,7 +1667,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 {
     CustomAnimationEffectPtr pEffect;
 
-    if( pPreset.get() )
+    if( pPreset )
     {
         Reference< XAnimationNode > xNode( pPreset->create( "" ) );
         if( xNode.is() )
@@ -1771,7 +1771,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
 
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, const OUString& rPresetSubType, double fDuration /* = -1.0 */ )
 {
-    if( !(pEffect.get() && pPreset.get()) )
+    if( !(pEffect && pPreset) )
         return;
 
     try
@@ -1799,7 +1799,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
 
 void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
 {
-    if( pEffect.get() )
+    if( pEffect )
     {
         pEffect->setEffectSequence( nullptr );
         maEffects.remove( pEffect );
@@ -1810,7 +1810,7 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
 
 void EffectSequenceHelper::moveToBeforeEffect( const CustomAnimationEffectPtr& pEffect, const CustomAnimationEffectPtr& pInsertBefore)
 {
-    if ( pEffect.get() )
+    if ( pEffect )
     {
         maEffects.remove( pEffect );
         EffectSequence::iterator aInsertIter( find( pInsertBefore ) );
@@ -1922,13 +1922,13 @@ void EffectSequenceHelper::implRebuild()
                         else
                             pEffect.reset();
                     }
-                    while( pEffect.get() && (pEffect->getNodeType() == EffectNodeType::WITH_PREVIOUS) );
+                    while( pEffect && (pEffect->getNodeType() == EffectNodeType::WITH_PREVIOUS) );
 
                     fBegin += fDuration;
                 }
-                while( pEffect.get() && (pEffect->getNodeType() != EffectNodeType::ON_CLICK) );
+                while( pEffect && (pEffect->getNodeType() != EffectNodeType::ON_CLICK) );
             }
-            while( pEffect.get() );
+            while( pEffect );
 
             // process after effect nodes
             std::for_each( aAfterEffects.begin(), aAfterEffects.end(), stl_process_after_effect_node_func );
@@ -2417,7 +2417,7 @@ void EffectSequenceHelper::updateTextGroups()
             continue; // trivial case, no group
 
         CustomAnimationTextGroupPtr pGroup = findGroup( nGroupId );
-        if( !pGroup.get() )
+        if( !pGroup )
         {
             pGroup = std::make_shared<CustomAnimationTextGroup>( pEffect->getTargetShape(), nGroupId );
             maGroupMap[nGroupId] = pGroup;
@@ -2991,7 +2991,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             if( aIter != maEffects.end() )
                 pMasterEffect = *aIter;
 
-            if( pMasterEffect.get() )
+            if( pMasterEffect )
             {
                 pMasterEffect->setHasAfterEffect( true );
 
@@ -3221,7 +3221,7 @@ CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< cs
         for (auto const& interactiveSequence : maInteractiveSequenceVector)
         {
             pEffect = interactiveSequence->findEffect( xNode );
-            if (pEffect.get())
+            if (pEffect)
                 break;
         }
     }
@@ -3535,13 +3535,13 @@ void InteractiveSequence::implRebuild()
 MainSequenceRebuildGuard::MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence )
 : mpMainSequence( pMainSequence )
 {
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->lockRebuilds();
 }
 
 MainSequenceRebuildGuard::~MainSequenceRebuildGuard()
 {
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->unlockRebuilds();
 }
 

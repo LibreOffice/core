@@ -388,7 +388,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
         m_nColBreakStatus = COLBRK_WRITE;
 
     // Output table/table row/table cell starts if needed
-    if ( pTextNodeInfo.get() )
+    if ( pTextNodeInfo )
     {
         // New cell/row?
         if ( m_tableReference->m_nTableDepth > 0 && !m_tableReference->m_bTableCellOpen )
@@ -912,7 +912,7 @@ void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_
 
 void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, bool bForceEmptyParagraph )
 {
-    if ( pInner.get() )
+    if ( pInner )
     {
         // Where are we in the table
         sal_uInt32 nRow = pInner->getRow();

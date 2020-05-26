@@ -420,7 +420,7 @@ void VclProcessor2D::RenderFillGraphicPrimitive2D(
         // when graphic is animated, force decomposition to use the correct graphic, else
         // fill style will not be animated
         if (GraphicType::Bitmap == rFillGraphicAttribute.getGraphic().GetType()
-            && !rFillGraphicAttribute.getGraphic().getVectorGraphicData().get()
+            && !rFillGraphicAttribute.getGraphic().getVectorGraphicData()
             && !rFillGraphicAttribute.getGraphic().IsAnimated())
         {
             // decompose matrix to check for shear, rotate and mirroring

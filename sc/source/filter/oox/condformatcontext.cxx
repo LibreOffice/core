@@ -198,7 +198,7 @@ void CondFormatContext::onEndElement()
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( conditionalFormatting ):
-            if(mxCondFmt.get())
+            if(mxCondFmt)
                 mxCondFmt->setReadyForFinalize();
             break;
     }
@@ -212,14 +212,14 @@ void CondFormatContext::onStartElement( const AttributeList& rAttribs )
             mxCondFmt = getCondFormats().importConditionalFormatting( rAttribs );
         break;
         case XLS_TOKEN( cfRule ):
-            if( mxCondFmt.get() ) mxRule = mxCondFmt->importCfRule( rAttribs );
+            if( mxCondFmt ) mxRule = mxCondFmt->importCfRule( rAttribs );
         break;
     }
 }
 
 void CondFormatContext::onCharacters( const OUString& rChars )
 {
-    if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt.get() && mxRule.get() )
+    if( isCurrentElement( XLS_TOKEN( formula ) ) && mxCondFmt && mxRule )
         mxRule->appendFormula( rChars );
 }
 
@@ -241,7 +241,7 @@ void CondFormatContext::onStartRecord( SequenceInputStream& rStrm )
             mxCondFmt = getCondFormats().importCondFormatting( rStrm );
         break;
         case BIFF12_ID_CFRULE:
-            if( mxCondFmt.get() ) mxCondFmt->importCfRule( rStrm );
+            if( mxCondFmt ) mxCondFmt->importCfRule( rStrm );
         break;
     }
 }
@@ -251,7 +251,7 @@ void CondFormatContext::onEndRecord()
     switch( getCurrentElement() )
     {
         case BIFF12_ID_CONDFORMATTING:
-            if( mxCondFmt.get() )
+            if( mxCondFmt )
             {
                 mxCondFmt->setReadyForFinalize();
             }

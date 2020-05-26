@@ -518,7 +518,7 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
         // OpCode symbol mapping that could be used to create strings from
         // tokens, it's all dreaded API mapping. However, in that case there's
         // no array/matrix support anyway, but ensure checking.
-        if (pCompiler->GetCurrentOpCodeMap().get())
+        if (pCompiler->GetCurrentOpCodeMap())
         {
             const sal_Int32 nPos = m_aFuncSel.Min();
             assert( 0 <= nPos && nPos < m_pHelper->getCurrentFormula().getLength());

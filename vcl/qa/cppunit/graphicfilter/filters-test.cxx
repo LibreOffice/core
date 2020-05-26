@@ -72,7 +72,7 @@ bool VclFiltersTest::load(const OUString &,
     // other format will work (what may be wanted). For the test framework it was indirectly
     // intended to trigger an error when load in the sense of deep data interpretation fails,
     // so we need to trigger this here
-    if (aGraphic.getVectorGraphicData().get())
+    if (aGraphic.getVectorGraphicData())
     {
         if (aGraphic.getVectorGraphicData()->getRange().isEmpty())
         {

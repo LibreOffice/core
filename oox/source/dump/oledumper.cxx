@@ -323,7 +323,7 @@ void OlePropertyStreamObject::dumpDictionaryProperty( sal_uInt32 nStartPos )
             TableGuard aTabGuard( mxOut, 10, 20 );
             sal_Int32 nId = dumpDec< sal_Int32 >( "id" );
             OUString aName = dumpString8( "name" );
-            if( mxPropIds.get() )
+            if( mxPropIds )
                 mxPropIds->setName( nId, aName );
         }
     }

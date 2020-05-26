@@ -1848,7 +1848,7 @@ void SwFlyFrame::ActiveUnfloatButton(SwWrtShell* pWrtSh)
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
     SwFrameControlPtr pControl = rMngr.GetControl(FrameControlType::FloatingTable, this);
-    if (pControl.get() || pControl->GetWindow())
+    if (pControl || pControl->GetWindow())
     {
         pControl->GetWindow()->MouseButtonDown(MouseEvent());
     }

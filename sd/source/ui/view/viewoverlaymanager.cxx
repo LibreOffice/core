@@ -488,7 +488,7 @@ bool ViewOverlayManager::CreateTags()
 
     std::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
 
-    SdPage* pPage = aMainShell.get() ? aMainShell->getCurrentPage() : nullptr;
+    SdPage* pPage = aMainShell ? aMainShell->getCurrentPage() : nullptr;
 
     if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PageKind::Standard) )
     {

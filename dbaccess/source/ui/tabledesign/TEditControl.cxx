@@ -891,7 +891,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
         default:
             OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
     }
-    SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : OUString());
+    SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : OUString());
 }
 
 void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData )
@@ -1562,7 +1562,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     // Show the new description
     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];
     pRow->SetFieldType( _pType, true );
-    if ( _pType.get() )
+    if ( _pType )
     {
         weld::ComboBox& rTypeList = pTypeCell->get_widget();
         const sal_Int32 nCurrentlySelected = rTypeList.get_active();

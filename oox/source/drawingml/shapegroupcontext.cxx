@@ -45,7 +45,7 @@ ShapeGroupContext::ShapeGroupContext( FragmentHandler2 const & rParent, ShapePtr
 {
     if( pMasterShapePtr )
         mpGroupShapePtr->setWps(pMasterShapePtr->getWps());
-    if( pMasterShapePtr.get() && mpGroupShapePtr.get() )
+    if( pMasterShapePtr && mpGroupShapePtr )
         pMasterShapePtr->addChild( mpGroupShapePtr );
 }
 

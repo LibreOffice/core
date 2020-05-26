@@ -124,7 +124,7 @@ uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
     const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     uno::Reference< chart2::data::XDataProvider > xResult;
-    if( spChart2ModelContact.get())
+    if( spChart2ModelContact)
     {
         uno::Reference< chart2::XChartDocument > xChartDoc(
             spChart2ModelContact->getChart2Document());

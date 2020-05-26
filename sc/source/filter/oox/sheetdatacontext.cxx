@@ -196,7 +196,7 @@ void SheetDataContext::onEndElement()
                     mrSheetData.setDateCell( maCellData, maCellValue );
                 break;
             }
-            else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr.get() )
+            else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr )
             {
                 mxInlineStr->finalizeImport();
                 mrSheetData.setStringCell( maCellData, mxInlineStr );

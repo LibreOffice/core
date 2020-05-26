@@ -837,17 +837,13 @@ bool isSmartPointerType(const Expr* e)
     if (tc1.ClassOrStruct("unique_ptr").StdNamespace()
           || tc1.ClassOrStruct("shared_ptr").StdNamespace())
         return true;
-    return isSmartPointerType(e->getType().getTypePtr());
-}
 
-bool isSmartPointerType(const clang::Type* t)
-{
     // Then check the object type coerced to the type of the get member function, in
     // case the type-as-written is derived from one of these types (tools::SvRef is
     // final, but the rest are not; but note that this will fail when the type-as-
     // written is derived from std::unique_ptr or std::shared_ptr for which the get
     // member function is declared at a base class):
-    auto const tc2 = loplugin::TypeCheck(t);
+    auto const tc2 = loplugin::TypeCheck(e->getType());
     if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
            || tc2.ClassOrStruct("shared_ptr").StdNamespace()
            || tc2.Class("Reference").Namespace("uno").Namespace("star")

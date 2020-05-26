@@ -59,7 +59,7 @@ ErrCode LoadOlePropertySet(
 
     // global section
     SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
-    if( xGlobSect.get() )
+    if( xGlobSect )
     {
         // set supported properties
         OUString aStrValue;
@@ -144,7 +144,7 @@ ErrCode LoadOlePropertySet(
 
     // custom properties
     SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
-    if( xCustomSect.get() )
+    if( xCustomSect )
     {
         uno::Reference < beans::XPropertyContainer > xUserDefined(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_SET_THROW);
@@ -173,7 +173,7 @@ ErrCode LoadOlePropertySet(
     if ( xWriterProps.is() )
     {
         SfxOleSectionRef xBuiltin = aDocSet.GetSection( SECTION_BUILTIN );
-        if ( xBuiltin.get() )
+        if ( xBuiltin )
         {
             try
             {

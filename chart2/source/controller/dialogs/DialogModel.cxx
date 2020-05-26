@@ -393,7 +393,7 @@ void DialogModel::setTemplate(
 std::shared_ptr< RangeSelectionHelper > const &
     DialogModel::getRangeSelectionHelper() const
 {
-    if( ! m_spRangeSelectionHelper.get())
+    if( ! m_spRangeSelectionHelper)
         m_spRangeSelectionHelper =
             std::make_shared<RangeSelectionHelper>( m_xChartDocument );
 

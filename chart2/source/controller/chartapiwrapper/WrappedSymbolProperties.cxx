@@ -283,7 +283,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
     //so we need to return PropertyState_DIRECT_VALUE for more cases
 
     if( m_ePropertyType == DATA_SERIES && //single series or point
-        m_spChart2ModelContact.get())
+        m_spChart2ModelContact)
     {
         Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
         Reference< chart2::XDataSeries > xSeries( xInnerPropertyState, uno::UNO_QUERY );

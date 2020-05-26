@@ -1080,7 +1080,7 @@ SwContentNode::~SwContentNode()
     m_aCondCollListener.EndListeningAll();
     m_pCondColl = nullptr;
 
-    if ( mpAttrSet.get() && mbSetModifyAtAttr )
+    if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
 }
 

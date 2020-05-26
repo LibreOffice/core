@@ -109,7 +109,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #endif
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
+    Reference< XOutputStream> xFlush = pHelper ? pHelper->getOutputStream() : Reference< XOutputStream>();
     if ( xFlush.is() )
         try
         {
@@ -176,7 +176,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     OperationLogFile( env, name, "output" ).logOperation( "sync" );
 #endif
     std::shared_ptr< StreamHelper > pStream = StorageContainer::getRegisteredStream( env, name, key );
-    Reference< XOutputStream > xFlush = pStream.get() ? pStream->getOutputStream() : Reference< XOutputStream>();
+    Reference< XOutputStream > xFlush = pStream ? pStream->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE( xFlush.is(), "StorageNativeOutputStream::sync: could not retrieve an output stream!" );
     if ( xFlush.is() )
     {

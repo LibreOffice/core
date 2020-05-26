@@ -291,7 +291,7 @@ Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return mpCanvas.get() ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
+    return mpCanvas ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
 }
 
 void SAL_CALL SlideShowView::clear()
@@ -311,7 +311,7 @@ void SAL_CALL SlideShowView::clear()
     ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
         ::cppcanvas::BaseGfxFactory::createPolyPolygon( mpCanvas, aPoly ) );
 
-    if( pPolyPoly.get() )
+    if( pPolyPoly )
     {
         pPolyPoly->setRGBAFillColor( 0x000000FFU );
         pPolyPoly->draw();

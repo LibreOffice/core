@@ -7,7 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <cassert>
+#include <deque>
+#include <stack>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -16,6 +19,7 @@
 #include <clang/AST/CXXInheritance.h>
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 /**
   Simplify boolean expressions involving smart pointers e.g.
@@ -27,11 +31,11 @@
 
 namespace
 {
-class SimplifyPointerToBool : public loplugin::FilteringPlugin<SimplifyPointerToBool>
+class SimplifyPointerToBool : public loplugin::FilteringRewritePlugin<SimplifyPointerToBool>
 {
 public:
     explicit SimplifyPointerToBool(loplugin::InstantiationData const& data)
-        : FilteringPlugin(data)
+        : FilteringRewritePlugin(data)
     {
     }
 
@@ -42,6 +46,280 @@ public:
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const*);
+
+    bool PreTraverseUnaryLNot(UnaryOperator* expr)
+    {
+        contextuallyConvertedExprs_.push_back(expr->getSubExpr()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseUnaryLNot(UnaryOperator*, bool)
+    {
+        assert(!contextuallyConvertedExprs_.empty());
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseUnaryLNot(UnaryOperator* expr)
+    {
+        auto res = PreTraverseUnaryLNot(expr);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseUnaryLNot(expr);
+        PostTraverseUnaryLNot(expr, res);
+        return res;
+    }
+
+    bool PreTraverseBinLAnd(BinaryOperator* expr)
+    {
+        contextuallyConvertedExprs_.push_back(expr->getLHS()->IgnoreParenImpCasts());
+        contextuallyConvertedExprs_.push_back(expr->getRHS()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseBinLAnd(BinaryOperator*, bool)
+    {
+        assert(contextuallyConvertedExprs_.size() >= 2);
+        contextuallyConvertedExprs_.pop_back();
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseBinLAnd(BinaryOperator* expr)
+    {
+        auto res = PreTraverseBinLAnd(expr);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseBinLAnd(expr);
+        PostTraverseBinLAnd(expr, res);
+        return res;
+    }
+
+    bool PreTraverseBinLOr(BinaryOperator* expr)
+    {
+        contextuallyConvertedExprs_.push_back(expr->getLHS()->IgnoreParenImpCasts());
+        contextuallyConvertedExprs_.push_back(expr->getRHS()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseBinLOr(BinaryOperator*, bool)
+    {
+        assert(contextuallyConvertedExprs_.size() >= 2);
+        contextuallyConvertedExprs_.pop_back();
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseBinLOr(BinaryOperator* expr)
+    {
+        auto res = PreTraverseBinLOr(expr);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseBinLOr(expr);
+        PostTraverseBinLOr(expr, res);
+        return res;
+    }
+
+    bool PreTraverseConditionalOperator(ConditionalOperator* expr)
+    {
+        contextuallyConvertedExprs_.push_back(expr->getCond()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseConditionalOperator(ConditionalOperator*, bool)
+    {
+        assert(!contextuallyConvertedExprs_.empty());
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseConditionalOperator(ConditionalOperator* expr)
+    {
+        auto res = PreTraverseConditionalOperator(expr);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseConditionalOperator(expr);
+        PostTraverseConditionalOperator(expr, res);
+        return res;
+    }
+
+    bool PreTraverseIfStmt(IfStmt* stmt)
+    {
+        contextuallyConvertedExprs_.push_back(stmt->getCond()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseIfStmt(IfStmt*, bool)
+    {
+        assert(!contextuallyConvertedExprs_.empty());
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseIfStmt(IfStmt* stmt)
+    {
+        auto res = PreTraverseIfStmt(stmt);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseIfStmt(stmt);
+        PostTraverseIfStmt(stmt, res);
+        return res;
+    }
+
+    bool PreTraverseWhileStmt(WhileStmt* stmt)
+    {
+        contextuallyConvertedExprs_.push_back(stmt->getCond()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseWhileStmt(WhileStmt*, bool)
+    {
+        assert(!contextuallyConvertedExprs_.empty());
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseWhileStmt(WhileStmt* stmt)
+    {
+        auto res = PreTraverseWhileStmt(stmt);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseWhileStmt(stmt);
+        PostTraverseWhileStmt(stmt, res);
+        return res;
+    }
+
+    bool PreTraverseDoStmt(DoStmt* stmt)
+    {
+        contextuallyConvertedExprs_.push_back(stmt->getCond()->IgnoreParenImpCasts());
+        return true;
+    }
+
+    bool PostTraverseDoStmt(DoStmt*, bool)
+    {
+        assert(!contextuallyConvertedExprs_.empty());
+        contextuallyConvertedExprs_.pop_back();
+        return true;
+    }
+
+    bool TraverseDoStmt(DoStmt* stmt)
+    {
+        auto res = PreTraverseDoStmt(stmt);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseDoStmt(stmt);
+        PostTraverseDoStmt(stmt, res);
+        return res;
+    }
+
+    bool PreTraverseForStmt(ForStmt* stmt)
+    {
+        auto const e = stmt->getCond();
+        if (e != nullptr)
+        {
+            contextuallyConvertedExprs_.push_back(e->IgnoreParenImpCasts());
+        }
+        return true;
+    }
+
+    bool PostTraverseForStmt(ForStmt* stmt, bool)
+    {
+        if (stmt->getCond() != nullptr)
+        {
+            assert(!contextuallyConvertedExprs_.empty());
+            contextuallyConvertedExprs_.pop_back();
+        }
+        return true;
+    }
+
+    bool TraverseForStmt(ForStmt* stmt)
+    {
+        auto res = PreTraverseForStmt(stmt);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseForStmt(stmt);
+        PostTraverseForStmt(stmt, res);
+        return res;
+    }
+
+    bool PreTraverseParenExpr(ParenExpr* expr)
+    {
+        parenExprs_.push(expr);
+        return true;
+    }
+
+    bool PostTraverseParenExpr(ParenExpr*, bool)
+    {
+        assert(!parenExprs_.empty());
+        parenExprs_.pop();
+        return true;
+    }
+
+    bool TraverseParenExpr(ParenExpr* expr)
+    {
+        auto res = PreTraverseParenExpr(expr);
+        assert(res);
+        res = FilteringRewritePlugin::TraverseParenExpr(expr);
+        PostTraverseParenExpr(expr, res);
+        return res;
+    }
+
+private:
+    bool isContextuallyConverted(Expr const* expr) const
+    {
+        return std::find(contextuallyConvertedExprs_.begin(), contextuallyConvertedExprs_.end(),
+                         expr)
+               != contextuallyConvertedExprs_.end();
+    }
+
+    // Get the source range starting at the "."or "->" (plus any preceding non-comment white space):
+    SourceRange getCallSourceRange(CXXMemberCallExpr const* expr) const
+    {
+        if (expr->getImplicitObjectArgument() == nullptr)
+        {
+            //TODO: Arguably, such a call of a `get` member function from within some member
+            // function (so that syntactically no caller is mentioned) should already be handled
+            // differently when reporting it (just "drop the get()" does not make sense), instead of
+            // being fitered here:
+            return {};
+        }
+        // CXXMemberCallExpr::getExprLoc happens to return the location following the "." or "->":
+        auto start = compiler.getSourceManager().getSpellingLoc(expr->getExprLoc());
+        if (!start.isValid())
+        {
+            return {};
+        }
+        for (;;)
+        {
+            start = Lexer::GetBeginningOfToken(start.getLocWithOffset(-1),
+                                               compiler.getSourceManager(), compiler.getLangOpts());
+            auto const s = StringRef(compiler.getSourceManager().getCharacterData(start),
+                                     Lexer::MeasureTokenLength(start, compiler.getSourceManager(),
+                                                               compiler.getLangOpts()));
+            if (s.empty() || s.startswith("\\\n"))
+            {
+                continue;
+            }
+            if (s != "." && s != "->")
+            {
+                return {};
+            }
+            break;
+        }
+        for (;;)
+        {
+            auto start1 = Lexer::GetBeginningOfToken(
+                start.getLocWithOffset(-1), compiler.getSourceManager(), compiler.getLangOpts());
+            auto const s = StringRef(compiler.getSourceManager().getCharacterData(start1),
+                                     Lexer::MeasureTokenLength(start1, compiler.getSourceManager(),
+                                                               compiler.getLangOpts()));
+            if (!(s.empty() || s.startswith("\\\n")))
+            {
+                break;
+            }
+            start = start1;
+        }
+        return SourceRange(start,
+                           compiler.getSourceManager().getSpellingLoc(compat::getEndLoc(expr)));
+    }
+
+    //TODO: There are some more places where an expression is contextually converted to bool, but
+    // those are probably not relevant for our needs here.
+    std::deque<Expr const*> contextuallyConvertedExprs_;
+
+    std::stack<ParenExpr const*> parenExprs_;
 };
 
 bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castExpr)
@@ -58,7 +336,7 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         return true;
     //    castExpr->dump();
     //    methodDecl->getParent()->getTypeForDecl()->dump();
-    if (!loplugin::isSmartPointerType(methodDecl->getParent()->getTypeForDecl()))
+    if (!loplugin::isSmartPointerType(memberCallExpr->getImplicitObjectArgument()))
         return true;
     //    if (isa<CXXOperatorCallExpr>(callExpr))
     //        return true;
@@ -104,15 +382,57 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
     //            if (isa<ConditionalOperator>(arg->IgnoreParenImpCasts()))
     //                continue;
     //        }
-    report(DiagnosticsEngine::Warning, "simplify, drop the get()", castExpr->getExprLoc())
-        << castExpr->getSourceRange();
+    if (isContextuallyConverted(memberCallExpr))
+    {
+        if (rewriter)
+        {
+            auto const range = getCallSourceRange(memberCallExpr);
+            if (range.isValid() && removeText(range))
+            {
+                return true;
+            }
+        }
+        report(DiagnosticsEngine::Warning, "simplify, drop the get()", memberCallExpr->getExprLoc())
+            << memberCallExpr->getSourceRange();
+    }
+    else if (!parenExprs_.empty() && parenExprs_.top()->IgnoreImpCasts() == memberCallExpr)
+    {
+        //TODO: attempt rewrite
+        report(DiagnosticsEngine::Warning,
+               "simplify, drop the get() and turn the surrounding parentheses into a functional "
+               "cast to bool",
+               memberCallExpr->getExprLoc())
+            << memberCallExpr->getSourceRange();
+        report(DiagnosticsEngine::Note, "surrounding parentheses here",
+               parenExprs_.top()->getExprLoc())
+            << parenExprs_.top()->getSourceRange();
+    }
+    else
+    {
+        if (rewriter)
+        {
+            auto const loc
+                = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(memberCallExpr));
+            auto const range = getCallSourceRange(memberCallExpr);
+            if (loc.isValid() && range.isValid() && insertText(loc, "bool(")
+                && replaceText(range, ")"))
+            {
+                //TODO: atomically only change both or neither
+                return true;
+            }
+        }
+        report(DiagnosticsEngine::Warning,
+               "simplify, drop the get() and wrap the expression in a functional cast to bool",
+               memberCallExpr->getExprLoc())
+            << memberCallExpr->getSourceRange();
+    }
     //        report(DiagnosticsEngine::Note, "method here", param->getLocation())
     //            << param->getSourceRange();
     return true;
 }
 
-loplugin::Plugin::Registration<SimplifyPointerToBool>
-    simplifypointertobool("simplifypointertobool");
+loplugin::Plugin::Registration<SimplifyPointerToBool> simplifypointertobool("simplifypointertobool",
+                                                                            true);
 
 } // namespace
 

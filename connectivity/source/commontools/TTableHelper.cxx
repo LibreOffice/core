@@ -371,7 +371,7 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
         {
             if ( sOldFKName != sFkName )
             {
-                if ( pKeyProps.get() )
+                if ( pKeyProps )
                     m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
 
                 const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
@@ -387,13 +387,13 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
                 } // if ( m_pTables->hasByName(sReferencedName) )
                 sOldFKName = sFkName;
             } // if ( sOldFKName != sFkName )
-            else if ( pKeyProps.get() )
+            else if ( pKeyProps )
             {
                 pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
             }
         }
     } // while( xResult->next() )
-    if ( pKeyProps.get() )
+    if ( pKeyProps )
         m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
     ::comphelper::disposeComponent(xResult);
 }

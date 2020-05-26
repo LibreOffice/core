@@ -452,7 +452,7 @@ void DrawDocShell::ClearUndoBuffer()
         if( pViewShellBase )
         {
             std::shared_ptr<ViewShell> pViewSh( pViewShellBase->GetMainViewShell() );
-            if( pViewSh.get() )
+            if( pViewSh )
             {
                 ::sd::View* pView = pViewSh->GetView();
                 if( pView )

@@ -2688,12 +2688,12 @@ ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId
 
 OUString EmbeddedControl::getServiceName() const
 {
-    return mxModel.get() ? mxModel->getServiceName() : OUString();
+    return mxModel ? mxModel->getServiceName() : OUString();
 }
 
 bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv ) const
 {
-    if( mxModel.get() && rxCtrlModel.is() && !maName.isEmpty() )
+    if( mxModel && rxCtrlModel.is() && !maName.isEmpty() )
     {
         PropertyMap aPropMap;
         aPropMap.setProperty( PROP_Name, maName );
@@ -2715,7 +2715,7 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
 
 void EmbeddedControl::convertFromProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv )
 {
-    if( mxModel.get() && rxCtrlModel.is() && !maName.isEmpty() )
+    if( mxModel && rxCtrlModel.is() && !maName.isEmpty() )
     {
         PropertySet aPropSet( rxCtrlModel );
         aPropSet.getProperty( maName, PROP_Name );

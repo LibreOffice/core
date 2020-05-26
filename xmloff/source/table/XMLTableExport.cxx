@@ -355,7 +355,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             OUString sDefaultCellStyle;
 
             // table:style-name
-            if( xTableInfo.get() )
+            if( xTableInfo )
             {
                 Reference< XInterface > xKey( xCellRange, UNO_QUERY );
                 const OUString sStyleName( xTableInfo->maRowStyleMap[xKey] );
@@ -400,7 +400,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
          if ( xColumnProperties.is() )
         {
             // table:style-name
-            if( rTableInfo.get() )
+            if( rTableInfo )
             {
                 Reference< XInterface > xKey( xColumnProperties, UNO_QUERY );
                 const OUString sStyleName( rTableInfo->maColumnStyleMap[xKey] );
@@ -426,7 +426,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
     try
     {
-        if( rTableInfo.get() )
+        if( rTableInfo )
         {
             // table:style-name
             Reference< XInterface > xKey( xCell, UNO_QUERY );

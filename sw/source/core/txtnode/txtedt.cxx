@@ -493,7 +493,7 @@ void SwTextNode::RstTextAttr(
                 {
                     delAttributes.push_back(pHt);
 
-                    if ( pStyleHandle.get() )
+                    if ( pStyleHandle )
                     {
                         SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nAttrEnd );
@@ -508,7 +508,7 @@ void SwTextNode::RstTextAttr(
                     pHt->SetStart(nEnd);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
-                    if ( pStyleHandle.get() && nAttrStart < nEnd )
+                    if ( pStyleHandle && nAttrStart < nEnd )
                     {
                         SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nEnd );
@@ -536,7 +536,7 @@ void SwTextNode::RstTextAttr(
                     pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
-                    if ( pStyleHandle.get() )
+                    if ( pStyleHandle )
                     {
                         SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                             *pStyleHandle, nStt, nAttrEnd );
@@ -558,7 +558,7 @@ void SwTextNode::RstTextAttr(
                     pHt->SetEnd(nStt);
                     m_pSwpHints->NoteInHistory( pHt, true );
 
-                    if ( pStyleHandle.get() && nStt < nEnd )
+                    if ( pStyleHandle && nStt < nEnd )
                     {
                         SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                             *pStyleHandle, nStt, nEnd );

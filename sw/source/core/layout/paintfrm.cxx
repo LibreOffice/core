@@ -1717,7 +1717,7 @@ bool DrawFillAttributes(
     const basegfx::utils::B2DClipState& rClipState,
     vcl::RenderContext& rOut)
 {
-    if(rFillAttributes.get() && rFillAttributes->isUsed())
+    if(rFillAttributes && rFillAttributes->isUsed())
     {
         basegfx::B2DRange aPaintRange(
             rPaintRegion.GetOrigin().Left(),
@@ -3052,7 +3052,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         {
             pHiddenPage = static_cast< const SwPageFrame* >( pHiddenPage->GetPrev() );
             SwFrameControlPtr pControl = rMngr.GetControl( FrameControlType::PageBreak, pHiddenPage );
-            if ( pControl.get() )
+            if ( pControl )
                 pControl->ShowAll( false );
         }
     }
@@ -3765,7 +3765,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
             {
                 bBackgroundTransparent = true;
             }
-            else if(aFillAttributes.get() && aFillAttributes->isUsed())
+            else if(aFillAttributes && aFillAttributes->isUsed())
             {
                 bBackgroundTransparent = aFillAttributes->isTransparent();
             }
@@ -3973,7 +3973,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pSwFrameFormat->getSdrAllFillAttributesHelper());
 
                 // check if the new fill attributes are used
-                if(aFillAttributes.get() && aFillAttributes->isUsed())
+                if(aFillAttributes && aFillAttributes->isUsed())
                 {
                     bPaintCompleteBack = true;
                 }
@@ -6328,7 +6328,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 
                 // #i125189# We are also done when the new DrawingLayer FillAttributes are used
                 // or the FillStyle is set (different from drawing::FillStyle_NONE)
-                if(pOut && aFillAttributes.get())
+                if(pOut && aFillAttributes)
                 {
                     if(aFillAttributes->isUsed())
                     {
@@ -7023,7 +7023,7 @@ Color SwPageFrame::GetDrawBackgrdColor() const
 
     if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true, /*bConsiderTextBox=*/false) )
     {
-        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        if(aFillAttributes && aFillAttributes->isUsed())
         {
             // let SdrAllFillAttributesHelper do the average color calculation
             return Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
@@ -7274,7 +7274,7 @@ bool SwFrame::GetBackgroundBrush(
         // transparence is at 100% while no fill is the criteria for derivation
         bool bNewDrawingLayerFillStyleIsUsedAndNotNoFill(false);
 
-        if(rFillAttributes.get())
+        if(rFillAttributes)
         {
             // the new DrawingLayer FillStyle is used
             if(rFillAttributes->isUsed())

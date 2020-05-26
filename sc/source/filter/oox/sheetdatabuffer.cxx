@@ -158,7 +158,7 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, const RichStringRe
 void SheetDataBuffer::setStringCell( const CellModel& rModel, sal_Int32 nStringId )
 {
     RichStringRef xString = getSharedStrings().getString( nStringId );
-    if( xString.get() )
+    if( xString )
         setStringCell( rModel, xString );
     else
         setBlankCell( rModel );

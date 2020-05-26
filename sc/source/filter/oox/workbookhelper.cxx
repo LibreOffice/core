@@ -688,7 +688,7 @@ void WorkbookHelper::finalizeWorkbookImport()
     // contains the workbook code name).  Do it before processing formulas in
     // order to correctly resolve VBA custom function names.
     StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
-    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+    if( xVbaPrjStrg && xVbaPrjStrg->isStorage() )
         getBaseFilter().getVbaProject().importModulesAndForms( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 
     // need to import formulas before scenarios

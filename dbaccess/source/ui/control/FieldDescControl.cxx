@@ -916,7 +916,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     {
         DeactivateAggregate(tpRequired);
     }
-    else if (!m_xAutoIncrement && pFieldType.get())
+    else if (!m_xAutoIncrement && pFieldType)
     {
         if (pFieldType->bNullable)
             ActivateAggregate(tpRequired);
@@ -961,7 +961,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         OUString sDef = BoolStringUI(sValue);
 
         // Make sure that <<none>> is only present if the field can be NULL
-        if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
+        if ( ( pFieldType && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
         {
             pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // The type says so
 
@@ -1015,11 +1015,11 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if (m_xType)
     {
-        sal_Int32 nPos = pFieldType.get() ? m_xType->find_text(pFieldDescr->getTypeInfo()->aUIName) : -1;
+        sal_Int32 nPos = pFieldType ? m_xType->find_text(pFieldDescr->getTypeInfo()->aUIName) : -1;
         if (nPos == -1)
         {
             const OTypeInfoMap* pMap = getTypeInfo();
-            OTypeInfoMap::const_iterator aIter = pMap->find(pFieldType.get() ? pFieldDescr->getTypeInfo()->nType : pFieldDescr->GetType());
+            OTypeInfoMap::const_iterator aIter = pMap->find(pFieldType ? pFieldDescr->getTypeInfo()->nType : pFieldDescr->GetType());
             if(aIter == pMap->end() && !pMap->empty())
             {
                 aIter = pMap->begin();

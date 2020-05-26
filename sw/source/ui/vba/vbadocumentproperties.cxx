@@ -370,19 +370,19 @@ public:
     }
     uno::Any getValue()
     {
-        if ( mpPropGetSetHelper.get() )
+        if ( mpPropGetSetHelper )
             return mpPropGetSetHelper->getPropertyValue( msOOOPropName );
         return uno::Any();
     }
     void setValue( const uno::Any& rValue )
     {
-        if ( mpPropGetSetHelper.get() )
+        if ( mpPropGetSetHelper )
             mpPropGetSetHelper->setPropertyValue( msOOOPropName, rValue );
     }
     uno::Reference< beans::XPropertySet > getUserDefinedProperties()
     {
         uno::Reference< beans::XPropertySet > xProps;
-        if ( mpPropGetSetHelper.get() )
+        if ( mpPropGetSetHelper )
             return mpPropGetSetHelper->getUserDefinedProperties();
         return xProps;
     }

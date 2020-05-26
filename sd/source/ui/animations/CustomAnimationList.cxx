@@ -555,7 +555,7 @@ CustomAnimationList::~CustomAnimationList()
         mnPostCollapseEvent = nullptr;
     }
 
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->removeListener( this );
 
     clear();
@@ -631,13 +631,13 @@ void CustomAnimationList::clear()
 
 void CustomAnimationList::update( const MainSequencePtr& pMainSequence )
 {
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->removeListener( this );
 
     mpMainSequence = pMainSequence;
     update();
 
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
         mpMainSequence->addListener( this );
 }
 
@@ -670,7 +670,7 @@ void CustomAnimationList::update()
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
 
-    if( mpMainSequence.get() )
+    if( mpMainSequence )
     {
         std::unique_ptr<weld::TreeIter> xLastSelectedEntry;
         std::unique_ptr<weld::TreeIter> xLastVisibleEntry;
@@ -680,7 +680,7 @@ void CustomAnimationList::update()
                                  &aSelected, &nFirstSelOld, &pFirstSelEffect, &xLastSelectedEntry](weld::TreeIter& rEntry){
             CustomAnimationListEntryItem* pEntry = reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(rEntry).toInt64());
             CustomAnimationEffectPtr pEffect(pEntry->getEffect());
-            if (pEffect.get())
+            if (pEffect)
             {
                 if (weld::IsEntryVisible(*mxTreeView, rEntry))
                 {
@@ -735,7 +735,7 @@ void CustomAnimationList::update()
 
     clear();
 
-    if (mpMainSequence.get())
+    if (mpMainSequence)
     {
         std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
         mxLastParentEntry.reset();
@@ -768,7 +768,7 @@ void CustomAnimationList::update()
         mxTreeView->show();
     }
 
-    if (mpMainSequence.get())
+    if (mpMainSequence)
     {
         long nFirstSelNew = -1;
         long nLastSelNew = -1;
@@ -783,7 +783,7 @@ void CustomAnimationList::update()
                 CustomAnimationListEntryItem* pEntry = reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xEntry).toInt64());
 
                 CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
-                if (pEffect.get())
+                if (pEffect)
                 {
                     // Any effects that were visible should still be visible, so expand their parents.
                     // (a previously expanded parent may have moved leaving a child to now be the new parent to expand)
@@ -1112,7 +1112,7 @@ EffectSequence CustomAnimationList::getSelection() const
                 {
                     CustomAnimationListEntryItem* pChild = reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xChild).toInt64());
                     const CustomAnimationEffectPtr& pChildEffect( pChild->getEffect() );
-                    if( pChildEffect.get() )
+                    if( pChildEffect )
                         aSelection.push_back( pChildEffect );
                 }
             } while (mxTreeView->iter_next_sibling(*xChild));
@@ -1146,7 +1146,7 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
         CustomAnimationEffectPtr pEffect(pEntry->getEffect());
 
         nEntries++;
-        if (pEffect.get())
+        if (pEffect)
         {
             if( nNodeType == -1 )
             {

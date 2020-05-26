@@ -735,7 +735,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     mpDrawUndo( std::move(pDrawUndo) )
 {
     OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
-    OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected uninitialized note" );
+    OSL_ENSURE( !maOldData.mxInitData && !maNewData.mxInitData, "ScUndoReplaceNote::ScUndoReplaceNote - unexpected uninitialized note" );
     maOldData.mxCaption.setNotOwner();
     maNewData.mxCaption.setNotOwner();
 }

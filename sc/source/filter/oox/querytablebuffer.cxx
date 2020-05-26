@@ -214,7 +214,7 @@ void QueryTable::finalizeImport()
 {
     ConnectionRef xConnection = getConnections().getConnection( maModel.mnConnId );
     OSL_ENSURE( xConnection.get(), "QueryTable::finalizeImport - missing connection object" );
-    if( xConnection.get() && (xConnection->getConnectionType() == BIFF12_CONNECTION_HTML) )
+    if( xConnection && (xConnection->getConnectionType() == BIFF12_CONNECTION_HTML) )
     {
         // check that valid web query properties exist
         const WebPrModel* pWebPr = xConnection->getModel().mxWebPr.get();
@@ -227,7 +227,7 @@ void QueryTable::finalizeImport()
                 OUString aDefName = maModel.maDefName.replace( ' ', '_' ).replace( '-', '_' );
                 DefinedNameRef xDefName = getDefinedNames().getByModelName( aDefName, getSheetIndex() );
                 OSL_ENSURE( xDefName.get(), "QueryTable::finalizeImport - missing defined name" );
-                if( xDefName.get() )
+                if( xDefName )
                 {
                     ScRange aDestRange;
                     bool bIsRange = xDefName->getAbsoluteRange( aDestRange ) && (aDestRange.aStart.Tab() == getSheetIndex());

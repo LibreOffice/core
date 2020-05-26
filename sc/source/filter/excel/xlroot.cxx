@@ -357,7 +357,7 @@ DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
 
 ScEditEngineDefaulter& XclRoot::GetEditEngine() const
 {
-    if( !mrData.mxEditEngine.get() )
+    if( !mrData.mxEditEngine )
     {
         mrData.mxEditEngine = std::make_shared<ScEditEngineDefaulter>( GetDoc().GetEnginePool() );
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
@@ -372,7 +372,7 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
 
 ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
-    if( !mrData.mxHFEditEngine.get() )
+    if( !mrData.mxHFEditEngine )
     {
         mrData.mxHFEditEngine = std::make_shared<ScHeaderEditEngine>( EditEngine::CreatePool() );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
@@ -396,7 +396,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 
 EditEngine& XclRoot::GetDrawEditEngine() const
 {
-    if( !mrData.mxDrawEditEng.get() )
+    if( !mrData.mxDrawEditEng )
     {
         mrData.mxDrawEditEng = std::make_shared<EditEngine>( &GetDoc().GetDrawLayer()->GetItemPool() );
         EditEngine& rEE = *mrData.mxDrawEditEng;

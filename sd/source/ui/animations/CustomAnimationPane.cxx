@@ -323,7 +323,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
         case EventMultiplexerEventId::EndTextEdit:
-            if (mpMainSequence.get() && rEvent.mpUserData)
+            if (mpMainSequence && rEvent.mpUserData)
                 mxCustomAnimationList->update( mpMainSequence );
             break;
         default: break;
@@ -540,7 +540,7 @@ void CustomAnimationPane::updateControls()
 
         Any aValue;
         CustomAnimationPresetPtr pDescriptor = CustomAnimationPresets::getCustomAnimationPresets().getEffectDescriptor( pEffect->getPresetId() );
-        if (pDescriptor.get())
+        if (pDescriptor)
         {
             std::vector<OUString> aProperties( pDescriptor->getProperties() );
             if( !aProperties.empty() )
@@ -572,7 +572,7 @@ void CustomAnimationPane::updateControls()
         mxPlaceholderBox->set_sensitive( bEnable );
         mxFTProperty->set_sensitive( bEnable );
 
-        if (!pDescriptor.get())
+        if (!pDescriptor)
         {
             mxPBPropertyMore->set_sensitive( false );
             mxFTStartDelay->set_sensitive( false );
@@ -609,7 +609,7 @@ void CustomAnimationPane::updateControls()
             if (nEntryData)
             {
                 CustomAnimationPresetPtr& pPtr = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
-                if( pPtr.get() && pPtr->getPresetId() == rsPresetId )
+                if( pPtr && pPtr->getPresetId() == rsPresetId )
                 {
                     mxLBAnimation->select( nAnimationPos );
                     mnLastSelectedAnimation = nAnimationPos;
@@ -719,7 +719,7 @@ void CustomAnimationPane::updateControls()
             EffectSequenceHelper* pSequence = nullptr;
             for( const CustomAnimationEffectPtr& pEffect : maListSelection )
             {
-                if( pEffect.get() )
+                if( pEffect )
                 {
                     if( pSequence == nullptr )
                     {
@@ -754,7 +754,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
     while( aIter != aEnd )
     {
         CustomAnimationEffectPtr pEffect( *aIter++ );
-        if( pEffect.get() && pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH )
+        if( pEffect && pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH )
         {
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
@@ -797,11 +797,11 @@ void CustomAnimationPane::updateMotionPathTags()
     if( mxView.is() )
     {
         std::shared_ptr<ViewShell> xViewShell( mrBase.GetMainViewShell() );
-        if( xViewShell.get() )
+        if( xViewShell )
             pView = xViewShell->GetView();
     }
 
-    if( IsVisible() && mpMainSequence.get() && pView )
+    if( IsVisible() && mpMainSequence && pView )
     {
         bChanges = updateMotionPathImpl( *this, *pView, mpMainSequence->getBegin(), mpMainSequence->getEnd(), aTags, maMotionPathTags );
 
@@ -1155,10 +1155,10 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         if( nGroupId != -1 )
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
-        addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup.get() ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
+        addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
         addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() == nullptr || pTextGroup->getAnimateForm() ) );
-        addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup.get() ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
-        addValue( pSet, nHandleTextReverse, makeAny( pTextGroup.get() && pTextGroup->getTextReverse() ) );
+        addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
+        addValue( pSet, nHandleTextReverse, makeAny( pTextGroup && pTextGroup->getTextReverse() ) );
 
         if( pEffectSequence->getSequenceType() == EffectNodeType::INTERACTIVE_SEQUENCE  )
         {
@@ -1167,7 +1167,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         }
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
-        if( pDescriptor.get() )
+        if( pDescriptor )
         {
             sal_Int32 nType = nPropertyTypeNone;
 
@@ -1544,7 +1544,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
             if( bHasAnimateForm )
             {
-                if( pTextGroup.get() && pTextGroup->getAnimateForm() != bAnimateForm )
+                if( pTextGroup && pTextGroup->getAnimateForm() != bAnimateForm )
                 {
                     if( (pTextGroup->getTextGrouping() >= 0) && (nTextGrouping == -1 ) )
                     {
@@ -1562,7 +1562,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
             if( bHasTextGrouping )
             {
-                if( pTextGroup.get() && pTextGroup->getTextGrouping() != nTextGrouping )
+                if( pTextGroup && pTextGroup->getTextGrouping() != nTextGrouping )
                 {
                     pEffectSequence->setTextGrouping( pTextGroup, nTextGrouping );
 
@@ -1582,7 +1582,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
             if (!bDoSetAnimateFormFirst && bNeedDoSetAnimateForm)
             {
-                if( pTextGroup.get() )
+                if( pTextGroup )
                 {
                     pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
                     bChanged = true;
@@ -1591,7 +1591,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
             if( bHasTextGroupingAuto )
             {
-                if( pTextGroup.get() && pTextGroup->getTextGroupingAuto() != fTextGroupingAuto )
+                if( pTextGroup && pTextGroup->getTextGroupingAuto() != fTextGroupingAuto )
                 {
                     pEffectSequence->setTextGroupingAuto( pTextGroup, fTextGroupingAuto );
                     bChanged = true;
@@ -1600,7 +1600,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
             if( bHasTextReverse )
             {
-                if( pTextGroup.get() && pTextGroup->getTextReverse() != bTextReverse )
+                if( pTextGroup && pTextGroup->getTextReverse() != bTextReverse )
                 {
                     pEffectSequence->setTextReverse( pTextGroup, bTextReverse );
                     bChanged = true;
@@ -1817,7 +1817,7 @@ void CustomAnimationPane::onAdd()
     mxCBXDuration->set_sensitive( bHasSpeed );
     mxFTDuration->set_sensitive( bHasSpeed );
 
-    if( pDescriptor.get() )
+    if( pDescriptor )
     {
         mxCustomAnimationList->unselect_all();
 
@@ -1842,7 +1842,7 @@ void CustomAnimationPane::onAdd()
             else
                 pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
 
-            if( pCreated.get() )
+            if( pCreated )
                 mxCustomAnimationList->select( pCreated );
         }
     }
@@ -2214,7 +2214,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 
     for (PresetCategoryPtr& pCategory : rCategoryList)
     {
-        if( pCategory.get() )
+        if( pCategory )
         {
             InsertCategory(*mxLBAnimation, pCategory->maLabel);
 
@@ -2226,7 +2226,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
             for( CustomAnimationPresetPtr& pDescriptor : aSortedVector )
             {
                 // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
-                if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
+                if( pDescriptor && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
                     auto pCustomPtr = new CustomAnimationPresetPtr(pDescriptor);
                     OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pCustomPtr));
@@ -2467,7 +2467,7 @@ void CustomAnimationPane::onSelect()
 // pEffectInsertBefore may be null if moving to end of list.
 void CustomAnimationPane::onDragNDropComplete(std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore)
 {
-    if ( !mpMainSequence.get() )
+    if ( !mpMainSequence )
         return;
 
     addUndo();

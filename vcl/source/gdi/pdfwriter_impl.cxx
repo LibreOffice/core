@@ -9193,7 +9193,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
+    if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
         return;
 
     sal_uInt32 nLength = rGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
@@ -9268,7 +9268,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream = std::move( pStream );
@@ -9372,7 +9372,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!rGraphic.getVectorGraphicData().get() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
             m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();

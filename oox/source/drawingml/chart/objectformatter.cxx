@@ -842,7 +842,7 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
 void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
 {
     LineProperties aLineProps;
-    if( mxAutoLine.get() )
+    if( mxAutoLine )
         aLineProps.assignUsed( *mxAutoLine );
     if( rxShapeProp.is() )
         aLineProps.assignUsed( rxShapeProp->getLineProperties() );
@@ -871,7 +871,7 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
 void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, const PictureOptionsModel* pPicOptions, sal_Int32 nSeriesIdx )
 {
     FillProperties aFillProps;
-    if( mxAutoFill.get() )
+    if( mxAutoFill )
         aFillProps.assignUsed( *mxAutoFill );
     if( rxShapeProp.is() )
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
@@ -919,7 +919,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
 void TextFormatter::convertFormatting( PropertySet& rPropSet, const TextCharacterProperties* pTextProps )
 {
     TextCharacterProperties aTextProps;
-    if( mxAutoText.get() )
+    if( mxAutoText )
         aTextProps.assignUsed( *mxAutoText );
     if( pTextProps )
         aTextProps.assignUsed( *pTextProps );

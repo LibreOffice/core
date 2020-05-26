@@ -165,7 +165,7 @@ bool OWizNameMatching::LeavePage()
             }
 
             sal_Int32 nType = css::sdbc::DataType::VARCHAR;
-            if ( pTypeInfo.get() )
+            if ( pTypeInfo )
                 nType = pTypeInfo->nType;
             m_pParent->m_vColumnTypes[nPos] = nType;
         }

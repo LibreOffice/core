@@ -596,7 +596,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
     }
     if ( rGraphic.GetType() == GraphicType::Bitmap )
     {
-        if(rGraphic.getVectorGraphicData().get())
+        if(rGraphic.getVectorGraphicData())
         {
             // embedded Vector Graphic Data, no need to scale. Also no method to apply crop data currently
         }

@@ -2044,7 +2044,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 try
                 {
-                    if ( maStructInfo.get()  )
+                    if ( maStructInfo  )
                     {
                         StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
                         if ( aMember.isEmpty() )
@@ -2121,7 +2121,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     StarBASIC::Error( ERRCODE_BASIC_PROP_READONLY );
                     return;
                 }
-                if (  maStructInfo.get()  )
+                if (  maStructInfo  )
                 {
                     StructRefInfo aMember = maStructInfo->getStructMember( pProp->GetName() );
                     if ( aMember.isEmpty() )
@@ -2840,7 +2840,7 @@ Any SbUnoObject::getUnoAny()
 {
     Any aRetAny;
     if( bNeedIntrospection ) doIntrospection();
-    if ( maStructInfo.get() )
+    if ( maStructInfo )
        aRetAny = maTmpUnoObj;
     else if( mxMaterialHolder.is() )
         aRetAny = mxMaterialHolder->getMaterial();

@@ -207,7 +207,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
         if (mpFrame->supportsFullDrawingLayerFillAttributeSet())
         {
             drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(mpFrame->getSdrAllFillAttributesHelper());
-            if(aFillAttributes.get() && aFillAttributes->isUsed())
+            if(aFillAttributes && aFillAttributes->isUsed())
             {
                 bUseNewFillProperties = true;
                 // use SetCompletePaint if needed

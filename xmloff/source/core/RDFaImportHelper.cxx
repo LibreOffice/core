@@ -406,7 +406,7 @@ RDFaImportHelper::AddRDFa(
         SAL_WARN("xmloff.core", "AddRDFa: invalid arg: null textcontent");
         return;
     }
-    if (!i_pRDFaAttributes.get())
+    if (!i_pRDFaAttributes)
     {
         SAL_WARN("xmloff.core", "AddRDFa: invalid arg: null RDFa attributes");
         return;
@@ -424,7 +424,7 @@ RDFaImportHelper::ParseAndAddRDFa(
 {
     std::shared_ptr<ParsedRDFaAttributes> pAttributes(
         ParseRDFa(i_rAbout, i_rProperty, i_rContent, i_rDatatype) );
-    if (pAttributes.get())
+    if (pAttributes)
     {
         AddRDFa(i_xObject, pAttributes);
     }

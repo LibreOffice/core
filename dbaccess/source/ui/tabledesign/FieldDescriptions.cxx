@@ -323,7 +323,7 @@ void OFieldDescription::SetAutoIncrementValue(const OUString& _sAutoIncValue)
 void OFieldDescription::SetType(const TOTypeInfoSP& _pType)
 {
     m_pType = _pType;
-    if ( !m_pType.get() )
+    if ( !m_pType )
         return;
 
     try
@@ -348,7 +348,7 @@ void OFieldDescription::SetTypeValue(sal_Int32 _nType)
         else
         {
             m_nType = _nType;
-            OSL_ENSURE(!m_pType.get(),"Invalid call here!");
+            OSL_ENSURE(!m_pType,"Invalid call here!");
         }
     }
     catch( const Exception& )
@@ -504,7 +504,7 @@ sal_Int32                   OFieldDescription::GetType()                const
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_TYPE));
     else
-        return m_pType.get() ? m_pType->nType : m_nType;
+        return m_pType ? m_pType->nType : m_nType;
 }
 
 OUString             OFieldDescription::GetTypeName()            const
@@ -512,7 +512,7 @@ OUString             OFieldDescription::GetTypeName()            const
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_TYPENAME));
     else
-        return m_pType.get() ? m_pType->aTypeName : m_sTypeName;
+        return m_pType ? m_pType->aTypeName : m_sTypeName;
 }
 
 sal_Int32                   OFieldDescription::GetPrecision()           const

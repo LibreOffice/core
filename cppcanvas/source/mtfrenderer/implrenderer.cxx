@@ -2514,7 +2514,7 @@ namespace cppcanvas::internal
                                 rCanvas,
                                 rState ) );
 
-                        if( pPolyAction.get() )
+                        if( pPolyAction )
                         {
                             maActions.emplace_back(
                                     pPolyAction,

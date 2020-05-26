@@ -250,7 +250,7 @@ bool TBCData::Read(SvStream &rS)
         default:
             break;
     }
-    if ( controlSpecificInfo.get() )
+    if ( controlSpecificInfo )
         return controlSpecificInfo->Read( rS );
     //#FIXME I need to be able to handle different controlSpecificInfo types.
     return true;
@@ -549,7 +549,7 @@ TBCMenuSpecific::Print( FILE* fp )
 OUString TBCMenuSpecific::Name()
 {
     OUString aName;
-    if ( name.get() )
+    if ( name )
         aName = name->getString();
     return aName;
 }
@@ -641,7 +641,7 @@ TBCComboDropdownSpecific::TBCComboDropdownSpecific(const TBCHeader& header )
 bool TBCComboDropdownSpecific::Read( SvStream &rS)
 {
     nOffSet = rS.Tell();
-    if ( data.get() )
+    if ( data )
         return data->Read( rS );
     return true;
 }

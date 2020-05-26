@@ -192,7 +192,7 @@ Shape::~Shape()
 
 table::TablePropertiesPtr const & Shape::getTableProperties()
 {
-    if ( !mpTablePropertiesPtr.get() )
+    if ( !mpTablePropertiesPtr )
         mpTablePropertiesPtr = std::make_shared<table::TableProperties>();
     return mpTablePropertiesPtr;
 }
@@ -321,7 +321,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
     SAL_INFO("oox.drawingml", "Shape::applyShapeReference: apply '" << rReferencedShape.msId << "' to '" << msId << "'");
 
-    if ( rReferencedShape.mpTextBody.get() && bUseText )
+    if ( rReferencedShape.mpTextBody && bUseText )
         mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody );
     else
         mpTextBody.reset();
@@ -650,7 +650,7 @@ Reference< XShape > const & Shape::createAndInsert(
     SAL_INFO("oox.drawingml", "Shape::createAndInsert: id='" << msId << "' service='" << rServiceName << "'");
 
     formulaimport::XmlStreamBuilder * pMathXml(nullptr);
-    if (mpTextBody.get())
+    if (mpTextBody)
     {
         for (auto const& it : mpTextBody->getParagraphs())
         {
@@ -669,7 +669,7 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     // tdf#90403 PowerPoint ignores a:ext cx and cy values of p:xfrm, and uses real table width and height
-    if ( mpTablePropertiesPtr.get() && rServiceName == "com.sun.star.drawing.TableShape" )
+    if ( mpTablePropertiesPtr && rServiceName == "com.sun.star.drawing.TableShape" )
     {
         maSize.Width = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableGrid())
@@ -1022,7 +1022,7 @@ Reference< XShape > const & Shape::createAndInsert(
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
 
         // add properties from textbody to shape properties
-        if( mpTextBody.get() )
+        if( mpTextBody )
         {
             mpTextBody->getTextProperties().pushRotationAdjustments();
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
@@ -1036,7 +1036,7 @@ Reference< XShape > const & Shape::createAndInsert(
         aShapeProps.assignUsed( maDefaultShapeProperties );
         if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" || bIsCustomShape )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
-        if ( mpTablePropertiesPtr.get() && aServiceName == "com.sun.star.drawing.TableShape" )
+        if ( mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape" )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);

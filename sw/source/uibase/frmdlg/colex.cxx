@@ -217,7 +217,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     const tools::Rectangle aDefineRect(aRect);
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
 
-    if (!rFillAttributes.get() || !rFillAttributes->isUsed())
+    if (!rFillAttributes || !rFillAttributes->isUsed())
     {
         // If there is no fill, use fallback color
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();

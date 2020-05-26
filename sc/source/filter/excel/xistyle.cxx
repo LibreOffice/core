@@ -1986,7 +1986,7 @@ void XclImpXFRangeBuffer::Finalize()
     for( const auto& rxColumn : maColumns )
     {
         // apply all cell styles of an existing column
-        if( rxColumn.get() )
+        if( rxColumn )
         {
             XclImpXFRangeColumn& rColumn = *rxColumn;
             std::vector<ScAttrEntry> aAttrs;

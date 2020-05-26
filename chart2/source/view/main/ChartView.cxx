@@ -1064,7 +1064,7 @@ ChartView::ChartView(
 
 void ChartView::init()
 {
-    if( !m_pDrawModelWrapper.get() )
+    if( !m_pDrawModelWrapper )
     {
         SolarMutexGuard aSolarGuard;
         m_pDrawModelWrapper = std::make_shared< DrawModelWrapper >();
@@ -1088,7 +1088,7 @@ ChartView::~ChartView()
     if ( xComp.is() )
         xComp->dispose();
 
-    if( m_pDrawModelWrapper.get() )
+    if( m_pDrawModelWrapper )
     {
         SolarMutexGuard aSolarGuard;
         EndListening( m_pDrawModelWrapper->getSdrModel() );
@@ -1395,7 +1395,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
         }
         if( nWritingMode != -1 && nWritingMode != text::WritingMode2::PAGE )
         {
-            if( pDrawModelWrapper.get() )
+            if( pDrawModelWrapper )
                 pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
         }
     }

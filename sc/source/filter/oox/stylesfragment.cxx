@@ -57,20 +57,20 @@ ContextHandlerRef IndexedColorsContext::onCreateRecordContext( sal_Int32 nRecId,
 
 ContextHandlerRef FontContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxFont.get() )
+    if( mxFont )
         mxFont->importAttribs( nElement, rAttribs );
     return nullptr;
 }
 
 void BorderContext::onStartElement( const AttributeList& rAttribs )
 {
-    if( mxBorder.get() && (getCurrentElement() == XLS_TOKEN( border )) )
+    if( mxBorder && (getCurrentElement() == XLS_TOKEN( border )) )
         mxBorder->importBorder( rAttribs );
 }
 
 ContextHandlerRef BorderContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxBorder.get() ) switch( getCurrentElement() )
+    if( mxBorder ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( border ):
             mxBorder->importStyle( nElement, rAttribs );
@@ -85,7 +85,7 @@ ContextHandlerRef BorderContext::onCreateContext( sal_Int32 nElement, const Attr
 
 ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxFill.get() ) switch( getCurrentElement() )
+    if( mxFill ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( fill ):
             switch( nElement )
@@ -118,13 +118,13 @@ ContextHandlerRef FillContext::onCreateContext( sal_Int32 nElement, const Attrib
 
 void XfContext::onStartElement( const AttributeList& rAttribs )
 {
-    if( mxXf.get() && (getCurrentElement() == XLS_TOKEN( xf )) )
+    if( mxXf && (getCurrentElement() == XLS_TOKEN( xf )) )
         mxXf->importXf( rAttribs, mbCellXf );
 }
 
 ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxXf.get() ) switch( getCurrentElement() )
+    if( mxXf ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( xf ):
             switch( nElement )
@@ -139,7 +139,7 @@ ContextHandlerRef XfContext::onCreateContext( sal_Int32 nElement, const Attribut
 
 ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( mxDxf.get() ) switch( getCurrentElement() )
+    if( mxDxf ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( dxf ):
             switch( nElement )
@@ -157,7 +157,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
         break;
     }
 
-    if( mxExtDxf.get() ) switch( getCurrentElement() )
+    if( mxExtDxf ) switch( getCurrentElement() )
     {
         case XLS14_TOKEN( dxf ):
             switch( nElement )

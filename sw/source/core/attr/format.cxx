@@ -402,7 +402,7 @@ SfxItemState SwFormat::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, cons
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
-        if(aFill.get() && aFill->isUsed())
+        if(aFill && aFill->isUsed())
         {
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
@@ -435,7 +435,7 @@ SfxItemState SwFormat::GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) 
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
-        if(aFill.get() && aFill->isUsed())
+        if(aFill && aFill->isUsed())
         {
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
@@ -765,7 +765,7 @@ IDocumentChartDataProviderAccess& SwFormat::getIDocumentChartDataProviderAccess(
 
 void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 {
-    if (m_pGrabBagItem.get())
+    if (m_pGrabBagItem)
         m_pGrabBagItem->QueryValue(rVal);
     else
         rVal <<= uno::Sequence<beans::PropertyValue>();
@@ -773,7 +773,7 @@ void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 
 void SwFormat::SetGrabBagItem(const uno::Any& rVal)
 {
-    if (!m_pGrabBagItem.get())
+    if (!m_pGrabBagItem)
         m_pGrabBagItem = std::make_shared<SfxGrabBagItem>();
 
     m_pGrabBagItem->PutValue(rVal, 0);

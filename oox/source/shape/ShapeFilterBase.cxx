@@ -111,7 +111,7 @@ GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
 {
     ::Color nColor;
 
-    if (mpTheme.get())
+    if (mpTheme)
         mpTheme->getClrScheme().getColor( nToken, nColor );
 
     return nColor;

@@ -37,8 +37,15 @@ public:
     bool TraverseDecl( Decl* ) { return complain(); }
     bool TraverseLinkageSpecDecl( LinkageSpecDecl* ) { return complain(); }
     bool TraverseStmt( Stmt* ) { return complain(); }
+    bool TraverseIfStmt( IfStmt* ) { return complain(); }
+    bool TraverseWhileStmt( WhileStmt* ) { return complain(); }
+    bool TraverseDoStmt( DoStmt* ) { return complain(); }
+    bool TraverseForStmt( ForStmt* ) { return complain(); }
+    bool TraverseParenExpr( ParenExpr* ) { return complain(); }
     bool TraverseUnaryLNot( UnaryOperator* ) { return complain(); }
     bool TraverseBinLAnd( BinaryOperator* ) { return complain(); }
+    bool TraverseBinLOr( BinaryOperator* ) { return complain(); }
+    bool TraverseConditionalOperator( ConditionalOperator* ) { return complain(); }
     bool TraverseCXXCatchStmt( CXXCatchStmt* ) { return complain(); }
     bool TraverseCXXDestructorDecl( CXXDestructorDecl* ) { return complain(); }
     bool TraverseFunctionDecl( FunctionDecl* ) { return complain(); }

@@ -4801,7 +4801,7 @@ void ScXMLExport::WriteExternalRefCaches()
         for (const auto& rTabName : aTabNames)
         {
             ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, rTabName, false);
-            if (!pTable.get() || !pTable->isReferenced())
+            if (!pTable || !pTable->isReferenced())
                 continue;
 
             AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, "'" + *pUrl + "'#" + rTabName);

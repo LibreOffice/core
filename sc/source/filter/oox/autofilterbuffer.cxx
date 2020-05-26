@@ -518,7 +518,7 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
 ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
 {
     ApiFilterSettings aSettings;
-    if( (0 <= mnColId) && mxSettings.get() )
+    if( (0 <= mnColId) && mxSettings )
     {
         // filter settings object creates a sequence of filter fields
         aSettings = mxSettings->finalizeImport( nMaxCount );
@@ -683,7 +683,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
                         // position of output data (if built-in defined name 'Extract' exists)
                         DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
                         ScRange aOutputRange;
-                        bool bHasOutputRange = xExtractName.get() && xExtractName->getAbsoluteRange( aOutputRange );
+                        bool bHasOutputRange = xExtractName && xExtractName->getAbsoluteRange( aOutputRange );
                         aDescProps.setProperty( PROP_CopyOutputData, bHasOutputRange );
                         if( bHasOutputRange )
                         {

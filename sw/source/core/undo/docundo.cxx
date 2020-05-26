@@ -62,7 +62,7 @@ UndoManager::UndoManager(std::shared_ptr<SwNodes> const & xUndoNodes,
     ,   m_pDocShell(nullptr)
     ,   m_pView(nullptr)
 {
-    assert(m_xUndoNodes.get());
+    assert(bool(m_xUndoNodes));
     // writer expects it to be disabled initially
     // Undo is enabled by SwEditShell constructor
     SdrUndoManager::EnableUndo(false);

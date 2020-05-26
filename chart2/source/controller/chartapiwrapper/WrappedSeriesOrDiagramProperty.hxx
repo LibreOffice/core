@@ -64,7 +64,7 @@ public:
         bool bHasDetectableInnerValue = false;
         rHasAmbiguousValue = false;
         if( m_ePropertyType == DIAGRAM &&
-            m_spChart2ModelContact.get() )
+            m_spChart2ModelContact )
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
@@ -91,7 +91,7 @@ public:
     void setInnerValue( PROPERTYTYPE aNewValue ) const
     {
         if( m_ePropertyType == DIAGRAM &&
-            m_spChart2ModelContact.get() )
+            m_spChart2ModelContact )
         {
             std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );

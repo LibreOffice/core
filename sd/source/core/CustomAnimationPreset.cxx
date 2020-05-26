@@ -162,7 +162,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
             strSubType = maDefaultSubTyp;
 
         CustomAnimationEffectPtr pEffect = maSubTypes[strSubType];
-        if( pEffect.get() )
+        if( pEffect )
         {
             Reference< XCloneable > xCloneable( pEffect->getNode(), UNO_QUERY_THROW );
             Reference< XAnimationNode > xNode( xCloneable->createClone(), UNO_QUERY_THROW );
@@ -292,7 +292,7 @@ void CustomAnimationPresets::importEffects()
 
                     const OUString aPresetId( pEffect->getPresetId() );
                     CustomAnimationPresetPtr pDescriptor = getEffectDescriptor( aPresetId );
-                    if( pDescriptor.get() )
+                    if( pDescriptor )
                         pDescriptor->add( pEffect );
                     else
                     {
@@ -398,7 +398,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
                     for( const OUString& rEffectName : std::as_const(aEffects) )
                     {
                         CustomAnimationPresetPtr pEffect = getEffectDescriptor( rEffectName );
-                        if( pEffect.get() )
+                        if( pEffect )
                         {
                             aEffectsList.push_back( pEffect );
                         }
@@ -465,11 +465,11 @@ const OUString& CustomAnimationPresets::translateName( const OUString& rId, cons
 }
 void CustomAnimationPresets::changePresetSubType( const CustomAnimationEffectPtr& pEffect, const OUString& rPresetSubType ) const
 {
-    if( pEffect.get() && pEffect->getPresetSubType() != rPresetSubType )
+    if( pEffect && pEffect->getPresetSubType() != rPresetSubType )
     {
         CustomAnimationPresetPtr pDescriptor( getEffectDescriptor( pEffect->getPresetId() ) );
 
-        if( pDescriptor.get() )
+        if( pDescriptor )
         {
             Reference< XAnimationNode > xNewNode( pDescriptor->create( rPresetSubType ) );
             if( xNewNode.is() )
@@ -518,11 +518,11 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
         sal_Int32 nCategory = comphelper::rng::uniform_size_distribution(0, pCategoryList->size()-1);
 
         PresetCategoryPtr pCategory = (*pCategoryList)[nCategory];
-        if( pCategory.get() && !pCategory->maEffects.empty() )
+        if( pCategory && !pCategory->maEffects.empty() )
         {
             sal_Int32 nDescriptor = comphelper::rng::uniform_size_distribution(0, pCategory->maEffects.size()-1);
             CustomAnimationPresetPtr pPreset = pCategory->maEffects[nDescriptor];
-            if( pPreset.get() )
+            if( pPreset )
             {
                 std::vector<OUString> aSubTypes = pPreset->getSubTypes();
 

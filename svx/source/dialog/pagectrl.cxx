@@ -337,7 +337,7 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
         drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
         // create fill geometry if there is something to fill
-        if (rFillAttributes.get() && rFillAttributes->isUsed())
+        if (rFillAttributes && rFillAttributes->isUsed())
         {
             aSequence = rFillAttributes->getPrimitive2DSequence(aPaintRange, aDefineRange);
         }

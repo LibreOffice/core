@@ -711,7 +711,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
             Color nLabelColor;
 
             if( ! std::isnan( fData ) &&
-                m_spNumberFormatterWrapper.get() )
+                m_spNumberFormatterWrapper )
             {
                 bool bColorChanged = false;
                 aResult = m_spNumberFormatterWrapper->getFormattedString(
@@ -728,7 +728,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                 aResult = aText;
             else if( aAny>>=fDouble )
             {
-                if( ! std::isnan( fDouble ) && m_spNumberFormatterWrapper.get() )
+                if( ! std::isnan( fDouble ) && m_spNumberFormatterWrapper )
                 {
                     // If a numberformat was available here we could directly
                     // obtain the corresponding edit format in
@@ -831,7 +831,7 @@ bool DataBrowser::IsDataValid() const
         OUString aText( m_aNumberEditField->GetText());
 
         if( !aText.isEmpty() &&
-            m_spNumberFormatterWrapper.get() &&
+            m_spNumberFormatterWrapper &&
             m_spNumberFormatterWrapper->getSvNumberFormatter() &&
             ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
               aText, nDummy, fDummy ))
@@ -1165,7 +1165,7 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_uInt16 nCol ) const
 bool DataBrowser::isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue )
 {
     sal_uInt32 nNumberFormat=0;
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
     if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateTimeValue ) )
     {
         SvNumFormatType nType = pSvNumberFormatter->GetType( nNumberFormat);
@@ -1186,7 +1186,7 @@ bool DataBrowser::SaveModified()
 
     OSL_ENSURE( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
-    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper ? m_spNumberFormatterWrapper->getSvNumberFormatter() : nullptr;
     switch( m_apDataBrowserModel->getCellType( nCol ))
     {
         case DataBrowserModel::NUMBER:

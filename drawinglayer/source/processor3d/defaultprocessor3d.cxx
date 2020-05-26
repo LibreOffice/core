@@ -352,7 +352,7 @@ namespace drawinglayer::processor3d
             if(bPaintIt)
             {
                 // get rid of texture coordinates if there is no texture
-                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx().get() && !getTransparenceGeoTexSvx().get())
+                if(aFill.areTextureCoordinatesUsed() && !getGeoTexSvx() && !getTransparenceGeoTexSvx())
                 {
                     aFill.clearTextureCoordinates();
                 }

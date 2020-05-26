@@ -301,7 +301,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         xCustomLabel->setFieldType( lcl_ConvertFieldNameToFieldEnum( pField->getType() ) );
                         xCustomLabel->setGuid( pField->getUuid() );
                     }
-                    else if( pRun.get() )
+                    else if( pRun )
                     {
                         xCustomLabel->setString( pRun->getText() );
                         xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
