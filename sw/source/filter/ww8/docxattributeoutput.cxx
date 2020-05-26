@@ -143,7 +143,6 @@
 #include <stdarg.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <oox/mathml/export.hxx>
 
 using ::editeng::SvxBorderLine;
 
