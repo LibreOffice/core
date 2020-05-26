@@ -1478,7 +1478,23 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         if( ( !pLay->IsInFootnote() || pSct->IsInFootnote() ) &&
             ( !pLay->IsInTab() || pSct->IsInTab() ) )
         {
-            pActualSection.reset(new SwActualSection( nullptr, pSct, nullptr ));
+            pActualSection.reset(new SwActualSection(nullptr, pSct, pSct->GetSection()->GetFormat()->GetSectionNode()));
+            // tdf#132236 for SwUndoDelete: find outer sections whose start
+            // nodes aren't contained in the range but whose end nodes are,
+            // because section frames may need to be created for them
+            SwActualSection * pUpperSection(pActualSection.get());
+            while (pUpperSection->GetSectionNode()->EndOfSectionIndex() < nEndIndex)
+            {
+                SwStartNode *const pStart(pUpperSection->GetSectionNode()->StartOfSectionNode());
+                if (!pStart->IsSectionNode())
+                {
+                    break;
+                }
+                // note: these don't have a section frame, check it in EndNode case!
+                auto const pTmp(new SwActualSection(nullptr, nullptr, static_cast<SwSectionNode*>(pStart)));
+                pUpperSection->SetUpper(pTmp);
+                pUpperSection = pTmp;
+            }
             OSL_ENSURE( !pLay->Lower() || !pLay->Lower()->IsColumnFrame(),
                 "InsertCnt_: Wrong Call" );
         }
@@ -1800,7 +1816,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 SwSectionFrame* pOuterSectionFrame = pActualSection->GetSectionFrame();
 
                 // a follow has to be appended to the new section frame
-                SwSectionFrame* pFollow = pOuterSectionFrame->GetFollow();
+                SwSectionFrame* pFollow = pOuterSectionFrame ? pOuterSectionFrame->GetFollow() : nullptr;
                 if ( pFollow )
                 {
                     pOuterSectionFrame->SetFollow( nullptr );
@@ -1809,7 +1825,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
 
                 // We don't want to leave empty parts back.
-                if( ! pOuterSectionFrame->IsColLocked() &&
+                if (pOuterSectionFrame &&
+                    ! pOuterSectionFrame->IsColLocked() &&
                     ! pOuterSectionFrame->ContainsContent() )
                 {
                     pOuterSectionFrame->DelEmpty( true );
