@@ -464,6 +464,12 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         if (pFF->GetFollow())
             xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
     }
+    if (IsSctFrame())
+    {
+        SwSectionFrame const*const pFrame(static_cast<SwSectionFrame const*>(this));
+        SwSectionNode const*const pNode(pFrame->GetSection()->GetFormat()->GetSectionNode());
+        xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode->GetIndex());
+    }
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
