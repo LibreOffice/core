@@ -15,6 +15,7 @@ $(eval $(call gb_Executable_use_sdk_api,lngconvex))
 
 $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	comphelper \
+	cppu \
 	i18nlangtag \
 	sal \
 	tl \

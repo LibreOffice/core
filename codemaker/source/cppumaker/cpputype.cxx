@@ -355,7 +355,7 @@ void CppuType::dumpGetCppuTypePreamble(FileStream & out)
         if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
             out << "\n\n";
         }
-        out << ("inline ::css::uno::Type const &"
+        out << ("::css::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
         out << " const *) {\n";
@@ -567,10 +567,10 @@ void CppuType::dumpHFileContent(
           || name_ == "com.sun.star.uno.Exception"
           || isPolymorphic())) {
         out << "\n" << indent()
-            << ("inline ::css::uno::Type const &"
+            << ("::css::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
-        out << " const *);\n";
+        out << " const *) __attribute__((noinline,weak));\n";
     }
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, false)) {
         out << "\n";

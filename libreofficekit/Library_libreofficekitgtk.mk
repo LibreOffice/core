@@ -16,6 +16,11 @@ $(eval $(call gb_Library_add_exception_objects,libreofficekitgtk,\
     libreofficekit/source/gtk/tilebuffer \
 ))
 
+$(eval $(call gb_Library_use_libraries,libreofficekitgtk,\
+        cppu \
+	sal \
+))
+
 $(eval $(call gb_Library_use_externals,libreofficekitgtk,\
     boost_headers \
 ))
