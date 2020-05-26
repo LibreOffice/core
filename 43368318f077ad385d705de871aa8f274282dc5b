@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8e18065_ade1d582",
+        "filename": "sw/qa/uitest/writer_tests4/tdf113284.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-26T08:44:23Z",
+      "side": 1,
+      "message": "as a followup, would be nice to pull all of this into a superclass helper method",
+      "revId": "43368318f077ad385d705de871aa8f274282dc5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
