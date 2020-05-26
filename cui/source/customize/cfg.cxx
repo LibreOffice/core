@@ -110,24 +110,24 @@ void printPropertySet(
 
     SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
 
-    for ( sal_Int32 i = 0; i < aPropDetails.(); ++i )
+    for ( beans::Property const & aPropDetail  : std::as_const(aPropDetails) )
     {
         OUString tmp;
         sal_Int32 ival;
 
-        uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
+        uno::Any a = xPropSet->getPropertyValue( aPropDetail.Name );
 
         if ( a >>= tmp )
         {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << tmp);
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetail.Name << tmp);
         }
         else if ( ( a >>= ival ) )
         {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " = " << ival);
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetail.Name << " = " << ival);
         }
         else
         {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " of type " << a.getValueTypeName());
+            SAL_WARN("cui", prefix << ": Got property: " << aPropDetail.Name << " of type " << a.getValueTypeName());
         }
     }
 }
@@ -136,13 +136,13 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for ( sal_Int32 i = 0; i < aProp.(); ++i )
+    for (PropertyValue const & aPropVal : std::as_const(aProp))
     {
         OUString tmp;
 
-        aProp[i].Value >>= tmp;
+        aPropVal.Value >>= tmp;
 
-        SAL_WARN("cui", prefix << ": Got property: " << aProp[i].Name << " = " << tmp);
+        SAL_WARN("cui", prefix << ": Got property: " << aPropVal.Name << " = " << tmp);
     }
 }
 
