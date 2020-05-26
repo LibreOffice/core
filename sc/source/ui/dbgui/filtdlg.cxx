@@ -65,18 +65,22 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xLbField1(m_xBuilder->weld_combo_box("field1"))
     , m_xLbCond1(m_xBuilder->weld_combo_box("cond1"))
     , m_xEdVal1(m_xBuilder->weld_combo_box("val1"))
+    , m_xBtnRemove1(m_xBuilder->weld_button("remove1"))
     , m_xLbConnect2(m_xBuilder->weld_combo_box("connect2"))
     , m_xLbField2(m_xBuilder->weld_combo_box("field2"))
     , m_xLbCond2(m_xBuilder->weld_combo_box("cond2"))
     , m_xEdVal2(m_xBuilder->weld_combo_box("val2"))
+    , m_xBtnRemove2(m_xBuilder->weld_button("remove2"))
     , m_xLbConnect3(m_xBuilder->weld_combo_box("connect3"))
     , m_xLbField3(m_xBuilder->weld_combo_box("field3"))
     , m_xLbCond3(m_xBuilder->weld_combo_box("cond3"))
     , m_xEdVal3(m_xBuilder->weld_combo_box("val3"))
+    , m_xBtnRemove3(m_xBuilder->weld_button("remove3"))
     , m_xLbConnect4(m_xBuilder->weld_combo_box("connect4"))
     , m_xLbField4(m_xBuilder->weld_combo_box("field4"))
     , m_xLbCond4(m_xBuilder->weld_combo_box("cond4"))
     , m_xEdVal4(m_xBuilder->weld_combo_box("val4"))
+    , m_xBtnRemove4(m_xBuilder->weld_button("remove4"))
     , m_xContents(m_xBuilder->weld_widget("grid"))
     , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
     , m_xExpander(m_xBuilder->weld_expander("more"))
@@ -150,6 +154,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xLbCond3->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
     m_xLbCond4->connect_changed( LINK( this, ScFilterDlg, LbSelectHdl ) );
 
+    m_xBtnRemove1->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
+    m_xBtnRemove2->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
+    m_xBtnRemove3->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
+    m_xBtnRemove4->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
+
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
@@ -175,6 +184,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(m_xLbConnect2.get());
     maConnLbArr.push_back(m_xLbConnect3.get());
     maConnLbArr.push_back(m_xLbConnect4.get());
+    maRemoveBtnArr.reserve(QUERY_ENTRY_COUNT);
+    maRemoveBtnArr.push_back(m_xBtnRemove1.get());
+    maRemoveBtnArr.push_back(m_xBtnRemove2.get());
+    maRemoveBtnArr.push_back(m_xBtnRemove3.get());
+    maRemoveBtnArr.push_back(m_xBtnRemove4.get());
 
     // Option initialization:
     pOptionsMgr.reset( new ScFilterOptionsMgr(
@@ -302,12 +316,14 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField2->set_sensitive(false);
         m_xLbCond2->set_sensitive(false);
         m_xEdVal2->set_sensitive(false);
+        m_xBtnRemove2->set_sensitive(false);
     }
     else if ( m_xLbConnect2->get_active() == -1 )
     {
         m_xLbField2->set_sensitive(false);
         m_xLbCond2->set_sensitive(false);
         m_xEdVal2->set_sensitive(false);
+        m_xBtnRemove2->set_sensitive(false);
     }
 
     if ( m_xLbField2->get_active() == 0 )
@@ -316,12 +332,14 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField3->set_sensitive(false);
         m_xLbCond3->set_sensitive(false);
         m_xEdVal3->set_sensitive(false);
+        m_xBtnRemove3->set_sensitive(false);
     }
     else if ( m_xLbConnect3->get_active() == -1 )
     {
         m_xLbField3->set_sensitive(false);
         m_xLbCond3->set_sensitive(false);
         m_xEdVal3->set_sensitive(false);
+        m_xBtnRemove3->set_sensitive(false);
     }
     if ( m_xLbField3->get_active() == 0 )
     {
@@ -329,12 +347,14 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         m_xLbField4->set_sensitive(false);
         m_xLbCond4->set_sensitive(false);
         m_xEdVal4->set_sensitive(false);
+        m_xBtnRemove4->set_sensitive(false);
     }
     else if ( m_xLbConnect4->get_active() == -1 )
     {
         m_xLbField4->set_sensitive(false);
         m_xLbCond4->set_sensitive(false);
         m_xEdVal4->set_sensitive(false);
+        m_xBtnRemove4->set_sensitive(false);
     }
 
     m_xEdVal1->set_entry_width_chars(10);
@@ -703,6 +723,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         m_xLbField1->set_sensitive(true);
         m_xLbCond1->set_sensitive(true);
         m_xEdVal1->set_sensitive(true);
+        m_xBtnRemove1->set_sensitive(true);
 
         const sal_Int32 nConnect1 = m_xLbConnect1->get_active();
         size_t nQE = nOffset;
@@ -716,6 +737,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         m_xLbField2->set_sensitive(true);
         m_xLbCond2->set_sensitive(true);
         m_xEdVal2->set_sensitive(true);
+        m_xBtnRemove2->set_sensitive(true);
 
         const sal_Int32 nConnect2 = m_xLbConnect2->get_active();
         size_t nQE = 1+nOffset;
@@ -729,6 +751,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         m_xLbField3->set_sensitive(true);
         m_xLbCond3->set_sensitive(true);
         m_xEdVal3->set_sensitive(true);
+        m_xBtnRemove3->set_sensitive(true);
 
         const sal_Int32 nConnect3 = m_xLbConnect3->get_active();
         size_t nQE = 2 + nOffset;
@@ -743,6 +766,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
         m_xLbField4->set_sensitive(true);
         m_xLbCond4->set_sensitive(true);
         m_xEdVal4->set_sensitive(true);
+        m_xBtnRemove4->set_sensitive(true);
 
         const sal_Int32 nConnect4 = m_xLbConnect4->get_active();
         size_t nQE = 3 + nOffset;
@@ -781,6 +805,9 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xEdVal2->set_sensitive(false);
             m_xEdVal3->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xBtnRemove2->set_sensitive(false);
+            m_xBtnRemove3->set_sensitive(false);
+            m_xBtnRemove4->set_sensitive(false);
             SCSIZE nCount = theQueryData.GetEntryCount();
             if (maRefreshExceptQuery.size() < nCount + 1)
                 maRefreshExceptQuery.resize(nCount + 1, false);
@@ -826,6 +853,8 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xLbCond4->set_sensitive(false);
             m_xEdVal3->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xBtnRemove3->set_sensitive(false);
+            m_xBtnRemove4->set_sensitive(false);
 
             sal_uInt16 nTemp=nOffset+1;
             SCSIZE nCount = theQueryData.GetEntryCount();
@@ -866,6 +895,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             m_xLbField4->set_sensitive(false);
             m_xLbCond4->set_sensitive(false);
             m_xEdVal4->set_sensitive(false);
+            m_xBtnRemove4->set_sensitive(false);
 
             sal_uInt16 nTemp=nOffset+2;
             SCSIZE nCount = theQueryData.GetEntryCount();
@@ -1061,6 +1091,84 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )
     }
 }
 
+IMPL_LINK( ScFilterDlg, BtnRemoveHdl, weld::Button&, rBtn, void )
+{
+    // Calculate the row to delete
+    sal_uInt16 nOffset = GetSliderPos();
+    int nButtonIndex = 0;
+    if ( &rBtn == m_xBtnRemove2.get() )
+        nButtonIndex = 1;
+    if ( &rBtn == m_xBtnRemove3.get() )
+        nButtonIndex = 2;
+    if ( &rBtn == m_xBtnRemove4.get() )
+        nButtonIndex = 3;
+    SCSIZE nRowToDelete = nOffset + nButtonIndex;
+
+    // Check that the index is sensible
+    SCSIZE nCount = theQueryData.GetEntryCount();
+    if (nRowToDelete >= nCount)
+    {
+        SAL_WARN( "sc", "ScFilterDlg::BtnRemoveHdl: could not delete row - invalid index.");
+        return;
+    }
+
+    // Resize maRefreshExceptQuery
+    if (maRefreshExceptQuery.size() < nCount + 1)
+        maRefreshExceptQuery.resize(nCount + 1, false);
+
+    // Move all the subsequent rows back one position;
+    // also find the last row, which we will delete
+    SCSIZE nRowToClear = nCount-1;
+    for (SCSIZE i = nRowToDelete; i < nCount-1; ++i)
+    {
+        if (theQueryData.GetEntry(i+1).bDoQuery)
+        {
+            theQueryData.GetEntry(i) = theQueryData.GetEntry(i+1);
+        }
+        else
+        {
+            nRowToClear = i;
+            break;
+        }
+    }
+
+    // If the next row is being edited, but not confirmed, move it back
+    // one position
+    if (nRowToClear < nCount-1  &&  maRefreshExceptQuery[nRowToClear+1])
+    {
+        theQueryData.GetEntry(nRowToClear) = theQueryData.GetEntry(nRowToClear+1);
+        maRefreshExceptQuery[nRowToClear] = true;
+        maRefreshExceptQuery[nRowToClear+1] = false;
+    }
+    else
+    {
+        // Remove the very last one, since everything has moved back
+        theQueryData.GetEntry(nRowToClear).bDoQuery = false;
+        theQueryData.GetEntry(nRowToClear).nField =  static_cast<SCCOL>(0);
+        maRefreshExceptQuery[nRowToClear] = false;
+    }
+
+    // Special handling for deleting the first item, if it is the only one
+    if (theQueryData.GetEntry(0).bDoQuery == false)
+    {
+        maRefreshExceptQuery[0] = true;
+    }
+
+    // Refresh the UI
+    RefreshEditRow( nOffset );
+
+    // Special handling for deleting the first item, if it is the only one
+    if (theQueryData.GetEntry(0).bDoQuery == false)
+    {
+        m_xLbConnect1->set_active(-1);
+        m_xLbField1->set_active(0);
+        m_xLbField1->set_sensitive(true);
+        m_xLbCond1->set_active(0);
+        m_xLbCond1->set_sensitive(true);
+        ClearValueList(1);
+    }
+}
+
 IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl, weld::ScrolledWindow&, void)
 {
     SliderMoved();
@@ -1115,11 +1223,44 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             }
             else
             {
-                aValStr = aQueryStr;
+                // Logic copied from Init()
+                if (aQueryStr.isEmpty())
+                {
+                    pDoc = pViewData ? pViewData->GetDocument() : nullptr;
+                    if (rItem.meType == ScQueryEntry::ByValue)
+                    {
+                        if (pDoc)
+                        {
+                            pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aValStr);
+                        }
+                    }
+                    else if (rItem.meType == ScQueryEntry::ByDate)
+                    {
+                        if (pDoc)
+                        {
+                            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                            pFormatter->GetInputLineString(rItem.mfVal,
+                                                           pFormatter->GetStandardFormat( SvNumFormatType::DATE), aValStr);
+                        }
+                    }
+                    else
+                    {
+                        SAL_WARN( "sc", "ScFilterDlg::RefreshEditRow: empty query string, really?");
+                        aValStr = aQueryStr;
+                    }
+                }
+                else
+                {
+                    // XXX NOTE: if not ByString we just assume this has been
+                    // set to a proper string corresponding to the numeric
+                    // value earlier!
+                    aValStr = aQueryStr;
+                }
                 maCondLbArr[i]->set_sensitive(true);
             }
             maFieldLbArr[i]->set_sensitive(true);
             maValueEdArr[i]->set_sensitive(true);
+            maRemoveBtnArr[i]->set_sensitive(true);
 
             if (nOffset==0)
             {
@@ -1175,6 +1316,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             maFieldLbArr[i]->set_sensitive(false);
             maCondLbArr[i]->set_sensitive(false);
             maValueEdArr[i]->set_sensitive(false);
+            maRemoveBtnArr[i]->set_sensitive(false);
         }
         maFieldLbArr[i]->set_active( nFieldSelPos );
         maCondLbArr [i]->set_active( nCondPos );
