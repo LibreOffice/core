@@ -1678,6 +1678,36 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                             static_cast<SwTextFrame*>(pPrv)->Prepare( PrepareHint::QuoVadis, nullptr, false );
                     }
                 }
+                if (nIndex + 1 == nEndIndex)
+                {   // tdf#131684 tdf#132236 fix upper of frame moved in
+                    // SwUndoDelete; can't be done there unfortunately
+                    // because empty section frames are deleted here
+                    SwFrame *const pNext(
+                        // if there's a parent section, it has been split
+                        // into 2 SwSectionFrame already :(
+                        (   pFrame->GetNext()->IsSctFrame()
+                         && pActualSection->GetUpper()
+                         && pActualSection->GetUpper()->GetSectionNode() ==
+                             static_cast<SwSectionFrame const*>(pFrame->GetNext())->GetSection()->GetFormat()->GetSectionNode())
+                        ? static_cast<SwSectionFrame *>(pFrame->GetNext())->ContainsContent()
+                        : pFrame->GetNext());
+                    if (pNext
+                        && pNext->IsTextFrame()
+                        && static_cast<SwTextFrame*>(pNext)->GetTextNodeFirst() == pDoc->GetNodes()[nEndIndex]
+                        && (pNext->GetUpper() == pFrame->GetUpper()
+                            || pFrame->GetNext()->IsSctFrame())) // checked above
+                    {
+                        pNext->Cut();
+                        pNext->InvalidateInfFlags(); // mbInfSct changed
+                        // could have columns
+                        SwSectionFrame *const pSection(static_cast<SwSectionFrame*>(pFrame));
+                        assert(!pSection->Lower() || pSection->Lower()->IsLayoutFrame());
+                        SwLayoutFrame *const pParent(pSection->Lower() ? pSection->GetNextLayoutLeaf() : pSection);
+                        assert(!pParent->Lower());
+                        // paste invalidates, section could have indent...
+                        pNext->Paste(pParent, nullptr);
+                    }
+                }
                 // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.

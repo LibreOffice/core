@@ -478,6 +478,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // check that the text frame has the correct upper
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    OUString const sectionId = getXPath(pXmlDoc, "/root/page[1]/body/section[7]", "id");
+    OUString const sectionLower = getXPath(pXmlDoc, "/root/page[1]/body/section[7]", "lower");
+    OUString const textId = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]", "id");
+    OUString const textUpper = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]", "upper");
+    CPPUNIT_ASSERT_EQUAL(textId, sectionLower);
+    CPPUNIT_ASSERT_EQUAL(sectionId, textUpper);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
