@@ -98,7 +98,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
-		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
 endef
@@ -114,7 +113,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
-		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
 endef
@@ -130,7 +128,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
-		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
 endef
@@ -146,7 +143,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
-		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
 endef
@@ -162,7 +158,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
-		-I$(dir $(2)) \
 		$(INCLUDE) \
 		)
 endef
