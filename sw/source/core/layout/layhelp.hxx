@@ -83,7 +83,7 @@ public:
 // by controlling nested sections.
 class SwActualSection
 {
-    SwActualSection * const pUpper;
+    SwActualSection *pUpper;
     SwSectionFrame  *pSectFrame;
     SwSectionNode   *pSectNode;
 public:
@@ -94,6 +94,7 @@ public:
     SwSectionFrame    *GetSectionFrame()                    { return pSectFrame; }
     void             SetSectionFrame( SwSectionFrame *p )   { pSectFrame = p; }
     SwSectionNode   *GetSectionNode()                   { return pSectNode;}
+    void             SetUpper(SwActualSection *p)       { pUpper = p; }
     SwActualSection *GetUpper()                         { return pUpper; }
 };
 
