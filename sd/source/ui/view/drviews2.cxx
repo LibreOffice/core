@@ -180,6 +180,14 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sdmod.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsInsertionIndicatorHandler.hxx>
+#include <controller/SlsPageSelector.hxx>
 
 #include <ViewShellBase.hxx>
 #include <memory>
@@ -744,7 +752,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
-        case SID_DUPLICATE_PAGE:
         {
             SdPage* pNewPage = CreateOrDuplicatePage (rReq, mePageKind, GetActualPage());
             Cancel();
@@ -753,6 +760,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pNewPage != nullptr)
                 SwitchPage((pNewPage->GetPageNum()-1)/2);
             rReq.Done ();
+        }
+        break;
+
+        case SID_DUPLICATE_PAGE:
+        {
+            DuplicateSelectedSlides(rReq);
+            Cancel();
+            if(HasCurrentFunction(SID_BEZIER_EDIT) )
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+            rReq.Done();
         }
         break;
 
@@ -3755,6 +3772,56 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
         pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage, nInsertPosition);
     }
     return pNewPage;
+}
+
+void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
+{
+    // Create a list of the pages that are to be duplicated.  The process of
+    // duplication alters the selection.
+    sal_Int32 nInsertPosition (0);
+    ::std::vector<SdPage*> aPagesToDuplicate;
+    sd::slidesorter::SlideSorter &mrSlideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetSlideSorter();
+    sd::slidesorter::model::PageEnumeration aSelectedPages (
+        sd::slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
+    while (aSelectedPages.HasMoreElements())
+    {
+        sd::slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        if (pDescriptor && pDescriptor->GetPage())
+        {
+            aPagesToDuplicate.push_back(pDescriptor->GetPage());
+            nInsertPosition = pDescriptor->GetPage()->GetPageNum()+2;
+        }
+    }
+
+    // Duplicate the pages in aPagesToDuplicate and collect the newly
+    // created pages in aPagesToSelect.
+    const bool bUndo (aPagesToDuplicate.size()>1 && mrSlideSorter.GetView().IsUndoEnabled());
+    if (bUndo)
+        mrSlideSorter.GetView().BegUndo(SdResId(STR_INSERTPAGE));
+
+    ::std::vector<SdPage*> aPagesToSelect;
+    for(::std::vector<SdPage*>::const_iterator
+            iPage(aPagesToDuplicate.begin()),
+            iEnd(aPagesToDuplicate.end());
+        iPage!=iEnd;
+        ++iPage, nInsertPosition+=2)
+    {
+        aPagesToSelect.push_back(
+            mrSlideSorter.GetViewShell()->CreateOrDuplicatePage(
+                rRequest, PageKind::Standard, *iPage, nInsertPosition));
+    }
+    aPagesToDuplicate.clear();
+
+    if (bUndo)
+        mrSlideSorter.GetView().EndUndo();
+
+    // Set the selection to the pages in aPagesToSelect.
+    sd::slidesorter::controller::PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
+    rSelector.DeselectAllPages();
+    for (auto const& it: aPagesToSelect)
+    {
+        rSelector.SelectPage(it);
+    }
 }
 
 void DrawViewShell::ExecutePropPanelAttr (SfxRequest const & rReq)
