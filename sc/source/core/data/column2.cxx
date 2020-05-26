@@ -669,7 +669,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         // All cells are empty.
         return nOldWidth;
 
-    sc::SingleColumnSpanSet aSpanSet;
+    sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
     sc::SingleColumnSpanSet::SpansType aMarkedSpans;
     if (pMarkData && (pMarkData->IsMarked() || pMarkData->IsMultiMarked()))
     {
@@ -889,7 +889,7 @@ void ScColumn::GetOptimalHeight(
                 }
             }
 
-            sc::SingleColumnSpanSet aSpanSet;
+            sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
             aSpanSet.scan(*this, nStart, nEnd);
             sc::SingleColumnSpanSet::SpansType aSpans;
             aSpanSet.getSpans(aSpans);
@@ -1603,21 +1603,21 @@ void ScColumn::CellStorageModified()
     // TODO: Update column's "last updated" timestamp here.
 
 #if DEBUG_COLUMN_STORAGE
-    if (maCells.size() != MAXROWCOUNT)
+    if (maCells.size() != MAXROWCOUNT1)
     {
         cout << "ScColumn::CellStorageModified: Size of the cell array is incorrect." << endl;
         cout.flush();
         abort();
     }
 
-    if (maCellTextAttrs.size() != MAXROWCOUNT)
+    if (maCellTextAttrs.size() != MAXROWCOUNT1)
     {
         cout << "ScColumn::CellStorageModified: Size of the cell text attribute array is incorrect." << endl;
         cout.flush();
         abort();
     }
 
-    if (maBroadcasters.size() != MAXROWCOUNT)
+    if (maBroadcasters.size() != MAXROWCOUNT1)
     {
         cout << "ScColumn::CellStorageModified: Size of the broadcaster array is incorrect." << endl;
         cout.flush();
@@ -3445,7 +3445,7 @@ public:
 void ScColumn::UpdateSelectionFunction(
     const ScRangeList& rRanges, ScFunctionData& rData, const ScFlatBoolRowSegments& rHiddenRows )
 {
-    sc::SingleColumnSpanSet aSpanSet;
+    sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
     aSpanSet.scan(rRanges, nTab, nCol); // mark all selected rows.
 
     if (aSpanSet.empty())
