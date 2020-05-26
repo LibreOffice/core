@@ -105,12 +105,12 @@ void printPropertySet(
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
 
-    uno::Sequence< beans::Property > aPropDetails =
+    const uno::Sequence< beans::Property >& aPropDetails =
         xPropSetInfo->getProperties();
 
     SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
 
-    for ( beans::Property const & aPropDetail  : std::as_const(aPropDetails) )
+    for ( beans::Property const & aPropDetail  : aPropDetails )
     {
         OUString tmp;
         sal_Int32 ival;
@@ -136,7 +136,7 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for (PropertyValue const & aPropVal : std::as_const(aProp))
+    for (PropertyValue const & aPropVal : aProp)
     {
         OUString tmp;
 
