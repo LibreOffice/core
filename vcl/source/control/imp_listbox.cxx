@@ -467,7 +467,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mbCenter            = ( nWinStyle & WB_CENTER );
     mbSimpleMode        = ( nWinStyle & WB_SIMPLEMODE );
     mbSort              = ( nWinStyle & WB_SORT );
-    mbIsDropdown        = ( nWinStyle & WB_DROPDOWN ) ||  ( nWinStyle & WB_LISTBOX_POPUP );
+    mbIsDropdown        = ( nWinStyle & WB_DROPDOWN );
     mbEdgeBlending      = false;
 
     // pb: #106948# explicit mirroring for calc
