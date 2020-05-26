@@ -60,6 +60,7 @@ public:
     static TestResult checkInvertTrackFrameRectangle(Bitmap& aBitmap);
 
     static TestResult checkRectangles(Bitmap& rBitmap, std::vector<Color>& aExpectedColors);
+    static TestResult checkRectangle(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor);
 
     static TestResult checkFilled(Bitmap& rBitmap, tools::Rectangle aRectangle, Color aExpectedColor);
     static TestResult checkChecker(Bitmap& rBitmap, sal_Int32 nStartX, sal_Int32 nEndX,
@@ -125,6 +126,9 @@ public:
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
+
+    Bitmap setupDashedLine();
+    static TestResult checkDashedLine(Bitmap& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLine : public OutputDeviceTestCommon

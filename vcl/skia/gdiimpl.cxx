@@ -644,10 +644,8 @@ void SkiaSalGraphicsImpl::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAr
         aPolygon.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPolygon.setClosed(false);
 
-    drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, 1.0,
-                 nullptr, // MM01
-                 basegfx::B2DLineJoin::Miter, css::drawing::LineCap_BUTT,
-                 basegfx::deg2rad(15.0) /*default*/, false);
+    drawPolyLine(basegfx::B2DHomMatrix(), aPolygon, 0.0, 1.0, nullptr, basegfx::B2DLineJoin::Miter,
+                 css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0) /*default*/, false);
 }
 
 void SkiaSalGraphicsImpl::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -736,13 +734,11 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
 bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
                                        const basegfx::B2DPolygon& rPolyLine, double fTransparency,
-                                       double fLineWidth,
-                                       const std::vector<double>* pStroke, // MM01
+                                       double fLineWidth, const std::vector<double>* pStroke,
                                        basegfx::B2DLineJoin eLineJoin,
                                        css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
                                        bool bPixelSnapHairline)
 {
-    // MM01 check done for simple reasons
     if (!rPolyLine.count() || fTransparency < 0.0 || fTransparency > 1.0
         || mLineColor == SALCOLOR_NONE)
     {
@@ -758,29 +754,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     else // Adjust line width for object-to-device scale.
         fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
 
-    // MM01 need to do line dashing as fallback stuff here now
-    const double fDotDashLength(
-        nullptr != pStroke ? std::accumulate(pStroke->begin(), pStroke->end(), 0.0) : 0.0);
-    const bool bStrokeUsed(0.0 != fDotDashLength);
-    assert(!bStrokeUsed || (bStrokeUsed && pStroke));
-    basegfx::B2DPolyPolygon aPolyPolygonLine;
-
-    if (bStrokeUsed)
-    {
-        // apply LineStyle
-        basegfx::utils::applyLineDashing(rPolyLine, // source
-                                         *pStroke, // pattern
-                                         &aPolyPolygonLine, // target for lines
-                                         nullptr, // target for gaps
-                                         fDotDashLength); // full length if available
-    }
-    else
-    {
-        // no line dashing, just copy
-        aPolyPolygonLine.append(rPolyLine);
-    }
-
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
+    basegfx::B2DPolyPolygon aPolyPolygonLine;
+    aPolyPolygonLine.append(rPolyLine);
     aPolyPolygonLine.transform(rObjectToDevice);
     if (bPixelSnapHairline)
     {
@@ -830,6 +806,13 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setStrokeMiter(fMiterLimit);
     aPaint.setStrokeWidth(fLineWidth);
     aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+
+    if (pStroke && std::accumulate(pStroke->begin(), pStroke->end(), 0.0) != 0)
+    {
+        std::vector<SkScalar> intervals;
+        intervals.assign(pStroke->begin(), pStroke->end());
+        aPaint.setPathEffect(SkDashPathEffect::Make(intervals.data(), intervals.size(), 0));
+    }
 
     // Skia does not support basegfx::B2DLineJoin::NONE, so in that case batch only if lines
     // are not wider than a pixel.

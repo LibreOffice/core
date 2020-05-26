@@ -495,6 +495,16 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDashedLine()
+    {
+        vcl::test::OutputDeviceTestLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDashedLine();
+        auto eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
+        exportImage("10-01_dashed_line_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -574,6 +584,8 @@ public:
     CPPUNIT_TEST(testClipPolygon);
     CPPUNIT_TEST(testClipPolyPolygon);
     CPPUNIT_TEST(testClipB2DPolyPolygon);
+
+    CPPUNIT_TEST(testDashedLine);
 
     CPPUNIT_TEST(testTdf124848);
 
