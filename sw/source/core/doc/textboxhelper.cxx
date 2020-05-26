@@ -62,8 +62,18 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
     uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
                                                                 uno::UNO_QUERY);
-
-    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+    try
+    {
+        SdrObject* pSourceSDRShape = pShape->FindRealSdrObject();
+        uno::Reference<text::XTextContent> XSourceShape(pSourceSDRShape->getUnoShape(),
+                                                        uno::UNO_QUERY_THROW);
+        xTextContentAppend->insertTextContentWithProperties(
+            xTextFrame, uno::Sequence<beans::PropertyValue>(), XSourceShape->getAnchor());
+    }
+    catch (uno::Exception&)
+    {
+        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+    }
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
     auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
