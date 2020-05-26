@@ -1488,6 +1488,16 @@ void SdImportTestSmartArt::testFillColorList()
     // - Actual  : 16225862 (0xf79646)
     // i.e. the background of the "A" shape was orange-ish, rather than red-ish.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xC0504D), nFillColor);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2239
+    // - Actual  : 5199
+    // i.e. the "A" shape's height/width aspect ratio was not 0.4 but rather close to 1.0, even if
+    // ppt/diagrams/layout1.xml's <dgm:constr type="h" refType="w" op="lte" fact="0.4"/> requested
+    // 0.4.
+    awt::Size aActualSize = xShape->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2239), aActualSize.Height);
+
     xDocShRef->DoClose();
 }
 
