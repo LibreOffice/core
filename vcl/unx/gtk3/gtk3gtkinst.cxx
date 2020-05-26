@@ -11134,7 +11134,7 @@ public:
         weld::TreeView::connect_popup_menu(rLink);
     }
 
-    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult) override
+    virtual bool get_dest_row_at_pos(const Point &rPos, weld::TreeIter* pResult, bool bHighLightTarget) override
     {
         const bool bAsTree = gtk_tree_view_get_enable_tree_lines(m_pTreeView);
 
@@ -11184,7 +11184,7 @@ public:
             gtk_tree_model_get_iter(pModel, &rGtkIter.iter, path);
         }
 
-        if (m_bInDrag)
+        if (m_bInDrag && bHighLightTarget) // bHighLightTarget alone might be sufficient
         {
             // highlight the row
             gtk_tree_view_set_drag_dest_row(m_pTreeView, path, pos);
