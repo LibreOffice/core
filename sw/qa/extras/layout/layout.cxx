@@ -2716,6 +2716,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
                        "Category 1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf133376)
+{
+    SwDoc* pDoc = createDoc("tdf133376.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test X and Y position of the third data point label
+    sal_Int32 nXposition
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[7]", "x")
+              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(6672, nXposition, 50);
+
+    sal_Int32 nYposition
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[7]", "y")
+              .toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5046, nYposition, 50);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
