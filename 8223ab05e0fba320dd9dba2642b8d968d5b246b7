@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47577c8f_90639464",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-26T09:18:12Z",
+      "side": 1,
+      "message": "My preferred solution in this case would be marking aPropDetails as const in line 108, because it never changes in the code. Then it would not need std::as_const (which is IMO only useful when we have an object that we actually intend to modify, but use as const in some part of code).",
+      "range": {
+        "startLine": 113,
+        "startChar": 49,
+        "endLine": 113,
+        "endChar": 62
+      },
+      "revId": "8223ab05e0fba320dd9dba2642b8d968d5b246b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeb1cccf_897b5ed0",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-26T09:18:12Z",
+      "side": 1,
+      "message": "... and here it likely should be unnecessary? aProp is already const?",
+      "range": {
+        "startLine": 139,
+        "startChar": 42,
+        "endLine": 139,
+        "endChar": 55
+      },
+      "revId": "8223ab05e0fba320dd9dba2642b8d968d5b246b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
