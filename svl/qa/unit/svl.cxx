@@ -1453,7 +1453,7 @@ void Test::testUserDefinedNumberFormats()
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
 #endif
     }
-    { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditonal), Japanese, Korean
+    { // tdf#130193 tdf#130140 Native Number Formats mapping for Chinese (Traditional), Japanese, Korean
         // -- Traditional Chinese: DBNum1 -> NatNum4, DBNum2 -> NatNum5, DBnum3 -> NatNum3
 
         // DBNum1 -> NatNum4: Chinese lower case text for 123456789
