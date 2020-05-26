@@ -336,7 +336,7 @@ void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
 {
     weld::TreeView* pTreeView = mxTreeBox->get_visible() ? mxTreeBox.get() : mxFmtLb.get();
     std::unique_ptr<weld::TreeIter> xIter(pTreeView->make_iterator());
-    if (pTreeView->get_dest_row_at_pos(rPos, xIter.get()) && !pTreeView->is_selected(*xIter))
+    if (pTreeView->get_dest_row_at_pos(rPos, xIter.get(), false) && !pTreeView->is_selected(*xIter))
     {
         pTreeView->unselect_all();
         pTreeView->select(*xIter);

@@ -528,9 +528,9 @@ IMPL_LINK( SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt,
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> rIter(rTreeView.make_iterator());
-    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), &*rIter );
-    rTreeView.select(*rIter);
+    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false );
+    rTreeView.select(*xIter);
     SelectMenuEntry( rTreeView );
 
     int nSelectIndex = m_xContentsListBox->get_selected_index();
@@ -571,9 +571,9 @@ IMPL_LINK( SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt
     weld::TreeView& rTreeView = m_xFunctions->get_widget();
 
     // Select clicked entry
-    std::unique_ptr<weld::TreeIter> rIter(rTreeView.make_iterator());
-    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), &*rIter );
-    rTreeView.select(*rIter);
+    std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
+    rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false );
+    rTreeView.select(*xIter);
     SelectFunctionHdl( rTreeView );
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder( &rTreeView, "cui/ui/entrycontextmenu.ui" ) );

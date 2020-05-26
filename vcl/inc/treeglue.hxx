@@ -127,7 +127,7 @@ public:
         m_aModelChangedHdl.Call(this);
     }
 
-    virtual SvTreeListEntry* GetDropTarget(const Point& rPos) override
+    SvTreeListEntry* GetTargetAtPoint(const Point& rPos, bool bHighLightTarget)
     {
         SvTreeListEntry* pOldTargetEntry = pTargetEntry;
         pTargetEntry = pImpl->GetEntry(rPos);
@@ -150,9 +150,14 @@ public:
             }
         }
 
-        if (pTargetEntry)
+        if (pTargetEntry && bHighLightTarget)
             ImplShowTargetEmphasis(pTargetEntry, true);
         return pTargetEntry;
+    }
+
+    virtual SvTreeListEntry* GetDropTarget(const Point& rPos) override
+    {
+        return GetTargetAtPoint(rPos, true);
     }
 
     virtual bool EditingEntry(SvTreeListEntry* pEntry, Selection&) override

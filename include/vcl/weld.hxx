@@ -1157,7 +1157,9 @@ public:
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) = 0;
 
     // for dnd
-    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
+    virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult,
+                                     bool bHighLightTarget = true)
+        = 0;
     virtual void unset_drag_dest_row() = 0;
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const = 0;
     // for dragging and dropping between TreeViews, return the active source
