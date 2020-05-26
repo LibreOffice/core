@@ -4379,32 +4379,29 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
 
 void VclBuilder::mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment)
 {
+    double nMaxValue = 0, nMinValue = 0, nValue = 0, nSpinSize = 0;
+
     for (auto const& elem : rAdjustment)
     {
         const OString &rKey = elem.first;
         const OUString &rValue = elem.second;
 
         if (rKey == "upper")
-        {
-            rTarget.SetMaxValue(rValue.toDouble());
-        }
+            nMaxValue = rValue.toDouble();
         else if (rKey == "lower")
-        {
-            rTarget.SetMinValue(rValue.toDouble());
-        }
+            nMinValue = rValue.toDouble();
         else if (rKey == "value")
-        {
-            rTarget.SetValue(rValue.toDouble());
-        }
+            nValue = rValue.toDouble();
         else if (rKey == "step-increment")
-        {
-            rTarget.SetSpinSize(rValue.toDouble());
-        }
+            nSpinSize = rValue.toDouble();
         else
-        {
             SAL_INFO("vcl.builder", "unhandled property :" << rKey);
-        }
     }
+
+    rTarget.SetMinValue(nMinValue);
+    rTarget.SetMaxValue(nMaxValue);
+    rTarget.SetValue(nValue);
+    rTarget.SetSpinSize(nSpinSize);
 }
 
 void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment)
