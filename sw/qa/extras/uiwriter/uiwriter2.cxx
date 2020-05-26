@@ -32,6 +32,7 @@ public:
     void testRedlineInHiddenSection();
     void testTdf101534();
     void testTdf131684();
+    void testTdf132236();
     void testTdf109376();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
@@ -39,6 +40,7 @@ public:
     CPPUNIT_TEST(testRedlineInHiddenSection);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf131684);
+    CPPUNIT_TEST(testTdf132236);
     CPPUNIT_TEST(testTdf109376);
     CPPUNIT_TEST_SUITE_END();
 
@@ -235,6 +237,30 @@ void SwUiWriterTest2::testRedlineInHiddenSection()
     CPPUNIT_ASSERT(
         !pNode->GetNodes()[pNode->GetIndex() + 3]->GetTextNode()->getLayoutFrame(nullptr));
     CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
+}
+
+void SwUiWriterTest2::testTdf132236()
+{
+    load(DATA_DIRECTORY, "tdf132236.odt");
+
+    SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // select everything and delete
+    SwWrtShell* const pWrtShell(pTextDoc->GetDocShell()->GetWrtShell());
+    pWrtShell->Down(true);
+    pWrtShell->Down(true);
+    pWrtShell->Down(true);
+    pWrtShell->Delete();
+    SwDoc* const pDoc(pWrtShell->GetDoc());
+    sw::UndoManager& rUndoManager(pDoc->GetUndoManager());
+    rUndoManager.Undo();
+
+    // check that the text frames exist inside their sections
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
 }
 
 void SwUiWriterTest2::testTdf109376()
