@@ -576,13 +576,20 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 7)
         {
-            std::vector<tools::Rectangle> aRegions = setupRegions(3, 1, nWidth, nHeight);
+            std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
 
             aRectangle = aRegions[index++];
             {
                 vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
                 Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
                 assertAndSetBackground(vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap), aRectangle, rRenderContext);
+                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+            }
+            aRectangle = aRegions[index++];
+            {
+                vcl::test::OutputDeviceTestLine aOutDevTest;
+                Bitmap aBitmap = aOutDevTest.setupDashedLine();
+                assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap), aRectangle, rRenderContext);
                 drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
             }
             aRectangle = aRegions[index++];

@@ -416,6 +416,11 @@ TestResult OutputDeviceTestCommon::checkRectangles(Bitmap& aBitmap, std::vector<
     return aReturnValue;
 }
 
+TestResult OutputDeviceTestCommon::checkRectangle(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
+{
+    return checkRect(rBitmap, aLayerNumber, aExpectedColor);
+}
+
 tools::Rectangle OutputDeviceTestCommon::alignToCenter(tools::Rectangle aRect1, tools::Rectangle aRect2)
 {
     Point aPoint((aRect1.GetWidth()  / 2.0) - (aRect2.GetWidth()  / 2.0),
