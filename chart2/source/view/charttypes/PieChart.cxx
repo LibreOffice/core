@@ -1591,6 +1591,41 @@ void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const &
     aTranslationVector.setLength(150);
     aScreenPosition2D.X += aTranslationVector.getX();
     aScreenPosition2D.Y += aTranslationVector.getY();
+
+    double fAngleDegree = rShapeParam.mfUnitCircleStartAngleDegree + rShapeParam.mfUnitCircleWidthAngleDegree / 2.0;
+    ::basegfx::B2IRectangle aBb(lcl_getRect(rPieLabelInfo.xLabelGroupShape));
+    double fLabelWidth = aBb.getWidth();
+    double fLabelHeight = aBb.getHeight();
+
+    while (fAngleDegree > 360.0)
+        fAngleDegree -= 360.0;
+    while (fAngleDegree < 0.0)
+        fAngleDegree += 360.0;
+
+    if( fAngleDegree <= 22.5 || fAngleDegree >= 337.5 )
+        aScreenPosition2D.Y -= fLabelHeight / 2;
+    else if( fAngleDegree < 67.5 )
+        aScreenPosition2D.Y -= fLabelHeight;
+    else if( fAngleDegree < 112.5 )
+    {
+        aScreenPosition2D.X -= fLabelWidth / 2;
+        aScreenPosition2D.Y -= fLabelHeight;
+    }
+    else if (fAngleDegree <= 157.5)
+    {
+        aScreenPosition2D.X -= fLabelWidth;
+        aScreenPosition2D.Y -= fLabelHeight;
+    }
+    else if (fAngleDegree <= 202.5)
+    {
+        aScreenPosition2D.X -= fLabelWidth;
+        aScreenPosition2D.Y -= fLabelHeight / 2;
+    }
+    else if (fAngleDegree < 247.5)
+        aScreenPosition2D.X -= fLabelWidth;
+    else if (fAngleDegree < 292.5)
+        aScreenPosition2D.X -= fLabelWidth / 2;
+
     rPieLabelInfo.xLabelGroupShape->setPosition(aScreenPosition2D);
 }
 
