@@ -1405,7 +1405,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
     sc::RefUpdateContext aCxt(*this);
-    const bool bLastRowIncluded = (nStartRow + nSize == MAXROWCOUNT && ValidRow(nStartRow));
+    const bool bLastRowIncluded = (static_cast<SCROW>(nStartRow + nSize) == GetSheetLimits().GetMaxRowCount() && ValidRow(nStartRow));
     if ( ValidRow(nStartRow+nSize) || bLastRowIncluded )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
@@ -1414,7 +1414,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         if (bLastRowIncluded)
         {
             // Last row is included, shift a virtually non-existent row in.
-            aCxt.maRange = ScRange( nStartCol, MAXROWCOUNT, nTabRangeStart, nEndCol, MAXROWCOUNT, nTabRangeEnd);
+            aCxt.maRange = ScRange( nStartCol, GetSheetLimits().GetMaxRowCount(), nTabRangeStart, nEndCol, GetSheetLimits().GetMaxRowCount(), nTabRangeEnd);
         }
         else
         {

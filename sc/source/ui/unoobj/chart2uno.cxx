@@ -1061,7 +1061,7 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>&
         return false;
 
     SCCOL nMinCol = MAXCOLCOUNT;
-    SCROW nMinRow = MAXROWCOUNT;
+    SCROW nMinRow = pDoc->GetSheetLimits().GetMaxRowCount();
     SCCOL nMaxCol = 0;
     SCROW nMaxRow = 0;
     SCTAB nTab    = 0;
@@ -1207,8 +1207,8 @@ bool lcl_addUpperLeftCornerIfMissing(const ScDocument* pDoc, vector<ScTokenRef>&
     }
 
     if (nMinRow >= nMaxRow || nMinCol >= nMaxCol ||
-        nMinRow >= MAXROWCOUNT || nMinCol >= MAXCOLCOUNT ||
-        nMaxRow >= MAXROWCOUNT || nMaxCol >= MAXCOLCOUNT)
+        nMinRow >= pDoc->GetSheetLimits().GetMaxRowCount() || nMinCol >= MAXCOLCOUNT ||
+        nMaxRow >= pDoc->GetSheetLimits().GetMaxRowCount() || nMaxCol >= MAXCOLCOUNT)
     {
         // Invalid range.  Bail out.
         return false;
