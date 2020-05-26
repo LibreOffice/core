@@ -311,6 +311,7 @@
 0x083B se-SE
 0x083C ga-IE
 0x083E ms-BN
+0x083F kk-Latn-KZ, reserved
 0x0843 uz-Cyrl-UZ
 0x0845 bn-BD
 0x0846 pa-Arab-PK
@@ -416,7 +417,7 @@
 0x4801 ar-145, reserved
 0x4809 en-SG
 0x480A es-HN
-0x4C09 en-AE, reserved
+0x4C09 en-AE
 0x4C0A es-NI
 0x5009 en-BH, reserved
 0x500A es-PR
@@ -440,6 +441,7 @@
 0x781A bs
 0x782C az-Latn
 0x783B sma
+0x783F kk-Cyrl, reserved
 0x7843 uz-Cyrl
 0x7850 mn-Cyrl
 0x785D iu-Cans
@@ -450,6 +452,7 @@
 0x7C28 tg-Cyrl
 0x7C2E dsb
 0x7C3B smj
+0x7C3F kk-Latn, reserved
 0x7C43 uz-Latn
 0x7C46 pa-Arab
 0x7C50 mn-Mong
@@ -461,4 +464,5 @@
 0x7C68 ha-Latn
 0x7C92 ku-Arab
 0xF2EE reserved
+0xE40C fr-015, reserved
 0xEEEE reserved
