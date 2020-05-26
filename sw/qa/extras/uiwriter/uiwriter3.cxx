@@ -13,6 +13,10 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <frameformats.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <wrtsh.hxx>
 
@@ -546,6 +550,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130805)
+{
+    load(DATA_DIRECTORY, "tdf130805.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    auto pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    SwTextBoxHelper::create(pShape);
+    auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    auto pTxAnch = pTxBxFrm->GetAnchor().GetContentAnchor();
+    auto pShpAnch = pShape->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pTxAnch);
+    CPPUNIT_ASSERT(pShpAnch);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->nNode, pShpAnch->nNode);
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("", xShp->getPosition().Y, xShp2->getPosition().Y);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
