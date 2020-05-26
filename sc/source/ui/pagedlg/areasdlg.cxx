@@ -607,7 +607,7 @@ static bool lcl_CheckOne_OOO( const ScDocument& rDoc, const OUString& rStr, bool
             {
                 sal_Int32 n = aStr.toInt32();
 
-                bStrOk = (n > 0) && ( n <= MAXROWCOUNT );
+                bStrOk = (n > 0) && ( n <= rDoc.GetSheetLimits().GetMaxRowCount() );
                 if ( bStrOk )
                     nNum = static_cast<SCCOLROW>(n - 1);
             }
@@ -632,7 +632,7 @@ static bool lcl_CheckOne_XL_A1( const ScDocument& rDoc, const OUString& rStr, bo
     return lcl_CheckOne_OOO(rDoc, rStr, bIsRow, rVal);
 }
 
-static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_R1C1( const ScDocument& rDoc, const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     sal_Int32 nLen = rStr.getLength();
     if (nLen <= 1)
@@ -653,7 +653,7 @@ static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& r
     if (nNum <= 0)
         return false;
 
-    if ((bIsRow && nNum > MAXROWCOUNT) || (!bIsRow && nNum > MAXCOLCOUNT))
+    if ((bIsRow && nNum > rDoc.GetSheetLimits().GetMaxRowCount()) || (!bIsRow && nNum > MAXCOLCOUNT))
         return false;
 
     rVal = static_cast<SCCOLROW>(nNum-1);
@@ -669,7 +669,7 @@ static bool lcl_CheckRepeatOne( const ScDocument& rDoc, const OUString& rStr, fo
         case formula::FormulaGrammar::CONV_XL_A1:
             return lcl_CheckOne_XL_A1(rDoc, rStr, bIsRow, rVal);
         case formula::FormulaGrammar::CONV_XL_R1C1:
-            return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
+            return lcl_CheckOne_XL_R1C1(rDoc, rStr, bIsRow, rVal);
         default:
         {
             // added to avoid warnings

@@ -263,7 +263,7 @@ private:
     class TableSlots
     {
     public:
-                                        TableSlots();
+                                        TableSlots(SCSIZE nBcaSlots);
                                         ~TableSlots();
         ScBroadcastAreaSlot**    getSlots() { return ppSlots.get(); }
 
@@ -275,6 +275,7 @@ private:
         ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return ppSlots[nOff]; }
 
     private:
+        SCSIZE                                    mnBcaSlots;
         std::unique_ptr<ScBroadcastAreaSlot*[]>   ppSlots;
 
         TableSlots( const TableSlots& ) = delete;
@@ -286,6 +287,19 @@ private:
     typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
 
 private:
+    struct ScSlotData
+    {
+        SCROW  nStartRow;   // first row of this segment
+        SCROW  nStopRow;    // first row of next segment
+        SCSIZE nSlice;      // slice size in this segment
+        SCSIZE nCumulated;  // cumulated slots of previous segments
+
+        ScSlotData( SCROW r1, SCROW r2, SCSIZE s, SCSIZE c ) : nStartRow(r1), nStopRow(r2), nSlice(s), nCumulated(c) {}
+    };
+    typedef ::std::vector< ScSlotData > ScSlotDistribution;
+    ScSlotDistribution maSlotDistribution;
+    SCSIZE mnBcaSlotsRow;
+    SCSIZE mnBcaSlots;
     ScBroadcastAreasBulk  aBulkBroadcastAreas;
     BulkGroupAreasType m_BulkGroupAreas;
     TableSlotsMap         aTableSlotsMap;

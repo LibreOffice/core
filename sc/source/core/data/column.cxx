@@ -77,17 +77,17 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 {
 }
 
-ScColumn::ScColumn() :
-    maCellTextAttrs(MAXROWCOUNT),
-    maCellNotes(MAXROWCOUNT),
-    maBroadcasters(MAXROWCOUNT),
+ScColumn::ScColumn(ScSheetLimits const & rSheetLimits) :
+    maCellTextAttrs(rSheetLimits.GetMaxRowCount()),
+    maCellNotes(rSheetLimits.GetMaxRowCount()),
+    maBroadcasters(rSheetLimits.GetMaxRowCount()),
     maCellsEvent(this),
     maCells(maCellsEvent),
     mnBlkCountFormula(0),
     nCol( 0 ),
     nTab( 0 )
 {
-    maCells.resize(MAXROWCOUNT);
+    maCells.resize(rSheetLimits.GetMaxRowCount());
 }
 
 ScColumn::~ScColumn() COVERITY_NOEXCEPT_FALSE
@@ -868,16 +868,16 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     pAttrArray->InsertRow( nStartRow, nSize );
 
     maCellNotes.insert_empty(nStartRow, nSize);
-    maCellNotes.resize(MAXROWCOUNT);
+    maCellNotes.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     maBroadcasters.insert_empty(nStartRow, nSize);
-    maBroadcasters.resize(MAXROWCOUNT);
+    maBroadcasters.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     maCellTextAttrs.insert_empty(nStartRow, nSize);
-    maCellTextAttrs.resize(MAXROWCOUNT);
+    maCellTextAttrs.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     maCells.insert_empty(nStartRow, nSize);
-    maCells.resize(MAXROWCOUNT);
+    maCells.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     CellStorageModified();
 
@@ -1775,7 +1775,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     // rows that are present in the position column (rPosCol).
 
     // First, mark all the non-empty cell ranges from the position column.
-    sc::SingleColumnSpanSet aRangeSet;
+    sc::SingleColumnSpanSet aRangeSet(GetDoc()->GetSheetLimits());
     aRangeSet.scan(rPosCol);
 
     // Now, copy cells from this column to the destination column for those
@@ -1993,7 +1993,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     pAttrArray->MoveTo(nStartRow, nEndRow, *rCol.pAttrArray);
 
     // Mark the non-empty cells within the specified range, for later broadcasting.
-    sc::SingleColumnSpanSet aNonEmpties;
+    sc::SingleColumnSpanSet aNonEmpties(GetDoc()->GetSheetLimits());
     aNonEmpties.scan(*this, nStartRow, nEndRow);
     sc::SingleColumnSpanSet::SpansType aRanges;
     aNonEmpties.getSpans(aRanges);
@@ -2822,7 +2822,9 @@ class SetDirtyOnRangeHandler
     sc::SingleColumnSpanSet maValueRanges;
     ScColumn& mrColumn;
 public:
-    explicit SetDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
+    explicit SetDirtyOnRangeHandler(ScColumn& rColumn)
+        : maValueRanges(rColumn.GetDoc()->GetSheetLimits()),
+          mrColumn(rColumn) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {
@@ -2865,7 +2867,9 @@ class SetTableOpDirtyOnRangeHandler
     sc::SingleColumnSpanSet maValueRanges;
     ScColumn& mrColumn;
 public:
-    explicit SetTableOpDirtyOnRangeHandler(ScColumn& rColumn) : mrColumn(rColumn) {}
+    explicit SetTableOpDirtyOnRangeHandler(ScColumn& rColumn)
+        : maValueRanges(rColumn.GetDoc()->GetSheetLimits()),
+          mrColumn(rColumn) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {

@@ -86,7 +86,7 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
 
 void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 {
-    sc::SingleColumnSpanSet aSpanSet;
+    sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
     aSpanSet.scan(*this, nStartRow, nEndRow);
     std::vector<SCROW> aRows;
     aSpanSet.getRows(aRows);
@@ -149,20 +149,21 @@ void ScColumn::Delete( SCROW nRow )
 
 void ScColumn::FreeAll()
 {
+    auto maxRowCount = GetDoc()->GetSheetLimits().GetMaxRowCount();
     // Keep a logical empty range of 0-rDoc.MaxRow() at all times.
     maCells.clear();
-    maCells.resize(MAXROWCOUNT);
+    maCells.resize(maxRowCount);
     maCellTextAttrs.clear();
-    maCellTextAttrs.resize(MAXROWCOUNT);
+    maCellTextAttrs.resize(maxRowCount);
     maCellNotes.clear();
-    maCellNotes.resize(MAXROWCOUNT);
+    maCellNotes.resize(maxRowCount);
     CellStorageModified();
 }
 
 void ScColumn::FreeNotes()
 {
     maCellNotes.clear();
-    maCellNotes.resize(MAXROWCOUNT);
+    maCellNotes.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 }
 
 namespace {
@@ -186,11 +187,11 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     SCROW nEndRow = nStartRow + nSize - 1;
 
     maBroadcasters.erase(nStartRow, nEndRow);
-    maBroadcasters.resize(MAXROWCOUNT);
+    maBroadcasters.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     CellNotesDeleting(nStartRow, nEndRow, false);
     maCellNotes.erase(nStartRow, nEndRow);
-    maCellNotes.resize(MAXROWCOUNT);
+    maCellNotes.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     // See if we have any cells that would get deleted or shifted by deletion.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
@@ -227,7 +228,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
             bShiftCells = true;
     }
 
-    sc::SingleColumnSpanSet aNonEmptySpans;
+    sc::SingleColumnSpanSet aNonEmptySpans(GetDoc()->GetSheetLimits());
     if (bShiftCells)
     {
         // Mark all non-empty cell positions below the end row.
@@ -240,7 +241,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Remove the cells.
     maCells.erase(nStartRow, nEndRow);
-    maCells.resize(MAXROWCOUNT);
+    maCells.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     // Get the position again after the container change.
     aPos = maCells.position(nStartRow);
@@ -255,7 +256,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
-    maCellTextAttrs.resize(MAXROWCOUNT);
+    maCellTextAttrs.resize(GetDoc()->GetSheetLimits().GetMaxRowCount());
 
     CellStorageModified();
 }
@@ -814,6 +815,7 @@ class DeleteAreaHandler
 public:
     DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag, ScColumn& rCol) :
         mrDoc(rDoc),
+        maDeleteRanges(rDoc.GetSheetLimits()),
         mbNumeric(nDelFlag & InsertDeleteFlags::VALUE),
         mbString(nDelFlag & InsertDeleteFlags::STRING),
         mbFormula(nDelFlag & InsertDeleteFlags::FORMULA),
@@ -993,7 +995,7 @@ void ScColumn::DeleteArea(
         nContMask |= InsertDeleteFlags::NOCAPTIONS;
     InsertDeleteFlags nContFlag = nDelFlag & nContMask;
 
-    sc::SingleColumnSpanSet aDeletedRows;
+    sc::SingleColumnSpanSet aDeletedRows(GetDoc()->GetSheetLimits());
 
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
@@ -1393,7 +1395,7 @@ void ScColumn::CopyFromClip(
         if (rCxt.isSkipAttrForEmptyCells())
         {
             //  copy only attributes for non-empty cells between nRow1-nDy and nRow2-nDy.
-            sc::SingleColumnSpanSet aSpanSet;
+            sc::SingleColumnSpanSet aSpanSet(GetDoc()->GetSheetLimits());
             aSpanSet.scan(rColumn, nRow1-nDy, nRow2-nDy);
             sc::SingleColumnSpanSet::SpansType aSpans;
             aSpanSet.getSpans(aSpans);

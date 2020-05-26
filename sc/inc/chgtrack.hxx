@@ -826,8 +826,8 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
     friend void ScChangeActionMove::DeleteCellEntries();
     friend bool ScChangeActionMove::Reject( ScDocument* pDoc );
 
-    static  const SCROW         nContentRowsPerSlot;
-    static  const SCSIZE        nContentSlots;
+    SCROW               mnContentRowsPerSlot;
+    SCSIZE              mnContentSlots;
 
     css::uno::Sequence< sal_Int8 >   aProtectPass;
     ScChangeActionMap   aMap;
@@ -869,7 +869,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrack( const ScChangeTrack& ) = delete;
     ScChangeTrack& operator=( const ScChangeTrack& ) = delete;
 
-    static  SCROW               InitContentRowsPerSlot();
+    SCROW               InitContentRowsPerSlot();
 
     // true if one is ScMatrixMode::Formula and the other is
     // not, or if both are and range differs
@@ -948,12 +948,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
 
 public:
 
-    static  SCSIZE              ComputeContentSlot( sal_Int32 nRow )
-                                    {
-                                        if ( nRow < 0 || nRow > MAXROW )
-                                            return nContentSlots - 1;
-                                        return static_cast< SCSIZE >( nRow / nContentRowsPerSlot );
-                                    }
+    SCSIZE              ComputeContentSlot( sal_Int32 nRow ) const;
 
     SC_DLLPUBLIC ScChangeTrack( ScDocument* );
     ScChangeTrack(ScDocument* pDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import

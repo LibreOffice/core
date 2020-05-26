@@ -71,7 +71,7 @@ ScDPCache::Field::Field() : mnNumFormat(0) {}
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
-    maEmptyRows(0, MAXROWCOUNT, true),
+    maEmptyRows(0, pDoc->GetSheetLimits().GetMaxRowCount(), true),
     mnDataSize(-1),
     mnRowCount(0),
     mbDisposing(false)
@@ -303,8 +303,8 @@ struct InitColumnData
 
     SCCOL mnCol;
 
-    InitColumnData() :
-        maEmptyRows(0, MAXROWCOUNT, true),
+    InitColumnData(ScSheetLimits const & rSheetLimits) :
+        maEmptyRows(0, rSheetLimits.GetMaxRowCount(), true),
         mpStrPool(nullptr),
         mpField(nullptr),
         mnCol(-1) {}
@@ -553,7 +553,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     }
 
     maStringPools.resize(mnColumnCount);
-    std::vector<InitColumnData> aColData(mnColumnCount);
+    std::vector<InitColumnData> aColData(mnColumnCount, InitColumnData(pDoc->GetSheetLimits()));
     maFields.reserve(mnColumnCount);
     for (SCCOL i = 0; i < mnColumnCount; ++i)
         maFields.push_back(std::make_unique<Field>());

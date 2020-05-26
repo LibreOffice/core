@@ -19,6 +19,7 @@ class ScDocument;
 class ScColumn;
 class ScMarkData;
 class ScRangeList;
+struct ScSheetLimits;
 
 namespace sc {
 
@@ -114,7 +115,7 @@ public:
 
     typedef std::vector<RowSpan> SpansType;
 
-    SingleColumnSpanSet();
+    SingleColumnSpanSet(ScSheetLimits const &);
 
     /**
      * Scan an entire column and tag all non-empty cell positions.
@@ -149,6 +150,7 @@ public:
     bool empty() const;
 
 private:
+    ScSheetLimits const & mrSheetLimits;
     ColumnSpansType maSpans;
 };
 

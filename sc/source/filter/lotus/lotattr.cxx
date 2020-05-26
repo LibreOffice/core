@@ -182,7 +182,7 @@ const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 
 void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatternAttr& rAttr )
 {
-    // Actually with the current implementation of MAXROWCOUNT>=64k and nRow
+    // Actually with the current implementation of MAXROWCOUNT1>=64k and nRow
     // being read as sal_uInt16 there's no chance that nRow would be invalid...
     SAL_WARN_IF( !pDoc->ValidRow(nRow), "sc.filter", "*LotAttrCol::SetAttr(): ... and failed?!" );
 

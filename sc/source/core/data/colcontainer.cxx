@@ -21,11 +21,11 @@
 #include <colcontainer.hxx>
 #include <column.hxx>
 
-ScColContainer::ScColContainer( const size_t nSize )
+ScColContainer::ScColContainer( ScSheetLimits const & rSheetLimits, const size_t nSize )
 {
     aCols.resize( nSize );
     for ( size_t nCol = 0; nCol < nSize; ++nCol )
-        aCols[nCol].reset( new ScColumn() );
+        aCols[nCol].reset( new ScColumn(rSheetLimits) );
 }
 
 ScColContainer::~ScColContainer() COVERITY_NOEXCEPT_FALSE
@@ -44,12 +44,12 @@ void ScColContainer::Clear()
     aCols.clear();
 }
 
-void ScColContainer::resize( const size_t aNewColSize )
+void ScColContainer::resize( ScSheetLimits const & rSheetLimits, const size_t aNewColSize )
 {
     size_t aOldColSize = aCols.size();
     aCols.resize( aNewColSize );
     for ( size_t nCol = aOldColSize; nCol < aNewColSize; ++nCol )
-        aCols[nCol].reset(new ScColumn());
+        aCols[nCol].reset(new ScColumn(rSheetLimits));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

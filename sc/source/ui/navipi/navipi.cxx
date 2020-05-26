@@ -53,7 +53,7 @@ using namespace com::sun::star;
 // precomputed constant because it is used in every change of spin button field
 const sal_Int32 SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).getLength();    // A...IV...ZZZ
 
-#define SCNAV_MAXROW        (MAXROWCOUNT)
+constexpr auto SCNAV_MAXROW(const ScSheetLimits& rSheetLimits) { return rSheetLimits.GetMaxRowCount(); }
 
 void ScNavigatorDlg::ReleaseFocus()
 {
@@ -339,7 +339,9 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
 {
     set_id("NavigatorPanelParent"); // for uitests
 
-    m_xEdRow->set_range(1, SCNAV_MAXROW);
+    GetViewData();
+    ScDocument* pDoc = pViewData->GetDocument();
+    m_xEdRow->set_range(1, SCNAV_MAXROW(pDoc->GetSheetLimits()));
     m_xEdRow->set_width_chars(5);
     //max rows is 1,000,000, which is too long for typical use
     m_xEdRow->connect_activate(LINK(this, ScNavigatorDlg, ExecuteRowHdl));

@@ -990,7 +990,7 @@ void ScDocument::UpdateReference(
                 ((rCxt.mnColDelta < 0 &&    // convention from ScDocument::DeleteCol()
                   rCxt.maRange.aStart.Col() == MAXCOLCOUNT && rCxt.maRange.aEnd.Col() == MAXCOLCOUNT) ||
                  (rCxt.mnRowDelta < 0 &&    // convention from ScDocument::DeleteRow()
-                  rCxt.maRange.aStart.Row() == MAXROWCOUNT && rCxt.maRange.aEnd.Row() == MAXROWCOUNT))))
+                  rCxt.maRange.aStart.Row() == GetSheetLimits().GetMaxRowCount() && rCxt.maRange.aEnd.Row() == GetSheetLimits().GetMaxRowCount()))))
         return;
 
     std::unique_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
