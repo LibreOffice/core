@@ -166,9 +166,9 @@ void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rX
 
 void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
 {
-    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
+    sal_Int32 aValue = getXPath(pXmlDoc, rXPath, rAttribute).toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OStringLiteral("In <") + pXmlDoc->name + ">, attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
-                                 rExpectedValue, aValue);
+                                 rExpectedValue.toInt32(), aValue);
 }
 
 void XmlTestTools::assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
