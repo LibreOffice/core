@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e28c06c8_ec07e572",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-05-27T22:06:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97d46b3f_f8526a3c",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f69b9fcb_54dc1abd",
         "filename": "sc/source/ui/view/tabvwsh4.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5dcccdad_cf3c43a6",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-05-27T22:06:57Z",
+      "side": 1,
+      "message": "Makes sense. Moved as suggested.",
+      "parentUuid": "f69b9fcb_54dc1abd",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba34091e_3c8410d0",
         "filename": "sc/source/ui/view/tabvwsh4.cxx",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c50f55d_05dd20ba",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1001825
+      },
+      "writtenOn": "2020-05-27T22:06:57Z",
+      "side": 1,
+      "message": "I will ignore the shortcut if a cell is currently being edited.",
+      "parentUuid": "ba34091e_3c8410d0",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
