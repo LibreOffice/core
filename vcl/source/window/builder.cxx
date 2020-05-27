@@ -2014,52 +2014,20 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkSpinButton")
     {
         OUString sAdjustment = extractAdjustment(rMap);
-        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
-        OUString sUnit = extractUnit(sPattern);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK|WB_SPIN|WB_REPEAT;
 
-        if (sPattern.isEmpty())
+        if (m_bLegacy)
         {
-            SAL_INFO("vcl.builder", "making numeric field for " << name << " " << sUnit);
-            if (m_bLegacy)
-            {
-                connectNumericFormatterAdjustment(id, sAdjustment);
-                xWindow = VclPtr<NumericField>::Create(pParent, nBits);
-            }
-            else
-            {
-                connectFormattedFormatterAdjustment(id, sAdjustment);
-                VclPtrInstance<FormattedField> xField(pParent, nBits);
-                xField->SetMinValue(0);
-                xWindow = xField;
-            }
+            connectNumericFormatterAdjustment(id, sAdjustment);
+            xWindow = VclPtr<NumericField>::Create(pParent, nBits);
         }
         else
         {
-            if (sPattern == "hh:mm")
-            {
-                connectTimeFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.builder", "making time field for " << name << " " << sUnit);
-                xWindow = VclPtr<TimeField>::Create(pParent, nBits);
-            }
-            else if (sPattern == "yy:mm:dd")
-            {
-                connectDateFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.builder", "making date field for " << name << " " << sUnit);
-                xWindow = VclPtr<DateField>::Create(pParent, nBits);
-            }
-            else
-            {
-                connectNumericFormatterAdjustment(id, sAdjustment);
-                FieldUnit eUnit = detectMetricUnit(sUnit);
-                SAL_INFO("vcl.builder", "making metric field for " << name << " " << sUnit);
-                VclPtrInstance<MetricField> xField(pParent, nBits);
-                xField->SetUnit(eUnit);
-                if (eUnit == FieldUnit::CUSTOM)
-                    xField->SetCustomUnitText(sUnit);
-                xWindow = xField;
-            }
+            connectFormattedFormatterAdjustment(id, sAdjustment);
+            VclPtrInstance<FormattedField> xField(pParent, nBits);
+            xField->SetMinValue(0);
+            xWindow = xField;
         }
     }
     else if (name == "GtkLinkButton")
