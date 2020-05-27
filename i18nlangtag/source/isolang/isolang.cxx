@@ -378,7 +378,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA", k0    },
     { LANGUAGE_FRENCH_REUNION,              "fr", "RE", k0    },
     { LANGUAGE_FRENCH,                      "fr", ""  , k0    },    // needed as a catcher before other "fr" entries!
-    { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , k0    },
+    { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , k0    },    // MS reserved, "fr-015"
     { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , k0    },    // no ISO country code; MS "Neither defined nor reserved"
     { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", k0    },
     { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", k0    },
@@ -485,7 +485,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH", k0    },
     { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", k0    },
     { LANGUAGE_YI,                          "ii", "CN", k0    },
-    { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", k0    },    // MS reserved
+    { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", k0    },
     { LANGUAGE_ENGLISH_BAHRAIN,             "en", "BH", k0    },    // MS reserved
     { LANGUAGE_ENGLISH_EGYPT,               "en", "EG", k0    },    // MS reserved
     { LANGUAGE_ENGLISH_JORDAN,              "en", "JO", k0    },    // MS reserved
@@ -774,6 +774,9 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_USER_HUNGARIAN_ROVAS,                "hu-Hung", "HU", k0    },
     { LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,          "ms-Arab", "MY", k0    },
     { LANGUAGE_USER_MALAY_ARABIC_BRUNEI,            "ms-Arab", "BN", k0    },
+    { LANGUAGE_KAZAKH_LATIN,                        "kk-Latn", "KZ", k0    },   // MS reserved
+    { LANGUAGE_KAZAKH_LATIN_LSO,                    "kk-Latn", ""  , k0    },   // MS reserved
+    { LANGUAGE_KAZAKH_CYRILLIC_LSO,                 "kk-Cyrl", ""  , k0    },   // MS reserved
     { LANGUAGE_DONTKNOW,                            "",        ""  , k0    }    // marks end of table
 };
 
