@@ -1977,6 +1977,7 @@ void SvTreeListBox::LoseFocus()
 void SvTreeListBox::ModelHasCleared()
 {
     pImpl->m_pCursor = nullptr; // else we crash in GetFocus when editing in-place
+    pTargetEntry = nullptr;
     pEdCtrl.reset();
     pImpl->Clear();
     nFocusWidth = -1;
@@ -2250,8 +2251,12 @@ void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
 
 void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
 {
-    if ( pEntry == pHdlEntry)
+    if (pEntry == pHdlEntry)
         pHdlEntry = nullptr;
+
+    if (pEntry == pTargetEntry)
+        pTargetEntry = nullptr;
+
     pImpl->EntryRemoved();
 }
 
