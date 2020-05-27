@@ -1426,6 +1426,17 @@
           <value>com.sun.star.comp.svx.FontNameToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="StylesPreviewToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:StylesPreview</value>
+          </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.StylesPreviewToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="OpenToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Open</value>

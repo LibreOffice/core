@@ -95,6 +95,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/sidebarstylespanel \
 	svx/uiconfig/ui/sidebartextpanel \
 	svx/uiconfig/ui/stylemenu \
+	svx/uiconfig/ui/stylespreview \
 	svx/uiconfig/ui/textcharacterspacingcontrol \
 	svx/uiconfig/ui/textcontrolchardialog \
 	svx/uiconfig/ui/textcontrolparadialog \
