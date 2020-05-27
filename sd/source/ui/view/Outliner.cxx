@@ -1013,6 +1013,18 @@ void SdOutliner::RestoreStartPosition()
     }
 }
 
+namespace
+{
+
+bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
+{
+    auto* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
+    return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
+}
+
+} // end anonymous namespace
+
+
 /** The main purpose of this method is to iterate over all shape objects of
     the search area (current selection, current view, or whole document)
     until a text object has been found that contains at least one match or
@@ -1058,7 +1070,7 @@ void SdOutliner::ProvideNextTextObject()
             bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
             // Switch to the current object only if it is a valid text object.
-            if (!bForbiddenPage && IsValidTextObject(maCurrentPosition))
+            if (!bForbiddenPage && lclIsValidTextObject(maCurrentPosition))
             {
                 // Don't set yet in case of searching: the text object may not match.
                 if (meMode != SEARCH)
@@ -1224,12 +1236,6 @@ bool SdOutliner::ShowWrapArroundDialog()
     sal_uInt16 nBoxResult = xQueryBox->run();
 
     return (nBoxResult == RET_YES);
-}
-
-bool SdOutliner::IsValidTextObject (const sd::outliner::IteratorPosition& rPosition)
-{
-    SdrTextObj* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
-    return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
 
 void SdOutliner::PutTextIntoOutliner()
