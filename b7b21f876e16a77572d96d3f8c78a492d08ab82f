@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1c34e4a_d82c9c27",
+        "filename": "drawinglayer/source/attribute/sdrshadowattribute.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-05-27T19:31:26Z",
+      "side": 1,
+      "message": "Please add the unit of [0 .. 180] to the comment.",
+      "range": {
+        "startLine": 35,
+        "startChar": 107,
+        "endLine": 35,
+        "endChar": 111
+      },
+      "revId": "b7b21f876e16a77572d96d3f8c78a492d08ab82f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
