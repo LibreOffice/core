@@ -128,16 +128,12 @@ public:
 
     TransliterationFlags        GetTransliterationFlags() const;
 
-    void SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand);
-    void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
-    bool GetSrchFlag() const { return mbSuccess; }
+    void SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand, bool bSuccess);
     void            SetSaveToModule(bool b);
 
     void SetSearchLabel(const OUString& rStr);
 
 private:
-    bool            mbSuccess;
-
     SfxBindings&    rBindings;
     bool            bWriter;
     bool            bSearch;
