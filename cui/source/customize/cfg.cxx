@@ -1974,7 +1974,7 @@ void ToolbarSaveInData::SetSystemStyle(
         window = VCLUnoHelper::GetWindow( xWindow ).get();
     }
 
-    if ( !(window != nullptr && window->GetType() == WindowType::TOOLBOX) )
+    if ( window == nullptr || window->GetType() != WindowType::TOOLBOX )
         return;
 
     ToolBox* toolbox = static_cast<ToolBox*>(window);

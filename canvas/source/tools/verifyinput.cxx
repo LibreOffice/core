@@ -295,8 +295,8 @@ namespace canvas::tools
 #endif
             }
 
-            if( !(renderState.CompositeOperation < rendering::CompositeOperation::CLEAR ||
-                renderState.CompositeOperation > rendering::CompositeOperation::SATURATE) )
+            if( renderState.CompositeOperation >= rendering::CompositeOperation::CLEAR &&
+                renderState.CompositeOperation <= rendering::CompositeOperation::SATURATE )
                 return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -361,8 +361,8 @@ namespace canvas::tools
 #endif
             }
 
-            if( !(texture.RepeatModeY < rendering::TexturingMode::NONE ||
-                texture.RepeatModeY > rendering::TexturingMode::REPEAT) )
+            if( texture.RepeatModeY >= rendering::TexturingMode::NONE &&
+                texture.RepeatModeY <= rendering::TexturingMode::REPEAT )
                 return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -483,8 +483,8 @@ namespace canvas::tools
 #endif
             }
 
-            if( !(strokeAttributes.JoinType < rendering::PathJoinType::NONE ||
-                strokeAttributes.JoinType > rendering::PathJoinType::BEVEL) )
+            if( strokeAttributes.JoinType >= rendering::PathJoinType::NONE &&
+                strokeAttributes.JoinType <= rendering::PathJoinType::BEVEL )
                 return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -552,8 +552,8 @@ namespace canvas::tools
 #endif
             }
 
-            if( !(bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
-                bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG) )
+            if( bitmapLayout.ColorSpace->getEndianness() >= util::Endianness::LITTLE &&
+                bitmapLayout.ColorSpace->getEndianness() <= util::Endianness::BIG )
                 return;
 
 #if OSL_DEBUG_LEVEL > 0
