@@ -137,14 +137,14 @@ OUString getImageFromFileName(const OUString& aFile)
             nullptr, &hOut, nullptr                                   // [out] File handles for redirected I/O
         );
 
-        // Create a guard to ensure correct cleanup in its dtor in any case
-        comphelper::ScopeGuard g([hOut, hProcess] () {
-            osl_closeFile(hOut);
-            osl_freeProcessHandle(hProcess);
-        });
-
         if( osl_Process_E_None == rc )
         {
+            // Create a guard to ensure correct cleanup in its dtor in any case
+            comphelper::ScopeGuard g([hOut, hProcess] () {
+                osl_closeFile(hOut);
+                osl_freeProcessHandle(hProcess);
+            });
+
             oslProcessInfo aInfo;
             aInfo.Size = sizeof(oslProcessInfo);
 
