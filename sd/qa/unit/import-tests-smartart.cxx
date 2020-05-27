@@ -1498,6 +1498,14 @@ void SdImportTestSmartArt::testFillColorList()
     awt::Size aActualSize = xShape->getSize();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2239), aActualSize.Height);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1738 (2766)
+    // - Actual  : 1738
+    // i.e. the columns were not centered vertically.
+    sal_Int32 nGroupTop = xGroup->getPosition().Y;
+    sal_Int32 nShapeTop = xShape->getPosition().Y;
+    CPPUNIT_ASSERT_GREATER(nGroupTop, nShapeTop);
+
     xDocShRef->DoClose();
 }
 
