@@ -22,6 +22,30 @@
       "revId": "f0df7ef6b77284c1d5dda16812a9121fb9a4b0ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "008dc761_990a69e0",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-27T12:53:21Z",
+      "side": 1,
+      "message": "fixed in https://gerrit.libreoffice.org/c/core/+/94972",
+      "parentUuid": "43d0496a_1314d05c",
+      "range": {
+        "startLine": 96,
+        "startChar": 98,
+        "endLine": 96,
+        "endChar": 100
+      },
+      "revId": "f0df7ef6b77284c1d5dda16812a9121fb9a4b0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
