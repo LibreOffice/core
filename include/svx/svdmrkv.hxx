@@ -26,6 +26,8 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+
 
 class SfxViewShell;
 
@@ -84,6 +86,7 @@ enum class ImpGetDescriptionOptions
 };
 
 class ImplMarkingOverlay;
+class MarkingSubSelectionOverlay;
 
 class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
 {
@@ -94,6 +97,8 @@ class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
     std::unique_ptr<ImplMarkingOverlay> mpMarkPointsOverlay;
     std::unique_ptr<ImplMarkingOverlay> mpMarkGluePointsOverlay;
 
+    std::unique_ptr<MarkingSubSelectionOverlay> mpMarkingSubSelectionOverlay;
+
 protected:
     SdrObject*                  mpMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
     SdrPageView*                mpMarkedPV;        // If all marked obects are situated on the same PageView.
@@ -101,8 +106,10 @@ protected:
     Point                       maRef1;            // Persistent - Rotation center / axis of reflection
     Point                       maRef2;            // Persistent
     SdrHdlList                  maHdlList;
+
     sdr::ViewSelection          maSdrViewSelection;
 
+    std::vector<basegfx::B2DRectangle> maSubSelectionList;
     tools::Rectangle            maMarkedObjRect;
     tools::Rectangle            maMarkedPointsRect;
     tools::Rectangle            maMarkedGluePointsRect;
@@ -302,7 +309,8 @@ public:
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely
     void MarkObj(const tools::Rectangle& rRect, bool bUnmark);
-    void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
+    void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark = false, bool bDoNoSetMarkHdl = false,
+                 std::vector<basegfx::B2DRectangle> const & rSubSelections = std::vector<basegfx::B2DRectangle>());
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView const * pPV=nullptr); // pPage=NULL => all displayed pages
 
