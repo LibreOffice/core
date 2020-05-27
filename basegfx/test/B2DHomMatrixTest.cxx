@@ -503,6 +503,36 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL(26, aRange.getMaxY(), 1E-12);
     }
 
+    void testCoordinateSystemConversion()
+    {
+        // Use case when we convert
+
+        B2DRange aWindow(50, 50, 150, 150);
+
+        B2DRange aSubPage(0, 0, 2000, 2000);
+
+        B2DHomMatrix aB2DMatrix;
+        aB2DMatrix.scale(aWindow.getWidth() / aSubPage.getWidth(),
+                         aWindow.getHeight() / aSubPage.getHeight());
+        aB2DMatrix.translate(aWindow.getMinX(), aWindow.getMinY());
+
+        B2DPoint aPoint1(0, 0);
+        aPoint1 *= aB2DMatrix;
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(50, aPoint1.getX(), 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(50, aPoint1.getY(), 1E-12);
+
+        B2DPoint aPoint2(1000, 1000);
+        aPoint2 *= aB2DMatrix;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(100, aPoint2.getX(), 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(100, aPoint2.getY(), 1E-12);
+
+        B2DPoint aPoint3(2000, 2000);
+        aPoint3 *= aB2DMatrix;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(150, aPoint3.getX(), 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(150, aPoint3.getY(), 1E-12);
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -520,6 +550,8 @@ public:
     CPPUNIT_TEST(testMultiplyWithAnotherMatrix);
     CPPUNIT_TEST(testTransformPoint);
     CPPUNIT_TEST(testTransformRange);
+    CPPUNIT_TEST(testCoordinateSystemConversion);
+
     CPPUNIT_TEST_SUITE_END();
 
 }; // class b2dhommatrix
