@@ -662,6 +662,66 @@ bool SdOutliner::SearchAndReplaceAll()
     return bRet;
 }
 
+void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pViewShell,
+                                             OutlinerView* pOutlinerView,
+                                             std::vector<sd::SearchSelection>* pSelections)
+{
+    std::vector<::tools::Rectangle> aLogicRects;
+    pOutlinerView->GetSelectionRectangles(aLogicRects);
+
+    // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
+    // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
+    // which makes that method unusable for others
+    if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
+    {
+        for (tools::Rectangle& rRectangle : aLogicRects)
+        {
+            rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+        }
+    }
+
+    std::vector<OString> aLogicRectStrings;
+    std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings),
+        [](const ::tools::Rectangle& rRectangle)
+    {
+        return rRectangle.toString();
+    });
+
+    OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);
+
+    if (!pSelections)
+    {
+        // notify LibreOfficeKit about changed page
+        OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
+        SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
+        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+
+        // also about search result selections
+        boost::property_tree::ptree aTree;
+        aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
+        aTree.put("highlightAll", false);
+
+        boost::property_tree::ptree aChildren;
+        boost::property_tree::ptree aChild;
+        aChild.put("part", OString::number(maCurrentPosition.mnPageIndex).getStr());
+        aChild.put("rectangles", sRectangles.getStr());
+        aChildren.push_back(std::make_pair("", aChild));
+        aTree.add_child("searchResultSelection", aChildren);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        aPayload = aStream.str().c_str();
+        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+    }
+    else
+    {
+        sd::SearchSelection aSelection(maCurrentPosition.mnPageIndex, sRectangles);
+        bool bDuplicate = !pSelections->empty() && pSelections->back() == aSelection;
+        if (!bDuplicate)
+            pSelections->push_back(aSelection);
+    }
+}
+
 bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelections)
 {
     DetectChange ();
@@ -753,55 +813,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
     {
-        std::vector<::tools::Rectangle> aLogicRects;
-        pOutlinerView->GetSelectionRectangles(aLogicRects);
-
-        // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
-        // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
-        // which makes that method unusable for others
-        if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
-        {
-            for (tools::Rectangle& rRectangle : aLogicRects)
-            {
-                rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-            }
-        }
-
-        std::vector<OString> aLogicRectStrings;
-        std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const ::tools::Rectangle& rRectangle) { return rRectangle.toString(); });
-        OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);
-
-        if (!pSelections)
-        {
-            // notify LibreOfficeKit about changed page
-            OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
-            SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-
-            // also about search result selections
-            boost::property_tree::ptree aTree;
-            aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
-            aTree.put("highlightAll", false);
-
-            boost::property_tree::ptree aChildren;
-            boost::property_tree::ptree aChild;
-            aChild.put("part", OString::number(maCurrentPosition.mnPageIndex).getStr());
-            aChild.put("rectangles", sRectangles.getStr());
-            aChildren.push_back(std::make_pair("", aChild));
-            aTree.add_child("searchResultSelection", aChildren);
-
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            aPayload = aStream.str().c_str();
-            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-        }
-        else
-        {
-            sd::SearchSelection aSelection(maCurrentPosition.mnPageIndex, sRectangles);
-            bool bDuplicate = !pSelections->empty() && pSelections->back() == aSelection;
-            if (!bDuplicate)
-                pSelections->push_back(aSelection);
-        }
+        sendLOKSearchResultCallback(pViewShell, pOutlinerView, pSelections);
     }
 
     return mbEndOfSearch;
