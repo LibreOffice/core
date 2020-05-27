@@ -478,6 +478,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             LayoutProperty& rParent = aProperties[""];
 
             sal_Int32 nParentXOffset = 0;
+
+            // Track min/max vertical positions, so we can center everything at the end, if needed.
+            sal_Int32 nVertMin = std::numeric_limits<sal_Int32>::max();
+            sal_Int32 nVertMax = 0;
+
             if (mfAspectRatio != 1.0)
             {
                 rParent[XML_w] = rShape->getSize().Width;
@@ -613,6 +618,24 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrShape->setSize(aSize);
                 aCurrShape->setChildSize(aSize);
                 aCurrShape->setPosition(aPos);
+
+                nVertMin = std::min(aPos.Y, nVertMin);
+                nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
+            }
+
+            // See if all vertical space is used or we have to center the content.
+            if (nVertMin >= 0 && nVertMax <= rParent[XML_h])
+            {
+                sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
+                if (nDiff > 0)
+                {
+                    for (auto& aCurrShape : rShape->getChildren())
+                    {
+                        awt::Point aPosition = aCurrShape->getPosition();
+                        aPosition.Y += nDiff / 2;
+                        aCurrShape->setPosition(aPosition);
+                    }
+                }
             }
             break;
         }
