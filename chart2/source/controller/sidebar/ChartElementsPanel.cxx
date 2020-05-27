@@ -203,7 +203,7 @@ bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisTy
         else if (eType == AxisType::Z_MAIN)
             nDimensionIndex = 2;
 
-        bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+        bool bMajor = (eType != AxisType::X_SECOND && eType != AxisType::Y_SECOND);
 
         bool bHasAxis = AxisHelper::isAxisShown(nDimensionIndex, bMajor, xDiagram);
         return bHasAxis;
@@ -223,7 +223,7 @@ void setAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisT
     else if (eType == AxisType::Z_MAIN)
         nDimensionIndex = 2;
 
-    bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+    bool bMajor = (eType != AxisType::X_SECOND && eType != AxisType::Y_SECOND);
 
     if (bVisible)
         AxisHelper::showAxis(nDimensionIndex, bMajor, xDiagram, comphelper::getProcessComponentContext());
