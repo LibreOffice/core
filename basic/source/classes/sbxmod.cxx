@@ -1482,7 +1482,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             p += 8;
             nPC += 8;
         }
-        else if( !( eOp >= SbiOpcode::SbOP0_START && eOp <= SbiOpcode::SbOP0_END ) )
+        else if( eOp < SbiOpcode::SbOP0_START || eOp > SbiOpcode::SbOP0_END )
         {
             StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
             break;
@@ -1759,7 +1759,7 @@ bool SbModule::HasExeCode()
     }
 
     bool bRes = false;
-    if (pImage && !(pImage->GetCodeSize() == 5 && (memcmp(pImage->GetCode(), pEmptyImage, pImage->GetCodeSize()) == 0 )))
+    if (pImage && (pImage->GetCodeSize() != 5 || (memcmp(pImage->GetCode(), pEmptyImage, pImage->GetCodeSize()) != 0 )))
         bRes = true;
 
     return bRes;
