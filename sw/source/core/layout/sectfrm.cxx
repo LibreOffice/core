@@ -2466,9 +2466,8 @@ SwFrame* SwFrame::GetIndPrev_() const
         const SwFrame* pCol = GetUpper()->GetUpper()->GetPrev();
         while( pCol )
         {
-            OSL_ENSURE( pCol->IsColumnFrame(), "GetIndPrev(): ColumnFrame expected" );
-            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrame(),
-                    "GetIndPrev(): Where's the body?");
+            assert(pCol->IsColumnFrame());
+            assert(pCol->GetLower() && pCol->GetLower()->IsBodyFrame());
             if( static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pCol)->Lower())->Lower() )
                 return nullptr;
             pCol = pCol->GetPrev();
@@ -2496,9 +2495,8 @@ SwFrame* SwFrame::GetIndNext_()
         SwFrame* pCol = GetUpper()->GetUpper()->GetNext();
         while( pCol )
         {
-            OSL_ENSURE( pCol->IsColumnFrame(), "GetIndNext(): ColumnFrame expected" );
-            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrame(),
-                    "GetIndNext(): Where's the body?");
+            assert(pCol->IsColumnFrame());
+            assert(pCol->GetLower() && pCol->GetLower()->IsBodyFrame());
             if( static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pCol)->Lower())->Lower() )
                 return nullptr;
             pCol = pCol->GetNext();
