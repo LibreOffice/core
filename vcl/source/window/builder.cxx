@@ -2173,8 +2173,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkDrawingArea")
     {
-        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        xWindow = VclPtr<VclDrawingArea>::Create(pParent, sBorder.isEmpty() ? WB_TABSTOP : WB_BORDER | WB_TABSTOP);
+        xWindow = VclPtr<VclDrawingArea>::Create(pParent, WB_TABSTOP);
     }
     else if (name == "GtkTextView")
     {
