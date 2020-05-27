@@ -96,22 +96,25 @@ case "$1" in
             fi
         done
     fi
-    echo "Please go to https://gerrit.libreoffice.org/ and:"
-    echo " - press the 'register' button in the top right corner"
-    echo " - after login set yourself a username (it is recommended to use your IRC-nick)"
-	if test -z "$ssh_key"; then
-        echo " - add your public ssh-key into the ssh keys settings."
+    echo "Please go to https://gerrit.libreoffice.org/ and click the \"Sign in\" link"
+    echo "at the top right of the page. You'll be sent to our Single Sign-On portal"
+    echo "for authentication (create an account if needs be), and automatically"
+    echo "redirected back to gerrit afterwards."
+    echo
+    echo "Visit https://gerrit.libreoffice.org/settings/#SSHKeys and paste the public"
+    if test -z "$ssh_key"; then
+        echo "part of your SSH key in the 'New SSH key' form."
     else
-	    echo " - paste the key below into the 'Add SSH Public Key' box."
+        echo "key below in the 'New SSH key' form."
         echo
         printf '%s\n' "$ssh_key"
         echo
-	fi
-        echo
-        echo "Note that you need to register additional email addresses, if you want to"
-        echo "commit from them. Additional emails must be confirmed by replying to the"
-        echo "invitation mail it sends you."
-        echo
+    fi
+    echo
+    echo "Note that you need to register additional email addresses, if you want to"
+    echo "commit from them. Each additional email address must be confirmed by"
+    echo "following the verification link sent to it."
+    echo
         read -r -p 'Which user name did you choose? ' GERRITUSER
 	if test -z "$created_ssh"; then
         echo
