@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97d46b3f_f8526a3c",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-27T12:29:07Z",
+      "side": 1,
+      "message": "Nitpick: these variable definitions should be moved to where they are actually used, so ...",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f69b9fcb_54dc1abd",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-27T12:29:07Z",
+      "side": 1,
+      "message": "... move the variable definitions here.",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba34091e_3c8410d0",
+        "filename": "sc/source/ui/view/tabvwsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-27T12:29:07Z",
+      "side": 1,
+      "message": "As is, hitting Alt+\u003d while editing a cell overwrites the currently edited cell content. That should be either prevented and the shortcut ignored, or, even better if possible, the AutoSum be inserted at the current cursor position.",
+      "revId": "5c8c7c0cc10a5bd19b248bcd09797b44707130a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
