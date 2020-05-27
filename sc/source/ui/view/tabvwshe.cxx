@@ -247,25 +247,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>(pItem);
 
                     ScGlobal::SetSearchItem( *pSearchItem );
-                    bool bSuccess = SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
-                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
-                            SvxSearchDialogWrapper::GetChildWindowId());
-                    if (pChildWindow)
-                    {
-                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
-                        if( pSearchDlg )
-                        {
-                            ScTabView* pTabView = GetViewData().GetView();
-                            if( pTabView )
-                            {
-                                vcl::Window* pWin = pTabView->GetActiveWin();
-                                if( pWin )
-                                {
-                                    pSearchDlg->SetDocWin(pWin, pSearchItem->GetCommand(), bSuccess);
-                                }
-                            }
-                        }
-                    }
+                    SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
                     rReq.Done();
                 }
             }
@@ -317,24 +299,6 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
                                             SfxCallMode::RECORD,
                             { &aSearchItem });
-                    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
-                            SvxSearchDialogWrapper::GetChildWindowId());
-                    if (pChildWindow)
-                    {
-                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
-                        if( pSearchDlg )
-                        {
-                            ScTabView* pTabView = GetViewData().GetView();
-                            if( pTabView )
-                            {
-                                vcl::Window* pWin = pTabView->GetActiveWin();
-                                if( pWin )
-                                {
-                                    pSearchDlg->SetDocWin(pWin, aSearchItem.GetCommand(), false);
-                                }
-                            }
-                        }
-                    }
                 }
                 else
                 {

@@ -34,9 +34,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/accessibility/AccessibleRelation.hpp>
-#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -46,7 +43,6 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#include <comphelper/accflowenum.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <svl/itempool.hxx>
@@ -2281,58 +2277,6 @@ void SvxSearchDialog::SaveToModule_Impl()
     nModifyFlag = ModifyFlags::NONE;
     const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
-}
-
-void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand, bool bSuccess)
-{
-    m_xDialog->clear_extra_accessible_relations();
-
-    if (!pDocWin)
-        return;
-
-    Reference<css::accessibility::XAccessible> xDocAcc = pDocWin->GetAccessible();
-    if (!xDocAcc.is())
-    {
-        return;
-    }
-    Reference<css::accessibility::XAccessibleGetAccFlowTo> xGetAccFlowTo(xDocAcc, UNO_QUERY);
-    if (!xGetAccFlowTo.is())
-    {
-        return;
-    }
-
-    /* tdf#128313 FlowTo tries to set an a11y relation between the search dialog
-       and its results. But for "find/replace" within a calc column we don't
-       want to return the entire column as the result, we want the current cell.
-
-       But with search/all we do want the new multi-cellselection as the result.
-    */
-    AccessibilityFlowTo eFlowTo(AccessibilityFlowTo::ForFindReplaceItem);
-    switch (eCommand)
-    {
-        case SvxSearchCmd::FIND:
-        case SvxSearchCmd::REPLACE:
-            eFlowTo = AccessibilityFlowTo::ForFindReplaceItem;
-            break;
-        case SvxSearchCmd::FIND_ALL:
-        case SvxSearchCmd::REPLACE_ALL:
-            eFlowTo = AccessibilityFlowTo::ForFindReplaceRange;
-            break;
-    }
-    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(bSuccess), static_cast<sal_Int32>(eFlowTo));
-
-    sal_Int32 nLen = aAnySeq.getLength();
-    if (nLen)
-    {
-        uno::Sequence<uno::Reference<uno::XInterface>> aSequence(nLen);
-        std::transform(aAnySeq.begin(), aAnySeq.end(), aSequence.begin(),
-            [](const uno::Any& rAny) -> uno::Reference < css::accessibility::XAccessible > {
-                uno::Reference < css::accessibility::XAccessible > xAcc;
-                rAny >>= xAcc;
-                return xAcc;
-            });
-        m_xDialog->add_extra_accessible_relation(css::accessibility::AccessibleRelation(css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence));
-    }
 }
 
 short SvxSearchDialog::executeSubDialog(VclAbstractDialog * dialog) {

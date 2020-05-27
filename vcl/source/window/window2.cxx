@@ -1970,21 +1970,6 @@ const std::vector<VclPtr<FixedText> >& Window::list_mnemonic_labels() const
     return mpWindowImpl->m_aMnemonicLabels;
 }
 
-void Window::AddExtraAccessibleRelation(const css::accessibility::AccessibleRelation &rRelation)
-{
-    mpWindowImpl->m_aExtraAccessibleRelations.push_back(rRelation);
-}
-
-const std::vector<css::accessibility::AccessibleRelation>& Window::GetExtraAccessibleRelations() const
-{
-    return mpWindowImpl->m_aExtraAccessibleRelations;
-}
-
-void Window::ClearExtraAccessibleRelations()
-{
-    mpWindowImpl->m_aExtraAccessibleRelations.clear();
-}
-
 } /* namespace vcl */
 
 void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

@@ -158,12 +158,6 @@ private:
 
     virtual void impl_dispose() override;
 
-    //=====  XAccessibleGetAccFromXShape  ============================================
-    css::uno::Sequence< css::uno::Any >
-        SAL_CALL getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType) override;
-    css::uno::Reference< css::accessibility::XAccessible >
-        GetSelAccContextInTable();
-
     void UpdateAccessibleName();
 };
 

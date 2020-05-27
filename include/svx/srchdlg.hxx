@@ -128,7 +128,6 @@ public:
 
     TransliterationFlags        GetTransliterationFlags() const;
 
-    void SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand, bool bSuccess);
     void            SetSaveToModule(bool b);
 
     void SetSearchLabel(const OUString& rStr);
