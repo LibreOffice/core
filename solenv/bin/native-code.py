@@ -257,6 +257,7 @@ core_constructor_list = [
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
+    "com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoButtonControl_get_implementation",
