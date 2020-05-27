@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10ea9c0d_f571fb6d",
+        "filename": "sc/source/filter/oox/drawingfragment.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-27T08:44:03Z",
+      "side": 1,
+      "message": "const sal_uInt16 aRotation\n\n(see git grep getRotation -- sc)",
+      "range": {
+        "startLine": 264,
+        "startChar": 19,
+        "endLine": 264,
+        "endChar": 28
+      },
+      "revId": "372b529a422562547564e0acd593a06d1554f131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49324147_8014cf0f",
+        "filename": "sc/source/filter/oox/drawingfragment.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-27T08:44:03Z",
+      "side": 1,
+      "message": "Is this true for all rotation values and all kind of shapes (not only rotated rectangles or rectangle like shapes)?\n\nCould you improve this description a little bit? \n\nAnchor rectangle is the bounding rectangle of the shape? (https://en.wikipedia.org/wiki/Minimum_bounding_rectangle)",
+      "range": {
+        "startLine": 267,
+        "startChar": 24,
+        "endLine": 275,
+        "endChar": 77
+      },
+      "revId": "372b529a422562547564e0acd593a06d1554f131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f53a33_185f4e3e",
+        "filename": "sc/source/filter/oox/drawingfragment.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-05-27T08:44:03Z",
+      "side": 1,
+      "message": "const sal_Int32\n\nUsing auto is contraproductive for basic data types, because it hides potential conversion problems, i.e. different range, float or integer.",
+      "range": {
+        "startLine": 276,
+        "startChar": 24,
+        "endLine": 276,
+        "endChar": 28
+      },
+      "revId": "372b529a422562547564e0acd593a06d1554f131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
