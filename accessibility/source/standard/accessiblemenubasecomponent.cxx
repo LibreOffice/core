@@ -409,7 +409,7 @@ void OAccessibleMenuBaseComponent::InsertChild( sal_Int32 i )
 
 void OAccessibleMenuBaseComponent::RemoveChild( sal_Int32 i )
 {
-    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         return;
 
     // keep the accessible of the removed item
