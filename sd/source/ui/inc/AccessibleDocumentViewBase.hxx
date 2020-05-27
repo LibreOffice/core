@@ -33,7 +33,6 @@
 #include <tools/link.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 
 #include "Window.hxx"
 
@@ -87,8 +86,7 @@ class AccessibleDocumentViewBase
         public css::beans::XPropertyChangeListener,
         public css::awt::XWindowListener,
         public css::awt::XFocusListener,
-        public css::accessibility::XAccessibleExtendedAttributes,
-        public css::accessibility::XAccessibleGetAccFlowTo
+        public css::accessibility::XAccessibleExtendedAttributes
 {
 public:
     //=====  internal  ========================================================
@@ -313,9 +311,6 @@ protected:
     */
     void SetAccessibleOLEObject (
         const css::uno::Reference<css::accessibility::XAccessible>& xOLEObject);
-    //=====  XAccessibleGetAccFromXShape  ============================================
-    css::uno::Sequence< css::uno::Any >
-        SAL_CALL getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType) override;
 
 public:
     void SwitchViewActivated() { Activated(); }
