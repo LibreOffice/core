@@ -48,6 +48,7 @@
 #include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -133,6 +134,38 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
         maSecondPosition = rNewPosition;
     }
 }
+
+class MarkingSubSelectionOverlay
+{
+    sdr::overlay::OverlayObjectList maObjects;
+
+public:
+    MarkingSubSelectionOverlay(const SdrPaintView& rView, std::vector<basegfx::B2DRectangle> const & rSelections)
+    {
+        if (comphelper::LibreOfficeKit::isActive())
+            return; // We do client-side object manipulation with the Kit API
+
+        for (sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
+        {
+            SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xTargetOverlay = pCandidate->GetOverlayManager();
+
+            if (xTargetOverlay.is())
+            {
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const Color aHighlightColor = aSvtOptionsDrawinglayer.getHilightColor();
+
+                std::unique_ptr<sdr::overlay::OverlaySelection> pNew =
+                    std::make_unique<sdr::overlay::OverlaySelection>(
+                        sdr::overlay::OverlayType::Transparent,
+                        aHighlightColor, rSelections, false);
+
+                xTargetOverlay->add(*pNew);
+                maObjects.append(std::move(pNew));
+            }
+        }
+    }
+};
 
 
 // MarkView
@@ -929,6 +962,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     SdrHdlKind eSaveKind(SdrHdlKind::Move);
     SdrObject* pSaveObj = nullptr;
 
+    mpMarkingSubSelectionOverlay.reset();
+
     if(pSaveOldFocusHdl
         && pSaveOldFocusHdl->GetObj()
         && dynamic_cast<const SdrPathObj*>(pSaveOldFocusHdl->GetObj()) != nullptr
@@ -1022,6 +1057,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
         {
             return;
+        }
+
+        if (!maSubSelectionList.empty())
+        {
+            mpMarkingSubSelectionOverlay = std::make_unique<MarkingSubSelectionOverlay>(*this, maSubSelectionList);
         }
     }
 
@@ -1918,7 +1958,8 @@ void collectUIInformation(const SdrObject* pObj)
 
 }
 
-void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bImpNoSetMarkHdl)
+void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool bDoNoSetMarkHdl,
+                          std::vector<basegfx::B2DRectangle> const & rSubSelections)
 {
     if (pObj!=nullptr && pPV!=nullptr && IsObjMarkable(pObj, pPV)) {
         BrkAction();
@@ -1935,7 +1976,10 @@ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool 
                 GetMarkedObjectListWriteAccess().DeleteMark(nPos);
             }
         }
-        if (!bImpNoSetMarkHdl) {
+
+        maSubSelectionList = rSubSelections;
+
+        if (!bDoNoSetMarkHdl) {
             MarkListHasChanged();
             AdjustMarkHdl();
         }
