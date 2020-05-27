@@ -317,11 +317,6 @@ public:
 
     virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override;
 
-    virtual void
-    add_extra_accessible_relation(const css::accessibility::AccessibleRelation& rRelation) override;
-
-    virtual void clear_extra_accessible_relations() override;
-
     virtual void set_tooltip_text(const OUString& rTip) override;
 
     virtual OUString get_tooltip_text() const override;

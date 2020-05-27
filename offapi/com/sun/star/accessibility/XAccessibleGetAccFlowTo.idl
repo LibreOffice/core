@@ -28,7 +28,6 @@ module com { module sun { module star { module accessibility {
 // !!!
 interface XAccessibleGetAccFlowTo : ::com::sun::star::uno::XInterface
 {
-    // @param nType see include/comphelper/accflowenum.hxx
     sequence<any> getAccFlowTo([in] any aXShape, [in] long nType);
 };
 
