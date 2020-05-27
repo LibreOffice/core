@@ -744,7 +744,7 @@ void SplineCalculater::CalculateBSplines(
             // find the one interval with u_i <= t_k < u_(i+1)
             // remember u_0 = ... = u_p = 0.0 and u_(m-p) = ... u_m = 1.0 and 0<t_k<1
             lcl_tSizeType i = p;
-            while (!(u[i] <= t[k] && t[k] < u[i+1]))
+            while (u[i] > t[k] || t[k] >= u[i+1])
             {
                 ++i;
             }
@@ -872,7 +872,7 @@ void SplineCalculater::CalculateBSplines(
             for ( lcl_tSizeType nTIndex = 0; nTIndex <= n-1; ++nTIndex)
             {
                 for (sal_uInt32 nResolutionStep = 1;
-                     nResolutionStep <= nResolution && !( nTIndex == n-1 && nResolutionStep == nResolution);
+                     nResolutionStep <= nResolution && ( nTIndex != n-1 || nResolutionStep != nResolution);
                      ++nResolutionStep)
                 {
                     lcl_tSizeType nNewIndex = nTIndex * nResolution + nResolutionStep;

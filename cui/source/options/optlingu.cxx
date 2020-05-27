@@ -1625,7 +1625,7 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, const row_col&, rRowCol, v
 {
     auto nPos = rRowCol.first;
     ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(nPos).toInt64());
-    if (!(!pData->IsParent() && pData->GetType() == TYPE_HYPH))
+    if (pData->IsParent() || pData->GetType() != TYPE_HYPH)
         return;
 
     // make hyphenator checkboxes function as radio-buttons
