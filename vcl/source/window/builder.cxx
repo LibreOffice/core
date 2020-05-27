@@ -1373,83 +1373,6 @@ namespace
         return xWindow;
     }
 
-    OUString extractUnit(const OUString& sPattern)
-    {
-        OUString sUnit(sPattern);
-        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
-        {
-            if (sPattern[i] != '.' && sPattern[i] != ',' && sPattern[i] != '0')
-            {
-                sUnit = sPattern.copy(i);
-                break;
-            }
-        }
-        return sUnit;
-    }
-
-    int extractDecimalDigits(const OUString& sPattern)
-    {
-        int nDigits = 0;
-        bool bAfterPoint = false;
-        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
-        {
-            if (sPattern[i] == '.' || sPattern[i] == ',')
-                bAfterPoint = true;
-            else if (sPattern[i] == '0')
-            {
-                if (bAfterPoint)
-                    ++nDigits;
-            }
-            else
-                break;
-        }
-        return nDigits;
-    }
-
-    FieldUnit detectMetricUnit(const OUString& sUnit)
-    {
-        FieldUnit eUnit = FieldUnit::NONE;
-
-        if (sUnit == "mm")
-            eUnit = FieldUnit::MM;
-        else if (sUnit == "cm")
-            eUnit = FieldUnit::CM;
-        else if (sUnit == "m")
-            eUnit = FieldUnit::M;
-        else if (sUnit == "km")
-            eUnit = FieldUnit::KM;
-        else if ((sUnit == "twips") || (sUnit == "twip"))
-            eUnit = FieldUnit::TWIP;
-        else if (sUnit == "pt")
-            eUnit = FieldUnit::POINT;
-        else if (sUnit == "pc")
-            eUnit = FieldUnit::PICA;
-        else if (sUnit == "\"" || (sUnit == "in") || (sUnit == "inch"))
-            eUnit = FieldUnit::INCH;
-        else if ((sUnit == "'") || (sUnit == "ft") || (sUnit == "foot") || (sUnit == "feet"))
-            eUnit = FieldUnit::FOOT;
-        else if (sUnit == "mile" || (sUnit == "miles"))
-            eUnit = FieldUnit::MILE;
-        else if (sUnit == "ch")
-            eUnit = FieldUnit::CHAR;
-        else if (sUnit == "line")
-            eUnit = FieldUnit::LINE;
-        else if (sUnit == "%")
-            eUnit = FieldUnit::PERCENT;
-        else if ((sUnit == "pixels") || (sUnit == "pixel") || (sUnit == "px"))
-            eUnit = FieldUnit::PIXEL;
-        else if ((sUnit == "degrees") || (sUnit == "degree"))
-            eUnit = FieldUnit::DEGREE;
-        else if ((sUnit == "sec") || (sUnit == "seconds") || (sUnit == "second"))
-            eUnit = FieldUnit::SECOND;
-        else if ((sUnit == "ms") || (sUnit == "milliseconds") || (sUnit == "millisecond"))
-            eUnit = FieldUnit::MILLISECOND;
-        else if (sUnit != "0")
-            eUnit = FieldUnit::CUSTOM;
-
-        return eUnit;
-    }
-
     WinBits extractDeferredBits(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK|WB_HIDE;
@@ -2034,7 +1957,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         xWindow = VclPtr<FixedHyperlink>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
     else if (name == "GtkComboBox" || name == "GtkComboBoxText")
     {
-        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         extractModel(id, rMap);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
@@ -2044,25 +1966,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (bDropdown)
             nBits |= WB_DROPDOWN;
 
-        if (!sPattern.isEmpty())
-        {
-            OUString sAdjustment = extractAdjustment(rMap);
-            connectNumericFormatterAdjustment(id, sAdjustment);
-            OUString sUnit = extractUnit(sPattern);
-            FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_WARN("vcl.builder", "making metric box for type: " << name
-                << " unit: " << sUnit
-                << " name: " << id
-                << " use a GtkSpinButton instead");
-            VclPtrInstance<MetricBox> xBox(pParent, nBits);
-            xBox->EnableAutoSize(true);
-            xBox->SetUnit(eUnit);
-            xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-            if (eUnit == FieldUnit::CUSTOM)
-                xBox->SetCustomUnitText(sUnit);
-            xWindow = xBox;
-        }
-        else if (extractEntry(rMap))
+        if (extractEntry(rMap))
         {
             VclPtrInstance<ComboBox> xComboBox(pParent, nBits);
             xComboBox->EnableAutoSize(true);
