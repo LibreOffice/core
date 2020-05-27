@@ -1912,9 +1912,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkCheckButton")
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
-        if (!sWrap.isEmpty())
-            nBits |= WB_WORDBREAK;
         bool bIsTriState = extractInconsistent(rMap);
         VclPtr<CheckBox> xCheckBox = VclPtr<CheckBox>::Create(pParent, nBits);
         if (bIsTriState)
