@@ -238,7 +238,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         }
         bool bManualLayout=false;
         // manual positioning and size
-        if( mrModel.mxLayout.get() )
+        if( mrModel.mxLayout )
         {
             LayoutConverter aLayoutConv( *this, *mrModel.mxLayout );
             // manual size needs ChartLegendExpansion_CUSTOM
