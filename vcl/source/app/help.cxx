@@ -518,11 +518,6 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
                 ((pHelpWin->GetHelpArea() != rHelpArea) && aHelpData.mbRequestingHelp);
             if (bUpdate)
             {
-                vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
-                tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
-                if( pHelpWin->IsVisible() )
-                    pWindow->Invalidate( aInvRect );
-
                 pHelpWin->SetHelpText( rHelpText );
                 // approach mouse position
                 ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle, rScreenPos, rHelpArea );
@@ -564,18 +559,6 @@ void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime)
     VclPtr<HelpTextWindow> pHelpWin = rHelpData.mpHelpWin;
     if( pHelpWin )
     {
-        vcl::Window * pParent = pHelpWin->GetParent();
-        if( pParent )
-        {
-            VclPtr<vcl::Window> pWindow( pParent->ImplGetFrameWindow() );
-            if( pWindow )
-            {
-                // find out screen area covered by system help window
-                tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
-                if( pHelpWin->IsVisible() )
-                    pWindow->Invalidate( aInvRect );
-            }
-        }
         rHelpData.mpHelpWin = nullptr;
         rHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
