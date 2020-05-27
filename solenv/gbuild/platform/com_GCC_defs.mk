@@ -106,9 +106,7 @@ gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
 gb_COMPILEROPTFLAGS := -O0
 endif
 
-# Strip out duplicates, which happen a lot with e.g. UNO
-# functions declared in UNO header files.
-ifneq ($(OS_FOR_BUILD),MACOSX)
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_CFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
