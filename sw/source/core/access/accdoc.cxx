@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <comphelper/accflowenum.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
@@ -450,11 +449,6 @@ uno::Any SwAccessibleDocument::queryInterface(
         uno::Reference<XAccessibleExtendedAttributes> aAttribute = this;
         aRet <<= aAttribute;
     }
-    else if(rType == cppu::UnoType<XAccessibleGetAccFlowTo>::get())
-    {
-        uno::Reference<XAccessibleGetAccFlowTo> AccFlowTo = this;
-        aRet <<= AccFlowTo;
-    }
     else
         aRet = SwAccessibleContext::queryInterface( rType );
     return aRet;
@@ -720,121 +714,6 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
 {
     SolarMutexGuard aGuard;
     return sal_Int32(SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
-}
-
-css::uno::Sequence< css::uno::Any >
-        SAL_CALL SwAccessibleDocument::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
-{
-    SolarMutexGuard g;
-
-    SwAccessibleMap* pAccMap = GetMap();
-    if ( !pAccMap )
-    {
-        return uno::Sequence< uno::Any >();
-    }
-
-    if (nType == AccessibilityFlowTo::FORSPELLCHECKFLOWTO)
-    {
-        uno::Reference< css::drawing::XShape > xShape;
-        rAny >>= xShape;
-        if( xShape.is() )
-        {
-            SdrObject* pObj = GetSdrObjectFromXShape(xShape);
-            if( pObj )
-            {
-                uno::Reference<XAccessible> xAcc = pAccMap->GetContext(pObj, this, false);
-                uno::Reference < XAccessibleSelection > xAccSelection( xAcc, uno::UNO_QUERY );
-                if ( xAccSelection.is() )
-                {
-                    try
-                    {
-                        if ( xAccSelection->getSelectedAccessibleChildCount() )
-                        {
-                            uno::Reference < XAccessible > xSel = xAccSelection->getSelectedAccessibleChild( 0 );
-                            if ( xSel.is() )
-                            {
-                                uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
-                                if ( xSelContext.is() )
-                                {
-                                    //if in sw we find the selected paragraph here
-                                    if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                                    {
-                                        uno::Sequence<uno::Any> aRet( 1 );
-                                        aRet[0] <<= xSel;
-                                        return aRet;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch ( const css::lang::IndexOutOfBoundsException& )
-                    {
-                        return uno::Sequence< uno::Any >();
-                    }
-                    //end of try...catch
-                }
-            }
-        }
-        else
-        {
-            uno::Reference< XAccessible > xAcc = pAccMap->GetCursorContext();
-            SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
-            if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-            {
-                uno::Sequence< uno::Any > aRet(1);
-                aRet[0] <<= xAcc;
-                return aRet;
-            }
-        }
-    }
-    else if (nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_ITEM || nType == AccessibilityFlowTo::FORFINDREPLACEFLOWTO_RANGE)
-    {
-        SwCursorShell* pCursorShell = GetCursorShell();
-        if ( pCursorShell )
-        {
-            SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
-            std::set<SwFrame*> vFrameList;
-            do
-            {
-                if ( _pStartCursor && _pStartCursor->HasMark() )
-                {
-                    SwContentNode* pContentNode = _pStartCursor->GetContentNode();
-                    SwFrame *const pFrame = pContentNode
-                        ? pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint())
-                        : nullptr;
-                    if ( pFrame )
-                    {
-                        vFrameList.insert( pFrame );
-                    }
-                }
-            }
-
-            while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
-
-            if ( !vFrameList.empty() )
-            {
-                uno::Sequence< uno::Any > aRet(vFrameList.size());
-                sal_Int32 nIndex = 0;
-                for ( const auto& rpFrame : vFrameList )
-                {
-                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(rpFrame, false);
-                    if ( xAcc.is() )
-                    {
-                        SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
-                        if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                        {
-                            aRet[nIndex] <<= xAcc;
-                        }
-                    }
-                    nIndex++;
-                }
-                aRet.realloc(nIndex);
-                return aRet;
-            }
-        }
-    }
-
-    return uno::Sequence< uno::Any >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
