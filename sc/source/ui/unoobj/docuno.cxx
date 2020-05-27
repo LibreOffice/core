@@ -626,20 +626,22 @@ Size ScModelObj::getDocumentSize()
     rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
     const ScDocument* pThisDoc = &rDoc;
+    const double fPPTX = pViewData->GetPPTX();
+    const double fPPTY = pViewData->GetPPTY();
 
-    auto GetColWidthPx = [pThisDoc, nTab](SCCOL nCol) {
+    auto GetColWidthPx = [pThisDoc, fPPTX, nTab](SCCOL nCol) {
         const sal_uInt16 nSize = pThisDoc->GetColWidth(nCol, nTab);
-        return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
+        return ScViewData::ToPixel(nSize, fPPTX);
     };
 
     long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
-    long nDocHeightPixel = pThisDoc->GetScaledRowHeight( 0, nEndRow, nTab, 1.0 / TWIPS_PER_PIXEL );
+    long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, nEndRow, nTab, fPPTY);
 
     if (nDocWidthPixel > 0 && nDocHeightPixel > 0)
     {
         // convert to twips
-        aSize.setWidth(nDocWidthPixel * TWIPS_PER_PIXEL);
-        aSize.setHeight(nDocHeightPixel * TWIPS_PER_PIXEL);
+        aSize.setWidth(nDocWidthPixel / fPPTX);
+        aSize.setHeight(nDocHeightPixel / fPPTY);
     }
     else
     {
