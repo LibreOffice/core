@@ -1640,7 +1640,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleEventListener \
     XAccessibleExtendedAttributes \
 	XAccessibleExtendedComponent \
-    XAccessibleGetAccFlowTo \
     XAccessibleGroupPosition \
 	XAccessibleHyperlink \
 	XAccessibleHypertext \
