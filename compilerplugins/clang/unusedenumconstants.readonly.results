@@ -170,8 +170,6 @@ framework/inc/xml/toolboxdocumenthandler.hxx:53
     enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_STYLE
 framework/inc/xml/toolboxdocumenthandler.hxx:54
     enum framework::OReadToolBoxDocumentHandler::ToolBox_XML_Entry TB_ATTRIBUTE_UINAME
-include/comphelper/accflowenum.hxx:27
-    enum AccessibilityFlowTo FORSPELLCHECKFLOWTO
 include/connectivity/dbtools.hxx:813
     enum connectivity::dbase::DBFType dBaseIII
 include/connectivity/dbtools.hxx:814

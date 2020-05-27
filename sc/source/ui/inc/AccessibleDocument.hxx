@@ -26,7 +26,6 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-#include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
 
 class ScTabViewShell;
@@ -53,7 +52,6 @@ typedef cppu::ImplHelper3< css::accessibility::XAccessibleSelection,
 class ScAccessibleDocument
     :   public ScAccessibleDocumentBase,
         public ScAccessibleDocumentImpl,
-        public css::accessibility::XAccessibleGetAccFlowTo,
         public accessibility::IAccessibleViewForwarder
 {
 public:
@@ -258,11 +256,8 @@ private:
 public:
     ScDocument *GetDocument() const ;
     ScAddress   GetCurCellAddress() const;
-    //=====  XAccessibleGetAccFromXShape  ============================================
-    css::uno::Sequence< css::uno::Any >
-        SAL_CALL getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType) override;
 
-     virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
 
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 };
