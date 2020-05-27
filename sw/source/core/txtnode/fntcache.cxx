@@ -1049,7 +1049,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             sal_uInt8 nType = lcl_WhichPunctuation( cChar );
             switch ( nType )
             {
-            // centre character
+            // center character
             case SwScriptInfo::NONE :
                 aTextOriginPos.AdjustX(( nAvgWidthPerChar - nCharWidth ) / 2 );
                 nNextFix = nCharWidth / 2;
@@ -1072,7 +1072,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // almost the same as getting the offset for the first character:
                 // punctuation characters are not centered, so just add half an
                 // average character width minus the characters actual char width
-                // to get the offset into the centre of the next character
+                // to get the offset into the center of the next character
 
                 cChar = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + j ];
                 nType = lcl_WhichPunctuation( cChar );

@@ -35,7 +35,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.o
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
 {
-    // Since non-DOCX formats ignores column breaks in non-column situtations, don't export to docx.
+    // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
