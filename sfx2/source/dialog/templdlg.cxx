@@ -339,6 +339,7 @@ void SfxCommonTemplateDialog_Impl::PrepareMenu(const Point& rPos)
     if (pTreeView->get_dest_row_at_pos(rPos, xIter.get(), false) && !pTreeView->is_selected(*xIter))
     {
         pTreeView->unselect_all();
+        pTreeView->set_cursor(*xIter);
         pTreeView->select(*xIter);
         FmtSelectHdl(*pTreeView);
     }
