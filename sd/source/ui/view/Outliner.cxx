@@ -211,7 +211,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
 /// Nothing spectacular in the destructor.
 SdOutliner::~SdOutliner()
 {
-    mpImpl.reset();
 }
 
 /** Prepare find&replace or spellchecking.  This distinguishes between three
@@ -467,7 +466,9 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 
         const SvxSearchCmd nCommand (mpSearchItem->GetCommand());
         if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
+        {
             bEndOfSearch = SearchAndReplaceAll ();
+        }
         else
         {
             RememberStartPosition ();
@@ -573,6 +574,7 @@ void SdOutliner::Initialize (bool bDirectionIsForward)
 bool SdOutliner::SearchAndReplaceAll()
 {
     bool bRet = true;
+
     // Save the current position to be restored after having replaced all
     // matches.
     RememberStartPosition ();
@@ -756,13 +758,13 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         pOutlinerView = mpImpl->GetOutlinerView();
     }
 
-    if (pViewShell != nullptr)
+    if (pViewShell)
     {
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
         pOutlinerView->SetWindow(mpWindow);
 
-        if( nullptr != dynamic_cast< const sd::DrawViewShell *>( pViewShell.get() ))
+        if (nullptr != dynamic_cast<const sd::DrawViewShell*>(pViewShell.get()))
         {
             // When replacing we first check if there is a selection
             // indicating a match.  If there is then replace it.  The
@@ -785,7 +787,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
             {
                 ProvideNextTextObject ();
 
-                if ( ! mbEndOfSearch)
+                if (!mbEndOfSearch)
                 {
                     // Remember the current position as the last one with a
                     // text object.
@@ -807,7 +809,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 }
             }
         }
-        else if( nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ))
+        else if (nullptr != dynamic_cast<const sd::OutlineViewShell*>(pViewShell.get()))
         {
             mpDrawDocument->GetDocSh()->SetWaitCursor(false);
             // The following loop is executed more than once only when a
