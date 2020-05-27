@@ -2103,9 +2103,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkLabel")
     {
         WinBits nWinStyle = WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        if (!sBorder.isEmpty())
-            nWinStyle |= WB_BORDER;
         extractMnemonicWidget(id, rMap);
         if (extractSelectable(rMap))
             xWindow = VclPtr<SelectableFixedText>::Create(pParent, nWinStyle);
