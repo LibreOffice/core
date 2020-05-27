@@ -258,7 +258,6 @@ void SearchAttrItemList::Remove(size_t nPos)
 SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
                                   "svx/ui/findreplacedialog.ui", "FindReplaceDialog")
-    , mbSuccess(false)
     , rBindings(rBind)
     , bWriter(false)
     , bSearch(true)
@@ -2284,7 +2283,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
 
-void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand)
+void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand, bool bSuccess)
 {
     m_xDialog->clear_extra_accessible_relations();
 
@@ -2320,7 +2319,7 @@ void SvxSearchDialog::SetDocWin(vcl::Window* pDocWin, SvxSearchCmd eCommand)
             eFlowTo = AccessibilityFlowTo::ForFindReplaceRange;
             break;
     }
-    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(GetSrchFlag()), static_cast<sal_Int32>(eFlowTo));
+    uno::Sequence<uno::Any> aAnySeq = xGetAccFlowTo->getAccFlowTo(Any(bSuccess), static_cast<sal_Int32>(eFlowTo));
 
     sal_Int32 nLen = aAnySeq.getLength();
     if (nLen)

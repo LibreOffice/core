@@ -239,8 +239,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
-                        pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand, false);
                     }
                 }
 #endif
@@ -272,8 +271,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
-                        pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand, false);
                     }
                 }
 #endif
@@ -330,8 +328,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     pSrchDlg = GetSearchDialog();
                     if (pSrchDlg)
                     {
-                        pSrchDlg->SetDocWin(m_pEditWin, eCommand);
-                        pSrchDlg->SetSrchFlag(false);
+                        pSrchDlg->SetDocWin(m_pEditWin, eCommand, false);
                     }
                 }
 #endif
@@ -398,8 +395,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 pSrchDlg = GetSearchDialog();
                 if (pSrchDlg)
                 {
-                    pSrchDlg->SetDocWin(m_pEditWin, eCommand);
-                    pSrchDlg->SetSrchFlag(false);
+                    pSrchDlg->SetDocWin(m_pEditWin, eCommand, false);
                 }
 #endif
                 break;
