@@ -146,7 +146,6 @@ blacklist:
     sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
-    - com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp
     - com/sun/star/awt/XFocusListener.hpp
     - com/sun/star/awt/XWindowListener.hpp
     - com/sun/star/beans/XPropertyChangeListener.hpp
