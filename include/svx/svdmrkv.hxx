@@ -90,9 +90,9 @@ class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
     friend class                SdrPageView;
 
     // #114409#-3 Migrate selections
-    ImplMarkingOverlay*                                 mpMarkObjOverlay;
-    ImplMarkingOverlay*                                 mpMarkPointsOverlay;
-    ImplMarkingOverlay*                                 mpMarkGluePointsOverlay;
+    std::unique_ptr<ImplMarkingOverlay> mpMarkObjOverlay;
+    std::unique_ptr<ImplMarkingOverlay> mpMarkPointsOverlay;
+    std::unique_ptr<ImplMarkingOverlay> mpMarkGluePointsOverlay;
 
 protected:
     SdrObject*                  mpMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
