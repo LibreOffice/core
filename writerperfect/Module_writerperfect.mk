@@ -51,4 +51,8 @@ $(eval $(call gb_Module_add_uicheck_targets,writerperfect,\
     UITest_writerperfect_epubexport \
 ))
 
+# screenshots
+$(eval $(call gb_Module_add_screenshot_targets,writerperfect,\
+    CppunitTest_writerperfect_dialogs_test \
+))
 # vim: set noet sw=4 ts=4:
