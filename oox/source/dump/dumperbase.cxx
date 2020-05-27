@@ -2015,7 +2015,7 @@ void InputObjectBase::construct( const InputObjectBase& rParent )
 
 bool InputObjectBase::implIsValid() const
 {
-    return mxStrm.get() && OutputObjectBase::implIsValid();
+    return mxStrm && OutputObjectBase::implIsValid();
 }
 
 void InputObjectBase::skipBlock( sal_Int64 nBytes, bool bShowSize )
@@ -2318,7 +2318,7 @@ void TextStreamObjectBase::implDump()
 
 void TextStreamObjectBase::constructTextStrmObj( rtl_TextEncoding eTextEnc )
 {
-    if( mxStrm.get() )
+    if( mxStrm )
         mxTextStrm = std::make_shared<TextInputStream>( getContext(), *mxStrm, eTextEnc );
 }
 
@@ -2450,7 +2450,7 @@ void RecordObjectBase::construct( const ObjectBase& rParent,
 
 bool RecordObjectBase::implIsValid() const
 {
-    return mxBaseStrm.get() && InputObjectBase::implIsValid();
+    return mxBaseStrm && InputObjectBase::implIsValid();
 }
 
 void RecordObjectBase::implDump()

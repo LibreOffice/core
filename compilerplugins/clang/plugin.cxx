@@ -830,19 +830,21 @@ bool hasExternalLinkage(VarDecl const * decl) {
 
 bool isSmartPointerType(const Expr* e)
 {
-    // First check the object type as written, in case the get member function is
-    // declared at a base class of std::unique_ptr or std::shared_ptr:
-    auto const t = e->IgnoreImpCasts()->getType();
-    auto const tc1 = loplugin::TypeCheck(t);
-    if (tc1.ClassOrStruct("unique_ptr").StdNamespace()
-          || tc1.ClassOrStruct("shared_ptr").StdNamespace())
+    // First check whether the object type as written is, or is derived from, std::unique_ptr or
+    // std::shared_ptr, in case the get member function is declared at a base class of that std
+    // type:
+    if (loplugin::isDerivedFrom(
+            e->IgnoreImpCasts()->getType()->getAsCXXRecordDecl(),
+            [](Decl const * decl) {
+                auto const dc = loplugin::DeclCheck(decl);
+                return dc.ClassOrStruct("unique_ptr").StdNamespace()
+                    || dc.ClassOrStruct("shared_ptr").StdNamespace();
+            }))
         return true;
 
     // Then check the object type coerced to the type of the get member function, in
     // case the type-as-written is derived from one of these types (tools::SvRef is
-    // final, but the rest are not; but note that this will fail when the type-as-
-    // written is derived from std::unique_ptr or std::shared_ptr for which the get
-    // member function is declared at a base class):
+    // final, but the rest are not):
     auto const tc2 = loplugin::TypeCheck(e->getType());
     if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
            || tc2.ClassOrStruct("shared_ptr").StdNamespace()
