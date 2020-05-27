@@ -625,15 +625,14 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabOverMargin = rSource.mbTabOverMargin;
     // No mbTreatSingleColumnBreakAsPageBreak
     // No mbSurroundTextWrapSmall
-    // No mbPropLineSpacingShrinksFirstLine
+    mbPropLineSpacingShrinksFirstLine = rSource.mbPropLineSpacingShrinksFirstLine;
     mbSubtractFlys = rSource.mbSubtractFlys;
-    // No mbLastBrowseMode
+    // No mbLastBrowseMode: this is false by default everywhere
     mbDisableOffPagePositioning = rSource.mbDisableOffPagePositioning;
-    // No mbEmptyDbFieldHidesPara
     mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
     mbContinuousEndnotes = rSource.mbContinuousEndnotes;
-    // No mbProtectBookmarks
-    // No mbProtectFields
+    // No mbProtectBookmarks: this is false by default everywhere
+    // No mbProtectFields: this is false by default everywhere
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
