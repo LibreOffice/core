@@ -382,7 +382,6 @@ uno::Any SAL_CALL
             static_cast<awt::XWindowListener*>(this),
             static_cast<awt::XFocusListener*>(this)
            ,static_cast<XAccessibleExtendedAttributes*>(this)
-           ,static_cast<XAccessibleGetAccFlowTo*>(this)
             );
     return aReturn;
 }
@@ -763,14 +762,6 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     if (sValue.getLength())
         anyAtrribute <<= sValue.makeStringAndClear();
     return anyAtrribute;
-}
-
-css::uno::Sequence< css::uno::Any >
-        SAL_CALL AccessibleDocumentViewBase::getAccFlowTo(const css::uno::Any&, sal_Int32 )
-{
-    css::uno::Sequence< uno::Any> aRet;
-
-    return aRet;
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )

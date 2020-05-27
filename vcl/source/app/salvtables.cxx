@@ -374,17 +374,6 @@ void SalInstanceWidget::set_accessible_relation_label_for(weld::Widget* pLabeled
     m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
 }
 
-void SalInstanceWidget::add_extra_accessible_relation(
-    const css::accessibility::AccessibleRelation& rRelation)
-{
-    m_xWidget->AddExtraAccessibleRelation(rRelation);
-}
-
-void SalInstanceWidget::clear_extra_accessible_relations()
-{
-    m_xWidget->ClearExtraAccessibleRelations();
-}
-
 void SalInstanceWidget::set_tooltip_text(const OUString& rTip)
 {
     m_xWidget->SetQuickHelpText(rTip);

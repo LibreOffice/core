@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/accflowenum.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -742,117 +741,6 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
 
     // Forward call to base classes.
     AccessibleDocumentViewBase::disposing ();
-}
-
-css::uno::Sequence< css::uno::Any >
-        SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const css::uno::Any& /*rAny*/, sal_Int32 nType)
-{
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    AccessibilityFlowTo eType = static_cast<AccessibilityFlowTo>(nType);
-    assert(eType == AccessibilityFlowTo::ForFindReplaceItem || eType == AccessibilityFlowTo::ForFindReplaceRange);
-#else
-    (void) nType;
-#endif
-
-    SolarMutexGuard g;
-
-    sal_Int32 nChildCount = getSelectedAccessibleChildCount();
-    if ( nChildCount )
-    {
-        uno::Reference < XAccessible > xSel = getSelectedAccessibleChild( 0 );
-        if ( xSel.is() )
-        {
-            uno::Reference < XAccessibleSelection > xAccChildSelection( xSel, uno::UNO_QUERY );
-            if ( xAccChildSelection.is() )
-            {
-                if ( xAccChildSelection->getSelectedAccessibleChildCount() )
-                {
-                    uno::Reference < XAccessible > xChildSel = xAccChildSelection->getSelectedAccessibleChild( 0 );
-                    if ( xChildSel.is() )
-                    {
-                        uno::Reference < XAccessibleContext > xChildSelContext( xChildSel->getAccessibleContext() );
-                        if ( xChildSelContext.is() &&
-                            xChildSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                        {
-                            uno::Sequence<uno::Any> aRet( 1 );
-                            aRet[0] <<= xChildSel;
-                            return aRet;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        uno::Reference<XAccessible> xPara = GetSelAccContextInTable();
-        if ( xPara.is() )
-        {
-            uno::Sequence<uno::Any> aRet( 1 );
-            aRet[0] <<= xPara;
-            return aRet;
-        }
-    }
-
-    css::uno::Sequence< uno::Any> aRet;
-    return aRet;
-}
-uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable()
-{
-    uno::Reference<XAccessible> xRet;
-    sal_Int32 nCount = mpChildrenManager ? mpChildrenManager->GetChildCount() : 0;
-    if ( nCount )
-    {
-        for ( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            try
-            {
-                uno::Reference<XAccessible> xObj = mpChildrenManager->GetChild(i);
-                if ( xObj.is() )
-                {
-                    uno::Reference<XAccessibleContext> xObjContext( xObj, uno::UNO_QUERY );
-                    if ( xObjContext.is() && xObjContext->getAccessibleRole() == AccessibleRole::TABLE )
-                    {
-                        uno::Reference<XAccessibleSelection> xObjSelection( xObj, uno::UNO_QUERY );
-                        if ( xObjSelection.is() && xObjSelection->getSelectedAccessibleChildCount() )
-                        {
-                            uno::Reference<XAccessible> xCell = xObjSelection->getSelectedAccessibleChild(0);
-                            if ( xCell.is() )
-                            {
-                                uno::Reference<XAccessibleSelection> xCellSel( xCell, uno::UNO_QUERY );
-                                if ( xCellSel.is() && xCellSel->getSelectedAccessibleChildCount() )
-                                {
-                                    uno::Reference<XAccessible> xPara = xCellSel->getSelectedAccessibleChild( 0 );
-                                    if ( xPara.is() )
-                                    {
-                                        uno::Reference<XAccessibleContext> xParaContext( xPara, uno::UNO_QUERY );
-                                        if ( xParaContext.is() &&
-                                            xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
-                                        {
-                                            xRet = xPara;
-                                            return xRet;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (const lang::IndexOutOfBoundsException&)
-            {
-                uno::Reference<XAccessible> xEmpty;
-                return xEmpty;
-            }
-            catch (const uno::RuntimeException&)
-            {
-                uno::Reference<XAccessible> xEmpty;
-                return xEmpty;
-            }
-        }
-    }
-
-    return xRet;
 }
 
 void AccessibleDrawDocumentView::UpdateAccessibleName()
