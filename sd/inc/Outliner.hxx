@@ -416,13 +416,6 @@ private:
     */
     bool ShowWrapArroundDialog();
 
-    /** Check whether the object pointed to by the iterator is a valid text
-        object.
-        @param aPosition
-            The object for which to test whether it is a valid text object.
-    */
-    static bool IsValidTextObject(const ::sd::outliner::IteratorPosition& rPosition);
-
     /** Put text of current text object into outliner so that the text can
         be searched/spell checked.
     */
