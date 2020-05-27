@@ -156,9 +156,6 @@ SdrMarkView::SdrMarkView(
     SdrModel& rSdrModel,
     OutputDevice* pOut)
 :   SdrSnapView(rSdrModel, pOut),
-    mpMarkObjOverlay(nullptr),
-    mpMarkPointsOverlay(nullptr),
-    mpMarkGluePointsOverlay(nullptr),
     maHdlList(this)
 {
     ImpClearVars();
@@ -354,10 +351,10 @@ void SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
 {
     BrkAction();
 
-    DBG_ASSERT(nullptr == mpMarkObjOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkObjOverlay (!)");
+    DBG_ASSERT(!mpMarkObjOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkObjOverlay (!)");
 
     basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-    mpMarkObjOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
+    mpMarkObjOverlay.reset(new ImplMarkingOverlay(*this, aStartPos, bUnmark));
 
     maDragStat.Reset(rPnt);
     maDragStat.NextPoint();
@@ -401,8 +398,7 @@ void SdrMarkView::BrkMarkObj()
     if(IsMarkObj())
     {
         DBG_ASSERT(mpMarkObjOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        delete mpMarkObjOverlay;
-        mpMarkObjOverlay = nullptr;
+        mpMarkObjOverlay.reset();
     }
 }
 
@@ -413,9 +409,9 @@ bool SdrMarkView::BegMarkPoints(const Point& rPnt, bool bUnmark)
     {
         BrkAction();
 
-        DBG_ASSERT(nullptr == mpMarkPointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkPointsOverlay (!)");
+        DBG_ASSERT(!mpMarkPointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkPointsOverlay (!)");
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-        mpMarkPointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
+        mpMarkPointsOverlay.reset(new ImplMarkingOverlay(*this, aStartPos, bUnmark));
 
         maDragStat.Reset(rPnt);
         maDragStat.NextPoint();
@@ -466,8 +462,7 @@ void SdrMarkView::BrkMarkPoints()
     if(IsMarkPoints())
     {
         DBG_ASSERT(mpMarkPointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        delete mpMarkPointsOverlay;
-        mpMarkPointsOverlay = nullptr;
+        mpMarkPointsOverlay.reset();
     }
 }
 
@@ -478,10 +473,10 @@ bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, bool bUnmark)
     {
         BrkAction();
 
-        DBG_ASSERT(nullptr == mpMarkGluePointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkGluePointsOverlay (!)");
+        DBG_ASSERT(!mpMarkGluePointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkGluePointsOverlay (!)");
 
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-        mpMarkGluePointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
+        mpMarkGluePointsOverlay.reset(new ImplMarkingOverlay(*this, aStartPos, bUnmark));
         maDragStat.Reset(rPnt);
         maDragStat.NextPoint();
         maDragStat.SetMinMove(mnMinMovLog);
@@ -525,8 +520,7 @@ void SdrMarkView::BrkMarkGluePoints()
     if(IsMarkGluePoints())
     {
         DBG_ASSERT(mpMarkGluePointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        delete mpMarkGluePointsOverlay;
-        mpMarkGluePointsOverlay = nullptr;
+        mpMarkGluePointsOverlay.reset();
     }
 }
 
