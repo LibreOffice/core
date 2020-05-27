@@ -275,6 +275,9 @@ namespace o3tl
 #define LANGUAGE_KASHMIRI                   LanguageType(0x0460)
 #define LANGUAGE_KASHMIRI_INDIA             LanguageType(0x0860)
 #define LANGUAGE_KAZAKH                     LanguageType(0x043F)
+#define LANGUAGE_KAZAKH_LATIN               LanguageType(0x083F)
+#define LANGUAGE_KAZAKH_CYRILLIC_LSO        LanguageType(0x783F)
+#define LANGUAGE_KAZAKH_LATIN_LSO           LanguageType(0x7C3F)
 #define LANGUAGE_KHMER                      LanguageType(0x0453)
 #define LANGUAGE_KICHE_GUATEMALA            LanguageType(0x0486)  /* AKA K'iche', West Central Quiche,  */
 #define LANGUAGE_KINYARWANDA_RWANDA         LanguageType(0x0487)  /* obsoletes LANGUAGE_USER_KINYARWANDA 0x0621 */
