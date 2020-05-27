@@ -15,7 +15,7 @@
 
 #include <o3tl/lru_map.hxx>
 
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 
 using namespace ::o3tl;
 
@@ -202,8 +202,8 @@ struct TestClassKeyHashFunction
     std::size_t operator()(TestClassKey const& aKey) const
     {
         std::size_t seed = 0;
-        boost::hash_combine(seed, aKey.mA);
-        boost::hash_combine(seed, aKey.mB);
+        o3tl::hash_combine(seed, aKey.mA);
+        o3tl::hash_combine(seed, aKey.mB);
         return seed;
     }
 };
