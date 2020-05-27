@@ -2505,7 +2505,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
                 Point aTopLeft = pViewData->GetPrintTwipsPos(rPos.Col(), rPos.Row());
                 long nSizeX, nSizeY;
                 pViewData->GetMergeSizePrintTwips(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
-                aRectString = tools::Rectangle(aTopLeft, Size(nSizeX, nSizeY)).toString();
+                aRectString = tools::Rectangle(aTopLeft, Size(nSizeX - 1, nSizeY - 1)).toString();
             }
             else
             {
