@@ -132,6 +132,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/stylemenu \
 	svx/uiconfig/ui/surfacewindow \
 	svx/uiconfig/ui/tablewindow \
+	svx/uiconfig/ui/stylespreview \
 	svx/uiconfig/ui/textcharacterspacingcontrol \
 	svx/uiconfig/ui/textcontrolchardialog \
 	svx/uiconfig/ui/textcontrolparadialog \
