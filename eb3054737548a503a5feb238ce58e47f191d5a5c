@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4de2c7c3_64630412",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-05-27T19:11:31Z",
+      "side": 1,
+      "message": "The previous (now commented out) static_assert((BCA_SLOT_ROWS ...) calculation above guaranteed that all rows were covered by slots. This is not the case anymore if the max row count is not a factor 2 multiple of the initial nRow2 value. The last hunk of rows then will not be covered by a broadcast slot thus no broadcasters/listeners will be set up for these and dependencies not recalculated. If max row count is not exactly the last nRow2 after the last iteration then an additional slot is needed.",
+      "revId": "eb3054737548a503a5feb238ce58e47f191d5a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
