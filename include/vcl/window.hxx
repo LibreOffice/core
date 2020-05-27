@@ -1250,10 +1250,6 @@ public:
     void                                SetAccessibleRelationMemberOf( vcl::Window* pMemberOf );
     vcl::Window*                        GetAccessibleRelationMemberOf() const;
 
-    void                                AddExtraAccessibleRelation(const css::accessibility::AccessibleRelation &rRelation);
-    const std::vector<css::accessibility::AccessibleRelation>& GetExtraAccessibleRelations() const;
-    void                                ClearExtraAccessibleRelations();
-
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
     bool                                IsAccessibilityEventsSuppressed( bool bTraverseParentPath = true );
