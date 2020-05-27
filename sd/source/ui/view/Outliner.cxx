@@ -126,6 +126,16 @@ private:
     OutlinerView* mpOutlineView;
 };
 
+namespace
+{
+
+sd::ViewShellBase* getViewShellBase()
+{
+    return dynamic_cast<sd::ViewShellBase*>(SfxViewShell::Current());
+}
+
+} // end anonymous namespace
+
 SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
@@ -245,7 +255,7 @@ void SdOutliner::PrepareSpelling()
 {
     mbPrepareSpellingPending = false;
 
-    sd::ViewShellBase* pBase = dynamic_cast< sd::ViewShellBase *>( SfxViewShell::Current() );
+    sd::ViewShellBase* pBase = getViewShellBase();
     if (pBase != nullptr)
         SetViewShell (pBase->GetMainViewShell());
     SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
@@ -287,7 +297,7 @@ void SdOutliner::EndSpelling()
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     std::shared_ptr<sd::ViewShell> pOldViewShell (pViewShell);
 
-    sd::ViewShellBase* pBase = dynamic_cast< sd::ViewShellBase *>( SfxViewShell::Current() );
+    sd::ViewShellBase* pBase = getViewShellBase();
     if (pBase != nullptr)
         pViewShell = pBase->GetMainViewShell();
     else
@@ -430,7 +440,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
         PrepareSpelling();
-    sd::ViewShellBase* pBase = dynamic_cast< sd::ViewShellBase *>( SfxViewShell::Current() );
+    sd::ViewShellBase* pBase = getViewShellBase();
     // Determine whether we have to abort the search.  This is necessary
     // when the main view shell does not support searching.
     bool bAbort = false;
@@ -1631,7 +1641,7 @@ void SdOutliner::BeginConversion()
 {
     SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
-    sd::ViewShellBase* pBase = dynamic_cast<sd::ViewShellBase*>( SfxViewShell::Current() );
+    sd::ViewShellBase* pBase = getViewShellBase();
     if (pBase != nullptr)
         SetViewShell (pBase->GetMainViewShell());
 
