@@ -117,7 +117,7 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
 css::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIndex )
 {
     sal_Int32 nSize(maProperties.size());
-    if (!((nIndex < nSize) && (nIndex >= 0)))
+    if ((nIndex >= nSize) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
     return uno::Any( maProperties[nIndex] );

@@ -288,21 +288,21 @@ bool SimplifyBool::VisitUnaryLNot(UnaryOperator const * expr) {
         }
         else if (binaryOp->isLogicalOp())
         {
-            auto containsNegation = [](Expr const * expr) {
+            auto containsNegationOrComparison = [](Expr const * expr) {
                 expr = ignoreParenImpCastAndComma(expr);
                 if (auto unaryOp = dyn_cast<UnaryOperator>(expr))
                     if (unaryOp->getOpcode() == UO_LNot)
                         return expr;
                 if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
-                    if (binaryOp->getOpcode() == BO_NE)
+                    if (binaryOp->isComparisonOp())
                         return expr;
                 if (auto cxxOpCall = dyn_cast<CXXOperatorCallExpr>(expr))
                     if (cxxOpCall->getOperator() == OO_ExclaimEqual)
                         return expr;
                 return (Expr const*)nullptr;
             };
-            auto lhs = containsNegation(binaryOp->getLHS());
-            auto rhs = containsNegation(binaryOp->getRHS());
+            auto lhs = containsNegationOrComparison(binaryOp->getLHS());
+            auto rhs = containsNegationOrComparison(binaryOp->getRHS());
             if (!lhs || !rhs)
                 return true;
             if (lhs || rhs)
