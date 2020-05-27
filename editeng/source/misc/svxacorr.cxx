@@ -1192,9 +1192,8 @@ sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, bool bSttQuote,
 
 void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
-                                    bool bIns, bool b_iApostrophe ) const
+                                    bool bIns, LanguageType eLang, ACQuotes eType ) const
 {
-    const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sChg( cInsChar );
@@ -1205,36 +1204,21 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     sChg = OUString(cRet);
 
-    if( '\"' == cInsChar )
+    if( eType == ACQuotes::NonBreakingSpace )
     {
-        if (primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS)
+        OUString s( cNonBreakingSpace ); // UNICODE code for no break space
+        if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
         {
-            OUString s( cNonBreakingSpace ); // UNICODE code for no break space
-            if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
-            {
-                if( !bSttQuote )
-                    ++nInsPos;
-            }
+            if( !bSttQuote )
+                ++nInsPos;
         }
     }
 
     rDoc.Replace( nInsPos, sChg );
 
-    // i' -> I' in English (last step for the undo)
-    if( b_iApostrophe && eLang.anyOf(
-        LANGUAGE_ENGLISH,
-        LANGUAGE_ENGLISH_US,
-        LANGUAGE_ENGLISH_UK,
-        LANGUAGE_ENGLISH_AUS,
-        LANGUAGE_ENGLISH_CAN,
-        LANGUAGE_ENGLISH_NZ,
-        LANGUAGE_ENGLISH_EIRE,
-        LANGUAGE_ENGLISH_SAFRICA,
-        LANGUAGE_ENGLISH_JAMAICA,
-        LANGUAGE_ENGLISH_CARIBBEAN))
-    {
+    // i' -> I' in English (last step for the Undo)
+    if( eType == ACQuotes::CapitalizeIAm )
         rDoc.Replace( nInsPos-1, "I" );
-    }
 }
 
 OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
@@ -1285,7 +1269,8 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             {
                 sal_Unicode cPrev;
                 bool bSttQuote = !nInsPos;
-                bool b_iApostrophe = false;
+                ACQuotes eType = ACQuotes::NONE;
+                const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
                 if (!bSttQuote)
                 {
                     cPrev = rTxt[ nInsPos-1 ];
@@ -1295,17 +1280,25 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         ( cEnDash == cPrev );
                     // tdf#38394 use opening quotation mark << in French l'<<word>>
                     if ( !bSingle && !bSttQuote && cPrev == cApostrophe &&
+                        primary(eLang) == primary(LANGUAGE_FRENCH) &&
                         (nInsPos == 2 || (nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ))) )
                     {
-                        const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
-                        if ( primary(eLang) == primary(LANGUAGE_FRENCH) )
-                            bSttQuote = true;
+                        bSttQuote = true;
                     }
                     // tdf#108423 for capitalization of English i'm
-                    b_iApostrophe = bSingle && ( cPrev == 'i' ) &&
-                        (( nInsPos == 1 ) || IsWordDelim( rTxt[ nInsPos-2 ] ));
+                    else if ( bSingle && ( cPrev == 'i' ) &&
+                        primary(eLang) == primary(LANGUAGE_ENGLISH) &&
+                        ( nInsPos == 1 || IsWordDelim( rTxt[ nInsPos-2 ] ) ) )
+                    {
+                        eType = ACQuotes::CapitalizeIAm;
+                    }
                 }
-                InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, b_iApostrophe );
+
+                if ( eType == ACQuotes::NONE && !bSingle &&
+                    ( primary(eLang) == primary(LANGUAGE_FRENCH) && eLang != LANGUAGE_FRENCH_SWISS ) )
+                    eType = ACQuotes::NonBreakingSpace;
+
+                InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, eLang, eType );
                 break;
             }
 
