@@ -786,9 +786,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
     }
 }
 
-
-static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
-    const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLength,
+static basegfx::B2DPolyPolygon GetLineArrow( const sal_Int32 nLineWidth, const sal_uInt32 eLineEnd,
+    const sal_uInt32 eLineWidth, const sal_uInt32 eLineLength,
     sal_Int32& rnArrowWidth, bool& rbArrowCenter,
     OUString& rsArrowName, bool bScaleArrow )
 {
@@ -1087,9 +1086,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineEndArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = static_cast<MSO_LineEnd>(GetPropertyValue( DFF_Prop_lineEndArrowhead, 0 ));
-                MSO_LineEndWidth    eWidth = static_cast<MSO_LineEndWidth>(GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow ));
-                MSO_LineEndLength   eLength = static_cast<MSO_LineEndLength>(GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow ));
+                auto eLineEnd = GetPropertyValue(DFF_Prop_lineEndArrowhead, 0);
+                auto eWidth = GetPropertyValue(DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow);
+                auto eLength = GetPropertyValue(DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow);
 
                 sal_Int32   nArrowWidth;
                 bool        bArrowCenter;
