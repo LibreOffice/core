@@ -51,15 +51,18 @@ gtv_application_activate(GApplication*)
 }
 
 static void
-gtv_application_open(GApplication* app, GFile** file, gint /*nFiles*/, const gchar* /*hint*/)
+gtv_application_open(GApplication* app, GFile** file, gint nFiles, const gchar* /*hint*/)
 {
-    // TODO: add some option to create a new view for existing document
-    // For now, this just opens a new document
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
-    gtk_window_present(GTK_WINDOW(window));
+    for (gint i = 0; i < nFiles; i++)
+    {
+        // TODO: add some option to create a new view for existing document
+        // For now, this just opens a new document
+        GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
+        gtk_window_present(GTK_WINDOW(window));
 
-    GtvApplicationPrivate* priv = getPrivate(GTV_APPLICATION(app));
-    gtv_application_window_load_document(window, priv->m_pRenderingArgs, std::string(g_file_get_path(file[0])));
+        GtvApplicationPrivate* priv = getPrivate(GTV_APPLICATION(app));
+        gtv_application_window_load_document(window, priv->m_pRenderingArgs, std::string(g_file_get_path(file[i])));
+    }
 }
 
 static void
