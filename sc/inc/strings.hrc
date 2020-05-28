@@ -164,10 +164,6 @@
 #define STR_MENU_SORT_ASC                           NC_("STR_MENU_SORT_ASC", "Sort Ascending")
 #define STR_MENU_SORT_DESC                          NC_("STR_MENU_SORT_DESC", "Sort Descending")
 #define STR_MENU_SORT_CUSTOM                        NC_("STR_MENU_SORT_CUSTOM", "Custom Sort")
-#define STR_BTN_TOGGLE_ALL                          NC_("STR_BTN_TOGGLE_ALL", "All")
-#define STR_BTN_SELECT_CURRENT                      NC_("STR_BTN_SELECT_CURRENT", "Show only the current item.")
-#define STR_BTN_UNSELECT_CURRENT                    NC_("STR_BTN_UNSELECT_CURRENT", "Hide only the current item.")
-#define STR_EDIT_SEARCH_ITEMS                       NC_("STR_EDIT_SEARCH_ITEMS", "Search items...")
 
 #define SCSTR_QHELP_POSWND                          NC_("SCSTR_QHELP_POSWND", "Name Box")
 #define SCSTR_QHELP_INPUTWND                        NC_("SCSTR_QHELP_INPUTWND", "Input line")
