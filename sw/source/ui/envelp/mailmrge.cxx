@@ -484,7 +484,7 @@ bool SwMailMergeDlg::ExecQryShell()
         nMergeType = DBMGR_MERGE_FILE;
         pModOpt->SetMailingPath( GetURLfromPath() );
         pModOpt->SetIsNameFromColumn(m_xGenerateFromDataBaseCB->get_active());
-        pModOpt->SetIsFileEncyrptedFromColumn(m_xPasswordCB->get_active());
+        pModOpt->SetIsFileEncryptedFromColumn(m_xPasswordCB->get_active());
 
         if (!AskUserFilename())
         {
