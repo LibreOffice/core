@@ -5968,7 +5968,6 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         if (it == pViewShell)
             continue;
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
-        assert(pOther);
         if (!pOther)
             return;
 
