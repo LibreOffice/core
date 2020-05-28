@@ -21,6 +21,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/VectorGraphicSearch.hxx>
 
 #include <svl/srchitem.hxx>
 #include <svl/intitem.hxx>
@@ -29,6 +30,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdograf.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <svx/srchdlg.hxx>
@@ -95,6 +97,11 @@ public:
     /** This method is called when the OutlinerView is no longer used.
     */
     void ReleaseOutlinerView();
+
+    /** Search in vector graphic
+     */
+    bool mbCurrentIsVectorGraphic;
+    std::unique_ptr<VectorGraphicSearch> mpVectorGraphicSearch;
 
 private:
     /** Flag that specifies whether we own the outline view pointed to by
@@ -674,21 +681,93 @@ bool SdOutliner::SearchAndReplaceAll()
     return bRet;
 }
 
+namespace
+{
+basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
+{
+    if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
+        return basegfx::B2DRange(basegfx::B2DTuple(rRect.Left(), rRect.Top()));
+    return basegfx::B2DRectangle(rRect.Left(),
+                                 rRect.Top(),
+                                 rRect.IsWidthEmpty() ? rRect.Left() : rRect.Right(),
+                                 rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom());
+}
+
+void getPDFSelections(std::vector<basegfx::B2DRectangle> & rSubSelections,
+                      std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
+                      SdrObject* pObject)
+{
+    basegfx::B2DSize aPdfPageSize = rVectorGraphicSearch->pageSize();
+
+    basegfx::B2DRectangle aObjectB2DRectHMM(b2DRectangleFromRectangle(pObject->GetLogicRect()));
+
+    // Setup coordinate conversion matrix to convert the inner PDF
+    // coordinates to the page relative coordinates
+    basegfx::B2DHomMatrix aB2DMatrix;
+
+    aB2DMatrix.scale(aObjectB2DRectHMM.getWidth() / aPdfPageSize.getX(),
+                     aObjectB2DRectHMM.getHeight() / aPdfPageSize.getY());
+
+    aB2DMatrix.translate(aObjectB2DRectHMM.getMinX(), aObjectB2DRectHMM.getMinY());
+
+    basegfx::B2DRectangle aCombined;
+
+    for (auto const & rRectangle : rVectorGraphicSearch->getTextRectangles())
+    {
+        basegfx::B2DRectangle aRectangle(rRectangle);
+        aRectangle *= aB2DMatrix;
+        if (aCombined.isEmpty())
+            aCombined = aRectangle;
+        else
+            aCombined.expand(aRectangle);
+    }
+
+    rSubSelections.push_back(aCombined);
+}
+
+} // end namespace
+
 void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pViewShell,
                                              OutlinerView* pOutlinerView,
                                              std::vector<sd::SearchSelection>* pSelections)
 {
     std::vector<::tools::Rectangle> aLogicRects;
-    pOutlinerView->GetSelectionRectangles(aLogicRects);
-
-    // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
-    // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
-    // which makes that method unusable for others
-    if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
+    if (mpImpl->mbCurrentIsVectorGraphic)
     {
-        for (tools::Rectangle& rRectangle : aLogicRects)
+        basegfx::B2DSize aPdfPageSize = mpImpl->mpVectorGraphicSearch->pageSize();
+
+        tools::Rectangle aObjectRectTwip = OutputDevice::LogicToLogic(mpObj->GetLogicRect(), MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+        basegfx::B2DRectangle aObjectB2DRectTwip(b2DRectangleFromRectangle(aObjectRectTwip));
+
+        // Setup coordinate conversion matrix to convert the inner PDF
+        // coordinates to the page relative coordinates
+        basegfx::B2DHomMatrix aB2DMatrix;
+
+        aB2DMatrix.scale(aObjectB2DRectTwip.getWidth() / aPdfPageSize.getX(),
+                         aObjectB2DRectTwip.getHeight() / aPdfPageSize.getY());
+
+        aB2DMatrix.translate(aObjectB2DRectTwip.getMinX(), aObjectB2DRectTwip.getMinY());
+
+        for (auto const & rRectangle : mpImpl->mpVectorGraphicSearch->getTextRectangles())
         {
-            rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            basegfx::B2DRectangle aRectangle(rRectangle);
+            aRectangle *= aB2DMatrix;
+            aLogicRects.emplace_back(Point(aRectangle.getMinX(), aRectangle.getMinY()), Size(aRectangle.getWidth(), aRectangle.getHeight()));
+        }
+    }
+    else
+    {
+        pOutlinerView->GetSelectionRectangles(aLogicRects);
+
+        // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
+        // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
+        // which makes that method unusable for others
+        if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
+        {
+            for (tools::Rectangle& rRectangle : aLogicRects)
+            {
+                rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            }
         }
     }
 
@@ -724,6 +803,11 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
         boost::property_tree::write_json(aStream, aTree);
         aPayload = aStream.str().c_str();
         rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+
+        if (mpImpl->mbCurrentIsVectorGraphic)
+        {
+            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
+        }
     }
     else
     {
@@ -755,19 +839,40 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
         if (nullptr != dynamic_cast<const sd::DrawViewShell*>(pViewShell.get()))
         {
-            // When replacing we first check if there is a selection
-            // indicating a match.  If there is then replace it.  The
-            // following call to StartSearchAndReplace will then search for
-            // the next match.
-            if (meMode == SEARCH
-                && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
-                if (pOutlinerView->GetSelection().HasRange())
-                    pOutlinerView->StartSearchAndReplace(*mpSearchItem);
-
-            // Search for the next match.
             sal_uLong nMatchCount = 0;
-            if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
-                nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+
+            if (mpImpl->mbCurrentIsVectorGraphic)
+            {
+                if (mpImpl->mpVectorGraphicSearch->next())
+                {
+                    nMatchCount = 1;
+
+                    SdrPageView* pPageView = mpView->GetSdrPageView();
+                    mpView->UnmarkAllObj(pPageView);
+
+                    std::vector<basegfx::B2DRectangle> aSubSelections;
+                    getPDFSelections(aSubSelections, mpImpl->mpVectorGraphicSearch, mpObj);
+                    mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
+                }
+            }
+            else
+            {
+                // When replacing we first check if there is a selection
+                // indicating a match.  If there is then replace it.  The
+                // following call to StartSearchAndReplace will then search for
+                // the next match.
+                if (meMode == SEARCH && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
+                {
+                    if (pOutlinerView->GetSelection().HasRange())
+                        pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                }
+
+                // Search for the next match.
+                if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
+                {
+                    nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
+                }
+            }
 
             // Go to the next text object when there have been no matches in
             // the current object or the whole object has already been
@@ -1034,6 +1139,20 @@ bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
     return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
 
+bool isValidVectorGraphicObject(const sd::outliner::IteratorPosition& rPosition)
+{
+    auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(rPosition.mxObject.get());
+    if (pGraphicObject)
+    {
+        auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
+        if (pVectorGraphicData && VectorGraphicDataType::Pdf == pVectorGraphicData->getVectorGraphicDataType())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 } // end anonymous namespace
 
 
@@ -1048,6 +1167,9 @@ void SdOutliner::ProvideNextTextObject()
 {
     mbEndOfSearch = false;
     mbFoundObject = false;
+
+    // reset the vector search
+    mpImpl->mpVectorGraphicSearch.reset();
 
     mpView->UnmarkAllObj (mpView->GetSdrPageView());
     try
@@ -1081,35 +1203,83 @@ void SdOutliner::ProvideNextTextObject()
             // LOK: do not descent to notes or master pages when searching
             bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
-            // Switch to the current object only if it is a valid text object.
-            if (!bForbiddenPage && lclIsValidTextObject(maCurrentPosition))
+            mpImpl->mbCurrentIsVectorGraphic = false;
+
+            if (!bForbiddenPage)
             {
-                // Don't set yet in case of searching: the text object may not match.
-                if (meMode != SEARCH)
-                    mpObj = SetObject(maCurrentPosition);
-                else
+                // Switch to the current object only if it is a valid text object.
+                if (lclIsValidTextObject(maCurrentPosition))
+                {
+                    // Don't set yet in case of searching: the text object may not match.
+                    if (meMode != SEARCH)
+                        mpObj = SetObject(maCurrentPosition);
+                    else
+                        mpObj = maCurrentPosition.mxObject.get();
+                }
+                // Or if the object is a valid graphic object which contains vector graphic
+                else if (meMode == SEARCH && isValidVectorGraphicObject(maCurrentPosition))
+                {
                     mpObj = maCurrentPosition.mxObject.get();
+                    mpImpl->mbCurrentIsVectorGraphic = true;
+                }
             }
+
+            // Advance to the next object
             ++maObjectIterator;
 
             if (mpObj)
             {
-                PutTextIntoOutliner();
+                if (mpImpl->mbCurrentIsVectorGraphic)
+                {
+                    // We know here the object is a SdrGrafObj and that it
+                    // contains a vector graphic
+                    auto* pGraphicObject = static_cast<SdrGrafObj*>(mpObj);
+                    OUString const & rString = mpSearchItem->GetSearchString();
 
-                std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
-                if (pViewShell != nullptr)
-                    switch (meMode)
+                    mpImpl->mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
+                    if (mpImpl->mpVectorGraphicSearch->search(rString))
                     {
-                        case SEARCH:
-                            PrepareSearchAndReplace ();
-                            break;
-                        case SPELL:
-                            PrepareSpellCheck ();
-                            break;
-                        case TEXT_CONVERSION:
-                            PrepareConversion();
-                            break;
+                        bool bResult = mpImpl->mpVectorGraphicSearch->next();
+                        if (bResult)
+                        {
+                            mpObj = SetObject(maCurrentPosition);
+
+                            mbStringFound = true;
+                            mbMatchMayExist = true;
+                            mbFoundObject = true;
+
+                            SdrPageView* pPageView = mpView->GetSdrPageView();
+                            mpView->UnmarkAllObj(pPageView);
+
+                            std::vector<basegfx::B2DRectangle> aSubSelections;
+                            getPDFSelections(aSubSelections, mpImpl->mpVectorGraphicSearch, mpObj);
+                            mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
+
+                            mpDrawDocument->GetDocSh()->SetWaitCursor( false );
+                        }
                     }
+                }
+                else
+                {
+                    PutTextIntoOutliner();
+
+                    std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
+                    if (pViewShell != nullptr)
+                    {
+                        switch (meMode)
+                        {
+                            case SEARCH:
+                                PrepareSearchAndReplace ();
+                                break;
+                            case SPELL:
+                                PrepareSpellCheck ();
+                                break;
+                            case TEXT_CONVERSION:
+                                PrepareConversion();
+                                break;
+                        }
+                    }
+                }
             }
         }
         else
@@ -1731,6 +1901,7 @@ weld::Window* SdOutliner::GetMessageBoxParent()
 
 SdOutliner::Implementation::Implementation()
     : meOriginalEditMode(EditMode::Page),
+      mbCurrentIsVectorGraphic(false),
       mbOwnOutlineView(false),
       mpOutlineView(nullptr)
 {
