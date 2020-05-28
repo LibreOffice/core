@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "466471c8_bcea2bca",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-28T19:55:31Z",
+      "side": 1,
+      "message": "This is the reason why your first patch fails with build bots - a test crashes when it tries to set defaults.",
+      "revId": "e39128715ab3b542506ec4435efdcaa046c2181d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
