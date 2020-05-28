@@ -64,7 +64,7 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
 
-const double D_MAX_D_BY_100  = 1.7E306;
+const double D_MAX_D_BY [5]  = { 1.7e306, 1.7e306, 1.7E306, 1.7e305, 1.7e304 };
 const double D_MIN_M_BY_1000 = 2.3E-305;
 
 static const sal_uInt8 cCharWidths[ 128-32 ] = {
@@ -2081,18 +2081,21 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) const
 {
     bool bModified = false;
-    if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
+    sal_uInt16 nCntBase = NumFor[0].Info().nCntExp;
+    if ( nCntBase > 4 )
+        nCntBase = 2;
+    if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < D_MAX_D_BY[ nCntBase ]))
     {
-        if (fNumber == 0.0)
+        if ( fNumber == 0.0 )
         {
-            OutString = "0%";
+            OutString = "0" + GetPercentSign( nCntBase );
             return;
         }
-        fNumber *= 100;
+        fNumber *= GetPercentBase( nCntBase );
         bModified = true;
     }
 
-    if (fNumber == 0.0)
+    if ( fNumber == 0.0 )
     {
         OutString = "0";
         return;
@@ -2105,7 +2108,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) 
 
     if ( eType & SvNumFormatType::PERCENT && bModified)
     {
-        OutString += "%";
+        OutString += GetPercentSign( nCntBase );
     }
 }
 
@@ -2237,15 +2240,15 @@ OUString lcl_GetPercentString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCn
 {
     sal_Int32 i;
     OUStringBuffer aPercentString;
-    for( i = 0; i < nCnt; i++ )
+    for ( i = 0; i < nCnt; i++ )
     {
-        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_PERCENT )
+        if ( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_PERCENT )
         {
             aPercentString.append( rInfo.sStrArray[i] );
             bool bStringFound = false;
-            for( i--; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_STRING ; i-- )
+            for ( i--; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_STRING ; i-- )
             {
-                if( !bStringFound )
+                if ( !bStringFound )
                 {
                     bStringFound = true;
                     aPercentString.insert( 0, "\"" );
@@ -2253,9 +2256,9 @@ OUString lcl_GetPercentString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCn
                 aPercentString.insert( 0, rInfo.sStrArray[i] );
             }
             i = nCnt;
-            if( bStringFound )
+            if ( bStringFound )
                 aPercentString.insert( 0, "\"" );
-      }
+        }
     }
     return aPercentString.makeStringAndClear();
 }
@@ -2332,6 +2335,46 @@ OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInf
     return OUString();
 }
 
+}
+
+// static
+double SvNumberformat::GetPercentBase( sal_uInt16 nCntBase )
+{
+    switch ( nCntBase )
+    {
+        case 0:
+        case 1:
+        case 2: return 100.0;
+        case 3: return 1000.0;
+        case 4: return 10000.0;
+        default:return 100.0;
+    }
+}
+
+// static
+OUString SvNumberformat::GetPercentSign( sal_uInt16 nCntBase )
+{
+    switch ( nCntBase )
+    {
+        case 0:
+        case 1:
+        case 2: return "%";              // percent
+        case 3: return OUString( u'‰' ); // per mille
+        case 4: return OUString( u'‱' ); // permyriad
+        default:return "%";
+    }
+}
+
+// static
+short SvNumberformat::GetPercentCntBase( sal_Unicode aChar )
+{
+    switch ( aChar )
+    {
+        case '%' : return 2; // percent
+        case u'‰': return 3; // per mille
+        case u'‱': return 4; // permyriad
+        default:  return 2;
+    }
 }
 
 OUString SvNumberformat::GetPercentString( sal_uInt16 nNumFor ) const
@@ -4253,11 +4296,12 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    if (rInfo.eScannedType == SvNumFormatType::PERCENT)
+    if ( rInfo.eScannedType == SvNumFormatType::PERCENT )
     {
-        if (fNumber < D_MAX_D_BY_100)
+        sal_uInt16 nCntBase = rInfo.nCntExp > 4 ? 2 : rInfo.nCntExp;
+        if ( fNumber < D_MAX_D_BY[ nCntBase ] )
         {
-            fNumber *= 100.0;
+            fNumber *= GetPercentBase( nCntBase );
         }
         else
         {
