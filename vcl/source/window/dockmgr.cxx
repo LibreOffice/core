@@ -472,6 +472,7 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mbStartDockingEnabled(false)
     , mbLocked(false)
 {
+    assert(mpDockingWindow);
     DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
     if( pDockWin )
         mnFloatBits = pDockWin->GetFloatStyle();
