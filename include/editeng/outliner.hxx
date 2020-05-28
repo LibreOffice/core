@@ -126,9 +126,9 @@ private:
 
     Paragraph& operator=(const Paragraph& rPara ) = delete;
 
-    ParaFlag            nFlags;
     OUString            aBulText;
     Size                aBulSize;
+    ParaFlag            nFlags;
     bool                bVisible;
 
     bool                IsVisible() const { return bVisible; }
@@ -526,16 +526,16 @@ public:
     SdrPage*        GetSdrPage() const { return mpSdrPage; }
 };
 
-struct EBulletInfo
+ struct EBulletInfo
 {
-    bool        bVisible;
-    sal_uInt16  nType;          // see SvxNumberType
-    OUString    aText;
-    SvxFont     aFont;
-    sal_Int32   nParagraph;
-    tools::Rectangle   aBounds;
+    SvxFont           aFont;
+    tools::Rectangle  aBounds;
+    OUString          aText;
+    sal_Int32         nParagraph;
+    sal_uInt16        nType;          // see SvxNumberType
+    bool              bVisible;
 
-    EBulletInfo() : bVisible( false ), nType( 0 ), nParagraph( EE_PARA_NOT_FOUND ) {}
+    EBulletInfo() : nParagraph( EE_PARA_NOT_FOUND ), nType( 0 ), bVisible( false ) {}
 };
 
 enum class OutlinerMode {
