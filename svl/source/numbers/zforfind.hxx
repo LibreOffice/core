@@ -113,7 +113,7 @@ private:
     sal_uInt16 nTimePos;                        // Index of first time separator (+1)
     short  nDecPos;                             // Index of substring containing "," (+1)
     bool   bNegCheck;                           // '( )' for negative
-    short  nESign;                              // Sign of exponent
+    short  nESign;                              // Sign of exponent, or base of percent
     short  nAmPm;                               // +1 AM, -1 PM, 0 if none
     short  nLogical;                            // -1 => False, 1 => True
     bool   mbEraCE;                            // Era if date, 0 => BCE, 1 => CE (currently only Gregorian)

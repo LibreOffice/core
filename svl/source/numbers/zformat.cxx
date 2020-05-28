@@ -64,7 +64,8 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
 
-const double D_MAX_D_BY_100  = 1.7E306;
+const double D_MAX_D_BY_100  = 1.7e306;
+const double D_MAX_D_BY_1000 = 1.7e305;
 const double D_MIN_M_BY_1000 = 2.3E-305;
 
 static const sal_uInt8 cCharWidths[ 128-32 ] = {
@@ -2081,14 +2082,15 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) const
 {
     bool bModified = false;
-    if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < D_MAX_D_BY_100))
+    sal_uInt16 nCntBase = NumFor[0].Info().nCntExp;
+    if ( (eType & SvNumFormatType::PERCENT) && (fabs(fNumber) < ( nCntBase == 3 ? D_MAX_D_BY_1000 : D_MAX_D_BY_100 )) )
     {
         if (fNumber == 0.0)
         {
-            OutString = "0%";
+            OutString = "0" + GetPercentSign( nCntBase );
             return;
         }
-        fNumber *= 100;
+        fNumber *= GetPercentBase( nCntBase );
         bModified = true;
     }
 
@@ -2105,7 +2107,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString) 
 
     if ( eType & SvNumFormatType::PERCENT && bModified)
     {
-        OutString += "%";
+        OutString += GetPercentSign( nCntBase );
     }
 }
 
@@ -2332,6 +2334,24 @@ OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInf
     return OUString();
 }
 
+}
+
+// static
+double SvNumberformat::GetPercentBase( sal_uInt16 nCntBase )
+{
+    return ( nCntBase == 3 ? 1000.0 : 100.0 );
+}
+
+// static
+OUString SvNumberformat::GetPercentSign( sal_uInt16 nCntBase )
+{
+    return ( nCntBase == 3 ? u"‰" : u"%" );
+}
+
+// static
+short SvNumberformat::GetPercentCntBase( sal_Unicode aChar )
+{
+    return ( aChar == u'‰' ? 3 : 2 );
 }
 
 OUString SvNumberformat::GetPercentString( sal_uInt16 nNumFor ) const
@@ -4255,9 +4275,9 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     if (rInfo.eScannedType == SvNumFormatType::PERCENT)
     {
-        if (fNumber < D_MAX_D_BY_100)
+        if ( fNumber < ( rInfo.nCntExp == 3 ? D_MAX_D_BY_1000 : D_MAX_D_BY_100 ) )
         {
-            fNumber *= 100.0;
+            fNumber *= GetPercentBase( rInfo.nCntExp );
         }
         else
         {

@@ -2883,12 +2883,14 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString )
         }
     }
 
-    if ( SkipChar('%', rString, nPos) )             // 1%
+    if ( SkipChar( '%', rString, nPos) ||           // 1%
+         SkipChar(u'‰', rString, nPos) )            // 1‰ per mille
     {
         if (eScannedType != SvNumFormatType::UNDEFINED) // already another type
         {
             return MatchedReturn();
         }
+        nESign = SvNumberformat::GetPercentCntBase( rString[ nPos-1 ] );
         SkipBlanks(rString, nPos);
         eScannedType = SvNumFormatType::PERCENT;
     }
@@ -3985,7 +3987,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
 
             if (eScannedType == SvNumFormatType::PERCENT)
             {
-                fOutNumber/= 100.0;
+                fOutNumber/= SvNumberformat::GetPercentBase( nESign );
             }
             break;
 
