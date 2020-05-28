@@ -915,26 +915,30 @@ void WW8SprmIter::UpdateMyMembers()
     }
 }
 
-SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, const sal_uInt8* pNextByteMatch)
+SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, bool bFindFirst, const sal_uInt8* pNextByteMatch)
 {
+    SprmResult aRet;
+
     while (GetSprms())
     {
         if (GetCurrentId() == nId)
         {
             sal_uInt16 nFixedLen =  mrSprmParser.DistanceToData(nId);
             sal_uInt16 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
-            SprmResult aRet(GetCurrentParams(), nL - nFixedLen); // SPRM found!
+            SprmResult aSprmResult(GetCurrentParams(), nL - nFixedLen);
             // typically pNextByteMatch is nullptr and we just return the first match
-            if (!pNextByteMatch)
-                return aRet;
             // very occasionally we want one with a specific following byte
-            if (aRet.nRemainingData >= 1 && *aRet.pSprm == *pNextByteMatch)
-                return aRet;
+            if ( !pNextByteMatch || (aSprmResult.nRemainingData >= 1 && *aSprmResult.pSprm == *pNextByteMatch) )
+            {
+                if ( bFindFirst )
+                    return aSprmResult;
+                aRet = aSprmResult;
+            }
         }
         advance();
     }
 
-    return SprmResult();                                   // SPRM _not_ found
+    return aRet;
 }
 
 // temporary test
@@ -2945,7 +2949,7 @@ sal_uInt8* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(sal_Int32& rLen) const
     return maEntries[mnIdx].mpData;
 }
 
-SprmResult WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
+SprmResult WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId, bool bFindFirst )
 {
     if (mnIdx >= mnIMax)
         return SprmResult();
@@ -2954,7 +2958,7 @@ SprmResult WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( sal_uInt16 nId )
     sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
 
     WW8SprmIter aIter(pSprms, nLen, maSprmParser);
-    return aIter.FindSprm(nId);
+    return aIter.FindSprm(nId, bFindFirst);
 }
 
 void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
@@ -3245,7 +3249,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     }
 }
 
-SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId)
+SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, bool bFindFirst)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
     if( !pFkp )
@@ -3259,7 +3263,7 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId)
     if (!pFkp)
         return SprmResult();
 
-    SprmResult aRes = pFkp->HasSprm(nId);
+    SprmResult aRes = pFkp->HasSprm(nId, bFindFirst);
 
     if (!aRes.pSprm)
     {
@@ -3270,7 +3274,7 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId)
         {
             WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen,
                 pFkp->GetSprmParser());
-            aRes = aIter.FindSprm(nId);
+            aRes = aIter.FindSprm(nId, bFindFirst);
         }
     }
 
@@ -3782,7 +3786,7 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms
     if (pPLCF)
     {
         WW8SprmIter aIter(pOtherSprms, nOtherSprmSiz, maSprmParser);
-        aRet = aIter.FindSprm(nId);
+        aRet = aIter.FindSprm(nId, /*bFindFirst=*/true);
     }
     return aRet;
 }
@@ -3846,7 +3850,7 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
     if (pPLCF)
     {
         WW8SprmIter aIter(pSprms.get(), nSprmSiz, maSprmParser);
-        aRet = aIter.FindSprm(nId, &n2nd);
+        aRet = aIter.FindSprm(nId, /*bFindFirst=*/true, &n2nd);
     }
     return aRet;
 }
