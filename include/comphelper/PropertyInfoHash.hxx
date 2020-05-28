@@ -28,15 +28,20 @@ namespace comphelper
 {
     struct PropertyInfo
     {
-        OUString const maName;
-        sal_Int32 const mnHandle;
-        css::uno::Type const maType;
-        sal_Int16 const mnAttributes;
+        OUString maName;
+        css::uno::Type maType;
+        sal_Int32 mnHandle;
+        sal_Int16 mnAttributes;
+
+        PropertyInfo(OUString const & aName, sal_Int32 nHandle, css::uno::Type const & aType, sal_Int16 nAttributes)
+            : maName(aName), maType(aType), mnHandle(nHandle), mnAttributes(nAttributes) {}
+        PropertyInfo(OUString && aName, sal_Int32 nHandle, css::uno::Type const & aType, sal_Int16 nAttributes)
+            : maName(std::move(aName)), maType(aType), mnHandle(nHandle), mnAttributes(nAttributes) {}
     };
     struct PropertyData
     {
-        sal_uInt8 const mnMapId;
-        PropertyInfo const *mpInfo;
+        sal_uInt8 mnMapId;
+        const PropertyInfo *mpInfo;
         PropertyData ( sal_uInt8 nMapId, PropertyInfo const *pInfo )
         : mnMapId ( nMapId )
         , mpInfo ( pInfo ) {}

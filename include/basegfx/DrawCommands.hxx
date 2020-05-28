@@ -43,8 +43,8 @@ enum class GradientType
 class GradientStop
 {
 public:
-    float mfOffset;
     basegfx::BColor maColor;
+    float mfOffset;
     float mfOpacity;
 };
 

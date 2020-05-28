@@ -100,9 +100,9 @@ public:
 
 private:
     OInterfaceContainerHelper2 & rCont;
-    bool const                   bIsList;
     detail::element_alias2       aData;
     sal_Int32                    nRemain;
+    bool                         bIsList;
 
     OInterfaceIteratorHelper2( const OInterfaceIteratorHelper2 & ) = delete;
     OInterfaceIteratorHelper2 &  operator = ( const OInterfaceIteratorHelper2 & ) = delete;

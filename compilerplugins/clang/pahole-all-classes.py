@@ -8,10 +8,8 @@
 # (2) First run the unusedfields loplugin to generate a log file
 # (3) Install the pahole stuff into your gdb, I used this one:
 #     https://github.com/PhilArmstrong/pahole-gdb
-# (4) Edit the loop near the top of the script to only produce results for one of our modules.
-#     Note that this will make GDB soak up about 8G of RAM, which is why I don't do more than one module at a time
-# (5) Run the script
-#     ./compilerplugins/clang/pahole-all-classes.py > ./compilerplugins/clang/pahole.results
+# (4) Run the script
+#     ./compilerplugins/clang/pahole-all-classes.py
 #
 
 import _thread
@@ -27,6 +25,7 @@ a = subprocess.Popen("cat n1", stdout=subprocess.PIPE, shell=True)
 
 classSet = set()
 classSourceLocDict = dict()
+locToClassDict = dict()
 with a.stdout as txt:
     for line in txt:
         tokens = line.decode('utf8').strip().split("\t")
@@ -38,6 +37,7 @@ with a.stdout as txt:
         if className in classSet: continue
         classSet.add(className)
         classSourceLocDict[className] = srcLoc
+        locToClassDict[srcLoc] = className
 a.terminate()
 
 # Some of the pahole commands are going to fail, and I cannot read the error stream and the input stream
@@ -57,83 +57,100 @@ def write_pahole_commands(classes):
 # to split them up, and that creates a mess in the parsing logic.
 def read_generator(gdbOutput):
     while True:
-        line = gdbOutput.readline().decode('utf8').strip()
+        line = gdbOutput.readline();
+        if line == "": return # end of file
+        line = line.decode('utf8').strip()
+        print("gdb: " + line)
         for split in line.split("(gdb)"):
             split = split.strip()
             if len(split) == 0: continue
             if "all-done" in split: return
             yield split
 
-classList = sorted(classSet)
+# build list of classes sorted by source location to increase the chances of
+# processing stuff stored in the same DSO together
+sortedLocs = sorted(locToClassDict.keys())
+classList = list()
+for src in sortedLocs:
+    if "include/" in src:
+        classList.append(locToClassDict[src])
 
-# Process 200 classes at a time, otherwise gdb's memory usage blows up and kills the machine
-#
-while len(classList) > 0:
+with open("compilerplugins/clang/pahole.results", "wt") as f:
+    # Process 400 classes at a time, otherwise gdb's memory usage blows up and kills the machine
+    # This number is chosen to make gdb peak at around 8G.
+    while len(classList) > 0:
 
-    currClassList = classList[1:200];
-    classList = classList[200:]
+        currClassList = classList[0:500];
+        classList = classList[500:]
 
-    gdbProc = subprocess.Popen("gdb", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        gdbProc = subprocess.Popen("gdb", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 
-    stdin = io.TextIOWrapper(gdbProc.stdin, 'utf-8')
+        stdin = io.TextIOWrapper(gdbProc.stdin, 'utf-8')
 
-    # make gdb load all the debugging info
-    stdin.write("set confirm off\n")
-    for filename in sorted(os.listdir('instdir/program')):
-        if filename.endswith(".so"):
-            stdin.write("add-symbol-file instdir/program/" + filename + "\n")
-    stdin.flush()
+        # make gdb load all the debugging info
+        stdin.write("set confirm off\n")
+        # make gdb not wrap output and mess up my parsing
+        stdin.write("set width unlimited\n")
+        for filename in sorted(os.listdir('instdir/program')):
+            if filename.endswith(".so"):
+                stdin.write("add-symbol-file instdir/program/" + filename + "\n")
+        stdin.flush()
 
 
-    _thread.start_new_thread( write_pahole_commands, (currClassList,) )
+        _thread.start_new_thread( write_pahole_commands, (currClassList,) )
 
-    firstLineRegex = re.compile("/\*\s+(\d+)\s+\*/ struct")
-    fieldLineRegex = re.compile("/\*\s+(\d+)\s+(\d+)\s+\*/ ")
-    holeLineRegex = re.compile("/\* XXX (\d+) bit hole, try to pack \*/")
-    # sometimes pahole can't determine the size of a sub-struct, and then it returns bad data
-    bogusLineRegex = re.compile("/\*\s+\d+\s+0\s+\*/")
-    structLines = list()
-    foundHole = False
-    cumulativeHoleBits = 0
-    structSize = 0
-    foundBogusLine = False
-    # pahole doesn't report space at the end of the structure, so work it out myself
-    sizeOfFields = 0
-    for line in read_generator(gdbProc.stdout):
-        structLines.append(line)
-        firstLineMatch = firstLineRegex.match(line)
-        if firstLineMatch:
-            structSize = int(firstLineMatch.group(1))
-        holeLineMatch = holeLineRegex.match(line)
-        if holeLineMatch:
-            foundHole = True
-            cumulativeHoleBits += int(holeLineMatch.group(1))
-        fieldLineMatch = fieldLineRegex.match(line)
-        if fieldLineMatch:
-            fieldSize = int(fieldLineMatch.group(2))
-            sizeOfFields = int(fieldLineMatch.group(1)) + fieldSize
-        if bogusLineRegex.match(line):
-            foundBogusLine = True
-        if line == "}":
-            # Ignore very large structs, packing those is not going to help much, and
-            # re-organising them can make them much less readable.
-            if foundHole and len(structLines) < 12 and structSize < 100 and not foundBogusLine:
-                # Verify that we have enough hole-space that removing it will result in a structure
-                # that still satisfies alignment requirements, otherwise the compiler will just put empty
-                # space at the end of the struct.
-                # TODO improve detection of the required alignment for a structure
-                potentialSpace = (cumulativeHoleBits / 8) + (sizeOfFields - structSize)
-                if potentialSpace >= 8:
-                    for line in structLines:
-                        print(line)
-                    if (sizeOfFields - structSize) > 0:
-                        print("hole at end of struct: " + str(sizeOfFields - structSize))
-            #  reset state
-            structLines.clear()
-            foundHole = False
-            cumulativeHoleBits = 0
-            structSize = 0
-            foundBogusLine = False
-            actualStructSize = 0
+        firstLineRegex = re.compile("/\*\s+(\d+)\s+\*/ struct") # /* 16 */ struct Foo
+        fieldLineRegex = re.compile("/\*\s+(\d+)\s+(\d+)\s+\*/ ") # /* 12 8 */ class rtl::OUString aName
+        holeLineRegex = re.compile("/\* XXX (\d+) bit hole, try to pack \*/")
+        # sometimes pahole can't determine the size of a sub-struct, and then it returns bad data
+        bogusLineRegex = re.compile("/\*\s+\d+\s+0\s+\*/")
+        structLines = list()
+        foundHole = False
+        cumulativeHoleBits = 0
+        alignedStructSize = 0
+        foundBogusLine = False
+        # pahole doesn't report space at the end of the structure, so work it out myself
+        sizeOfStructWithoutPadding = 0
+        for line in read_generator(gdbProc.stdout):
+            structLines.append(line)
+            firstLineMatch = firstLineRegex.match(line)
+            if firstLineMatch:
+                alignedStructSize = int(firstLineMatch.group(1))
+                structLines.clear()
+                structLines.append(line)
+            holeLineMatch = holeLineRegex.match(line)
+            if holeLineMatch:
+                foundHole = True
+                cumulativeHoleBits += int(holeLineMatch.group(1))
+            fieldLineMatch = fieldLineRegex.match(line)
+            if fieldLineMatch:
+                fieldPosInBytes = int(fieldLineMatch.group(1))
+                fieldSizeInBytes = int(fieldLineMatch.group(2))
+                sizeOfStructWithoutPadding = fieldPosInBytes + fieldSizeInBytes
+            if bogusLineRegex.match(line):
+                foundBogusLine = True
+            if line == "}":
+                # Ignore very large structs, packing those is not going to help much, and
+                # re-organising them can make them much less readable.
+                if foundHole and len(structLines) < 16 and alignedStructSize < 100 and not foundBogusLine:
+                    # Verify that, after packing, and compiler alignment, the new structure will be actually smaller.
+                    # Sometimes, we can save space, but the compiler will align the structure such that we don't
+                    # actually save any space.
+                    # TODO improve detection of the required alignment for a structure
+                    holeAtEnd = alignedStructSize - sizeOfStructWithoutPadding
+                    potentialSpace = (cumulativeHoleBits / 8) + holeAtEnd
+                    if potentialSpace >= 8:
+                        for line in structLines:
+                            f.write(line + "\n")
+                        if holeAtEnd > 0:
+                            f.write("hole at end of struct: " + str(holeAtEnd) + "\n")
+                        f.write("\n")
+                #  reset state
+                structLines.clear()
+                foundHole = False
+                cumulativeHoleBits = 0
+                structSize = 0
+                foundBogusLine = False
+                actualStructSize = 0
 
-    gdbProc.terminate()
+        gdbProc.terminate()
