@@ -119,7 +119,7 @@ XclExpSstImpl::XclExpSstImpl() :
 
 sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 {
-    OSL_ENSURE( xString.get(), "XclExpSstImpl::Insert - empty pointer not allowed" );
+    OSL_ENSURE( xString, "XclExpSstImpl::Insert - empty pointer not allowed" );
     if( !xString )
         xString.reset( new XclExpString );
 

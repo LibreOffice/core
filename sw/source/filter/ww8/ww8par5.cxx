@@ -1281,7 +1281,7 @@ the appropriate set/ask field.
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     OUString &rOrigName, const OUString &rData)
 {
-    OSL_ENSURE(m_xPlcxMan.get(), "No pPlcxMan");
+    OSL_ENSURE(m_xPlcxMan, "No pPlcxMan");
     long nNo;
     /*
     If there was no bookmark associated with this set field, then we create a
@@ -1344,7 +1344,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
 OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
 {
     OUString sName(BookmarkToWriter(rOrigName));
-    OSL_ENSURE(m_xPlcxMan.get(), "no pPlcxMan");
+    OSL_ENSURE(m_xPlcxMan, "no pPlcxMan");
     m_xPlcxMan->GetBook()->MapName(sName);
 
     //See if there has been a variable set with this name, if so get

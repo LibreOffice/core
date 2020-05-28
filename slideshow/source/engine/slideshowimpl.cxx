@@ -1830,7 +1830,7 @@ void SlideShowImpl::removeShapeEventListener(
         // entry for this shape found -> remove listener from
         // helper object
         ENSURE_OR_THROW(
-            aIter->second.get(),
+            aIter->second,
             "SlideShowImpl::removeShapeEventListener(): "
             "listener map contains NULL broadcast helper" );
 

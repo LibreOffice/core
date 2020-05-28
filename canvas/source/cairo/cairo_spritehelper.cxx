@@ -45,7 +45,7 @@ namespace cairocanvas
     void SpriteHelper::init( const geometry::RealSize2D& rSpriteSize,
                              const SpriteCanvasRef&      rSpriteCanvas )
     {
-        ENSURE_OR_THROW( rSpriteCanvas.get(),
+        ENSURE_OR_THROW( rSpriteCanvas,
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
 
         mpSpriteCanvas     = rSpriteCanvas;

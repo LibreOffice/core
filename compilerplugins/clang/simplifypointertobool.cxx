@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <cassert>
 #include <deque>
-#include <stack>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -234,28 +233,6 @@ public:
         return res;
     }
 
-    bool PreTraverseParenExpr(ParenExpr* expr)
-    {
-        parenExprs_.push(expr);
-        return true;
-    }
-
-    bool PostTraverseParenExpr(ParenExpr*, bool)
-    {
-        assert(!parenExprs_.empty());
-        parenExprs_.pop();
-        return true;
-    }
-
-    bool TraverseParenExpr(ParenExpr* expr)
-    {
-        auto res = PreTraverseParenExpr(expr);
-        assert(res);
-        res = FilteringRewritePlugin::TraverseParenExpr(expr);
-        PostTraverseParenExpr(expr, res);
-        return res;
-    }
-
 private:
     bool isContextuallyConverted(Expr const* expr) const
     {
@@ -318,8 +295,6 @@ private:
     //TODO: There are some more places where an expression is contextually converted to bool, but
     // those are probably not relevant for our needs here.
     std::deque<Expr const*> contextuallyConvertedExprs_;
-
-    std::stack<ParenExpr const*> parenExprs_;
 };
 
 bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castExpr)
@@ -328,7 +303,7 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         return true;
     if (castExpr->getCastKind() != CK_PointerToBoolean)
         return true;
-    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(castExpr->getSubExpr());
+    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(castExpr->getSubExpr()->IgnoreParens());
     if (!memberCallExpr)
         return true;
     auto methodDecl = memberCallExpr->getMethodDecl();
@@ -395,17 +370,27 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         report(DiagnosticsEngine::Warning, "simplify, drop the get()", memberCallExpr->getExprLoc())
             << memberCallExpr->getSourceRange();
     }
-    else if (!parenExprs_.empty() && parenExprs_.top()->IgnoreImpCasts() == memberCallExpr)
+    else if (isa<ParenExpr>(castExpr->getSubExpr()))
     {
-        //TODO: attempt rewrite
+        if (rewriter)
+        {
+            auto const loc
+                = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(memberCallExpr));
+            auto const range = getCallSourceRange(memberCallExpr);
+            if (loc.isValid() && range.isValid() && insertText(loc, "bool") && removeText(range))
+            {
+                //TODO: atomically only change both or neither
+                return true;
+            }
+        }
         report(DiagnosticsEngine::Warning,
                "simplify, drop the get() and turn the surrounding parentheses into a functional "
                "cast to bool",
                memberCallExpr->getExprLoc())
             << memberCallExpr->getSourceRange();
         report(DiagnosticsEngine::Note, "surrounding parentheses here",
-               parenExprs_.top()->getExprLoc())
-            << parenExprs_.top()->getSourceRange();
+               castExpr->getSubExpr()->getExprLoc())
+            << castExpr->getSubExpr()->getSourceRange();
     }
     else
     {

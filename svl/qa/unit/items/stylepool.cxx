@@ -60,18 +60,18 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
         aStylePool.insertItemSet(aChild2, &aChild2Name);
         std::unique_ptr<IStylePoolIteratorAccess> pIter = aStylePool.createIterator();
         std::shared_ptr<SfxItemSet> pStyle1 = pIter->getNext();
-        CPPUNIT_ASSERT(pStyle1.get());
+        CPPUNIT_ASSERT(pStyle1);
         const SfxStringItem* pItem1 = static_cast<const SfxStringItem*>(pStyle1->GetItem(1));
         CPPUNIT_ASSERT_EQUAL(OUString("Item1"), pItem1->GetValue());
         std::shared_ptr<SfxItemSet> pStyle2 = pIter->getNext();
-        CPPUNIT_ASSERT(pStyle2.get());
+        CPPUNIT_ASSERT(pStyle2);
         const SfxStringItem* pItem2 = static_cast<const SfxStringItem*>(pStyle2->GetItem(1));
         // Without the accompanying fix in place, this test would have failed with 'Expected: Item2;
         // Actual: Item3'. The iteration order depended on the pointer address on the pointer
         // address of the parents.
         CPPUNIT_ASSERT_EQUAL(OUString("Item2"), pItem2->GetValue());
         std::shared_ptr<SfxItemSet> pStyle3 = pIter->getNext();
-        CPPUNIT_ASSERT(pStyle3.get());
+        CPPUNIT_ASSERT(pStyle3);
         const SfxStringItem* pItem3 = static_cast<const SfxStringItem*>(pStyle3->GetItem(1));
         CPPUNIT_ASSERT_EQUAL(OUString("Item3"), pItem3->GetValue());
         CPPUNIT_ASSERT(!pIter->getNext());

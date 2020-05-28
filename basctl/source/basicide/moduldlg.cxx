@@ -842,7 +842,7 @@ void ObjectPage::DeleteCurrent()
     std::unique_ptr<weld::TreeIter> xCurEntry(m_xBasicBox->make_iterator());
     if (!m_xBasicBox->get_cursor(xCurEntry.get()))
         xCurEntry.reset();
-    DBG_ASSERT( xCurEntry.get(), "No current entry!" );
+    DBG_ASSERT( xCurEntry, "No current entry!" );
     EntryDescriptor aDesc( m_xBasicBox->GetEntryDescriptor( xCurEntry.get() ) );
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );

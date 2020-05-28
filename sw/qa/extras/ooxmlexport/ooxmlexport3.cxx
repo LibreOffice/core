@@ -427,7 +427,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
         bTheme = true;
         uno::Reference<xml::dom::XDocument> aThemeDom;
         CPPUNIT_ASSERT(prop.Value >>= aThemeDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aThemeDom); // Reference not empty
       }
     }
     CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
@@ -449,28 +449,28 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
         bData = true;
         uno::Reference<xml::dom::XDocument> aDataDom;
         CPPUNIT_ASSERT(prop.Value >>= aDataDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aDataDom); // Reference not empty
       }
       else if (prop.Name == "OOXLayout")
       {
         bLayout = true;
         uno::Reference<xml::dom::XDocument> aLayoutDom;
         CPPUNIT_ASSERT(prop.Value >>= aLayoutDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aLayoutDom); // Reference not empty
       }
       else if (prop.Name == "OOXStyle")
       {
         bQStyle = true;
         uno::Reference<xml::dom::XDocument> aStyleDom;
         CPPUNIT_ASSERT(prop.Value >>= aStyleDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aStyleDom); // Reference not empty
       }
       else if (prop.Name == "OOXColor")
       {
         bColor = true;
         uno::Reference<xml::dom::XDocument> aColorDom;
         CPPUNIT_ASSERT(prop.Value >>= aColorDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aColorDom); // Reference not empty
       }
       else if (prop.Name == "OOXDrawing")
       {
@@ -479,7 +479,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
         uno::Reference<xml::dom::XDocument> aDrawingDom;
         CPPUNIT_ASSERT(prop.Value >>= diagramDrawing);
         CPPUNIT_ASSERT(diagramDrawing[0] >>= aDrawingDom); // PropertyValue of proper type
-        CPPUNIT_ASSERT(aDrawingDom.get()); // Reference not empty
+        CPPUNIT_ASSERT(aDrawingDom); // Reference not empty
       }
     }
     CPPUNIT_ASSERT(bData && bLayout && bQStyle && bColor && bDrawing); // Grab Bag has all the expected elements
@@ -541,7 +541,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
             sal_Int32 length = aCustomXmlDomList.getLength();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);
             aCustomXmlDom = aCustomXmlDomList[0];
-            CPPUNIT_ASSERT(aCustomXmlDom.get()); // Reference not empty
+            CPPUNIT_ASSERT(aCustomXmlDom); // Reference not empty
         }
     }
     CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements

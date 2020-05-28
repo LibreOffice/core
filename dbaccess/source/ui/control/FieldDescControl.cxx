@@ -766,7 +766,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     ActivateAggregate( tpColumnName );
     ActivateAggregate( tpType );
 
-    OSL_ENSURE(pFieldType.get(),"We need a type information here!");
+    OSL_ENSURE(pFieldType,"We need a type information here!");
     // If the type has changed, substitute Controls
     if( m_pPreviousType != pFieldType )
     {

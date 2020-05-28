@@ -677,7 +677,7 @@ void HTMLTableCnts::Add( std::unique_ptr<HTMLTableCnts> pNewCnts )
 
 inline void HTMLTableCnts::SetTableBox( SwTableBox *pBox )
 {
-    OSL_ENSURE(m_xLayoutInfo.get(), "There is no layout info");
+    OSL_ENSURE(m_xLayoutInfo, "There is no layout info");
     if (m_xLayoutInfo)
         m_xLayoutInfo->SetTableBox(pBox);
 }

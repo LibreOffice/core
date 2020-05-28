@@ -164,7 +164,7 @@ namespace canvas
     void CanvasCustomSpriteHelper::init( const geometry::RealSize2D&        rSpriteSize,
                                          const SpriteSurface::Reference&    rOwningSpriteCanvas )
     {
-        ENSURE_OR_THROW( rOwningSpriteCanvas.get(),
+        ENSURE_OR_THROW( rOwningSpriteCanvas,
                           "CanvasCustomSpriteHelper::init(): Invalid owning sprite canvas" );
 
         mpSpriteCanvas = rOwningSpriteCanvas;

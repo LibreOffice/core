@@ -106,7 +106,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nati
 #endif
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    OSL_ENSURE(pHelper.get(),"No stream helper!");
+    OSL_ENSURE(pHelper,"No stream helper!");
 
     jlong nReturn = pHelper ? pHelper->getSeek()->getPosition() : jlong(0);
 #ifdef HSQLDB_DBG
@@ -130,7 +130,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nati
 #endif
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    OSL_ENSURE(pHelper.get(),"No stream helper!");
+    OSL_ENSURE(pHelper,"No stream helper!");
 
     jlong nReturn = pHelper ? pHelper->getSeek()->getLength() :jlong(0);
 #ifdef HSQLDB_DBG

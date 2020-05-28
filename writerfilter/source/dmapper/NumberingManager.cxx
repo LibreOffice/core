@@ -664,7 +664,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
 
     if (nName != NS_ooxml::LN_CT_NumPicBullet_numPicBulletId)
     {
-        OSL_ENSURE( m_pCurrentDefinition.get(), "current entry has to be set here");
+        OSL_ENSURE( m_pCurrentDefinition, "current entry has to be set here");
         if(!m_pCurrentDefinition)
             return ;
         pCurrentLvl = m_pCurrentDefinition->GetCurrentLevel( );

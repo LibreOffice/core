@@ -2970,7 +2970,7 @@ void SdImportTest::testOOXTheme()
             bTheme = true;
             uno::Reference<xml::dom::XDocument> aThemeDom;
             CPPUNIT_ASSERT(prop.Value >>= aThemeDom); // PropertyValue of proper type
-            CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+            CPPUNIT_ASSERT(aThemeDom); // Reference not empty
         }
     }
     CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements

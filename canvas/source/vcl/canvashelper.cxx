@@ -994,7 +994,7 @@ namespace vclcanvas
                                         const rendering::RenderState&   renderState,
                                         ColorType                       eColorType ) const
     {
-        ENSURE_OR_THROW( mpOutDevProvider.get(),
+        ENSURE_OR_THROW( mpOutDevProvider,
                          "outdev null. Are we disposed?" );
 
         ::canvas::tools::verifyInput( renderState,
@@ -1079,7 +1079,7 @@ namespace vclcanvas
                                         const rendering::RenderState&                   renderState,
                                         const uno::Reference< rendering::XCanvasFont >& xFont   ) const
     {
-        ENSURE_OR_THROW( mpOutDevProvider.get(),
+        ENSURE_OR_THROW( mpOutDevProvider,
                          "outdev null. Are we disposed?" );
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );

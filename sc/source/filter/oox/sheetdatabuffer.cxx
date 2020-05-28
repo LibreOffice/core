@@ -141,7 +141,7 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, const OUString& rT
 
 void SheetDataBuffer::setStringCell( const CellModel& rModel, const RichStringRef& rxString )
 {
-    OSL_ENSURE( rxString.get(), "SheetDataBuffer::setStringCell - missing rich string object" );
+    OSL_ENSURE( rxString, "SheetDataBuffer::setStringCell - missing rich string object" );
     const oox::xls::Font* pFirstPortionFont = getStyles().getFontFromCellXf( rModel.mnXfId ).get();
     OUString aText;
     if( rxString->extractPlainString( aText, pFirstPortionFont ) )

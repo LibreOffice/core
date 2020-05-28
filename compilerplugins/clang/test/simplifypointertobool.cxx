@@ -18,7 +18,8 @@ bool test1(std::unique_ptr<int> p2)
         foo();
     // expected-error@+1 {{simplify, drop the get() and wrap the expression in a functional cast to bool [loplugin:simplifypointertobool]}}
     bool b1 = p2.get();
-    //TODO:
+    // expected-error@+3 {{simplify, drop the get() and turn the surrounding parentheses into a functional cast to bool [loplugin:simplifypointertobool]}}
+    // expected-note@+1 {{surrounding parentheses here [loplugin:simplifypointertobool]}}
     bool b2 = ( // deliberately spread across multiple lines
         p2.get());
     return b1 && b2;

@@ -1712,7 +1712,7 @@ void Fill::importPatternFill( const AttributeList& rAttribs )
 
 void Fill::importFgColor( const AttributeList& rAttribs )
 {
-    OSL_ENSURE( mxPatternModel.get(), "Fill::importFgColor - missing pattern data" );
+    OSL_ENSURE( mxPatternModel, "Fill::importFgColor - missing pattern data" );
     if( mxPatternModel )
     {
         mxPatternModel->maPatternColor.importColor( rAttribs );
@@ -1722,7 +1722,7 @@ void Fill::importFgColor( const AttributeList& rAttribs )
 
 void Fill::importBgColor( const AttributeList& rAttribs )
 {
-    OSL_ENSURE( mxPatternModel.get(), "Fill::importBgColor - missing pattern data" );
+    OSL_ENSURE( mxPatternModel, "Fill::importBgColor - missing pattern data" );
     if( mxPatternModel )
     {
         mxPatternModel->maFillColor.importColor( rAttribs );
@@ -1743,7 +1743,7 @@ void Fill::importGradientFill( const AttributeList& rAttribs )
 
 void Fill::importColor( const AttributeList& rAttribs, double fPosition )
 {
-    OSL_ENSURE( mxGradientModel.get(), "Fill::importColor - missing gradient data" );
+    OSL_ENSURE( mxGradientModel, "Fill::importColor - missing gradient data" );
     if( mxGradientModel && (fPosition >= 0.0) )
         mxGradientModel->maColors[ fPosition ].importColor( rAttribs );
 }
@@ -2853,7 +2853,7 @@ FontRef StylesBuffer::getDefaultFont() const
     // no font from styles - try first loaded font (e.g. BIFF2)
     if( !xDefFont )
         xDefFont = maFonts.get( 0 );
-    OSL_ENSURE( xDefFont.get(), "StylesBuffer::getDefaultFont - no default font found" );
+    OSL_ENSURE( xDefFont, "StylesBuffer::getDefaultFont - no default font found" );
     return xDefFont;
 }
 

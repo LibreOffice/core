@@ -215,7 +215,7 @@ DocumentHolder PdfExportTest::exportAndParse(const OUString& rURL, const utl::Me
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     return pPdfDocument;
 }
 
@@ -362,12 +362,12 @@ void PdfExportTest::testTdf105461()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Make sure there is a filled rectangle inside.
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
@@ -423,7 +423,7 @@ void PdfExportTest::testTdf107868()
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Make sure there is no filled rectangle inside.
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
@@ -681,7 +681,7 @@ void PdfExportTest::testSofthyphenPos()
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // tdf#96892 incorrect fractional part of font size caused soft-hyphen to
     // be positioned inside preceding text (incorrect = 11.1, correct = 11.05)
@@ -910,12 +910,12 @@ void PdfExportTest::testTdf108963()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // FIXME: strangely this fails on some Win systems after a pdfium update, expected: 793.7; actual: 793
 #if !defined _WIN32
@@ -1158,12 +1158,12 @@ void PdfExportTest::testTdf115117_1a()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
     CPPUNIT_ASSERT(pPdfTextPage);
@@ -1205,12 +1205,12 @@ void PdfExportTest::testTdf115117_2a()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
     CPPUNIT_ASSERT(pPdfTextPage);
@@ -1519,12 +1519,12 @@ void PdfExportTest::testTdf105954()
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // There is a single image on the page.
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
@@ -1552,7 +1552,7 @@ void PdfExportTest::testTdf128630()
 
     // Assert the aspect ratio of the only bitmap on the page.
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -1586,7 +1586,7 @@ void PdfExportTest::testTdf106702()
 
     // First page already has the correct image position.
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     int nExpected = 0;
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
@@ -1603,7 +1603,7 @@ void PdfExportTest::testTdf106702()
 
     // Second page had an incorrect image position.
     pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     int nActual = 0;
     nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
@@ -1644,7 +1644,7 @@ void PdfExportTest::testTdf113143()
 
     // First has the original (larger) image.
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     int nLarger = 0;
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
@@ -1661,7 +1661,7 @@ void PdfExportTest::testTdf113143()
 
     // Second page has the scaled (smaller) image.
     pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     int nSmaller = 0;
     nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
@@ -1702,7 +1702,7 @@ void PdfExportTest::testTdf115262()
 
     // Get the 6th page.
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/5));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Look up the position of the first image and the 400th row.
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
@@ -1746,7 +1746,7 @@ void PdfExportTest::testTdf121962()
 
     // Get the first page
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
 
     // Make sure the table sum is displayed as "0", not faulty expression.
@@ -1776,7 +1776,7 @@ void PdfExportTest::testTdf115967()
 
     // Get the first page
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
 
     // Make sure the elements inside a formula in a RTL document are exported
@@ -1873,11 +1873,11 @@ void PdfExportTest::testTocLink()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
 
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Ensure there is a link on the first page (in the ToC).
     int nStartPos = 0;
@@ -1904,10 +1904,10 @@ void PdfExportTest::testReduceSmallImage()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
     FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
     FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
@@ -1959,10 +1959,10 @@ void PdfExportTest::testReduceImage()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
     FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
@@ -2001,7 +2001,7 @@ void PdfExportTest::testLinkWrongPage()
 
     // First page should have 1 link (2nd slide, 1st was hidden).
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Without the accompanying fix in place, this test would have failed, as the link of the first
     // page went to the second page due to the hidden first slide.
@@ -2009,7 +2009,7 @@ void PdfExportTest::testLinkWrongPage()
 
     // Second page should have no links (3rd slide).
     PageHolder pPdfPage2(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
-    CPPUNIT_ASSERT(pPdfPage2.get());
+    CPPUNIT_ASSERT(pPdfPage2);
     CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
 }
 
@@ -2074,12 +2074,12 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
 
     // Make sure that the page -> form -> form has a child image.
     PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT(pPdfPage.get());
+    CPPUNIT_ASSERT(pPdfPage);
     CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
     FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pPageObject));
@@ -2133,7 +2133,7 @@ void PdfExportTest::testDefaultVersion()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = 0;
     FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
@@ -2159,7 +2159,7 @@ void PdfExportTest::testVersion15()
     maMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(
         FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
-    CPPUNIT_ASSERT(pPdfDocument.get());
+    CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = 0;
     FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);

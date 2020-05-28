@@ -330,7 +330,7 @@ void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBa
     if( mxSiteModel->isContainer() )
     {
         StorageRef xSubStrg = rStrg.openSubStorage( mxSiteModel->getSubStorageName(), false );
-        OSL_ENSURE( xSubStrg.get(), "VbaFormControl::importModelOrStorage - cannot find storage for embedded control" );
+        OSL_ENSURE( xSubStrg, "VbaFormControl::importModelOrStorage - cannot find storage for embedded control" );
         if( xSubStrg )
             importStorage( *xSubStrg, rClassTable );
     }

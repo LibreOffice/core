@@ -1074,7 +1074,7 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
     if ( !pTypeInfo ) // just a fallback
         pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);
 
-    OSL_ENSURE(pTypeInfo.get(),"checkColumns: can't find a type which is usable as a key!");
+    OSL_ENSURE(pTypeInfo,"checkColumns: can't find a type which is usable as a key!");
     return pTypeInfo;
 }
 
