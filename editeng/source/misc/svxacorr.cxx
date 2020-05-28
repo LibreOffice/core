@@ -259,6 +259,7 @@ bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == '*'  || cChar == '_'  || cChar == '%' ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
             cChar == ':'  || cChar == '?' || cChar == '!' ||
+            cChar == '<'  || cChar == '>' ||
             cChar == '/'  || cChar == '-';
 }
 
@@ -309,6 +310,12 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
 static constexpr sal_Unicode cEmDash = 0x2014;
 static constexpr sal_Unicode cEnDash = 0x2013;
 static constexpr sal_Unicode cApostrophe = 0x2019;
+static constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
+static constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
+// stop characters for searching preceding quotes
+// (the first character is also the opening quote we are looking for)
+const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,
+const sal_Unicode aStopDoubleAngleQuoteEnd[] = { cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0x201D, 0x201E, 0 }; // preceding >>
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
@@ -1194,7 +1201,16 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
                                     bool bIns, LanguageType eLang, ACQuotes eType ) const
 {
-    sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
+    sal_Unicode cRet;
+
+    if ( eType == ACQuotes::DoubleAngleQuote )
+    {
+        cRet = ( '<' == cInsChar || ('\"' == cInsChar && !bSttQuote) )
+                ? cLeftDoubleAngleQuote
+                : cRightDoubleAngleQuote;
+    }
+    else
+        cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sChg( cInsChar );
     if( bIns )
@@ -1212,6 +1228,11 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
             if( !bSttQuote )
                 ++nInsPos;
         }
+    }
+    else if( eType == ACQuotes::DoubleAngleQuote && cInsChar != '\"' )
+    {
+        rDoc.Delete( nInsPos-1, nInsPos);
+        --nInsPos;
     }
 
     rDoc.Replace( nInsPos, sChg );
@@ -1240,6 +1261,26 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
         }
     }
     return sRet;
+}
+
+// search preceding opening quote in the paragraph before the insert position
+static bool lcl_HasPrecedingChar( const OUString& rTxt, sal_Int32 nPos,
+                const sal_Unicode sPrecedingChar, const sal_Unicode* aStopChars )
+{
+    sal_Unicode cTmpChar;
+
+    do {
+        cTmpChar = rTxt[ --nPos ];
+        if ( cTmpChar == sPrecedingChar )
+            return true;
+
+        for ( const sal_Unicode* pCh = aStopChars; *pCh; ++pCh )
+            if ( cTmpChar == *pCh )
+                return false;
+
+    } while ( nPos > 0 );
+
+    return false;
 }
 
 // WARNING: rText may become invalid, see comment below
@@ -1292,6 +1333,14 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                     {
                         eType = ACQuotes::CapitalizeIAm;
                     }
+                    // tdf#133524 support << and >> in Hungarian and Romanian
+                    else if ( !bSingle && nInsPos && eLang.anyOf( LANGUAGE_HUNGARIAN, LANGUAGE_ROMANIAN ) &&
+                        lcl_HasPrecedingChar( rTxt, nInsPos,
+                                bSttQuote ? aStopDoubleAngleQuoteStart[0] : aStopDoubleAngleQuoteEnd[0],
+                                bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 1 ) )
+                    {
+                        eType = ACQuotes::DoubleAngleQuote;
+                    }
                 }
 
                 if ( eType == ACQuotes::NONE && !bSingle &&
@@ -1300,6 +1349,29 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, eLang, eType );
                 break;
+            }
+            // tdf#133524 change "<<" and ">>" to double angle quoation marks
+            else if ( IsAutoCorrFlag( ACFlags::ChgQuotes ) && ('<' == cChar || '>' == cChar) &&
+                nInsPos > 0 && cChar == rTxt[ nInsPos-1 ] )
+            {
+                const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
+                if ( eLang.anyOf(
+                        LANGUAGE_FINNISH,              // alternative primary level
+                        LANGUAGE_HUNGARIAN,            // second level
+                        LANGUAGE_POLISH,               // second level
+                        LANGUAGE_PORTUGUESE,           // primary level
+                        LANGUAGE_PORTUGUESE_BRAZILIAN, // primary level
+                        LANGUAGE_ROMANIAN,             // second level
+                        LANGUAGE_ROMANIAN_MOLDOVA,     // second level
+                        LANGUAGE_SWEDISH,              // alternative primary level
+                        LANGUAGE_SWEDISH_FINLAND,      // alternative primary level
+                        LANGUAGE_UKRAINIAN ) ||        // primary level
+                    primary(eLang) == primary(LANGUAGE_GERMAN) ||  // alternative primary level
+                    primary(eLang) == primary(LANGUAGE_SPANISH) )  // primary level
+                {
+                    InsertQuote( rDoc, nInsPos, cChar, false, bInsert, eLang, ACQuotes::DoubleAngleQuote );
+                    break;
+                }
             }
 
             if( bInsert )
