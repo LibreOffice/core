@@ -43,6 +43,7 @@ struct EffectShadowProperties
     OptValue< sal_Int64 > moShadowSx;
     OptValue< sal_Int64 > moShadowSy;
     Color moShadowColor;
+    OptValue< sal_Int64 > moShadowBlur; // size of blur effect
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const EffectShadowProperties& rSourceProps );
