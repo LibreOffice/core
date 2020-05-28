@@ -341,8 +341,8 @@ public:
     void        SetNameFromColumn( const OUString& rSet )       { m_aMiscConfig.m_sNameFromColumn = rSet;
                                                                   m_aMiscConfig.SetModified();}
 
-    bool        IsFileEncyrptedFromColumn() const        { return m_aMiscConfig.m_bIsPasswordFromColumn;}
-    void        SetIsFileEncyrptedFromColumn( bool bSet )
+    bool        IsFileEncryptedFromColumn() const        { return m_aMiscConfig.m_bIsPasswordFromColumn;}
+    void        SetIsFileEncryptedFromColumn( bool bSet )
                         {
                             m_aMiscConfig.SetModified();
                             m_aMiscConfig.m_bIsPasswordFromColumn = bSet;
