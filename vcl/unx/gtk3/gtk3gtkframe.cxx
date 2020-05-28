@@ -1336,6 +1336,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             if( isFloatGrabWindow() )
             {
                 m_nFloats++;
+                fprintf(stderr, "floats up to %d\n", m_nFloats);
                 if (!getDisplay()->GetCaptureFrame())
                 {
                     grabPointer(true, true, true);
@@ -1351,6 +1352,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             if( isFloatGrabWindow() )
             {
                 m_nFloats--;
+                fprintf(stderr, "floats down to %d\n", m_nFloats);
                 if (!getDisplay()->GetCaptureFrame())
                 {
                     removeGrabLevel();
@@ -2500,6 +2502,7 @@ namespace
 
 void GtkSalFrame::GrabFocus()
 {
+    fprintf(stderr, "GrabFocus %p\n", this);
     GtkWidget* pGrabWidget;
     if (GTK_IS_EVENT_BOX(m_pWindow))
         pGrabWidget = GTK_WIDGET(m_pWindow);
@@ -3086,19 +3089,38 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return false;
 }
 
+namespace
+{
+    OString get_help_id(const GtkWidget *pWidget)
+    {
+        void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-helpid");
+        const gchar* pStr = static_cast<const gchar*>(pData);
+        return OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+}
+
 void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 {
+    fprintf(stderr, "0 signalSetFocus %p\n", frame);
     // do not propagate focus get/lose if floats are open
-    if (m_nFloats)
+    if (0 && m_nFloats)
+    {
+        fprintf(stderr, "floats\n");
         return;
+    }
     // change of focus between native widgets within the toplevel
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     // tdf#129634 ignore floating toolbars
     if (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
+    {
+        fprintf(stderr, "ownerdrawdeco\n");
         return;
-
+    }
     // tdf#129634 interpret losing focus as focus passing explicitly to another widget
     bool bLoseFocus = pWidget && pWidget != GTK_WIDGET(pThis->m_pFixedContainer);
+    if (pWidget)
+        fprintf(stderr, "widget with focus is %s\n", get_help_id(pWidget).getStr());
+    fprintf(stderr, "1 signalSetFocus %d %p\n", bLoseFocus, frame);
     pThis->CallCallbackExc(bLoseFocus ? SalEvent::LoseFocus : SalEvent::GetFocus, nullptr);
     gtk_widget_set_can_focus(GTK_WIDGET(pThis->m_pFixedContainer), !bLoseFocus);
 }
