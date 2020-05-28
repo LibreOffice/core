@@ -1027,33 +1027,28 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     // Blur radius is equal to soft edge radius
     const double fBlurRadius = aRadiusVector.getLength();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        // Processing will draw whatever geometry on white background, applying *black*
-        // replacement color
         mpOutputDevice->Erase();
-        rCandidate.setMaskGeneration();
         process(rCandidate);
-        rCandidate.setMaskGeneration(false);
+
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
                                      static_cast<long>(std::floor(aRange.getMinY())),
                                      static_cast<long>(std::ceil(aRange.getMaxX())),
                                      static_cast<long>(std::ceil(aRange.getMaxY())));
-        Bitmap bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
+        BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, -fBlurRadius, fBlurRadius, 0);
+        AlphaMask aMask = bitmap.GetAlpha();
+        AlphaMask blurMask = ProcessAndBlurAlphaMask(aMask, -fBlurRadius, fBlurRadius, 0);
+
+        aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-
-        mpOutputDevice->Erase();
-        process(rCandidate);
-        bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
-
-        BitmapEx result(bitmap, mask);
+        BitmapEx result(bitmap.GetBitmap(), aMask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
