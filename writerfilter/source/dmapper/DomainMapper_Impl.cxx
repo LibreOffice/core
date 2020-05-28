@@ -1167,10 +1167,21 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     pStyleProperties->IsyValid() ? pStyleProperties->Gety() : DEFAULT_VALUE));
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
-                rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
+            if (rAppendContext.pLastParagraphProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE &&
+                pStyleProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+            {
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
+                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA )));
+                    pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME)));
+            }
+            else
+            {
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
+                    rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
+                    rAppendContext.pLastParagraphProperties->GetvAnchor() :
+                    pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA)));
+            }
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
                 rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
