@@ -60,22 +60,6 @@ GlowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation
     return aRetval;
 }
 
-void GlowPrimitive2D::get2DDecomposition(
-    Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
-{
-    if (getChildren().empty())
-        return;
-
-    // create a modifiedColorPrimitive containing the *black* color and the content. Using black
-    // on white allows creating useful mask in VclPixelProcessor2D::processGlowPrimitive2D.
-    basegfx::BColorModifierSharedPtr aBColorModifier
-        = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor());
-
-    const Primitive2DReference xRef(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
-    rVisitor.append(xRef);
-}
-
 // provide unique ID
 ImplPrimitive2DIDBlock(GlowPrimitive2D, PRIMITIVE2D_ID_GLOWPRIMITIVE2D)
 

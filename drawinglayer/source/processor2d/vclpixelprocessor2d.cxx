@@ -983,30 +983,29 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
     // Consider glow transparency (initial transparency near the object edge)
     const sal_uInt8 nTransparency = rCandidate.getGlowColor().GetTransparency();
 
-    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
     if (aBufferDevice.isVisible())
     {
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
-        // Processing will draw whatever geometry on white background, applying *black*
-        // replacement color. The black color replacement is added in 2d decomposition of
-        // glow primitive.
         mpOutputDevice->Erase();
         process(rCandidate);
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
                                      static_cast<long>(std::floor(aRange.getMinY())),
                                      static_cast<long>(std::ceil(aRange.getMaxX())),
                                      static_cast<long>(std::ceil(aRange.getMaxY())));
-        Bitmap bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
+        BitmapEx bmpEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmap, fBlurRadius, fBlurRadius, nTransparency);
+        AlphaMask mask
+            = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius, nTransparency);
 
         // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
         const basegfx::BColor aGlowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getGlowColor().getBColor()));
-        bitmap.Erase(Color(aGlowColor));
-        BitmapEx result(bitmap, mask);
+        Bitmap bmp = bmpEx.GetBitmap();
+        bmp.Erase(Color(aGlowColor));
+        BitmapEx result(bmp, mask);
 
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
