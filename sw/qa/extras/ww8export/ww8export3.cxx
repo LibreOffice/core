@@ -312,6 +312,11 @@ DECLARE_WW8EXPORT_TEST(testTdf120412_proportionalEscapement, "tdf120412_proporti
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf133453_realFontSize, "tdf133453_realFontSize.doc")
+{
+    CPPUNIT_ASSERT_EQUAL( -95.f, getProperty<float>(getRun(getParagraph(1), 2, "2"), "CharEscapement") );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),

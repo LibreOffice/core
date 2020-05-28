@@ -3450,7 +3450,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     if ( m_xPlcxMan )
     {
         const sal_uInt16 nFontsizeID = m_bVer67 ? NS_sprm::v6::sprmCHps : NS_sprm::sprmCHps;
-        const SprmResult aFontsize = m_xPlcxMan->GetChpPLCF()->HasSprm( nFontsizeID );
+        const SprmResult aFontsize = m_xPlcxMan->GetChpPLCF()->HasSprm( nFontsizeID, /*bFindFirst=*/false );
         if ( aFontsize.pSprm && aFontsize.nRemainingData )
             Read_FontSize(nFontsizeID, aFontsize.pSprm, aFontsize.nRemainingData);
     }
