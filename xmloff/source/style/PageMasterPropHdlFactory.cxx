@@ -131,6 +131,9 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             case XML_SW_TYPE_FILLSTYLE:
                 pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap );
                 break;
+            case XML_SW_TYPE_PRESPAGE_BACKSIZE:
+                pHdl = new XMLNamedBoolPropertyHdl(GetXMLToken(XML_FULL), GetXMLToken(XML_BORDER));
+                break;
             case XML_SW_TYPE_FILLBITMAPSIZE:
                 pHdl = new XMLFillBitmapSizePropertyHandler();
                 break;
