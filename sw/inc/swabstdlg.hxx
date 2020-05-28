@@ -152,7 +152,7 @@ public:
     virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveSingleDoc() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;
-    virtual bool IsFileEncyrptedFromDataBase() const = 0;
+    virtual bool IsFileEncryptedFromDataBase() const = 0;
     virtual OUString GetColumnName() const = 0;
     virtual OUString GetPasswordColumnName() const = 0;
     virtual OUString GetTargetURL() const = 0;
