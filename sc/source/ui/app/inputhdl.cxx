@@ -741,6 +741,7 @@ ScInputHandler::ScInputHandler()
         nTipVisibleSec( nullptr ),
         nFormSelStart( 0 ),
         nFormSelEnd( 0 ),
+        nCellPercentFormatDecSep( 0 ),
         nAutoPar( 0 ),
         eMode( SC_INPUT_NONE ),
         bUseTab( false ),
@@ -755,7 +756,6 @@ ScInputHandler::ScInputHandler()
         bCommandErrorShown( false ),
         bInOwnChange( false ),
         bProtected( false ),
-        bCellHasPercentFormat( false ),
         bLastIsSymbol( false ),
         mbDocumentDisposing(false),
         nValidation( 0 ),
@@ -2359,11 +2359,13 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
                 {
                     sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                    bCellHasPercentFormat = ( SvNumFormatType::PERCENT ==
-                                              rDoc.GetFormatTable()->GetType( nFormat ) );
+                    if (SvNumFormatType::PERCENT == rDoc.GetFormatTable()->GetType( nFormat ))
+                        nCellPercentFormatDecSep = rDoc.GetFormatTable()->GetFormatDecimalSep( nFormat).toChar();
+                    else
+                        nCellPercentFormatDecSep = 0;
                 }
                 else
-                    bCellHasPercentFormat = false; // Default: no percent
+                    nCellPercentFormatDecSep = 0; // Default: no percent
 
                 // Validity specified?
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
@@ -3669,8 +3671,11 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                     {
                         OUString aStrLoP;
 
-                        if ( bStartEdit && bCellHasPercentFormat && ((nChar >= '0' && nChar <= '9') || nChar == '-') )
+                        if (bStartEdit && nCellPercentFormatDecSep != 0 &&
+                                ((nChar >= '0' && nChar <= '9') || nChar == '-' || nChar == nCellPercentFormatDecSep))
+                        {
                             aStrLoP = "%";
+                        }
 
                         if (pTableView)
                         {
