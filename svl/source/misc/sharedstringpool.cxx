@@ -72,23 +72,23 @@ void SharedStringPool::purge()
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    std::unordered_set<OUString> aNewStrPoolUpper;
     {
         auto it = mpImpl->maStrMap.begin(), itEnd = mpImpl->maStrMap.end();
         while (it != itEnd)
         {
             const rtl_uString* p = it->first.pData;
             if (getRefCount(p) == 1)
+            {
+                mpImpl->maStrPoolUpper.erase(it->second);
                 it = mpImpl->maStrMap.erase(it);
+            }
             else
             {
                 // Still referenced outside the pool. Keep it.
-                aNewStrPoolUpper.insert(it->second);
                 ++it;
             }
         }
     }
-    mpImpl->maStrPoolUpper = std::move(aNewStrPoolUpper);
 }
 
 size_t SharedStringPool::getCount() const
