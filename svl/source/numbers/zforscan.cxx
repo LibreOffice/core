@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
@@ -813,6 +812,8 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             case '0':
             case '?':
             case '%':
+            case u'‰': // per mille
+            case u'‱': // permyriad
             case '@':
             case '[':
             case ']':
@@ -1410,6 +1411,8 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 }
                 break;
             case '%':
+            case u'‰': // per mille
+            case u'‱': // permyriad
                 eNewType = SvNumFormatType::PERCENT;
                 break;
             case '/':
@@ -2320,9 +2323,23 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     break;
                 default: // Other Dels
-                    if (eScannedType == SvNumFormatType::PERCENT && cHere == '%')
+                    if ( eScannedType == SvNumFormatType::PERCENT )
                     {
                         nTypeArray[i] = NF_SYMBOLTYPE_PERCENT;
+                        switch ( cHere )
+                        {
+                            case '%' :
+                                nCntExp = 2;
+                                break;
+                            case u'‰': // per mille
+                                nCntExp = 3;
+                                break;
+                            case u'‱': // permyriad
+                                nCntExp = 4;
+                                break;
+                            default:
+                                nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        }
                     }
                     else
                     {

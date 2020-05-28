@@ -53,7 +53,7 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
     sal_uInt16 nThousand;               // Count of group separator sequences
     sal_uInt16 nCntPre;                 // Count of digits before decimal point
     sal_uInt16 nCntPost;                // Count of digits after decimal point
-    sal_uInt16 nCntExp;                 // Count of exponent digits, or AM/PM
+    sal_uInt16 nCntExp;                 // Count of exponent digits, or AM/PM, or denominator digit, or percent base
     SvNumFormatType eScannedType;       // Type determined by scan
     bool bThousand;                     // Has group (AKA thousand) separator
 
@@ -297,7 +297,14 @@ public:
     // nPos == 0xFFFF => last substring
     short GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos ) const;
 
+    /// Return string after number for a percent format
     OUString GetPercentString( sal_uInt16 nNumFor = 0 ) const;
+    /// Return base for percent: 100 for %
+    static double GetPercentBase( sal_uInt16 nCntBase );
+    /// Return percent symbol
+    static OUString GetPercentSign( sal_uInt16 nCntBase );
+    /// Return count of 0 of percent base: 2 for %
+    static short GetPercentCntBase( sal_Unicode aChar );
 
     OUString GetDenominatorString( sal_uInt16 nNumFor ) const;
     OUString GetNumeratorString( sal_uInt16 nNumFor ) const;
