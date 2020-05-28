@@ -20,6 +20,7 @@
 #include "PageMasterExportPropMapper.hxx"
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlexp.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -335,6 +336,9 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     rtl::Reference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
+    // distinguish 2 cases: drawing-page export has CTF_PM_FILL, page-layout-properties export does not
+    bool const isDrawingPageExport(aPropMapper->FindEntryIndex(CTF_PM_FILL) != -1);
+
     for( auto& rProp : rPropState )
     {
         XMLPropertyState *pProp = &rProp;
@@ -342,6 +346,17 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
         sal_Int16 nSimpleId     = nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
         sal_Int16 nPrintId      = nContextId & CTF_PM_PRINTMASK;
+
+
+        // tdf#103602 don't export draw:fill attributes on page-layout-properteis in strict ODF
+        if (!isDrawingPageExport
+            && aPropMapper->GetEntryAPIName(rProp.mnIndex).startsWith("Fill")
+            && ((aBackgroundImageExport.GetExport().getSaneDefaultVersion()
+                & SvtSaveOptions::ODFSVER_EXTENDED) == 0))
+        {
+            lcl_RemoveState(&rProp);
+            continue;
+        }
 
         XMLPropertyStateBuffer* pBuffer;
         switch( nFlag )
