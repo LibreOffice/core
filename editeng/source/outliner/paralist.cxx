@@ -54,8 +54,8 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
 }
 
 Paragraph::Paragraph( const ParagraphData& rData )
-: nFlags( ParaFlag::NONE )
-, aBulSize( -1, -1)
+: aBulSize( -1, -1)
+, nFlags( ParaFlag::NONE )
 , bVisible( true )
 {
     nDepth = rData.nDepth;

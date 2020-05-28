@@ -27,8 +27,8 @@ namespace comphelper
 
 OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
-    ,m_nPos(0)
     ,m_xAccess(_rxAccess)
+    ,m_nPos(0)
     ,m_bListening(false)
 {
     impl_startDisposeListening();
@@ -38,8 +38,8 @@ OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container:
 OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess,
                                        const css::uno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
-    ,m_nPos(0)
     ,m_xAccess(_rxAccess)
+    ,m_nPos(0)
     ,m_bListening(false)
 {
     impl_startDisposeListening();

@@ -60,8 +60,8 @@ struct FormulaArrayStack
 {
     FormulaArrayStack*  pNext;
     FormulaTokenArray*  pArr;
-    sal_uInt16          nIndex;
     FormulaTokenRef     mpLastToken;
+    sal_uInt16          nIndex;
     bool bTemp;
 };
 
