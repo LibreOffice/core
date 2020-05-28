@@ -80,6 +80,17 @@ namespace o3tl {
     template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe0003fff> {};
 }
 
+<<<<<<< HEAD   (98e0e7 tdf#115382 AutoCorrect: fix Hungarian apostrophe usage)
+=======
+enum class ACQuotes
+{
+    NONE,
+    NonBreakingSpace,
+    CapitalizeIAm,
+    DoubleAngleQuote,
+};
+
+>>>>>>> CHANGE (57f07b tdf#133524 AutoCorrect: support double angle quotes)
 // TODO: handle code points > U+FFFF and check users of this class
 
 // only a mapping class

@@ -366,6 +366,7 @@ public:
     void testTdf54409();
     void testTdf38394();
     void testTdf59666();
+    void testTdf133524();
     void testInconsistentBookmark();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -575,6 +576,13 @@ public:
     CPPUNIT_TEST(testTdf54409);
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
+<<<<<<< HEAD   (98e0e7 tdf#115382 AutoCorrect: fix Hungarian apostrophe usage)
+=======
+    CPPUNIT_TEST(testTdf133524);
+#if HAVE_FEATURE_PDFIUM
+    CPPUNIT_TEST(testInsertPdf);
+#endif
+>>>>>>> CHANGE (57f07b tdf#133524 AutoCorrect: support double angle quotes)
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -7095,6 +7103,88 @@ void SwUiWriterTest::testTdf59666()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+<<<<<<< HEAD   (98e0e7 tdf#115382 AutoCorrect: fix Hungarian apostrophe usage)
+=======
+void SwUiWriterTest::testTdf133524()
+{
+    SwDoc* pDoc = createDoc("tdf133524.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // 1. Testing autocorrect of >> and <<
+    // Example: »word«
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    // >>
+    pWrtShell->Insert(u">");
+    pWrtShell->AutoCorrect(corr, '>');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"»");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // <<
+    pWrtShell->Insert(u"word<");
+    pWrtShell->AutoCorrect(corr, '<');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"word«";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // 2. Testing autocorrect of " to >> and << inside „...”
+    // Example: „Sentence and »word«.”
+    // opening primary level quote
+    pWrtShell->Insert(u" ");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" „";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // opening second level quote
+    pWrtShell->Insert(u"Sentence and ");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"Sentence and »";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing second level quote
+    pWrtShell->Insert(u"word");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"word«";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing primary level quote
+    pWrtShell->Insert(u".");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u".”";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+#if HAVE_FEATURE_PDFIUM
+void SwUiWriterTest::testInsertPdf()
+{
+    createDoc();
+    SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // insert the PDF into the document
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+                {"FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "hello-world.pdf")}
+                }));
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    // Save and load cycle
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+    loadURL(aTempFile.GetURL(), nullptr);
+    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Assert that we have a replacement graphics
+    auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+    CPPUNIT_ASSERT(xReplacementGraphic.is());
+
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    // Assert that the graphic is a PDF
+    CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
+}
+#endif
+
+>>>>>>> CHANGE (57f07b tdf#133524 AutoCorrect: support double angle quotes)
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
