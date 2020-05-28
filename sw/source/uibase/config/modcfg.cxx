@@ -1187,9 +1187,9 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
             "FormLetter/FileOutput/Path",               // 8
             "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
             "FormLetter/FileOutput/FileName/Generation",//10
-            "FormLetter/PrintOutput/AskForMerge"        //11
+            "FormLetter/PrintOutput/AskForMerge",        //11
             "FormLetter/FileOutput/FilePassword/FromDatabaseField",  // 12
-            "FormLetter/FileOutput/FilePassword/Generation",//13
+            "FormLetter/FileOutput/FilePassword/Generation" //13
     };
     return aNames;
 }
