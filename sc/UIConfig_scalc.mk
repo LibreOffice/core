@@ -129,6 +129,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/exponentialsmoothingdialog \
 	sc/uiconfig/scalc/ui/filldlg \
+	sc/uiconfig/scalc/ui/filterdropdown \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/formulacalculationoptions \
@@ -151,6 +152,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/integerdialog \
 	sc/uiconfig/scalc/ui/leftfooterdialog \
 	sc/uiconfig/scalc/ui/leftheaderdialog \
+	sc/uiconfig/scalc/ui/listmenu \
 	sc/uiconfig/scalc/ui/namerangesdialog \
 	sc/uiconfig/scalc/ui/notebookbar \
 	sc/uiconfig/scalc/ui/notebookbar_compact \

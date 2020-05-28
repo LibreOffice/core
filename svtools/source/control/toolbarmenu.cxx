@@ -1514,7 +1514,6 @@ void ToolbarMenu::SetSelectHdl( const Link<ToolbarMenu*,void>& rLink )
     mpImpl->maSelectHdl = rLink;
 }
 
-
 }
 
 

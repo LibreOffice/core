@@ -525,7 +525,7 @@ void ScGridWindow::ClickExtern()
 
     if (mpDPFieldPopup)
     {
-        mpDPFieldPopup->close(false);
+        mpDPFieldPopup->get_widget().close(false);
         mpDPFieldPopup.disposeAndClear();
     }
 }
@@ -547,13 +547,13 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
 
 namespace {
 
-struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
+struct AutoFilterData : public ScCheckListMenuControl::ExtendedData
 {
     ScAddress maPos;
     ScDBData* mpData;
 };
 
-class AutoFilterAction : public ScMenuFloatingWindow::Action
+class AutoFilterAction : public ScCheckListMenuControl::Action
 {
     VclPtr<ScGridWindow> mpWindow;
     ScGridWindow::AutoFilterMode const meMode;
@@ -566,7 +566,7 @@ public:
     }
 };
 
-class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
+class AutoFilterPopupEndAction : public ScCheckListMenuControl::Action
 {
     VclPtr<ScGridWindow> mpWindow;
     ScAddress const maPos;
@@ -586,7 +586,7 @@ class AddItemToEntry
 public:
     AddItemToEntry(ScQueryEntry::QueryItemsType& rItems, svl::SharedStringPool& rPool) :
         mrItems(rItems), mrPool(rPool) {}
-    void operator() (const ScCheckListMenuWindow::ResultEntry& rEntry)
+    void operator() (const ScCheckListMenuControl::ResultEntry& rEntry)
     {
         if (rEntry.bValid)
         {
@@ -635,17 +635,13 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     mpAutoFilterPopup.disposeAndClear();
     int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(nCol, nTab), pViewData->GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, nColWidth));
-
-    // Avoid flicker when hovering over the menu items.
-    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
-        // If NWF renders the focus rects itself, that breaks double-buffering.
-        mpAutoFilterPopup->RequestDoubleBuffering(true);
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false, nColWidth));
+    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     if (bLOKActive)
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
-    mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
-    mpAutoFilterPopup->setPopupEndAction(
+    rControl.setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
+    rControl.setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
     std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
     pData->maPos = ScAddress(nCol, nRow, nTab);
@@ -673,7 +669,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         return;
 
     pData->mpData = pDBData;
-    mpAutoFilterPopup->setExtendedData(std::move(pData));
+    rControl.setExtendedData(std::move(pData));
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
@@ -692,8 +688,8 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScFilterEntries aFilterEntries;
     pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
-    mpAutoFilterPopup->setHasDates(aFilterEntries.mbHasDates);
-    mpAutoFilterPopup->setMemberSize(aFilterEntries.size());
+    rControl.setHasDates(aFilterEntries.mbHasDates);
+    rControl.setMemberSize(aFilterEntries.size());
     for (const auto& rEntry : aFilterEntries)
     {
         const OUString& aVal = rEntry.GetString();
@@ -701,38 +697,40 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         if (!aSelected.empty())
             bSelected = aSelected.count(aVal) > 0;
         if ( rEntry.IsDate() )
-            mpAutoFilterPopup->addDateMember( aVal, rEntry.GetValue(), bSelected );
+            rControl.addDateMember( aVal, rEntry.GetValue(), bSelected );
         else
-            mpAutoFilterPopup->addMember(aVal, bSelected);
+            rControl.addMember(aVal, bSelected);
     }
-    mpAutoFilterPopup->initMembers();
+    rControl.initMembers();
 
     // Populate the menu.
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addMenuItem(
         ScResId(STR_MENU_SORT_ASC),
         new AutoFilterAction(this, AutoFilterMode::SortAscending));
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addMenuItem(
         ScResId(STR_MENU_SORT_DESC),
         new AutoFilterAction(this, AutoFilterMode::SortDescending));
-    mpAutoFilterPopup->addSeparator();
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addSeparator();
+    rControl.addMenuItem(
         ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addMenuItem(
         ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addMenuItem(
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
-    mpAutoFilterPopup->addSeparator();
-    mpAutoFilterPopup->addMenuItem(
+    rControl.addSeparator();
+    rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
 
-    ScCheckListMenuWindow::Config aConfig;
+    ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
-    mpAutoFilterPopup->setConfig(aConfig);
-    mpAutoFilterPopup->launch(aCellRect);
+    rControl.setConfig(aConfig);
+    if (IsMouseCaptured())
+        ReleaseMouse();
+    rControl.launch(aCellRect);
 
     // remember filter rules before modification
-    mpAutoFilterPopup->getResult(aSaveAutoFilterResult);
+    rControl.getResult(aSaveAutoFilterResult);
 
     collectUIInformation(OUString::number(nRow), OUString::number(nCol));
 }
@@ -750,8 +748,10 @@ void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
 
 void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 {
+    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
+
     const AutoFilterData* pData =
-        static_cast<const AutoFilterData*>(mpAutoFilterPopup->getExtendedData());
+        static_cast<const AutoFilterData*>(rControl.getExtendedData());
 
     if (!pData)
         return;
@@ -815,14 +815,14 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     if (eMode == AutoFilterMode::Normal)
     {
         // Do not recreate autofilter rules if there are no changes from the user
-        ScCheckListMenuWindow::ResultType aResult;
-        mpAutoFilterPopup->getResult(aResult);
+        ScCheckListMenuControl::ResultType aResult;
+        rControl.getResult(aResult);
 
         if (aResult == aSaveAutoFilterResult)
         {
             SAL_INFO("sc.ui", "Apply autofilter to data when entries are the same");
 
-            if (!mpAutoFilterPopup->isAllSelected())
+            if (!rControl.isAllSelected())
             {
                 // Apply autofilter to data
                 ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -840,7 +840,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     // Remove old entries in auto-filter rules
     aParam.RemoveAllEntriesByField(rPos.Col());
 
-    if( !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() ) )
+    if( !(eMode == AutoFilterMode::Normal && rControl.isAllSelected() ) )
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -862,8 +862,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             {
                 pEntry->eOp = SC_EQUAL;
 
-                ScCheckListMenuWindow::ResultType aResult;
-                mpAutoFilterPopup->getResult(aResult);
+                ScCheckListMenuControl::ResultType aResult;
+                rControl.getResult(aResult);
 
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
