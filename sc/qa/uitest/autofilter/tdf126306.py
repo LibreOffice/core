@@ -48,8 +48,9 @@ class tdf126306(UITestCase):
         # Sort ascending button
         xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+TAB"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SPACE"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
         sort_asc_values = [0, 3, 8, 9, 17, 19, 25, 25, 33, 89, 107, 204, 453, 1023]
         self.check_values(document, sort_asc_values)
@@ -63,9 +64,9 @@ class tdf126306(UITestCase):
         # Sort descending button
         xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+TAB"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
         sort_des_values = [1023, 453, 204, 107, 89, 33, 25, 25, 19, 17, 9, 8, 3, 0]
         self.check_values(document, sort_des_values)
@@ -79,10 +80,10 @@ class tdf126306(UITestCase):
         # Top 10 button
         xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+TAB"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
         top10_hidden_values = [True, True, True, False, True, False, True,
                 True, False, True, True, False, True, True]
@@ -99,11 +100,11 @@ class tdf126306(UITestCase):
         # Empty button
         xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+TAB"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
         empty_values = [False] * 14
         #Values are the same
@@ -118,12 +119,12 @@ class tdf126306(UITestCase):
         # Not Empty button
         xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SHIFT+TAB"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xFloatWindow.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+        xMenu = xFloatWindow.getChild("menu")
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
         #Nothing should change
         self.check_values(document, default_values)

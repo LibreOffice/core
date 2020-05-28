@@ -237,6 +237,8 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
 void InterimToolbarPopup::GetFocus()
 {
     ToolbarPopup::GetFocus();
+    if (!m_xPopup)
+        return;
     m_xPopup->GrabFocus();
 }
 

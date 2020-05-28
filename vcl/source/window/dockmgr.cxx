@@ -366,6 +366,13 @@ void DockingManager::EndPopupMode( const vcl::Window *pWin )
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
+void DockingManager::SetPopupModeEndHdl( const vcl::Window *pWindow, const Link<FloatingWindow*,void>& rLink )
+{
+    ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
+    if( pWrapper )
+        pWrapper->SetPopupModeEndHdl(rLink);
+}
+
 void DockingManager::AddWindow( const vcl::Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
@@ -472,6 +479,7 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mbStartDockingEnabled(false)
     , mbLocked(false)
 {
+    assert(mpDockingWindow);
     DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
     if( pDockWin )
         mnFloatBits = pDockWin->GetFloatStyle();
@@ -850,6 +858,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
     GetWindow()->SetParent( pRealParent );
     GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
+    maPopupModeEndHdl.Call(mpFloatWin);
     mpFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
