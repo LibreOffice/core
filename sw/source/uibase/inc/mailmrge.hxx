@@ -126,7 +126,7 @@ public:
 
     bool IsSaveSingleDoc() const { return m_xSaveSingleDocRB->get_active(); }
     bool IsGenerateFromDataBase() const { return m_xGenerateFromDataBaseCB->get_active(); }
-    bool IsFileEncyrptedFromDataBase() const { return m_xPasswordCB->get_active(); }
+    bool IsFileEncryptedFromDataBase() const { return m_xPasswordCB->get_active(); }
     OUString GetColumnName() const { return m_xColumnLB->get_active_text(); }
     OUString GetPasswordColumnName() const { return m_xPasswordLB->get_active_text(); }
     OUString GetTargetURL() const;
