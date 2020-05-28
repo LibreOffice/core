@@ -39,6 +39,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
