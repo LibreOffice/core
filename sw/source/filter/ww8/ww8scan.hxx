@@ -275,7 +275,7 @@ public:
     explicit WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
         const wwSprmParser &rSprmParser);
     void  SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_);
-    SprmResult FindSprm(sal_uInt16 nId, const sal_uInt8* pNextByteMatch = nullptr);
+    SprmResult FindSprm(sal_uInt16 nId, bool bFindFirst, const sal_uInt8* pNextByteMatch = nullptr);
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
@@ -562,8 +562,11 @@ public:
 
         /*
             calls GetLenAndIStdAndSprms()...
+            2020 bFindFirst note: Normally the last SPRM takes effect, so I don't know why HasSprm always returned the first value!
+            I don't dare to change the default due to regression potential (and slower in the few cases looking for a boolean result),
+            but first thing to try is use FindFirst as false.
         */
-        SprmResult HasSprm(sal_uInt16 nId);
+        SprmResult HasSprm(sal_uInt16 nId, bool bFindFirst = true);
         void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
@@ -617,7 +620,7 @@ public:
     virtual void advance() override;
     virtual sal_uInt16 GetIstd() const override;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
-    SprmResult HasSprm(sal_uInt16 nId);
+    SprmResult HasSprm(sal_uInt16 nId, bool bFindFirst = true);
     void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
     bool HasFkp() const { return (nullptr != pFkp); }
 };
