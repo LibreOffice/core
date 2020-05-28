@@ -16,6 +16,24 @@
       "revId": "e39128715ab3b542506ec4435efdcaa046c2181d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfc0f3e6_103fbdd1",
+        "filename": "svx/source/svdraw/svdattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-05-28T19:56:20Z",
+      "side": 1,
+      "message": "So move this line from here into the first patch.",
+      "parentUuid": "466471c8_bcea2bca",
+      "revId": "e39128715ab3b542506ec4435efdcaa046c2181d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
