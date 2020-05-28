@@ -9152,9 +9152,6 @@ sax/test/sax/testsax.cxx
 sax/test/sax/testwriter.cxx
 sax/test/saxdemo.cxx
 sax/test/testcomponent.cxx
-sc/inc/AccessibleFilterMenu.hxx
-sc/inc/AccessibleFilterMenuItem.hxx
-sc/inc/AccessibleFilterTopWindow.hxx
 sc/inc/AccessibleGlobal.hxx
 sc/inc/ChartTools.hxx
 sc/inc/NumberFormatControl.hxx
@@ -10113,9 +10110,6 @@ sc/source/ui/Accessibility/AccessibleDocument.cxx
 sc/source/ui/Accessibility/AccessibleDocumentBase.cxx
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx
 sc/source/ui/Accessibility/AccessibleEditObject.cxx
-sc/source/ui/Accessibility/AccessibleFilterMenu.cxx
-sc/source/ui/Accessibility/AccessibleFilterMenuItem.cxx
-sc/source/ui/Accessibility/AccessibleFilterTopWindow.cxx
 sc/source/ui/Accessibility/AccessibleGlobal.cxx
 sc/source/ui/Accessibility/AccessiblePageHeader.cxx
 sc/source/ui/Accessibility/AccessiblePageHeaderArea.cxx

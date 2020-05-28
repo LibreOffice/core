@@ -23,20 +23,15 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
-#include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
 #include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
 
-#include <AccessibleFilterMenu.hxx>
-#include <AccessibleFilterTopWindow.hxx>
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <vcl/svlbitm.hxx>
-#include <vcl/treelistentry.hxx>
 #include <document.hxx>
 
 using namespace com::sun::star;
@@ -44,12 +39,14 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
 
-ScMenuFloatingWindow::MenuItemData::MenuItemData() :
-    mbEnabled(true), mbSeparator(false),
-    mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(nullptr))
+ScCheckListMenuControl::MenuItemData::MenuItemData()
+    : mbEnabled(true)
+    , mbSeparator(false)
+//TODO    , mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(nullptr))
 {
 }
 
+#if 0
 ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pParent) :
     mpSubMenu(nullptr),
     mnMenuPos(MENU_NOT_SELECTED),
@@ -76,9 +73,6 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
     maOpenTimer(this),
     maCloseTimer(this),
     maName("ScMenuFloatingWindow"),
-    mnSelectedMenu(MENU_NOT_SELECTED),
-    mnClickedMenu(MENU_NOT_SELECTED),
-    mpDoc(pDoc),
     mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent))
 {
     SetMenuStackLevel(nMenuStackLevel);
@@ -110,28 +104,15 @@ void ScMenuFloatingWindow::PopupModeEnd()
     handlePopupEnd();
 }
 
-void ScMenuFloatingWindow::MouseMove(const MouseEvent& rMEvt)
-{
-    const Point& rPos = rMEvt.GetPosPixel();
-    size_t nSelectedMenu = getEnclosingMenuItem(rPos);
-    setSelectedMenuItem(nSelectedMenu, true, false);
+#endif
 
-    Window::MouseMove(rMEvt);
+IMPL_LINK_NOARG(ScCheckListMenuControl, RowActivatedHdl, weld::TreeView&, bool)
+{
+    executeMenuItem(mxMenu->get_selected_index());
+    return true;
 }
 
-void ScMenuFloatingWindow::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    const Point& rPos = rMEvt.GetPosPixel();
-    mnClickedMenu = getEnclosingMenuItem(rPos);
-    Window::MouseButtonDown(rMEvt);
-}
-
-void ScMenuFloatingWindow::MouseButtonUp(const MouseEvent& rMEvt)
-{
-    executeMenuItem(mnClickedMenu);
-    mnClickedMenu = MENU_NOT_SELECTED;
-    Window::MouseButtonUp(rMEvt);
-}
+#if 0
 
 void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
 {
@@ -271,44 +252,29 @@ void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools
     drawAllMenuItems(rRenderContext);
 }
 
-Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
-{
-    if (!mxAccessible.is())
-    {
-        Reference<XAccessible> xAccParent = mpParentMenu ?
-            mpParentMenu->GetAccessible() : GetAccessibleParentWindow()->GetAccessible();
+#endif
 
-        mxAccessible.set(new ScAccessibleFilterMenu(xAccParent, this, maName, 999));
-        ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
-            mxAccessible.get());
-
-        size_t nPos = 0;
-        for (const auto& rMenuItem : maMenuItems)
-        {
-            p->appendMenuItem(rMenuItem.maText, nPos);
-            ++nPos;
-        }
-    }
-
-    return mxAccessible;
-}
-
-void ScMenuFloatingWindow::addMenuItem(const OUString& rText, Action* pAction)
+void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 {
     MenuItemData aItem;
     aItem.maText = rText;
     aItem.mbEnabled = true;
     aItem.mpAction.reset(pAction);
     maMenuItems.push_back(aItem);
+
+    mxMenu->append_text(rText);
 }
 
-void ScMenuFloatingWindow::addSeparator()
+void ScCheckListMenuControl::addSeparator()
 {
     MenuItemData aItem;
     aItem.mbSeparator = true;
     maMenuItems.push_back(aItem);
+
+    mxMenu->append_separator("seperator" + OUString::number(maMenuItems.size()));
 }
 
+#if 0
 ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText, bool bEnabled)
 {
     MenuItemData aItem;
@@ -318,11 +284,6 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::addSubMenuItem(const OUString& rText
     aItem.mpSubMenuWin->setName(rText);
     maMenuItems.push_back(aItem);
     return aItem.mpSubMenuWin.get();
-}
-
-void ScMenuFloatingWindow::handlePopupEnd()
-{
-    clearSelectedMenuItem();
 }
 
 Size ScMenuFloatingWindow::getMenuSize() const
@@ -442,7 +403,9 @@ void ScMenuFloatingWindow::drawAllMenuItems(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
+#endif
+
+void ScCheckListMenuControl::executeMenuItem(size_t nPos)
 {
     if (nPos >= maMenuItems.size())
         return;
@@ -456,7 +419,7 @@ void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
     maMenuItems[nPos].mpAction->execute();
 }
 
-void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
+void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
 {
     if (mnSelectedMenu == nPos)
         // nothing to do.
@@ -464,6 +427,7 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
 
     if (bEnsureSubMenu)
     {
+#if 0
         // Dismiss any child popup menu windows.
         if (mnSelectedMenu < maMenuItems.size() &&
             maMenuItems[mnSelectedMenu].mpSubMenuWin &&
@@ -477,14 +441,13 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
         // window, as well as all its parent windows are visible.
         if (!IsVisible() && mpParentMenu)
             mpParentMenu->ensureSubMenuVisible(this);
+#endif
     }
 
-    selectMenuItem(mnSelectedMenu, false, bSubMenuTimer);
-    selectMenuItem(nPos, true, bSubMenuTimer);
-    mnSelectedMenu = nPos;
-
-    fireMenuHighlightedEvent();
+    selectMenuItem(nPos, bSubMenuTimer);
 }
+
+#if 0
 
 void ScMenuFloatingWindow::handleMenuTimeout(const SubMenuItemData* pTimer)
 {
@@ -592,23 +555,18 @@ void ScMenuFloatingWindow::endSubMenu(ScMenuFloatingWindow* pSubMenu)
     }
 }
 
-void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
-{
-    size_t nPos = 0;
-    for (const auto& rMenuItem : maMenuItems)
-    {
-        pAccMenu->appendMenuItem(rMenuItem.maText, nPos);
-        ++nPos;
-    }
-}
-
 void ScMenuFloatingWindow::resizeToFitMenuItems()
 {
     SetOutputSizePixel(getMenuSize());
 }
 
-void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer)
+#endif
+
+void ScCheckListMenuControl::selectMenuItem(size_t nPos, bool /*bSubMenuTimer*/)
 {
+    mxMenu->select(nPos == MENU_NOT_SELECTED ? -1 : nPos);
+    mnSelectedMenu = nPos;
+#if 0
     if (nPos >= maMenuItems.size() || nPos == MENU_NOT_SELECTED)
     {
         queueCloseSubMenu();
@@ -621,9 +579,7 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
         return;
     }
 
-    Invalidate();
-
-    if (bSelected)
+    if (nPos != MENU_NOT_SELECTED)
     {
         if (mpParentMenu)
             mpParentMenu->setSubMenuFocused(this);
@@ -639,14 +595,15 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
                 queueCloseSubMenu();
         }
     }
+#endif
 }
 
-void ScMenuFloatingWindow::clearSelectedMenuItem()
+void ScCheckListMenuControl::clearSelectedMenuItem()
 {
-    selectMenuItem(mnSelectedMenu, false, false);
-    mnSelectedMenu = MENU_NOT_SELECTED;
+    selectMenuItem(MENU_NOT_SELECTED, false);
 }
 
+#if 0
 ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
 {
     if (maMenuItems.size() <= nPos)
@@ -765,26 +722,6 @@ size_t ScMenuFloatingWindow::getSubMenuPos(const ScMenuFloatingWindow* pSubMenu)
     return MENU_NOT_SELECTED;
 }
 
-void ScMenuFloatingWindow::fireMenuHighlightedEvent()
-{
-    if (mnSelectedMenu == MENU_NOT_SELECTED)
-        return;
-
-    if (!mxAccessible.is())
-        return;
-
-    Reference<XAccessibleContext> xAccCxt = mxAccessible->getAccessibleContext();
-    if (!xAccCxt.is())
-        return;
-
-    Reference<XAccessible> xAccMenu = xAccCxt->getAccessibleChild(mnSelectedMenu);
-    if (!xAccMenu.is())
-        return;
-
-    VclAccessibleEvent aEvent(VclEventId::MenuHighlight, xAccMenu);
-    FireVclEvent(aEvent);
-}
-
 void ScMenuFloatingWindow::setSubMenuFocused(const ScMenuFloatingWindow* pSubMenu)
 {
     maCloseTimer.reset();
@@ -835,15 +772,18 @@ void ScMenuFloatingWindow::ensureSubMenuNotVisible()
 
     EndPopupMode();
 }
+#endif
 
-void ScMenuFloatingWindow::terminateAllPopupMenus()
+void ScCheckListMenuControl::terminateAllPopupMenus()
 {
-    EndPopupMode();
+    vcl::Window::GetDockingManager()->EndPopupMode(mxParent);
+#if 0
     if (mpParentMenu)
         mpParentMenu->terminateAllPopupMenus();
+#endif
 }
 
-ScCheckListMenuWindow::Config::Config() :
+ScCheckListMenuControl::Config::Config() :
     mbAllowEmptySet(true), mbRTL(false)
 {
 }
@@ -853,66 +793,69 @@ ScCheckListMember::ScCheckListMember()
     , mbDate(false)
     , mbLeaf(false)
     , meDatePartType(YEAR)
-    , mpParent(nullptr)
+//TODO    , mpParent(nullptr)
 {
 }
 
-ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent) :
-    ::CancelButton(pParent), mpParent(pParent) {}
-
-ScCheckListMenuWindow::CancelButton::~CancelButton()
+ScCheckListMenuControl::ScCheckListMenuControl(DockingWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc, int /*nWidth*/)
+    : mxParent(pParent)
+    , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui"))
+    , mxContainer(mxBuilder->weld_container("FilterDropDown"))
+    , mxMenu(mxBuilder->weld_tree_view("menu"))
+    , mxScratchIter(mxMenu->make_iterator())
+    , mxEdSearch(mxBuilder->weld_entry("search_edit"))
+    , mxChecks(mxBuilder->weld_tree_view("check_list_box"))
+    , mxChkToggleAll(mxBuilder->weld_check_button("toggle_all"))
+    , mxBtnSelectSingle(mxBuilder->weld_button("select_current"))
+    , mxBtnUnselectSingle(mxBuilder->weld_button("unselect_current"))
+    , mxButtonBox(mxBuilder->weld_box("buttonbox"))
+    , mxBtnOk(mxBuilder->weld_button("ok"))
+    , mxBtnCancel(mxBuilder->weld_button("cancel"))
+    , maWndSize()
+    , mePrevToggleAllState(TRISTATE_INDET)
+    , mnSelectedMenu(MENU_NOT_SELECTED)
+    , mpDoc(pDoc)
 {
-    disposeOnce();
-}
+    // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
+    // popup isn't a true dialog
+    mxButtonBox->sort_native_button_order();
 
-void ScCheckListMenuWindow::CancelButton::dispose()
-{
-    mpParent.clear();
-    ::CancelButton::dispose();
-}
+    std::vector<int> aWidths;
+    aWidths.push_back(mxChecks->get_checkbox_column_width());
+    mxChecks->set_column_fixed_widths(aWidths);
 
-void ScCheckListMenuWindow::CancelButton::Click()
-{
-    mpParent->EndPopupMode();
-    ::CancelButton::Click();
-}
-
-ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, int nWidth) :
-    ScMenuFloatingWindow(pParent, pDoc),
-    maEdSearch(VclPtr<ScSearchEdit>::Create(this)),
-    maChecks(VclPtr<ScCheckListBox>::Create(this)),
-    maChkToggleAll(VclPtr<CheckBox>::Create(this, 0)),
-    maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),
-    maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
-    maBtnOk(VclPtr<OKButton>::Create(this)),
-    maBtnCancel(VclPtr<CancelButton>::Create(this)),
-    maWndSize(),
-    mePrevToggleAllState(TRISTATE_INDET),
-    maTabStops(this)
-{
-    maChkToggleAll->EnableTriState(true);
-
+    mxContainer->connect_focus_in(LINK(this, ScCheckListMenuControl, FocusHdl));
+//TODO    mxMenu->connect_mouse_move(LINK(this, ScCheckListMenuControl, MouseMoveHdl));
+    mxMenu->connect_row_activated(LINK(this, ScCheckListMenuControl, RowActivatedHdl));
+#if 0
     float fScaleFactor = GetDPIScaleFactor();
 
     nWidth = std::max<int>(nWidth, 200 * fScaleFactor);
     maWndSize = Size(nWidth, 330 * fScaleFactor);
+#endif
+}
 
-    maTabStops.AddTabStop( this );
-    maTabStops.AddTabStop( maEdSearch.get() );
-    maTabStops.AddTabStop( maChecks.get() );
-    maTabStops.AddTabStop( maChkToggleAll.get() );
-    maTabStops.AddTabStop( maBtnSelectSingle.get() );
-    maTabStops.AddTabStop( maBtnUnselectSingle.get() );
-    maTabStops.AddTabStop( maBtnOk.get() );
-    maTabStops.AddTabStop( maBtnCancel.get() );
+IMPL_LINK_NOARG(ScCheckListMenuControl, FocusHdl, weld::Widget&, void)
+{
+    GrabFocus();
+}
 
-    maEdSearch->SetTabStopsContainer( &maTabStops );
-    maChecks->SetTabStopsContainer( &maTabStops );
+void ScCheckListMenuControl::GrabFocus()
+{
+    mxEdSearch->grab_focus();
+}
 
+ScCheckListMenuControl::~ScCheckListMenuControl()
+{
+}
+
+ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, int nWidth)
+    : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    , mxBox(get("box"))
+    , mxControl(new ScCheckListMenuControl(this, mxBox.get(), pDoc, nWidth))
+{
+    SetBackground(Application::GetSettings().GetStyleSettings().GetMenuColor());
     set_id("check_list_menu");
-    maChkToggleAll->set_id("toggle_all");
-    maBtnSelectSingle->set_id("select_current");
-    maBtnUnselectSingle->set_id("unselect_current");
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -922,131 +865,20 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 
 void ScCheckListMenuWindow::dispose()
 {
-    maTabStops.clear();
-    maEdSearch.disposeAndClear();
-    maChecks.disposeAndClear();
-    maChkToggleAll.disposeAndClear();
-    maBtnSelectSingle.disposeAndClear();
-    maBtnUnselectSingle.disposeAndClear();
-    maBtnOk.disposeAndClear();
-    maBtnCancel.disposeAndClear();
-    ScMenuFloatingWindow::dispose();
+    mxControl.reset();
+    mxBox.disposeAndClear();
+    DockingWindow::dispose();
 }
 
-void ScCheckListMenuWindow::getSectionPosSize(
-    Point& rPos, Size& rSize, SectionType eType) const
+void ScCheckListMenuWindow::GetFocus()
 {
-    float fScaleFactor = GetDPIScaleFactor();
-
-    // constant parameters.
-    const long nSearchBoxMargin = 10 *fScaleFactor;
-    const long nListBoxMargin = 5 * fScaleFactor;            // horizontal distance from the side of the dialog to the listbox border.
-    const long nListBoxInnerPadding = 5 * fScaleFactor;
-    const long nTopMargin = 5 * fScaleFactor;
-    const long nMenuHeight = maMenuSize.getHeight();
-    const long nSingleItemBtnAreaHeight = 32 * fScaleFactor; // height of the middle area below the list box where the single-action buttons are.
-    const long nBottomBtnAreaHeight = 50 * fScaleFactor;     // height of the bottom area where the OK and Cancel buttons are.
-    const long nBtnWidth = 90 * fScaleFactor;
-    const long nLabelHeight = getLabelFont().GetFontHeight();
-    const long nBtnHeight = nLabelHeight * 2;
-    const long nBottomMargin = 10 * fScaleFactor;
-    const long nMenuListMargin = 5 * fScaleFactor;
-    const long nSearchBoxHeight = nLabelHeight * 2;
-
-    // parameters calculated from constants.
-    const long nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
-    const long nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
-        nMenuListMargin - nSearchBoxHeight - nSearchBoxMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
-
-    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin;
-
-    switch (eType)
-    {
-        case WHOLE:
-        {
-            rPos  = Point(0, 0);
-            rSize = maWndSize;
-        }
-        break;
-        case EDIT_SEARCH:
-        {
-            rPos = Point(nSearchBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
-            rSize = Size(maWndSize.Width() - 2*nSearchBoxMargin, nSearchBoxHeight);
-        }
-        break;
-        case SINGLE_BTN_AREA:
-        {
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rSize = Size(nListBoxWidth, nSingleItemBtnAreaHeight);
-        }
-        break;
-        case CHECK_TOGGLE_ALL:
-        {
-            long h = std::min(maChkToggleAll->CalcMinimumSize().Height(), 26L);
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.AdjustX(5 );
-            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
-            rSize = Size(70, h);
-        }
-        break;
-        case BTN_SINGLE_SELECT:
-        {
-            long h = 26 * fScaleFactor;
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.AdjustX(nListBoxWidth - h - 10 - h - 10 );
-            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
-            rSize = Size(h, h);
-        }
-        break;
-        case BTN_SINGLE_UNSELECT:
-        {
-            long h = 26 * fScaleFactor;
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.AdjustX(nListBoxWidth - h - 10 );
-            rPos.AdjustY((nSingleItemBtnAreaHeight - h)/2 );
-            rSize = Size(h, h);
-        }
-        break;
-        case LISTBOX_AREA_OUTER:
-        {
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY + nSingleItemBtnAreaHeight-1);
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-        }
-        break;
-        case LISTBOX_AREA_INNER:
-        {
-            rPos = Point(nListBoxMargin, nSingleBtnAreaY + nSingleItemBtnAreaHeight-1);
-            rPos.AdjustX(nListBoxInnerPadding );
-            rPos.AdjustY(nListBoxInnerPadding );
-
-            rSize = Size(nListBoxWidth, nListBoxHeight);
-            rSize.AdjustWidth( -(nListBoxInnerPadding*2) );
-            rSize.AdjustHeight( -(nListBoxInnerPadding*2) );
-        }
-        break;
-        case BTN_OK:
-        {
-            long x = (maWndSize.Width() - nBtnWidth*2)/3;
-            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
-            rPos = Point(x, y);
-            rSize = Size(nBtnWidth, nBtnHeight);
-        }
-        break;
-        case BTN_CANCEL:
-        {
-            long x = (maWndSize.Width() - nBtnWidth*2)/3*2 + nBtnWidth;
-            long y = maWndSize.Height() - nBottomMargin - nBtnHeight;
-            rPos = Point(x, y);
-            rSize = Size(nBtnWidth, nBtnHeight);
-        }
-        break;
-        default:
-            ;
-    }
+    DockingWindow::GetFocus();
+    mxControl->GrabFocus();
 }
 
-void ScCheckListMenuWindow::packWindow()
+void ScCheckListMenuControl::packWindow()
 {
+#if 0
     maMenuSize = getMenuSize();
 
     if (maWndSize.Width() < maMenuSize.Width())
@@ -1061,176 +893,107 @@ void ScCheckListMenuWindow::packWindow()
     // screen. Also do adjustment based on the number of check box items.
 
     SetOutputSizePixel(maWndSize);
+#endif
 
-    const StyleSettings& rStyle = GetSettings().GetStyleSettings();
-
+#if 0
     Point aPos;
     Size aSize;
     getSectionPosSize(aPos, aSize, WHOLE);
     SetOutputSizePixel(aSize);
+#endif
 
-    getSectionPosSize(aPos, aSize, BTN_OK);
-    maBtnOk->SetPosSizePixel(aPos, aSize);
-    maBtnOk->SetFont(getLabelFont());
-    maBtnOk->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnOk->Show();
+    mxBtnOk->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+    mxBtnCancel->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+    mxEdSearch->connect_changed(LINK(this, ScCheckListMenuControl, EdModifyHdl));
+    mxEdSearch->connect_activate(LINK(this, ScCheckListMenuControl, EdActivateHdl));
+    mxChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
+    mxChkToggleAll->connect_toggled(LINK(this, ScCheckListMenuControl, TriStateHdl));
+    mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
+    mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
 
-    getSectionPosSize(aPos, aSize, BTN_CANCEL);
-    maBtnCancel->SetPosSizePixel(aPos, aSize);
-    maBtnCancel->SetFont(getLabelFont());
-    maBtnCancel->Show();
+    mxChecks->set_size_request(-1, mxChecks->get_height_rows(9));
+    mxMenu->set_size_request(-1, mxMenu->get_preferred_size().Height() + 2);
 
-    getSectionPosSize(aPos, aSize, EDIT_SEARCH);
-    maEdSearch->SetPosSizePixel(aPos, aSize);
-    maEdSearch->SetFont(getLabelFont());
-    maEdSearch->SetControlBackground(rStyle.GetFieldColor());
-    maEdSearch->SetPlaceholderText(ScResId(STR_EDIT_SEARCH_ITEMS));
-    maEdSearch->SetModifyHdl( LINK(this, ScCheckListMenuWindow, EdModifyHdl) );
-    maEdSearch->Show();
-
-    getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
-    maChecks->SetPosSizePixel(aPos, aSize);
-    maChecks->SetFont(getLabelFont());
-    maChecks->SetCheckButtonHdl( LINK(this, ScCheckListMenuWindow, CheckHdl) );
-    maChecks->Show();
-
-    getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
-    maChkToggleAll->SetPosSizePixel(aPos, aSize);
-    maChkToggleAll->SetFont(getLabelFont());
-    maChkToggleAll->SetText(ScResId(STR_BTN_TOGGLE_ALL));
-    maChkToggleAll->SetTextColor(rStyle.GetMenuTextColor());
-    maChkToggleAll->SetControlBackground(rStyle.GetMenuColor());
-    maChkToggleAll->SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
-    maChkToggleAll->Show();
-
-    float fScaleFactor = GetDPIScaleFactor();
-
-    ;
-
-    getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
-    maBtnSelectSingle->SetPosSizePixel(aPos, aSize);
-    maBtnSelectSingle->SetQuickHelpText(ScResId(STR_BTN_SELECT_CURRENT));
-    maBtnSelectSingle->SetModeImage(Image(StockImage::Yes, RID_BMP_SELECT_CURRENT));
-    maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnSelectSingle->Show();
-
-    BitmapEx aSingleUnselectBmp(RID_BMP_UNSELECT_CURRENT);
-    if (fScaleFactor > 1)
-        aSingleUnselectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
-    Image aSingleUnselect(aSingleUnselectBmp);
-
-    getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
-    maBtnUnselectSingle->SetPosSizePixel(aPos, aSize);
-    maBtnUnselectSingle->SetQuickHelpText(ScResId(STR_BTN_UNSELECT_CURRENT));
-    maBtnUnselectSingle->SetModeImage(aSingleUnselect);
-    maBtnUnselectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
-    maBtnUnselectSingle->Show();
+    maWndSize = mxContainer->get_preferred_size();
 }
 
-void ScCheckListMenuWindow::setAllMemberState(bool bSet)
+void ScCheckListMenuControl::setAllMemberState(bool bSet)
 {
-    size_t n = maMembers.size();
-    std::set<SvTreeListEntry*> aParents;
-    for (size_t i = 0; i < n; ++i)
-    {
-        aParents.insert(maMembers[i].mpParent);
-    }
-
-    for (const auto& pParent : aParents)
-    {
-        if (!pParent)
-        {
-            sal_uInt32 nCount = maChecks->GetEntryCount();
-            for( sal_uInt32 i = 0; i < nCount; ++i)
-            {
-                SvTreeListEntry* pEntry = maChecks->GetEntry(i);
-                if (!pEntry)
-                    continue;
-
-                maChecks->CheckEntry(pEntry, bSet);
-            }
-        }
-        else
-        {
-            SvTreeListEntries& rEntries = pParent->GetChildEntries();
-            for (const auto& rxEntry : rEntries)
-            {
-                maChecks->CheckEntry(rxEntry.get(), bSet);
-            }
-        }
-    }
+    CheckAllChildren(nullptr, bSet);
 
     if (!maConfig.mbAllowEmptySet)
+    {
         // We need to have at least one member selected.
-        maBtnOk->Enable(maChecks->GetCheckedEntryCount() != 0);
+        mxBtnOk->set_sensitive(GetCheckedEntryCount() != 0);
+    }
 }
 
-void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
+void ScCheckListMenuControl::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-    SvTreeListEntry* pEntry = maChecks->GetCurEntry();
-    if (!pEntry)
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
+    if (!mxChecks->get_cursor(xEntry.get()))
         return;
-    maChecks->CheckEntry(pEntry, bSet );
-
+    mxChecks->set_toggle(*xEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+#if 0
     // Make sure all checkboxes are invalidated.
     Invalidate();
+#endif
 }
 
-IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
 {
-    if (pBtn == maBtnOk.get())
+    if (&rBtn == mxBtnOk.get())
         close(true);
-    else if (pBtn == maBtnSelectSingle.get())
+    else if (&rBtn == mxBtnCancel.get())
+        close(false);
+    else if (&rBtn == mxBtnSelectSingle.get() || &rBtn == mxBtnUnselectSingle.get())
     {
-        selectCurrentMemberOnly(true);
-        CheckHdl(maChecks.get());
-    }
-    else if (pBtn == maBtnUnselectSingle.get())
-    {
-        selectCurrentMemberOnly(false);
-        CheckHdl(maChecks.get());
+        selectCurrentMemberOnly(&rBtn == mxBtnSelectSingle.get());
+        std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
+        if (!mxChecks->get_cursor(xEntry.get()))
+            xEntry.reset();
+        Check(xEntry.get());
     }
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl, Button*, void)
+IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::ToggleButton&, void)
 {
     switch (mePrevToggleAllState)
     {
         case TRISTATE_FALSE:
-            maChkToggleAll->SetState(TRISTATE_TRUE);
+            mxChkToggleAll->set_state(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
         case TRISTATE_TRUE:
-            maChkToggleAll->SetState(TRISTATE_FALSE);
+            mxChkToggleAll->set_state(TRISTATE_FALSE);
             setAllMemberState(false);
         break;
         case TRISTATE_INDET:
         default:
-            maChkToggleAll->SetState(TRISTATE_TRUE);
+            mxChkToggleAll->set_state(TRISTATE_TRUE);
             setAllMemberState(true);
         break;
     }
 
-    mePrevToggleAllState = maChkToggleAll->GetState();
-    maTabStops.SetTabStop(maChkToggleAll); // Needed for when accelerator is used
+    mePrevToggleAllState = mxChkToggleAll->get_state();
 }
 
-IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
 {
-    OUString aSearchText = maEdSearch->GetText();
+    OUString aSearchText = mxEdSearch->get_text();
     aSearchText = ScGlobal::getCharClassPtr()->lowercase( aSearchText );
     bool bSearchTextEmpty = aSearchText.isEmpty();
     size_t n = maMembers.size();
     size_t nSelCount = 0;
     bool bSomeDateDeletes = false;
 
-    maChecks->SetUpdateMode(false);
+    mxChecks->freeze();
 
     if (bSearchTextEmpty)
     {
         // when there are a lot of rows, it is cheaper to simply clear the tree and re-initialise
-        maChecks->Clear();
+        mxChecks->clear();
         nSelCount = initMembers();
     }
     else
@@ -1254,13 +1017,13 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 
             if ( bPartialMatch )
             {
-                SvTreeListEntry* pLeaf = maChecks->ShowCheckEntry( aLabelDisp, maMembers[i] );
-                updateMemberParents( pLeaf, i );
+                auto xLeaf = ShowCheckEntry(aLabelDisp, maMembers[i]);
+                updateMemberParents(xLeaf.get(), i);
                 ++nSelCount;
             }
             else
             {
-                maChecks->ShowCheckEntry( aLabelDisp, maMembers[i], false, false );
+                ShowCheckEntry(aLabelDisp, maMembers[i], false, false);
                 if( bIsDate )
                     bSomeDateDeletes = true;
             }
@@ -1271,66 +1034,87 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
     {
         for (size_t i = 0; i < n; ++i)
         {
-            if ( !maMembers[i].mbDate ) continue;
-            if ( maMembers[i].meDatePartType != ScCheckListMember::DAY ) continue;
-            updateMemberParents( nullptr, i );
+            if (!maMembers[i].mbDate)
+                continue;
+            if (maMembers[i].meDatePartType != ScCheckListMember::DAY)
+                continue;
+            updateMemberParents(nullptr, i);
         }
     }
 
-    maChecks->SetUpdateMode(true);
+    mxChecks->thaw();
 
     if ( nSelCount == n )
-        maChkToggleAll->SetState( TRISTATE_TRUE );
+        mxChkToggleAll->set_state( TRISTATE_TRUE );
     else if ( nSelCount == 0 )
-        maChkToggleAll->SetState( TRISTATE_FALSE );
+        mxChkToggleAll->set_state( TRISTATE_FALSE );
     else
-        maChkToggleAll->SetState( TRISTATE_INDET );
+        mxChkToggleAll->set_state( TRISTATE_INDET );
 
     if ( !maConfig.mbAllowEmptySet )
     {
         const bool bEmptySet( nSelCount == 0 );
-        maChecks->Enable( !bEmptySet );
-        maChkToggleAll->Enable( !bEmptySet );
-        maBtnSelectSingle->Enable( !bEmptySet );
-        maBtnUnselectSingle->Enable( !bEmptySet );
-        maBtnOk->Enable( !bEmptySet );
+        mxChecks->set_sensitive(!bEmptySet);
+        mxChkToggleAll->set_sensitive(!bEmptySet);
+        mxBtnSelectSingle->set_sensitive(!bEmptySet);
+        mxBtnUnselectSingle->set_sensitive(!bEmptySet);
+        mxBtnOk->set_sensitive(!bEmptySet);
     }
 }
 
-IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
+IMPL_LINK_NOARG(ScCheckListMenuControl, EdActivateHdl, weld::Entry&, bool)
 {
-    if (pChecks != maChecks.get())
-        return;
-    SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
-    if ( pEntry )
-        maChecks->CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SvButtonState::Checked ) );
-    size_t nNumChecked = maChecks->GetCheckedEntryCount();
+    if (mxBtnOk->get_sensitive())
+        close(true);
+    return true;
+}
+
+IMPL_LINK( ScCheckListMenuControl, CheckHdl, const weld::TreeView::iter_col&, rRowCol, void )
+{
+    Check(&rRowCol.first);
+}
+
+void ScCheckListMenuControl::Check(const weld::TreeIter* pEntry)
+{
+    if (pEntry)
+        CheckEntry(pEntry,  mxChecks->get_toggle(*pEntry, 0) == TRISTATE_TRUE);
+    size_t nNumChecked = GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
-        maChkToggleAll->SetState(TRISTATE_TRUE);
+        mxChkToggleAll->set_state(TRISTATE_TRUE);
     else if (nNumChecked == 0)
         // no members visible
-        maChkToggleAll->SetState(TRISTATE_FALSE);
+        mxChkToggleAll->set_state(TRISTATE_FALSE);
     else
-        maChkToggleAll->SetState(TRISTATE_INDET);
+        mxChkToggleAll->set_state(TRISTATE_INDET);
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
-        maBtnOk->Enable(nNumChecked != 0);
+        mxBtnOk->set_sensitive(nNumChecked != 0);
 
-    mePrevToggleAllState = maChkToggleAll->GetState();
+    mePrevToggleAllState = mxChkToggleAll->get_state();
 }
 
-void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
+IMPL_LINK(ScCheckListMenuControl, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    ScMenuFloatingWindow::MouseMove(rMEvt);
+    const Point& rPos = rMEvt.GetPosPixel();
 
-    size_t nSelectedMenu = getSelectedMenuItem();
+    int nSelectedMenu = MENU_NOT_SELECTED;
+    if (rPos.X() >= 0 && rPos.Y() >= 0 && mxMenu->get_dest_row_at_pos(rPos, mxScratchIter.get(), false))
+        nSelectedMenu = mxMenu->get_iter_index_in_parent(*mxScratchIter);
+
+    if (nSelectedMenu != mxMenu->get_selected_index())
+        setSelectedMenuItem(nSelectedMenu, true, false);
+#if 0
     if (nSelectedMenu == MENU_NOT_SELECTED)
         queueCloseSubMenu();
+#endif
+
+    return false;
 }
 
-bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
+#if 0
+bool ScCheckListMenuControl::EventNotify(NotifyEvent& rNEvt)
 {
     MouseNotifyEvent nType = rNEvt.GetType();
     if (HasFocus() && nType == MouseNotifyEvent::GETFOCUS)
@@ -1338,22 +1122,11 @@ bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
         setSelectedMenuItem( 0 , false, false );
         return true;
     }
-    if (nType == MouseNotifyEvent::KEYINPUT)
-    {
-        const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
-        const sal_uInt16 nCode = rCode.GetCode();
-        if (nCode != KEY_RETURN)
-        {
-            bool bShift = rCode.IsShift();
-            if (nCode == KEY_TAB)
-                maTabStops.CycleFocus(bShift);
-            return true;
-        }
-    }
-    return ScMenuFloatingWindow::EventNotify(rNEvt);
+    return InterimItemWindow::EventNotify(rNEvt);
 }
+#endif
 
+#if 0
 void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     ScMenuFloatingWindow::Paint(rRenderContext, rRect);
@@ -1376,10 +1149,10 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.SetFillColor(rStyle.GetMenuColor());
     rRenderContext.DrawRect(tools::Rectangle(aPos,aSize));
 }
+#endif
 
-void ScCheckListMenuWindow::updateMemberParents( const SvTreeListEntry* pLeaf, size_t nIdx )
+void ScCheckListMenuControl::updateMemberParents(const weld::TreeIter* pLeaf, size_t nIdx)
 {
-
     if ( !maMembers[nIdx].mbDate || maMembers[nIdx].meDatePartType != ScCheckListMember::DAY )
         return;
 
@@ -1389,67 +1162,46 @@ void ScCheckListMenuWindow::updateMemberParents( const SvTreeListEntry* pLeaf, s
 
     if ( pLeaf )
     {
-        SvTreeListEntry* pMonthEntry = pLeaf->GetParent();
-        SvTreeListEntry* pYearEntry = pMonthEntry ? pMonthEntry->GetParent() : nullptr;
+        std::unique_ptr<weld::TreeIter> xYearEntry;
+        std::unique_ptr<weld::TreeIter> xMonthEntry = mxChecks->make_iterator(pLeaf);
+        if (!mxChecks->iter_parent(*xMonthEntry))
+            xMonthEntry.reset();
+        else
+        {
+            xYearEntry = mxChecks->make_iterator(xMonthEntry.get());
+            if (!mxChecks->iter_parent(*xYearEntry))
+                xYearEntry.reset();
+        }
 
-        maMembers[nIdx].mpParent = pMonthEntry;
+        maMembers[nIdx].mxParent = std::move(xMonthEntry);
         if ( aItr != maYearMonthMap.end() )
         {
             size_t nMonthIdx = aItr->second;
-            maMembers[nMonthIdx].mpParent = pYearEntry;
+            maMembers[nMonthIdx].mxParent = std::move(xYearEntry);
         }
     }
     else
     {
-        SvTreeListEntry* pYearEntry = maChecks->FindEntry( nullptr, aYearName );
-        if ( aItr != maYearMonthMap.end() && !pYearEntry )
+        std::unique_ptr<weld::TreeIter> xYearEntry = FindEntry(nullptr, aYearName);
+        if (aItr != maYearMonthMap.end() && !xYearEntry)
         {
             size_t nMonthIdx = aItr->second;
-            maMembers[nMonthIdx].mpParent = nullptr;
-            maMembers[nIdx].mpParent = nullptr;
+            maMembers[nMonthIdx].mxParent.reset();
+            maMembers[nIdx].mxParent.reset();
         }
-        else if ( pYearEntry && !maChecks->FindEntry( pYearEntry, aMonthName ) )
-            maMembers[nIdx].mpParent = nullptr;
+        else if (xYearEntry && !FindEntry(xYearEntry.get(), aMonthName))
+            maMembers[nIdx].mxParent.reset();
     }
 }
 
-Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
-{
-    if (!mxAccessible.is() && maEdSearch)
-    {
-        mxAccessible.set(new ScAccessibleFilterTopWindow(
-            GetAccessibleParentWindow()->GetAccessible(), this, getName()));
-        ScAccessibleFilterTopWindow* pAccTop = static_cast<ScAccessibleFilterTopWindow*>(mxAccessible.get());
-        fillMenuItemsToAccessible(pAccTop);
-
-        pAccTop->setAccessibleChild(
-            maEdSearch->CreateAccessible(), ScAccessibleFilterTopWindow::EDIT_SEARCH_BOX);
-        pAccTop->setAccessibleChild(
-            maChecks->CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);
-        pAccTop->setAccessibleChild(
-            maChkToggleAll->CreateAccessible(), ScAccessibleFilterTopWindow::TOGGLE_ALL);
-        pAccTop->setAccessibleChild(
-            maBtnSelectSingle->CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_ON_BTN);
-        pAccTop->setAccessibleChild(
-            maBtnUnselectSingle->CreateAccessible(), ScAccessibleFilterTopWindow::SINGLE_OFF_BTN);
-        pAccTop->setAccessibleChild(
-            maBtnOk->CreateAccessible(), ScAccessibleFilterTopWindow::OK_BTN);
-        pAccTop->setAccessibleChild(
-            maBtnCancel->CreateAccessible(), ScAccessibleFilterTopWindow::CANCEL_BTN);
-    }
-
-    return mxAccessible;
-}
-
-void ScCheckListMenuWindow::setMemberSize(size_t n)
+void ScCheckListMenuControl::setMemberSize(size_t n)
 {
     maMembers.reserve(n);
 }
 
-void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, bool bVisible)
+void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, bool bVisible)
 {
-    ScDocument* pDoc = getDoc();
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
 
     // Convert the numeric date value to a date object.
     Date aDate = pFormatter->GetNullDate();
@@ -1472,43 +1224,52 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     if ( aDayName.getLength() == 1 )
         aDayName = "0" + aDayName;
 
-    maChecks->SetUpdateMode(false);
+    mxChecks->freeze();
 
-    SvTreeListEntry* pYearEntry = maChecks->FindEntry(nullptr, aYearName);
-    if (!pYearEntry)
+    std::unique_ptr<weld::TreeIter> xYearEntry = FindEntry(nullptr, aYearName);
+    if (!xYearEntry)
     {
-        pYearEntry = maChecks->InsertEntry(aYearName, nullptr, true);
+        xYearEntry = mxChecks->make_iterator();
+        mxChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
+        mxChecks->set_toggle(*xYearEntry, TRISTATE_FALSE, 0);
+        mxChecks->set_text(*xYearEntry, aYearName, 1);
         ScCheckListMember aMemYear;
         aMemYear.maName = aYearName;
         aMemYear.maRealName = rsName;
         aMemYear.mbDate = true;
         aMemYear.mbLeaf = false;
         aMemYear.mbVisible = bVisible;
-        aMemYear.mpParent = nullptr;
+        aMemYear.mxParent.reset();
         aMemYear.meDatePartType = ScCheckListMember::YEAR;
-        maMembers.push_back(aMemYear);
+        maMembers.emplace_back(std::move(aMemYear));
     }
 
-    SvTreeListEntry* pMonthEntry = maChecks->FindEntry(pYearEntry, aMonthName);
-    if (!pMonthEntry)
+    std::unique_ptr<weld::TreeIter> xMonthEntry = FindEntry(xYearEntry.get(), aMonthName);
+    if (!xMonthEntry)
     {
-        pMonthEntry = maChecks->InsertEntry(aMonthName, pYearEntry, true);
+        xMonthEntry = mxChecks->make_iterator();
+        mxChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
+        mxChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE, 0);
+        mxChecks->set_text(*xMonthEntry, aMonthName, 1);
         ScCheckListMember aMemMonth;
         aMemMonth.maName = aMonthName;
         aMemMonth.maRealName = rsName;
         aMemMonth.mbDate = true;
         aMemMonth.mbLeaf = false;
         aMemMonth.mbVisible = bVisible;
-        aMemMonth.mpParent = pYearEntry;
+        aMemMonth.mxParent = std::move(xYearEntry);
         aMemMonth.meDatePartType = ScCheckListMember::MONTH;
-        maMembers.push_back(aMemMonth);
+        maMembers.emplace_back(std::move(aMemMonth));
         maYearMonthMap[aYearName + aMonthName] = maMembers.size() - 1;
     }
 
-    SvTreeListEntry* pDayEntry = maChecks->FindEntry(pMonthEntry, aDayName);
-    if (!pDayEntry)
+    std::unique_ptr<weld::TreeIter> xDayEntry = FindEntry(xMonthEntry.get(), aDayName);
+    if (!xDayEntry)
     {
-        maChecks->InsertEntry(aDayName, pMonthEntry);
+        xDayEntry = mxChecks->make_iterator();
+        mxChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
+        mxChecks->set_toggle(*xDayEntry, TRISTATE_FALSE, 0);
+        mxChecks->set_text(*xDayEntry, aDayName, 1);
         ScCheckListMember aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;
@@ -1518,168 +1279,83 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
         aMemDay.mbDate = true;
         aMemDay.mbLeaf = true;
         aMemDay.mbVisible = bVisible;
-        aMemDay.mpParent = pMonthEntry;
+        aMemDay.mxParent = std::move(xMonthEntry);
         aMemDay.meDatePartType = ScCheckListMember::DAY;
-        maMembers.push_back(aMemDay);
+        maMembers.emplace_back(std::move(aMemDay));
     }
 
-    maChecks->SetUpdateMode(true);
+    mxChecks->thaw();
 }
 
-void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
+void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
 {
     ScCheckListMember aMember;
     aMember.maName = rName;
     aMember.mbDate = false;
     aMember.mbLeaf = true;
     aMember.mbVisible = bVisible;
-    aMember.mpParent = nullptr;
-    maMembers.push_back(aMember);
+    aMember.mxParent.reset();
+    maMembers.emplace_back(std::move(aMember));
 }
 
-ScTabStops::ScTabStops( ScCheckListMenuWindow* pMenuWin ) :
-    mpMenuWindow( pMenuWin ),
-    maControlToPos( ControlToPosMap() ),
-    mnCurTabStop(0)
-{
-    maControls.reserve( 8 );
-}
-
-ScTabStops::~ScTabStops()
-{}
-
-void ScTabStops::AddTabStop( vcl::Window* pWin )
-{
-    maControls.emplace_back(pWin );
-    maControlToPos[pWin] = maControls.size() - 1;
-}
-
-void ScTabStops::SetTabStop( vcl::Window* pWin )
-{
-    if ( maControls.empty() )
-        return;
-    ControlToPosMap::const_iterator aIter = maControlToPos.find( pWin );
-    if ( aIter == maControlToPos.end() )
-        return;
-    if ( aIter->second == mnCurTabStop )
-        return;
-    if ( mnCurTabStop < maControls.size() )
-    {
-        maControls[mnCurTabStop]->SetFakeFocus( false );
-        maControls[mnCurTabStop]->LoseFocus();
-    }
-    mnCurTabStop = aIter->second;
-    maControls[mnCurTabStop]->SetFakeFocus( true );
-    maControls[mnCurTabStop]->GrabFocus();
-}
-
-void ScTabStops::CycleFocus( bool bReverse )
-{
-    if (maControls.empty())
-        return;
-    if ( mnCurTabStop < maControls.size() )
-    {
-        maControls[mnCurTabStop]->SetFakeFocus( false );
-        maControls[mnCurTabStop]->LoseFocus();
-    }
-    else
-        mnCurTabStop = 0;
-
-    if ( mpMenuWindow && mnCurTabStop == 0 )
-        mpMenuWindow->clearSelectedMenuItem();
-
-    size_t nIterCount = 0;
-
-    if ( bReverse )
-    {
-        do
-        {
-            if ( mnCurTabStop > 0 )
-                --mnCurTabStop;
-            else
-                mnCurTabStop = maControls.size() - 1;
-            ++nIterCount;
-        } while ( nIterCount <= maControls.size() && !maControls[mnCurTabStop]->IsEnabled() );
-    }
-    else
-    {
-        do
-        {
-            ++mnCurTabStop;
-            if ( mnCurTabStop >= maControls.size() )
-                mnCurTabStop = 0;
-            ++nIterCount;
-        } while ( nIterCount <= maControls.size() && !maControls[mnCurTabStop]->IsEnabled() );
-    }
-
-    if ( nIterCount <= maControls.size() )
-    {
-        maControls[mnCurTabStop]->SetFakeFocus( true );
-        maControls[mnCurTabStop]->GrabFocus();
-    }
-    // else : all controls are disabled, so can't do anything
-}
-
-void ScTabStops::clear()
-{
-    mnCurTabStop = 0;
-    maControlToPos.clear();
-    maControls.clear();
-}
-
+#if 0
 ScCheckListBox::ScCheckListBox( vcl::Window* pParent )
     :  SvTreeListBox( pParent, 0 ), mbSeenMouseButtonDown( false )
 {
     Init();
     set_id("check_list_box");
 }
+#endif
 
-SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
+std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::TreeIter* pParent, const OUString& sNode)
 {
-    sal_uInt32 nRootPos = 0;
-    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
-    while ( pEntry )
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(pParent);
+    bool bEntry = pParent ? mxChecks->iter_children(*xEntry) : mxChecks->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        if ( sNode == GetEntryText( pEntry ) )
-            return pEntry;
-
-        pEntry = pParent ? pEntry->NextSibling() : GetEntry( ++nRootPos );
+        if (sNode == mxChecks->get_text(*xEntry, 1))
+            return xEntry;
+        bEntry = mxChecks->iter_next_sibling(*xEntry);
     }
     return nullptr;
 }
 
+#if 0
 void ScCheckListBox::Init()
 {
     mpCheckButton.reset( new SvLBoxButtonData( this ) );
     EnableCheckButton( mpCheckButton.get() );
     SetNodeDefaultImages();
 }
+#endif
 
-void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString>& vOut,
-        OUString& rLabel )
+void ScCheckListMenuControl::GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut,
+                                                 OUString& rLabel)
 {
-    if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
+    if (mxChecks->get_toggle(*pEntry, 0) == TRISTATE_TRUE)
     {
         // We have to hash parents and children together.
         // Per convention for easy access in getResult()
         // "child;parent;grandparent" while descending.
         if (rLabel.isEmpty())
-            rLabel = GetEntryText(pEntry);
+            rLabel = mxChecks->get_text(*pEntry, 1);
         else
-            rLabel = GetEntryText(pEntry) + ";" + rLabel;
+            rLabel = mxChecks->get_text(*pEntry, 1) + ";" + rLabel;
 
         // Prerequisite: the selection mechanism guarantees that if a child is
         // selected then also the parent is selected, so we only have to
         // inspect the children in case the parent is selected.
-        if (pEntry->HasChildren())
+        if (mxChecks->iter_has_child(*pEntry))
         {
-            const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
-            for (auto& rChild : rChildren)
+            std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator());
+            bool bChild = mxChecks->iter_children(*xChild);
+            while (bChild)
             {
                 OUString aLabel = rLabel;
-                GetRecursiveChecked( rChild.get(), vOut, aLabel);
+                GetRecursiveChecked(xChild.get(), vOut, aLabel);
                 if (!aLabel.isEmpty() && aLabel != rLabel)
-                    vOut.insert( aLabel);
+                    vOut.insert(aLabel);
+                bChild = mxChecks->iter_next_sibling(*xChild);
             }
             // Let the caller not add the parent alone.
             rLabel.clear();
@@ -1687,155 +1363,164 @@ void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordere
     }
 }
 
-std::unordered_set<OUString> ScCheckListBox::GetAllChecked()
+std::unordered_set<OUString> ScCheckListMenuControl::GetAllChecked()
 {
     std::unordered_set<OUString> vResults(0);
-    sal_uInt32 nRootPos = 0;
-    SvTreeListEntry* pEntry = GetEntry(nRootPos);
-    while (pEntry)
+
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
+    bool bEntry = mxChecks->get_iter_first(*xEntry);
+    while (bEntry)
     {
         OUString aLabel;
-        GetRecursiveChecked( pEntry, vResults, aLabel);
+        GetRecursiveChecked(xEntry.get(), vResults, aLabel);
         if (!aLabel.isEmpty())
-            vResults.insert( aLabel);
-        pEntry = GetEntry(++nRootPos);
+            vResults.insert(aLabel);
+        bEntry = mxChecks->iter_next_sibling(*xEntry);
     }
 
     return vResults;
 }
 
-bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
+bool ScCheckListMenuControl::IsChecked(const OUString& sName, const weld::TreeIter* pParent)
 {
-    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
-    return pEntry && GetCheckButtonState( pEntry ) == SvButtonState::Checked;
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
+    return xEntry && mxChecks->get_toggle(*xEntry, 0) == TRISTATE_TRUE;
 }
 
-void ScCheckListBox::CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck )
+void ScCheckListMenuControl::CheckEntry(const OUString& sName, const weld::TreeIter* pParent, bool bCheck)
 {
-    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
-    if ( pEntry )
-        CheckEntry(  pEntry, bCheck );
+    std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
+    if (xEntry)
+        CheckEntry(xEntry.get(), bCheck);
 }
 
 // Recursively check all children of pParent
-void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
+void ScCheckListMenuControl::CheckAllChildren(const weld::TreeIter* pParent, bool bCheck)
 {
-    if ( pParent )
+    if (pParent)
+        mxChecks->set_toggle(*pParent, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(pParent);
+    bool bEntry = pParent ? mxChecks->iter_children(*xEntry) : mxChecks->get_iter_first(*xEntry);
+    while (bEntry)
     {
-        SetCheckButtonState(
-            pParent, bCheck ? SvButtonState::Checked : SvButtonState::Unchecked );
-    }
-    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
-    while ( pEntry )
-    {
-        CheckAllChildren( pEntry, bCheck );
-        pEntry = pEntry->NextSibling();
+        CheckAllChildren(xEntry.get(), bCheck);
+        bEntry = mxChecks->iter_next_sibling(*xEntry);
     }
 }
 
-void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
+void ScCheckListMenuControl::CheckEntry(const weld::TreeIter* pParent, bool bCheck)
 {
     // recursively check all items below pParent
-    CheckAllChildren( pParent, bCheck );
+    CheckAllChildren(pParent, bCheck);
     // checking pParent can affect ancestors, e.g. if ancestor is unchecked and pParent is
     // now checked then the ancestor needs to be checked also
-    SvTreeListEntry* pAncestor = GetParent(pParent);
-    if ( pAncestor )
+    if (pParent && mxChecks->get_iter_depth(*pParent))
     {
-        while ( pAncestor )
+        std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(pParent));
+        bool bAncestor = mxChecks->iter_parent(*xAncestor);
+        while (bAncestor)
         {
             // if any first level children checked then ancestor
             // needs to be checked, similarly if no first level children
             // checked then ancestor needs to be unchecked
-            SvTreeListEntry* pChild = FirstChild( pAncestor );
+            std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(xAncestor.get()));
+            bool bChild = mxChecks->iter_children(*xChild);
             bool bChildChecked = false;
 
-            while ( pChild )
+            while (bChild)
             {
-                if ( GetCheckButtonState( pChild ) == SvButtonState::Checked )
+                if (mxChecks->get_toggle(*xChild, 0) == TRISTATE_TRUE)
                 {
                     bChildChecked = true;
                     break;
                 }
-                pChild = pChild->NextSibling();
+                bChild = mxChecks->iter_next_sibling(*xChild);
             }
-            SetCheckButtonState( pAncestor, bChildChecked ? SvButtonState::Checked : SvButtonState::Unchecked );
-            pAncestor = GetParent(pAncestor);
+            mxChecks->set_toggle(*xAncestor, bChildChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            bAncestor = mxChecks->iter_parent(*xAncestor);
         }
     }
 }
 
-SvTreeListEntry* ScCheckListBox::ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow, bool bCheck )
+std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::ShowCheckEntry(const OUString& sName, ScCheckListMember& rMember, bool bShow, bool bCheck)
 {
-    SvTreeListEntry* pEntry = nullptr;
-    if (!rMember.mbDate || rMember.mpParent)
-        pEntry = FindEntry( rMember.mpParent, sName );
+    std::unique_ptr<weld::TreeIter> xEntry;
+    if (!rMember.mbDate || rMember.mxParent)
+        xEntry = FindEntry(rMember.mxParent.get(), sName);
 
     if ( bShow )
     {
-        if ( !pEntry )
+        if (!xEntry)
         {
             if (rMember.mbDate)
             {
                 if (rMember.maDateParts.empty())
                     return nullptr;
 
-                SvTreeListEntry* pYearEntry = FindEntry( nullptr, rMember.maDateParts[0] );
-                if ( !pYearEntry )
-                    pYearEntry = InsertEntry( rMember.maDateParts[0], nullptr, true );
-                SvTreeListEntry* pMonthEntry = FindEntry( pYearEntry, rMember.maDateParts[1] );
-                if ( !pMonthEntry )
-                    pMonthEntry = InsertEntry( rMember.maDateParts[1], pYearEntry, true );
-                SvTreeListEntry* pDayEntry = FindEntry( pMonthEntry, rMember.maName );
-                if ( !pDayEntry )
-                    pDayEntry = InsertEntry( rMember.maName, pMonthEntry );
-
-                return pDayEntry; // Return leaf node
+                std::unique_ptr<weld::TreeIter> xYearEntry = FindEntry(nullptr, rMember.maDateParts[0]);
+                if (!xYearEntry)
+                {
+                    mxChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
+                    mxChecks->set_toggle(*xYearEntry, TRISTATE_FALSE, 0);
+                    mxChecks->set_text(*xYearEntry, rMember.maDateParts[0], 1);
+                }
+                std::unique_ptr<weld::TreeIter> xMonthEntry = FindEntry(xYearEntry.get(), rMember.maDateParts[1]);
+                if (!xMonthEntry)
+                {
+                    mxChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
+                    mxChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE, 0);
+                    mxChecks->set_text(*xMonthEntry, rMember.maDateParts[1], 1);
+                }
+                std::unique_ptr<weld::TreeIter> xDayEntry = FindEntry(xMonthEntry.get(), rMember.maName);
+                if (!xDayEntry)
+                {
+                    mxChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
+                    mxChecks->set_toggle(*xDayEntry, TRISTATE_FALSE, 0);
+                    mxChecks->set_text(*xDayEntry, rMember.maName, 1);
+                }
+                return xDayEntry; // Return leaf node
             }
 
-            pEntry = InsertEntry(
-                sName);
-
-            SetCheckButtonState(
-                pEntry, bCheck ? SvButtonState::Checked : SvButtonState::Unchecked);
+            xEntry = mxChecks->make_iterator();
+            mxChecks->append(xEntry.get());
+            mxChecks->set_toggle(*xEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            mxChecks->set_text(*xEntry, sName, 1);
         }
         else
-            CheckEntry( pEntry, bCheck );
+            CheckEntry(xEntry.get(), bCheck);
     }
-    else if ( pEntry )
+    else if (xEntry)
     {
-        GetModel()->Remove( pEntry );
-        SvTreeListEntry* pParent = rMember.mpParent;
-        while ( pParent && !pParent->HasChildren() )
+        mxChecks->remove(*xEntry);
+        if (rMember.mxParent)
         {
-            SvTreeListEntry* pTmp = pParent;
-            pParent = pTmp->GetParent();
-            GetModel()->Remove( pTmp );
+            std::unique_ptr<weld::TreeIter> xParent(mxChecks->make_iterator(rMember.mxParent.get()));
+            while (xParent && !mxChecks->iter_has_child(*xParent))
+            {
+                std::unique_ptr<weld::TreeIter> xTmp(mxChecks->make_iterator(xParent.get()));
+                if (!mxChecks->iter_parent(*xParent))
+                    xParent.reset();
+                mxChecks->remove(*xTmp);
+            }
         }
     }
     return nullptr;
 }
 
-void ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
+int ScCheckListMenuControl::GetCheckedEntryCount() const
 {
-    if ( pParent && GetCheckButtonState( pParent ) == SvButtonState::Checked  )
-        nCount++;
-    // Iterate over the children
-    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
-    while ( pEntry )
-    {
-        CountCheckedEntries( pEntry, nCount );
-        pEntry = pEntry->NextSibling();
-    }
+    int nRet = 0;
+
+    mxChecks->all_foreach([this, &nRet](weld::TreeIter& rEntry){
+        if (mxChecks->get_toggle(rEntry, 0) == TRISTATE_TRUE)
+            ++nRet;
+        return false;
+    });
+
+    return nRet;
 }
 
-sal_uInt16 ScCheckListBox::GetCheckedEntryCount() const
-{
-    sal_uLong nCount = 0;
-    CountCheckedEntries( nullptr,  nCount );
-    return nCount;
-}
-
+#if 0
 void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
     const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
@@ -1871,44 +1556,40 @@ void ScCheckListBox::MouseButtonUp(const MouseEvent& rMEvt)
         mbSeenMouseButtonDown = false;
     }
 }
+#endif
 
-void ScSearchEdit::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    Edit::MouseButtonDown( rMEvt );
-    if ( mpTabStops && rMEvt.IsLeft() && rMEvt.GetClicks() >= 1 )
-        mpTabStops->SetTabStop( this );
-}
-
-void ScCheckListMenuWindow::setHasDates(bool bHasDates)
+#if 0
+void ScCheckListMenuControl::setHasDates(bool bHasDates)
 {
     // Enables type-ahead search in the check list box.
-    maChecks->SetQuickSearch(true);
+    mxChecks->SetQuickSearch(true);
     if (bHasDates)
-        maChecks->SetStyle(WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
+        mxChecks->SetStyle(WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
     else
-        maChecks->SetStyle(WB_HASBUTTONS);
+        mxChecks->SetStyle(WB_HASBUTTONS);
 }
+#endif
 
-size_t ScCheckListMenuWindow::initMembers()
+size_t ScCheckListMenuControl::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
+    mxChecks->freeze();
 
-    maChecks->SetUpdateMode(false);
-    maChecks->GetModel()->EnableInvalidate(false);
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
 
     for (size_t i = 0; i < n; ++i)
     {
         if (maMembers[i].mbDate)
         {
-            maChecks->CheckEntry(maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
+            CheckEntry(maMembers[i].maName, maMembers[i].mxParent.get(), maMembers[i].mbVisible);
             // Expand first node of checked dates
-            if (!maMembers[i].mpParent && maChecks->IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
+            if (!maMembers[i].mxParent && IsChecked(maMembers[i].maName,  maMembers[i].mxParent.get()))
             {
-                SvTreeListEntry* pEntry = maChecks->FindEntry(nullptr, maMembers[i].maName);
-                if (pEntry)
-                    maChecks->Expand(pEntry);
+                std::unique_ptr<weld::TreeIter> xDateEntry = FindEntry(nullptr, maMembers[i].maName);
+                if (xDateEntry)
+                    mxChecks->expand_row(*xDateEntry);
             }
         }
         else
@@ -1916,11 +1597,10 @@ size_t ScCheckListMenuWindow::initMembers()
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScResId(STR_EMPTYDATA);
-            SvTreeListEntry* pEntry = maChecks->InsertEntry(
-                aLabel);
 
-            maChecks->SetCheckButtonState(
-                pEntry, maMembers[i].mbVisible ? SvButtonState::Checked : SvButtonState::Unchecked);
+            mxChecks->append(xEntry.get());
+            mxChecks->set_toggle(*xEntry, maMembers[i].mbVisible ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            mxChecks->set_text(*xEntry, aLabel, 1);
         }
 
         if (maMembers[i].mbVisible)
@@ -1929,40 +1609,39 @@ size_t ScCheckListMenuWindow::initMembers()
     if (nVisMemCount == n)
     {
         // all members visible
-        maChkToggleAll->SetState(TRISTATE_TRUE);
+        mxChkToggleAll->set_state(TRISTATE_TRUE);
         mePrevToggleAllState = TRISTATE_TRUE;
     }
     else if (nVisMemCount == 0)
     {
         // no members visible
-        maChkToggleAll->SetState(TRISTATE_FALSE);
+        mxChkToggleAll->set_state(TRISTATE_FALSE);
         mePrevToggleAllState = TRISTATE_FALSE;
     }
     else
     {
-        maChkToggleAll->SetState(TRISTATE_INDET);
+        mxChkToggleAll->set_state(TRISTATE_INDET);
         mePrevToggleAllState = TRISTATE_INDET;
     }
 
-    maChecks->GetModel()->EnableInvalidate(true);
-    maChecks->SetUpdateMode(true);
+    mxChecks->thaw();
     return nVisMemCount;
 }
 
-void ScCheckListMenuWindow::setConfig(const Config& rConfig)
+void ScCheckListMenuControl::setConfig(const Config& rConfig)
 {
     maConfig = rConfig;
 }
 
-bool ScCheckListMenuWindow::isAllSelected() const
+bool ScCheckListMenuControl::isAllSelected() const
 {
-    return maChkToggleAll->IsChecked();
+    return mxChkToggleAll->get_active();
 }
 
-void ScCheckListMenuWindow::getResult(ResultType& rResult)
+void ScCheckListMenuControl::getResult(ResultType& rResult)
 {
     ResultType aResult;
-    std::unordered_set<OUString> vCheckeds = maChecks->GetAllChecked();
+    std::unordered_set<OUString> vCheckeds = GetAllChecked();
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
@@ -1972,6 +1651,7 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             if (aLabel.isEmpty())
                 aLabel = ScResId(STR_EMPTYDATA);
 
+#if 0 //TODO
             /* TODO: performance-wise this looks suspicious, concatenating to
              * do the lookup for each leaf item seems wasteful. */
             // Checked labels are in the form "child;parent;grandparent".
@@ -1979,8 +1659,9 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
                     pParent && pParent->GetFirstItem( SvLBoxItemType::String);
                     pParent = pParent->GetParent())
             {
-                aLabel.append(";").append(maChecks->GetEntryText( pParent));
+                aLabel.append(";").append(mxChecks->GetEntryText( pParent));
             }
+#endif
             bool bState = vCheckeds.find(aLabel.makeStringAndClear()) != vCheckeds.end();
 
             ResultEntry aResultEntry;
@@ -1996,12 +1677,12 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     rResult.swap(aResult);
 }
 
-void ScCheckListMenuWindow::launch(const tools::Rectangle& rRect)
+void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
 {
     packWindow();
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
-        maBtnOk->Enable(maChecks->GetCheckedEntryCount() != 0);
+        mxBtnOk->set_sensitive(GetCheckedEntryCount() != 0);
 
     tools::Rectangle aRect(rRect);
     if (maConfig.mbRTL)
@@ -2019,43 +1700,43 @@ void ScCheckListMenuWindow::launch(const tools::Rectangle& rRect)
         aRect.AdjustLeft(nDiff );
     }
 
-    StartPopupMode(aRect, (FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus));
-    maTabStops.CycleFocus(); // Set initial focus to the search box ( index = 1 )
+    mxParent->EnableDocking();
+    vcl::Window::GetDockingManager()->StartPopupMode(mxParent, aRect, (FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus));
 }
 
-void ScCheckListMenuWindow::close(bool bOK)
+void ScCheckListMenuControl::close(bool bOK)
 {
-    if (bOK && mpOKAction)
-        mpOKAction->execute();
+    if (bOK && mxOKAction)
+        mxOKAction->execute();
 
-    EndPopupMode();
+    vcl::Window::GetDockingManager()->EndPopupMode(mxParent);
 }
 
-void ScCheckListMenuWindow::setExtendedData(std::unique_ptr<ExtendedData> p)
+void ScCheckListMenuControl::setExtendedData(std::unique_ptr<ExtendedData> p)
 {
-    mpExtendedData = std::move(p);
+    mxExtendedData = std::move(p);
 }
 
-ScCheckListMenuWindow::ExtendedData* ScCheckListMenuWindow::getExtendedData()
+ScCheckListMenuControl::ExtendedData* ScCheckListMenuControl::getExtendedData()
 {
-    return mpExtendedData.get();
+    return mxExtendedData.get();
 }
 
-void ScCheckListMenuWindow::setOKAction(Action* p)
+void ScCheckListMenuControl::setOKAction(Action* p)
 {
-    mpOKAction.reset(p);
+    mxOKAction.reset(p);
 }
 
-void ScCheckListMenuWindow::setPopupEndAction(Action* p)
+void ScCheckListMenuControl::setPopupEndAction(Action* p)
 {
-    mpPopupEndAction.reset(p);
+    mxPopupEndAction.reset(p);
 }
 
-void ScCheckListMenuWindow::handlePopupEnd()
+void ScCheckListMenuControl::handlePopupEnd()
 {
     clearSelectedMenuItem();
-    if (mpPopupEndAction)
-        mpPopupEndAction->execute();
+    if (mxPopupEndAction)
+        mxPopupEndAction->execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
