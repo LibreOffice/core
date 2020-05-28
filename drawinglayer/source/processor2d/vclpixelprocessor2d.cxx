@@ -917,18 +917,17 @@ void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrim
 
 namespace
 {
-/* Returns 8-bit alpha mask created from passed mask. The result may be scaled down; it's
-   expected that it will be automatically scaled up back when applied to the bitmap.
+/* Returns 8-bit alpha mask created from passed mask.
 
    Negative fErodeDilateRadius values mean erode, positive - dilate.
    nTransparency defines minimal transparency level.
 */
-AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadius,
+AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius,
                                   double fBlurRadius, sal_uInt8 nTransparency)
 {
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(rBWMask.CreateMask(COL_WHITE));
+    BitmapEx mask(rMask.CreateMask(COL_WHITE));
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.
@@ -962,6 +961,8 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rBWMask, double fErodeDilateRadi
 
     // calculate blurry effect
     BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
+
+    mask.Scale(rMask.GetSizePixel());
 
     return AlphaMask(mask.GetBitmap());
 }
@@ -1005,7 +1006,6 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         const basegfx::BColor aGlowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getGlowColor().getBColor()));
         bitmap.Erase(Color(aGlowColor));
-        // alpha mask will be scaled up automatically to match bitmap
         BitmapEx result(bitmap, mask);
 
         // back to old OutDev
@@ -1053,7 +1053,6 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         process(rCandidate);
         bitmap = mpOutputDevice->GetBitmap(aRect.TopLeft(), aRect.GetSize());
 
-        // alpha mask will be scaled up automatically to match bitmap
         BitmapEx result(bitmap, mask);
 
         // back to old OutDev
