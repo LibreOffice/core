@@ -145,7 +145,7 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 {
     const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
 
-    if (isValidBitCount(nNewBitCount) && rSourceBitmap.m_pUserBuffer.get())
+    if (isValidBitCount(nNewBitCount) && rSourceBitmap.m_pUserBuffer)
     {
         mnBits = nNewBitCount;
         mnWidth = rSourceBitmap.mnWidth;
@@ -249,7 +249,7 @@ bool QuartzSalBitmap::CreateContext()
         }
     }
 
-    if (m_pContextBuffer.get())
+    if (m_pContextBuffer)
     {
         maGraphicContext.set(CGBitmapContextCreate(m_pContextBuffer.get(), mnWidth, mnHeight,
                                                    bitsPerComponent, nContextBytesPerRow,
@@ -695,7 +695,7 @@ static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
 BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
     // TODO: AllocateUserData();
-    if (!m_pUserBuffer.get())
+    if (!m_pUserBuffer)
         return nullptr;
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
@@ -843,7 +843,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
                                              int nHeight, Color nMaskColor ) const
 {
     CGImageRef xMask = nullptr;
-    if (m_pUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
+    if (m_pUserBuffer && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
         std::unique_ptr<sal_uInt32[]> pMaskBuffer(new (std::nothrow) sal_uInt32[ nHeight * nDestBytesPerRow / 4] );
