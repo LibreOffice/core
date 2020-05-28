@@ -1826,10 +1826,6 @@ sax/source/tools/converter.cxx:994
     enum sax::(anonymous namespace)::Result readUnsignedNumberMaxDigits(int,const class rtl::OUString &,int &,int &)
     int maxDigits
     9
-sc/inc/AccessibleFilterMenu.hxx:41
-    void ScAccessibleFilterMenu::ScAccessibleFilterMenu(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class ScMenuFloatingWindow *,const class rtl::OUString &,unsigned long)
-    unsigned long nMenuPos
-    999
 sc/inc/address.hxx:334
     void ScAddress::Format(class rtl::OStringBuffer &,enum ScRefFlags,const class ScDocument *,const struct ScAddress::Details &) const
     enum ScRefFlags nFlags
