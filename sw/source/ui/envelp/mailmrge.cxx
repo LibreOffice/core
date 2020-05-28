@@ -559,7 +559,7 @@ bool SwMailMergeDlg::ExecQryShell()
         nMergeType = DBMGR_MERGE_FILE;
         pModOpt->SetMailingPath( GetURLfromPath() );
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
-        pModOpt->SetIsFileEncyrptedFromColumn(m_pPasswordCB->IsChecked());
+        pModOpt->SetIsFileEncryptedFromColumn(m_pPasswordCB->IsChecked());
 
         if (!AskUserFilename()) {
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectedEntry());

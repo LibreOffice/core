@@ -135,7 +135,7 @@ public:
 
     bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
-    bool IsFileEncyrptedFromDataBase() const { return m_pPasswordCB->IsChecked(); }
+    bool IsFileEncryptedFromDataBase() const { return m_pPasswordCB->IsChecked(); }
     OUString GetColumnName() const { return m_pColumnLB->GetSelectedEntry(); }
     OUString GetPasswordColumnName() const { return m_pPasswordLB->GetSelectedEntry(); }
     OUString GetTargetURL() const;
