@@ -142,8 +142,9 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 
 SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet *rAttrSet)
     : BuilderPage(pPage, pController, rUIXMLDescription, rID,
-                    comphelper::LibreOfficeKit::isActive()
-                    && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+                  comphelper::LibreOfficeKit::isActive() &&
+                  SfxViewShell::Current() &&
+                  SfxViewShell::Current()->isLOKMobilePhone())
     , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )

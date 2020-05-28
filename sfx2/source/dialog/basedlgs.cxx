@@ -412,8 +412,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
                                          const OString& rDialogId)
     : GenericDialogController(pParent, rUIFile, rDialogId,
-                                    comphelper::LibreOfficeKit::isActive()
-                                    && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+                              comphelper::LibreOfficeKit::isActive() &&
+                              SfxViewShell::Current() &&
+                              SfxViewShell::Current()->isLOKMobilePhone())
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
     m_xDialog->connect_toplevel_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));

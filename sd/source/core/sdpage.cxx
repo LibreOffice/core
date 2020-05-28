@@ -2592,9 +2592,9 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     OUString aString;
 
 #if defined(IOS) || defined(ANDROID)
-    bool isMobile = true;
+    bool isMobileDevice = true;
 #else
-    bool isMobile = false;
+    bool isMobileDevice = false;
     if (const SfxViewShell* pCurrentViewShell = SfxViewShell::Current())
         isMobileDevice = pCurrentViewShell->isLOKMobilePhone() || pCurrentViewShell->isLOKMobilePhone();
 #endif
@@ -2605,20 +2605,20 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
         {
             if (mePageKind != PageKind::Notes)
             {
-                if (isMobile)
+                if (isMobileDevice)
                     aString = SdResId(STR_PRESOBJ_MPTITLE_MOBILE);
                 else
                     aString = SdResId(STR_PRESOBJ_MPTITLE);
             }
             else
             {
-                if (isMobile)
+                if (isMobileDevice)
                     aString = SdResId(STR_PRESOBJ_MPNOTESTITLE_MOBILE);
                 else
                     aString = SdResId(STR_PRESOBJ_MPNOTESTITLE);
             }
         }
-        else if (isMobile)
+        else if (isMobileDevice)
             aString = SdResId(STR_PRESOBJ_TITLE_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_TITLE);
@@ -2627,12 +2627,12 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     {
         if (mbMaster)
         {
-            if (isMobile)
+            if (isMobileDevice)
                 aString = SdResId(STR_PRESOBJ_MPOUTLINE_MOBILE);
             else
                 aString = SdResId(STR_PRESOBJ_MPOUTLINE);
         }
-        else if (isMobile)
+        else if (isMobileDevice)
             aString = SdResId(STR_PRESOBJ_OUTLINE_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_OUTLINE);
@@ -2641,19 +2641,19 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     {
         if (mbMaster)
         {
-            if (isMobile)
+            if (isMobileDevice)
                 aString = SdResId(STR_PRESOBJ_MPNOTESTEXT_MOBILE);
             else
                 aString = SdResId(STR_PRESOBJ_MPNOTESTEXT);
         }
-        else if (isMobile)
+        else if (isMobileDevice)
             aString = SdResId(STR_PRESOBJ_NOTESTEXT_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_NOTESTEXT);
     }
     else if (eObjKind == PRESOBJ_TEXT)
     {
-        if (isMobile)
+        if (isMobileDevice)
             aString = SdResId(STR_PRESOBJ_TEXT_MOBILE);
         else
             aString = SdResId(STR_PRESOBJ_TEXT);
