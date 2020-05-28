@@ -337,6 +337,7 @@ core_constructor_list = [
     "com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation",
     "com_sun_star_comp_Chart_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Chart_XMLOasisExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation",
 # xmlscript/util/xmlscript.component
     "com_sun_star_comp_xmlscript_XMLBasicExporter",
     "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",

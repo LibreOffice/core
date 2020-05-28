@@ -211,7 +211,8 @@
     <service name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"/>
   </implementation>
   <implementation
-      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter">
+      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"/>
   </implementation>
   <implementation

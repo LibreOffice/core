@@ -55,8 +55,7 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
         // auto text import/export
-        SINGLEFACTORY( XMLAutoTextEventExport )
-        else SINGLEFACTORY( XMLAutoTextEventImport )
+        SINGLEFACTORY( XMLAutoTextEventImport )
         else SINGLEFACTORY( XMLAutoTextEventExportOOO )
 
         if( xFactory.is())
