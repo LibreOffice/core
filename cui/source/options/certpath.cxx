@@ -155,9 +155,9 @@ CertPathDialog::~CertPathDialog()
 {
 }
 
-IMPL_LINK(CertPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(CertPathDialog, CheckHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    HandleEntryChecked(rRowCol.first);
+    HandleEntryChecked(m_xCertPathList->get_iter_index_in_parent(rRowCol.first));
 }
 
 void CertPathDialog::HandleEntryChecked(int nRow)

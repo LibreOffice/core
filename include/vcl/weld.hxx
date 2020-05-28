@@ -618,9 +618,7 @@ protected:
     void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
                               bool bSelected, const OUString& rId)
     {
-        m_aRenderHdl.Call(
-            std::tuple<vcl::RenderContext&, const tools::Rectangle, bool, const OUString&>(
-                rDevice, rRect, bSelected, rId));
+        m_aRenderHdl.Call(render_args(rDevice, rRect, bSelected, rId));
     }
 
     Link<vcl::RenderContext&, Size> m_aGetSizeHdl;
@@ -761,6 +759,14 @@ public:
 
 class VCL_DLLPUBLIC TreeView : virtual public Container
 {
+public:
+    typedef std::pair<const TreeIter&, int> iter_col;
+    typedef std::pair<const TreeIter&, OUString> iter_string;
+    // OUString is the id of the row, it may be null to measure the height of a generic line
+    typedef std::pair<vcl::RenderContext&, const OUString&> get_size_args;
+    typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
+        render_args;
+
 private:
     OUString m_sSavedValue;
 
@@ -768,9 +774,9 @@ protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
-    Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
+    Link<const iter_col&, void> m_aRadioToggleHdl;
     Link<const TreeIter&, bool> m_aEditingStartedHdl;
-    Link<const std::pair<const TreeIter&, OUString>&, bool> m_aEditingDoneHdl;
+    Link<const iter_string&, bool> m_aEditingDoneHdl;
     // if handler returns false, the expansion of the row is refused
     Link<const TreeIter&, bool> m_aExpandingHdl;
     // if handler returns false, the collapse of the row is refused
@@ -783,12 +789,6 @@ protected:
     // arg to false to disable the treeview default dnd icon
     Link<bool&, bool> m_aDragBeginHdl;
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
-
-public:
-    // OUString is the id of the row, it may be null to measure the height of a generic line
-    typedef std::pair<vcl::RenderContext&, const OUString&> get_size_args;
-    typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
-        render_args;
 
 protected:
     std::vector<int> m_aRadioIndexes;
@@ -807,12 +807,11 @@ protected:
     void signal_visible_range_changed() { m_aVisibleRangeChangedHdl.Call(*this); }
     void signal_model_changed() { m_aModelChangedHdl.Call(*this); }
 
-    // arg is pair<row,col>
-    void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
+    void signal_toggled(const iter_col& rIterCol) { m_aRadioToggleHdl.Call(rIterCol); }
 
     bool signal_editing_started(const TreeIter& rIter) { return m_aEditingStartedHdl.Call(rIter); }
 
-    bool signal_editing_done(const std::pair<const TreeIter&, OUString>& rIterText)
+    bool signal_editing_done(const iter_string& rIterText)
     {
         return m_aEditingDoneHdl.Call(rIterText);
     }
@@ -824,15 +823,13 @@ protected:
     void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
                               bool bSelected, const OUString& rId)
     {
-        m_aRenderHdl.Call(
-            std::tuple<vcl::RenderContext&, const tools::Rectangle, bool, const OUString&>(
-                rDevice, rRect, bSelected, rId));
+        m_aRenderHdl.Call(render_args(rDevice, rRect, bSelected, rId));
     }
 
     Link<get_size_args, Size> m_aGetSizeHdl;
     Size signal_custom_get_size(vcl::RenderContext& rDevice, const OUString& rId)
     {
-        return m_aGetSizeHdl.Call(std::pair<vcl::RenderContext&, const OUString&>(rDevice, rId));
+        return m_aGetSizeHdl.Call(get_size_args(rDevice, rId));
     }
 
 public:
@@ -901,10 +898,7 @@ public:
 
     // Argument is a pair of row, col describing the node in non-tree mode.
     // If in tree mode, then retrieve the toggled node with get_cursor
-    void connect_toggled(const Link<const std::pair<int, int>&, void>& rLink)
-    {
-        m_aRadioToggleHdl = rLink;
-    }
+    void connect_toggled(const Link<const iter_col&, void>& rLink) { m_aRadioToggleHdl = rLink; }
 
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
@@ -1063,9 +1057,8 @@ public:
 
     // rStartLink returns true to allow editing, false to disallow
     // rEndLink returns true to accept the edit, false to reject
-    virtual void
-    connect_editing(const Link<const TreeIter&, bool>& rStartLink,
-                    const Link<const std::pair<const TreeIter&, OUString>&, bool>& rEndLink)
+    virtual void connect_editing(const Link<const TreeIter&, bool>& rStartLink,
+                                 const Link<const iter_string&, bool>& rEndLink)
     {
         assert(rStartLink.IsSet() == rEndLink.IsSet() && "should be both on or both off");
         m_aEditingStartedHdl = rStartLink;

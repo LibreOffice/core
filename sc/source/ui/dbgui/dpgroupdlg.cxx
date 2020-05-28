@@ -318,7 +318,7 @@ IMPL_LINK(ScDPDateGroupDlg, ClickHdl, weld::Button&, rButton, void)
         mxLbUnits->set_sensitive(true);
         mxLbUnits->grab_focus();
         // disable OK button if no date part selected
-        CheckHdl(row_col(0, 0));
+        Check();
     }
 }
 
@@ -335,10 +335,16 @@ namespace
     }
 }
 
-IMPL_LINK_NOARG(ScDPDateGroupDlg, CheckHdl, const row_col&, void)
+IMPL_LINK_NOARG(ScDPDateGroupDlg, CheckHdl, const weld::TreeView::iter_col&, void)
+{
+    Check();
+}
+
+void ScDPDateGroupDlg::Check()
 {
     // enable/disable OK button on modifying check list box
     mxBtnOk->set_sensitive(HasCheckedEntryCount(*mxLbUnits));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

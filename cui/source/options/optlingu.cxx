@@ -1302,21 +1302,19 @@ IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
     ClickHdl_Impl(*m_xLinguModulesEditPB);
 }
 
-IMPL_LINK(SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
     if (!pLinguData)
         return;
-    auto nPos = rRowCol.first;
-    pLinguData->Reconfigure(m_xLinguModulesCLB->get_text(nPos, 1),
-                            m_xLinguModulesCLB->get_toggle(nPos, 0) == TRISTATE_TRUE);
+    pLinguData->Reconfigure(m_xLinguModulesCLB->get_text(rRowCol.first, 1),
+                            m_xLinguModulesCLB->get_toggle(rRowCol.first, 0) == TRISTATE_TRUE);
 }
 
-IMPL_LINK(SvxLinguTabPage, DicsBoxCheckButtonHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxLinguTabPage, DicsBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    auto nPos = rRowCol.first;
-    const uno::Reference<XDictionary> &rDic = aDics.getConstArray()[ nPos ];
+    const uno::Reference<XDictionary> &rDic = aDics.getConstArray()[m_xLinguDicsCLB->get_iter_index_in_parent(rRowCol.first)];
     if (LinguMgr::GetIgnoreAllList() == rDic)
-        m_xLinguDicsCLB->set_toggle(nPos, TRISTATE_TRUE, 0);
+        m_xLinguDicsCLB->set_toggle(rRowCol.first, TRISTATE_TRUE, 0);
 }
 
 IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
@@ -1621,15 +1619,15 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, weld::TreeView&, rBox, void )
     m_xPrioDownPB->set_sensitive(!bDisableDown);
 }
 
-IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, const row_col&, rRowCol, void )
+IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void )
 {
-    auto nPos = rRowCol.first;
-    ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(nPos).toInt64());
+    ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(rRowCol.first).toInt64());
     if (pData->IsParent() || pData->GetType() != TYPE_HYPH)
         return;
 
     // make hyphenator checkboxes function as radio-buttons
     // (at most one box may be checked)
+    auto nPos = m_xModulesCLB->get_iter_index_in_parent(rRowCol.first);
     for (int i = 0, nEntryCount = m_xModulesCLB->n_children(); i < nEntryCount; ++i)
     {
         pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(i).toInt64());

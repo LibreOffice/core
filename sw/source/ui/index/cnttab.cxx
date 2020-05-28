@@ -478,8 +478,7 @@ class SwAddStylesDlg_Impl : public SfxDialogController
     DECL_LINK(LeftRightHdl, weld::Button&, void);
     DECL_LINK(KeyInput, const KeyEvent&, bool);
     DECL_LINK(TreeSizeAllocHdl, const Size&, void);
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(RadioToggleOnHdl, const row_col&, void);
+    DECL_LINK(RadioToggleOnHdl, const weld::TreeView::iter_col&, void);
 
 public:
     SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
@@ -596,7 +595,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
     m_xHeaderTree->set_column_fixed_widths(aWidths);
 }
 
-IMPL_LINK(SwAddStylesDlg_Impl, RadioToggleOnHdl, const row_col&, rRowCol, void)
+IMPL_LINK(SwAddStylesDlg_Impl, RadioToggleOnHdl, const weld::TreeView::iter_col&, rRowCol, void)
 {
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
     {
