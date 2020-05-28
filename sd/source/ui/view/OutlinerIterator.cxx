@@ -173,7 +173,7 @@ Iterator OutlinerContainer::CreateSelectionIterator (
     bool bDirectionIsForward,
     IteratorLocation aLocation)
 {
-    OSL_ASSERT(rpViewShell.get());
+    OSL_ASSERT(rpViewShell);
 
     sal_Int32 nObjectIndex;
 
@@ -212,7 +212,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
     bool bDirectionIsForward,
     IteratorLocation aLocation)
 {
-    OSL_ASSERT(rpViewShell.get());
+    OSL_ASSERT(rpViewShell);
 
     PageKind ePageKind;
     EditMode eEditMode;

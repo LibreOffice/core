@@ -798,7 +798,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
            {
                aEmbeddingsList[j].Value >>= aEmbeddingXlsxStream;
                aEmbeddedfileName = aEmbeddingsList[j].Name;
-               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); // Reference not empty
+               CPPUNIT_ASSERT(aEmbeddingXlsxStream); // Reference not empty
                CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(testEmbeddedFileNames[j]),aEmbeddedfileName);
            }
        }
@@ -1536,7 +1536,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
            {
                aEmbeddingsList[j].Value >>= aEmbeddingXlsxStream;
                aEmbeddedfileName = aEmbeddingsList[j].Name;
-               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); // Reference not empty
+               CPPUNIT_ASSERT(aEmbeddingXlsxStream); // Reference not empty
                CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(testEmbeddedFileNames[j]),aEmbeddedfileName);
            }
        }

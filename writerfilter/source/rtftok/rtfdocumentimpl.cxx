@@ -2667,7 +2667,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 = new RTFReferenceProperties(aObjAttributes, aObjSprms);
             uno::Reference<drawing::XShape> xShape;
             RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
-            OSL_ASSERT(pShape.get());
+            OSL_ASSERT(pShape);
             if (pShape)
                 pShape->getAny() >>= xShape;
             if (xShape.is())

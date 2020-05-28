@@ -46,7 +46,7 @@ namespace cppcanvas::internal
             OSL_ENSURE( rParentCanvas.is() , "ImplSprite::ImplSprite(): Invalid canvas");
             OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::ImplSprite(): Invalid graphic device");
             OSL_ENSURE( mxSprite.is(), "ImplSprite::ImplSprite(): Invalid sprite");
-            OSL_ENSURE( mpTransformArbiter.get(), "ImplSprite::ImplSprite(): Invalid transformation arbiter");
+            OSL_ENSURE( mpTransformArbiter, "ImplSprite::ImplSprite(): Invalid transformation arbiter");
         }
 
         ImplSprite::~ImplSprite()

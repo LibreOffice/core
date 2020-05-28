@@ -2851,7 +2851,7 @@ void DesktopLOKTest::testMetricField()
 
     WindowUIObject aWinUI(pWin);
     std::unique_ptr<UIObject> pUIWin(aWinUI.get_child("selectwidth"));
-    CPPUNIT_ASSERT(pUIWin.get());
+    CPPUNIT_ASSERT(pUIWin);
 
     StringMap aMap;
     aMap["VALUE"] = "75.06";

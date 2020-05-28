@@ -1261,7 +1261,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     }
 
-    OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
+    OSL_ENSURE(rContext, "PropertyMap has to be valid!");
     if(!rContext)
         return ;
 

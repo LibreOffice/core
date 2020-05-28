@@ -42,7 +42,7 @@ namespace cairocanvas
         maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),
                 ::canvas::tools::roundUp( rSpriteSize.Height ) )
     {
-        ENSURE_OR_THROW( rRefDevice.get(),
+        ENSURE_OR_THROW( rRefDevice,
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( rSpriteSize.Width ) << ", " << ::canvas::tools::roundUp( rSpriteSize.Height ));

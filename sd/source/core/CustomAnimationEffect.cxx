@@ -1718,7 +1718,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
         }
     }
 
-    DBG_ASSERT( pEffect.get(), "sd::EffectSequenceHelper::append(), failed!" );
+    DBG_ASSERT( pEffect, "sd::EffectSequenceHelper::append(), failed!" );
     return pEffect;
 }
 

@@ -421,7 +421,7 @@ void WorkbookFragment::finalizeImport()
                 {
                     // create the WorksheetGlobals object
                     WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetSegment, eSheetType, nCalcSheet );
-                    OSL_ENSURE( xSheetGlob.get(), "WorkbookFragment::finalizeImport - missing sheet in document" );
+                    OSL_ENSURE( xSheetGlob, "WorkbookFragment::finalizeImport - missing sheet in document" );
                     if( xSheetGlob )
                     {
                         // create the sheet fragment handler

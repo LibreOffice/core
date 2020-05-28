@@ -1984,7 +1984,7 @@ std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::R
 
 SdrModel& OReportDefinition::getSdrModelFromUnoModel() const
 {
-    OSL_ENSURE(m_pImpl->m_pReportModel.get(), "No SdrModel in ReportDesign, should not happen");
+    OSL_ENSURE(m_pImpl->m_pReportModel, "No SdrModel in ReportDesign, should not happen");
     return *m_pImpl->m_pReportModel;
 }
 

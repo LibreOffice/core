@@ -908,7 +908,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
 {
-    OSL_ENSURE( mpString.get(), "XclTxo::SaveCont - missing string" );
+    OSL_ENSURE( mpString, "XclTxo::SaveCont - missing string" );
 
     // #i96858# do not save existing string formatting if text is empty
     sal_uInt16 nRunLen = mpString->IsEmpty() ? 0 : (8 * mpString->GetFormatsCount());

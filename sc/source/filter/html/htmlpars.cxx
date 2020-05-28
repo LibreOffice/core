@@ -1910,14 +1910,14 @@ ScHTMLTable* ScHTMLTable::FindNestedTable( ScHTMLTableId nTableId ) const
 
 void ScHTMLTable::PutItem( const SfxPoolItem& rItem )
 {
-    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutItem - no current entry" );
+    OSL_ENSURE( mxCurrEntry, "ScHTMLTable::PutItem - no current entry" );
     if( mxCurrEntry && mxCurrEntry->IsEmpty() )
         mxCurrEntry->GetItemSet().Put( rItem );
 }
 
 void ScHTMLTable::PutText( const HtmlImportInfo& rInfo )
 {
-    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutText - no current entry" );
+    OSL_ENSURE( mxCurrEntry, "ScHTMLTable::PutText - no current entry" );
     if( mxCurrEntry )
     {
         if( !mxCurrEntry->HasContents() && IsSpaceCharInfo( rInfo ) )
@@ -1956,7 +1956,7 @@ void ScHTMLTable::InsertLeadingEmptyLine()
 
 void ScHTMLTable::AnchorOn()
 {
-    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::AnchorOn - no current entry" );
+    OSL_ENSURE( mxCurrEntry, "ScHTMLTable::AnchorOn - no current entry" );
     // don't skip entries with single hyperlinks
     if( mxCurrEntry )
         mxCurrEntry->SetImportAlways();
@@ -2332,7 +2332,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
 
 bool ScHTMLTable::PushEntry( const HtmlImportInfo& rInfo, bool bLastInCell )
 {
-    OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PushEntry - no current entry" );
+    OSL_ENSURE( mxCurrEntry, "ScHTMLTable::PushEntry - no current entry" );
     bool bPushed = false;
     if( mxCurrEntry )
     {

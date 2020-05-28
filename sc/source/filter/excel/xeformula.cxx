@@ -2217,7 +2217,7 @@ void XclExpFmlaCompImpl::PushOperandPos( sal_uInt16 nTokPos )
 void XclExpFmlaCompImpl::PushOperatorPos( sal_uInt16 nTokPos, const XclExpOperandListRef& rxOperands )
 {
     PushOperandPos( nTokPos );
-    OSL_ENSURE( rxOperands.get(), "XclExpFmlaCompImpl::AppendOperatorTokenId - missing operand list" );
+    OSL_ENSURE( rxOperands, "XclExpFmlaCompImpl::AppendOperatorTokenId - missing operand list" );
     if( mxData->maOpListVec.size() <= nTokPos )
         mxData->maOpListVec.resize( nTokPos + 1, XclExpOperandListRef() );
     mxData->maOpListVec[ nTokPos ] = rxOperands;

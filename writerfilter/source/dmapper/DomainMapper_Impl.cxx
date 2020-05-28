@@ -1369,7 +1369,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 #endif
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
-    OSL_ENSURE( pEntry.get(), "no style sheet found" );
+    OSL_ENSURE( pEntry, "no style sheet found" );
     const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = pParaContext && pParaContext->GetListId() > -1;
@@ -3860,7 +3860,7 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
 #endif
 
     FieldContextPtr pContext = m_aFieldStack.back();
-    OSL_ENSURE( pContext.get(), "no field context available");
+    OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
         pContext->AppendCommand( rPartOfCommand );
@@ -4832,7 +4832,7 @@ void DomainMapper_Impl::CloseFieldCommand()
     FieldContextPtr pContext;
     if(!m_aFieldStack.empty())
         pContext = m_aFieldStack.back();
-    OSL_ENSURE( pContext.get(), "no field context available");
+    OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
         m_bSetUserFieldContent = false;
@@ -5640,7 +5640,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     bool bRet = false;
     OSL_ENSURE( !m_aFieldStack.empty(), "field stack empty?");
     FieldContextPtr pContext = m_aFieldStack.back();
-    OSL_ENSURE( pContext.get(), "no field context available");
+    OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
         bRet = pContext->GetTextField().is()
@@ -5716,7 +5716,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 #endif
 
     FieldContextPtr pContext = m_aFieldStack.back();
-    OSL_ENSURE( pContext.get(), "no field context available");
+    OSL_ENSURE( pContext, "no field context available");
 
     if (m_aFieldStack.size() > 1)
     {
@@ -5882,7 +5882,7 @@ void DomainMapper_Impl::PopFieldContext()
         return;
 
     FieldContextPtr pContext = m_aFieldStack.back();
-    OSL_ENSURE( pContext.get(), "no field context available");
+    OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
         if( !pContext->IsCommandCompleted() )

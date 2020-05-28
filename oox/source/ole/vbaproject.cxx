@@ -196,7 +196,7 @@ void VbaProject::importVbaData(const uno::Reference<io::XInputStream>& xInputStr
 
 void VbaProject::registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher )
 {
-    OSL_ENSURE( rxAttacher.get(), "VbaProject::registerMacroAttacher - unexpected empty reference" );
+    OSL_ENSURE( rxAttacher, "VbaProject::registerMacroAttacher - unexpected empty reference" );
     maMacroAttachers.push_back( rxAttacher );
 }
 
@@ -263,7 +263,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
 {
     StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
-    OSL_ENSURE( xVbaStrg.get(), "VbaProject::readVbaModules - cannot open 'VBA' substorage" );
+    OSL_ENSURE( xVbaStrg, "VbaProject::readVbaModules - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;
 
@@ -425,7 +425,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
 void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
 {
     StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
-    OSL_ENSURE( xVbaStrg.get(), "VbaProject::importModulesAndForms - cannot open 'VBA' substorage" );
+    OSL_ENSURE( xVbaStrg, "VbaProject::importModulesAndForms - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;
     rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;

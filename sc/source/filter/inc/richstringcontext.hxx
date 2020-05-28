@@ -49,7 +49,7 @@ RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString
     mxString( xString )
 {
     mbEnableTrimSpace = false;
-    OSL_ENSURE( mxString.get(), "RichStringContext::RichStringContext - missing string object" );
+    OSL_ENSURE( mxString, "RichStringContext::RichStringContext - missing string object" );
 }
 
 } // namespace xls

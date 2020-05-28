@@ -38,7 +38,7 @@ namespace oglcanvas
         mfAlpha(0.0),
         mfPriority(0.0)
     {
-        ENSURE_OR_THROW( rRefDevice.get(),
+        ENSURE_OR_THROW( rRefDevice,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
