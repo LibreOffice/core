@@ -96,6 +96,8 @@
 #define CTF_PM_FILLBITMAPNAME           (XML_PM_CTF_START + 0x0041)
 #define CTF_PM_FILLTRANSNAME            (XML_PM_CTF_START + 0x0042)
 #define CTF_PM_FILLBITMAPMODE           (XML_PM_CTF_START + 0x0043)
+#define CTF_PM_FILL                     (XML_PM_CTF_START + 0x0044)
+#define CTF_PM_BACKGROUNDSIZE           (XML_PM_CTF_START + 0x0045)
 
 #define CTF_PM_SCALETO                  (XML_PM_CTF_START + 0x0051) // calc specific
 #define CTF_PM_SCALETOPAGES             (XML_PM_CTF_START + 0x0052)
