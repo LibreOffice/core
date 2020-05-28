@@ -368,6 +368,7 @@ public:
     void testTdf54409();
     void testTdf38394();
     void testTdf59666();
+    void testTdf133524();
     void testInconsistentBookmark();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
@@ -582,6 +583,7 @@ public:
     CPPUNIT_TEST(testTdf54409);
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
+    CPPUNIT_TEST(testTdf133524);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7188,6 +7190,53 @@ void SwUiWriterTest::testTdf59666()
     pWrtShell->AutoCorrect(corr, cChar);
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"\u03C0 ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf133524()
+{
+    SwDoc* pDoc = createDoc("tdf133524.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // 1. Testing autocorrect of >> and <<
+    // Example: »word«
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    // >>
+    pWrtShell->Insert(u">");
+    pWrtShell->AutoCorrect(corr, '>');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"»");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // <<
+    pWrtShell->Insert(u"word<");
+    pWrtShell->AutoCorrect(corr, '<');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"word«";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // 2. Testing autocorrect of " to >> and << inside „...”
+    // Example: „Sentence and »word«.”
+    // opening primary level quote
+    pWrtShell->Insert(u" ");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" „";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // opening second level quote
+    pWrtShell->Insert(u"Sentence and ");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"Sentence and »";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing second level quote
+    pWrtShell->Insert(u"word");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"word«";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // closing primary level quote
+    pWrtShell->Insert(u".");
+    pWrtShell->AutoCorrect(corr, '"');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u".”";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
