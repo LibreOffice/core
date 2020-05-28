@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62c19fef_1f74424a",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2362,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-05-28T19:35:07Z",
+      "side": 1,
+      "message": "you can implicitly construct an OUString from a char16_t string literal (i.e. just prefix with u)",
+      "range": {
+        "startLine": 2362,
+        "startChar": 23,
+        "endLine": 2362,
+        "endChar": 26
+      },
+      "revId": "8a8606013c9fc667ff8902d5253fba27d21efcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
