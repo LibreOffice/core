@@ -1077,23 +1077,6 @@ void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
 
 void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 {
-    const SwTable& rTable = rTableNd.GetTable();
-    const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
-    if( pTableFormat && !pTableFormat->GetName().isEmpty() )
-    {
-        AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName() );
-        AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                      EncodeStyleName( pTableFormat->GetName() ) );
-    }
-
-    // table:template-name=
-    if (!rTable.GetTableStyleName().isEmpty())
-    {
-        OUString sStyleName;
-        SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
-        AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName);
-    }
-
     ::std::optional<sal_uInt16> oPrefix = XML_NAMESPACE_TABLE;
     if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
     {
@@ -1113,6 +1096,23 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 
     if (oPrefix)
     {
+        const SwTable& rTable = rTableNd.GetTable();
+        const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
+        if (pTableFormat && !pTableFormat->GetName().isEmpty())
+        {
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName());
+            AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME,
+                         EncodeStyleName(pTableFormat->GetName()));
+        }
+
+        // table:template-name=
+        if (!rTable.GetTableStyleName().isEmpty())
+        {
+            OUString sStyleName;
+            SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName);
+        }
+
         SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);
 
         // export DDE source (if this is a DDE table)
