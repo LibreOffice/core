@@ -41,6 +41,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <map>
+#include <utility>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -1016,7 +1017,7 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         Sequence< OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
         sal_Int32 aSelectionChecked = 0;
-        for( const beans::PropertyValue& rEntry : aOptProp )
+        for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
         {
             if( rEntry.Name == "ControlType" )
             {
@@ -1066,7 +1067,7 @@ static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
         long nAttachOffset = 0;
         bool bIgnore = false;
 
-        for( const beans::PropertyValue& rEntry : aOptProp )
+        for( const beans::PropertyValue& rEntry : std::as_const(aOptProp) )
         {
             if( rEntry.Name == "Text" )
             {

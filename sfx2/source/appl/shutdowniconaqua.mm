@@ -189,7 +189,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
-            css::uno::Sequence< css::beans::PropertyValue >& rPickListEntry = aHistoryList[i];
+            css::uno::Sequence< css::beans::PropertyValue > const & rPickListEntry = aHistoryList[i];
             RecentMenuEntry aRecentFile;
 
             for ( const css::beans::PropertyValue& rProp : rPickListEntry )

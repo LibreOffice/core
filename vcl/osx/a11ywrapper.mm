@@ -313,7 +313,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     if ( mActsAsRadioGroup ) {
         NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
         Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
-        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
+        AccessibleRelation const relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
         if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
             for ( const auto& i : relationMemberOf.TargetSet ) {
                 Reference < XAccessible > rMateAccessible( i, UNO_QUERY );
@@ -1045,7 +1045,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                 Reference < XAccessibleRelationSet > relationSet = [ static_cast<SalFrameWindow *>(element) accessibleContext ] -> getAccessibleRelationSet();
                 if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType::SUB_WINDOW_OF )) {
                     // we have a valid relation to the parent element
-                    AccessibleRelation relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
+                    AccessibleRelation const relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
                     for ( const auto & i : relation.TargetSet ) {
                         Reference < XAccessible > rxAccessible ( i, UNO_QUERY );
                         if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {

@@ -192,7 +192,7 @@ using namespace ::com::sun::star::uno;
     }
 }
 
-+(void)applyAttributesFrom:(Sequence < PropertyValue >)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
++(void)applyAttributesFrom:(Sequence < PropertyValue > const &)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     // constants
     static const OUString attrUnderline("CharUnderline");
