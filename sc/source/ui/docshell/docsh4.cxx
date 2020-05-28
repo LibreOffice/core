@@ -40,6 +40,7 @@ using namespace ::com::sun::star;
 #include <svx/ofaitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dataaccessdescriptor.hxx>
