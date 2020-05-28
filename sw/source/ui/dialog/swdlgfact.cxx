@@ -645,9 +645,9 @@ bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
     return pDlg->IsGenerateFromDataBase();
 }
 
-bool AbstractMailMergeDlg_Impl::IsFileEncyrptedFromDataBase() const
+bool AbstractMailMergeDlg_Impl::IsFileEncryptedFromDataBase() const
 {
-    return pDlg->IsFileEncyrptedFromDataBase();
+    return pDlg->IsFileEncryptedFromDataBase();
 }
 
 OUString AbstractMailMergeDlg_Impl::GetColumnName() const

@@ -3131,7 +3131,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             if(pImpl->pMergeDialog->IsGenerateFromDataBase())
                 aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
 
-            if(pImpl->pMergeDialog->IsFileEncyrptedFromDataBase())
+            if(pImpl->pMergeDialog->IsFileEncryptedFromDataBase())
                 aMergeDesc.sDBPasswordColumn = pImpl->pMergeDialog->GetPasswordColumnName();
         }
 
