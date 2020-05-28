@@ -841,13 +841,14 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
         // transparence is in visible range
         basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
         aRange.transform(maCurrentTransformation);
-        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+        impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
 
         if (aBufferDevice.isVisible())
         {
             // remember last OutDev and set to content
             OutputDevice* pLastOutputDevice = mpOutputDevice;
             mpOutputDevice = &aBufferDevice.getContent();
+            mpOutputDevice->Erase();
 
             // paint content to it
             process(rTransCandidate.getChildren());
