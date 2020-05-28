@@ -70,9 +70,9 @@ void SvxMultiPathDialog::HandleEntryChecked(int nRow)
     }
 }
 
-IMPL_LINK(SvxMultiPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxMultiPathDialog, CheckHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    HandleEntryChecked(rRowCol.first);
+    HandleEntryChecked(m_xRadioLB->get_iter_index_in_parent(rRowCol.first));
 }
 
 void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)

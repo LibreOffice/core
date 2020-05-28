@@ -68,8 +68,7 @@ private:
     // Handler ------------------------
     DECL_LINK( SelectListBoxHdl, weld::ComboBox&, void );
     DECL_LINK( SelectTreeListBoxHdl, weld::TreeView&, void );
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(CheckHdl, const row_col&, void);
+    DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
     void SelectHdl(const weld::Widget*);
 };
 

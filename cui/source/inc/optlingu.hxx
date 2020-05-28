@@ -67,8 +67,7 @@ class SvxEditModulesDlg : public weld::GenericDialogController
     DECL_LINK( ClickHdl_Impl, weld::Button&, void );
     DECL_LINK( BackHdl_Impl, weld::Button&, void );
     DECL_LINK( LangSelectListBoxHdl_Impl, weld::ComboBox&, void );
-    typedef std::pair<int, int> row_col;
-    DECL_LINK( BoxCheckButtonHdl_Impl, const row_col&, void );
+    DECL_LINK( BoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, void );
     void LangSelectHdl_Impl(const SvxLanguageBox* pBox);
 
 public:
@@ -125,9 +124,8 @@ private:
     DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
     DECL_LINK( ClickHdl_Impl, weld::Button&, void );
     DECL_LINK( BoxDoubleClickHdl_Impl, weld::TreeView&, bool );
-    typedef std::pair<int, int> row_col;
-    DECL_LINK( ModulesBoxCheckButtonHdl_Impl, const row_col&, void );
-    DECL_LINK( DicsBoxCheckButtonHdl_Impl, const row_col&, void );
+    DECL_LINK( ModulesBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, void );
+    DECL_LINK( DicsBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, void );
     DECL_LINK( PostDblClickHdl_Impl, void *, void);
 
     void                UpdateModulesBox_Impl();

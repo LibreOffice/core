@@ -82,8 +82,7 @@ private:
     std::unique_ptr<weld::Widget> m_xJavaFrame;
 
     DECL_LINK(EnableHdl_Impl, weld::Button&, void);
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(CheckHdl_Impl, const row_col&, void);
+    DECL_LINK(CheckHdl_Impl, const weld::TreeView::iter_col&, void);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
     DECL_LINK(AddHdl_Impl, weld::Button&, void);
     DECL_LINK(ParameterHdl_Impl, weld::Button&, void);
