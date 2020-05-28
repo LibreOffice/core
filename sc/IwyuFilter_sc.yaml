@@ -4,12 +4,6 @@ blacklist:
     sc/inc/AccessibleGlobal.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleStateSet.hpp
-    sc/inc/AccessibleFilterMenu.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleSelection.hpp
-    sc/inc/AccessibleFilterMenuItem.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleAction.hpp
     sc/inc/addruno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
