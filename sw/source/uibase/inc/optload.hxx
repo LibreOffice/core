@@ -164,15 +164,13 @@ private:
     std::unique_ptr<weld::CheckButton> m_xApplyBorderCB;
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
-    typedef std::pair<int, int> row_col;
-
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(SelectListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
     DECL_LINK(ModifyComboHdl, weld::ComboBox&, void);
     DECL_LINK(OrderHdl, weld::ComboBox&, void );
     DECL_LINK(ShowEntryHdl, weld::TreeView&, void);
-    DECL_LINK(ToggleEntryHdl, const row_col&, void);
+    DECL_LINK(ToggleEntryHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(TextFilterHdl, OUString&, bool);
 
     void ModifyHdl();

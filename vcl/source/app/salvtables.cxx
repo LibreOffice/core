@@ -3917,7 +3917,7 @@ public:
 
     virtual void connect_editing(
         const Link<const weld::TreeIter&, bool>& rStartLink,
-        const Link<const std::pair<const weld::TreeIter&, OUString>&, bool>& rEndLink) override
+        const Link<const iter_string&, bool>& rEndLink) override
     {
         m_xTreeView->EnableInplaceEditing(rStartLink.IsSet() || rEndLink.IsSet());
         weld::TreeView::connect_editing(rStartLink, rEndLink);
@@ -4697,8 +4697,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
         m_xTreeView->Select(pEntry, true);
     }
 
-    // toggled signal handlers can query get_cursor to get which
-    // node was clicked
+    // additionally set the cursor into the row the toggled element is in
     m_xTreeView->pImpl->m_pCursor = pEntry;
 
     for (int i = 1, nCount = pEntry->ItemCount(); i < nCount; ++i)
@@ -4706,9 +4705,8 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
         SvLBoxItem& rItem = pEntry->GetItem(i);
         if (&rItem == pBox)
         {
-            int nRow = SvTreeList::GetRelPos(pEntry);
             int nCol = i - 1; // less dummy/expander column
-            signal_toggled(std::make_pair(nRow, nCol));
+            signal_toggled(iter_col(SalInstanceTreeIter(pEntry), nCol));
             break;
         }
     }
@@ -4806,7 +4804,7 @@ IMPL_LINK(SalInstanceTreeView, EditingEntryHdl, SvTreeListEntry*, pEntry, bool)
 
 IMPL_LINK(SalInstanceTreeView, EditedEntryHdl, IterString, rIterString, bool)
 {
-    return signal_editing_done(std::pair<const weld::TreeIter&, OUString>(
+    return signal_editing_done(iter_string(
         SalInstanceTreeIter(rIterString.first), rIterString.second));
 }
 

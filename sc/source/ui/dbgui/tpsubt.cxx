@@ -364,7 +364,7 @@ void ScTpSubTotalGroup::SelectHdl(const weld::Widget *pLb)
     }
 }
 
-IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const row_col&, rRowCol, void )
+IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const weld::TreeView::iter_col&, rRowCol, void )
 {
     mxLbColumns->select(rRowCol.first);
     SelectHdl(mxLbColumns.get());

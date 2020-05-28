@@ -768,9 +768,9 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, weld::TreeView&, void)
     m_nPrevSelectedEntry = m_xCheckLB->get_selected_index();
 }
 
-IMPL_LINK(SwCaptionOptPage, ToggleEntryHdl, const row_col&, rRowCol, void)
+IMPL_LINK(SwCaptionOptPage, ToggleEntryHdl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    UpdateEntry(rRowCol.first);
+    UpdateEntry(m_xCheckLB->get_iter_index_in_parent(rRowCol.first));
 }
 
 void SwCaptionOptPage::SaveEntry(int nEntry)

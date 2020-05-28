@@ -44,8 +44,7 @@ private:
     DECL_LINK(AddHdl_Impl, weld::Button&, void);
     DECL_LINK(DelHdl_Impl, weld::Button&, void);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(CheckHdl_Impl, const row_col&, void);
+    DECL_LINK(CheckHdl_Impl, const weld::TreeView::iter_col&, void);
 
 public:
     SvxMultiPathDialog(weld::Window* pParent);

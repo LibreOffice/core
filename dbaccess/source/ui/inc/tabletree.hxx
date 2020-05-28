@@ -200,11 +200,11 @@ public:
 
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
-    void            checkedButton_noBroadcast(weld::TreeIter& rEntry);
+    void            checkedButton_noBroadcast(const weld::TreeIter& rEntry);
 private:
     TriState implDetermineState(weld::TreeIter& rEntry);
 
-    void implEmphasize(weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
+    void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
     /** adds the given entry to our list
         @precond

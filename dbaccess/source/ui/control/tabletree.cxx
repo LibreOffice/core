@@ -485,7 +485,7 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     implEmphasize(_pEntry, SvButtonState::Checked == eState);
 }
 
-void TableTreeListBox::checkedButton_noBroadcast(weld::TreeIter& rEntry)
+void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)
         return;
@@ -564,7 +564,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
     }
 }
 
-void TableTreeListBox::implEmphasize(weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
+void TableTreeListBox::implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
 {
     // special emphasizing handling for the "all objects" entry
     bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry()->equal(rEntry));
