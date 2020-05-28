@@ -67,13 +67,13 @@
 #define SFX_THUMBNAIL_SHEET                 "res/ots_96_8.png"
 #define SFX_THUMBNAIL_PRESENTATION          "res/otp_96_8.png"
 #define SFX_THUMBNAIL_DRAWING               "res/otg_96_8.png"
-#define SFX_FILE_THUMBNAIL_TEXT             "res/writer128.png"
-#define SFX_FILE_THUMBNAIL_SHEET            "res/calc128.png"
-#define SFX_FILE_THUMBNAIL_PRESENTATION     "res/impress128.png"
-#define SFX_FILE_THUMBNAIL_DRAWING          "res/draw128.png"
-#define SFX_FILE_THUMBNAIL_DATABASE         "res/base128.png"
-#define SFX_FILE_THUMBNAIL_MATH             "res/math128.png"
-#define SFX_FILE_THUMBNAIL_DEFAULT          "res/main128.png"
+#define SFX_FILE_THUMBNAIL_TEXT             "res/odt_48_8.png"
+#define SFX_FILE_THUMBNAIL_SHEET            "res/ods_48_8.png"
+#define SFX_FILE_THUMBNAIL_PRESENTATION     "res/odp_48_8.png"
+#define SFX_FILE_THUMBNAIL_DRAWING          "res/odg_48_8.png"
+#define SFX_FILE_THUMBNAIL_DATABASE         "res/odb_48_8.png"
+#define SFX_FILE_THUMBNAIL_MATH             "res/odf_48_8.png"
+#define SFX_FILE_THUMBNAIL_DEFAULT          "res/mainapp_48_8.png"
 
 #define BMP_RECENTDOC_REMOVE                "res/recentdoc_remove.png"
 #define BMP_RECENTDOC_REMOVE_HIGHLIGHTED    "res/recentdoc_remove_highlighted.png"
@@ -87,6 +87,7 @@
 #define BMP_128X128_WRITER_DOC              "sfx2/res/128x128_writer_doc-p.png"
 
 #define SFX_BMP_CLOSE_DOC                   "sfx2/res/closedoc.png"
+
 
 #endif
 

@@ -266,7 +266,7 @@ void RecentDocsView::Reload()
             Size aSize(aThumbnail.GetSizePixel());
             m_pVirDev->SetOutputSizePixel(aSize);
             m_pVirDev->DrawBitmapEx(Point(), aThumbnail);
-            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-50,aSize.Height()-50), Size(40,40), aModule);
+            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-53,aSize.Height()-53), Size(48, 48), aModule);
             aThumbnail = m_pVirDev->GetBitmapEx(Point(), aSize);
             m_pVirDev.disposeAndClear();
         }
