@@ -370,14 +370,14 @@ bool ScGridWindow::DPTestFieldPopupArrow(
 
 namespace {
 
-struct DPFieldPopupData : public ScCheckListMenuWindow::ExtendedData
+struct DPFieldPopupData : public ScCheckListMenuControl::ExtendedData
 {
     ScDPLabelData   maLabels;
     ScDPObject*     mpDPObj;
     long            mnDim;
 };
 
-class DPFieldPopupOKAction : public ScMenuFloatingWindow::Action
+class DPFieldPopupOKAction : public ScCheckListMenuControl::Action
 {
 public:
     explicit DPFieldPopupOKAction(ScGridWindow* p) :
@@ -391,7 +391,7 @@ private:
     VclPtr<ScGridWindow> mpGridWindow;
 };
 
-class PopupSortAction : public ScMenuFloatingWindow::Action
+class PopupSortAction : public ScCheckListMenuControl::Action
 {
 public:
     enum SortType { ASCENDING, DESCENDING, CUSTOM };
@@ -458,6 +458,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         // This should never happen.
         return;
 
+    bool bDimOrientNotPage = pDim->GetOrientation() != DataPilotFieldOrientation_PAGE;
+
     // We need to get the list of field members.
     pDPObj->FillLabelData(pDPData->mnDim, pDPData->maLabels);
     pDPData->mpDPObj = pDPObj;
@@ -465,34 +467,29 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
     mpDPFieldPopup.disposeAndClear();
-    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pViewData->GetDocument()));
+    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pViewData->GetDocument(), bDimOrientNotPage));
 
-    // Avoid flicker when hovering over the menu items.
-    if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
-        // If NWF renders the focus rects itself, that breaks double-buffering.
-        mpDPFieldPopup->RequestDoubleBuffering(true);
-
-    mpDPFieldPopup->setName("DataPilot field member popup");
-    mpDPFieldPopup->setExtendedData(std::move(pDPData));
-    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
+    ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
+    rControl.setExtendedData(std::move(pDPData));
+    rControl.setOKAction(new DPFieldPopupOKAction(this));
     {
         // Populate field members.
         size_t n = rLabelData.maMembers.size();
-        mpDPFieldPopup->setMemberSize(n);
+        rControl.setMemberSize(n);
         for (size_t i = 0; i < n; ++i)
         {
             const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
             OUString aName = rMem.getDisplayName();
             if (aName.isEmpty())
                 // Use special string for an empty name.
-                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), rMem.mbVisible);
+                rControl.addMember(ScResId(STR_EMPTYDATA), rMem.mbVisible);
             else
-                mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
+                rControl.addMember(rMem.getDisplayName(), rMem.mbVisible);
         }
-        mpDPFieldPopup->initMembers();
+        rControl.initMembers();
     }
 
-    if (pDim->GetOrientation() != DataPilotFieldOrientation_PAGE)
+    if (bDimOrientNotPage)
     {
         vector<OUString> aUserSortNames;
         ScUserList* pUserList = ScGlobal::GetUserList();
@@ -509,35 +506,36 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
         // Populate the menus.
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        mpDPFieldPopup->addMenuItem(
+        rControl.addMenuItem(
             ScResId(STR_MENU_SORT_ASC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
-        mpDPFieldPopup->addMenuItem(
+        rControl.addMenuItem(
             ScResId(STR_MENU_SORT_DESC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
-        ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
-            ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
+        ScCheckListMenuWindow* pSubMenu = rControl.addSubMenuItem(ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
         if (pSubMenu)
         {
+            ScCheckListMenuControl& rSubMenu = pSubMenu->get_widget();
             size_t n = aUserSortNames.size();
             for (size_t i = 0; i < n; ++i)
             {
-                pSubMenu->addMenuItem(
-                    aUserSortNames[i],
-                    new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, sal_uInt16(i), pViewShell));
+                rSubMenu.addMenuItem(aUserSortNames[i],
+                                     new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, sal_uInt16(i), pViewShell));
             }
+            rSubMenu.resizeToFitMenuItems();
         }
     }
 
     tools::Rectangle aCellRect(rScrPos, rScrSize);
 
-    mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
-    ScCheckListMenuWindow::Config aConfig;
+    ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
     aConfig.mbRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
-    mpDPFieldPopup->setConfig(aConfig);
-    mpDPFieldPopup->launch(aCellRect);
+    rControl.setConfig(aConfig);
+    if (IsMouseCaptured())
+        ReleaseMouse();
+    rControl.launch(aCellRect);
 }
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
@@ -547,7 +545,9 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     if (!mpDPFieldPopup)
         return;
 
-    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(mpDPFieldPopup->getExtendedData());
+    ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
+
+    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(rControl.getExtendedData());
     if (!pDPData)
         return;
 
@@ -567,8 +567,8 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         aMemNameMap.emplace(rMember.maLayoutName, rMember.maName);
 
     // The raw result may contain a mixture of layout names and original names.
-    ScCheckListMenuWindow::ResultType aRawResult;
-    mpDPFieldPopup->getResult(aRawResult);
+    ScCheckListMenuControl::ResultType aRawResult;
+    rControl.getResult(aRawResult);
 
     std::unordered_map<OUString, bool> aResult;
     for (const auto& rItem : aRawResult)
