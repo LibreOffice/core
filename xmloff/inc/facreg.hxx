@@ -31,13 +31,6 @@ namespace com::sun::star {
     namespace uno { class XInterface; }
 }
 
-// writer autotext event export
-OUString XMLAutoTextEventExport_getImplementationName() throw();
-css::uno::Sequence<OUString> XMLAutoTextEventExport_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> XMLAutoTextEventExport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
 // writer autotext event import
 OUString XMLAutoTextEventImport_getImplementationName() throw();
 css::uno::Sequence<OUString> XMLAutoTextEventImport_getSupportedServiceNames() throw();
