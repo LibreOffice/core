@@ -83,6 +83,8 @@ private:
     sal_Int32               nFormSelStart;              // Selection for autopilot function
     sal_Int32               nFormSelEnd;
 
+    sal_Unicode             nCellPercentFormatDecSep;   // 0:= no percent format, else which decimal separator
+
     sal_uInt16              nAutoPar;                   // autom.parentheses than can be overwritten
 
     ScAddress               aCursorPos;
@@ -100,7 +102,6 @@ private:
     bool                    bInOwnChange:1;
 
     bool                    bProtected:1;
-    bool                    bCellHasPercentFormat:1;
     bool                    bLastIsSymbol:1;
     bool                    mbDocumentDisposing:1;
     sal_uLong                   nValidation;
