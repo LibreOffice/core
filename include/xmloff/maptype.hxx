@@ -32,9 +32,9 @@ struct XMLPropertyMapEntry
 {
     const char*     msApiName;      /// Property-Name
     sal_Int32       nApiNameLength; /// length of property name
+    enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */
-    enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
 
     /**
      * The lowest 14 bits specify the basic XML type of the property value, of
@@ -98,6 +98,21 @@ struct XMLPropertyMapEntry
         Property-Name exist, all except one must have this flag set.
      */
     bool            mbImportOnly;
+
+    XMLPropertyMapEntry(
+            const char*     sApiName,
+            sal_Int32       nApiNameLength_,
+            sal_uInt16      nNameSpace,
+            enum ::xmloff::token::XMLTokenEnum eXMLName,
+            sal_uInt32 nType,
+            sal_Int16       nContextId,
+            SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport,
+            bool            bImportOnly)
+        : msApiName(sApiName), nApiNameLength(nApiNameLength_),
+        meXMLName(eXMLName), mnNameSpace(nNameSpace), mnType(nType),
+        mnContextId(nContextId), mnEarliestODFVersionForExport(nEarliestODFVersionForExport),
+        mbImportOnly(bImportOnly)
+    {}
 };
 
 
