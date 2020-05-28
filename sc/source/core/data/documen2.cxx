@@ -394,6 +394,9 @@ ScDocument::~ScDocument()
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
 
     mpFormulaGroupCxt.reset();
+    // Purge unused items if the string pool will be still used (e.g. by undo history).
+    if(mpCellStringPool.use_count() > 1)
+        mpCellStringPool->purge();
     mpCellStringPool.reset();
 }
 
