@@ -865,9 +865,9 @@ void SvxToolbarEntriesListBox::ChangedVisibility(int nRow)
     }
 }
 
-IMPL_LINK(SvxToolbarEntriesListBox, CheckButtonHdl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxToolbarEntriesListBox, CheckButtonHdl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    ChangedVisibility(rRowCol.first);
+    ChangedVisibility(m_xControl->get_iter_index_in_parent(rRowCol.first));
 }
 
 IMPL_LINK(SvxToolbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)

@@ -117,10 +117,9 @@ public:
 
 private:
     DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(CheckHdl, const row_col&, void);
-
+    void Check();
 private:
     std::unique_ptr<weld::RadioButton> mxRbAutoStart;
     std::unique_ptr<weld::RadioButton> mxRbManStart;

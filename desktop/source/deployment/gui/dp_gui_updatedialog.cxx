@@ -487,14 +487,12 @@ short UpdateDialog::run() {
     return nRet;
 }
 
-IMPL_LINK(UpdateDialog, entryToggled, const row_col&, rRowCol, void)
+IMPL_LINK(UpdateDialog, entryToggled, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    int nRow = rRowCol.first;
-
     // error's can't be enabled
     const UpdateDialog::Index* p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first).toInt64());
     if (p->m_eKind == SPECIFIC_ERROR)
-        m_xUpdates->set_toggle(nRow, TRISTATE_FALSE, 0);
+        m_xUpdates->set_toggle(rRowCol.first, TRISTATE_FALSE, 0);
 
     enableOk();
 }

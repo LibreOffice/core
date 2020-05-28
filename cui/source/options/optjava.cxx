@@ -141,9 +141,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::Button&, void)
     m_xJavaList->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxJavaOptionsPage, CheckHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxJavaOptionsPage, CheckHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    HandleCheckEntry(rRowCol.first);
+    HandleCheckEntry(m_xJavaList->get_iter_index_in_parent(rRowCol.first));
 }
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, weld::TreeView&, void)

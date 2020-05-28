@@ -9383,8 +9383,7 @@ private:
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
-        // toggled signal handlers can query get_cursor to get which
-        // node was clicked
+        // additionally set the cursor into the row the toggled element is in
         gtk_tree_view_set_cursor(m_pTreeView, tree_path, nullptr, false);
 
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -9396,13 +9395,9 @@ private:
         bRet = !bRet;
         gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
 
-        gint depth;
-        gint* indices = gtk_tree_path_get_indices_with_depth(tree_path, &depth);
-        int nRow = indices[depth-1];
-
         set(iter, m_aToggleTriStateMap[nCol], false);
 
-        signal_toggled(std::make_pair(nRow, nCol));
+        signal_toggled(iter_col(GtkInstanceTreeIter(iter), nCol));
 
         gtk_tree_path_free(tree_path);
     }
@@ -9453,7 +9448,7 @@ private:
         gtk_tree_path_free(tree_path);
 
         OUString sText(pNewText, pNewText ? strlen(pNewText) : 0, RTL_TEXTENCODING_UTF8);
-        if (signal_editing_done(std::pair<const weld::TreeIter&, OUString>(aGtkIter, sText)))
+        if (signal_editing_done(iter_string(aGtkIter, sText)))
         {
             void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
             set(aGtkIter.iter, reinterpret_cast<sal_IntPtr>(pData), sText);
