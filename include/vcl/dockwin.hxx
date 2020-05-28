@@ -82,6 +82,7 @@ private:
     VclPtr<FloatingWindow> mpFloatWin;
     VclPtr<vcl::Window>    mpOldBorderWin;
     VclPtr<vcl::Window>    mpParent;
+    Link<FloatingWindow*,void> maPopupModeEndHdl;
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
@@ -137,6 +138,8 @@ public:
     void            StartPopupMode( ToolBox* pParentToolBox, FloatWinPopupFlags nPopupModeFlags );
     bool            IsInPopupMode() const;
 
+    void            SetPopupModeEndHdl( const Link<FloatingWindow*,void>& rLink ) { maPopupModeEndHdl = rLink; }
+
     void            TitleButtonClick( TitleButton nButton );
     void            Resizing( Size& rSize );
     void            Tracking( const TrackingEvent& rTEvt );
@@ -191,6 +194,8 @@ public:
     void    StartPopupMode( const vcl::Window *pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags );
     void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin );
     void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin, FloatWinPopupFlags nPopupModeFlags );
+
+    void    SetPopupModeEndHdl( const vcl::Window *pWindow, const Link<FloatingWindow*,void>& rLink );
 
     bool    IsInPopupMode( const vcl::Window *pWin );
     void    EndPopupMode( const vcl::Window *pWin );

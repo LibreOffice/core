@@ -157,7 +157,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;
 
-    ScCheckListMenuWindow::ResultType aSaveAutoFilterResult;
+    ScCheckListMenuControl::ResultType aSaveAutoFilterResult;
 
     sal_uInt16              nCursorHideCount;
 

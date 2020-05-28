@@ -874,8 +874,8 @@ public:
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
-    virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col) = 0;
-    virtual TriState get_toggle(const TreeIter& rIter, int col) const = 0;
+    virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
+    virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
