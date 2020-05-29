@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55575fe0_c23ef32a",
+        "filename": "svl/source/misc/sharedstringpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-29T17:28:54Z",
+      "side": 1,
+      "message": "your observation is correct, but I think you\u0027ve got a mix in this patch of changes to fix the ref-counting, and your other patch where you drop the building of a new set.",
+      "revId": "e672eb4b52746e8d71c2ba559afb4b25fe7e8507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
