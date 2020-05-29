@@ -12,6 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_tiledrendering))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_tiledrendering, \
+    sd/qa/unit/tiledrendering/LOKitSearchTest \
     sd/qa/unit/tiledrendering/tiledrendering \
 ))
 
