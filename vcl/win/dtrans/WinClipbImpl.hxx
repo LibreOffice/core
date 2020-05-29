@@ -90,6 +90,7 @@ private:
     CMtaOleClipboard        m_MtaOleClipboard;
     CWinClipboard*          m_pWinClipboard;
     CXNotifyingDataObject*  m_pCurrentClipContent;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > m_foreignContent;
     osl::Mutex              m_ClipContentMutex;
 
     static osl::Mutex       s_aMutex;
