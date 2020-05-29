@@ -74,6 +74,7 @@ public:
     virtual bool isHidden() const override;
     virtual sal_uInt32 getParameterCount() const override ;
     virtual sal_uInt32 getVarArgsStart() const override;
+    virtual sal_uInt32 getVarArgsLimit() const override;
     virtual OUString getParameterName(sal_uInt32 _nPos) const override ;
     virtual OUString getParameterDescription(sal_uInt32 _nPos) const override ;
     virtual bool isParameterOptional(sal_uInt32 _nPos) const override ;
