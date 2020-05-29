@@ -1442,6 +1442,8 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
                 {
                     if( ( nRequestFormat == format.mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( format.MimeType ) )
                     {
+                        // First, make sure that we actually hold the mutex to not crash in releaser
+                        SolarMutexGuard g;
                         // Our own thread may handle the nested IDataObject::GetData call,
                         // and try to acquire solar mutex
                         SolarMutexReleaser r;
@@ -1459,6 +1461,8 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
 
             if( !aRet.hasValue() )
             {
+                // First, make sure that we actually hold the mutex to not crash in releaser
+                SolarMutexGuard g;
                 // Our own thread may handle the nested IDataObject::GetData call,
                 // and try to acquire solar mutex
                 SolarMutexReleaser r;
