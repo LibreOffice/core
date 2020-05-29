@@ -1474,13 +1474,20 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     if (!pCallback)
         return;
 
+#if !defined IOS && !defined ANDROID
     // Ask other views to tell us about their cursors.
+
+    // In the mobile apps we don't allow multiple views of the same document. Firstly, there is no
+    // collaboration between separate users on the same document. Secondly, on iOS, with Split View,
+    // one should in theory be able to open the same document multiple times, but as that causes so
+    // much complication we prohibit it. So there are no "other views" for the same document.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         pViewShell->NotifyCursor(this);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
+#endif
 }
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
