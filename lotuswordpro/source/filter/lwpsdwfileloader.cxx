@@ -81,7 +81,7 @@ void LwpSdwFileLoader::CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >*
     unsigned char BinSignature[2];
     m_pStream->ReadBytes(BinSignature, 2);
 
-    if (!(BinSignature[0] == 'S' && BinSignature[1] == 'M'))
+    if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
         return;
 
     unsigned short nVersion;

@@ -425,7 +425,7 @@ Reference< XHyphenatedWord > SAL_CALL
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : nullptr;
 
     bool bWordModified = false;
-    if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
+    if (!pEntry || 0 > nIndex || nIndex > nWordLen - 2)
     {
         return nullptr;
     }
