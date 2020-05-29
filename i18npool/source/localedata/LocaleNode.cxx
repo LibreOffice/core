@@ -235,7 +235,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     if (languageNode)
     {
         aLanguage = languageNode->getChildAt(0)->getValue();
-        if (!(aLanguage.getLength() == 2 || aLanguage.getLength() == 3))
+        if (aLanguage.getLength() != 2 && aLanguage.getLength() != 3)
             incErrorStr( "Error: langID '%s' not 2-3 characters\n", aLanguage);
         of.writeParameter("langID", aLanguage);
         of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
