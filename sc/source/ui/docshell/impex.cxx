@@ -262,7 +262,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
         ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
-        ScMarkData aDestMark(pRedoDoc->MaxRow(), pRedoDoc->MaxCol());
+        ScMarkData aDestMark(pRedoDoc->GetSheetLimits());
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>(pDocSh, aRange, aDestMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
@@ -1949,7 +1949,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             pDoc->CheckLinkFormulaNeedingCheck(*xCode);
                             if ( ch == 'M' )
                             {
-                                ScMarkData aMark(pDoc->MaxRow(), pDoc->MaxCol());
+                                ScMarkData aMark(pDoc->GetSheetLimits());
                                 aMark.SelectTable( aPos.Tab(), true );
                                 pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
                                     nRefRow, aMark, EMPTY_OUSTRING, xCode.get() );

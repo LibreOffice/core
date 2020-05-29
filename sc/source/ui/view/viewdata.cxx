@@ -727,12 +727,14 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
+static const ScSheetLimits gaNoShellSheetLimits(MAXCOL, MAXROW);
+
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPPTX(0.0),
         nPPTY(0.0),
         mpMarkData(pDocSh?
-                   new ScMarkData(pDocSh->GetDocument().MaxRow(), pDocSh->GetDocument().MaxCol()) :
-                   new ScMarkData(MAXROW, MAXCOL)
+                   new ScMarkData(pDocSh->GetDocument().GetSheetLimits()) :
+                   new ScMarkData(gaNoShellSheetLimits)
                   ),
         pDocShell   ( pDocSh ),
         pDoc        ( nullptr ),
