@@ -146,7 +146,8 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
                            const ScRangeList& rLeftEnvelope, const ScRangeList& rRightEnvelope,
                            const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope )
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
     CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
 
     aMark.SetMarkArea( rRange );
@@ -251,16 +252,16 @@ void Test::testSimpleMark_Row()
 void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 {
 
-    ScMarkData aMark(MAXROW, MAXCOL);
-    ScMultiSel aMultiSel(MAXROW);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
+    ScMultiSel aMultiSel(aSheetLimits);
     CPPUNIT_ASSERT( !aMark.IsMarked() && !aMark.IsMultiMarked() );
     CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
     CPPUNIT_ASSERT( !aMultiSel.HasAnyMarks() );
 
     for ( const auto& rAreaTestData : rMarksData.aMarks )
     {
-        aMultiSel.SetMarkArea( ScSheetLimits(MAXCOL, MAXROW),
-                               rAreaTestData.aRange.aStart.Col(), rAreaTestData.aRange.aEnd.Col(),
+        aMultiSel.SetMarkArea( rAreaTestData.aRange.aStart.Col(), rAreaTestData.aRange.aEnd.Col(),
                                rAreaTestData.aRange.aStart.Row(), rAreaTestData.aRange.aEnd.Row(),
                                rAreaTestData.bMark );
         aMark.SetMultiMarkArea( rAreaTestData.aRange, rAreaTestData.bMark );
@@ -829,7 +830,8 @@ void Test::testMultiMark_NegativeMarking()
 
 void Test::testInsertTabBeforeSelected()
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
     aMark.SelectOneTable(0);
     aMark.InsertTab(0);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -838,7 +840,8 @@ void Test::testInsertTabBeforeSelected()
 
 void Test::testInsertTabAfterSelected()
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
     aMark.SelectOneTable(0);
     aMark.InsertTab(1);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -847,7 +850,8 @@ void Test::testInsertTabAfterSelected()
 
 void Test::testDeleteTabBeforeSelected()
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
     aMark.SelectOneTable(1);
     aMark.DeleteTab(0);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -856,7 +860,8 @@ void Test::testDeleteTabBeforeSelected()
 
 void Test::testDeleteTabAfterSelected()
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData aMark(aSheetLimits);
     aMark.SelectOneTable(0);
     aMark.DeleteTab(1);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -873,16 +878,17 @@ void Test::testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool 
 
 void Test::testScMarkArraySearch()
 {
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
     // empty
     {
-        ScMarkArray ar(MAXROW);
+        ScMarkArray ar(aSheetLimits);
         testScMarkArraySearch_check(ar, -1, true, 0);
         testScMarkArraySearch_check(ar, 100, true, 0);
     }
 
     // one range
     {
-        ScMarkArray ar(MAXROW);
+        ScMarkArray ar(aSheetLimits);
         ar.SetMarkArea(10, 20, true);
 
         // 0-9,10-20,21+
@@ -903,7 +909,7 @@ void Test::testScMarkArraySearch()
 
     // three ranges
     {
-        ScMarkArray ar(MAXROW);
+        ScMarkArray ar(aSheetLimits);
         ar.SetMarkArea(10, 20, true);
         ar.SetMarkArea(21, 30, true);
         ar.SetMarkArea(50, 100, true);
@@ -924,7 +930,7 @@ void Test::testScMarkArraySearch()
 
     // three single-row ranges
     {
-        ScMarkArray ar(MAXROW);
+        ScMarkArray ar(aSheetLimits);
         ar.SetMarkArea(4, 4, true);
         ar.SetMarkArea(6, 6, true);
         ar.SetMarkArea(8, 8, true);
@@ -944,7 +950,7 @@ void Test::testScMarkArraySearch()
 
     // one range
     {
-        ScMarkArray ar(MAXROW);
+        ScMarkArray ar(aSheetLimits);
         ar.SetMarkArea(10, MAXROW, true);
 
         // 0-10,11+

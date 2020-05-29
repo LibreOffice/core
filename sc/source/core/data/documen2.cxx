@@ -91,6 +91,15 @@ using namespace com::sun::star;
 
 const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 
+static ScSheetLimits* CreateSheetLimits()
+{
+    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    if (rOpt.GetInitJumboSheets())
+        return new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
+    else
+        return new ScSheetLimits(MAXCOL, MAXROW);
+}
+
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(std::make_shared<svl::SharedStringPool>(*ScGlobal::getCharClassPtr())),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
@@ -101,13 +110,13 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
         pFormatExchangeList( nullptr ),
-        mxSheetLimits(new ScSheetLimits(MAXCOL, MAXROW)),
+        mxSheetLimits(CreateSheetLimits()),
         pFormulaTree( nullptr ),
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
         pEOFormulaTrack( nullptr ),
         pPreviewCellStyle( nullptr ),
-        maPreviewSelection(MAXROW, MAXCOL),
+        maPreviewSelection(*mxSheetLimits),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MaxCol(),0,0),
@@ -170,12 +179,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbDocShellRecalc(false),
         mnMutationGuardFlags(0)
 {
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    if (rOpt.GetInitJumboSheets())
-    {
-        mxSheetLimits = new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
-    }
-    maPreviewSelection = { MaxRow(), MaxCol() };
+    maPreviewSelection = { *mxSheetLimits };
     aCurTextWidthCalcPos = { MaxCol(), 0, 0 };
 
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);

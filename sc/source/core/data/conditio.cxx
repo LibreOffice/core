@@ -2231,7 +2231,7 @@ ScRangeList ScConditionalFormatList::GetCombinedRange() const
 void ScConditionalFormatList::RemoveFromDocument(ScDocument* pDoc) const
 {
     ScRangeList aRange = GetCombinedRange();
-    ScMarkData aMark(pDoc->MaxRow(), pDoc->MaxCol());
+    ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.MarkFromRangeList(aRange, true);
     sal_uInt16 const pItems[2] = { sal_uInt16(ATTR_CONDITIONAL),0};
     pDoc->ClearSelectionItems(pItems, aMark);

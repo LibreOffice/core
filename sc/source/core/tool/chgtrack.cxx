@@ -1834,7 +1834,7 @@ void ScChangeActionContent::PutValueToDoc(
                 aRange.aEnd.IncCol( nC-1 );
             if ( nR > 1 )
                 aRange.aEnd.IncRow( nR-1 );
-            ScMarkData aDestMark(pDoc->MaxRow(), pDoc->MaxCol());
+            ScMarkData aDestMark(pDoc->GetSheetLimits());
             aDestMark.SelectOneTable( aPos.Tab() );
             aDestMark.SetMarkArea( aRange );
             pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),

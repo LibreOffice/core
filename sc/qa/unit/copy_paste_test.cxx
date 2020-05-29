@@ -88,7 +88,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     ScRefFlags nRes = aSrcRange.Parse("B2:C5", &rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(rDoc.GetSheetLimits());
     aMark.SetMarkArea(aSrcRange);
 
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);

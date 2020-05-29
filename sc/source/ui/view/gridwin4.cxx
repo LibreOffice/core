@@ -197,7 +197,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
 
         //! cache the ranges in table!!!!
 
-        ScMarkData aMarks(pDoc->MaxRow(), pDoc->MaxCol());
+        ScMarkData aMarks(pDoc->GetSheetLimits());
         for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
             pDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
         ScRangeListRef xRanges = new ScRangeList;

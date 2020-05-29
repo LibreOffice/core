@@ -366,7 +366,7 @@ void Test::testRangeList()
 
 void Test::testMarkData()
 {
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
 
     // Empty mark. Nothing is selected.
     std::vector<sc::ColRowSpan> aSpans = aMarkData.GetMarkedRowSpans();
@@ -599,7 +599,7 @@ void Test::testSelectionFunction()
     ScRangeList aRanges;
     aRanges.push_back(ScRange(1,1,0,1,7,0)); // B2:B8
     aRanges.push_back(ScRange(3,1,0,3,7,0)); // D2:D8
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.MarkFromRangeList(aRanges, true);
 
     struct Check
@@ -658,7 +658,7 @@ void Test::testSelectionFunction()
     }
 
     // Make sure that when no selection is present, use the current cursor position.
-    ScMarkData aEmpty(MAXROW, MAXCOL);
+    ScMarkData aEmpty(m_pDoc->GetSheetLimits());
 
     {
         // D3 (numeric cell containing 5.)
@@ -747,7 +747,7 @@ void Test::testMarkedCellIteration()
     m_pDoc->SetFormula(ScAddress(2,2,0), "=SUM(1,2,3)", m_pDoc->GetGrammar());
 
     // Select A1:C5.
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SetMarkArea(ScRange(0,0,0,2,4,0));
     aMarkData.MarkToMulti(); // TODO : we shouldn't have to do this.
 
@@ -1885,7 +1885,7 @@ void Test::testMatrixComparisonWithErrors()
 
     // Create a matrix formula in B3:B4 referencing A1:A2 and doing a greater
     // than comparison on it's values. Error value must be propagated.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(1, 2, 1, 3, aMark, "=A1:A2>0");
 
@@ -1903,7 +1903,7 @@ void Test::testMatrixConditionalBooleanResult()
 
     // Create matrix formulas in A1:B1,A2:B2,A3:B3,A4:B4 producing mixed
     // boolean and numeric results in an unformatted area.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula( 0,0, 1,0, aMark, "=IF({1,0};TRUE();42)");  // {TRUE,42}
     m_pDoc->InsertMatrixFormula( 0,1, 1,1, aMark, "=IF({0,1};TRUE();42)");  // {42,1} aim for {42,TRUE}
@@ -1935,7 +1935,7 @@ void Test::testEnterMixedMatrix()
     m_pDoc->SetValue(1, 1, 0, val);
 
     // Create a matrix range in A4:B5 referencing A1:B2.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 3, 1, 4, aMark, "=A1:B2");
 
@@ -1962,7 +1962,7 @@ void Test::testMatrixEditable()
 
     // A3:A4 is a matrix.
     ScRange aMatRange(0,2,0,0,3,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aMatRange);
     m_pDoc->InsertMatrixFormula(0, 2, 0, 3, aMark, "=TRANSPOSE(A1:B1)");
 
@@ -3346,7 +3346,7 @@ void Test::testCopyPaste()
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
     std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, std::move(pUndoDoc)));
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
@@ -3472,7 +3472,7 @@ void Test::testCopyPasteAsLink()
     copyToClip(m_pDoc, aRange, &aClipDoc);
 
     aRange = ScRange(1,1,1,1,3,1); // Paste to B2:B4 on Sheet2.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     // Paste range as link.
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc, true, true);
@@ -3531,7 +3531,7 @@ void Test::testCopyPasteTranspose()
     aNewClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false);
 
     ScRange aDestRange(3,1,1,3,3,1);//target: Sheet2.D2:D4
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get());
     pTransClip.reset();
@@ -3586,7 +3586,7 @@ void Test::testCopyPasteMultiRange()
         }
     }
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Copy A2:B2, A4:B4, and A6:B6 to clipboard.
@@ -3683,7 +3683,7 @@ void Test::testCopyPasteSkipEmpty()
     ScRange aSrcRange(0,0,0,0,4,0);
     ScRange aDestRange(1,0,0,1,4,0);
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
 
     // Put some texts in B1:B5.
@@ -3816,7 +3816,7 @@ void Test::testCopyPasteSkipEmpty2()
 
     // Paste to A3 with the skip empty option set.  This used to freeze. (fdo#77735)
     ScRange aDestRange(0,2,0,2,2,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false, false, true, true);
 
@@ -3840,7 +3840,7 @@ void Test::testCutPasteRefUndo()
     // A2 references B2.
     m_pDoc->SetString(ScAddress(0,1,0), "=B2");
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Set up clip document for cutting of B2.
@@ -3917,7 +3917,7 @@ void Test::testCutPasteGroupRefUndo()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Initial formula failure", OUString::createFromAscii(aDataCheck[i][1]), aString);
     }
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Set up clip document.
@@ -4040,7 +4040,7 @@ void Test::testUndoCut()
     CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(0,3,0));
 
     // Select A1:A3.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     ScRange aRange(0,0,0,0,2,0);
     aMark.SetMarkArea(aRange);
     aMark.MarkToMulti();
@@ -4154,7 +4154,7 @@ void Test::testCopyPasteRelativeFormula()
     // Select and copy B3:B4 to the clipboard.
     ScRange aRange(1,2,0,1,3,0);
     ScClipParam aClipParam(aRange, false);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
@@ -4209,7 +4209,7 @@ void Test::testCopyPasteRepeatOneFormula()
     m_pDoc->InsertTab(0, "Test");
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
 
     // Insert values in A1:B10.
     for (SCROW i = 0; i < 10; ++i)
@@ -4365,7 +4365,7 @@ void Test::testMergedCells()
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0);
     CPPUNIT_ASSERT_MESSAGE("did not merge cells", nEndCol == 3 && nEndRow == 3);
     ScRange aRange(0,2,0,MAXCOL,2,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS_BEFORE, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0);
@@ -4552,7 +4552,7 @@ void Test::testSearchCells()
     SvxSearchItem aItem(SID_SEARCH_ITEM);
     aItem.SetSearchString("A");
     aItem.SetCommand(SvxSearchCmd::FIND_ALL);
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectOneTable(0);
     SCCOL nCol = 0;
     SCROW nRow = 0;
@@ -4692,7 +4692,7 @@ void Test::testAutoFill()
 
     m_pDoc->SetValue(0,0,0,1);
 
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectTable(0, true);
 
     m_pDoc->Fill( 0, 0, 0, 0, nullptr, aMarkData, 5);
@@ -4812,7 +4812,7 @@ void Test::testAutoFillSimple()
     m_pDoc->SetValue(0, 0, 0, 1);
     m_pDoc->SetString(0, 1, 0, "=10");
 
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectTable(0, true);
 
     m_pDoc->Fill( 0, 0, 0, 1, nullptr, aMarkData, 6, FILL_TO_BOTTOM, FILL_AUTO);
@@ -4902,13 +4902,13 @@ void Test::testCopyPasteFormulasExternalDoc()
 
     ScRange aRange(0,0,0,0,5,0);
     ScClipParam aClipParam(aRange, false);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     aRange = ScRange(1,1,1,1,6,1);
-    ScMarkData aMarkData2(MAXROW, MAXCOL);
+    ScMarkData aMarkData2(m_pDoc->GetSheetLimits());
     aMarkData2.SetMarkArea(aRange);
     rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
@@ -4957,13 +4957,13 @@ void Test::testCopyPasteReferencesExternalDoc()
 
     ScRange aRange(0,2,0,0,5,0);
     ScClipParam aClipParam(aRange, false);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     aRange = ScRange(0,0,0,0,3,0);
-    ScMarkData aMarkData2(MAXROW, MAXCOL);
+    ScMarkData aMarkData2(m_pDoc->GetSheetLimits());
     aMarkData2.SetMarkArea(aRange);
     rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
@@ -5264,7 +5264,7 @@ void Test::testNoteDeleteRow()
 
     // Delete row 2.
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
 
@@ -5368,7 +5368,7 @@ void Test::testNoteLifeCycle()
 
     ScClipParam aClipParam(aPos, false);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectOneTable(0);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, true);
 
@@ -5503,7 +5503,7 @@ void Test::testNoteCopyPaste()
     pNote->SetText(aPos, "Note2");
 
     // Copy B2:B4 to clipboard.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScRange aCopyRange(1,1,0,1,3,0);
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -5994,7 +5994,7 @@ void Test::testDeleteContents()
 
     // Delete D2:D6.
     ScRange aRange(3,1,0,3,5,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     aMark.SetMarkArea(aRange);
 
@@ -6025,7 +6025,7 @@ void Test::testTransliterateText()
     m_pDoc->SetString(ScAddress(0,2,0), "Oscar");
 
     // Change them to uppercase.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(ScRange(0,0,0,0,2,0));
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.TransliterateText(
@@ -6402,7 +6402,7 @@ void Test::testCopyPasteMatrixFormula()
     m_pDoc->SetValue(ScAddress(3,2,0), 11.0);   // D3
 
     // Insert matrix formula to A1
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, "=COUNTIF(ISBLANK(B1:D1);TRUE())");
     m_pDoc->CalcAll();
@@ -6486,7 +6486,7 @@ void Test::testUndoDataAnchor()
     //pDrawLayer->BeginCalcUndo(false);
     // Insert a new row at row 3.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
 
@@ -6686,7 +6686,7 @@ void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCapt
 
 void Test::clearRange(ScDocument* pDoc, const ScRange& rRange)
 {
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(pDoc->GetSheetLimits());
     aMarkData.SetMarkArea(rRange);
     pDoc->DeleteArea(
         rRange.aStart.Col(), rRange.aStart.Row(),
@@ -6704,7 +6704,7 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
 
     ScClipParam aClipParam(rRange, true);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(pSrcDoc->GetSheetLimits());
     aMark.SetMarkArea(rRange);
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
@@ -6736,21 +6736,21 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
 void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
 {
     ScClipParam aClipParam(rRange, false);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(pSrcDoc->GetSheetLimits());
     aMark.SetMarkArea(rRange);
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 }
 
 void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
 void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
 {
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
     sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
     aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
@@ -6763,7 +6763,7 @@ void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
 ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
 {
     ScDocument& rDoc = rDocSh.GetDocument();
-    ScMarkData aMarkData(MAXROW, MAXCOL);
+    ScMarkData aMarkData(rDoc.GetSheetLimits());
     aMarkData.SetMarkArea(rRange);
     std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(&rDoc));
 
@@ -7010,7 +7010,7 @@ void Test::testProtectedSheetEditByRow()
 
         // Try to delete row 3.  It should fail.
         ScRange aRow3(0,2,0,MAXCOL,2,0);
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
         bool bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DelCellCmd::Rows, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should fail.", !bDeleted);
@@ -7048,7 +7048,7 @@ void Test::testProtectedSheetEditByRow()
 
     {
         // Insert matrix into B2:C3.
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(1);
         m_pDoc->InsertMatrixFormula(1, 1, 2, 2, aMark, "={1;2|3;4}");
 
@@ -7086,7 +7086,7 @@ void Test::testProtectedSheetEditByColumn()
 
         // Try to delete column C.  It should fail.
         ScRange aCol3(2,0,0,2,MAXROW,0);
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
         bool bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DelCellCmd::Cols, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should fail.", !bDeleted);
@@ -7124,7 +7124,7 @@ void Test::testProtectedSheetEditByColumn()
 
     {
         // Insert matrix into B2:C3.
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(1);
         m_pDoc->InsertMatrixFormula(1, 1, 2, 2, aMark, "={1;2|3;4}");
 
