@@ -6995,7 +6995,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 
     // indentation
     m_pSerializer->startElementNS(XML_w, XML_pPr);
-    if( nListTabPos != 0 )
+    if( nListTabPos >= 0 )
     {
         m_pSerializer->startElementNS(XML_w, XML_tabs);
         m_pSerializer->singleElementNS( XML_w, XML_tab,
