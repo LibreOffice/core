@@ -33,12 +33,11 @@ namespace sc {
 
 struct FormulaResultValue
 {
-    enum Type { Invalid, Value, String, Error };
-
-    Type meType;
+    enum Type : sal_uInt8 { Invalid, Value, String, Error };
 
     double mfValue;
     svl::SharedString maString;
+    Type meType;
     FormulaError mnError;
 
     FormulaResultValue();

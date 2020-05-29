@@ -30,9 +30,9 @@ namespace i18npool {
 
 // cache structure.
 struct WordBreakCache {
-    sal_Int32 length;       // contents length saved here.
     sal_Unicode *contents;      // separated segment contents.
     sal_Int32* wordboundary;        // word boundaries in segments.
+    sal_Int32 length;       // contents length saved here.
     sal_Int32 size;         // size of wordboundary
 
     WordBreakCache();

@@ -93,8 +93,8 @@ public:
 class SwAutoCorrExceptWord
 {
     OUString m_sWord;
-    ACFlags m_nFlags;
     sal_uLong m_nNode;
+    ACFlags m_nFlags;
     sal_Int32 m_nContent;
     sal_Unicode m_cChar;
     LanguageType m_eLanguage;
@@ -104,7 +104,7 @@ public:
     SwAutoCorrExceptWord(ACFlags nAFlags, sal_uLong nNd, sal_Int32 nContent,
                          const OUString& rWord, sal_Unicode cChr,
                          LanguageType eLang)
-        : m_sWord(rWord), m_nFlags(nAFlags), m_nNode(nNd), m_nContent(nContent),
+        : m_sWord(rWord), m_nNode(nNd), m_nFlags(nAFlags), m_nContent(nContent),
           m_cChar(cChr), m_eLanguage(eLang), m_bDeleted(false)
     {}
 

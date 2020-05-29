@@ -114,11 +114,11 @@ double SwNumFormatBase::GetDefValue(const SvNumFormatType nFormatType)
 }
 
 SwNumFormatBase::SwNumFormatBase()
-    : nCurrFormatType(SvNumFormatType::ALL)
-    , mbCurrFormatTypeNeedsInit(true)
-    , nStdEntry(0)
-    , bOneArea(false)
+    : nStdEntry(0)
     , nDefFormat(0)
+    , nCurrFormatType(SvNumFormatType::ALL)
+    , bOneArea(false)
+    , mbCurrFormatTypeNeedsInit(true)
     , bShowLanguageControl(false)
     , bUseAutomaticLanguage(true)
 {

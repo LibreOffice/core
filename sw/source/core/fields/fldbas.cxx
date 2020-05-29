@@ -212,11 +212,11 @@ SwField::SwField(
         LanguageType nLang,
         bool bUseFieldValueCache)
     : m_Cache()
-    , m_bUseFieldValueCache( bUseFieldValueCache )
-    , m_nLang( nLang )
-    , m_bIsAutomaticLanguage( true )
-    , m_nFormat( nFormat )
     , m_pType( pType )
+    , m_nFormat( nFormat )
+    , m_nLang( nLang )
+    , m_bUseFieldValueCache( bUseFieldValueCache )
+    , m_bIsAutomaticLanguage( true )
 {
     assert(m_pType);
 }

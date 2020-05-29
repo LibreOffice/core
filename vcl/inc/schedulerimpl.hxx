@@ -31,9 +31,9 @@ struct ImplSchedulerData final
 {
     ImplSchedulerData* mpNext;        ///< Pointer to the next element in list
     Task*              mpTask;        ///< Pointer to VCL Task instance
-    bool               mbInScheduler; ///< Task currently processed?
     sal_uInt64         mnUpdateTime;  ///< Last Update Time
     TaskPriority       mePriority;    ///< Task priority
+    bool               mbInScheduler; ///< Task currently processed?
 
     const char *GetDebugName() const;
 };
