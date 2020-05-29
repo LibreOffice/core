@@ -318,6 +318,8 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         }
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         nMaxArgs = std::min( nArgs, kMaxArgCount);
+        if (sal_uInt16 nVarArgsLimit = pFuncDesc->getVarArgsLimit())
+            nMaxArgs = std::min( nVarArgsLimit, nMaxArgs);
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
