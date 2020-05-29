@@ -853,6 +853,11 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                         aSubSelections.push_back(aSubSelection);
                     mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
                 }
+                else
+                {
+                    mpImpl->mbCurrentIsVectorGraphic = false;
+                    mpImpl->mpVectorGraphicSearch.reset();
+                }
             }
             else
             {
@@ -1259,6 +1264,16 @@ void SdOutliner::ProvideNextTextObject()
 
                             mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                         }
+                        else
+                        {
+                            mpImpl->mbCurrentIsVectorGraphic = false;
+                            mpImpl->mpVectorGraphicSearch.reset();
+                        }
+                    }
+                    else
+                    {
+                        mpImpl->mbCurrentIsVectorGraphic = false;
+                        mpImpl->mpVectorGraphicSearch.reset();
                     }
                 }
                 else
