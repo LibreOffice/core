@@ -48,6 +48,7 @@ namespace formula
             virtual bool isHidden() const override { return false; }
             virtual sal_uInt32 getParameterCount() const override { return 0; }
             virtual sal_uInt32 getVarArgsStart() const override { return 0; }
+            virtual sal_uInt32 getVarArgsLimit() const override { return 0; }
             virtual OUString getParameterName(sal_uInt32 ) const override { return OUString(); }
             virtual OUString getParameterDescription(sal_uInt32 ) const override { return OUString(); }
             virtual bool isParameterOptional(sal_uInt32 ) const override { return false; }
