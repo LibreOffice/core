@@ -34,6 +34,8 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
     moShadowSx.assignIfUsed( rSourceProps.moShadowSx );
     moShadowSy.assignIfUsed( rSourceProps.moShadowSy );
     moShadowColor.assignIfUsed( rSourceProps.moShadowColor );
+    moShadowBlur.assignIfUsed( rSourceProps.moShadowBlur );
+
 }
 
 void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
@@ -62,6 +64,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             sal_Int32 nAttrDir = 0, nAttrDist = 0;
             sal_Int32 nAttrSizeX = 100000, nAttrSizeY = 100000; // If shadow size is %100=100000 (means equal to object's size), sx sy is not exists,
                                                                 // Default values of sx, sy should be 100000 in this case.
+            sal_Int32 nAttrBlur = 0;
 
             std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( "dir" );
             if( attribIt != it->maAttribs.end() )
@@ -79,6 +82,10 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrSizeY;
 
+            attribIt = it->maAttribs.find( "blurRad" );
+            if( attribIt != it->maAttribs.end() )
+                attribIt->second >>= nAttrBlur;
+
             // Negative X or Y dist indicates left or up, respectively
             // Negative X or Y dist indicates left or up, respectively
             double nAngle = basegfx::deg2rad(static_cast<double>(nAttrDir) / PER_DEGREE);
@@ -93,6 +100,8 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_ShadowSizeY, nAttrSizeY);
             rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
+            rPropMap.setProperty( PROP_ShadowBlur, nAttrBlur);
+
         }
     }
 }

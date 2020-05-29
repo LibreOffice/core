@@ -59,6 +59,11 @@ published service ShadowProperties
      */
     [property] long ShadowYDistance;
 
+    /** This defines the degree of blur of the shadow in points.
+     */
+    [property,optional] long ShadowBlur;
+
+
 };
 
 
