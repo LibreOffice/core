@@ -104,7 +104,16 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsAscending(true),
     bFilterConditionSourceRange(false),
     bHasHeader(true),
-    bByRow(false),
+    // bs-edit: the following is an attempt to solve the wrong applied filter conditions on reload of files saved in *.ods format with active filters,
+    // bs-edit: see tdf#133336, please recheck!!!, affects only some files where the database range has asymmetric start (off from A1-B2-C3-D4-E5-F6 ...),
+    // bs-edit: there are oddities left, as without this patch the .field values for the filterdescriptor have been wrong from the first reload on,
+    // bs-edit: they are now still for load of 'prior-patch' 'second and subsequent' saves, i've not yet checked if old files are 'healed' on new save,
+    // bs-edit: some affected file may be spotted by negative values for .fields, some more by the tag 'table:orientation="column"', but that may be correct for some of them,
+    // bs-edit: for the gui access it looks as if the tag 'table:orientation="column"' and the wrong .field values cancel each other out as well with or without the patch,
+    // bs-edit: the patch is intended to apply from ver. 7.0 on, backport to old ver.?, if the patch holds theese comments should be removed starting with ver. 9.0, !!FIXME-9.0!!
+    // bs-edit: original was: bByRow(false),
+    // bs-edit: test:
+    bByRow(true),
     meRangeType(ScDBCollection::GlobalNamed)
 {
     if( rAttrList.is() )
