@@ -168,8 +168,7 @@ namespace emfio
         if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
         {
             SAL_WARN("vcl.wmf", "broken rectangle");
-            mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return tools::Rectangle();
+            return tools::Rectangle(aTL, Size(0,0));
         }
         return tools::Rectangle( aTL, aBR );
     }

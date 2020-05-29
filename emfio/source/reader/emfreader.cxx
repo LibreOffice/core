@@ -2091,8 +2091,7 @@ namespace emfio
         if (nLeft > nRight || nTop > nBottom)
         {
             SAL_WARN("emfio", "broken rectangle");
-            mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return tools::Rectangle();
+            return tools::Rectangle(nLeft, nTop);
         }
 
         return tools::Rectangle(nLeft, nTop, nRight, nBottom);
