@@ -85,11 +85,6 @@ void OTableSubscriptionDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-OUString OTableSubscriptionDialog::getConnectionURL() const
-{
-    return m_pImpl->getConnectionURL();
-}
-
 Reference< XPropertySet > const & OTableSubscriptionDialog::getCurrentDataSource()
 {
     return m_pImpl->getCurrentDataSource();

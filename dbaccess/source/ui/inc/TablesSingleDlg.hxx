@@ -58,7 +58,6 @@ class ODbDataSourceAdministrationHelper;
         void        successfullyConnected();
         bool        getCurrentSettings(css::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
         void        clearPassword();
-        OUString    getConnectionURL() const;
         css::uno::Reference< css::beans::XPropertySet > const & getCurrentDataSource();
         void endExecution() { m_bStopExecution = true; }
 

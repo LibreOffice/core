@@ -189,10 +189,6 @@ namespace dbaui
 
             // fill the table list with this connection information
             SQLExceptionInfo aErrorInfo;
-            // the current DSN
-            OUString sURL;
-            if ( m_pTablesDlg )
-                sURL = m_pTablesDlg->getConnectionURL();
 
             try
             {
