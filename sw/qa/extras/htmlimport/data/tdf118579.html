@@ -1,0 +1,1105 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /><style type="text/css">@media screen
+{
+    .documento
+    {
+        font-size: 130%;
+    }
+}
+
+.documento #schede table.principale thead tr th span:before,
+.documento #schede table.principale tbody tr td.campo1 span:before,
+.documento #schede table.principale tbody tr td.campo2 span:before,
+.documento #schede table.principale tbody tr td.campo3 span:before,
+.documento #schede table.principale tbody tr td.campo4 span:before,
+.documento #schede table.principale tbody tr td.campoMansioni1 span:before,
+.documento #schede table.principale tbody tr td.campoMansioni2 span:before
+{
+	/*content: ' ';*/
+	border-top: solid 28px;
+	border-right: solid 10px;
+	position: absolute;
+	left: -5px;
+	top: -5px;
+	width: 100%;
+}
+	
+.documento #schede table.principale thead tr th span:before
+{
+	border-color: #147;
+}
+	
+.documento #schede table.principale tbody tr td.campo1 span:before,
+.documento #schede table.principale tbody tr td.campoMansioni1 span:before,
+.documento #schede table.principale tbody tr td.campoMansioni2 span:before
+{
+	border-color: #C7D7E5;
+}
+	
+.documento #schede table.principale tbody tr td.campo2 span:before,
+.documento #schede table.principale tbody tr td.campo3 span:before,
+.documento #schede table.principale tbody tr td.campo4 span:before
+{
+	border-color: #E6EDF2;
+}
+
+.documento #schede table.principale thead tr th span a,
+.documento #schede table.principale tbody tr td span a,
+.documento #schede table.principale tbody tr td span p
+{
+	position: relative;
+	white-space: nowrap;
+}
+	
+.documento #schede table.principale tbody tr td
+{
+	width: 1%;
+}
+
+.documento #schede table.principale thead tr th span,
+.documento #schede table.principale tbody tr td.campo1 span,
+.documento #schede table.principale tbody tr td.campo2 span,
+.documento #schede table.principale tbody tr td.campo3 span,
+.documento #schede table.principale tbody tr td.campoMansioni1 span,
+.documento #schede table.principale tbody tr td.campoMansioni2 span
+{
+	position: relative;
+	display: block;
+	margin-bottom: 18px;
+}
+
+.documento #schede table.principale tbody tr td p
+{
+	font-size: 1em !important;
+}
+
+.documento #schede table.principale tbody tr td.campo1 span a,
+.documento #schede table.principale tbody tr td.campoMansioni1 span p,
+.documento #schede table.principale tbody tr td.campoMansioni2 span p
+{
+    color: #79C;
+    font-family: "Arial Black",Arial,Helvetica,sans-serif;
+    text-align: left;
+}
+
+.documento {
+	margin: 0;
+	padding: 0;
+}
+
+/* Firefox */
+.documento ::-moz-selection {
+    background: #FFFFC0;
+    color: #000;
+}
+/* Motore Webkit*/
+.documento ::-webkit-selection {
+    background: #FFFFC0;
+    color: #000;
+}
+/* Altri Browser */
+.documento ::selection {
+    background: #FFFFC0;
+    color: #000;
+}
+
+.documento .Section1,
+.documento .WordSection1 {
+	width: auto;
+	height: auto;
+	padding: 0.5em 1.5em;
+	text-align: left;
+}
+
+.documento a {
+	color: #C33;
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-decoration: none;
+	border-bottom: 1px solid #ABC;
+}
+
+.documento a:hover {
+	color: #06B;
+	border-bottom: 1px solid #C33;
+}
+
+.documento .evidenziaRisultato
+{
+	background-color: #FF9900;
+	color:#ffffff;
+}
+
+.documento p.MsoNormal {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	line-height: 1.7em;
+	color: #444;
+	margin: 0;
+	padding: 0;
+}
+
+.documento p.TitoloDocumento,
+.titoloSeparato
+{
+	font-family: 'Arial Black', Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1em;
+	line-height: 1.3em;
+	color: #147;
+	padding-bottom: 3px;
+	border-left: 10px solid #147;
+	border-bottom: 1px solid #147;
+    margin-top: 0;
+}
+
+.documento p.Oggetto {
+	text-align: center;
+	color: #27C;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 0.8em;
+	text-transform: uppercase;
+	line-height: 1.4em;
+	margin-top: 5px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #CDE;
+	border-left: 10px solid #CDE;
+}
+
+.documento p.TitoloArticolo {
+	font-family: 'Arial Black', Arial, Helvetica, sans-serif;
+	text-align: left;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: #27C;
+	border-left: 5px solid #8AC;
+	border-right: 5px solid #8AC;
+	padding-left: 5px;
+}
+
+.documento p.TitoloArticolo a {
+	border: none !important;
+	text-decoration: none !important;
+	color: #27C !important;
+}
+
+.documento p.Rubrica {
+	font-size: 0.85em;
+	text-align: left;
+	text-transform: uppercase;
+	padding-left: 5px;
+	border-left: 5px solid #CDE;
+	border-right: 5px solid #CDE;
+	color: #6AE;
+}
+
+.documento p.Rubrica a[name] {
+	border: none !important;
+	text-decoration: none !important;
+	color: #6AE !important;
+}
+
+.documento p.NormaleconRientro {
+	text-indent: 30px;
+}
+
+.documento p.CapoTitolo {
+	text-align: center;
+	font-size: 0.9em;
+	font-weight: bold;
+}
+
+.documento p.Tabella {
+	font-family: "Courier New", Courier, monospace;
+}
+
+.documento p.Sommario {
+	font-weight: bold;
+}
+
+.documento p.Note {
+	font-size: 0.7em;
+}
+
+/*TABELLE*/
+
+.documento table.FormattaTabella {
+	border: 1px solid #000;
+	border-collapse: collapse;
+}
+
+.documento table.FormattaTabella tr td {
+	display: block;
+	border-bottom: 1px solid #000;
+	border-right: 1px solid #000;
+	width: 200px;
+}
+
+.documento table.FormattaTabella tr td.Intestazione {
+	background-color: #CCECFF;
+}
+
+.documento h5 {
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1em;
+	line-height: 1.3em;
+	color: #147;
+	padding-bottom: 3px;
+	border-left: 10px solid #147;
+	border-bottom: 1px solid #147;
+	margin-bottom: 10px;
+}
+
+.documento table,
+.documento caption,
+.documento td,
+.documento tr,
+.documento th {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+}
+
+.documento table {
+	min-width: 600px;
+	margin-bottom: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1em;
+    width: 100%;
+}
+
+.documento caption {
+	text-align: left;
+	font-size: 15px;
+	padding-bottom: 10px;
+}
+.documento table td {
+	padding: 5px;
+	border: 1px solid #FFF;
+	border-width: 0 1px 1px 0;
+	text-align: center;
+}
+
+.documento table td.tipo {
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+}
+
+.documento table td.vigente {
+	background: #A7C0D9;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: normal;
+	font-size: 0.8em;
+}
+
+.documento table td.vigente .dataTab {
+	color: #68B;
+}
+
+.documento table td.tit {
+	background: #C7D7E5;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	color: #79C;
+	text-transform: uppercase;
+	font-size: 0.75em;
+}
+
+.documento table td.dati,
+.documento table td.datiu
+{
+	background: #E6EDF2;
+	font-size: 0.72em;
+}
+
+.documento table tbody tr.evi td {
+	background: #BCD;
+}
+
+.documento #schede {
+	text-align: center;
+	padding: 1em;
+}
+
+.documento #schede strong, b {
+	color: #27C;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	font-weight: normal;
+}
+
+.documento #schede #titoli {
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 1em;
+	line-height: 1.3em;
+	color: #147;
+	padding-bottom: 3px;
+	border-left: 10px solid #147;
+	border-bottom: 1px solid #147;
+	margin-bottom: 10px;
+}
+
+.documento #schede #infoscheda {
+	text-align: center;
+	color: #27C;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	text-transform: uppercase;
+	line-height: 1.4em;
+	margin-top: 5px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #CDE;
+	border-left: 10px solid #CDE;
+	margin-bottom: 15px;
+}
+
+.documento #schede table {
+	width: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1em;
+}
+
+.documento #schede table.principale {
+	margin-bottom: 15px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.documento #schede table.principale thead tr th {
+	background: #147;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+	text-align: center;
+	padding: 5px;
+}
+
+.documento #schede table.principale thead tr th a.titoloarticolo_sintesi {
+	color: #FFF !important;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+	cursor: default !important;
+	border: none !important;
+}
+
+.documento #schede table.principale td table thead tr td {
+	background: #C7D7E5;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	color: #79C;
+	text-transform: uppercase;
+	font-size: 0.75em;
+}
+
+.documento #schede table tr td.head1 {
+	width: 20%;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td.head2 {
+	width: 10%;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td.head3 {
+	width: 10%;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td.head4 {
+	width: 60%;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	letter-spacing: 0.2em;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td {
+	padding: 5px;
+	border: 1px solid #FFF;
+	border-width: 0 1px 1px 0;
+	text-align: center;
+	font-size: 0.75em;
+}
+
+.documento #schede table tr td.campo1 {
+	vertical-align: bottom;
+	background: #C7D7E5;
+	font-weight: bold;
+}
+
+.documento #schede table tr td.campo2 {
+	background: #E6EDF2;
+	vertical-align: top;
+}
+
+.documento #schede table tr td.campo3 {
+	background: #E6EDF2;
+	vertical-align: top;
+}
+
+.documento #schede table tr td.campo4 {
+	background: #E6EDF2;
+	text-align: left;
+	vertical-align: top;
+}
+
+.documento #schede table tr td a.rubrica_sintesi {
+	font-family: "Arial Black", Arial, Helvetica, sans-serif !important;
+	color: #79C;
+	text-transform: uppercase;
+	border: none;
+	cursor: default;
+}
+
+/******************************CASO PARTICOLARE: MANSIONI *********************************/
+
+.documento #schede table tr td.headMansioni1 {
+	width: 20%;
+	text-align: center;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td.headMansioni2 {
+	width: 80%;
+	text-align: center;
+	background: #8AC;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+}
+
+.documento #schede table tr td.campoMansioni1 {
+	width: 20%;
+	background: #C7D7E5;
+	color: #79C;
+	font-family: "Arial Black", Arial, Helvetica, sans-serif;
+	vertical-align: top;
+	text-align: center;
+}
+
+.documento #schede table tr td.campoMansioni2 {
+	width: 80%;
+	background: #E6EDF2;
+	text-align: left;
+	vertical-align: top;
+}
+
+/******************************CASO PARTICOLARE: MANSIONI *********************************/
+
+/*Per le tabelle Interne al Commento */
+
+.documento #schede table.principale table {
+	width: 100%;
+	margin: auto;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+.documento #schede table.principale table tr td {
+	border-bottom: 1px dotted #8AC;
+}
+
+.documento #schede table.principale table thead tr td {
+	font-weight: bold;
+}
+
+.documento #schede table td.sx {
+	text-align: left;
+}
+
+.documento table.dettaglio {
+	margin: auto;
+	margin-top: 1px;
+	border: solid 1px #BCD;
+	padding: 5px;
+	width: 97%;
+	font-family: Arial;
+}
+
+.documento table.dettaglio tr td {
+	padding: 5px;
+}
+
+.documento table.dettaglio tr td.descrizione {
+	vertical-align: top;
+	background: #DEF;
+	color: #147;
+	text-transform: uppercase;
+	border-bottom: 1px solid #DEF;
+	white-space: nowrap;
+	text-align: right;
+}
+
+.documento table.dettaglio tr td.valore {
+	border-bottom: 1px solid #BCD;
+	text-align: left;
+}
+
+/* PERSONALIZZAZIONE PER LE TABELLE RETRIBUTIVE INIZIO */
+/*TABELLE*/
+table.FormattaTabella { border: 1px solid #000; border-collapse: collapse;} 
+table.FormattaTabella tr td { display: block; border-bottom: 1px solid #000; border-right: 1px solid #000; width: 200px;}
+table.FormattaTabella tr td.Intestazione { background-color: #CCECFF; }
+h5.h5_documento {
+    font-family: 'Arial Black', Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 1.3em;
+    color: #147;
+    padding-bottom: 3px;
+    border-left: 10px solid #147;
+    border-bottom: 1px solid #147;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+p.tit2Tab { font-family: 'Arial Black', Arial, Helvetica, sans-serif; text-transform: uppercase; text-align: center; font-weight: bold; font-size: 1.1em; color: #147; padding-bottom: 3px; margin-bottom: 10px; }
+table.table_documento, caption.caption_documento, table.table_documento td, table.table_documento tr, table.table_documento th { margin: 0; padding: 0; font-weight: normal; }
+table.table_documento { width: 100%; margin-bottom: 15px; margin-left: auto; margin-right: auto; font-family: Arial, Helvetica, sans-serif; font-size: 1em; }
+caption.caption_documento { text-align: left; font-size: 15px; padding-bottom: 10px; }
+table.table_documento td { padding: 5px; border: 1px solid #FFF; border-width: 0 1px 1px 0; text-align: center; }
+table td.tipo { background: #8AC; color: #FFF; text-transform: uppercase; font-family: 'Arial Black', Arial, Helvetica, sans-serif; letter-spacing: 0.2em; font-size: 0.85em; }
+table td.tipoContrib { background: #8AC; color: #FFF; text-transform: uppercase; font-family: 'Arial Black', Arial, Helvetica, sans-serif; letter-spacing: normal; font-size: 0.75em; text-align: left; line-height: 1em; }
+table td.vigente { background: #A7C0D9; color: #68B; text-transform: uppercase; font-family: 'Arial Black', Arial, Helvetica, sans-serif; letter-spacing: normal; font-size: 0.8em; }
+table td.vigente .dataTab { color: #fff; }
+table td.tit { background: #C7D7E5; font-family: 'Arial Black', Arial, Helvetica, sans-serif; color: #79C; text-transform: uppercase; font-size: 0.75em; }
+table td.datiu { background: #E6EDF2; font-size: 0.72em; }
+td.totTab { background: #369; font-family: 'Arial Black', Arial, Helvetica, sans-serif; color: #FFF; text-transform: uppercase; font-size: 0.77em; }
+.sx { text-align: left; }
+.rx { text-align: right; }
+.cx { text-align: center; }
+/* PERSONALIZZAZIONE PER LE TABELLE RETRIBUTIVE FINE */
+
+/*FINE*/
+
+.documento #linkprassi p.titolo {
+	display: inline;
+	font-weight:bold;
+}
+
+.documento #linkprassi p.numero {
+	display: inline;
+	color: red;
+}
+
+.documento #linkprassi p.testo {
+	display: inline;
+}
+
+/* Apprendisti */
+
+#app-template p.app-tit1 {
+	font-size: 24px;
+	text-transform: uppercase;
+	text-align: center;
+	font-weight: bold;
+}
+
+#app-template p.app-tit1-dato {
+	font-size: 30px;
+	text-transform: uppercase;
+	text-align: center;
+	background: #F2F9FF;
+	background: -moz-linear-gradient(top, #ffffff 0%, #f2f9ff 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f2f9ff));
+	background: -webkit-linear-gradient(top, #ffffff 0%,#f2f9ff 100%);
+	background: -o-linear-gradient(top, #ffffff 0%,#f2f9ff 100%);
+	background: -ms-linear-gradient(top, #ffffff 0%,#f2f9ff 100%);
+	background: linear-gradient(to bottom, #ffffff 0%,#f2f9ff 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f2f9ff',GradientType=0 );
+	color: #147;
+	-webkit-box-shadow: inset 0px 0px 2px 0px #ACD;
+    box-shadow: inset 0px 0px 2px 0px #ACD;
+    border-bottom: 1px solid #ACD;
+}
+
+#app-template p.app-tit2 {
+	color: #27C;
+	font-size: 18px;
+	text-transform: uppercase;
+	border-bottom: 1px solid #27C;
+}
+
+#app-template p.app-tit2 em {
+	font-size: 13px;
+	font-style: normal;
+	color: #000
+}
+
+#app-template .app-dati {
+	margin-left: 20px;
+}
+
+#app-template p.app-etichetta {
+	font-size: 13px;
+	text-transform: uppercase;
+	border-bottom: 1px dotted #DDD;
+	font-weight: bold;
+	line-height: 30px;
+	color: #000;
+}
+
+#app-template p.app-etichetta.app-nolinea {
+	border-bottom: none;
+}
+
+#app-template p.app-etichetta.app-distanza {
+	border-top: 1px dotted #DDD;
+	padding-top: 5px;
+	margin-top: 5px;
+}
+
+#app-template .app-dato {
+	text-transform: none;
+	color: #27C;
+}
+
+#app-template ul.app-elenco {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	border-bottom: 1px dotted #DDD;
+	padding-bottom: 15px;
+	margin: 5px 0;
+}
+
+#app-template table.app-tab {
+	width: 100%;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+}
+
+#app-template table.app-tab caption {
+	font-weight: bold;
+	background: #147;
+	color: #FFF;
+	padding: 6px 0;
+	text-transform:uppercase;
+}
+
+#app-template table.app-tab thead th {
+	text-transform: uppercase;
+	text-align: center;
+	background: #ACD;
+	padding: 5px;
+	white-space: nowrap;
+}
+
+#app-template table.app-tab tbody td.app-tab-tit {
+	text-transform: uppercase;
+	font-weight: bold;
+	background: #DEF;
+	border-bottom: none;
+	padding: 5px;
+	text-align: left;
+}
+
+#app-template table.app-tab tbody td.app-tab-sottotit {
+	text-transform: uppercase;
+	font-weight: bold;
+	background: #DEF;
+	border-bottom: none;
+	padding: 5px;
+	text-align: center;
+}
+
+#app-template table.app-tab tbody td {
+	border-bottom: 1px solid #ACD;
+	padding: 5px;
+	text-align: center;
+}
+
+#app-template table.app-tab tbody td.app-tab-cella-left {
+	text-align: left;
+}
+
+#app-template table.app-tab tbody td.app-tab-cella-right {
+	text-align: right;
+}
+
+#app-template table.app-tab tbody td.app-tab-cella-tot {
+	font-weight: bold;
+	border-bottom-color: #CDE;
+	background: #ECF5FE;
+	color: #147;
+}
+
+#app-template table.app-tab tbody td.app-tab-cella-tot-right {
+	font-weight: bold;
+	text-align: right;
+	text-transform: uppercase;
+	border-bottom-color: #CDE;
+	background: #ECF5FE;
+	color: #147;
+}
+
+#app-template .interruzione-pagina{
+	display:none;
+}
+
+#app-template .firma-uno { 
+	display: inline-block;
+	width: 34%;
+}
+	
+#app-template .firma-due { 
+	display: inline-block;
+	text-align: center;
+	width: 33%;
+}
+
+#app-template .firma-tre { 
+	display: inline-block;
+	text-align: right;
+	width: 33%;
+}
+
+#app-template .firma-uno em,
+#app-template .firma-due em,
+#app-template .firma-tre em
+ { 
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #999;
+	font-style: normal;
+	padding-left: 10px;
+}
+
+@media print {
+
+	#app-template table.app-tab {
+		font-size: 10px;
+	}
+	
+	#app-template table.app-tab caption {
+		font-size: 14px;
+	}
+
+	#app-template table.app-tab thead th {
+		white-space: normal;
+	}
+	
+	#app-template table.app-tab thead th.prima-cella {
+		width: 60%;
+	}
+	
+	#app-template .interruzione-pagina { 
+		display: block; 
+		page-break-before: always; 
+	}
+}
+
+/* PLET */
+
+.plet p { line-height: normal; }
+
+.plet p.TitoloDocumento {
+	color: #095C8F;
+    font-family: "AdelleHeavy";
+    font-size: 40px;
+    font-weight: normal;
+    text-transform: none;
+    border: none;
+    padding-bottom: 0;
+}
+
+.plet p.Rubrica {
+	border-bottom: 1px dashed #AAAAAA;
+	border-left: none;
+	border-right: none;
+    color: #095C8F;
+    font-family: "AdelleHeavy";
+    font-size: 26px;
+    font-weight: normal;
+    padding-left: 0;
+    margin: 30px 0 0;
+    text-transform: uppercase;
+}
+
+.plet p.NormaleconRientro {
+	font-family: "UniversLTStd59UltraCondensed" !important;
+    font-size: 28px;
+    font-weight: normal;
+    margin: 20px 0 0;
+    text-transform: uppercase;
+    text-indent: 0;
+}
+
+.plet p.NormaleconRientro a {
+    font-family: "UniversLTStd59UltraCondensed" !important;
+	color: #000;
+	text-decoration: none;
+    border: none;
+	transition: color .2s ease-in-out;
+   -moz-transition: color .2s ease-in-out;
+   -webkit-transition: color .2s ease-in-out;
+   -o-transition: color .2s ease-in-out;
+}
+
+.plet p.NormaleconRientro a:hover {
+	color: #F8B65B;
+}
+
+.plet p.Note {
+	color: #777777;
+    font-family: "UniversLTStd59UltraCondensed" !important;
+    font-size: 18px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.plet p.Note b {
+	color: #095C8F;
+	font-family: "UniversLTStd59UltraCondensed" !important;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.plet .supplementi-online {
+    border: 2px solid #F8B65B;
+    padding: 10px;
+    width: 50%;
+}
+
+.plet .supplementi-online p.Rubrica {
+    background: #F8B65B;
+	color: #FFF;
+	border-bottom: none;
+	padding: 3px 6px;
+	text-shadow: 0px -1px 0px #C70;
+    margin: 0;
+}
+
+.titoloSeparato
+{
+    font-size: 130%;
+    margin: 1.5em 1.5em 0 1.5em
+}
+.x-grid-group-title{
+    font-size:14px;
+   color:black;
+    
+}</style></head><body>
+<BODY><SPAN id=panel-1140-outerCt style="HEIGHT: 100%; WIDTH: 100%; DISPLAY: table">
+<DIV id=panel-1140-innerCt style="HEIGHT: 100%; VERTICAL-ALIGN: top; DISPLAY: table-cell">
+<DIV class=titoloSeparato>PUBBLICI ESERCIZI MINORI</DIV><SPAN class=documento>
+<DIV class=WordSection1>
+<DIV id=app-template>
+<P class=TitoloDocumento>Addetto alla sala</P>
+<P class=Rubrica>Commis di bar</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit1">PIANO FORMATIVO DI</P>
+<P class="MsoNormal app-tit1-dato">&nbsp;</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">1. Dati relativi al datore di lavoro</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Denominazione datore di lavoro: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Partita IVA: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Codice Fiscale: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Indirizzo sede legale: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Indirizzo unità lavorativa interessata: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Telefono: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Fax: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">e-mail: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Attività svolta: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">CCNL applicato: <SPAN class=app-dato>PUBBLICI ESERCIZI</SPAN></P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">2. Dati relativi al lavoratore</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Cognome e Nome: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Codice Fiscale: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Data e luogo di nascita: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Residenza: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Telefono <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Fax: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">e-mail: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Cittadinanza: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Scadenza permesso di soggiorno (nel caso di stranieri): <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Centro per l’impiego di riferimento: <SPAN class=app-dato></SPAN></P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">3. Dati relativi alle esperienze formative e di lavoro</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Titoli di studio posseduti: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Eventuale possesso di qualifica professionale: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Formazione extra scolastica: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Periodi di apprendistato svolti dal-al: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Esperienze lavorative pregresse: <SPAN class=app-dato></SPAN></P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">4. Aspetti normativi</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Data di assunzione: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Qualifica da conseguire: <SPAN class=app-dato>Commis di bar</SPAN></P>
+<P class="MsoNormal app-etichetta">Durata: <SPAN class=app-dato>3</SPAN></P>
+<P class="MsoNormal app-etichetta">Livello di inquadramento: <SPAN class=app-dato>6 stagionale</SPAN></P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">5. Tutor</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Tutor aziendale Sig./ra: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Codice Fiscale: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Livello di inquadramento: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Qualifica: <SPAN class=app-dato></SPAN></P>
+<P class="MsoNormal app-etichetta">Anni di esperienza: <SPAN class=app-dato></SPAN></P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">6. Contenuti formativi</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<P class="MsoNormal app-etichetta">Formazione di base: <SPAN class=app-dato>0</SPAN> ore</P>
+<P class="MsoNormal app-etichetta">Formazione tecnico professionale: <SPAN class=app-dato>12</SPAN> ore</P>
+<P class="MsoNormal app-etichetta app-nolinea">Competenze tecnico-professionali:</P>
+<P class="MsoNormal app-etichetta app-nolinea app-distanza">Competenze di settore</P>
+<P>Conoscere le caratteristiche del settore</P>
+<P>Conoscere e saper presentare il territorio in cui si opera</P>
+<P>Conoscere l’impresa di riferimento nei suoi aspetti organizzativi e gestionali ed il contesto in cui opera</P>
+<P>Saper operare in un contesto aziendale orientato alla qualità, all’accoglienza ed alla soddisfazione del cliente</P>
+<P>Conoscere e sapersi adeguare alle innovazioni di prodotto, di processo e di contesto</P>
+<P>Saper operare nel rispetto delle norme e delle buone prassi in materia di prevenzione e protezione dai rischi per la sicurezza sul lavoro e di prevenzione e protezione dagli incendi</P>
+<P class="MsoNormal app-etichetta app-nolinea app-distanza">Competenze di area</P>
+<P>Conoscere il ruolo della propria area di attività all’interno del processo di produzione e di erogazione del servizio</P>
+<P>Sapersi rapportare alle altre aree organizzative aziendali</P>
+<P>Conoscere e saper utilizzare gli strumenti e le tecnologie proprie dell’area di attività</P>
+<P>Conoscere e saper utilizzare il linguaggio tecnico appropriato</P>
+<P>Conoscere la merceologia degli alimenti e delle bevande</P>
+<P>Conoscere i principali piatti e vini locali e nazionali</P>
+<P>Conoscere e saper applicare le norme, le disposizioni e i criteri di autocontrollo in materia di igiene alimentare</P>
+<P>Conoscere gli elementi basilari di una lingua straniera in modo da sostenere conversazioni brevi ed elementari</P>
+<P>Conoscere e saper utilizzare le principali tecniche di comunicazione</P>
+<P class="MsoNormal app-etichetta app-nolinea app-distanza">Competenze di profilo</P>
+<P>Riconoscere il proprio ruolo all’interno del contesto aziendale e del processo di erogazione del servizio</P>
+<P>Saper adottare uno stile comunicativo adeguato al proprio ruolo</P>
+<P>Conoscere e saper applicare le procedure stabilite per l’approvvigionamento, l’uso, la conservazione e la rotazione di strumenti, dotazioni e materiali</P>
+<P>Saper organizzare gli spazi di lavoro in modo razionale, assicurando lo stato di efficienza e di pulizia di strumenti e dotazioni</P>
+<P>Saper operare nel rispetto delle disposizioni di tutela igienico sanitaria</P>
+<P>Conoscere e saper utilizzare i dispositivi di protezione individuale</P></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class="MsoNormal app-tit2">7. Articolazione e modalità di erogazione della formazione</P>
+<P class=MsoNormal>&nbsp;</P>
+<DIV class=app-dati>
+<TABLE class=app-tab>
+<CAPTION>Percorso Anno I</CAPTION>
+<THEAD>
+<TR>
+<TH>Unità di Competenza</TH>
+<TH>Teorica</TH>
+<TH>On The Job</TH>
+<TH>Ore Totali</TH></TR></THEAD>
+<TBODY>
+<TR>
+<TD class=app-tab-tit colSpan=5>Di base e trasversale</TD></TR>
+<TR>
+<TD class=app-tab-cella-tot-right>Totale di Base e Trasversale</TD>
+<TD class=app-tab-cella-tot>0</TD>
+<TD class=app-tab-cella-tot>0</TD>
+<TD class=app-tab-cella-tot>0</TD></TR>
+<TR>
+<TD class=app-tab-tit colSpan=5>Professionalizzante</TD></TR>
+<TR>
+<TD class=app-tab-cella-left>Conoscere le tecniche di programmazione e controllo delle scorte di derrate e relativo riordino in funzione dei consumi prevedibili. Applicare le procedure stabilite per l’approvvigionamento, l’uso, la conservazione e la rotazione di strumenti, dotazioni e materiali.</TD>
+<TD>2</TD>
+<TD>4</TD>
+<TD>6</TD></TR>
+<TR>
+<TD class=app-tab-cella-left>Relazioni interpersonali con i colleghi. Tecniche di comunicazione e gestione del cliente. Conoscenza della lingua inglese.</TD>
+<TD>2</TD>
+<TD>4</TD>
+<TD>6</TD></TR>
+<TR>
+<TD class=app-tab-cella-tot-right>Totale professionalizzante</TD>
+<TD class=app-tab-cella-tot>4</TD>
+<TD class=app-tab-cella-tot>8</TD>
+<TD class=app-tab-cella-tot>12</TD></TR>
+<TR>
+<TD class=app-tab-cella-tot-right>Totale complessivo</TD>
+<TD class=app-tab-cella-tot>4</TD>
+<TD class=app-tab-cella-tot>8</TD>
+<TD class=app-tab-cella-tot>12</TD></TR></TBODY></TABLE>
+<TABLE class=app-tab style="MARGIN-TOP: 20px">
+<CAPTION>Riepilogo</CAPTION>
+<THEAD>
+<TR>
+<TH colSpan=3>Interna</TH>
+<TH colSpan=3>Esterna</TH>
+<TH colSpan=3>Interna / Esterna</TH></TR></THEAD>
+<TBODY>
+<TR>
+<TD class=app-tab-sottotit>Anno</TD>
+<TD class=app-tab-sottotit>Teorica</TD>
+<TD class=app-tab-sottotit>On the job</TD>
+<TD class=app-tab-sottotit>Anno</TD>
+<TD class=app-tab-sottotit>Teorica</TD>
+<TD class=app-tab-sottotit>On the job</TD>
+<TD class=app-tab-sottotit>Anno</TD>
+<TD class=app-tab-sottotit>Teorica</TD>
+<TD class=app-tab-sottotit>On the job</TD></TR>
+<TR>
+<TD>I</TD>
+<TD>4</TD>
+<TD>8</TD>
+<TD>I</TD>
+<TD>0</TD>
+<TD>0</TD>
+<TD>I</TD>
+<TD>0</TD>
+<TD>0</TD></TR>
+<TR>
+<TD class=app-tab-cella-tot-right>Totali</TD>
+<TD class=app-tab-cella-tot>4</TD>
+<TD class=app-tab-cella-tot>8</TD>
+<TD class=app-tab-cella-tot-right>Totali</TD>
+<TD class=app-tab-cella-tot>0</TD>
+<TD class=app-tab-cella-tot>0</TD>
+<TD class=app-tab-cella-tot-right>Totali</TD>
+<TD class=app-tab-cella-tot>0</TD>
+<TD class=app-tab-cella-tot>0</TD></TR>
+<TR>
+<TD class=app-tab-cella-tot-right>Totali Complessivi</TD>
+<TD class=app-tab-cella-tot colSpan=2>12</TD>
+<TD class=app-tab-cella-tot-right>Totali Complessivi</TD>
+<TD class=app-tab-cella-tot colSpan=2>0</TD>
+<TD class=app-tab-cella-tot-right>Totali Complessivi</TD>
+<TD class=app-tab-cella-tot colSpan=2>0</TD></TR></TBODY></TABLE></DIV>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal>Luogo e Data</P>
+<P class=MsoNormal>&nbsp;</P>
+<P class=MsoNormal><SPAN class=firma-uno>Il Datore di lavoro<EM>[Timbro e Firma]</EM></SPAN><SPAN class=firma-due>Il Tutor</SPAN><SPAN class=firma-tre>Il lavoratore</SPAN></P></DIV></DIV></SPAN></DIV></SPAN></BODY></body></html>

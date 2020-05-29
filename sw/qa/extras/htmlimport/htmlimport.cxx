@@ -380,6 +380,13 @@ DECLARE_HTMLIMPORT_TEST(testTdf122789, "tdf122789.html")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(70), rFormats[0]->GetAttrSet().GetFrameSize().GetWidthPercent());
 }
 
+DECLARE_HTMLIMPORT_TEST(testTdf118579, "tdf118579.html")
+{
+    //Without the fix in place, the file fails to load
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+}
+
 DECLARE_HTMLIMPORT_TEST(testReqIfPageStyle, "reqif-page-style.xhtml")
 {
     // Without the accompanying fix in place, this test would have failed with
