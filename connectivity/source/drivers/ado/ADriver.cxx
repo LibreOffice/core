@@ -45,20 +45,32 @@ using namespace com::sun::star::sdbcx;
 ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
+    ,mnPreviousCOMInit(COINIT_APARTMENTTHREADED)
 {
-     if ( FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) )
+     HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+     if (FAILED(hr))
      {
          CoUninitialize();
-         int h = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-         (void)h;
-         ++h;
+         if (hr == RPC_E_CHANGED_MODE)
+         {
+             // the pb was it was already initialized with COINIT_MULTITHREADED
+             // remember it so we put it back at the end
+             mnPreviousCOMInit = COINIT_MULTITHREADED;
+         }
+
+         // let's try a second time
+         hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+         if (FAILED(hr))
+         {
+             std::abort();
+         }
      }
 }
 
 ODriver::~ODriver()
 {
     CoUninitialize();
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    CoInitializeEx(nullptr, mnPreviousCOMInit);
 }
 
 void ODriver::disposing()
