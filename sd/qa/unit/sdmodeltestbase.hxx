@@ -73,7 +73,7 @@ pFilterName: <node oor:Name="...">
 pTypeName: <prop oor:Name="Type">...</prop>
 nFormatType: <prop oor:name="Flags">...</prop>
 */
-FileFormat aFileFormats[] =
+static FileFormat aFileFormats[] =
 {
     { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
     { "ppt",  "MS PowerPoint 97", "impress_MS_PowerPoint_97", "sdfilt", PPT_FORMAT_TYPE },
