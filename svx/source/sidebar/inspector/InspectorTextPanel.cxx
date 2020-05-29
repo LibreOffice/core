@@ -44,11 +44,12 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(20));
 }
 
 void InspectorTextPanel::updateEntries(std::vector<OUString> store)
 {
+    mxListBoxStyles->clear();
     for (OUString& str : store)
         mxListBoxStyles->append_text(str);
 }
