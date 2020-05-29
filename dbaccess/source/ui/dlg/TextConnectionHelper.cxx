@@ -358,7 +358,7 @@ namespace dbaui
         if (nPos == -1)
             return rBox.get_active_text().copy(0);
 
-        if ( !( m_xTextSeparator.get() == &rBox && nPos == (rBox.get_count()-1) ) )
+        if ( m_xTextSeparator.get() != &rBox || nPos != (rBox.get_count()-1) )
             return OUString(
                 static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
         // somewhat strange ... translates for instance an "32" into " "

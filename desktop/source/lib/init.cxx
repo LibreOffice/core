@@ -5043,7 +5043,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
             int nFontWidth = aRect.BottomRight().X() + 1;
             int nFontHeight = aRect.BottomRight().Y() + 1;
 
-            if (!(nFontWidth > 0 && nFontHeight > 0))
+            if (nFontWidth <= 0 || nFontHeight <= 0)
                 break;
 
             if (*pFontWidth > 0 && *pFontHeight > 0)

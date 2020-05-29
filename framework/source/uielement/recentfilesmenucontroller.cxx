@@ -236,8 +236,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
 void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 {
-    if (!(( nIndex >= 0 ) &&
-        ( nIndex < sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() ))))
+    if (( nIndex < 0 ) ||
+        ( nIndex >= sal::static_int_cast<sal_Int32>( m_aRecentFilesItems.size() )))
         return;
 
     Sequence< PropertyValue > aArgsList(3);
@@ -360,7 +360,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
     const OUString aEntryArgStr( "entry=" );
     sal_Int32 nEntryArg = aURL.Complete.indexOf( aEntryArgStr, nQueryPart );
     sal_Int32 nEntryPos = nEntryArg + aEntryArgStr.getLength();
-    if (!(( nEntryArg > 0 ) && ( nEntryPos < aURL.Complete.getLength() )))
+    if (( nEntryArg <= 0 ) || ( nEntryPos >= aURL.Complete.getLength() ))
         return;
 
     sal_Int32 nAddArgs = aURL.Complete.indexOf( '&', nEntryPos );

@@ -274,7 +274,7 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
     if(nSpanCount & 0x0001)
         return;
 
-    if(!(nLine >= 0 && nLine < static_cast<sal_Int32>(mrBuffer.getHeight())))
+    if(nLine < 0 || nLine >= static_cast<sal_Int32>(mrBuffer.getHeight()))
         return;
 
     sal_uInt32 nXA(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rA.getX().getVal())))));
