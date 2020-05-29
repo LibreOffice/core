@@ -12,6 +12,8 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -50,6 +52,8 @@ public:
     void testSkipImages();
 #endif
     void testNestedFieldmark();
+    void verifyText13(char const*);
+    void testODF13();
     void testRedlineFlags();
     void testBulletAsImage();
     void testTextFormField();
@@ -71,6 +75,7 @@ public:
     CPPUNIT_TEST(testSkipImages);
 #endif
     CPPUNIT_TEST(testNestedFieldmark);
+    CPPUNIT_TEST(testODF13);
     CPPUNIT_TEST(testRedlineFlags);
     CPPUNIT_TEST(testBulletAsImage);
     CPPUNIT_TEST(testTextFormField);
@@ -936,6 +941,159 @@ void Test::testNestedFieldmark()
 
         verifyNestedFieldmark(rFilterName.first + " exported-reload", mxComponent);
         aTempFile.EnableKillingFile();
+    }
+}
+
+auto Test::verifyText13(char const*const pTestName) -> void
+{
+    // OFFICE-3789 style:header-first/style:footer-first
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Standard") >>= xPageStyle;
+    uno::Reference<text::XText> xHF(getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("Header first"), xHF->getString());
+    uno::Reference<text::XText> xFF(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("Footer first"), xFF->getString());
+    // OFFICE-3767 text:contextual-spacing
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    CPPUNIT_ASSERT_MESSAGE(pTestName, getProperty<bool>(xPara, "ParaContextMargin"));
+    // OFFICE-3776 meta:creator-initials
+    uno::Reference<text::XTextRange> xRun(getRun(xPara, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("Annotation"), getProperty<OUString>(xRun, "TextPortionType"));
+    uno::Reference<beans::XPropertySet> xComment(getProperty<uno::Reference<beans::XPropertySet>>(xRun, "TextField"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("dj"), getProperty<OUString>(xComment, "Initials"));
+    // OFFICE-3941 text:index-entry-link-start/text:index-entry-link-end
+    uno::Reference<text::XDocumentIndexesSupplier> xDIS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xDIS->getDocumentIndexes());
+    uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexReplace> xLevels(getProperty<uno::Reference<container::XIndexReplace>>(xIndex, "LevelFormat"));
+    uno::Sequence<beans::PropertyValues> format;
+    xLevels->getByIndex(1) >>= format; // 1-based?
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("TokenType"), format[0][0].Name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("TokenHyperlinkStart"), format[0][0].Value.get<OUString>());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("TokenType"), format[4][0].Name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, OUString("TokenHyperlinkEnd"), format[4][0].Value.get<OUString>());
+}
+
+// test ODF 1.3 new text document features
+void Test::testODF13()
+{
+    // import
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
+            "/sw/qa/extras/globalfilter/data/text13e.odt"),
+        "com.sun.star.text.TextDocument");
+
+    // check model
+    verifyText13("import");
+
+    Resetter _([]() {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+            return pBatch->commit();
+        });
+
+    {
+        // export ODF 1.3
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString("writer8");
+
+        utl::TempFile aTempFile;
+        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+        // check XML
+        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
+        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
+
+        // reload
+        mxComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // check model
+        verifyText13("1.3 reload");
+    }
+    {
+        // export ODF 1.2 extended
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
+        pBatch->commit();
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString("writer8");
+
+        utl::TempFile aTempFile;
+        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+        // check XML
+        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
+        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
+
+        // reload
+        mxComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // check model
+        verifyText13("1.2 Extended reload");
+    }
+    {
+        // export ODF 1.2
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
+        pBatch->commit();
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString("writer8");
+
+        utl::TempFile aTempFile;
+        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+        // check XML
+        xmlDocUniquePtr pContentXml = parseExportInternal(aTempFile.GetURL(), "content.xml");
+        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties", "contextual-spacing");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
+        xmlDocUniquePtr pStylesXml = parseExportInternal(aTempFile.GetURL(), "styles.xml");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
+
+        // don't reload - no point
     }
 }
 
