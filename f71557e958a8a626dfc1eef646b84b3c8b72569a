@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac346416_dfa3a020",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-29T12:39:38Z",
+      "side": 1,
+      "message": "if we go into this case, then nSelCount isn\u0027t set so it will be 0 when its checked later on so if I type into the entry, then delete the content, the checkboxes are all shown again, but the tree is left inactive",
+      "revId": "f71557e958a8a626dfc1eef646b84b3c8b72569a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63c478f9_7f53d744",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-05-29T12:39:38Z",
+      "side": 1,
+      "message": "down here",
+      "revId": "f71557e958a8a626dfc1eef646b84b3c8b72569a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
