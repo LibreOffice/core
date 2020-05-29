@@ -693,11 +693,16 @@ basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
                                  rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom());
 }
 
-void getPDFSelections(std::vector<basegfx::B2DRectangle> & rSubSelections,
-                      std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
-                      SdrObject* pObject)
+basegfx::B2DRectangle getPDFSelection(std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
+                                       SdrObject* pObject)
 {
-    basegfx::B2DSize aPdfPageSize = rVectorGraphicSearch->pageSize();
+    basegfx::B2DRectangle aSelection;
+
+    auto const & rTextRectangles = rVectorGraphicSearch->getTextRectangles();
+    if (rTextRectangles.empty())
+        return aSelection;
+
+    basegfx::B2DSize aPdfPageSizeHMM = rVectorGraphicSearch->pageSize();
 
     basegfx::B2DRectangle aObjectB2DRectHMM(b2DRectangleFromRectangle(pObject->GetLogicRect()));
 
@@ -705,24 +710,24 @@ void getPDFSelections(std::vector<basegfx::B2DRectangle> & rSubSelections,
     // coordinates to the page relative coordinates
     basegfx::B2DHomMatrix aB2DMatrix;
 
-    aB2DMatrix.scale(aObjectB2DRectHMM.getWidth() / aPdfPageSize.getX(),
-                     aObjectB2DRectHMM.getHeight() / aPdfPageSize.getY());
+    aB2DMatrix.scale(aObjectB2DRectHMM.getWidth() / aPdfPageSizeHMM.getX(),
+                     aObjectB2DRectHMM.getHeight() / aPdfPageSizeHMM.getY());
 
     aB2DMatrix.translate(aObjectB2DRectHMM.getMinX(), aObjectB2DRectHMM.getMinY());
 
-    basegfx::B2DRectangle aCombined;
 
     for (auto const & rRectangle : rVectorGraphicSearch->getTextRectangles())
     {
         basegfx::B2DRectangle aRectangle(rRectangle);
         aRectangle *= aB2DMatrix;
-        if (aCombined.isEmpty())
-            aCombined = aRectangle;
+
+        if (aSelection.isEmpty())
+            aSelection = aRectangle;
         else
-            aCombined.expand(aRectangle);
+            aSelection.expand(aRectangle);
     }
 
-    rSubSelections.push_back(aCombined);
+    return aSelection;
 }
 
 } // end namespace
@@ -851,7 +856,9 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     mpView->UnmarkAllObj(pPageView);
 
                     std::vector<basegfx::B2DRectangle> aSubSelections;
-                    getPDFSelections(aSubSelections, mpImpl->mpVectorGraphicSearch, mpObj);
+                    basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+                    if (!aSubSelection.isEmpty())
+                        aSubSelections.push_back(aSubSelection);
                     mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
                 }
             }
@@ -1252,7 +1259,10 @@ void SdOutliner::ProvideNextTextObject()
                             mpView->UnmarkAllObj(pPageView);
 
                             std::vector<basegfx::B2DRectangle> aSubSelections;
-                            getPDFSelections(aSubSelections, mpImpl->mpVectorGraphicSearch, mpObj);
+                            basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+                            if (!aSubSelection.isEmpty())
+                                aSubSelections.push_back(aSubSelection);
+
                             mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
 
                             mpDrawDocument->GetDocSh()->SetWaitCursor( false );
