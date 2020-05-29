@@ -41,6 +41,7 @@
 class GDIMetaFile;
 class SalInfoPrinter;
 struct SalPrinterQueueInfo;
+class QueueInfo;
 class SalPrinter;
 class VirtualDevice;
 enum class SalPrinterError;
@@ -51,30 +52,6 @@ namespace vcl {
 }
 
 namespace weld { class Window; }
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) QueueInfo
-{
-    friend class               Printer;
-
-private:
-    OUString                   maPrinterName;
-    OUString                   maDriver;
-    OUString                   maLocation;
-    OUString                   maComment;
-    PrintQueueFlags            mnStatus;
-    sal_uInt32                 mnJobs;
-
-public:
-                               QueueInfo();
-
-    const OUString&            GetPrinterName() const { return maPrinterName; }
-    const OUString&            GetDriver() const { return maDriver; }
-    const OUString&            GetLocation() const { return maLocation; }
-    const OUString&            GetComment() const { return maComment; }
-    PrintQueueFlags            GetStatus() const { return mnStatus; }
-    sal_uInt32                 GetJobs() const { return mnJobs; }
-};
-
 
 enum class PrinterTransparencyMode
 {
