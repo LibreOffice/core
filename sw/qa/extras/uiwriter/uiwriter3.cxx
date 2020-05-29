@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -22,6 +23,7 @@
 #include <fmtanchr.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/json_writer.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
@@ -1302,6 +1304,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
     sal_uInt16 assertPage = 3;
     sal_uInt16 currentPage = pShell->GetPageNumSeqNonEmpty();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
+{
+    load(DATA_DIRECTORY, "tdf133477.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Save the shape to a BMP.
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(mxComponentContext);
+    uno::Reference<lang::XComponent> xSourceDoc(getShape(1), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xSourceDoc);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "OutputStream", uno::makeAny(xOutputStream) },
+                                           { "FilterName", uno::makeAny(OUString("BMP")) } }));
+    xGraphicExporter->filter(aDescriptor);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Read it back and check the color of the first pixel.
+    Graphic aGraphic;
+    ReadGraphic(aStream, aGraphic);
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
