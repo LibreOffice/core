@@ -21,6 +21,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <cppuhelper/compbase.hxx>
 
+#include <vcl/PrinterOptions.hxx>
 #include <vcl/print.hxx>
 
 namespace basctl

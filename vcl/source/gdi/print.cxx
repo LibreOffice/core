@@ -23,6 +23,7 @@
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
 
+#include <vcl/PrinterOptions.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/virdev.hxx>
@@ -87,98 +88,6 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
         if ( ePaper != PAPER_USER )
             rJobSetup.ImplGetData().SetPaperFormat(ePaper);
     }
-}
-
-// PrinterOptions
-PrinterOptions::PrinterOptions() :
-    mbReduceTransparency( false ),
-    meReducedTransparencyMode( PrinterTransparencyMode::Auto ),
-    mbReduceGradients( false ),
-    meReducedGradientsMode( PrinterGradientMode::Stripes ),
-    mnReducedGradientStepCount( 64 ),
-    mbReduceBitmaps( false ),
-    meReducedBitmapMode( PrinterBitmapMode::Normal ),
-    mnReducedBitmapResolution( 200 ),
-    mbReducedBitmapsIncludeTransparency( true ),
-    mbConvertToGreyscales( false ),
-    mbPDFAsStandardPrintJobFormat( false )
-{
-}
-
-void PrinterOptions::ReadFromConfig( bool i_bFile )
-{
-    bool bSuccess = false;
-    // save old state in case something goes wrong
-    PrinterOptions aOldValues( *this );
-
-    // get the configuration service
-    css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider;
-    css::uno::Reference< css::container::XNameAccess > xConfigAccess;
-    try
-    {
-        // get service provider
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierarchical access name
-        try
-        {
-            xConfigProvider = css::configuration::theDefaultProvider::get( xContext );
-
-            css::uno::Sequence< css::uno::Any > aArgs(1);
-            css::beans::PropertyValue aVal;
-            aVal.Name = "nodepath";
-            if( i_bFile )
-                aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/File" );
-            else
-                aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
-            aArgs.getArray()[0] <<= aVal;
-            xConfigAccess.set(
-                    xConfigProvider->createInstanceWithArguments(
-                        "com.sun.star.configuration.ConfigurationAccess", aArgs ),
-                        css::uno::UNO_QUERY );
-            if( xConfigAccess.is() )
-            {
-                css::uno::Reference< css::beans::XPropertySet > xSet( xConfigAccess, css::uno::UNO_QUERY );
-                if( xSet.is() )
-                {
-                    sal_Int32 nValue = 0;
-                    bool  bValue = false;
-                    if( xSet->getPropertyValue("ReduceTransparency") >>= bValue )
-                        SetReduceTransparency( bValue );
-                    if( xSet->getPropertyValue("ReducedTransparencyMode") >>= nValue )
-                        SetReducedTransparencyMode( static_cast<PrinterTransparencyMode>(nValue) );
-                    if( xSet->getPropertyValue("ReduceGradients") >>= bValue )
-                        SetReduceGradients( bValue );
-                    if( xSet->getPropertyValue("ReducedGradientMode") >>= nValue )
-                        SetReducedGradientMode( static_cast<PrinterGradientMode>(nValue) );
-                    if( xSet->getPropertyValue("ReducedGradientStepCount") >>= nValue )
-                        SetReducedGradientStepCount( static_cast<sal_uInt16>(nValue) );
-                    if( xSet->getPropertyValue("ReduceBitmaps") >>= bValue )
-                        SetReduceBitmaps( bValue );
-                    if( xSet->getPropertyValue("ReducedBitmapMode") >>= nValue )
-                        SetReducedBitmapMode( static_cast<PrinterBitmapMode>(nValue) );
-                    if( xSet->getPropertyValue("ReducedBitmapResolution") >>= nValue )
-                        SetReducedBitmapResolution( static_cast<sal_uInt16>(nValue) );
-                    if( xSet->getPropertyValue("ReducedBitmapIncludesTransparency") >>= bValue )
-                        SetReducedBitmapIncludesTransparency( bValue );
-                    if( xSet->getPropertyValue("ConvertToGreyscales") >>= bValue )
-                        SetConvertToGreyscales( bValue );
-                    if( xSet->getPropertyValue("PDFAsStandardPrintJobFormat") >>= bValue )
-                        SetPDFAsStandardPrintJobFormat( bValue );
-
-                    bSuccess = true;
-                }
-            }
-        }
-        catch( const css::uno::Exception& )
-        {
-        }
-    }
-    catch( const css::lang::WrappedTargetException& )
-    {
-    }
-
-    if( ! bSuccess )
-        *this = aOldValues;
 }
 
 bool Printer::DrawTransformBitmapExDirect(

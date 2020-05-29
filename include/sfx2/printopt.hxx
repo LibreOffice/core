@@ -21,6 +21,7 @@
 #define INCLUDED_SFX2_PRINTOPT_HXX
 
 #include <sal/config.h>
+#include <vcl/PrinterOptions.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/tabdlg.hxx>
 #include <sal/types.h>

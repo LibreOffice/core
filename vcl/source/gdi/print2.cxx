@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/PrinterOptions.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/PrinterOptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vcl/print.hxx>
 #include <com/sun/star/uno/Any.hxx>
