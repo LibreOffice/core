@@ -45,20 +45,45 @@ using namespace com::sun::star::sdbcx;
 ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
+    ,mnPreviousCOMInit(COINIT_APARTMENTTHREADED)
+    ,mnNbCallCoInitializeExForReinit(0)
 {
-     if ( FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) )
+     HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+     if (FAILED(hr))
      {
+         if (hr != RPC_E_CHANGED_MODE)
+             std::abort();
+
+         // so we're in RPC_E_CHANGED_MODE case
+         // the pb was it was already initialized with COINIT_MULTITHREADED
+         // remember it so we put it back at the end
+         mnPreviousCOMInit = COINIT_MULTITHREADED;
+         // close this init
          CoUninitialize();
-         int h = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-         (void)h;
-         ++h;
+         // remember this so we initialize at least once
+         ++mnNbCallCoInitializeExForReinit;
+
+         // notice it can't return S_FALSE since we had a RPC_E_CHANGED_MODE
+         // so we must keep on unpacking nb of previous init until it returns S_TRUE
+         while ((hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) == RPC_E_CHANGED_MODE)
+         {
+             CoUninitialize();
+             ++mnNbCallCoInitializeExForReinit;
+         }
+         // but it could also finally fail
+         if (FAILED(hr))
+         {
+             std::abort();
+         }
      }
 }
 
 ODriver::~ODriver()
 {
     CoUninitialize();
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    // Put back all the inits, if there were, before the use of ADO
+    for (int i = 0; i < mnNbCallCoInitializeExForReinit; ++i)
+        CoInitializeEx(nullptr, mnPreviousCOMInit);
 }
 
 void ODriver::disposing()
