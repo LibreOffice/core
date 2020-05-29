@@ -46,12 +46,11 @@ typedef ::std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
 class ScRecursionHelper
 {
     typedef ::std::stack< ScFormulaCell* >  ScRecursionInIterationStack;
-    typedef ::std::vector< ScFormulaCell* > ScFGList;
     ScFormulaRecursionList              aRecursionFormulas;
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;
     ScRecursionInIterationStack         aRecursionInIterationStack;
-    ScFGList                            aFGList;
+    std::vector< ScFormulaCell* >       aFGList;
     // Flag list corresponding to aFGList to indicate whether each formula-group
     // is in a dependency evaluation mode or not.
     std::vector< bool >                 aInDependencyEvalMode;

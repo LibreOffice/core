@@ -101,11 +101,8 @@ private:
     void                insertSheet( const SheetInfoModel& rModel );
 
 private:
-    typedef RefVector< SheetInfo > SheetInfoVector;
-    SheetInfoVector     maSheetInfos;
-
-    typedef RefMap< OUString, SheetInfo, IgnoreCaseCompare > SheetInfoMap;
-    SheetInfoMap        maSheetInfosByName;
+    RefVector< SheetInfo >  maSheetInfos;
+    RefMap< OUString, SheetInfo, IgnoreCaseCompare >  maSheetInfosByName;
 };
 
 } // namespace xls

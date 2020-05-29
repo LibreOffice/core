@@ -126,8 +126,7 @@ private:
     void                importArray( SequenceInputStream& rStrm );
 
 private:
-    typedef ::std::vector< PivotCacheItem > CacheItemVector;
-    CacheItemVector     maItems;            /// All items of this list.
+    std::vector< PivotCacheItem >  maItems;            /// All items of this list.
 };
 
 struct PCFieldModel
@@ -450,11 +449,10 @@ private:
 private:
     typedef ::std::map< sal_Int32, OUString >    FragmentPathMap;
     typedef RefMap< sal_Int32, PivotCache >             PivotCacheMap;
-    typedef ::std::vector< sal_Int32 >                  PivotCacheIdVector;
 
-    FragmentPathMap     maFragmentPaths;
-    PivotCacheMap       maCaches;
-    PivotCacheIdVector  maCacheIds;
+    FragmentPathMap           maFragmentPaths;
+    PivotCacheMap             maCaches;
+    std::vector< sal_Int32 >  maCacheIds;
 };
 
 } // namespace xls

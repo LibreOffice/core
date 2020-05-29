@@ -443,7 +443,6 @@ private:
     typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
     typedef ::std::vector< ScHTMLEntry* >               ScHTMLEntryVector;
-    typedef ::std::map< ScHTMLPos, ScHTMLEntryVector >    ScHTMLEntryMap;
     typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
 
     /** Returns true, if the current cell does not contain an entry yet. */
@@ -527,7 +526,7 @@ private:
     ScRangeList         maUsedCells;        /// List of all used cells.
     EditEngine&         mrEditEngine;       /// Edit engine (from ScEEParser).
     std::vector<std::shared_ptr<ScEEParseEntry>>& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
-    ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
+    std::map< ScHTMLPos, ScHTMLEntryVector >      maEntryMap;         /// List of entries for each cell.
     ScHTMLEntryVector*  mpCurrEntryVector;  /// Current entry vector from map for faster access.
     ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
     ScSizeVec           maCumSizes[ 2 ];    /// Cumulated cell counts for each HTML table column/row.

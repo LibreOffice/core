@@ -59,17 +59,10 @@ struct PivotTableSources
         ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc );
     };
 
-    typedef std::vector<SelectedPages> SelectedPagesListType;
-
-    typedef std::vector<SheetSource>    SheetSourcesType;
-    typedef std::vector<DBSource>       DBSourcesType;
-    typedef std::vector<ServiceSource>  ServiceSourcesType;
-
-    SelectedPagesListType maSelectedPagesList;
-
-    SheetSourcesType    maSheetSources;
-    DBSourcesType       maDBSources;
-    ServiceSourcesType  maServiceSources;
+    std::vector<SelectedPages>  maSelectedPagesList;
+    std::vector<SheetSource>    maSheetSources;
+    std::vector<DBSource>       maDBSources;
+    std::vector<ServiceSource>  maServiceSources;
 
     PivotTableSources();
 

@@ -550,13 +550,9 @@ namespace sw
             }
 
             typedef std::pair<int32_t, bool> DirEntry;
-            typedef std::vector<DirEntry> DirChanges;
-
             typedef std::pair<sal_Int32, sal_uInt16> ScriptEntry;
-            typedef std::vector<ScriptEntry> ScriptChanges;
-
-            DirChanges aDirChanges;
-            ScriptChanges aScripts;
+            std::vector<DirEntry> aDirChanges;
+            std::vector<ScriptEntry> aScripts;
 
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
