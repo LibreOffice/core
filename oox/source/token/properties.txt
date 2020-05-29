@@ -454,6 +454,7 @@ ShadowFormat
 ShadowSizeX
 ShadowSizeY
 ShadowTransparence
+ShadowBlur
 ShadowXDistance
 ShadowYDistance
 Show
