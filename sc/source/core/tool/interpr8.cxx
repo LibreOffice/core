@@ -1241,7 +1241,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
 
     // required arguments
     double fPILevel = 0.0;
-    if ( nParamCount < 3 && !( nParamCount == 2 && eETSType == etsSeason ) )
+    if ( nParamCount < 3 && ( nParamCount != 2 || eETSType != etsSeason ) )
     {
         PushParameterExpected();
         return;
