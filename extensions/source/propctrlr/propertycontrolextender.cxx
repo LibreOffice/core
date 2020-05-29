@@ -78,8 +78,8 @@ namespace pcr
     void SAL_CALL PropertyControlExtender::keyPressed( const KeyEvent& _event )
     {
         OSL_ENSURE( _event.Source == m_pData->xControlWindow, "PropertyControlExtender::keyPressed: where does this come from?" );
-        if  (   !(( _event.KeyFunc == KeyFunction::DELETE )
-            &&  ( _event.Modifiers == 0 ))
+        if  ( ( _event.KeyFunc != KeyFunction::DELETE )
+            ||  ( _event.Modifiers != 0 )
             )
             return;
 

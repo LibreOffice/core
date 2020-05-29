@@ -718,7 +718,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key )
     }
     else // key should be enclosed in '{}'
     {
-        if ( sKeyCode.getLength() < 3 ||  !( sKeyCode[0] == '{' && sKeyCode[sKeyCode.getLength() - 1 ] == '}' ) )
+        if ( sKeyCode.getLength() < 3 || sKeyCode[0] != '{' || sKeyCode[sKeyCode.getLength() - 1 ] != '}' )
             throw uno::RuntimeException();
 
         sKeyCode = sKeyCode.copy(1, sKeyCode.getLength() - 2 );
