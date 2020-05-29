@@ -761,14 +761,14 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     if ( !xOrigInfo.is() )
                         throw uno::RuntimeException();
 
-                    uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
-                    for ( sal_Int32 nInd = 0; nInd < aPropertiesList.getLength(); nInd++ )
+                    const uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
+                    for ( const auto & p : aPropertiesList )
                     {
                         try
                         {
                             xTargetProps->setPropertyValue(
-                                aPropertiesList[nInd].Name,
-                                xOrigProps->getPropertyValue( aPropertiesList[nInd].Name ) );
+                                p.Name,
+                                xOrigProps->getPropertyValue( p.Name ) );
                         }
                         catch (const beans::PropertyVetoException&)
                         {

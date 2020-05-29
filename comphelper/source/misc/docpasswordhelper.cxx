@@ -119,16 +119,16 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, cons
         uno::Sequence< sal_Int8 > aHash;
         sal_Int32 nCount = 0;
 
-        for ( sal_Int32 nInd = 0; nInd < aInfo.getLength(); nInd++ )
+        for ( const auto & prop : aInfo )
         {
-            if ( aInfo[nInd].Name == "algorithm-name" )
-                aInfo[nInd].Value >>= sAlgorithm;
-            else if ( aInfo[nInd].Name == "salt" )
-                aInfo[nInd].Value >>= aSalt;
-            else if ( aInfo[nInd].Name == "iteration-count" )
-                aInfo[nInd].Value >>= nCount;
-            else if ( aInfo[nInd].Name == "hash" )
-                aInfo[nInd].Value >>= aHash;
+            if ( prop.Name == "algorithm-name" )
+                prop.Value >>= sAlgorithm;
+            else if ( prop.Name == "salt" )
+                prop.Value >>= aSalt;
+            else if ( prop.Name == "iteration-count" )
+                prop.Value >>= nCount;
+            else if ( prop.Name == "hash" )
+                prop.Value >>= aHash;
         }
 
         if ( sAlgorithm == "PBKDF2" && aSalt.hasElements() && nCount > 0 && aHash.hasElements() )

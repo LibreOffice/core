@@ -474,7 +474,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
             comphelper::getProcessComponentContext()));
 
     // fire up certificate chooser dialog - user can multi-select!
-    uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
+    const uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
         xSigner->chooseEncryptionCertificate();
 
     if (!xSignCertificates.hasElements())
@@ -493,12 +493,11 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     ctx->setArmor(false);
 
-    const uno::Reference< security::XCertificate >* pCerts=xSignCertificates.getConstArray();
-    for (sal_uInt32 i = 0, nNum = xSignCertificates.getLength(); i < nNum; i++, pCerts++)
+    for (const auto & cert : xSignCertificates)
     {
         uno::Sequence < sal_Int8 > aKeyID;
-        if (pCerts->is())
-            aKeyID = (*pCerts)->getSHA1Thumbprint();
+        if (cert.is())
+            aKeyID = cert->getSHA1Thumbprint();
 
         std::vector<GpgME::Key> keys;
         keys.push_back(
@@ -526,7 +525,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         if(crypt_res.error() || !len)
             throw lang::IllegalArgumentException(
                 "Not a suitable key, or failed to encrypt.",
-                css::uno::Reference<css::uno::XInterface>(), i);
+                css::uno::Reference<css::uno::XInterface>(), -1);
 
         uno::Sequence < sal_Int8 > aCipherValue(len);
         result = cipher.seek(0,SEEK_SET);
