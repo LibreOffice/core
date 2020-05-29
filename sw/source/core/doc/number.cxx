@@ -1226,8 +1226,7 @@ namespace numfunc
     void SwDefBulletConfig::LoadConfig()
     {
         uno::Sequence<OUString> aPropNames = GetPropNames();
-        uno::Sequence<uno::Any> aValues =
-                                                    GetProperties( aPropNames );
+        uno::Sequence<uno::Any> aValues = GetProperties( aPropNames );
         const uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
