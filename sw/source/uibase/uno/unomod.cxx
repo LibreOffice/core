@@ -617,7 +617,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
         {
             sal_Int32 nTmp = 0;
-            if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
+            if(!(rValue >>= nTmp)  ||  (0 > nTmp  ||  nTmp >= 100))
                 throw IllegalArgumentException();
             mpViewOption->SetDivisionX( static_cast<short>(nTmp) );
         }
@@ -625,7 +625,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
         {
             sal_Int32 nTmp = 0;
-            if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
+            if(!(rValue >>= nTmp)  ||  (0 > nTmp  ||  nTmp >= 100))
                 throw IllegalArgumentException();
             mpViewOption->SetDivisionY( static_cast<short>(nTmp) );
         }

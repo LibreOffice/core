@@ -1229,8 +1229,8 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
 
     const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
     if(!pBeginAttrib ||
-       !(pBeginAttrib->nStart <= aSelection.nStartPos &&
-         pBeginAttrib->nEnd >= aSelection.nEndPos))
+         pBeginAttrib->nStart > aSelection.nStartPos ||
+         pBeginAttrib->nEnd < aSelection.nEndPos)
         return;
 
     //current item has been found
