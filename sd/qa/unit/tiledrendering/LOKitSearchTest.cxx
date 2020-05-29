@@ -24,9 +24,13 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/scheduler.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <unomodel.hxx>
+
+#include <sdpage.hxx>
+#include <svx/svdograf.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -38,7 +42,7 @@ private:
     static constexpr char DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
 
 public:
-    LOKitSearchTest() {}
+    LOKitSearchTest() = default;
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -49,6 +53,8 @@ public:
     void testSearchAllNotifications();
     void testSearchAllFollowedBySearch();
     void testDontSearchInMasterPages();
+    void testSearchInPDFNonExisting();
+    void testSearchInPDF();
 
     CPPUNIT_TEST_SUITE(LOKitSearchTest);
     CPPUNIT_TEST(testSearch);
@@ -57,6 +63,8 @@ public:
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testSearchAllFollowedBySearch);
     CPPUNIT_TEST(testDontSearchInMasterPages);
+    CPPUNIT_TEST(testSearchInPDFNonExisting);
+    CPPUNIT_TEST(testSearchInPDF);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -96,9 +104,11 @@ LOKitSearchTest::createDoc(const char* pName, const uno::Sequence<beans::Propert
 {
     if (mxComponent.is())
         mxComponent->dispose();
+
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
-                                      + OUString::createFromAscii(pName),
-                                  "com.sun.star.presentation.PresentationDocument");
+                                  + OUString::createFromAscii(pName));
+
+    CPPUNIT_ASSERT(mxComponent.is());
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering(rArguments);
@@ -109,15 +119,20 @@ namespace
 {
 void lcl_search(const OUString& rKey, bool bFindAll = false)
 {
+    Scheduler::ProcessEventsToIdle();
+    SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
+
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", uno::makeAny(rKey) },
         { "SearchItem.Backward", uno::makeAny(false) },
-        { "SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(
-                                    bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND)) },
+        { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
     }));
+
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
 }
-}
+
+} // end anonymous namespace
 
 void LOKitSearchTest::testSearch()
 {
@@ -226,6 +241,72 @@ void LOKitSearchTest::testDontSearchInMasterPages()
     // the master page)
     lcl_search("date");
     CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
+}
+
+void LOKitSearchTest::testSearchInPDFNonExisting()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+    CPPUNIT_ASSERT(pGraphicObject);
+
+    Graphic aGraphic = pGraphicObject->GetGraphic();
+    auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    lcl_search("NonExisting");
+
+    CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
+}
+
+void LOKitSearchTest::testSearchInPDF()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+    CPPUNIT_ASSERT(pGraphicObject);
+
+    Graphic aGraphic = pGraphicObject->GetGraphic();
+    auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+
+    CPPUNIT_ASSERT_EQUAL(long(3763), mpCallbackRecorder->m_aSelection[0].Left());
+    CPPUNIT_ASSERT_EQUAL(long(1331), mpCallbackRecorder->m_aSelection[0].Top());
+    CPPUNIT_ASSERT_EQUAL(long(1433), mpCallbackRecorder->m_aSelection[0].GetWidth());
+    CPPUNIT_ASSERT_EQUAL(long(484), mpCallbackRecorder->m_aSelection[0].GetHeight());
+
+    lcl_search("ABC");
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LOKitSearchTest);
