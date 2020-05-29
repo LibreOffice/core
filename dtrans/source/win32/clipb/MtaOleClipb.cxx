@@ -200,10 +200,10 @@ public:
     {
         /*
             we only call CoUninitialize when
-            CoInitialize returned S_FALSE, what
+            CoInitializeEx returned S_FALSE, what
             means that com was already initialize
             for that thread so we keep the balance
-            if CoInitialize returned S_OK what means
+            if CoInitializeEx returned S_OK what means
             com was not yet initialized we better
             let com initialized or we may run into
             the realm of undefined behaviour
@@ -678,7 +678,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
     CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );
     OSL_ASSERT( nullptr != pInst );
 
-    CoInitialize( nullptr );
+    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
 
     // assuming we don't need a lock for
     // a boolean variable like m_bRun...
