@@ -37,6 +37,7 @@ public:
     bool search(OUString const& rSearchString);
     basegfx::B2DSize pageSize();
     bool next();
+    bool previous();
     int index();
     std::vector<basegfx::B2DRectangle> getTextRectangles();
 };
