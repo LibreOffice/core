@@ -244,9 +244,9 @@ namespace basegfx
         // add defined offsets after rotation
         if(!fTools::equal(0.5, rOffset.getX()) || !fTools::equal(0.5, rOffset.getY()))
         {
-            // use scaled target size
-            fTargetOffsetX += (rOffset.getX() - 0.5) * fTargetSizeX;
-            fTargetOffsetY += (rOffset.getY() - 0.5) * fTargetSizeY;
+            // use original target size
+            fTargetOffsetX += (rOffset.getX() - 0.5) * rTargetRange.getWidth();
+            fTargetOffsetY += (rOffset.getY() - 0.5) * rTargetRange.getHeight();
         }
 
         // add object translate
