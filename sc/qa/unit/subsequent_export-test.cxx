@@ -27,6 +27,8 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <scitems.hxx>
+#include <attrib.hxx>
+#include <stlpool.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
@@ -127,6 +129,7 @@ public:
     void testCustomColumnWidthExportXLSX();
 #endif
     void testXfDefaultValuesXLSX();
+    void testODF13();
     void testColumnWidthResaveXLSX();
 #if HAVE_MORE_FONTS
     void testColumnWidthExportFromODStoXLSX();
@@ -283,6 +286,7 @@ public:
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
 #endif
     CPPUNIT_TEST(testXfDefaultValuesXLSX);
+    CPPUNIT_TEST(testODF13);
     CPPUNIT_TEST(testColumnWidthResaveXLSX);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
@@ -424,6 +428,7 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
         { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") },
         { BAD_CAST("loext"), BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0") },
+        { BAD_CAST("tableooo"), BAD_CAST("http://openoffice.org/2009/table") },
         { BAD_CAST("ContentType"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types") },
         { BAD_CAST("x14"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main") },
         { BAD_CAST("xm"), BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main") },
@@ -978,6 +983,133 @@ void ScExportTest::testXfDefaultValuesXLSX()
     assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf", 14);
 
     xShell->DoClose();
+}
+
+namespace {
+
+// TODO where to put this?
+class Resetter
+{
+private:
+    std::function<void ()> m_Func;
+
+public:
+    Resetter(std::function<void ()> const& rFunc)
+        : m_Func(rFunc)
+    {
+    }
+    ~Resetter()
+    {
+        try
+        {
+            m_Func();
+        }
+        catch (...) // has to be reliable
+        {
+            fprintf(stderr, "resetter failed with exception\n");
+            abort();
+        }
+    }
+};
+
+} // namespace
+
+static auto verifySpreadsheet13(char const*const pTestName, ScDocShellRef& pShell) -> void
+{
+    ScDocument const& rDoc(pShell->GetDocument());
+    // OFFICE-2173 table:tab-color
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, Color(0xff3838), rDoc.GetTabBgColor(0));
+    // OFFICE-3857 table:scale-to-X/table:scale-to-Y
+    OUString styleName = rDoc.GetPageStyle(0);
+    ScStyleSheetPool * pStylePool = rDoc.GetStyleSheetPool();
+    SfxStyleSheetBase * pStyleSheet = pStylePool->Find(styleName, SfxStyleFamily::Page);
+    CPPUNIT_ASSERT_MESSAGE(pTestName, pStyleSheet);
+
+    SfxItemSet const& rSet = pStyleSheet->GetItemSet();
+    ScPageScaleToItem const& rItem(rSet.Get(ATTR_PAGE_SCALETO));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, sal_uInt16(2), rItem.GetWidth());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, sal_uInt16(3), rItem.GetHeight());
+}
+
+void ScExportTest::testODF13()
+{
+    // import
+    ScDocShellRef pShell = loadDoc("spreadsheet13e.", FORMAT_ODS);
+
+    // check model
+    verifySpreadsheet13("import", pShell);
+
+    Resetter _([]() {
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+            return pBatch->commit();
+        });
+
+    {
+        // export ODF 1.3
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+
+        std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*pShell), FORMAT_ODS);
+
+        // check XML
+        xmlDocUniquePtr pContentXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:table-properties[@table:tab-color='#ff3838']");
+        xmlDocUniquePtr pStylesXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "styles.xml");
+        assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties[@style:scale-to-X='2']");
+        assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties[@style:scale-to-Y='3']");
+
+        // reload
+        pShell = load(pXPathFile->GetURL(), "calc8", OUString(), OUString(), ODS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+
+        // check model
+        verifySpreadsheet13("1.3 reload", pShell);
+    }
+    {
+        // export ODF 1.2 Extended
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
+        pBatch->commit();
+
+        std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::saveAs(&(*pShell), FORMAT_ODS);
+        pShell->DoClose();
+
+        // check XML
+        xmlDocUniquePtr pContentXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:table-properties[@tableooo:tab-color='#ff3838']");
+        xmlDocUniquePtr pStylesXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "styles.xml");
+        assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties[@loext:scale-to-X='2']");
+        assertXPath(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties[@loext:scale-to-Y='3']");
+
+        // reload
+        pShell = load(pXPathFile->GetURL(), "calc8", OUString(), OUString(), ODS_FORMAT_TYPE, SotClipboardFormatId::STARCALC_8);
+
+        // check model
+        verifySpreadsheet13("1.2 Extended reload", pShell);
+    }
+    {
+        // export ODF 1.2
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
+        pBatch->commit();
+
+        std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::saveAs(&(*pShell), FORMAT_ODS);
+        pShell->DoClose();
+
+        // check XML
+        xmlDocUniquePtr pContentXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:table-properties", "tab-color");
+        xmlDocUniquePtr pStylesXml = XPathHelper::parseExport(pXPathFile, m_xSFactory, "styles.xml");
+        assertXPathNoAttribute(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout[1]/style:page-layout-properties", "scale-to-X");
+        assertXPathNoAttribute(pStylesXml, "/office:document-styles/office:automatic-styles/style:page-layout[1]/style:page-layout-properties", "scale-to-Y");
+
+        // don't reload - no point
+    }
 }
 
 void ScExportTest::testColumnWidthResaveXLSX()
