@@ -20,6 +20,7 @@
 #include <svtools/prnsetup.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <vcl/event.hxx>
