@@ -541,7 +541,7 @@ int ScModelObj::getParts()
 int ScModelObj::getPart()
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    return pViewData->GetViewShell()->getPart();
+    return pViewData ? pViewData->GetViewShell()->getPart() : 0;
 }
 
 OUString ScModelObj::getPartInfo( int nPart )
