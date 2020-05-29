@@ -31,6 +31,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>

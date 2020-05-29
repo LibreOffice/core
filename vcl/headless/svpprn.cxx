@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <printerinfomanager.hxx>
 
 #include <jobset.h>

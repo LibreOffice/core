@@ -32,6 +32,7 @@
 #include <hintids.hxx>
 #include <swmodule.hxx>
 
+#include <vcl/QueueInfo.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/temporary.hxx>
 #include <svl/itemset.hxx>
