@@ -19,6 +19,10 @@
 
 #include <algorithm>
 
+/* TODO: Use round kernel instead of square one.
+   This would make the result more natural, e.g. not making rounded square out of circle.
+ */
+
 namespace
 {
 struct FilterSharedData

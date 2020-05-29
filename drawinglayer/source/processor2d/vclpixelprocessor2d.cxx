@@ -1022,6 +1022,10 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
 void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     const primitive2d::SoftEdgePrimitive2D& rCandidate)
 {
+    // TODO: don't limit the object at view range. This is needed to not blur objects at window
+    // borders, where they don't end. Ideally, process the full object once at maximal reasonable
+    // resolution, and store the resulting alpha mask in primitive's cache; then reuse it later,
+    // applying the transform.
     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
     aRange.transform(maCurrentTransformation);
     basegfx::B2DVector aRadiusVector(rCandidate.getRadius(), 0);
