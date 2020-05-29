@@ -126,9 +126,9 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
     // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
-    bool bInsOutlineIdx = !(
-            rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() < nNd &&
-            nNd < rNds.GetEndOfRedlines().GetIndex() );
+    bool bInsOutlineIdx = (
+            rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() >= nNd ||
+            nNd >= rNds.GetEndOfRedlines().GetIndex() );
 
     if( &rNds == this ) // if in the same node array -> move
     {
@@ -478,9 +478,9 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     // NEVER include nodes from the RedLineArea
                     sal_uLong nNd = aIdx.GetIndex();
-                    bool bInsOutlineIdx = !( rNodes.GetEndOfRedlines().
-                            StartOfSectionNode()->GetIndex() < nNd &&
-                            nNd < rNodes.GetEndOfRedlines().GetIndex() );
+                    bool bInsOutlineIdx = ( rNodes.GetEndOfRedlines().
+                            StartOfSectionNode()->GetIndex() >= nNd ||
+                            nNd >= rNodes.GetEndOfRedlines().GetIndex() );
 
                     if( bNewFrames )
                         // delete all frames

@@ -2727,8 +2727,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 }
 
                 if(  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !(nId & USER_FMT) &&
-                    !( RES_POOLCHR_HTML_BEGIN <= nId &&
-                          nId < RES_POOLCHR_HTML_END ) &&
+                    ( RES_POOLCHR_HTML_BEGIN > nId || nId >= RES_POOLCHR_HTML_END ) &&
                     RES_POOLCHR_INET_NORMAL != nId &&
                     RES_POOLCHR_INET_VISIT != nId &&
                     RES_POOLCHR_FOOTNOTE  != nId &&

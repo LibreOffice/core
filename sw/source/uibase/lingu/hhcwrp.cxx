@@ -194,7 +194,7 @@ void SwHHCWrapper::HandleNewUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd )
 {
     OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
-    if (!(0 <= nUnitStart && nUnitStart <= nUnitEnd))
+    if (0 > nUnitStart || nUnitStart > nUnitEnd)
         return;
 
     lcl_ActivateTextShell( m_rWrtShell );
@@ -357,7 +357,7 @@ void SwHHCWrapper::ReplaceUnit(
          LanguageType *pNewUnitLanguage )
 {
     OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
-    if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))
+    if (nUnitStart < 0 || nUnitEnd >= nUnitStart)
         return;
 
     lcl_ActivateTextShell( m_rWrtShell );

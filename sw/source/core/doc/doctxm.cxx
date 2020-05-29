@@ -825,9 +825,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             const SwContentNode* pNdAfterTOX = pSectNd->GetNodes().GoNext( &aIdx );
             const SwAttrSet& aNdAttrSet = pNdAfterTOX->GetSwAttrSet();
             const SvxBreak eBreak = aNdAttrSet.GetBreak().GetBreak();
-            if ( !( eBreak == SvxBreak::PageBefore ||
-                    eBreak == SvxBreak::PageBoth )
-               )
+            if ( eBreak != SvxBreak::PageBefore && eBreak != SvxBreak::PageBoth )
             {
                 pDefaultPageDesc = pNdAfterTOX->FindPageDesc();
             }
