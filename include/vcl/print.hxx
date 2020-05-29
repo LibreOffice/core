@@ -29,6 +29,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/PrinterSupport.hxx>
+#include <vcl/PrinterTransparencyMode.hxx>
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -52,13 +53,6 @@ namespace vcl {
 }
 
 namespace weld { class Window; }
-
-enum class PrinterTransparencyMode
-{
-    Auto = 0,
-    NONE = 1
-};
-
 
 enum class PrinterGradientMode
 {
