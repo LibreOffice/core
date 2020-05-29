@@ -83,6 +83,10 @@ Reference< XTransferable > CWinClipbImpl::getContents( )
             return m_pCurrentClipContent->m_XTransferable;
         }
 
+        // Content cached?
+        if (m_foreignContent.is())
+            return m_foreignContent;
+
         // release the mutex, so that the variable may be
         // changed by other threads
     }
@@ -101,6 +105,9 @@ Reference< XTransferable > CWinClipbImpl::getContents( )
 
         // remember pIDo destroys itself due to the smart pointer
         rClipContent = CDOTransferable::create( m_pWinClipboard->m_xContext, pIDo );
+
+        MutexGuard aGuard(m_ClipContentMutex);
+        m_foreignContent = rClipContent;
     }
 
     return rClipContent;
@@ -116,6 +123,8 @@ void CWinClipbImpl::setContents(
     {
         {
             MutexGuard aGuard(m_ClipContentMutex);
+
+            m_foreignContent.clear();
 
             m_pCurrentClipContent
                 = new CXNotifyingDataObject(CDTransObjFactory::createDataObjFromTransferable(
@@ -176,7 +185,10 @@ void WINAPI CWinClipbImpl::onClipboardContentChanged()
 
     // reassociation to instance through static member
     if ( nullptr != s_pCWinClipbImpl )
+    {
+        s_pCWinClipbImpl->m_foreignContent.clear();
         s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );
+    }
 }
 
 void CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCaller )
