@@ -19,17 +19,27 @@
 
 #include "InspectorTextPanel.hxx"
 
+#include <sfx2/dispatch.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/weldutils.hxx>
+#include <svx/svxids.hrc>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 using namespace css;
+
+using namespace css::uno;
 
 namespace svx::sidebar
 {
 VclPtr<vcl::Window>
 InspectorTextPanel::Create(vcl::Window* pParent,
-                           const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                           SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to InspectorTextPanel::Create",
@@ -38,16 +48,22 @@ InspectorTextPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to InspectorTextPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame);
+    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame, pBindings);
 }
 
 InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
-                                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                       SfxBindings* pBindings)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
-    , mxFont(m_xBuilder->weld_toolbar("font"))
-    , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
-    , mxFontHeight(m_xBuilder->weld_toolbar("fontheight"))
-    , mxFontHeightDispatch(new ToolbarUnoDispatcher(*mxFontHeight, *m_xBuilder, rxFrame))
+    , mxproperty_1(m_xBuilder->weld_label("property1"))
+    , mxproperty_2(m_xBuilder->weld_label("property2"))
+    , mxproperty_3(m_xBuilder->weld_label("property3"))
+    , mxproperty_4(m_xBuilder->weld_label("property4"))
+    , mxproperty_5(m_xBuilder->weld_label("property5"))
+    , mxproperty_6(m_xBuilder->weld_label("property6"))
+    , maParagraphStyle(SID_STYLE_FAMILY, *pBindings, *this)
+    , maCharacterStyle(SID_ATTR_CHAR, *pBindings, *this)
+    , mpBindings(pBindings)
 {
 }
 
@@ -55,13 +71,48 @@ InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
 
 void InspectorTextPanel::dispose()
 {
-    mxFontHeightDispatch.reset();
-    mxFontDispatch.reset();
+    mxproperty_1.reset();
+    mxproperty_2.reset();
+    mxproperty_3.reset();
+    mxproperty_4.reset();
+    mxproperty_5.reset();
+    mxproperty_6.reset();
 
-    mxFontHeight.reset();
-    mxFont.reset();
+    maParagraphStyle.dispose();
+    maCharacterStyle.dispose();
 
     PanelLayout::dispose();
+}
+
+void InspectorTextPanel::DataChanged(const DataChangedEvent&) {}
+
+void InspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
+                                          const SfxPoolItem* pState)
+{
+    SfxObjectShell* pDocShell = SfxObjectShell::Current();
+    SfxStyleSheetBasePool* pStyleSheetPool;
+    pStyleSheetPool = pDocShell->GetStyleSheetPool();
+
+    auto xIter = pStyleSheetPool->CreateIterator(
+        SfxStyleFamily::Para, SfxStyleSearchBits::Used); // All the applied Paragraph styles
+    SfxStyleSheetBase* StyleNames = nullptr;
+    StyleNames = xIter->First();
+    while (StyleNames)
+    {
+        OUString name = StyleNames->GetName();
+        property_dump[idx++]->set_label(name);
+        StyleNames = xIter->Next();
+    }
+
+    xIter = pStyleSheetPool->CreateIterator(
+        SfxStyleFamily::Char, SfxStyleSearchBits::Used); // All the applied Character styles
+    StyleNames = xIter->First();
+    while (StyleNames)
+    {
+        OUString name = StyleNames->GetName();
+        property_dump[idx++]->set_label(name);
+        StyleNames = xIter->Next();
+    }
 }
 
 void InspectorTextPanel::HandleContextChange(const vcl::EnumContext& rContext)
@@ -71,7 +122,6 @@ void InspectorTextPanel::HandleContextChange(const vcl::EnumContext& rContext)
 
     maContext = rContext;
 }
-
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
