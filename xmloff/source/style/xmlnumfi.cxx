@@ -735,7 +735,7 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
         return true;
 
     //  percent sign must be used without quotes for percentage styles only
-    if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
+    if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && ( cChar == '%' || cChar == u'‰' ) )
         return true;
 
     //  don't put quotes around single parentheses (often used for negative numbers)
@@ -772,6 +772,10 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
 
         OUString aString( rContent.getStr() );
         sal_Int32 nPos = aString.indexOf( '%' );
+        if ( nPos < 0 )
+        {
+            nPos = aString.indexOf( u'‰' ); // per mille
+        }
         if ( nPos >= 0 )
         {
             if ( nPos + 1 < nLength )
