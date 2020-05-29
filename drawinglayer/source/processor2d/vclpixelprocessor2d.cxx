@@ -989,6 +989,9 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         // remember last OutDev and set to content
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
+        // We don't need antialiased mask here, which would only make effect thicker
+        const auto aPrevAA = mpOutputDevice->GetAntialiasing();
+        mpOutputDevice->SetAntialiasing(AntialiasingFlags::NONE);
         mpOutputDevice->Erase();
         process(rCandidate);
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
@@ -996,6 +999,7 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
                                      static_cast<long>(std::ceil(aRange.getMaxX())),
                                      static_cast<long>(std::ceil(aRange.getMaxY())));
         BitmapEx bmpEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+        mpOutputDevice->SetAntialiasing(aPrevAA);
 
         AlphaMask mask
             = ProcessAndBlurAlphaMask(bmpEx.GetAlpha(), fBlurRadius, fBlurRadius, nTransparency);
@@ -1033,6 +1037,8 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         OutputDevice* pLastOutputDevice = mpOutputDevice;
         mpOutputDevice = &aBufferDevice.getContent();
         mpOutputDevice->Erase();
+        // Since the effect converts all children to bitmap, we can't disable antialiasing here,
+        // because it would result in poor quality in areas not affected by the effect
         process(rCandidate);
 
         const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
