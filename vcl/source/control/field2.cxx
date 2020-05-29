@@ -944,7 +944,7 @@ static ExtDateFieldFormat ImplGetExtFormat( DateOrder eOld )
 static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 {
     sal_Int32 i1 = 0;
-    while (i1 != rStr.getLength() && !(rStr[i1] >= '0' && rStr[i1] <= '9')) {
+    while (i1 != rStr.getLength() && (rStr[i1] < '0' || rStr[i1] > '9')) {
         ++i1;
     }
     sal_Int32 i2 = i1;
