@@ -310,7 +310,8 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
         case WindowType::LONGCURRENCYFIELD:
-        case WindowType::SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
+        case WindowType::SPINFIELD:
+        case WindowType::FORMATTEDFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
         case WindowType::TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
         case WindowType::STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
@@ -410,6 +411,7 @@ OUString Window::getDefaultAccessibleName() const
         case WindowType::DATEFIELD:
         case WindowType::TIMEFIELD:
         case WindowType::SPINFIELD:
+        case WindowType::FORMATTEDFIELD:
 
         case WindowType::COMBOBOX:
         case WindowType::LISTBOX:
