@@ -50,14 +50,12 @@ public:
     void        FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) const;
 };
 
-typedef ::std::vector<ScDPGroupItem> ScDPGroupItemVec;
-
 class ScDPGroupDimension
 {
     long                        nSourceDim;
     long                        nGroupDim;
-    OUString               aGroupName;
-    ScDPGroupItemVec            aItems;
+    OUString                    aGroupName;
+    std::vector<ScDPGroupItem>  aItems;
     mutable std::vector<SCROW> maMemberEntries;
     bool mbDateDimension;
 public:
@@ -86,8 +84,6 @@ public:
     void SetDateDimension();
     bool IsDateDimension() const { return mbDateDimension;}
 };
-
-typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
@@ -120,7 +116,8 @@ class ScDPGroupTableData final : public ScDPTableData
 {
     std::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
-    ScDPGroupDimensionVec   aGroups;
+    std::vector<ScDPGroupDimension>
+                            aGroups;
     std::unique_ptr<ScDPNumGroupDimension[]>
                             pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;

@@ -62,8 +62,6 @@ using namespace ::com::sun::star::util;
 #define TIMEOUT_FIRST       300
 #define TIMEOUT_UPDATING     20
 
-typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
-
 struct SfxFoundCache_Impl
 {
     sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
@@ -121,7 +119,8 @@ public:
     bool                    bInNextJob;     // for Assertions
     bool                    bFirstRound;    // First round in Update
     sal_uInt16              nOwnRegLevel;   // Counts the real Locks, except those of the Super Bindings
-    InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
+    std::unordered_map< sal_uInt16, bool >
+                            m_aInvalidateSlots; // store slots which are invalidated while in update
 };
 
 SfxBindings::SfxBindings()

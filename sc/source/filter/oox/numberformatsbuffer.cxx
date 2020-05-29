@@ -2048,8 +2048,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         aBuiltinVec.push_back( aMIt->second );
 
     // insert the default formats in the format map (in reverse order from default table to system locale)
-    typedef ::std::map< sal_uInt32, sal_uInt32 > ReuseMap;
-    ReuseMap aReuseMap;
+    std::map< sal_uInt32, sal_uInt32 > aReuseMap;
     for( BuiltinVec::reverse_iterator aVIt = aBuiltinVec.rbegin(), aVEnd = aBuiltinVec.rend(); aVIt != aVEnd; ++aVIt )
     {
         // do not put the current system locale for default table

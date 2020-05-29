@@ -30,15 +30,15 @@
 #include "vbapalette.hxx"
 #include <document.hxx>
 
-typedef std::map< sal_Int32, sal_Int32 >  PatternMap;
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlPattern;
+
 static const char BACKCOLOR[] = "CellBackColor";
 static const char PATTERN[] = "Pattern";
 static const char PATTERNCOLOR[] = "PatternColor";
 
-static PatternMap aPatternMap {
+static std::map< sal_Int32, sal_Int32 > aPatternMap {
     { xlPatternAutomatic, 0 },
     { xlPatternChecker, 9 },
     { xlPatternCrissCross, 16 },

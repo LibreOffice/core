@@ -112,8 +112,7 @@ private:
     /** Remember the URLs that describe slots whose state changes we are
         listening to.
     */
-    typedef ::std::vector<css::util::URL> RegisteredURLList;
-    RegisteredURLList maRegisteredURLList;
+    std::vector<css::util::URL> maRegisteredURLList;
 
     css::uno::WeakReference<css::frame::XDispatchProvider> mxDispatchProviderWeak;
 

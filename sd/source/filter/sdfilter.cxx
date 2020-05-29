@@ -57,8 +57,7 @@ OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 
 #ifndef DISABLE_DYNLOADING
 
-typedef std::map<OUString, std::unique_ptr<osl::Module>> SdModuleMap;
-static SdModuleMap g_SdModuleMap;
+static std::map<OUString, std::unique_ptr<osl::Module>> g_SdModuleMap;
 
 extern "C" { static void thisModule() {} }
 

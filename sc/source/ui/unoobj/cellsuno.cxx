@@ -9101,8 +9101,6 @@ struct ScPatternHashCode
 // Hash map to find a range by its start row
 typedef std::unordered_map< SCROW, ScRange > ScRowRangeHashMap;
 
-typedef std::vector<ScRange> ScRangeVector;
-
 namespace {
 
 // Hash map entry.
@@ -9114,7 +9112,7 @@ class ScUniqueFormatsEntry
     EntryState          eState;
     ScRange             aSingleRange;
     ScRowRangeHashMap   aJoinedRanges;      // "active" ranges to be merged
-    ScRangeVector       aCompletedRanges;   // ranges that will no longer be touched
+    std::vector<ScRange> aCompletedRanges;   // ranges that will no longer be touched
     ScRangeListRef      aReturnRanges;      // result as ScRangeList for further use
 
 public:

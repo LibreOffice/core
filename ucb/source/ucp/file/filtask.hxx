@@ -204,8 +204,6 @@ namespace fileaccess
         };
 
         typedef std::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
-        typedef std::vector< Notifier* >                              NotifierList;
-
 
         class UnqPathData
         {
@@ -215,7 +213,7 @@ namespace fileaccess
             ~UnqPathData();
 
             PropertySet properties;
-            NotifierList notifier;
+            std::vector< Notifier* > notifier;
 
             // Three views on the PersistentPropertySet
             css::uno::Reference< css::ucb::XPersistentPropertySet >   xS;

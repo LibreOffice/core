@@ -47,15 +47,13 @@
 using namespace ::com::sun::star;
 
 
-typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
-
 struct SfxObjectFactory_Impl
 {
-    SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
-    OUString             aServiceName;
-    SfxFilterContainer*         pFilterContainer;
-    SfxModule*                  pModule;
-    SvGlobalName                aClassName;
+    std::vector<SfxViewFactory*> aViewFactoryArr;// List of <SfxViewFactory>s
+    OUString                     aServiceName;
+    SfxFilterContainer*          pFilterContainer;
+    SfxModule*                   pModule;
+    SvGlobalName                 aClassName;
 
     SfxObjectFactory_Impl() :
         pFilterContainer    ( nullptr ),

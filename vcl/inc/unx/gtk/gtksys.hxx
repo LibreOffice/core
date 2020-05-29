@@ -16,11 +16,9 @@
 
 class GtkSalSystem final : public SalGenericSystem
 {
-    typedef std::deque<std::pair<GdkScreen*, int> > ScreenMonitors_t;
-
     GdkDisplay *mpDisplay;
     // Number of monitors for every active screen.
-    ScreenMonitors_t maScreenMonitors;
+    std::deque<std::pair<GdkScreen*, int> > maScreenMonitors;
 public:
              GtkSalSystem();
     virtual ~GtkSalSystem() override;

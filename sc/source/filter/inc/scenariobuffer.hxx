@@ -71,9 +71,7 @@ public:
     void                finalizeImport();
 
 private:
-    typedef ::std::vector< ScenarioCellModel > ScenarioCellVector;
-
-    ScenarioCellVector  maCells;            /// Scenario cells.
+    std::vector< ScenarioCellModel >  maCells;            /// Scenario cells.
     ScenarioModel       maModel;            /// Scenario model data.
     sal_Int16           mnSheet;            /// Index of the sheet this scenario is based on.
 };

@@ -673,15 +673,13 @@ private:
 
 void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 {
-    typedef ::std::map<SCTAB, const ScDBData*> SheetLocalDBs;
-
     pDoc = rExport.GetDocument();
     if (!pDoc)
         return;
 
     // Get sheet-local anonymous ranges.
     SCTAB nTabCount = pDoc->GetTableCount();
-    SheetLocalDBs aSheetDBs;
+    std::map<SCTAB, const ScDBData*> aSheetDBs;
     for (SCTAB i = 0; i < nTabCount; ++i)
     {
         const ScDBData* p = pDoc->GetAnonymousDBData(i);

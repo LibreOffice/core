@@ -72,12 +72,9 @@ struct ScOrcusImportXMLParam
         std::vector<OString> maRowGroups;
     };
 
-    typedef std::vector<CellLink> CellLinksType;
-    typedef std::vector<RangeLink> RangeLinksType;
-
-    std::vector<size_t> maNamespaces;
-    CellLinksType maCellLinks;
-    RangeLinksType maRangeLinks;
+    std::vector<size_t>    maNamespaces;
+    std::vector<CellLink>  maCellLinks;
+    std::vector<RangeLink> maRangeLinks;
 };
 
 #endif

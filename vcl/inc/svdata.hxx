@@ -123,8 +123,6 @@ public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 };
 
-typedef std::vector<Link<VclWindowEvent&,bool> > SVAppKeyListeners;
-
 typedef std::pair<VclPtr<vcl::Window>, ImplPostEventData *> ImplPostEventPair;
 
 struct ImplSVAppData
@@ -134,7 +132,8 @@ struct ImplSVAppData
     std::unique_ptr<AllSettings> mpSettings;           // Application settings
     LocaleConfigurationListener* mpCfgListener = nullptr;
     VclEventListeners       maEventListeners;     // listeners for vcl events (eg, extended toolkit)
-    SVAppKeyListeners       maKeyListeners;       // listeners for key events only (eg, extended toolkit)
+    std::vector<Link<VclWindowEvent&,bool> >
+                            maKeyListeners;       // listeners for key events only (eg, extended toolkit)
     std::vector<ImplPostEventPair> maPostedEventList;
     ImplAccelManager*       mpAccelMgr;           // Accelerator Manager
     std::optional<OUString> mxAppName;            // Application name
