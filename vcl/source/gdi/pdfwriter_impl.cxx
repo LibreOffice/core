@@ -5961,8 +5961,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( GetFontInstance()->GetFontFace()->GetItalic() == ITALIC_NORMAL ||
-           GetFontInstance()->GetFontFace()->GetItalic() == ITALIC_OBLIQUE )
+        ( GetFontInstance()->GetFontFace()->GetItalic() != ITALIC_NORMAL &&
+           GetFontInstance()->GetFontFace()->GetItalic() != ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;

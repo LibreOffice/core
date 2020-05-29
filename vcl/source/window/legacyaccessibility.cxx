@@ -191,8 +191,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
         pFrameWindow = ImplGetFrameWindow();
     }
     // if( ! ( GetType() == WindowType::FIXEDTEXT        ||
-    if( !( GetType() == WindowType::FIXEDLINE ||
-        GetType() == WindowType::GROUPBOX ) )
+    if( GetType() != WindowType::FIXEDLINE && GetType() != WindowType::GROUPBOX )
     {
         // search for a control that makes member of this window
         // it is considered the last fixed line or group box

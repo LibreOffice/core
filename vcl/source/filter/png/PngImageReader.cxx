@@ -126,8 +126,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
-    if (bitDepth != 8
-        || !(colorType == PNG_COLOR_TYPE_RGB || colorType == PNG_COLOR_TYPE_RGB_ALPHA))
+    if (bitDepth != 8 || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA))
     {
         png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
