@@ -26,9 +26,11 @@ class VectorGraphicSearchTest : public test::BootstrapFixtureBase
     }
 
     void test();
+    void testNextPrevious();
 
     CPPUNIT_TEST_SUITE(VectorGraphicSearchTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testNextPrevious);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -79,6 +81,44 @@ void VectorGraphicSearchTest::test()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7254.38, aRectangles[3].getMaxX(), 1E-2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6095.71, aRectangles[3].getMinY(), 1E-2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6381.04, aRectangles[3].getMaxY(), 1E-2);
+}
+
+// Test next and previous work as expected to move
+// between search matches.
+void VectorGraphicSearchTest::testNextPrevious()
+{
+    OUString aURL = getFullUrl("Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    VectorGraphicSearch aSearch(aGraphic);
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy"));
+
+    // next - first match found
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+    // next - second match found
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+    // next - not found, index unchanged
+    CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+    // previous - first match
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+    // previous - not found, index unchanged
+    CPPUNIT_ASSERT_EQUAL(false, aSearch.previous());
+    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+    // next - second match found
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
