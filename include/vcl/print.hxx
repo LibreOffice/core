@@ -28,6 +28,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -50,15 +51,6 @@ namespace vcl {
 }
 
 namespace weld { class Window; }
-
-enum class PrinterSupport
-{
-    SetOrientation,
-    SetPaperSize, SetPaper,
-    CollateCopy,
-    SetupDialog
-};
-
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) QueueInfo
 {
