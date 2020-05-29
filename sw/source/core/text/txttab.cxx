@@ -119,7 +119,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
 
         // #i24363# tab stops relative to indent
         // nSearchPos: The current position relative to the tabs origin
-        const SwTwips nSearchPos = bRTL ?
+        SwTwips nSearchPos = bRTL ?
                                    nTabLeft - nCurrentAbsPos :
                                    nCurrentAbsPos - nTabLeft;
 
@@ -127,6 +127,14 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // any hard set tab stops:
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
+
+        // If search is started from zero position (beginning of line), than
+        // lets do it from -1: this will allow to include into account potential
+        // tab stop at zero position. Yes, it will be zero width tab useless
+        // mostly, but this have sense in case of lists.
+        if (nSearchPos == 0)
+            nSearchPos = -1;
+
         const SvxTabStop* pTabStop = m_aLineInf.GetTabStop( nSearchPos, nMyRight );
         if ( pTabStop )
         {

@@ -578,6 +578,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    OUString sNodeType;
+
+    // First paragraph does not have tab before
+    sNodeType = parseDump("/root/page/body/txt[1]/Text[1]", "nType");
+    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
+
+    // Second paragraph starts with tab
+    sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
+    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")
 {
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
