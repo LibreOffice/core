@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1710,6 +1710,15 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     // formula mode in online is not usable in collaborative mode,
     // this is a workaround for disabling formula mode in online
     // when there is more than a single view
+
+    // If this is the iOS (or, perhaps in the future, the Android one) app, we might have several
+    // documents open in the same process and the static SfxViewShell::GetFirst() will return some
+    // arbitrary one of them, not related to the document we are handling here at all. If it is not
+    // even a spreadsheet document, the dynamic_cast below will return nullptr and the next line
+    // will crash. On the other hand, in the iOS and Android apps there is no collaboration between
+    // multiple users on one document, so if the above comment is correct and this code is relevant
+    // only for "collaborative mode", we can just bypass this on iOS and Android.
+#if !defined IOS && !defined ANDROID
     if (comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -1732,6 +1741,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
             }
         }
     }
+#endif
 }
 
 ScTabViewShell::~ScTabViewShell()
