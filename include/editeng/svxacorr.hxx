@@ -86,6 +86,7 @@ enum class ACQuotes
     NonBreakingSpace,
     CapitalizeIAm,
     DoubleAngleQuote,
+    UseApostrophe,
 };
 
 // TODO: handle code points > U+FFFF and check users of this class
