@@ -1895,7 +1895,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             const sal_Unicode* q = p;
                             while( *q && *q != ';' )
                                 q++;
-                            if ( !(*q == ';' && *(q+1) == 'I') && !bInvalidCol && !bInvalidRow )
+                            if ( (*q != ';' || *(q+1) != 'I') && !bInvalidCol && !bInvalidRow )
                             {   // don't ignore value
                                 if( bText )
                                 {

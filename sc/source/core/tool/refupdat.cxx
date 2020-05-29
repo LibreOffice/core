@@ -388,7 +388,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( nDx && (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    !(theCol1 == nInt32Min && theCol2 == nInt32Max) )
+                    (theCol1 != nInt32Min || theCol2 != nInt32Max) )
         {
             bCut1 = lcl_MoveBig( theCol1, nCol1, nDx );
             bCut2 = lcl_MoveBig( theCol2, nCol1, nDx );
@@ -399,7 +399,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    !(theRow1 == nInt32Min && theRow2 == nInt32Max) )
+                    (theRow1 != nInt32Min || theRow2 != nInt32Max) )
         {
             bCut1 = lcl_MoveBig( theRow1, nRow1, nDy );
             bCut2 = lcl_MoveBig( theRow2, nRow1, nDy );
@@ -410,7 +410,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
-                    !(theTab1 == nInt32Min && theTab2 == nInt32Max) )
+                    (theTab1 != nInt32Min || theTab2 != nInt32Max) )
         {
             bCut1 = lcl_MoveBig( theTab1, nTab1, nDz );
             bCut2 = lcl_MoveBig( theTab2, nTab1, nDz );
@@ -424,7 +424,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( rWhere.In( rWhat ) )
         {
-            if ( nDx && !(theCol1 == nInt32Min && theCol2 == nInt32Max) )
+            if ( nDx && (theCol1 != nInt32Min || theCol2 != nInt32Max) )
             {
                 bCut1 = lcl_MoveItCutBig( theCol1, nDx );
                 bCut2 = lcl_MoveItCutBig( theCol2, nDx );
@@ -433,7 +433,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetCol( theCol1 );
                 rWhat.aEnd.SetCol( theCol2 );
             }
-            if ( nDy && !(theRow1 == nInt32Min && theRow2 == nInt32Max) )
+            if ( nDy && (theRow1 != nInt32Min || theRow2 != nInt32Max) )
             {
                 bCut1 = lcl_MoveItCutBig( theRow1, nDy );
                 bCut2 = lcl_MoveItCutBig( theRow2, nDy );
@@ -442,7 +442,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetRow( theRow1 );
                 rWhat.aEnd.SetRow( theRow2 );
             }
-            if ( nDz && !(theTab1 == nInt32Min && theTab2 == nInt32Max) )
+            if ( nDz && (theTab1 != nInt32Min || theTab2 != nInt32Max) )
             {
                 bCut1 = lcl_MoveItCutBig( theTab1, nDz );
                 bCut2 = lcl_MoveItCutBig( theTab2, nDz );

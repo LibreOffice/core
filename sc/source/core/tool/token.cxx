@@ -2971,7 +2971,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
         // Edge-expansion is turned off.
         return false;
 
-    if (!(rSelectedRange.aStart.Tab() <= rRefRange.aStart.Tab() && rRefRange.aEnd.Tab() <= rSelectedRange.aEnd.Tab()))
+    if (rSelectedRange.aStart.Tab() > rRefRange.aStart.Tab() || rRefRange.aEnd.Tab() > rSelectedRange.aEnd.Tab())
         // Sheet references not within selected range.
         return false;
 

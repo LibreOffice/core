@@ -2857,8 +2857,8 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
         // #i64497# If a chart is in a temporary document during clipboard paste,
         // there should be no data provider, so that own data is used
         bool bCreate =
-            ! ( nType == ServiceType::CHDATAPROV &&
-                ( pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL ));
+                ( nType != ServiceType::CHDATAPROV ||
+                ( pDocShell->GetCreateMode() != SfxObjectCreateMode::INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
         // loaded, because this unlinks the data
         assert(bCreate);

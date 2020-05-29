@@ -141,7 +141,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             // If it is not a group object, we disable "ungroup"
-            if(!(dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr && nInv == SdrInventor::Default))
+            if(dynamic_cast< const SdrObjGroup *>( pObj ) == nullptr || nInv != SdrInventor::Default)
             {
                 rSet.DisableItem(SID_UNGROUP);
             }

@@ -180,7 +180,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
     {
         const bool bDoCreateGeometry(pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true ));
 
-        if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
+        if(!bDoCreateGeometry &&
+            (( pObject->GetObjInventor() != SdrInventor::Default ) || ( pObject->GetObjIdentifier() != OBJ_PAGE )) )
             return xRetval;
 
         PresObjKind eKind(PresObjKind::NONE);

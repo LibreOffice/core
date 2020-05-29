@@ -1316,7 +1316,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleS
     SdStyleSheet* pRealSheet = static_cast<SdStyleSheet const *>(pStyleSheet)->GetRealStyleSheet();
     pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 
-    if( !((ePO >= PresentationObjects::Outline_1) && (ePO <= PresentationObjects::Outline_8)) )
+    if( (ePO < PresentationObjects::Outline_1) || (ePO > PresentationObjects::Outline_8) )
         return;
 
     OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " ");

@@ -513,7 +513,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 SCCOL nColSpan = pMergeAttr->GetColMerge();
                 SCROW nRowSpan = pMergeAttr->GetRowMerge();
 
-                if ( !( nCurX >= nBlockStartXOrig + nColSpan - 1 && nCurY >= nBlockStartYOrig + nRowSpan - 1 ) )
+                if ( nCurX < nBlockStartXOrig + nColSpan - 1 || nCurY < nBlockStartYOrig + nRowSpan - 1 )
                 {
                     nBlockStartX = nCurX >= nBlockStartXOrig ? nBlockStartXOrig : nBlockStartXOrig + nColSpan - 1;
                     nBlockStartY = nCurY >= nBlockStartYOrig ? nBlockStartYOrig : nBlockStartYOrig + nRowSpan - 1;
@@ -538,7 +538,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 SCCOL nColSpan = pMergeAttr->GetColMerge();
                 SCROW nRowSpan = pMergeAttr->GetRowMerge();
 
-                if ( !( nBlockStartX >= nCurX + nColSpan - 1 && nBlockStartY >= nCurY + nRowSpan - 1 ) )
+                if ( nBlockStartX < nCurX + nColSpan - 1 || nBlockStartY < nCurY + nRowSpan - 1 )
                 {
                     if ( nBlockStartX <= nCurX + nColSpan - 1 )
                     {
@@ -550,8 +550,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                         SCROW nCurYOffsetTemp = (nCurY < nCurY + nRowSpan - 1) ? nRowSpan - 1 : 0;
                         nCurYOffset = std::max(nCurYOffset, nCurYOffsetTemp);
                     }
-                    if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
-                         !( nBlockStartX > nCurX + nColSpan - 1 && nBlockStartY > nCurY + nRowSpan - 1 ) )
+                    if ( ( nBlockStartX > nCurX || nBlockStartY > nCurY ) &&
+                         ( nBlockStartX <= nCurX + nColSpan - 1 || nBlockStartY <= nCurY + nRowSpan - 1 ) )
                     {
                         nBlockStartXOffset = (nBlockStartX > nCurX && nBlockStartX <= nCurX + nColSpan - 1) ? nCurX - nBlockStartX : 0;
                         nBlockStartYOffset = (nBlockStartY > nCurY && nBlockStartY <= nCurY + nRowSpan - 1) ? nCurY - nBlockStartY : 0;
