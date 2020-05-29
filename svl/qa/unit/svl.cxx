@@ -368,6 +368,11 @@ void Test::testSharedStringPoolPurge()
     // Since no string objects referencing the pooled strings exist, purging
     // the pool should empty it.
     aPool.purge();
+    // Current implementation of purge() leaves the uppercase string, because it's shared
+    // by the other strings as their uppercase variant. It's not worth running a second pass,
+    // so just run purge() once more. This can be removed if the implementation changes.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCount());
+    aPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 

@@ -32,6 +32,7 @@ struct SharedStringPool::Impl
     // set of upper-case, so we can share these as the value in the maStrMap
     std::unordered_set<OUString> maStrPoolUpper;
     // map with rtl_uString* as key so we can avoid some ref-counting
+    // (but it still is ref-counted to know when to remove from uppercase pool)
     std::unordered_map<OUString,rtl_uString*> maStrMap;
     const CharClass& mrCharClass;
 
@@ -58,11 +59,15 @@ SharedString SharedStringPool::intern( const OUString& rStr )
         {
             auto insertResult = mpImpl->maStrPoolUpper.insert(rStr);
             mapIt->second = insertResult.first->pData;
+            // refcount the shared uppercase (unless already refcounted by the OUString)
+            if (mapIt->second != mapIt->first.pData)
+                rtl_uString_acquire(mapIt->second);
         }
         else
         {
             auto insertResult = mpImpl->maStrPoolUpper.insert(aUpper);
             mapIt->second = insertResult.first->pData;
+            rtl_uString_acquire(mapIt->second);
         }
     }
     return SharedString(mapIt->first.pData, mapIt->second);
@@ -72,7 +77,6 @@ void SharedStringPool::purge()
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    std::unordered_set<OUString> aNewStrPoolUpper;
     {
         auto it = mpImpl->maStrMap.begin(), itEnd = mpImpl->maStrMap.end();
         while (it != itEnd)
@@ -80,18 +84,23 @@ void SharedStringPool::purge()
             const rtl_uString* p = it->first.pData;
             // If the string itself is uppercase, it is refcounted
             // both by the item and the uppercase pool.
-            const int unsharedRefcount = ( p == it->second ? 2 : 1 );
-            if (getRefCount(p) == unsharedRefcount)
+            const int unusedRefCount = (p == it->second) ? 2 : 1;
+            if (getRefCount(p) == unusedRefCount)
+            {
+                if (p != it->second)
+                    rtl_uString_release(it->second);
+                assert(getRefCount(it->second) >= unusedRefCount);
+                if (getRefCount(it->second) == unusedRefCount)
+                    mpImpl->maStrPoolUpper.erase(it->second);
                 it = mpImpl->maStrMap.erase(it);
+            }
             else
             {
                 // Still referenced outside the pool. Keep it.
-                aNewStrPoolUpper.insert(it->second);
                 ++it;
             }
         }
     }
-    mpImpl->maStrPoolUpper = std::move(aNewStrPoolUpper);
 }
 
 size_t SharedStringPool::getCount() const
