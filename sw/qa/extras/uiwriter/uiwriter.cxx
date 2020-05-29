@@ -369,6 +369,7 @@ public:
     void testTdf38394();
     void testTdf59666();
     void testTdf133524();
+    void testTdf128860();
     void testInconsistentBookmark();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
@@ -584,6 +585,7 @@ public:
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
+    CPPUNIT_TEST(testTdf128860);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7237,6 +7239,31 @@ void SwUiWriterTest::testTdf133524()
     pWrtShell->AutoCorrect(corr, '"');
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced += u".”";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf128860()
+{
+    SwDoc* pDoc = createDoc("tdf128860.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Second level ending quote: ‚word' -> ,word‘
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"‚word");
+    pWrtShell->AutoCorrect(corr, '\'');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"‚word‘");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // Us apostrophe without preceding starting quote: word' -> word’
+    pWrtShell->Insert(u" word");
+    pWrtShell->AutoCorrect(corr, '\'');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" word’";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // But only after letters: word.' -> word.‘
+    pWrtShell->Insert(u" word.");
+    pWrtShell->AutoCorrect(corr, '\'');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
