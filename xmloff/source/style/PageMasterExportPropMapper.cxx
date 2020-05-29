@@ -348,7 +348,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         sal_Int16 nPrintId      = nContextId & CTF_PM_PRINTMASK;
 
 
-        // tdf#103602 don't export draw:fill attributes on page-layout-properteis in strict ODF
+        // tdf#103602 don't export draw:fill attributes on page-layout-properties in strict ODF
         if (!isDrawingPageExport
             && aPropMapper->GetEntryAPIName(rProp.mnIndex).startsWith("Fill")
             && ((aBackgroundImageExport.GetExport().getSaneDefaultVersion()
