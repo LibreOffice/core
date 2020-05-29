@@ -3054,7 +3054,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                                   pHdl->GetKind() != SdrHdlKind::Anchor_TR;
 
                         if ((rSh.IsInsideSelectedObj(aDocPos) || bHitHandle) &&
-                            !(rMEvt.GetModifier() == KEY_SHIFT && !bHitHandle))
+                            (rMEvt.GetModifier() != KEY_SHIFT || bHitHandle))
                         {
                             rSh.EnterSelFrameMode( &aDocPos );
                             if ( !m_pApplyTempl )

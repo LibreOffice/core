@@ -1529,8 +1529,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                 if( pRule  )
                 {
                     nTmpNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
-                    if( !( ! pNd->IsCountedInList() &&
-                         (nTmpNum >= nSrchNum )) )
+                    if( pNd->IsCountedInList() || (nTmpNum < nSrchNum ) )
                         break;      // found it!
                 }
                 else
@@ -1696,8 +1695,8 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
             pNode = &aIdx.GetNode();
         }
-        while (!(pNode == GetNodes().DocumentSectionStartNode(pStartFromNode) ||
-                 pNode == GetNodes().DocumentSectionEndNode(pStartFromNode)));
+        while (pNode != GetNodes().DocumentSectionStartNode(pStartFromNode) &&
+                 pNode != GetNodes().DocumentSectionEndNode(pStartFromNode));
     }
 
     return pResult;

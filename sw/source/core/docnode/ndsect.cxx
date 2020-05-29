@@ -412,8 +412,8 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 const SwStartNode* pPrvNd;
                 const SwEndNode* pNxtNd;
                 while( nullptr != ( pPrvNd = (pNd = &aIdx.GetNode())->GetSectionNode() ) &&
-                    !( aIdx.GetIndex() < nCmp &&
-                        nCmp < pPrvNd->EndOfSectionIndex() ) )
+                    ( aIdx.GetIndex() >= nCmp ||
+                        nCmp >= pPrvNd->EndOfSectionIndex() ) )
                 {
                     --aIdx;
                 }
@@ -425,8 +425,8 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 nCmp = pStt->nNode.GetIndex();
                 while( nullptr != ( pNxtNd = (pNd = &aIdx.GetNode())->GetEndNode() ) &&
                     pNxtNd->StartOfSectionNode()->IsSectionNode() &&
-                    !( pNxtNd->StartOfSectionIndex() < nCmp &&
-                        nCmp < aIdx.GetIndex() ) )
+                    ( pNxtNd->StartOfSectionIndex() >= nCmp ||
+                        nCmp >= aIdx.GetIndex() ) )
                 {
                     ++aIdx;
                 }

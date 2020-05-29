@@ -1412,7 +1412,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         if(static_cast<size_t>(nIndex) == i)
             break;
     }
-    if(!(nIndex >= 0 && o3tl::make_unsigned(nIndex) < rFormats.size()))
+    if(nIndex < 0 || o3tl::make_unsigned(nIndex) >= rFormats.size())
         throw IndexOutOfBoundsException();
 
     SwSectionFormat* pFormat = rFormats[nIndex];
