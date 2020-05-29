@@ -1230,7 +1230,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
     {
         // when there are a lot of rows, it is cheaper to simply clear the tree and re-initialise
         maChecks->Clear();
-        initMembers();
+        nSelCount = initMembers();
     }
     else
     {
@@ -1888,10 +1888,11 @@ void ScCheckListMenuWindow::setHasDates(bool bHasDates)
         maChecks->SetStyle(WB_HASBUTTONS);
 }
 
-void ScCheckListMenuWindow::initMembers()
+size_t ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
+
 
     maChecks->SetUpdateMode(false);
     maChecks->GetModel()->EnableInvalidate(false);
@@ -1944,6 +1945,7 @@ void ScCheckListMenuWindow::initMembers()
 
     maChecks->GetModel()->EnableInvalidate(true);
     maChecks->SetUpdateMode(true);
+    return nVisMemCount;
 }
 
 void ScCheckListMenuWindow::setConfig(const Config& rConfig)
