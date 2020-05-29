@@ -135,7 +135,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
 static bool
 is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
 {
-        if (!(next == 0x3099 || next == 0x309a))
+        if (next != 0x3099 && next != 0x309a)
             return false;
         sal_Unicode c = widthfolding::getCompositionChar(current, next);
         if (c != 0)
