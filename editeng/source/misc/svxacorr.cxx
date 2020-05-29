@@ -316,6 +316,7 @@ static constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;
 // (the first character is also the opening quote we are looking for)
 const sal_Unicode aStopDoubleAngleQuoteStart[] = { 0x201E, 0x201D, 0 }; // preceding ,,
 const sal_Unicode aStopDoubleAngleQuoteEnd[] = { cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0x201D, 0x201E, 0 }; // preceding >>
+const sal_Unicode aStopSingleQuoteEnd[] = { 0x201A, 0x2018, 0x201C, 0x201E, 0 };
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
@@ -1209,6 +1210,8 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                 ? cLeftDoubleAngleQuote
                 : cRightDoubleAngleQuote;
     }
+    else if ( eType == ACQuotes::UseApostrophe )
+        cRet = cApostrophe;
     else
         cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
@@ -1340,6 +1343,25 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 bSttQuote ? aStopDoubleAngleQuoteStart + 1 : aStopDoubleAngleQuoteEnd + 1 ) )
                     {
                         eType = ACQuotes::DoubleAngleQuote;
+                    }
+                    // tdf#128860 use apostrophe outside of second level quotation in Czech, German, Icelandic,
+                    // Slovak and Slovenian instead of the – in this case, bad – closing quotation mark U+2018.
+                    else if ( bSingle && nInsPos && !bSttQuote &&
+                        ( primary(eLang) == primary(LANGUAGE_GERMAN) || eLang.anyOf (
+                             LANGUAGE_CZECH,
+                             LANGUAGE_ICELANDIC,
+                             LANGUAGE_SLOVAK,
+                             LANGUAGE_SLOVENIAN ) ) &&
+                        !lcl_HasPrecedingChar( rTxt, nInsPos, aStopSingleQuoteEnd[0],  aStopSingleQuoteEnd + 1 ) )
+                    {
+                        LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
+                        CharClass& rCC = GetCharClass( eLang );
+                        if ( rLcl.getQuotationMarkStart() == OUStringChar(aStopSingleQuoteEnd[0]) &&
+                             // use apostrophe only after letters, not after digits or punctuation
+                             rCC.isLetter(rTxt, nInsPos-1) )
+                        {
+                            eType = ACQuotes::UseApostrophe;
+                        }
                     }
                 }
 
