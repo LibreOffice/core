@@ -93,32 +93,71 @@ void VectorGraphicSearchTest::testNextPrevious()
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
     aGraphic.makeAvailable();
 
-    VectorGraphicSearch aSearch(aGraphic);
-    CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy"));
+    { // Start from the beginning of the page
+        VectorGraphicSearch aSearch(aGraphic);
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy"));
 
-    // next - first match found
-    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+        // no previous - we are at the begin
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(0, aSearch.index()); // nothing was yet found, so it is 0
 
-    // next - second match found
-    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+        // next - first position found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
 
-    // next - not found, index unchanged
-    CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+        // next - second position found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
-    // previous - first match
-    CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
-    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+        // next - not found, index unchanged
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
 
-    // previous - not found, index unchanged
-    CPPUNIT_ASSERT_EQUAL(false, aSearch.previous());
-    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+        // previous - first position
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
 
-    // next - second match found
-    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
-    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+        // previous - not found, index unchanged
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+        // next - second position found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+    }
+
+    { // Start from the end of the page
+        VectorGraphicSearch aSearch(aGraphic);
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy", SearchStartPosition::End));
+
+        // no next - we are at the end
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(0, aSearch.index()); // nothing was yet found, so it is 0
+
+        // previous - second position found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+        // previous - first position found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+        // previous - not found, index unchanged
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+        // next - second position
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+        // next - not found, index unchanged
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+        // previous - first match found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+        CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
