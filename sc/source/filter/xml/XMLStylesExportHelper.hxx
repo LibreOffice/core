@@ -58,12 +58,10 @@ struct ScMyValidation
     bool                        IsEqual(const ScMyValidation& aVal) const;
 };
 
-typedef std::vector<ScMyValidation>         ScMyValidationVec;
-
 class ScMyValidationsContainer
 {
 private:
-    ScMyValidationVec      aValidationVec;
+    std::vector<ScMyValidation> aValidationVec;
 public:
                            ScMyValidationsContainer();
                            ~ScMyValidationsContainer();

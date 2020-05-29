@@ -177,13 +177,11 @@ private:
 private:
     typedef RefVector< WorkbookViewModel >                                      WorkbookViewModelVec;
     typedef RefMap< sal_Int16, SheetViewModel >                                 SheetViewModelMap;
-    typedef ::std::map< sal_Int16, css::uno::Any >                 SheetPropertiesMap;
-    typedef ::std::map< sal_Int16, ScRange >                                    SheetUsedAreaMap;
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.
-    SheetPropertiesMap  maSheetProps;       /// Converted property sequences for each sheet.
-    SheetUsedAreaMap    maSheetUsedAreas;   /// Used area (cell range) of every sheet.
+    std::map< sal_Int16, css::uno::Any >  maSheetProps;       /// Converted property sequences for each sheet.
+    std::map< sal_Int16, ScRange >        maSheetUsedAreas;   /// Used area (cell range) of every sheet.
     ScRange             maOleSize;          /// Visible area if this is an embedded OLE object.
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };

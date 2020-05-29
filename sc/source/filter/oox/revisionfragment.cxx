@@ -183,11 +183,9 @@ struct RevisionMetadata
 
 }
 
-typedef std::map<OUString, RevisionMetadata> RevDataType;
-
 struct RevisionHeadersFragment::Impl
 {
-    RevDataType maRevData;
+    std::map<OUString, RevisionMetadata> maRevData;
 
     Impl() {}
 };

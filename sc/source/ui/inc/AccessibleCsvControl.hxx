@@ -429,11 +429,9 @@ private:
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn);
 };
 
-typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> ScAccessibleCsvCellImpl;
-
 /** Accessible class representing a cell of the CSV grid control. */
 class ScAccessibleCsvCell : public ScAccessibleCsvControl
-                          , public ScAccessibleCsvCellImpl
+                          , public cppu::ImplHelper1<css::accessibility::XAccessible>
                           , public ::accessibility::AccessibleStaticTextBase
 {
 protected:

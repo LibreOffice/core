@@ -126,7 +126,6 @@ private:
 };
 
 typedef ::rtl::Reference< FormViewPageWindowAdapter >   PFormViewPageWindowAdapter;
-typedef ::std::vector< PFormViewPageWindowAdapter >     PageWindowAdapterList;
 typedef ::std::set< css::uno::Reference< css::form::XForm > > SetOfForms;
 typedef ::std::map< css::uno::Reference< css::awt::XControlContainer >, SetOfForms > MapControlContainerToSetOfForms;
 class SdrModel;
@@ -156,7 +155,7 @@ class FmXFormView : public ::cppu::WeakImplHelper<
     css::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
-    PageWindowAdapterList
+    std::vector< PFormViewPageWindowAdapter >
                     m_aPageWindowAdapters;  // to be filled in alive mode only
     MapControlContainerToSetOfForms
                     m_aNeedTabOrderUpdate;

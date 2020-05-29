@@ -104,8 +104,6 @@ public:
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
 };
 
-typedef std::vector<OGroupComp> OGroupCompArr;
-
 
 class OGroupComp;
 class OGroupCompAcc
@@ -126,7 +124,7 @@ public:
 
 class OGroup final
 {
-    OGroupCompArr              m_aCompArray;
+    std::vector<OGroupComp>    m_aCompArray;
     std::vector<OGroupCompAcc> m_aCompAccArray;
 
     OUString    m_aGroupName;

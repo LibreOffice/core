@@ -67,9 +67,8 @@ private:
 
         explicit     ScenarioEntry() : mbProtected( false ) {}
     };
-    typedef ::std::vector< ScenarioEntry > ScenarioList;
 
-    ScenarioList m_aEntries;
+    std::vector< ScenarioEntry > m_aEntries;
 
     void UpdateEntries(const std::vector<OUString> &rNewEntryList);
     void SelectScenario();

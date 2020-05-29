@@ -1099,20 +1099,18 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
     }
 }
 
-        namespace {
+namespace {
 
-        struct ScMyRememberItem
-        {
-            sal_Int32   nIndex;
-            SfxItemSet  aItemSet;
+    struct ScMyRememberItem
+    {
+        sal_Int32   nIndex;
+        SfxItemSet  aItemSet;
 
-            ScMyRememberItem(const SfxItemSet& rItemSet, sal_Int32 nTempIndex) :
-                nIndex(nTempIndex), aItemSet(rItemSet) {}
-        };
+        ScMyRememberItem(const SfxItemSet& rItemSet, sal_Int32 nTempIndex) :
+            nIndex(nTempIndex), aItemSet(rItemSet) {}
+    };
 
-        }
-
-        typedef ::std::vector<std::unique_ptr<ScMyRememberItem>> ScMyRememberItemVector;
+}
 
 void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
@@ -1133,7 +1131,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         if (bUpdateMode)
             rEngine.SetUpdateMode(false);
 
-        ScMyRememberItemVector aRememberItems;
+        std::vector<std::unique_ptr<ScMyRememberItem>> aRememberItems;
 
         //  All paragraph attributes must be removed before calling CreateTextObject,
         //  not only alignment, so the object doesn't contain the cell attributes as
