@@ -27,6 +27,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
@@ -711,15 +712,6 @@ bool SdOutliner::SearchAndReplaceAll()
 
 namespace
 {
-basegfx::B2DRange b2DRectangleFromRectangle( const ::tools::Rectangle& rRect )
-{
-    if (rRect.IsWidthEmpty() && rRect.IsHeightEmpty())
-        return basegfx::B2DRange(basegfx::B2DTuple(rRect.Left(), rRect.Top()));
-    return basegfx::B2DRectangle(rRect.Left(),
-                                 rRect.Top(),
-                                 rRect.IsWidthEmpty() ? rRect.Left() : rRect.Right(),
-                                 rRect.IsHeightEmpty() ? rRect.Top() : rRect.Bottom());
-}
 
 basegfx::B2DRectangle getPDFSelection(std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
                                        SdrObject* pObject)
@@ -732,7 +724,7 @@ basegfx::B2DRectangle getPDFSelection(std::unique_ptr<VectorGraphicSearch> & rVe
 
     basegfx::B2DSize aPdfPageSizeHMM = rVectorGraphicSearch->pageSize();
 
-    basegfx::B2DRectangle aObjectB2DRectHMM(b2DRectangleFromRectangle(pObject->GetLogicRect()));
+    basegfx::B2DRectangle aObjectB2DRectHMM(vcl::unotools::b2DRectangleFromRectangle(pObject->GetLogicRect()));
 
     // Setup coordinate conversion matrix to convert the inner PDF
     // coordinates to the page relative coordinates
@@ -770,7 +762,7 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
         basegfx::B2DSize aPdfPageSize = mpImpl->mpVectorGraphicSearch->pageSize();
 
         tools::Rectangle aObjectRectTwip = OutputDevice::LogicToLogic(mpObj->GetLogicRect(), MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-        basegfx::B2DRectangle aObjectB2DRectTwip(b2DRectangleFromRectangle(aObjectRectTwip));
+        basegfx::B2DRectangle aObjectB2DRectTwip(vcl::unotools::b2DRectangleFromRectangle(aObjectRectTwip));
 
         // Setup coordinate conversion matrix to convert the inner PDF
         // coordinates to the page relative coordinates
