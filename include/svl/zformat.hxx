@@ -269,6 +269,10 @@ public:
     sal_uInt16 GetFormatIntegerDigits( sal_uInt16 nIx = 0 ) const
         { return NumFor[nIx].Info().nCntPre; }
 
+    /// Count of exponent digits, or AM/PM, or denominator digits, or percent base
+    sal_uInt16 GetFormatExponentDigits( sal_uInt16 nIx = 0 ) const
+        { return NumFor[nIx].Info().nCntExp; }
+
     /** Count of hidden integer digits with thousands divisor:
      * formats like "0," to show only thousands
      */

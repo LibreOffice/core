@@ -646,8 +646,8 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
             nPrecision = static_cast<short>(pFormat->GetFormatPrecision( nIdx ));
             switch ( nType )
             {
-                case SvNumFormatType::PERCENT:      // 0.41% == 0.0041
-                    nPrecision += 2;
+                case SvNumFormatType::PERCENT:      // 0.41% == 0.0041; 0.41‰ == 0.00041
+                    nPrecision += static_cast<short>(pFormat->GetFormatExponentDigits( nIdx ));
                     break;
                 case SvNumFormatType::SCIENTIFIC:   // 1.23e-3 == 0.00123
                 {
