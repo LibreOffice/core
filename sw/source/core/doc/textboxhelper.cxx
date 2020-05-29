@@ -677,6 +677,18 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         const SfxPoolItem* pItem = aIter.GetCurItem();
         do
         {
+            if (pFormat->GetAnchor().GetContentAnchor()->nNode != rShape.GetAnchor().GetContentAnchor()->nNode)
+            {
+                try
+                {
+                    SwFormatAnchor pShapeAnch = rShape.GetAnchor();
+                    if(pShapeAnch.GetContentAnchor())
+                        aTextBoxSet.Put(pShapeAnch);
+                }
+                catch (uno::Exception&)
+                {
+                }
+            }
             switch (pItem->Which())
             {
                 case RES_VERT_ORIENT:
