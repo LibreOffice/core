@@ -19,22 +19,39 @@
 #pragma once
 
 #include <sfx2/weldutils.hxx>
-#include <svx/sidebar/InspectorTextPanel.hxx>
+#include <sfx2/sidebar/ControllerItem.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <svx/sidebar/InspectorTextPanel.hxx>
 namespace sw
 {
 namespace sidebar
 {
-class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
+class WriterInspectorTextPanel final
+    : public svx::sidebar::InspectorTextPanel,
+      public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                      SfxBindings* pBindings);
 
     WriterInspectorTextPanel(vcl::Window* pParent,
-                             const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                             const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                             SfxBindings* pBindings);
 
     // virtual ~WriterInspectorTextPanel();
+    virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
+                                  const SfxPoolItem* pState) override;
+
+    virtual void GetControlState(const sal_uInt16 /*nSId*/,
+                                 boost::property_tree::ptree& /*rState*/) override{};
+
+private:
+    sfx2::sidebar::ControllerItem maCharStyle;
+
+    static void GetPropertyValues(const css::beans::Property rProperty, const css::uno::Any& rAny,
+                                  OUString& rString);
 };
 }
 } // end of namespace svx::sidebar
