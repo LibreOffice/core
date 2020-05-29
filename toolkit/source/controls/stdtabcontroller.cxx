@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -306,17 +307,31 @@ void StdTabController::activateTabOrder(  )
     if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
+    // This may return a TabController, which returns desired list of controls faster
+    //jcl nope: Reference< XTabController >  xTabController = this;
+    //jcl nope: Reference< XTabController >  xTabController(this);
+    //jcl nope: Reference< XTabController >  xTabController = const_cast<StdTabController*>(this);
+    //jcl fails to compile an ambiguous base   Reference< XTabController >  xTabController(this,UNO_QUERY);
+    //jcl fails Reference< XTabController > xTabController =static_cast< css::awt::XTabController* >(this);
+    //jcl fails Reference< XTabController > xTabController (static_cast< css::awt::XTabController* >(this));
+
+
+    Reference< XTabController > xTabController (static_cast< css::awt::XTabController* >(this), UNO_QUERY);
+
+    //jcl works: Reference< XTabController > xTabController(static_cast< css::awt::XTabController* >(this), UNO_QUERY);
+    //jcl works: Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
+    //jcl works: Reference< XTabController >  xTabController(const_cast< ::cppu::OWeakObject* >(static_cast< const ::cppu::OWeakObject* >(this)), UNO_QUERY);
+
     // Get a flattened list of controls sequences
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
     Sequence< Any> aTabSeq;
 
-    // Previously used aControls = xTabController->getControls() "for the sake of optimization",
-    // but that list isn't valid during the creation phase (missing last created control) because
-    // listenermultiplexer.cxx handles fmvwimp::elementinserted before formcontroller::elementInserted
-    // Perhaps other places using the same optimization need to be reviewed?  (tdf#125609)
-    Sequence< Reference< XControl > > aCachedControls = getControls();
-    Sequence< Reference< XControl > > aControls = aCachedControls;
+    // DG: For the sake of optimization, retrieve Controls from getControls(),
+    // this may sound counterproductive, but leads to performance improvements
+    // in practical scenarios (Forms)
+    //jcl fails Sequence< Reference< XControl > > aControls = static_cast<css::awt::XTabController*>(this)->getControls();
+    Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
@@ -334,7 +349,7 @@ void StdTabController::activateTabOrder(  )
     {
         mxModel->getGroup( nG, aThisGroupModels, aName );
 
-        aControls = aCachedControls;
+        aControls = xTabController->getControls();
             // ImplCreateComponentSequence has a really strange semantics regarding it's first parameter:
             // upon method entry, it expects a super set of the controls which it returns
             // this means we need to completely fill this sequence with all available controls before
