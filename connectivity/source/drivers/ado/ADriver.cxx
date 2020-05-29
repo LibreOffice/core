@@ -45,20 +45,30 @@ using namespace com::sun::star::sdbcx;
 ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
+    ,mnNbCallCoInitializeExForReinit(0)
 {
-     if ( FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) )
+     HRESULT hr;
+     while ((hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) == RPC_E_CHANGED_MODE)
      {
+         // so we're in RPC_E_CHANGED_MODE case
+         // the pb was it was already initialized with COINIT_MULTITHREADED
+         // close this init
          CoUninitialize();
-         int h = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-         (void)h;
-         ++h;
+         // and increment counter for dtr part
+         ++mnNbCallCoInitializeExForReinit;
+
+         // and keep on the loop if there were multi initializations
      }
+     if (FAILED(hr))
+         std::abort();
 }
 
 ODriver::~ODriver()
 {
     CoUninitialize();
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    // Put back all the inits, if there were, before the use of ADO
+    for (int i = 0; i < mnNbCallCoInitializeExForReinit; ++i)
+        CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 }
 
 void ODriver::disposing()

@@ -48,6 +48,8 @@ namespace connectivity
                                                         //  for this Driver
             css::uno::Reference< css::lang::XMultiServiceFactory > m_xORB;
 
+            // to put back all the inits with COINIT_MULTITHREADED if needed
+            int mnNbCallCoInitializeExForReinit;
 
         public:
             ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB);
