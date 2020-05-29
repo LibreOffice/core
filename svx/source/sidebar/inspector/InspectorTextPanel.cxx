@@ -49,6 +49,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
 
 void InspectorTextPanel::updateEntries(std::vector<OUString> store)
 {
+    mxListBoxStyles->clear();
     for (OUString& str : store)
         mxListBoxStyles->append_text(str);
 }

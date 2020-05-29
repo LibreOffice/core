@@ -34,6 +34,8 @@
 
 using namespace css;
 using namespace css::uno;
+#include <bits/stdc++.h>
+using namespace std;
 
 namespace svx::sidebar {
 #define DEFAULT_VALUE          0
@@ -168,6 +170,7 @@ void ParaPropertyPanel::initial()
 // for Paragraph Indent
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton&, void)
 {
+    cout<<"enter\n\n";
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTextLeft(mxLeftIndent->GetCoreValue(m_eLRSpaceUnit));
     aMargin.SetRight(mxRightIndent->GetCoreValue(m_eLRSpaceUnit));
@@ -181,6 +184,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton
 // for Paragraph Spacing
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, weld::MetricSpinButton&, void)
 {
+    cout<<"ndsa\n\n";
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
     aMargin.SetUpper( static_cast<sal_uInt16>(mxTopDist->GetCoreValue(m_eULSpaceUnit)));
     aMargin.SetLower( static_cast<sal_uInt16>(mxBottomDist->GetCoreValue(m_eULSpaceUnit)));
