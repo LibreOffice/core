@@ -31,6 +31,7 @@
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/PrinterTransparencyMode.hxx>
 #include <vcl/PrinterGradientMode.hxx>
+#include <vcl/PrinterBitmapMode.hxx>
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -54,14 +55,6 @@ namespace vcl {
 }
 
 namespace weld { class Window; }
-
-enum class PrinterBitmapMode
-{
-    Optimal    = 0,
-    Normal     = 1,
-    Resolution = 2
-};
-
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PrinterOptions
 {
