@@ -103,9 +103,17 @@ MERGE_LIBRARY_LIST := \
 	updatefeed \
 	utl \
 	uui \
+	vbaevents \
+	vbahelper \
 	vcl \
+	vclcanvas \
+	xmlfa \
+	xmlfd \
 	xmlscript \
 	xo \
+	xof \
+	xsltdlg \
+	xsltfilter \
 	xstor \
 
 
