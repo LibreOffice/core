@@ -209,6 +209,7 @@ public:
     void testTdf128684();
     void testTdf119187();
     void testShapeGlowEffectPPTXImpoer();
+    void testShapeBlurPPTXImport();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -329,6 +330,7 @@ public:
     CPPUNIT_TEST(testTdf113198);
     CPPUNIT_TEST(testTdf119187);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
+    CPPUNIT_TEST(testShapeBlurPPTXImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3119,6 +3121,22 @@ void SdImportTest::testShapeGlowEffectPPTXImpoer()
     sal_Int16 nTransparency;
     xShape->getPropertyValue("GlowEffectTransparency") >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
+}
+
+void SdImportTest::testShapeBlurPPTXImport()
+{
+    sd::DrawDocShellRef xDocShRef
+            = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-blur-effect.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    bool bHasShadow = false;
+    xShape->getPropertyValue("Shadow") >>= bHasShadow;
+    CPPUNIT_ASSERT(bHasShadow);
+
+    sal_Int32 nRadius = -1;
+    xShape->getPropertyValue("ShadowBlur") >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(139700), nRadius); // 584200EMU=46pt - 139700EMU = 11pt
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

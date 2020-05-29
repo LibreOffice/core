@@ -84,6 +84,7 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
             mrEffectProperties.maShadow.moShadowSx = rAttribs.getInteger( XML_sx, 0 );
             mrEffectProperties.maShadow.moShadowSy = rAttribs.getInteger( XML_sy, 0 );
+            mrEffectProperties.maShadow.moShadowBlur = rAttribs.getInteger( XML_blurRad, 0 );
             return new ColorContext(*this, mrEffectProperties.m_Effects[nPos]->moColor);
         }
         break;

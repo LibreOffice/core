@@ -364,6 +364,7 @@
 #define SIP_SA_SHADOWXDIST                                  NC_("SIP_SA_SHADOWXDIST", "Shadow spacing X")
 #define SIP_SA_SHADOWYDIST                                  NC_("SIP_SA_SHADOWYDIST", "Shadow spacing Y")
 #define SIP_SA_SHADOWTRANSPARENCE                           NC_("SIP_SA_SHADOWTRANSPARENCE", "Shadow transparency")
+#define SIP_SA_SHADOWBLUR                                   NC_("SIP_SA_SHADOWBLUR", "Shadow blur")
 #define SIP_SA_SHADOW3D                                     NC_("SIP_SA_SHADOW3D", "3D shadow")
 #define SIP_SA_SHADOWPERSP                                  NC_("SIP_SA_SHADOWPERSP", "Perspective shadow")
 #define SIP_SA_CAPTIONTYPE                                  NC_("SIP_SA_CAPTIONTYPE", "Type of legend")
