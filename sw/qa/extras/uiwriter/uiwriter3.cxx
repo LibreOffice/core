@@ -12,7 +12,6 @@
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -722,20 +721,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
 
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Comment"), getProperty<OUString>(xPropertySet, "Content"));
+
     // Without the fix in place, it would crash here
     dispatchCommand(mxComponent, ".uno:Copy", {});
     Scheduler::ProcessEventsToIdle();
 
-    OUString aPostits = pTextDoc->getPostIts();
-    std::stringstream aStream(aPostits.toUtf8().getStr());
-    boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
-    for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
-    {
-        const boost::property_tree::ptree& rComment = rValue.second;
-        OString aText(rComment.get<std::string>("text").c_str());
-        CPPUNIT_ASSERT_EQUAL(OString("Comment"), aText);
-    }
+    // Paste content twice and resolve so properties are updated
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:ResolveComment", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("CommentComment"),
+                         getProperty<OUString>(xPropertySet, "Content"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Comment"), getProperty<OUString>(xPropertySet, "Content"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
