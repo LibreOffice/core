@@ -1386,7 +1386,7 @@ void MultiSelectionModeHandler::UpdateSelection()
             maSecondCorner,
             false,
             false));
-    if (!(nIndexUnderMouse>=0 && nIndexUnderMouse<nPageCount))
+    if (nIndexUnderMouse < 0 || nIndexUnderMouse >= nPageCount)
         return;
 
     if (mnAnchorIndex < 0)

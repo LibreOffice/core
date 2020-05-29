@@ -970,7 +970,7 @@ readUnsignedNumber(const OUString & rString,
     while (nPos < rString.getLength())
     {
         const sal_Unicode c = rString[nPos];
-        if (!(('0' <= c) && (c <= '9')))
+        if (('0' > c) || (c > '9'))
             break;
         ++nPos;
     }

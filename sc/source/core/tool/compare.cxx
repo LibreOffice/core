@@ -42,7 +42,7 @@ CompareOptions::CompareOptions( const ScDocument* pDoc, const ScQueryEntry& rEnt
 {
     // Wildcard and Regex search work only with equal or not equal.
     if (eSearchType != utl::SearchParam::SearchType::Normal &&
-            !(aQueryEntry.eOp == SC_EQUAL || aQueryEntry.eOp == SC_NOT_EQUAL))
+            aQueryEntry.eOp != SC_EQUAL && aQueryEntry.eOp != SC_NOT_EQUAL)
         eSearchType = utl::SearchParam::SearchType::Normal;
 
     // Interpreter functions usually are case insensitive, except the simple

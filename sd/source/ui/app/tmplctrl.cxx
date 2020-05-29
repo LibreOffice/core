@@ -97,7 +97,7 @@ void SdTemplateControl::Paint( const UserDrawEvent&  )
 
 void SdTemplateControl::Command( const CommandEvent& rCEvt )
 {
-    if ( !(rCEvt.GetCommand() == CommandEventId::ContextMenu && !GetStatusBar().GetItemText( GetId() ).isEmpty()) )
+    if ( rCEvt.GetCommand() != CommandEventId::ContextMenu || GetStatusBar().GetItemText( GetId() ).isEmpty() )
         return;
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();

@@ -301,7 +301,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                             {
                                 if ( *pNameBuffer == '\'' && *(pNameBuffer-1) != '\\' )
                                     bQuote = false;
-                                else if( !(*pNameBuffer == '\\' && *(pNameBuffer+1) == '\'') )
+                                else if( *pNameBuffer != '\\' || *(pNameBuffer+1) != '\'' )
                                     aDocURLBuffer.append(*pNameBuffer); // If escaped quote: only quote in the name
                                 ++pNameBuffer;
                             }

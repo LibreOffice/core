@@ -559,7 +559,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
                 {
                     while ( nRef < nMax && nSortArray.at( nRef ) < nDate1 )
                         nRef++;
-                    if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate1 ) )
+                    if ( nRef >= nMax || nSortArray.at( nRef ) != nDate1 )
                         nCnt++;
                 }
                 ++nDate1;
@@ -613,7 +613,7 @@ void ScInterpreter::ScWorkday_MS()
                         while ( nRef < nMax && nSortArray.at( nRef ) < nDate )
                             nRef++;
 
-                        if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate ) || nRef >= nMax )
+                        if ( nRef >= nMax || nSortArray.at( nRef ) != nDate || nRef >= nMax )
                             nDays--;
                     }
                 }

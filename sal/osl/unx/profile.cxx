@@ -306,7 +306,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     }
 
     pFile = pProfile->m_pFile;
-    if ( !( pFile != nullptr && pFile->m_Handle >= 0 ) )
+    if ( pFile == nullptr || pFile->m_Handle < 0 )
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 
@@ -325,7 +325,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
 static bool writeProfileImpl(osl_TFile* pFile)
 {
-    if ( !( pFile != nullptr && pFile->m_Handle >= 0 ) || ( pFile->m_pWriteBuf == nullptr ) )
+    if ( pFile == nullptr || pFile->m_Handle < 0 || pFile->m_pWriteBuf == nullptr )
     {
         return false;
     }
