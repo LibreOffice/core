@@ -172,7 +172,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/WriterInspectorTextPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::WriterInspectorTextPanel::Create( pParentWindow, xFrame);
+        VclPtr<vcl::Window> pPanel = sw::sidebar::WriterInspectorTextPanel::Create( pParentWindow, xFrame, pBindings);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
