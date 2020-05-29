@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 
 #include <configsettings.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/print.hxx>

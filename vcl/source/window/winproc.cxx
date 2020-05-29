@@ -27,6 +27,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <comphelper/lok.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/GestureEvent.hxx>

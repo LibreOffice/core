@@ -43,6 +43,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <printerinfomanager.hxx>
 #include <vcl/svapp.hxx>

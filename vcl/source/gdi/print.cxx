@@ -23,6 +23,7 @@
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
 
+#include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
@@ -332,13 +333,6 @@ bool Printer::HasMirroredGraphics() const
 {
     // due to a "hotfix" for AOO bug i55719, this needs to return false
     return false;
-}
-
-// QueueInfo
-QueueInfo::QueueInfo()
-{
-    mnStatus    = PrintQueueFlags::NONE;
-    mnJobs      = 0;
 }
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()

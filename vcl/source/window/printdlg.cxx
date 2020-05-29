@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
+#include <vcl/QueueInfo.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/naturalsort.hxx>
 #include <vcl/print.hxx>
