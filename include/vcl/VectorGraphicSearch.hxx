@@ -21,6 +21,12 @@
 
 class SearchContext;
 
+enum class SearchStartPosition
+{
+    Begin,
+    End
+};
+
 class VCL_DLLPUBLIC VectorGraphicSearch final
 {
 private:
@@ -29,12 +35,14 @@ private:
     Graphic maGraphic;
     std::unique_ptr<SearchContext> mpSearchContext;
 
-    bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData, OUString const& rSearchString);
+    bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData, OUString const& rSearchString,
+                   SearchStartPosition eStartPosition);
 
 public:
     VectorGraphicSearch(Graphic const& rGraphic);
     ~VectorGraphicSearch();
-    bool search(OUString const& rSearchString);
+    bool search(OUString const& rSearchString,
+                SearchStartPosition eStartPosition = SearchStartPosition::Begin);
     basegfx::B2DSize pageSize();
     bool next();
     bool previous();
