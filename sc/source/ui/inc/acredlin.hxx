@@ -35,11 +35,11 @@ class ScRedlinData : public RedlinData
 public:
                     ScRedlinData();
                     virtual ~ScRedlinData() override;
+    sal_uLong       nActionNo;
+    sal_uLong       nInfo;
     SCTAB           nTable;
     SCCOL           nCol;
     SCROW           nRow;
-    sal_uLong       nActionNo;
-    sal_uLong       nInfo;
     bool            bIsRejectable;
     bool            bIsAcceptable;
 };

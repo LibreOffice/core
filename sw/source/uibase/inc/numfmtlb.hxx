@@ -28,12 +28,12 @@ class SwView;
 class SW_DLLPUBLIC SwNumFormatBase
 {
 protected:
-    SvNumFormatType     nCurrFormatType;
-    bool                mbCurrFormatTypeNeedsInit;
     sal_Int32           nStdEntry;
-    bool                bOneArea;
     sal_uInt32          nDefFormat;
+    SvNumFormatType     nCurrFormatType;
     LanguageType        eCurLanguage;
+    bool                bOneArea;
+    bool                mbCurrFormatTypeNeedsInit;
     bool                bShowLanguageControl; //determine whether the language control has
                                               //to be shown in the number format dialog
     bool                bUseAutomaticLanguage;//determine whether language is automatically assigned

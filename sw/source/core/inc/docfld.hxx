@@ -44,7 +44,6 @@ enum class SwFieldIds : sal_uInt16;
 class SetGetExpField
 {
     sal_uLong m_nNode;
-    sal_Int32 m_nContent;
     union {
         const SwTextField* pTextField;
         const SwSection* pSection;
@@ -54,6 +53,7 @@ class SetGetExpField
         const SwTextINetFormat* pTextINet;
         const SwFlyFrameFormat* pFlyFormat;
     } m_CNTNT;
+    sal_Int32 m_nContent;
     enum SetGetExpFieldType
         {
             TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,

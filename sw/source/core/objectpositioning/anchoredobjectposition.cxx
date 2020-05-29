@@ -44,10 +44,10 @@ using namespace objectpositioning;
 
 SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
     : mrDrawObj( _rDrawObj ),
-      mbIsObjFly( false ),
       mpAnchoredObj( nullptr ),
       mpAnchorFrame( nullptr ),
       mpContact( nullptr ),
+      mbIsObjFly( false ),
       // #i62875#
       mbFollowTextFlow( false ),
       mbDoNotCaptureAnchoredObj( false )

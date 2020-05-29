@@ -72,7 +72,7 @@ def read_generator(gdbOutput):
 sortedLocs = sorted(locToClassDict.keys())
 classList = list()
 for src in sortedLocs:
-    if "include/" in src:
+    if "/inc/" in src or "include/" in src:
         classList.append(locToClassDict[src])
 
 with open("compilerplugins/clang/pahole.results", "wt") as f:

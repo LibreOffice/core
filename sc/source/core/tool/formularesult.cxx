@@ -15,10 +15,10 @@
 
 namespace sc {
 
-FormulaResultValue::FormulaResultValue() : meType(Invalid), mfValue(0.0), mnError(FormulaError::NONE) {}
-FormulaResultValue::FormulaResultValue( double fValue ) : meType(Value), mfValue(fValue), mnError(FormulaError::NONE) {}
-FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : meType(String), mfValue(0.0), maString(rStr), mnError(FormulaError::NONE) {}
-FormulaResultValue::FormulaResultValue( FormulaError nErr ) : meType(Error), mfValue(0.0), mnError(nErr) {}
+FormulaResultValue::FormulaResultValue() : mfValue(0.0), meType(Invalid), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( double fValue ) : mfValue(fValue), meType(Value), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : mfValue(0.0), maString(rStr), meType(String), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( FormulaError nErr ) : mfValue(0.0), meType(Error), mnError(nErr) {}
 
 }
 

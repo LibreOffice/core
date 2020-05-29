@@ -92,10 +92,10 @@ class SW_DLLPUBLIC SwRedlineData
 
     OUString m_sComment;
     DateTime m_aStamp;
-    RedlineType m_eType;
-    bool m_bAutoFormat;
     std::size_t m_nAuthor;
+    RedlineType m_eType;
     sal_uInt16 m_nSeqNo;
+    bool m_bAutoFormat;
 
 public:
     SwRedlineData( RedlineType eT, std::size_t nAut );

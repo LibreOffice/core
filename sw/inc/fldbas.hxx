@@ -294,11 +294,11 @@ class SW_DLLPUBLIC SwField
 {
 private:
     mutable OUString    m_Cache;                ///< Cached expansion (for clipboard).
-    bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
-    LanguageType        m_nLang;                ///< Always change via SetLanguage!
-    bool                m_bIsAutomaticLanguage;
-    sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
+    sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
+    LanguageType        m_nLang;                ///< Always change via SetLanguage!
+    bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
+    bool                m_bIsAutomaticLanguage;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const = 0;
     virtual std::unique_ptr<SwField> Copy() const = 0;
