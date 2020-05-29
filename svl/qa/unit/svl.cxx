@@ -358,9 +358,9 @@ void Test::testSharedStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(*aSysLocale.GetCharClassPtr());
+    aPool.intern("ANDY");
     aPool.intern("Andy");
     aPool.intern("andy");
-    aPool.intern("ANDY");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string count.", static_cast<size_t>(3), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong case insensitive string count.", static_cast<size_t>(1), aPool.getCountIgnoreCase());

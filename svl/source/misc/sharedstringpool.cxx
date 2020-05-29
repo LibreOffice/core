@@ -78,7 +78,10 @@ void SharedStringPool::purge()
         while (it != itEnd)
         {
             const rtl_uString* p = it->first.pData;
-            if (getRefCount(p) == 1)
+            // If the string itself is uppercase, it is refcounted
+            // both by the item and the uppercase pool.
+            const int unsharedRefcount = ( p == it->second ? 2 : 1 );
+            if (getRefCount(p) == unsharedRefcount)
                 it = mpImpl->maStrMap.erase(it);
             else
             {
