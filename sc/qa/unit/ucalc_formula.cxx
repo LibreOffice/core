@@ -1260,7 +1260,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
         {
             if (rCase.bMatrixFormula)
             {
-                ScMarkData aMark(MAXROW, MAXCOL);
+                ScMarkData aMark(m_pDoc->GetSheetLimits());
                 aMark.SelectOneTable(0);
                 SCCOL nColStart = rCase.aCellAddress.Col();
                 SCROW nRowStart = rCase.aCellAddress.Row();
@@ -2241,7 +2241,7 @@ void Test::testFormulaRefUpdateInsertRows()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
     // Insert rows over rows 1:2.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,m_pDoc->MaxCol(),1,0), &aMark, INS_INSROWS_BEFORE, false, true);
@@ -2396,7 +2396,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Insert columns over A:B.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.InsertCells(ScRange(0,0,0,1,m_pDoc->MaxRow(),0), &aMark, INS_INSCOLS_BEFORE, false, true);
@@ -2994,7 +2994,7 @@ void Test::testFormulaRefUpdateDeleteContent()
 
     // Delete B2.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(ScAddress(1,1,0));
     rFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
 
@@ -3034,7 +3034,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft()
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
 
     // Delete columns D:E (middle of the reference).
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
@@ -3169,7 +3169,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftLeft2()
     funcCheckOriginal();
 
     // Delete Column A.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
@@ -3208,7 +3208,7 @@ void Test::testFormulaRefUpdateDeleteAndShiftUp()
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
 
     // Delete rows 4:5 (middle of the reference).
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,m_pDoc->MaxCol(),4,0), &aMark, DelCellCmd::CellsUp, true);
@@ -3549,7 +3549,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
@@ -3663,7 +3663,7 @@ void Test::testFormulaRefUpdateNameExpandRef2()
 
     // Insert a new row at row 4, which should expand the named range to A1:A4.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Insert a new column at column 3, which should expand the named
@@ -3708,7 +3708,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
 
     // Delete row 3.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::CellsUp, true);
 
@@ -3773,7 +3773,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
 
     m_pDoc->InsertTab(1, "test2");
 
-    ScMarkData aMark2(MAXROW, MAXCOL);
+    ScMarkData aMark2(m_pDoc->GetSheetLimits());
     aMark2.SelectOneTable(1);
     rFunc.DeleteCells(ScRange(0,2,1,m_pDoc->MaxCol(),2,1), &aMark2, DelCellCmd::CellsUp, true);
 
@@ -4254,7 +4254,7 @@ void Test::testFormulaRefUpdateValidity()
     CPPUNIT_ASSERT_MESSAGE("Initial list is incorrect.", bGood);
 
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Insert a new column at Column B, to move the list from C2:C4 to D2:D4.
@@ -4378,7 +4378,7 @@ void Test::testMultipleOperations()
     aParam.aRefFormulaCell = ScRefAddress(1,0,0);
     aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
     aParam.aRefColCell = ScRefAddress(0,0,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(ScRange(0,2,0,1,4,0)); // Select A3:B5.
     m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(1,2,0));
@@ -4463,7 +4463,7 @@ void Test::testFuncCOUNT()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
 
     // Matrix in C1.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(2, 0, 2, 0, aMark, "=COUNT(SEARCH(\"a\";{\"a\";\"b\";\"a\"}))");
     // Check that the #VALUE! error of "a" not found in "b" is not counted.
@@ -4568,7 +4568,7 @@ void Test::testFuncROW()
 
     // Insert a new row at row 4.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,3,0,m_pDoc->MaxCol(),3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,1,0), "ROW(A6)", "Wrong formula!");
@@ -4780,7 +4780,7 @@ void Test::testFuncMIN()
     m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
 
     // Matrix in C1:C2.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(2, 0, 2, 1, aMark, "=MIN(IF(A1:A2=\"c\";B1:B2))");
 
@@ -4992,7 +4992,7 @@ void Test::testFuncCOUNTIF()
     // Another test case adopted from tdf#99291, empty array elements should
     // not match empty cells, but cells with 0.
     clearSheet(m_pDoc, 0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,0, 0,1, aMark, "=COUNTIF(B1:B5;C1:C2)");
     // As we will be testing for 0.0 values, check that formulas are actually present.
@@ -5030,7 +5030,7 @@ void Test::testFuncIF()
     CPPUNIT_ASSERT_EQUAL(OUString("not two"), m_pDoc->GetString(ScAddress(0,0,0)));
 
     // Test nested IF in array/matrix if the nested IF condition is a scalar.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,2, 1,2, aMark, "=IF({1;0};IF(1;23);42)");
     // Results must be 23 and 42.
@@ -5147,7 +5147,7 @@ void Test::testFuncIFERROR()
 
     // Create a matrix range in last two rows of the range above, actual data
     // of the placeholders.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 20 + nRows-2, 0, 20 + nRows-1, aMark, "=IFERROR(3*A11:A12;1998)");
 
@@ -5330,7 +5330,7 @@ void Test::testFuncLEN()
     // Leave A1:A3 empty, and insert an array of LEN in B1:B3 that references
     // these empty cells.
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(1, 0, 1, 2, aMark, "=LEN(A1:A3)");
 
@@ -6282,7 +6282,7 @@ void Test::testFormulaDepTrackingDeleteRow()
 
     // Delete row 2.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,1,0,m_pDoc->MaxCol(),1,0), &aMark, DelCellCmd::CellsUp, true);
 
@@ -6340,7 +6340,7 @@ void Test::testFormulaDepTrackingDeleteCol()
 
     // Delete column A.  A1, B1, A3:A4 and B3:B4 should all show #REF!.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,0,0,0,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
 
@@ -6425,7 +6425,7 @@ void Test::testFormulaMatrixResultUpdate()
     // Set a numeric value to A1.
     m_pDoc->SetValue(ScAddress(0,0,0), 11.0);
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(1, 0, 1, 0, aMark, "=A1");
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(1,0,0)));
@@ -6797,7 +6797,7 @@ void Test::testExternalRefFunctions()
     FormulaError nErr = pFC->GetErrCode();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield FormulaError::MatrixSize", int(FormulaError::MatrixSize), static_cast<int>(nErr));
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,0,0,0, aMark, "'file:///extdata.fake'#Data.B1:AMJ1048575");
     pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
@@ -7054,7 +7054,7 @@ void Test::testFuncFORMULA()
     }
 
     // Matrix in D4:D6, no intersection with B1:B3
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(3, 3, 3, 5, aMark, "=FORMULA(B1:B3)");
     for (size_t i=0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -7070,7 +7070,7 @@ void Test::testFuncTableRef()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
     m_pDoc->InsertTab(0, "Sheet1");
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
 
@@ -8284,7 +8284,7 @@ void Test::testFormulaErrorPropagation()
 
     m_pDoc->InsertTab(0, "Sheet1");
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScAddress aPos, aPos2;
     const OUString aTRUE("TRUE");
@@ -8377,7 +8377,7 @@ public:
                       std::function<double(SCROW )> const & lExpected ) const
     {
         ScDocument aClipDoc(SCDOCMODE_CLIP);
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
 
         ScAddress aPos(nColumn, m_nStart1, 0);
         m_pDoc->SetString(aPos, rFormula);
@@ -8498,7 +8498,7 @@ void Test::testTdf97587()
     }
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
 
     ScAddress aPos(1, 0, 0);
     m_pDoc->SetString(aPos, "=SUM(A1:A10)");
@@ -8536,7 +8536,7 @@ void Test::testMatConcat()
         }
     }
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 12, 9, 21, aMark, "=A1:J10&A1:J10");
 
@@ -8599,7 +8599,7 @@ void Test::testMatConcatReplication()
         }
     }
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 12, 9, 21, aMark, "=A1:J10&A1:J1");
 
@@ -8771,7 +8771,7 @@ void Test::testFuncSUMIFS()
 
     insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     // Matrix formula in C8:C10 with SUMIFS
     m_pDoc->InsertMatrixFormula(2, 7, 2, 9, aMark, "=SUMIFS(B1:B7;A1:A7;A9:A11)");
@@ -8932,7 +8932,7 @@ void Test::testFuncRefListArraySUBTOTAL()
     m_pDoc->SetValue(0,5,0, 32.0);  // A6
 
     // Matrix in B7:B9, individual SUM of A2:A3, A3:A4 and A4:A5
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(1, 6, 1, 8, aMark, "=SUBTOTAL(9;OFFSET(A1;ROW(1:3);0;2))");
     ScAddress aPos(1,6,0);
@@ -9052,7 +9052,7 @@ void Test::testFuncJumpMatrixArrayIF()
     };                              // A7:B9
     insertRangeData(m_pDoc, ScAddress(0,6,0), aData);
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Matrix in C10, summing B7,B9
@@ -9081,7 +9081,7 @@ void Test::testFuncJumpMatrixArrayOFFSET()
     };
     insertRangeData(m_pDoc, ScAddress(0,0,0), aData);   // A1:A3
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Matrix in C5:C7, COLUMN()-3 here offsets by 0 but the entire expression

@@ -1454,7 +1454,7 @@ const ScRangeList* ScTable::GetScenarioRanges() const
     if (!pScenarioRanges)
     {
         const_cast<ScTable*>(this)->pScenarioRanges.reset(new ScRangeList);
-        ScMarkData aMark(pDocument->MaxRow(), pDocument->MaxCol());
+        ScMarkData aMark(pDocument->GetSheetLimits());
         MarkScenarioIn( aMark, ScScenarioFlags::NONE );     // always
         aMark.FillRangeListWithMarks( pScenarioRanges.get(), false );
     }

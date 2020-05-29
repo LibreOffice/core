@@ -679,7 +679,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
 
     // Delete row 3.  This will merge the two formula groups.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DelCellCmd::Rows, true);
 
@@ -792,7 +792,7 @@ void Test::testSharedFormulasRefUpdateExternal()
 
     // Delete rows 1 and 2. This should not change the references in the formula cells below.
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
 
@@ -906,7 +906,7 @@ void Test::testSharedFormulasInsertRow()
 
     // Insert a new row at row 3.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, true, true);
 
@@ -1027,7 +1027,7 @@ void Test::testSharedFormulasDeleteColumns()
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // First, test a single cell case.  A value in B1 and formula in C1.
@@ -2266,7 +2266,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
 
     // Set up an undo object for deleting A4.
     ScRange aUndoRange(0,3,0,0,3,0);
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     aMark.SetMultiMarkArea(aUndoRange);
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
@@ -2408,7 +2408,7 @@ void Test::testSharedFormulaDeleteTopCell()
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue( ScAddress(0,1,0)));
 
     // Delete cell A1.
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     getDocShell().GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false);
     // Check it's gone.
@@ -2443,7 +2443,7 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
         const ScAddress aOrgPos(0,0,0);
         insertRangeData( m_pDoc, aOrgPos, aData);
 
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
 
         // Set up clip document.
@@ -2490,7 +2490,7 @@ void Test::testSharedFormulaCutCopyMoveIntoRef()
             aPos.IncRow();
         }
 
-        ScMarkData aMark(MAXROW, MAXCOL);
+        ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
 
         // Set up clip document.
@@ -2557,7 +2557,7 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
     const ScAddress aOrgPos(0,0,0);
     insertRangeData( m_pDoc, aOrgPos, aData);
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     ScAddress aPos( ScAddress::UNINITIALIZED);
@@ -2651,7 +2651,7 @@ void Test::testSharedFormulaCutCopyMoveWithinRun()
         aPos.IncRow();
     }
 
-    ScMarkData aMark(MAXROW, MAXCOL);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
 
     // Set up clip document.

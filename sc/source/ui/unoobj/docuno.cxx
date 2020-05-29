@@ -1572,7 +1572,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
                 static_cast< sheet::XSpreadsheetDocument* >(this) );
     }
 
-    ScMarkData aMark(GetDocument()->MaxRow(), GetDocument()->MaxCol());
+    ScMarkData aMark(GetDocument()->GetSheetLimits());
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
     bool bRenderToGraphic = false;
@@ -1662,7 +1662,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
                 static_cast< sheet::XSpreadsheetDocument* >(this) );
     }
 
-    ScMarkData aMark(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol());
+    ScMarkData aMark(pDocShell->GetDocument().GetSheetLimits());
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
     // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
@@ -1909,7 +1909,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                 static_cast< sheet::XSpreadsheetDocument* >(this) );
     }
 
-    ScMarkData aMark(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol());
+    ScMarkData aMark(pDocShell->GetDocument().GetSheetLimits());
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
     bool bRenderToGraphic = false;
@@ -3085,7 +3085,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
     //! separate method with ScMarkData? Then change HasChangesListeners back.
     if ( rOperation == "cell-change" && pDocShell )
     {
-        ScMarkData aMarkData(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol());
+        ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
         aMarkData.MarkFromRangeList( rRanges, false );
         ScDocument& rDoc = pDocShell->GetDocument();
         SCTAB nTabCount = rDoc.GetTableCount();
@@ -4453,7 +4453,7 @@ void SAL_CALL ScAnnotationsObj::removeByIndex( sal_Int32 nIndex )
         ScAddress aPos;
         if ( GetAddressByIndex_Impl( nIndex, aPos ) )
         {
-            ScMarkData aMarkData(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol());
+            ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
             aMarkData.SelectTable( aPos.Tab(), true );
             aMarkData.SetMultiMarkArea( ScRange(aPos) );
 
@@ -4584,7 +4584,7 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        ScMarkData aMarkData(pDocShell->GetDocument().MaxRow(), pDocShell->GetDocument().MaxCol());
+        ScMarkData aMarkData(pDocShell->GetDocument().GetSheetLimits());
         aMarkData.SelectTable( nTab, true );
 
         for (const table::CellRangeAddress& rRange : aRanges)

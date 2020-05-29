@@ -160,7 +160,7 @@ void FuText::StopEditMode()
 
                 // Make sure the former area of the note anchor is invalidated.
                 ScRangeList aRangeList(aNotePos);
-                ScMarkData aMarkData(rDoc.MaxRow(), rDoc.MaxCol(), aRangeList);
+                ScMarkData aMarkData(rDoc.GetSheetLimits(), aRangeList);
                 rViewShell.UpdateSelectionArea(aMarkData);
             }
             else if( bNewNote || bDeleteNote )

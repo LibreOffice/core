@@ -54,8 +54,7 @@ private:
     ScRangeList     aBottomEnvelope;        // list of ranges in the bottom envelope of the multi selection
     ScRangeList     aLeftEnvelope;          // list of ranges in the left envelope of the multi selection
     ScRangeList     aRightEnvelope;         // list of ranges in the right envelope of the multi selection
-    SCROW           mnMaxRow;
-    SCCOL           mnMaxCol;
+    const ScSheetLimits& mrSheetLimits;
     bool            bMarked:1;              // rectangle marked
     bool            bMultiMarked:1;
 
@@ -63,12 +62,12 @@ private:
     bool            bMarkIsNeg:1;           // cancel if multi selection
 
 public:
-    ScMarkData(SCROW nMaxRow, SCCOL nMaxCol);
-    ScMarkData(SCROW nMaxRow, SCCOL nMaxCol, const ScRangeList& rList);
+    ScMarkData(const ScSheetLimits& rSheetLimits);
+    ScMarkData(const ScSheetLimits& rSheetLimits, const ScRangeList& rList);
     ScMarkData(const ScMarkData& rData) = default;
     ScMarkData(ScMarkData&& rData) = default;
-    ScMarkData& operator=(const ScMarkData& rData) = default;
-    ScMarkData& operator=(ScMarkData&& rData) = default;
+    ScMarkData& operator=(const ScMarkData& rData);
+    ScMarkData& operator=(ScMarkData&& rData);
     ~ScMarkData();
 
     void        ResetMark();

@@ -441,7 +441,7 @@ void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
         if ( nUpdateTab >= nTabCount )
             nUpdateTab = nTabCount-1;     // nUpdateTab is inclusive
 
-        ScMarkData aUpdateSheets(m_aDocument.MaxRow(), m_aDocument.MaxCol());
+        ScMarkData aUpdateSheets(m_aDocument.GetSheetLimits());
         SCTAB nTab;
         for (nTab=0; nTab<=nUpdateTab; ++nTab)
             if ( m_aDocument.IsPendingRowHeights( nTab ) )
@@ -680,7 +680,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
             if ( m_aDocument.TestCopyScenario( nSrcTab, nTab ) )          // test cell protection
             {
                 ScDocShellModificator aModificator( *this );
-                ScMarkData aScenMark(m_aDocument.MaxRow(), m_aDocument.MaxCol());
+                ScMarkData aScenMark(m_aDocument.GetSheetLimits());
                 m_aDocument.MarkScenario( nSrcTab, nTab, aScenMark );
                 ScRange aMultiRange;
                 aScenMark.GetMultiMarkArea( aMultiRange );

@@ -24,6 +24,7 @@
 #include <vector>
 
 class ScRangeList;
+struct ScSheetLimits;
 
 struct ScMarkEntry
 {
@@ -41,14 +42,14 @@ struct ScMarkEntry
 */
 class SC_DLLPUBLIC ScMarkArray
 {
+    const ScSheetLimits &       mrSheetLimits;
     std::vector<ScMarkEntry>    mvData;
-    SCROW                       mnMaxRow;
 
 friend class ScMarkArrayIter;
 friend class ScDocument;                // for FillInfo
 
 public:
-            ScMarkArray(SCROW nMaxRow);
+            ScMarkArray( const ScSheetLimits& rLimits );
             ScMarkArray( ScMarkArray&& rArray ) noexcept;
             ScMarkArray( const ScMarkArray& rArray );
             ~ScMarkArray();
