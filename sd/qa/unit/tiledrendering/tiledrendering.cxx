@@ -59,7 +59,10 @@
 
 using namespace css;
 
-static char const DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
+namespace
+{
+    char const DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
+}
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
@@ -84,12 +87,6 @@ public:
     void testSetGraphicSelection();
     void testUndoShells();
     void testResetSelection();
-    void testSearch();
-    void testSearchAll();
-    void testSearchAllSelections();
-    void testSearchAllNotifications();
-    void testSearchAllFollowedBySearch();
-    void testDontSearchInMasterPages();
     void testInsertDeletePage();
     void testInsertTable();
     void testPartHash();
@@ -140,12 +137,6 @@ public:
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST(testResetSelection);
-    CPPUNIT_TEST(testSearch);
-    CPPUNIT_TEST(testSearchAll);
-    CPPUNIT_TEST(testSearchAllSelections);
-    CPPUNIT_TEST(testSearchAllNotifications);
-    CPPUNIT_TEST(testSearchAllFollowedBySearch);
-    CPPUNIT_TEST(testDontSearchInMasterPages);
     CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testInsertTable);
     CPPUNIT_TEST(testPartHash);
@@ -257,7 +248,10 @@ void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData
     static_cast<SdTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
 }
 
-static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
+namespace
+{
+
+std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
 {
     std::vector<OUString> aRet;
 
@@ -274,7 +268,7 @@ static std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_U
     return aRet;
 }
 
-static void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangle)
+void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
@@ -283,6 +277,8 @@ static void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rR
     rRectangle.setWidth(aSeq[2].toInt32());
     rRectangle.setHeight(aSeq[3].toInt32());
 }
+
+} // end anonymouse namespace
 
 void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
@@ -588,120 +584,6 @@ void SdTiledRenderingTest::testResetSelection()
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
-}
-
-static void lcl_search(const OUString& rKey, bool bFindAll = false)
-{
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-    {
-        {"SearchItem.SearchString", uno::makeAny(rKey)},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND))},
-    }));
-    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-}
-
-void SdTiledRenderingTest::testSearch()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-    uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    xShape->setString("Aaa bbb.");
-
-    lcl_search("bbb");
-
-    SdrView* pView = pViewShell->GetView();
-    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
-    // Did we indeed manage to select the second word?
-    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
-
-    // Did the selection callback fire?
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
-
-    // Search for something on the second slide, and make sure that the set-part callback fired.
-    lcl_search("bbb");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
-    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
-    // This was 0; should be 1 match for "find".
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultSelection.size());
-    // Result is on the second slide.
-    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
-
-    // This should trigger the not-found callback.
-    lcl_search("ccc");
-    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
-}
-
-void SdTiledRenderingTest::testSearchAll()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("match", /*bFindAll=*/true);
-
-    // This was empty: find-all did not highlight the first match.
-    CPPUNIT_ASSERT_EQUAL(OString("match"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
-
-    // We're on the first slide, search for something on the second slide and make sure we get a SET_PART.
-    m_nPart = 0;
-    lcl_search("second", /*bFindAll=*/true);
-    // This was 0: no SET_PART was emitted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
-}
-
-void SdTiledRenderingTest::testSearchAllSelections()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("third", /*bFindAll=*/true);
-    // Make sure this is found on the 3rd slide.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
-    // This was 1: only the first match was highlighted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
-}
-
-void SdTiledRenderingTest::testSearchAllNotifications()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("third", /*bFindAll=*/true);
-    // Make sure that we get no notifications about selection changes during search.
-    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
-    // But we do get the selection of the first hit.
-    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
-}
-
-void SdTiledRenderingTest::testSearchAllFollowedBySearch()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("third", /*bFindAll=*/true);
-    lcl_search("match" /*,bFindAll=false*/);
-
-    // This used to give wrong result: 'search' after 'search all' still
-    // returned 'third'
-    CPPUNIT_ASSERT_EQUAL(OString("match"), apitest::helper::transferable::getTextSelection(pXImpressDocument->getSelection(), "text/plain;charset=utf-8"));
-}
-
-void SdTiledRenderingTest::testDontSearchInMasterPages()
-{
-    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
-
-    // This should trigger the not-found callback ("date" is present only on
-    // the master page)
-    lcl_search("date");
-    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
 namespace
