@@ -104,6 +104,13 @@ public:
         return false;
     }
 
+    bool previous()
+    {
+        if (mpSearchHandle)
+            return FPDFText_FindPrev(mpSearchHandle);
+        return false;
+    }
+
     int index()
     {
         if (mpSearchHandle)
@@ -242,6 +249,13 @@ bool VectorGraphicSearch::next()
 {
     if (mpSearchContext)
         return mpSearchContext->next();
+    return false;
+}
+
+bool VectorGraphicSearch::previous()
+{
+    if (mpSearchContext)
+        return mpSearchContext->previous();
     return false;
 }
 
