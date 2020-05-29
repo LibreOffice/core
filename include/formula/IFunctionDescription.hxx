@@ -101,6 +101,7 @@ namespace formula
         // parameter
         virtual sal_uInt32 getParameterCount() const = 0;
         virtual sal_uInt32 getVarArgsStart() const = 0;
+        virtual sal_uInt32 getVarArgsLimit() const = 0;
         virtual OUString getParameterName(sal_uInt32 _nPos) const = 0;
         virtual OUString getParameterDescription(sal_uInt32 _nPos) const = 0;
         virtual bool isParameterOptional(sal_uInt32 _nPos) const = 0;
