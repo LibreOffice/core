@@ -127,7 +127,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/InspectorTextPanel"))
     {
-        pControl = InspectorTextPanel::Create(pParentWindow, xFrame);
+        pControl = InspectorTextPanel::Create(pParentWindow, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/StylesPropertyPanel"))
     {
