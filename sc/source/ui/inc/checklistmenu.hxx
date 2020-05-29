@@ -346,7 +346,7 @@ public:
     void setHasDates(bool bHasDates);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
-    void initMembers();
+    size_t initMembers();
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
