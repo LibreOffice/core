@@ -51,7 +51,7 @@ class ListLevel : public PropertyMap
     OUString                               m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
     css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
-    sal_Int32                                     m_nTabstop;
+    std::optional<sal_Int32>               m_nTabstop;
     tools::SvRef< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
     bool m_bHasValues = false;
@@ -65,7 +65,6 @@ public:
         ,m_nStartOverride(-1)
         ,m_nNFC(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
-        ,m_nTabstop( 0 )
         ,m_outline(false)
         {}
 

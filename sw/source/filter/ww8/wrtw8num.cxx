@@ -583,7 +583,7 @@ void MSWordExportBase::NumberingLevel(
 
     sal_Int16 nIndentAt = 0;
     sal_Int16 nFirstLineIndex = 0;
-    sal_Int16 nListTabPos = 0;
+    sal_Int16 nListTabPos = -1;
 
     // #i86652#
     if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
