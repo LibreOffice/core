@@ -954,6 +954,7 @@ ControlType Edit::ImplGetNativeControlType() const
         case WindowType::LONGCURRENCYFIELD:
         case WindowType::NUMERICFIELD:
         case WindowType::SPINFIELD:
+        case WindowType::FORMATTEDFIELD:
             if (pControl->GetStyle() & WB_SPIN)
                 nCtrl = ControlType::Spinbox;
             else
