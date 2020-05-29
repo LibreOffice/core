@@ -2066,6 +2066,7 @@ Sequence< Reference< XControl > > FormController::getControls()
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
+//SAL_WARN("JCL"," FormController::getControls()");
     if (!m_bControlsSorted)
     {
         Reference< XTabControllerModel >  xModel = getModel();
