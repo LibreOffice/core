@@ -48,6 +48,7 @@ namespace connectivity
                                                         //  for this Driver
             css::uno::Reference< css::lang::XMultiServiceFactory > m_xORB;
 
+            DWORD mnPreviousCOMInit;
 
         public:
             ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB);
