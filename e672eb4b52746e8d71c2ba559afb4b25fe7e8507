@@ -16,6 +16,24 @@
       "revId": "e672eb4b52746e8d71c2ba559afb4b25fe7e8507",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc415b57_8e60cffe",
+        "filename": "svl/source/misc/sharedstringpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-05-30T05:54:05Z",
+      "side": 1,
+      "message": "I don\u0027t know what you mean. I find both the changes separate, where do you see a mix?",
+      "parentUuid": "55575fe0_c23ef32a",
+      "revId": "e672eb4b52746e8d71c2ba559afb4b25fe7e8507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
