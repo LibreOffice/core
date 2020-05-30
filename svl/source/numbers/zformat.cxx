@@ -5282,6 +5282,9 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         // tdf#102370: Excel code for exponent without sign
                             aStr.append( "-" );
                         break;
+                    case NF_SYMBOLTYPE_PERCENT :
+                        aStr.append( '%' ); // export permille as percent
+                        break;
                     case NF_SYMBOLTYPE_DATESEP :
                         aStr.append( rLocWrp.getDateSep() );
                         break;

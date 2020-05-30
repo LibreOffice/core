@@ -1393,6 +1393,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         }
 
         //  final loop to write elements
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
 
         bool bNumWritten = false;
         bool bCurrencyWritten = false;
@@ -1439,7 +1440,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             bAnyContent = true;
                         }
                         else
-                            AddToTextElement_Impl( *pElemStr );
+                        {
+                            if ( nElemType == NF_SYMBOLTYPE_PERCENT && !( eVersion & SvtSaveOptions::ODFSVER_EXTENDED ) )
+                            {
+                                AddToTextElement_Impl( "%" );  // export permille as percent
+                            }
+                            else
+                                AddToTextElement_Impl( *pElemStr );
+                        }
                     }
                     break;
                 case NF_SYMBOLTYPE_BLANK:
@@ -1494,10 +1502,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         {
                             // for type 0 (not recognized as a special type),
                             // write a "normal" number
+                            case SvNumFormatType::PERCENT:
+                                // percent sign
+                                // export permille as percent if not ODF extended
+                                if ( !( eVersion & SvtSaveOptions::ODFSVER_EXTENDED ) )
+                                {
+                                    nPrecision += rFormat.GetFormatExponentDigits( nPart ) - 2;
+                                }
+                                [[fallthrough]];
                             case SvNumFormatType::ALL:
                             case SvNumFormatType::NUMBER:
                             case SvNumFormatType::CURRENCY:
-                            case SvNumFormatType::PERCENT:
                                 {
                                     //  decimals
                                     //  only some built-in formats have automatic decimals
@@ -1699,7 +1714,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_STAR :
                     // export only if ODF 1.2 extensions are enabled
-                    if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
+                    if (eVersion > SvtSaveOptions::ODFSVER_012)
                     {
                         if ( pElemStr && pElemStr->getLength() > 1 )
                             WriteRepeatedElement_Impl( (*pElemStr)[1] );
