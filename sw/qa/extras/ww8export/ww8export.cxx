@@ -1320,6 +1320,7 @@ DECLARE_WW8EXPORT_TEST(tesTdf91083_tableKeep2, "tdf91083_tableKeep2.odt")
 
 DECLARE_WW8EXPORT_TEST(tesTdf91083_tableKeep3, "tdf91083_tableKeep3.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
     //emulate table "keep with next" - split single row table in order to keep with previous paragraph
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table doesn't split, so it starts on page 2",
                                  OUString("0"), parseDump("count(//page[1]//tab)") );

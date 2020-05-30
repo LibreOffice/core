@@ -1275,6 +1275,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSpacingGroupShapeText, "tdf131775_Spacin
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf100581, "tdf100581.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
