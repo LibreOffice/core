@@ -520,7 +520,7 @@ void RtfSdrExport::impl_writeGraphic()
     }
     catch (beans::UnknownPropertyException const&)
     {
-        DBG_UNHANDLED_EXCEPTION("sw.rtf");
+        TOOLS_WARN_EXCEPTION("sw.rtf", "failed to fetch graphic");
     }
 
     if (xGraphic.is())
