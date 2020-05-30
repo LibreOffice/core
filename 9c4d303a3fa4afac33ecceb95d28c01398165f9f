@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96c1c133_81fc06bb",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-30T08:04:28Z",
+      "side": 1,
+      "message": "Possibly simplify this like the following:\n\n    HRESULT hr;\n    while ((hr \u003d CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) \u003d\u003d RPC_E_CHANGED_MODE)\n    {\n        // so we\u0027re in RPC_E_CHANGED_MODE case\n        // the pb was it was already initialized with COINIT_MULTITHREADED\n\n        // close this init\n        CoUninitialize();\n        // remember this so we initialize at least once\n        ++mnNbCallCoInitializeExForReinit;\n    }\n\n    if (FAILED(hr))\n    {\n        std::abort();\n    }\n\nNotice that we need not remember previous mode, since we *only* need to re-init in dtor when we changed mode -\u003e just use COINIT_MULTITHREADED in dtor unconditionally",
+      "range": {
+        "startLine": 51,
+        "startChar": 5,
+        "endLine": 78,
+        "endChar": 6
+      },
+      "revId": "9c4d303a3fa4afac33ecceb95d28c01398165f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
