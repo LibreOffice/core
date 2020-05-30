@@ -51,6 +51,7 @@ struct CallbackRecorder
         , m_nPart(0)
         , m_nSelectionBeforeSearchResult(0)
         , m_nSelectionAfterSearchResult(0)
+        , m_nSearchResultCount(0)
     {
     }
 
@@ -62,6 +63,7 @@ struct CallbackRecorder
     std::vector<int> m_aSearchResultPart;
     int m_nSelectionBeforeSearchResult;
     int m_nSelectionAfterSearchResult;
+    int m_nSearchResultCount;
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
 
@@ -115,6 +117,7 @@ struct CallbackRecorder
             break;
             case LOK_CALLBACK_SEARCH_RESULT_SELECTION:
             {
+                m_nSearchResultCount++;
                 m_aSearchResultSelection.clear();
                 m_aSearchResultPart.clear();
                 boost::property_tree::ptree aTree;
