@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a269d529_0ecfd6d6",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-30T07:25:51Z",
+      "side": 1,
+      "message": "Only if hr \u003d\u003d RPC_E_CHANGED_MODE, we should change all the uninit-\u003ereinit dance. In all other fail cases, we should abort() immediately.",
+      "range": {
+        "startLine": 53,
+        "startChar": 9,
+        "endLine": 53,
+        "endChar": 26
+      },
+      "revId": "29a41e34782372c7fa44f932bf64182b33afee96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d8aed7_79f3779c",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-05-30T07:25:51Z",
+      "side": 1,
+      "message": "This must *only* be performed if we uninited in ctor. Otherwise, we unbalance Init-\u003eUninit pairs. The COM could be uninitialized before, and then this will unexpectedly make COM initialized for no reason. Or it could had been COINIT_APARTMENTTHREADED before ctor -\u003e so the very first call to Init in ctor succeeded, and we didn\u0027t try to uninit -\u003e dtor would not decrement ref counter (it will decrement then increment again).",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "29a41e34782372c7fa44f932bf64182b33afee96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
