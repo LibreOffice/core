@@ -39,8 +39,8 @@ namespace sc { namespace sidebar {
 #define FRM_VALID_OUTER     0x0f
 #define FRM_VALID_ALL       0xff
 
-CellBorderStylePopup::CellBorderStylePopup(SfxDispatcher* pDispatcher)
-    : FloatingWindow(SfxGetpApp()->GetTopWindow(), "FloatingBorderStyle", "modules/scalc/ui/floatingborderstyle.ui")
+CellBorderStylePopup::CellBorderStylePopup(SfxDispatcher* pDispatcher, vcl::Window *pParent)
+    : FloatingWindow(pParent, "FloatingBorderStyle", "modules/scalc/ui/floatingborderstyle.ui")
     , mpDispatcher(pDispatcher)
 {
     get(maTBBorder1, "border1");

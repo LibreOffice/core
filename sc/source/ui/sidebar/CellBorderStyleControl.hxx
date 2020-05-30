@@ -41,7 +41,7 @@ private:
     DECL_LINK(TB3SelectHdl, ToolBox *, void);
 
 public:
-    explicit CellBorderStylePopup(SfxDispatcher* pDispatcher);
+    explicit CellBorderStylePopup(SfxDispatcher* pDispatcher, vcl::Window *pParent);
     virtual ~CellBorderStylePopup() override;
     virtual void dispose() override;
 };
