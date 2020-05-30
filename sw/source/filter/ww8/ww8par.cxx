@@ -4993,7 +4993,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         }
         catch (const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION("sw.ww8", "failed to initialize RDF metadata");
+            TOOLS_WARN_EXCEPTION("sw.ww8", "failed to initialize RDF metadata");
         }
         ReadDocInfo();
     }
