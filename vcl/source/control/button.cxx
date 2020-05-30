@@ -1857,9 +1857,6 @@ WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nSty
             nStyle &= ~WB_TABSTOP;
     }
 
-    if ( IsChecked() && IsRadioCheckEnabled() )
-        ImplUncheckAllOther( /*bSetStyle=*/false );
-
     return nStyle;
 }
 
@@ -2245,10 +2242,9 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
     return aGroup;
 }
 
-void RadioButton::ImplUncheckAllOther( const bool bSetStyle )
+void RadioButton::ImplUncheckAllOther()
 {
-    if ( bSetStyle )
-        mpWindowImpl->mnStyle |= WB_TABSTOP;
+    mpWindowImpl->mnStyle |= WB_TABSTOP;
 
     std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
