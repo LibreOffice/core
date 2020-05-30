@@ -882,7 +882,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
             {
                 ProvideNextTextObject ();
 
-                if (!mbEndOfSearch)
+                if (!mbEndOfSearch && !mpImpl->mbCurrentIsVectorGraphic)
                 {
                     // Remember the current position as the last one with a
                     // text object.
