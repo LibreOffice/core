@@ -889,6 +889,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80895, "fdo80895.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118242, "tdf118242.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"

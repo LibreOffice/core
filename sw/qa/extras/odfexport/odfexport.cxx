@@ -1684,6 +1684,7 @@ DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
 
 DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XNameAccess> xStyles(getStyles("PageStyles"));
     uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
