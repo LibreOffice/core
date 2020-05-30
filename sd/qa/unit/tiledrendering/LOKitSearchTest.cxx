@@ -56,6 +56,7 @@ public:
     void testSearchInPDFNonExisting();
     void testSearchInPDF();
     void testSearchInMixedObject();
+    void testSearchInMixedObject2();
 
     CPPUNIT_TEST_SUITE(LOKitSearchTest);
     CPPUNIT_TEST(testSearch);
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testSearchInPDFNonExisting);
     CPPUNIT_TEST(testSearchInPDF);
     CPPUNIT_TEST(testSearchInMixedObject);
+    CPPUNIT_TEST(testSearchInMixedObject2);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -132,6 +134,15 @@ void lcl_search(const OUString& rKey, bool bFindAll = false)
 
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
+}
+
+SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
+{
+    SdrView* pSdrView = pViewShell->GetView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rMarkList.GetMarkCount());
+    SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    return pObject;
 }
 
 } // end anonymous namespace
@@ -319,6 +330,8 @@ void LOKitSearchTest::testSearchInPDF()
                          mpCallbackRecorder->m_aSelection[0]);
 }
 
+// Test searching in document with mixed objects.
+// We have 2 objects: 1. Text Object, 2. Graphic Object with PDF
 void LOKitSearchTest::testSearchInMixedObject()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("MixedTest1.odg");
@@ -334,7 +347,7 @@ void LOKitSearchTest::testSearchInMixedObject()
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
 
-    // Check page hase 2 objects only
+    // Check page has 2 objects only
     CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
 
     // Check Object 1
@@ -401,6 +414,170 @@ void LOKitSearchTest::testSearchInMixedObject()
 
     CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
+}
+
+// Test searching in document with mixed objects. We have 6 objects.
+void LOKitSearchTest::testSearchInMixedObject2()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("MixedTest2.odg");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    // Check we have one page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    // Check page has 6 objects only
+    CPPUNIT_ASSERT_EQUAL(size_t(6), pPage->GetObjCount());
+
+    // Check we have the right objects that we expect
+
+    // Check Object 1
+    {
+        SdrObject* pObject = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_TEXT), pObject->GetObjIdentifier());
+    }
+
+    // Check Object 2
+    {
+        SdrObject* pObject = pPage->GetObj(1);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+        auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                             pVectorGraphicData->getVectorGraphicDataType());
+    }
+
+    // Check Object 3
+    {
+        SdrObject* pObject = pPage->GetObj(2);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_CUSTOMSHAPE), pObject->GetObjIdentifier());
+    }
+
+    // Check Object 4
+    {
+        SdrObject* pObject = pPage->GetObj(3);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_CUSTOMSHAPE), pObject->GetObjIdentifier());
+    }
+
+    // Check Object 5
+    {
+        SdrObject* pObject = pPage->GetObj(4);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+        auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg,
+                             pVectorGraphicData->getVectorGraphicDataType());
+    }
+
+    // Check Object 6
+    {
+        SdrObject* pObject = pPage->GetObj(5);
+        CPPUNIT_ASSERT(pObject);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+        SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+        auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                             pVectorGraphicData->getVectorGraphicDataType());
+    }
+
+    // Search "ABC" which is in all objects (2 times in Object 3)
+
+    // Object 1
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
+
+    // Object 2
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(1), lclGetSelectedObject(pViewShell));
+
+    // Object 3
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(2), lclGetSelectedObject(pViewShell));
+
+    // Object 3 again
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(4, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(2), lclGetSelectedObject(pViewShell));
+
+    // Object 4
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(5, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(3), lclGetSelectedObject(pViewShell));
+
+    // Object 5
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(6, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(4), lclGetSelectedObject(pViewShell));
+
+    // Object 6
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(7, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(5), lclGetSelectedObject(pViewShell));
+
+    // Loop to Object 1 again
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(8, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LOKitSearchTest);
