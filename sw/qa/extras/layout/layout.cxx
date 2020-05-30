@@ -2841,15 +2841,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableExtrusion2)
     assertXPath(pXmlDoc, sXPath, 0);
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf105478)
-{
-    createDoc("tdf105478_rowMinHeight.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-    // Minimum row height forces the cell (with table header as row 1) to start on page 2, not page 1.
-    assertXPathContent(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell/txt[1]", "Cell 1");
-}
-
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116848)
 {
     SwDoc* pDoc = createDoc("tdf116848.odt");
