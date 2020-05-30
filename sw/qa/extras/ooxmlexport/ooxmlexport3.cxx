@@ -1143,6 +1143,8 @@ DECLARE_OOXMLEXPORT_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
 {
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#92526: Make sure that line with stays 0.
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     if (!pXml)
