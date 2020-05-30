@@ -318,7 +318,7 @@
 #define STR_PRESOBJ_TABLE                               NC_("STR_PRESOBJ_TABLE", "Double-click to add a Spreadsheet" )
 #define STR_LAYOUT_DEFAULT_NAME                         NC_("STR_LAYOUT_DEFAULT_NAME", "Default" )
 #define STR_LAYOUT_DEFAULT_TITLE_NAME                   NC_("STR_LAYOUT_DEFAULT_TITLE_NAME", "Title" )
-#define STR_STANDARD_STYLESHEET_NAME                    NC_("STR_STANDARD_STYLESHEET_NAME", "Default" )
+#define STR_STANDARD_STYLESHEET_NAME                    NC_("STR_STANDARD_STYLESHEET_NAME", "Default Drawing Style" )
 #define STR_UNDO_MOVEPAGES                              NC_("STR_UNDO_MOVEPAGES", "Move slides" )
 #define STR_INSERT_PAGES                                NC_("STR_INSERT_PAGES", "Insert Pages" )
 #define STR_INSERT_PAGE_DRAW                            NC_("STR_INSERT_PAGE_DRAW", "Insert Page" )
