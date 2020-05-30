@@ -45,6 +45,30 @@
       "revId": "29a41e34782372c7fa44f932bf64182b33afee96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5416278_ef232aaa",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-05-30T07:56:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1d8aed7_79f3779c",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "29a41e34782372c7fa44f932bf64182b33afee96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
