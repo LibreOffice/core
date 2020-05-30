@@ -34,6 +34,24 @@
       "revId": "e672eb4b52746e8d71c2ba559afb4b25fe7e8507",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d404534f_60f200f1",
+        "filename": "svl/source/misc/sharedstringpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-05-30T17:09:42Z",
+      "side": 1,
+      "message": "sorry, you are correct, this change is fine",
+      "parentUuid": "dc415b57_8e60cffe",
+      "revId": "e672eb4b52746e8d71c2ba559afb4b25fe7e8507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
