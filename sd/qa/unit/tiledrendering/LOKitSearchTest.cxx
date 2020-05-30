@@ -292,21 +292,29 @@ void LOKitSearchTest::testSearchInPDF()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
+    // Search
     lcl_search("ABC");
 
     CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(OString("3763, 1331, 1432, 483"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
+                         mpCallbackRecorder->m_aSelection[0]);
 
-    CPPUNIT_ASSERT_EQUAL(long(3763), mpCallbackRecorder->m_aSelection[0].Left());
-    CPPUNIT_ASSERT_EQUAL(long(1331), mpCallbackRecorder->m_aSelection[0].Top());
-    CPPUNIT_ASSERT_EQUAL(long(1433), mpCallbackRecorder->m_aSelection[0].GetWidth());
-    CPPUNIT_ASSERT_EQUAL(long(484), mpCallbackRecorder->m_aSelection[0].GetHeight());
-
+    // Search again - same result
     lcl_search("ABC");
+
     CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(OString("3763, 1331, 1432, 483"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
+                         mpCallbackRecorder->m_aSelection[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LOKitSearchTest);
