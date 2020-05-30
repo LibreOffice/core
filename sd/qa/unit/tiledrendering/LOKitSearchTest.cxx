@@ -55,6 +55,7 @@ public:
     void testDontSearchInMasterPages();
     void testSearchInPDFNonExisting();
     void testSearchInPDF();
+    void testSearchInMixedObject();
 
     CPPUNIT_TEST_SUITE(LOKitSearchTest);
     CPPUNIT_TEST(testSearch);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testDontSearchInMasterPages);
     CPPUNIT_TEST(testSearchInPDFNonExisting);
     CPPUNIT_TEST(testSearchInPDF);
+    CPPUNIT_TEST(testSearchInMixedObject);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -315,6 +317,90 @@ void LOKitSearchTest::testSearchInPDF()
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
                          mpCallbackRecorder->m_aSelection[0]);
+}
+
+void LOKitSearchTest::testSearchInMixedObject()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("MixedTest1.odg");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    // Check we have one page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    // Check page hase 2 objects only
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+
+    // Check Object 1
+    {
+        SdrObject* pObject = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObject);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_TEXT), pObject->GetObjIdentifier());
+    }
+
+    // Check Object 2
+    {
+        SdrObject* pObject = pPage->GetObj(1);
+        CPPUNIT_ASSERT(pObject);
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(OBJ_GRAF), pObject->GetObjIdentifier());
+
+        SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+
+        Graphic aGraphic = pGraphicObject->GetGraphic();
+        auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                             pVectorGraphicData->getVectorGraphicDataType());
+    }
+
+    // Let's try to search now
+
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search next
+
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(OString("8412, 6385, 519, 174"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search next again - we should get the first object again
+
+    lcl_search("ABC");
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LOKitSearchTest);
