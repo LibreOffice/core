@@ -371,15 +371,11 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 
-    // Now, create string objects on the heap.
-    std::unique_ptr<OUString> pStr1(new OUString("Andy"));
-    std::unique_ptr<OUString> pStr2(new OUString("andy"));
-    std::unique_ptr<OUString> pStr3(new OUString("ANDY"));
-    std::unique_ptr<OUString> pStr4(new OUString("Bruce"));
-    aPool.intern(*pStr1);
-    aPool.intern(*pStr2);
-    aPool.intern(*pStr3);
-    aPool.intern(*pStr4);
+    // Now, create string objects using optional so we can clear them
+    std::optional<svl::SharedString> pStr1 = aPool.intern("Andy");
+    std::optional<svl::SharedString> pStr2 = aPool.intern("andy");
+    std::optional<svl::SharedString> pStr3 = aPool.intern("ANDY");
+    std::optional<svl::SharedString> pStr4 = aPool.intern("Bruce");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
