@@ -826,13 +826,19 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
             if (mpImpl->mbCurrentIsVectorGraphic)
             {
+                OUString const & rString = mpSearchItem->GetSearchString();
                 bool bBackwards = mpSearchItem->GetBackward();
 
-                bool bResult = false;
-                if (bBackwards)
-                    bResult = mpImpl->mpVectorGraphicSearch->previous();
-                else
-                    bResult = mpImpl->mpVectorGraphicSearch->next();
+                SearchStartPosition eSearchStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
+                bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, eSearchStartPosition);
+
+                if (bResult)
+                {
+                    if (bBackwards)
+                        bResult = mpImpl->mpVectorGraphicSearch->previous();
+                    else
+                        bResult = mpImpl->mpVectorGraphicSearch->next();
+                }
 
                 if (bResult)
                 {
