@@ -34,26 +34,26 @@ public:
 
 class SearchContext
 {
-public:
-    bool bInitialized = false;
-
+private:
     FPDF_DOCUMENT mpPdfDocument;
-    sal_Int32 mnPageIndex;
     FPDF_PAGE mpPage;
     FPDF_TEXTPAGE mpTextPage;
+    FPDF_SCHHANDLE mpSearchHandle;
+
+public:
+    sal_Int32 mnPageIndex;
     OUString maSearchString;
     SearchStartPosition meStartPosition;
-    FPDF_SCHHANDLE mpSearchHandle;
 
     SearchContext(FPDF_DOCUMENT pPdfDocument, sal_Int32 nPageIndex, OUString const& rSearchString,
                   SearchStartPosition eStartPosition)
         : mpPdfDocument(pPdfDocument)
-        , mnPageIndex(nPageIndex)
         , mpPage(nullptr)
         , mpTextPage(nullptr)
+        , mpSearchHandle(nullptr)
+        , mnPageIndex(nPageIndex)
         , maSearchString(rSearchString)
         , meStartPosition(eStartPosition)
-        , mpSearchHandle(nullptr)
     {
     }
 
