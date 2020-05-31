@@ -1170,6 +1170,7 @@ void SdOutliner::ProvideNextTextObject()
     mbFoundObject = false;
 
     // reset the vector search
+    mpImpl->mbCurrentIsVectorGraphic = false;
     mpImpl->mpVectorGraphicSearch.reset();
 
     mpView->UnmarkAllObj (mpView->GetSdrPageView());
@@ -1205,6 +1206,7 @@ void SdOutliner::ProvideNextTextObject()
             bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
             mpImpl->mbCurrentIsVectorGraphic = false;
+            mpImpl->mpVectorGraphicSearch.reset();
 
             if (!bForbiddenPage)
             {
@@ -1238,34 +1240,30 @@ void SdOutliner::ProvideNextTextObject()
                     OUString const & rString = mpSearchItem->GetSearchString();
 
                     mpImpl->mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
-                    if (mpImpl->mpVectorGraphicSearch->search(rString))
+
+                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString);
+                    if (bResult)
+                        bResult = mpImpl->mpVectorGraphicSearch->next();
+
+                    if (bResult)
                     {
-                        bool bResult = mpImpl->mpVectorGraphicSearch->next();
-                        if (bResult)
-                        {
-                            mpObj = SetObject(maCurrentPosition);
+                        mpObj = SetObject(maCurrentPosition);
 
-                            mbStringFound = true;
-                            mbMatchMayExist = true;
-                            mbFoundObject = true;
+                        mbStringFound = true;
+                        mbMatchMayExist = true;
+                        mbFoundObject = true;
 
-                            SdrPageView* pPageView = mpView->GetSdrPageView();
-                            mpView->UnmarkAllObj(pPageView);
+                        SdrPageView* pPageView = mpView->GetSdrPageView();
+                        mpView->UnmarkAllObj(pPageView);
 
-                            std::vector<basegfx::B2DRectangle> aSubSelections;
-                            basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
-                            if (!aSubSelection.isEmpty())
-                                aSubSelections.push_back(aSubSelection);
+                        std::vector<basegfx::B2DRectangle> aSubSelections;
+                        basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+                        if (!aSubSelection.isEmpty())
+                            aSubSelections.push_back(aSubSelection);
 
-                            mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
+                        mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
 
-                            mpDrawDocument->GetDocSh()->SetWaitCursor( false );
-                        }
-                        else
-                        {
-                            mpImpl->mbCurrentIsVectorGraphic = false;
-                            mpImpl->mpVectorGraphicSearch.reset();
-                        }
+                        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                     }
                     else
                     {
@@ -1298,6 +1296,9 @@ void SdOutliner::ProvideNextTextObject()
         }
         else
         {
+            mpImpl->mbCurrentIsVectorGraphic = false;
+            mpImpl->mpVectorGraphicSearch.reset();
+
             if (meMode == SEARCH)
                 // Instead of doing a full-blown SetObject(), which would do the same -- but would also possibly switch pages.
                 mbStringFound = false;
