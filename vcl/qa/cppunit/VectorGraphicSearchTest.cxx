@@ -27,10 +27,12 @@ class VectorGraphicSearchTest : public test::BootstrapFixtureBase
 
     void test();
     void testNextPrevious();
+    void testSearchStringChange();
 
     CPPUNIT_TEST_SUITE(VectorGraphicSearchTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testNextPrevious);
+    CPPUNIT_TEST(testSearchStringChange);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -158,6 +160,37 @@ void VectorGraphicSearchTest::testNextPrevious()
         CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
         CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
     }
+}
+
+void VectorGraphicSearchTest::testSearchStringChange()
+{
+    OUString aURL = getFullUrl("Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    VectorGraphicSearch aSearch(aGraphic);
+
+    // Set search to "lazy"
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy"));
+
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(34, aSearch.index());
+
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(817, aSearch.index());
+
+    // Change search to "fox"
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.search("fox"));
+
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+    CPPUNIT_ASSERT_EQUAL(822, aSearch.index());
+
+    // Change search to "Quick"
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.search("Quick"));
+    CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
+    CPPUNIT_ASSERT_EQUAL(784, aSearch.index());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
