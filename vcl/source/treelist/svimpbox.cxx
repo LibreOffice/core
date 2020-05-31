@@ -2074,7 +2074,11 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 {
     SvTreeListEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
-        m_aSelEng.SelMouseMove( rMEvt );
+    {
+        m_aSelEng.SelMouseMove(rMEvt);
+        if (m_pView->mbHoverSelection && !m_pView->IsSelected(pEntry))
+            m_pView->Select(pEntry);
+    }
 }
 
 void SvImpLBox::ExpandAll()
