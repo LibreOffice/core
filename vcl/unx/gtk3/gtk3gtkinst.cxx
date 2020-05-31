@@ -3688,6 +3688,78 @@ std::unique_ptr<weld::Container> GtkInstanceWidget::weld_parent() const
 
 namespace {
 
+struct ButtonOrder
+{
+    const char * m_aType;
+    int m_nPriority;
+};
+
+int getButtonPriority(const OString &rType)
+{
+    static const size_t N_TYPES = 7;
+    static const ButtonOrder aDiscardCancelSave[N_TYPES] =
+    {
+        { "/discard", 0 },
+        { "/cancel", 1 },
+        { "/no", 2 },
+        { "/open", 3 },
+        { "/save", 3 },
+        { "/yes", 3 },
+        { "/ok", 3 }
+    };
+
+    static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
+    {
+        { "/open", 0 },
+        { "/save", 0 },
+        { "/yes", 0 },
+        { "/ok", 0 },
+        { "/discard", 1 },
+        { "/no", 1 },
+        { "/cancel", 2 }
+    };
+
+    const ButtonOrder* pOrder = &aDiscardCancelSave[0];
+
+    const OUString &rEnv = Application::GetDesktopEnvironment();
+
+    if (rEnv.equalsIgnoreAsciiCase("windows") ||
+        rEnv.equalsIgnoreAsciiCase("tde") ||
+        rEnv.startsWithIgnoreAsciiCase("kde"))
+    {
+        pOrder = &aSaveDiscardCancel[0];
+    }
+
+    for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
+    {
+        if (rType.endsWith(pOrder->m_aType))
+            return pOrder->m_nPriority;
+    }
+
+    return -1;
+}
+
+bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
+{
+    //order within groups according to platform rules
+    return getButtonPriority(::get_help_id(pA)) < getButtonPriority(::get_help_id(pB));
+}
+
+void sort_native_button_order(GtkBox* pContainer)
+{
+    std::vector<GtkWidget*> aChildren;
+    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
+    for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+        aChildren.push_back(static_cast<GtkWidget*>(pChild->data));
+    g_list_free(pChildren);
+
+    //sort child order within parent so that we match the platform button order
+    std::stable_sort(aChildren.begin(), aChildren.end(), sortButtons);
+
+    for (size_t pos = 0; pos < aChildren.size(); ++pos)
+        gtk_box_reorder_child(pContainer, aChildren[pos], pos);
+}
+
 class GtkInstanceBox : public GtkInstanceContainer, public virtual weld::Box
 {
 private:
@@ -3707,6 +3779,11 @@ public:
         GtkWidget* pChild = pGtkWidget->getWidget();
         gtk_box_reorder_child(m_pBox, pChild, nNewPosition);
     }
+
+    virtual void sort_native_button_order() override
+    {
+        ::sort_native_button_order(m_pBox);
+    }
 };
 
     void set_cursor(GtkWidget* pWidget, const char *pName)
@@ -3724,78 +3801,6 @@ public:
 
 namespace
 {
-    struct ButtonOrder
-    {
-        const char * m_aType;
-        int m_nPriority;
-    };
-
-    int getButtonPriority(const OString &rType)
-    {
-        static const size_t N_TYPES = 7;
-        static const ButtonOrder aDiscardCancelSave[N_TYPES] =
-        {
-            { "/discard", 0 },
-            { "/cancel", 1 },
-            { "/no", 2 },
-            { "/open", 3 },
-            { "/save", 3 },
-            { "/yes", 3 },
-            { "/ok", 3 }
-        };
-
-        static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
-        {
-            { "/open", 0 },
-            { "/save", 0 },
-            { "/yes", 0 },
-            { "/ok", 0 },
-            { "/discard", 1 },
-            { "/no", 1 },
-            { "/cancel", 2 }
-        };
-
-        const ButtonOrder* pOrder = &aDiscardCancelSave[0];
-
-        const OUString &rEnv = Application::GetDesktopEnvironment();
-
-        if (rEnv.equalsIgnoreAsciiCase("windows") ||
-            rEnv.equalsIgnoreAsciiCase("tde") ||
-            rEnv.startsWithIgnoreAsciiCase("kde"))
-        {
-            pOrder = &aSaveDiscardCancel[0];
-        }
-
-        for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
-        {
-            if (rType.endsWith(pOrder->m_aType))
-                return pOrder->m_nPriority;
-        }
-
-        return -1;
-    }
-
-    bool sortButtons(const GtkWidget* pA, const GtkWidget* pB)
-    {
-        //order within groups according to platform rules
-        return getButtonPriority(::get_help_id(pA)) < getButtonPriority(::get_help_id(pB));
-    }
-
-    void sort_native_button_order(GtkBox* pContainer)
-    {
-        std::vector<GtkWidget*> aChildren;
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pContainer));
-        for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
-            aChildren.push_back(static_cast<GtkWidget*>(pChild->data));
-        g_list_free(pChildren);
-
-        //sort child order within parent so that we match the platform button order
-        std::stable_sort(aChildren.begin(), aChildren.end(), sortButtons);
-
-        for (size_t pos = 0; pos < aChildren.size(); ++pos)
-            gtk_box_reorder_child(pContainer, aChildren[pos], pos);
-    }
-
     Point get_csd_offset(GtkWidget* pTopLevel)
     {
         // try and omit drawing CSD under wayland
