@@ -10,6 +10,10 @@
 
 #include <vcl/VectorGraphicSearch.hxx>
 
+#include <config_features.h>
+
+#if HAVE_FEATURE_PDFIUM
+
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <sal/config.h>
@@ -287,5 +291,46 @@ std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
 
     return std::vector<basegfx::B2DRectangle>();
 }
+
+#else // !HAVE_FEATURE_PDFIUM
+
+class VectorGraphicSearch::Implementation
+{
+};
+
+VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
+    : maGraphic(rGraphic)
+{
+}
+
+VectorGraphicSearch::~VectorGraphicSearch() {}
+
+bool VectorGraphicSearch::search(OUString const& /*rSearchString*/,
+                                 SearchStartPosition /*eStartPosition*/)
+{
+    return false;
+}
+
+bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& /*rData*/,
+                                    OUString const& /*rSearchString*/,
+                                    SearchStartPosition /*eStartPosition*/)
+{
+    return false;
+}
+
+basegfx::B2DSize VectorGraphicSearch::pageSize() { return basegfx::B2DSize(); }
+
+bool VectorGraphicSearch::next() { return false; }
+
+bool VectorGraphicSearch::previous() { return false; }
+
+int VectorGraphicSearch::index() { return -1; }
+
+std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
+{
+    return std::vector<basegfx::B2DRectangle>();
+}
+
+#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
