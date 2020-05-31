@@ -10659,33 +10659,22 @@ R=""
 if test "$USING_X11" != TRUE; then
     enable_gtk3=no
 fi
-GTK3_CFLAGS=""
-GTK3_LIBS=""
+
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
-    if test "$with_system_cairo" = no; then
-        AC_MSG_ERROR([System cairo required for gtk3 support, do not combine --enable-gtk3 with --without-system-cairo])
-    fi
-    : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
-    if test "x$ENABLE_GTK3" = "xTRUE"; then
-        AC_DEFINE(ENABLE_GTK3)
-        R="gtk3"
-    else
-        AC_MSG_ERROR([gtk3 or dependent libraries of the correct versions, not found])
-    fi
-    GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    FilterLibs "${GTK3_LIBS}"
-    GTK3_LIBS="${filteredlibs}"
-
-    dnl We require egl only for the gtk3 plugin. Otherwise we use glx.
-    if test "$with_system_epoxy" != "yes"; then
-        AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
-        AC_CHECK_HEADER(EGL/eglplatform.h, [],
-                        [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
-    fi
+    ENABLE_GTK3="TRUE"
+    AC_DEFINE(ENABLE_GTK3)
+    R="$R gtk3"
 fi
 AC_SUBST(ENABLE_GTK3)
+
+ENABLE_GTK3_KDE5=""
+if test "x$enable_gtk3_kde5" = "xyes"; then
+    ENABLE_GTK3_KDE5="TRUE"
+    AC_DEFINE(ENABLE_GTK3_KDE5)
+    R="$R gtk3_kde5"
+fi
+AC_SUBST(ENABLE_GTK3_KDE5)
 
 ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
@@ -10703,19 +10692,14 @@ if test "x$enable_kf5" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KF5)
 
-ENABLE_GTK3_KDE5=""
-if test "x$enable_gtk3_kde5" = "xyes"; then
+GTK3_CFLAGS=""
+GTK3_LIBS=""
+if test "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
     if test "$with_system_cairo" = no; then
         AC_MSG_ERROR([System cairo required for gtk3 support, do not combine --enable-gtk3 with --without-system-cairo])
     fi
     : ${with_system_cairo:=yes}
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo, ENABLE_GTK3_KDE5="TRUE", ENABLE_GTK3_KDE5="")
-    if test "x$ENABLE_GTK3_KDE5" = "xTRUE"; then
-        AC_DEFINE(ENABLE_GTK3_KDE5)
-        R="$R gtk3_kde5"
-    else
-        AC_MSG_ERROR([gtk3_kde5 or dependent libraries of the correct versions, not found])
-    fi
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.18 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${GTK3_LIBS}"
     GTK3_LIBS="${filteredlibs}"
@@ -10727,7 +10711,6 @@ if test "x$enable_gtk3_kde5" = "xyes"; then
                         [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
     fi
 fi
-AC_SUBST(ENABLE_GTK3_KDE5)
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
 
