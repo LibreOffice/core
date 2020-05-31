@@ -111,16 +111,8 @@ css::uno::Sequence< OUString> SAL_CALL
     AccessibleOLEShape::getSupportedServiceNames()
 {
     ThrowIfDisposed();
-    // Get list of supported service names from base class...
-    uno::Sequence< OUString > aServiceNames =
-        AccessibleShape::getSupportedServiceNames();
-    sal_Int32 nCount (aServiceNames.getLength());
-
-    // ...and add additional names.
-    aServiceNames.realloc (nCount + 1);
-    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleOLEShape";
-
-    return aServiceNames;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleOLEShape" };
+    return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
 }
 
 // XTypeProvider

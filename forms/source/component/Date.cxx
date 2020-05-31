@@ -55,16 +55,10 @@ Sequence<Type> ODateControl::_getTypes()
     return OBoundControl::_getTypes();
 }
 
-
 css::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
-
-    OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_DATEFIELD;
-    pArray[aSupported.getLength()-2] = STARDIV_ONE_FORM_CONTROL_DATEFIELD;
-    return aSupported;
+    const css::uno::Sequence<OUString> vals { FRM_SUN_CONTROL_DATEFIELD, STARDIV_ONE_FORM_CONTROL_DATEFIELD };
+    return comphelper::concatSequences(OBoundControl::getSupportedServiceNames(), vals);
 }
 
 
@@ -122,26 +116,19 @@ IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    const css::uno::Sequence<OUString> vals {
+       BINDABLE_CONTROL_MODEL,
+       DATA_AWARE_CONTROL_MODEL,
+       VALIDATABLE_CONTROL_MODEL,
+       BINDABLE_DATA_AWARE_CONTROL_MODEL,
+       VALIDATABLE_BINDABLE_CONTROL_MODEL,
+       FRM_SUN_COMPONENT_DATEFIELD,
+       FRM_SUN_COMPONENT_DATABASE_DATEFIELD,
+       BINDABLE_DATABASE_DATE_FIELD,
+       FRM_COMPONENT_DATEFIELD
+    };
 
-    sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 9 );
-    OUString* pStoreTo = aSupported.getArray() + nOldLen;
-
-    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
-    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
-    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
-
-    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
-    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
-
-    *pStoreTo++ = FRM_SUN_COMPONENT_DATEFIELD;
-    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_DATEFIELD;
-    *pStoreTo++ = BINDABLE_DATABASE_DATE_FIELD;
-
-    *pStoreTo++ = FRM_COMPONENT_DATEFIELD;
-
-    return aSupported;
+    return comphelper::concatSequences(OBoundControlModel::getSupportedServiceNames(), vals);
 }
 
 

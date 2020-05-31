@@ -48,6 +48,7 @@
 #include <svx/svdview.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/sequence.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
 #include <algorithm>
@@ -863,16 +864,8 @@ uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
-    // Get list of supported service names from base class...
-    uno::Sequence<OUString> aServiceNames =
-        AccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nCount (aServiceNames.getLength());
-
-    // ...and add additional names.
-    aServiceNames.realloc (nCount + 1);
-    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleShape";
-
-    return aServiceNames;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleShape" };
+    return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 // XTypeProvider
@@ -884,30 +877,14 @@ uno::Sequence<uno::Type> SAL_CALL
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... get list of types from component base implementation, ...
     uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
-    // ... define local types, ...
-    const uno::Type aLangEventListenerType =
-        cppu::UnoType<lang::XEventListener>::get();
-    const uno::Type aDocumentEventListenerType =
-        cppu::UnoType<document::XEventListener>::get();
-    const uno::Type aUnoTunnelType =
-        cppu::UnoType<lang::XUnoTunnel>::get();
+    // ... define local types
+    uno::Sequence<uno::Type> localTypesList = {
+        cppu::UnoType<lang::XEventListener>::get(),
+        cppu::UnoType<document::XEventListener>::get(),
+        cppu::UnoType<lang::XUnoTunnel>::get()
+    };
 
-    // ... and merge them all into one list.
-    sal_Int32   nTypeCount (aTypeList.getLength()),
-        nComponentTypeCount (aComponentTypeList.getLength());
-
-    aTypeList.realloc (nTypeCount + nComponentTypeCount + 3);
-
-    std::copy(aComponentTypeList.begin(), aComponentTypeList.end(),
-              std::next(aTypeList.begin(), nTypeCount));
-
-    int i = nTypeCount + nComponentTypeCount;
-
-    aTypeList[ i++ ] = aLangEventListenerType;
-    aTypeList[ i++ ] = aDocumentEventListenerType;
-    aTypeList[ i ] = aUnoTunnelType;
-
-    return aTypeList;
+    return comphelper::concatSequences(aTypeList, aComponentTypeList, localTypesList);
 }
 
 // lang::XEventListener

@@ -187,10 +187,8 @@ public:
 
     Sequence< OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames()
     {
-        Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.UnoControlSpinButtonModel";
-        return aServices;
+        const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlSpinButtonModel" };
+        return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
     }
 
 
@@ -250,10 +248,8 @@ public:
 
     Sequence< OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames()
     {
-        Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.UnoControlSpinButton";
-        return aServices;
+        const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlSpinButton" };
+        return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
     }
 
 
