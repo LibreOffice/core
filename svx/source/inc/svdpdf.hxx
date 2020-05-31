@@ -42,6 +42,8 @@
 #include <postwin.h>
 #include <fpdfview.h>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 // Forward Declarations
 
 class SfxItemSet;
@@ -99,6 +101,8 @@ class SVXCORE_DLLPUBLIC ImpSdrPdfImport final
     /// Convert PDF points to logic (twips).
     tools::Rectangle PointsToLogic(double left, double right, double top, double bottom) const;
     Point PointsToLogic(double x, double y) const;
+
+    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
     // check for clip and evtl. fill maClip
     void checkClip();
