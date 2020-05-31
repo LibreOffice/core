@@ -39,6 +39,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace ::com::sun::star;
 
 static std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
@@ -84,6 +86,7 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     SvMemoryStream maMemory;
     // Export the document as PDF, then parse it with PDFium.
     DocumentHolder exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
+    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
 public:
     PdfExportTest();
@@ -219,18 +222,11 @@ void PdfExportTest::setUp()
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 
-    FPDF_LIBRARY_CONFIG config;
-    config.version = 2;
-    config.m_pUserFontPaths = nullptr;
-    config.m_pIsolate = nullptr;
-    config.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&config);
+    mpPDFium = vcl::pdf::PDFiumLibrary::get();
 }
 
 void PdfExportTest::tearDown()
 {
-    FPDF_DestroyLibrary();
-
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -1954,14 +1950,6 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
-
-    // Init pdfium, vcl::ImportPDF() calls FPDF_DestroyLibrary after our setUp().
-    FPDF_LIBRARY_CONFIG config;
-    config.version = 2;
-    config.m_pUserFontPaths = nullptr;
-    config.m_pIsolate = nullptr;
-    config.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&config);
 
     // Parse the export result.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
