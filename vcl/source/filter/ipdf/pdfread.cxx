@@ -23,6 +23,8 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace com::sun::star;
 
 namespace

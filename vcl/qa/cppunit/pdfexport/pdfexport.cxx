@@ -205,9 +205,6 @@ void PdfExportTest::setUp()
 
 void PdfExportTest::tearDown()
 {
-    FPDF_ClosePage(mpPdfPage);
-    FPDF_CloseDocument(mpPdfDocument);
-
     if (mxComponent.is())
         mxComponent->dispose();
 
