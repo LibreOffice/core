@@ -44,10 +44,7 @@ InspectorTextPanel::Create(vcl::Window* pParent,
 InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
-    , mxFont(m_xBuilder->weld_toolbar("font"))
-    , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
-    , mxFontHeight(m_xBuilder->weld_toolbar("fontheight"))
-    , mxFontHeightDispatch(new ToolbarUnoDispatcher(*mxFontHeight, *m_xBuilder, rxFrame))
+    , mxListBoxStyles(m_xBuilder->weld_tree_view("liststore"))
 {
 }
 
@@ -55,11 +52,7 @@ InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
 
 void InspectorTextPanel::dispose()
 {
-    mxFontHeightDispatch.reset();
-    mxFontDispatch.reset();
-
-    mxFontHeight.reset();
-    mxFont.reset();
+    mxListBoxStyles.reset();
 
     PanelLayout::dispose();
 }
