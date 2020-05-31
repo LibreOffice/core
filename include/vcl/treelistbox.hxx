@@ -221,8 +221,9 @@ class VCL_DLLPUBLIC SvTreeListBox
     bool mbContextBmpExpanded;
     bool mbAlternatingRowColors;
     bool mbUpdateAlternatingRows;
-    bool mbQuickSearch;     // Enables type-ahead search in the check list box.
-    bool mbActivateOnSingleClick;     // Make single click "activate" a row like a double-click normally does
+    bool mbQuickSearch; // Enables type-ahead search in the check list box.
+    bool mbActivateOnSingleClick; // Make single click "activate" a row like a double-click normally does
+    bool mbHoverSelection; // Make mouse over a row "select" a row like a single-click normally does
 
     SvTreeListEntry*    pHdlEntry;
 
@@ -722,6 +723,9 @@ public:
 
     // Make single click "activate" a row like a double-click normally does
     void            SetActivateOnSingleClick(bool bEnable) { mbActivateOnSingleClick = bEnable; }
+
+    // Make mouse over a row "select" a row like a single-click normally does
+    void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
 
     void            SetForceMakeVisible(bool bEnable);
 
