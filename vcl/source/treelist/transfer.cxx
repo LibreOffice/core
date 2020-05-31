@@ -1444,6 +1444,8 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
                     {
 // tdf#133365: only release solar mutex on Windows
 #ifdef _WIN32
+                        // tdf#133527: first, make sure that we actually hold the mutex
+                        SolarMutexGuard g;
                         // Our own thread may handle the nested IDataObject::GetData call,
                         // and try to acquire solar mutex
                         SolarMutexReleaser r;
@@ -1464,6 +1466,8 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             {
 // tdf#133365: only release solar mutex on Windows
 #ifdef _WIN32
+                // tdf#133527: first, make sure that we actually hold the mutex
+                SolarMutexGuard g;
                 // Our own thread may handle the nested IDataObject::GetData call,
                 // and try to acquire solar mutex
                 SolarMutexReleaser r;
