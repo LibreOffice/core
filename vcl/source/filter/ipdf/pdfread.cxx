@@ -20,6 +20,8 @@
 #include <vcl/graph.hxx>
 #include <bitmapwriteaccess.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace com::sun::star;
 
 namespace
@@ -58,12 +60,7 @@ double pointToPixel(double fPoint) { return fPoint / 72 * 96; }
 size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps, sal_uInt64 nPos,
                        sal_uInt64 nSize, const size_t nFirstPage, int nPages)
 {
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Read input into a buffer.
     SvMemoryStream aInBuffer;
@@ -119,7 +116,6 @@ size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps, sal_uIn
     }
 
     FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
 
     return rBitmaps.size();
 }
@@ -159,12 +155,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
     else
     {
         // Downconvert to PDF-1.5.
-        FPDF_LIBRARY_CONFIG aConfig;
-        aConfig.version = 2;
-        aConfig.m_pUserFontPaths = nullptr;
-        aConfig.m_pIsolate = nullptr;
-        aConfig.m_v8EmbedderSlot = 0;
-        FPDF_InitLibraryWithConfig(&aConfig);
+        auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
         // Read input into a buffer.
         SvMemoryStream aInBuffer;
@@ -182,7 +173,6 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
             return false;
 
         FPDF_CloseDocument(pPdfDocument);
-        FPDF_DestroyLibrary();
 
         aWriter.m_aStream.Seek(STREAM_SEEK_TO_BEGIN);
         rOutStream.WriteStream(aWriter.m_aStream);
