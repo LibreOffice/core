@@ -21,6 +21,8 @@
 #include <bitmapwriteaccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace com::sun::star;
 
 namespace
@@ -95,12 +97,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
     else
     {
         // Downconvert to PDF-1.5.
-        FPDF_LIBRARY_CONFIG aConfig;
-        aConfig.version = 2;
-        aConfig.m_pUserFontPaths = nullptr;
-        aConfig.m_pIsolate = nullptr;
-        aConfig.m_v8EmbedderSlot = 0;
-        FPDF_InitLibraryWithConfig(&aConfig);
+        auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
         // Read input into a buffer.
         SvMemoryStream aInBuffer;
@@ -121,7 +118,6 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
             return false;
 
         FPDF_CloseDocument(pPdfDocument);
-        FPDF_DestroyLibrary();
 
         aWriter.m_aStream.Seek(STREAM_SEEK_TO_BEGIN);
         rOutStream.WriteStream(aWriter.m_aStream);
@@ -152,12 +148,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
                         const size_t nFirstPage, int nPages, const double fResolutionDPI)
 {
 #if HAVE_FEATURE_PDFIUM
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(pBuffer, nSize, /*password=*/nullptr);
@@ -207,7 +198,6 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
     }
 
     FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
 
     return rBitmaps.size();
 #else
@@ -305,12 +295,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     std::shared_ptr<GfxLink> pGfxLink(std::make_shared<GfxLink>(
         std::move(pGraphicContent), nGraphicContentSize, GfxLinkType::NativePdf));
 
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument
@@ -348,7 +333,6 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
     }
 
     FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
 
     return rGraphics.size();
 #else
