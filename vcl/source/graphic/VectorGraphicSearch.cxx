@@ -10,6 +10,8 @@
 
 #include <vcl/VectorGraphicSearch.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 #include <sal/config.h>
 
 #include <fpdf_doc.h>
@@ -18,10 +20,12 @@
 class VectorGraphicSearch::Implementation
 {
 public:
+    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
     FPDF_DOCUMENT mpPdfDocument;
 
     Implementation()
-        : mpPdfDocument(nullptr)
+        : mpPDFium(vcl::pdf::PDFiumLibrary::get())
+        , mpPdfDocument(nullptr)
     {
     }
 
@@ -180,19 +184,12 @@ VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
     : mpImplementation(std::make_unique<VectorGraphicSearch::Implementation>())
     , maGraphic(rGraphic)
 {
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
 }
 
 VectorGraphicSearch::~VectorGraphicSearch()
 {
     mpSearchContext.reset();
     mpImplementation.reset();
-    FPDF_DestroyLibrary();
 }
 
 bool VectorGraphicSearch::search(OUString const& rSearchString, SearchStartPosition eStartPosition)

@@ -116,6 +116,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mnPageCount(0)
     , mdPageWidthPts(0)
     , mdPageHeightPts(0)
+    , mpPDFium(vcl::pdf::PDFiumLibrary::get())
 {
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
@@ -128,13 +129,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(),
                                               svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
     checkClip();
-
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
 
     // Load the buffer using pdfium.
     auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
@@ -170,11 +164,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mnPageCount = FPDF_GetPageCount(mpPdfDocument);
 }
 
-ImpSdrPdfImport::~ImpSdrPdfImport()
-{
-    FPDF_CloseDocument(mpPdfDocument);
-    FPDF_DestroyLibrary();
-}
+ImpSdrPdfImport::~ImpSdrPdfImport() { FPDF_CloseDocument(mpPdfDocument); }
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
