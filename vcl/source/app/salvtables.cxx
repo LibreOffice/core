@@ -3398,10 +3398,12 @@ public:
     {
         SalInstanceWidget::freeze();
         m_xTreeView->SetUpdateMode(false);
+        m_xTreeView->GetModel()->EnableInvalidate(false);
     }
 
     virtual void thaw() override
     {
+        m_xTreeView->GetModel()->EnableInvalidate(true);
         m_xTreeView->SetUpdateMode(true);
         SalInstanceWidget::thaw();
     }
