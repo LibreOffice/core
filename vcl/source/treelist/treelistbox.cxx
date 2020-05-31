@@ -369,6 +369,8 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
     mbQuickSearch(false),
+    mbActivateOnSingleClick(false),
+    mbHoverSelection(false),
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mbCenterAndClipText(false)
@@ -2327,7 +2329,6 @@ void SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
     pImpl->MouseMove( rMEvt );
 }
 
-
 void SvTreeListBox::SetUpdateMode( bool bUpdate )
 {
     pImpl->SetUpdateMode( bUpdate );
@@ -3644,6 +3645,14 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "enable-search")
     {
         SetQuickSearch(toBool(rValue));
+    }
+    else if (rKey == "activate-on-single-click")
+    {
+        SetActivateOnSingleClick(toBool(rValue));
+    }
+    else if (rKey == "hover-selection")
+    {
+        SetHoverSelection(toBool(rValue));
     }
     else if (rKey == "reorderable")
     {
