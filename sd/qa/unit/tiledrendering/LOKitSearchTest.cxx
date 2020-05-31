@@ -55,8 +55,8 @@ public:
     void testDontSearchInMasterPages();
     void testSearchInPDFNonExisting();
     void testSearchInPDF();
-    void testSearchInMixedObject();
-    void testSearchInMixedObject2();
+    void testSearchIn2MixedObjects();
+    void testSearchIn6MixedObjects();
 
     CPPUNIT_TEST_SUITE(LOKitSearchTest);
     CPPUNIT_TEST(testSearch);
@@ -67,8 +67,8 @@ public:
     CPPUNIT_TEST(testDontSearchInMasterPages);
     CPPUNIT_TEST(testSearchInPDFNonExisting);
     CPPUNIT_TEST(testSearchInPDF);
-    CPPUNIT_TEST(testSearchInMixedObject);
-    CPPUNIT_TEST(testSearchInMixedObject2);
+    CPPUNIT_TEST(testSearchIn2MixedObjects);
+    CPPUNIT_TEST(testSearchIn6MixedObjects);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -332,7 +332,7 @@ void LOKitSearchTest::testSearchInPDF()
 
 // Test searching in document with mixed objects.
 // We have 2 objects: 1. Text Object, 2. Graphic Object with PDF
-void LOKitSearchTest::testSearchInMixedObject()
+void LOKitSearchTest::testSearchIn2MixedObjects()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("MixedTest1.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -417,7 +417,7 @@ void LOKitSearchTest::testSearchInMixedObject()
 }
 
 // Test searching in document with mixed objects. We have 6 objects.
-void LOKitSearchTest::testSearchInMixedObject2()
+void LOKitSearchTest::testSearchIn6MixedObjects()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("MixedTest2.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
