@@ -100,7 +100,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_ShadowSizeY, nAttrSizeY);
             rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
-            rPropMap.setProperty( PROP_ShadowBlur, nAttrBlur);
+            rPropMap.setProperty( PROP_ShadowBlur, convertEmuToHmm(nAttrBlur));
 
         }
     }

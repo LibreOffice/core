@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <tools/color.hxx>
 
 
 namespace drawinglayer::primitive2d
@@ -51,17 +52,22 @@ namespace drawinglayer::primitive2d
             /// the shadow color to which all geometry is to be forced
             basegfx::BColor                         maShadowColor;
 
-        public:
+            /// the blur radius of the shadow
+            double mfShadowBlur;
+
+
+    public:
             /// constructor
             ShadowPrimitive2D(
                 const basegfx::B2DHomMatrix& rShadowTransform,
                 const basegfx::BColor& rShadowColor,
+                double fShadowBlur,
                 const Primitive2DContainer& rChildren);
 
             /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
             const basegfx::BColor& getShadowColor() const { return maShadowColor; }
-
+            double getShadowBlur() const { return mfShadowBlur; }
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
