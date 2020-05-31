@@ -270,6 +270,8 @@ class VCL_DLLPUBLIC Box : virtual public Container
 public:
     // Moves child to a new position in the list of children
     virtual void reorder_child(weld::Widget* pWidget, int position) = 0;
+    // Sort ok/cancel etc buttons in platform order
+    virtual void sort_native_button_order() = 0;
 };
 
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
