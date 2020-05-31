@@ -94,6 +94,10 @@ public:
     {
         m_bHomogeneous = bHomogeneous;
     }
+    bool get_orientation() const
+    {
+        return m_bVerticalContainer;
+    }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 protected:
@@ -211,7 +215,6 @@ public:
     {
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    void sort_native_button_order();
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
@@ -852,6 +855,9 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 
 //Get first parent which is not a layout widget
 vcl::Window* getNonLayoutParent(vcl::Window *pParent);
+
+//Sort ok/cancel etc buttons in platform order
+void sort_native_button_order(VclBox& rContainer);
 
 #endif
 
