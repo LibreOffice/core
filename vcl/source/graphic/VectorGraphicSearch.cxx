@@ -33,18 +33,18 @@ private:
 
 public:
     sal_Int32 mnPageIndex;
+    int mnCurrentIndex;
     OUString maSearchString;
     SearchStartPosition meStartPosition;
 
-    SearchContext(FPDF_DOCUMENT pPdfDocument, sal_Int32 nPageIndex, OUString const& rSearchString,
-                  SearchStartPosition eStartPosition)
+    SearchContext(FPDF_DOCUMENT pPdfDocument, sal_Int32 nPageIndex)
         : mpPdfDocument(pPdfDocument)
         , mpPage(nullptr)
         , mpTextPage(nullptr)
         , mpSearchHandle(nullptr)
         , mnPageIndex(nPageIndex)
-        , maSearchString(rSearchString)
-        , meStartPosition(eStartPosition)
+        , mnCurrentIndex(-1)
+        , meStartPosition(SearchStartPosition::Begin)
     {
     }
 
@@ -73,13 +73,30 @@ public:
         return aSize;
     }
 
-    bool initialize()
+    bool initialize(OUString const& rSearchString, SearchStartPosition eStartPosition)
     {
         if (!mpPdfDocument)
             return false;
+
+        if (rSearchString == maSearchString)
+            return true;
+
+        if (mpSearchHandle)
+            FPDFText_FindClose(mpSearchHandle);
+
+        if (mpTextPage)
+            FPDFText_ClosePage(mpTextPage);
+
+        if (mpPage)
+            FPDF_ClosePage(mpPage);
+
+        maSearchString = rSearchString;
+        meStartPosition = eStartPosition;
+
         mpPage = FPDF_LoadPage(mpPdfDocument, mnPageIndex);
         if (!mpPage)
             return false;
+
         mpTextPage = FPDFText_LoadPage(mpPage);
         if (!mpTextPage)
             return false;
@@ -88,6 +105,9 @@ public:
 
         // Index where to start to search. -1 => at the end
         int nStartIndex = meStartPosition == SearchStartPosition::End ? -1 : 0;
+
+        if (mnCurrentIndex >= 0)
+            nStartIndex = mnCurrentIndex;
 
         // FPDF_MATCHCASE, FPDF_MATCHWHOLEWORD, FPDF_CONSECUTIVE
         // FPDF_MATCHCASE - If not set, it will not match case by default.
@@ -102,15 +122,21 @@ public:
 
     bool next()
     {
-        if (mpSearchHandle)
-            return FPDFText_FindNext(mpSearchHandle);
+        if (mpSearchHandle && FPDFText_FindNext(mpSearchHandle))
+        {
+            mnCurrentIndex = index();
+            return true;
+        }
         return false;
     }
 
     bool previous()
     {
-        if (mpSearchHandle)
-            return FPDFText_FindPrev(mpSearchHandle);
+        if (mpSearchHandle && FPDFText_FindPrev(mpSearchHandle))
+        {
+            mnCurrentIndex = index();
+            return true;
+        }
         return false;
     }
 
@@ -202,22 +228,24 @@ VectorGraphicSearch::~VectorGraphicSearch() { mpImplementation.reset(); }
 
 bool VectorGraphicSearch::search(OUString const& rSearchString, SearchStartPosition eStartPosition)
 {
-    auto pData = maGraphic.getVectorGraphicData();
-
-    if (pData && pData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    if (!mpImplementation->mpSearchContext)
     {
-        return searchPDF(pData, rSearchString, eStartPosition);
+        auto pData = maGraphic.getVectorGraphicData();
+
+        if (pData && pData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+        {
+            if (searchPDF(pData))
+            {
+                return mpImplementation->mpSearchContext->initialize(rSearchString, eStartPosition);
+            }
+        }
+        return false;
     }
-    return false;
+    return mpImplementation->mpSearchContext->initialize(rSearchString, eStartPosition);
 }
 
-bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rData,
-                                    OUString const& rSearchString,
-                                    SearchStartPosition eStartPosition)
+bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rData)
 {
-    if (rSearchString.isEmpty())
-        return false;
-
     mpImplementation->mpPdfDocument
         = FPDF_LoadMemDocument(rData->getVectorGraphicDataArray().getConstArray(),
                                rData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);
@@ -249,10 +277,9 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
 
     sal_Int32 nPageIndex = std::max(rData->getPageIndex(), sal_Int32(0));
 
-    mpImplementation->mpSearchContext.reset(new SearchContext(
-        mpImplementation->mpPdfDocument, nPageIndex, rSearchString, eStartPosition));
-
-    return mpImplementation->mpSearchContext->initialize();
+    mpImplementation->mpSearchContext.reset(
+        new SearchContext(mpImplementation->mpPdfDocument, nPageIndex));
+    return true;
 }
 
 basegfx::B2DSize VectorGraphicSearch::pageSize()
@@ -311,9 +338,7 @@ bool VectorGraphicSearch::search(OUString const& /*rSearchString*/,
     return false;
 }
 
-bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& /*rData*/,
-                                    OUString const& /*rSearchString*/,
-                                    SearchStartPosition /*eStartPosition*/)
+bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& /*rData*/)
 {
     return false;
 }

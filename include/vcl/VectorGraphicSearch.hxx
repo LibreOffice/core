@@ -32,8 +32,7 @@ private:
     std::unique_ptr<Implementation> mpImplementation;
     Graphic maGraphic;
 
-    bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData, OUString const& rSearchString,
-                   SearchStartPosition eStartPosition);
+    bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData);
 
 public:
     VectorGraphicSearch(Graphic const& rGraphic);
