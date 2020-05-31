@@ -28,6 +28,8 @@
 #include <fpdfview.h>
 #endif
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
@@ -43,6 +45,7 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 #if HAVE_FEATURE_PDFIUM
     FPDF_PAGE mpPdfPage = nullptr;
     FPDF_DOCUMENT mpPdfDocument = nullptr;
+    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 #endif
 
 public:
@@ -97,12 +100,7 @@ void PdfExportTest::setUp()
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 
 #if HAVE_FEATURE_PDFIUM
-    FPDF_LIBRARY_CONFIG config;
-    config.version = 2;
-    config.m_pUserFontPaths = nullptr;
-    config.m_pIsolate = nullptr;
-    config.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&config);
+    mpPDFium = vcl::pdf::PDFiumLibrary::get();
 #endif
 }
 
@@ -111,7 +109,6 @@ void PdfExportTest::tearDown()
 #if HAVE_FEATURE_PDFIUM
     FPDF_ClosePage(mpPdfPage);
     FPDF_CloseDocument(mpPdfDocument);
-    FPDF_DestroyLibrary();
 #endif
 
     if (mxComponent.is())

@@ -304,6 +304,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/wall \
     vcl/source/gdi/scrptrun \
     vcl/source/gdi/CommonSalLayout \
+    vcl/source/pdf/PDFiumLibrary \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/bitmapscalesuper \
     vcl/source/bitmap/BitmapScaleConvolution \

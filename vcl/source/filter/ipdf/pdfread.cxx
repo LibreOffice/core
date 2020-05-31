@@ -19,6 +19,8 @@
 
 #include <vcl/bitmapaccess.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 using namespace com::sun::star;
 
 namespace
@@ -58,12 +60,7 @@ double pointToPixel(double fPoint)
 /// Does PDF to bitmap conversion using pdfium.
 bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 {
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Read input into a buffer.
     SvMemoryStream aInBuffer;
@@ -108,7 +105,6 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
     FPDFBitmap_Destroy(pPdfBitmap);
     FPDF_ClosePage(pPdfPage);
     FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
 
     return true;
 }
@@ -145,13 +141,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
         rOutStream.WriteStream(rInStream);
     else
     {
-        // Downconvert to PDF-1.4.
-        FPDF_LIBRARY_CONFIG aConfig;
-        aConfig.version = 2;
-        aConfig.m_pUserFontPaths = nullptr;
-        aConfig.m_pIsolate = nullptr;
-        aConfig.m_v8EmbedderSlot = 0;
-        FPDF_InitLibraryWithConfig(&aConfig);
+        // Downconvert to PDF-1.5.
+        auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
         // Read input into a buffer.
         SvMemoryStream aInBuffer;
@@ -168,7 +159,6 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
             return false;
 
         FPDF_CloseDocument(pPdfDocument);
-        FPDF_DestroyLibrary();
 
         aWriter.m_aStream.Seek(STREAM_SEEK_TO_BEGIN);
         rOutStream.WriteStream(aWriter.m_aStream);
