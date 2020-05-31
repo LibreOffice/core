@@ -378,30 +378,31 @@ void Test::testSharedStringPoolPurge()
     std::optional<svl::SharedString> pStr3 = aPool.intern("ANDY");
     std::optional<svl::SharedString> pStr4 = aPool.intern("Bruce");
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // This shouldn't purge anything.
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // Delete one heap string object, and purge. That should purge one string.
     pStr1.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Ditto...
+    // deleting the upper case variant makes no difference, the pool
+    // will keep that so it can look up upper case values
     pStr3.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Again.
+    // Again. Now we have Bruce and BRUCE left in the map
     pStr2.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCountIgnoreCase());
 
     // Delete 'Bruce' and purge.

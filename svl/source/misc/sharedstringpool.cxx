@@ -29,10 +29,10 @@ sal_Int32 getRefCount( const rtl_uString* p )
 struct SharedStringPool::Impl
 {
     mutable osl::Mutex maMutex;
-    // set of upper-case, so we can share these as the value in the maStrMap
-    std::unordered_set<OUString> maStrPoolUpper;
-    // map with rtl_uString* as value so we can avoid some ref-counting
-    std::unordered_map<OUString,rtl_uString*> maStrMap;
+    // We use this map for two purposes - to store lower->upper case mappings
+    // and to retrieve a shared uppercase object, so the management logic
+    // is quite complex.
+    std::unordered_map<OUString,OUString> maStrMap;
     const CharClass& mrCharClass;
 
     explicit Impl( const CharClass& rCharClass ) : mrCharClass(rCharClass) {}
@@ -49,26 +49,33 @@ SharedString SharedStringPool::intern( const OUString& rStr )
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
 
-    auto [mapIt,bInserted] = mpImpl->maStrMap.emplace(rStr, rStr.pData);
-    if (bInserted)
+    auto [mapIt,bInserted] = mpImpl->maStrMap.emplace(rStr, rStr);
+    if (!bInserted)
+        return SharedString(mapIt->first.pData, mapIt->second.pData);
+
+    // This is a new string insertion. Establish mapping to upper-case variant.
+    OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
+    if (aUpper == rStr)
+        // no need to do anything
+        return SharedString(mapIt->first.pData, mapIt->second.pData);
+
+    // if we need to insert a lower->upper mapping, then also insert
+    // an upper-upper mapping, which we can use both for when an upper string
+    // is interned, and to look up a shared upper string.
+    auto mapIt2 = mpImpl->maStrMap.find(aUpper);
+    if (mapIt2 != mpImpl->maStrMap.end())
     {
-        // This is a new string insertion. Establish mapping to upper-case variant.
-        OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
-        if (aUpper == rStr)
-        {
-            auto insertResult = mpImpl->maStrPoolUpper.insert(rStr);
-            // need to use the same underlying rtl_uString object so the
-            // upper->upper detection in purge() works
-            auto pData = insertResult.first->pData;
-            mpImpl->maStrMap.insert_or_assign(mapIt, pData, pData);
-        }
-        else
-        {
-            auto insertResult = mpImpl->maStrPoolUpper.insert(aUpper);
-            mapIt->second = insertResult.first->pData;
-        }
+        // there is an already existing upper string
+        mapIt->second = mapIt2->first;
+        return SharedString(mapIt->first.pData, mapIt->second.pData);
     }
-    return SharedString(mapIt->first.pData, mapIt->second);
+
+    // There is no already existing upper string.
+    // first, update using the iterator, can't do this later because
+    // the iterator will be invalid
+    mapIt->second = aUpper;
+    mpImpl->maStrMap.emplace_hint(mapIt2, aUpper, aUpper);
+    return SharedString(rStr.pData, aUpper.pData);
 }
 
 void SharedStringPool::purge()
@@ -86,7 +93,7 @@ void SharedStringPool::purge()
     while (it != itEnd)
     {
         rtl_uString* p1 = it->first.pData;
-        rtl_uString* p2 = it->second;
+        rtl_uString* p2 = it->second.pData;
         if (p1 != p2)
         {
             // normal case - lowercase mapped to uppercase, which
@@ -95,10 +102,6 @@ void SharedStringPool::purge()
             if (getRefCount(p1) == 1)
             {
                 it = mpImpl->maStrMap.erase(it);
-                // except that the uppercase entry may be mapped to
-                // by other lower-case entries
-                if (getRefCount(p2) == 1)
-                    mpImpl->maStrPoolUpper.erase(OUString::unacquired(&p2));
                 continue;
             }
         }
@@ -110,16 +113,15 @@ void SharedStringPool::purge()
     while (it != itEnd)
     {
         rtl_uString* p1 = it->first.pData;
-        rtl_uString* p2 = it->second;
+        rtl_uString* p2 = it->second.pData;
         if (p1 == p2)
         {
             // uppercase which is mapped to itself, which means
             // one ref-counted entry as the key in the map, and
-            // one ref-counted entry in the set
+            // one ref-counted entry in the value in the map
             if (getRefCount(p1) == 2)
             {
                 it = mpImpl->maStrMap.erase(it);
-                mpImpl->maStrPoolUpper.erase(OUString::unacquired(&p1));
                 continue;
             }
         }
@@ -136,7 +138,11 @@ size_t SharedStringPool::getCount() const
 size_t SharedStringPool::getCountIgnoreCase() const
 {
     osl::MutexGuard aGuard(&mpImpl->maMutex);
-    return mpImpl->maStrPoolUpper.size();
+    // this is only called from unit tests, so no need to be efficient
+    std::unordered_set<OUString> aUpperSet;
+    for (auto const & pair : mpImpl->maStrMap)
+        aUpperSet.insert(pair.second);
+    return aUpperSet.size();
 }
 
 }
