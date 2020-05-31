@@ -215,38 +215,6 @@ inline bool PushButton::IsChecked() const
     return (GetState() == TRISTATE_TRUE);
 }
 
-class VCL_DLLPUBLIC OKButton : public PushButton
-{
-protected:
-    using PushButton::ImplInit;
-private:
-    SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
-
-                                   OKButton (const OKButton &) = delete;
-                                   OKButton & operator= (const OKButton &) = delete;
-
-public:
-    explicit        OKButton( vcl::Window* pParent, WinBits nStyle = WB_DEFBUTTON );
-
-    virtual void    Click() override;
-};
-
-class VCL_DLLPUBLIC CancelButton : public PushButton
-{
-protected:
-    using PushButton::ImplInit;
-private:
-    SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
-
-                        CancelButton (const CancelButton &) = delete;
-                        CancelButton & operator= (const CancelButton &) = delete;
-
-public:
-    explicit        CancelButton( vcl::Window* pParent, WinBits nStyle = 0 );
-
-    virtual void    Click() override;
-};
-
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
