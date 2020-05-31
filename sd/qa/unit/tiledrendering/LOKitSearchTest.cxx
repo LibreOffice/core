@@ -56,6 +56,7 @@ public:
     void testSearchInPDFNonExisting();
     void testSearchInPDF();
     void testSearchInPDFInMultiplePages();
+    void testSearchInPDFInMultiplePagesBackwards();
     void testSearchIn2MixedObjects();
     void testSearchIn6MixedObjects();
 
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testSearchInPDFNonExisting);
     CPPUNIT_TEST(testSearchInPDF);
     CPPUNIT_TEST(testSearchInPDFInMultiplePages);
+    CPPUNIT_TEST(testSearchInPDFInMultiplePagesBackwards);
     CPPUNIT_TEST(testSearchIn2MixedObjects);
     CPPUNIT_TEST(testSearchIn6MixedObjects);
     CPPUNIT_TEST_SUITE_END();
@@ -123,14 +125,14 @@ LOKitSearchTest::createDoc(const char* pName, const uno::Sequence<beans::Propert
 
 namespace
 {
-void lcl_search(const OUString& rKey, bool bFindAll = false)
+void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false)
 {
     Scheduler::ProcessEventsToIdle();
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", uno::makeAny(rKey) },
-        { "SearchItem.Backward", uno::makeAny(false) },
+        { "SearchItem.Backward", uno::makeAny(bBackwards) },
         { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
     }));
 
@@ -419,6 +421,104 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
     CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+}
+
+void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    {
+        SdrObject* pObject = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObject);
+
+        SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+        CPPUNIT_ASSERT(pGraphicObject);
+
+        Graphic aGraphic = pGraphicObject->GetGraphic();
+        auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                             pVectorGraphicData->getVectorGraphicDataType());
+    }
+
+    // Expected for backwards search is:
+    // - Start with Page 1
+    //   + search backwards through objects
+    //   + inside objects search backwards through text
+    // - Switch to Page 2
+    //   + search backwards through objects
+    //   + inside objects search backwards through text
+
+    // Search for "him"
+    lcl_search("him", /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search for "him"
+    lcl_search("him", /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search for "him"
+    lcl_search("him", /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1100, 499"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search for "him"
+    lcl_search("him", /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(4, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 499"),
+                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+
+    // Search for "him" - back to start
+    lcl_search("him", /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(5, mpCallbackRecorder->m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
