@@ -2052,7 +2052,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 #if HAVE_FEATURE_PDFIUM
                 aLogicRect = pGraf->GetLogicRect();
                 ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, aGraphic);
-                if (pGraf->getEmbeddedPageNumber() < aFilter.GetPageCount())
+                if (aGraphic.getPageNumber() < aFilter.GetPageCount())
                 {
                     nInsAnz = aFilter.DoImport(*pOL, nInsPos, aGraphic.getPageNumber(), pProgrInfo);
                 }

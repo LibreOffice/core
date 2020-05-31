@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <deque>
 #include <memory>
+#include <algorithm>
 
 
 typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
@@ -109,7 +110,7 @@ public:
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 
-    sal_Int32 getPageIndex() const { return mnPageIndex; }
+    sal_Int32 getPageIndex() const { return std::max(sal_Int32(0), mnPageIndex); }
 
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
