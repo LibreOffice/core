@@ -110,7 +110,7 @@ public:
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 
-    sal_Int32 getPageIndex() const { return mnPageIndex; }
+    sal_Int32 getPageIndex() const { return std::max(0, mnPageIndex); }
 
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
