@@ -34,6 +34,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequence.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
@@ -461,16 +462,8 @@ OUString SAL_CALL AccessibleCell::getImplementationName()
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
-
-    // Get list of supported service names from base class...
-    uno::Sequence<OUString> aServiceNames = AccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nCount (aServiceNames.getLength());
-
-    // ...and add additional names.
-    aServiceNames.realloc (nCount + 1);
-    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleCell";
-
-    return aServiceNames;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.drawing.AccessibleCell" };
+    return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 

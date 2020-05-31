@@ -138,11 +138,8 @@ OUString UnoControlEditModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlEditModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Edit";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlEditModel", "stardiv.vcl.controlmodel.Edit" };
+    return comphelper::concatSequences(UnoControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -459,11 +456,8 @@ OUString UnoEditControl::getImplementationName(  )
 
 uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames = UnoControlBase::getSupportedServiceNames( );
-    aNames.realloc( aNames.getLength() + 2 );
-    aNames[ aNames.getLength() - 2 ] = "com.sun.star.awt.UnoControlEdit";
-    aNames[ aNames.getLength() - 1 ] = "stardiv.vcl.control.Edit";
-    return aNames;
+    css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlEdit", "stardiv.vcl.control.Edit" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames( ), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -534,11 +528,8 @@ OUString UnoControlFileControlModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlFileControlModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFileControlModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FileControl";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFileControlModel", "stardiv.vcl.controlmodel.FileControl" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -568,11 +559,8 @@ OUString UnoFileControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
 {
-    auto s(UnoEditControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFileControl";
-    s[s.getLength() - 1] = "stardiv.vcl.control.FileControl";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFileControl", "stardiv.vcl.control.FileControl" };
+    return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -711,11 +699,8 @@ OUString UnoControlButtonModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
 {
-    auto s(GraphicControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlButtonModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Button";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlButtonModel", "stardiv.vcl.controlmodel.Button" };
+    return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -868,11 +853,8 @@ OUString UnoButtonControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlButton";
-    s[s.getLength() - 1] = "stardiv.vcl.control.Button";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlButton", "stardiv.vcl.control.Button" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -905,13 +887,13 @@ OUString UnoControlImageControlModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlImageControlModel::getSupportedServiceNames()
 {
-    auto s(GraphicControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 4);
-    s[s.getLength() - 4] = "com.sun.star.awt.UnoControlImageButtonModel";
-    s[s.getLength() - 3] = "com.sun.star.awt.UnoControlImageControlModel";
-    s[s.getLength() - 2] = "stardiv.vcl.controlmodel.ImageButton";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ImageControl";
-    return s;
+    const css::uno::Sequence<OUString> vals {
+        "com.sun.star.awt.UnoControlImageButtonModel",
+        "com.sun.star.awt.UnoControlImageControlModel",
+        "stardiv.vcl.controlmodel.ImageButton",
+        "stardiv.vcl.controlmodel.ImageControl"
+    };
+    return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
 
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1035,13 +1017,13 @@ OUString UnoImageControlControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 4);
-    s[s.getLength() - 4] = "com.sun.star.awt.UnoControlImageButton";
-    s[s.getLength() - 3] = "com.sun.star.awt.UnoControlImageControl";
-    s[s.getLength() - 2] = "stardiv.vcl.control.ImageButton";
-    s[s.getLength() - 1] = "stardiv.vcl.control.ImageControl";
-    return s;
+    const css::uno::Sequence<OUString> vals {
+        "com.sun.star.awt.UnoControlImageButton",
+        "com.sun.star.awt.UnoControlImageControl",
+        "stardiv.vcl.control.ImageButton",
+        "stardiv.vcl.control.ImageControl"
+    };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1100,11 +1082,8 @@ OUString UnoControlRadioButtonModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlRadioButtonModel::getSupportedServiceNames()
 {
-    auto s(GraphicControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRadioButtonModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.RadioButton";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlRadioButtonModel", "stardiv.vcl.controlmodel.RadioButton" };
+    return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1277,11 +1256,8 @@ OUString UnoRadioButtonControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRadioButton";
-    s[s.getLength() - 1] = "stardiv.vcl.control.RadioButton";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlRadioButton", "stardiv.vcl.control.RadioButton" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1339,11 +1315,8 @@ OUString UnoControlCheckBoxModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
 {
-    auto s(GraphicControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCheckBoxModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.CheckBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCheckBoxModel", "stardiv.vcl.controlmodel.CheckBox" };
+    return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1489,11 +1462,8 @@ OUString UnoCheckBoxControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCheckBox";
-    s[s.getLength() - 1] = "stardiv.vcl.control.CheckBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCheckBox", "stardiv.vcl.control.CheckBox" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1743,11 +1713,8 @@ OUString UnoControlFixedTextModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlFixedTextModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedTextModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FixedText";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedTextModel", "stardiv.vcl.controlmodel.FixedText" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1848,11 +1815,8 @@ OUString UnoFixedTextControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedText";
-    s[s.getLength() - 1] = "stardiv.vcl.control.FixedText";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedText", "stardiv.vcl.control.FixedText" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1914,11 +1878,8 @@ OUString UnoControlGroupBoxModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlGroupBoxModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.GroupBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlGroupBoxModel", "stardiv.vcl.controlmodel.GroupBox" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1955,11 +1916,8 @@ OUString UnoGroupBoxControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlGroupBox";
-    s[s.getLength() - 1] = "stardiv.vcl.control.GroupBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlGroupBox", "stardiv.vcl.control.GroupBox" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -2113,11 +2071,8 @@ OUString UnoControlListBoxModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlListBoxModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ListBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlListBoxModel", "stardiv.vcl.controlmodel.ListBox" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 OUString UnoControlListBoxModel::getServiceName()
@@ -2551,11 +2506,8 @@ OUString UnoListBoxControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlListBox";
-    s[s.getLength() - 1] = "stardiv.vcl.control.ListBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlListBox", "stardiv.vcl.control.ListBox" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
 void UnoListBoxControl::dispose()
@@ -2959,11 +2911,8 @@ OUString UnoControlComboBoxModel::getImplementationName()
 
 css::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlComboBoxModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ComboBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlComboBoxModel", "stardiv.vcl.controlmodel.ComboBox" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
 uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  )
@@ -3051,11 +3000,8 @@ OUString UnoComboBoxControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
 {
-    auto s(UnoEditControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlComboBox";
-    s[s.getLength() - 1] = "stardiv.vcl.control.ComboBox";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlComboBox", "stardiv.vcl.control.ComboBox" };
+    return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals);
 }
 
 OUString UnoComboBoxControl::GetComponentServiceName()
@@ -3492,11 +3438,8 @@ OUString UnoControlDateFieldModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlDateFieldModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDateFieldModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.DateField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlDateFieldModel", "stardiv.vcl.controlmodel.DateField" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3708,11 +3651,8 @@ OUString UnoDateFieldControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
 {
-    auto s(UnoSpinFieldControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDateField";
-    s[s.getLength() - 1] = "stardiv.vcl.control.DateField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlDateField", "stardiv.vcl.control.DateField" };
+    return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3767,11 +3707,8 @@ OUString UnoControlTimeFieldModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlTimeFieldModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlTimeFieldModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.TimeField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlTimeFieldModel", "stardiv.vcl.controlmodel.TimeField" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -3942,11 +3879,8 @@ OUString UnoTimeFieldControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
 {
-    auto s(UnoSpinFieldControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlTimeField";
-    s[s.getLength() - 1] = "stardiv.vcl.control.TimeField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlTimeField", "stardiv.vcl.control.TimeField" };
+    return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4001,11 +3935,8 @@ OUString UnoControlNumericFieldModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlNumericFieldModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlNumericFieldModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.NumericField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "stardiv.vcl.controlmodel.NumericField", "com.sun.star.awt.UnoControlNumericFieldModel" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4147,11 +4078,8 @@ OUString UnoNumericFieldControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
 {
-    auto s(UnoSpinFieldControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlNumericField";
-    s[s.getLength() - 1] = "stardiv.vcl.control.NumericField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlNumericField", "stardiv.vcl.control.NumericField" };
+    return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 void UnoNumericFieldControl::setSpinSize( double Digits )
@@ -4230,11 +4158,8 @@ OUString UnoControlCurrencyFieldModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlCurrencyFieldModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCurrencyFieldModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.CurrencyField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCurrencyFieldModel", "stardiv.vcl.controlmodel.CurrencyField" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4376,11 +4301,8 @@ OUString UnoCurrencyFieldControl::getImplementationName()
 css::uno::Sequence<OUString>
 UnoCurrencyFieldControl::getSupportedServiceNames()
 {
-    auto s(UnoSpinFieldControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCurrencyField";
-    s[s.getLength() - 1] = "stardiv.vcl.control.CurrencyField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlCurrencyField", "stardiv.vcl.control.CurrencyField" };
+    return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 void UnoCurrencyFieldControl::setSpinSize( double Digits )
@@ -4454,11 +4376,8 @@ OUString UnoControlPatternFieldModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlPatternFieldModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlPatternFieldModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.PatternField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlPatternFieldModel", "stardiv.vcl.controlmodel.PatternField" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4566,11 +4485,8 @@ OUString UnoPatternFieldControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
 {
-    auto s(UnoSpinFieldControl::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlPatternField";
-    s[s.getLength() - 1] = "stardiv.vcl.control.PatternField";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlPatternField", "stardiv.vcl.control.PatternField" };
+    return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4637,11 +4553,8 @@ OUString UnoControlProgressBarModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlProgressBarModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlProgressBarModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ProgressBar";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlProgressBarModel", "stardiv.vcl.controlmodel.ProgressBar" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4735,11 +4648,8 @@ OUString UnoProgressBarControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlProgressBar";
-    s[s.getLength() - 1] = "stardiv.vcl.control.ProgressBar";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlProgressBar", "stardiv.vcl.control.ProgressBar" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4802,11 +4712,8 @@ OUString UnoControlFixedLineModel::getImplementationName()
 css::uno::Sequence<OUString>
 UnoControlFixedLineModel::getSupportedServiceNames()
 {
-    auto s(UnoControlModel::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedLineModel";
-    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FixedLine";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedLineModel", "stardiv.vcl.controlmodel.FixedLine" };
+    return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -4843,11 +4750,8 @@ OUString UnoFixedLineControl::getImplementationName()
 
 css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
 {
-    auto s(UnoControlBase::getSupportedServiceNames());
-    s.realloc(s.getLength() + 2);
-    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedLine";
-    s[s.getLength() - 1] = "stardiv.vcl.control.FixedLine";
-    return s;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.awt.UnoControlFixedLine", "stardiv.vcl.control.FixedLine" };
+    return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
