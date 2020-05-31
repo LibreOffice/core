@@ -318,6 +318,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/ResourceDict \
     vcl/source/pdf/Matrix3 \
     vcl/source/pdf/XmpMetadata \
+    vcl/source/pdf/PDFiumLibrary \
     vcl/source/graphic/GraphicID \
     vcl/source/graphic/GraphicLoader \
     vcl/source/graphic/GraphicObject \
