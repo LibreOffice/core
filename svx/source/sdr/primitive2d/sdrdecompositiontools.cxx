@@ -524,6 +524,7 @@ namespace drawinglayer::primitive2d
                     new ShadowPrimitive2D(
                         aShadowOffset,
                         rShadow.getColor(),
+                        rShadow.getBlur(),
                         rContent));
 
                 if(0.0 != rShadow.getTransparence())
