@@ -495,7 +495,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
 
     // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
     // popup isn't a true dialog
-    //mxButtonBox->sort_native_button_order();
+    mxButtonBox->sort_native_button_order();
 
     if (!bIsSubMenu)
     {
