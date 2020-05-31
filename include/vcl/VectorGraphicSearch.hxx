@@ -19,8 +19,6 @@
 
 #include <memory>
 
-class SearchContext;
-
 enum class SearchStartPosition
 {
     Begin,
@@ -33,7 +31,6 @@ private:
     class Implementation;
     std::unique_ptr<Implementation> mpImplementation;
     Graphic maGraphic;
-    std::unique_ptr<SearchContext> mpSearchContext;
 
     bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData, OUString const& rSearchString,
                    SearchStartPosition eStartPosition);
