@@ -17,25 +17,8 @@
 #include <fpdf_doc.h>
 #include <fpdf_text.h>
 
-class VectorGraphicSearch::Implementation
+namespace
 {
-public:
-    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
-    FPDF_DOCUMENT mpPdfDocument;
-
-    Implementation()
-        : mpPDFium(vcl::pdf::PDFiumLibrary::get())
-        , mpPdfDocument(nullptr)
-    {
-    }
-
-    ~Implementation()
-    {
-        if (mpPdfDocument)
-            FPDF_CloseDocument(mpPdfDocument);
-    }
-};
-
 class SearchContext
 {
 private:
@@ -180,17 +163,38 @@ public:
     }
 };
 
+} // end anonymous namespace
+
+class VectorGraphicSearch::Implementation
+{
+public:
+    std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
+    FPDF_DOCUMENT mpPdfDocument;
+
+    std::unique_ptr<SearchContext> mpSearchContext;
+
+    Implementation()
+        : mpPDFium(vcl::pdf::PDFiumLibrary::get())
+        , mpPdfDocument(nullptr)
+    {
+    }
+
+    ~Implementation()
+    {
+        mpSearchContext.reset();
+
+        if (mpPdfDocument)
+            FPDF_CloseDocument(mpPdfDocument);
+    }
+};
+
 VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
     : mpImplementation(std::make_unique<VectorGraphicSearch::Implementation>())
     , maGraphic(rGraphic)
 {
 }
 
-VectorGraphicSearch::~VectorGraphicSearch()
-{
-    mpSearchContext.reset();
-    mpImplementation.reset();
-}
+VectorGraphicSearch::~VectorGraphicSearch() { mpImplementation.reset(); }
 
 bool VectorGraphicSearch::search(OUString const& rSearchString, SearchStartPosition eStartPosition)
 {
@@ -241,45 +245,45 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
 
     sal_Int32 nPageIndex = std::max(rData->getPageIndex(), sal_Int32(0));
 
-    mpSearchContext.reset(new SearchContext(mpImplementation->mpPdfDocument, nPageIndex,
-                                            rSearchString, eStartPosition));
+    mpImplementation->mpSearchContext.reset(new SearchContext(
+        mpImplementation->mpPdfDocument, nPageIndex, rSearchString, eStartPosition));
 
-    return mpSearchContext->initialize();
+    return mpImplementation->mpSearchContext->initialize();
 }
 
 basegfx::B2DSize VectorGraphicSearch::pageSize()
 {
     basegfx::B2DSize aSize;
-    if (mpSearchContext)
-        aSize = mpSearchContext->getPageSize();
+    if (mpImplementation->mpSearchContext)
+        aSize = mpImplementation->mpSearchContext->getPageSize();
     return aSize;
 }
 
 bool VectorGraphicSearch::next()
 {
-    if (mpSearchContext)
-        return mpSearchContext->next();
+    if (mpImplementation->mpSearchContext)
+        return mpImplementation->mpSearchContext->next();
     return false;
 }
 
 bool VectorGraphicSearch::previous()
 {
-    if (mpSearchContext)
-        return mpSearchContext->previous();
+    if (mpImplementation->mpSearchContext)
+        return mpImplementation->mpSearchContext->previous();
     return false;
 }
 
 int VectorGraphicSearch::index()
 {
-    if (mpSearchContext)
-        return mpSearchContext->index();
+    if (mpImplementation->mpSearchContext)
+        return mpImplementation->mpSearchContext->index();
     return -1;
 }
 
 std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
 {
-    if (mpSearchContext)
-        return mpSearchContext->getTextRectangles();
+    if (mpImplementation->mpSearchContext)
+        return mpImplementation->mpSearchContext->getTextRectangles();
 
     return std::vector<basegfx::B2DRectangle>();
 }
