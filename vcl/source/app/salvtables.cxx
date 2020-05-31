@@ -1134,9 +1134,12 @@ namespace
 {
 class SalInstanceBox : public SalInstanceContainer, public virtual weld::Box
 {
+private:
+    VclPtr<VclBox> m_xBox;
 public:
-    SalInstanceBox(vcl::Window* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pContainer, pBuilder, bTakeOwnership)
+        , m_xBox(pContainer)
     {
     }
     virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override
@@ -1144,6 +1147,10 @@ public:
         SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
         assert(pVclWidget);
         pVclWidget->getWidget()->reorderWithinParent(nNewPosition);
+    }
+    virtual void sort_native_button_order() override
+    {
+        ::sort_native_button_order(*m_xBox);
     }
 };
 
@@ -1380,7 +1387,7 @@ bool SalInstanceDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
     aCtx.maEndDialogFn = rEndDialogFn;
     VclButtonBox* pActionArea = m_xDialog->get_action_area();
     if (pActionArea)
-        pActionArea->sort_native_button_order();
+        sort_native_button_order(*pActionArea);
     return m_xDialog->StartExecuteAsync(aCtx);
 }
 
@@ -1395,7 +1402,7 @@ bool SalInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     aCtx.maEndDialogFn = rEndDialogFn;
     VclButtonBox* pActionArea = m_xDialog->get_action_area();
     if (pActionArea)
-        pActionArea->sort_native_button_order();
+        sort_native_button_order(*pActionArea);
     return m_xDialog->StartExecuteAsync(aCtx);
 }
 
@@ -1473,7 +1480,7 @@ int SalInstanceDialog::run()
 {
     VclButtonBox* pActionArea = m_xDialog->get_action_area();
     if (pActionArea)
-        pActionArea->sort_native_button_order();
+        sort_native_button_order(*pActionArea);
     return m_xDialog->Execute();
 }
 
@@ -6292,7 +6299,7 @@ std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OStrin
 
 std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id, bool bTakeOwnership)
 {
-    vcl::Window* pContainer = m_xBuilder->get(id);
+    VclBox* pContainer = m_xBuilder->get<VclBox>(id);
     return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership)
                       : nullptr;
 }

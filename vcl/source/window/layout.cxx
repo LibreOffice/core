@@ -789,10 +789,10 @@ bool sortButtons::operator()(const vcl::Window *pA, const vcl::Window *pB) const
     return getButtonPriority(pA->GetHelpId()) < getButtonPriority(pB->GetHelpId());
 }
 
-void VclButtonBox::sort_native_button_order()
+void sort_native_button_order(VclBox& rContainer)
 {
     std::vector<vcl::Window*> aChilds;
-    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+    for (vcl::Window* pChild = rContainer.GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         aChilds.push_back(pChild);
@@ -800,7 +800,7 @@ void VclButtonBox::sort_native_button_order()
 
     //sort child order within parent so that we match the platform
     //button order
-    std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(m_bVerticalContainer));
+    std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(rContainer.get_orientation()));
     BuilderUtils::reorderWithinParent(aChilds, true);
 }
 
@@ -2295,7 +2295,7 @@ void MessageDialog::create_message_area()
                 break;
         }
         set_default_response(nDefaultResponse);
-        pButtonBox->sort_native_button_order();
+        sort_native_button_order(*pButtonBox);
         m_pMessageBox->Show();
         m_pGrid->Show();
     }
