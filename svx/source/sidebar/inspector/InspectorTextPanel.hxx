@@ -42,10 +42,7 @@ public:
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
-    std::unique_ptr<weld::Toolbar> mxFont;
-    std::unique_ptr<ToolbarUnoDispatcher> mxFontDispatch;
-    std::unique_ptr<weld::Toolbar> mxFontHeight;
-    std::unique_ptr<ToolbarUnoDispatcher> mxFontHeightDispatch;
+    std::unique_ptr<weld::TreeView> mxListBoxStyles; // To dump all the properties
 
     vcl::EnumContext maContext;
 };
