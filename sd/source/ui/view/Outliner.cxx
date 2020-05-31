@@ -826,7 +826,15 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
             if (mpImpl->mbCurrentIsVectorGraphic)
             {
-                if (mpImpl->mpVectorGraphicSearch->next())
+                bool bBackwards = mpSearchItem->GetBackward();
+
+                bool bResult = false;
+                if (bBackwards)
+                    bResult = mpImpl->mpVectorGraphicSearch->previous();
+                else
+                    bResult = mpImpl->mpVectorGraphicSearch->next();
+
+                if (bResult)
                 {
                     nMatchCount = 1;
 
@@ -1227,12 +1235,19 @@ void SdOutliner::ProvideNextTextObject()
                     // contains a vector graphic
                     auto* pGraphicObject = static_cast<SdrGrafObj*>(mpObj);
                     OUString const & rString = mpSearchItem->GetSearchString();
+                    bool bBackwards = mpSearchItem->GetBackward();
+                    SearchStartPosition eSearchStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
 
                     mpImpl->mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
 
-                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString);
+                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, eSearchStartPosition);
                     if (bResult)
-                        bResult = mpImpl->mpVectorGraphicSearch->next();
+                    {
+                        if (bBackwards)
+                            bResult = mpImpl->mpVectorGraphicSearch->previous();
+                        else
+                            bResult = mpImpl->mpVectorGraphicSearch->next();
+                    }
 
                     if (bResult)
                     {
