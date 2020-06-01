@@ -28,6 +28,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <o3tl/any.hxx>
 
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -306,6 +307,9 @@ void StdTabController::activateTabOrder(  )
     if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
+    // the dreaded UNO aggregration, retrieve the thing that we are part of
+    Reference<XTabController> xTabController = *o3tl::doAccess<Reference<XTabController>>(queryAggregation(cppu::UnoType<XTabController>::get()));
+
     // Get a flattened list of controls sequences
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
@@ -315,8 +319,7 @@ void StdTabController::activateTabOrder(  )
     // but that list isn't valid during the creation phase (missing last created control) because
     // listenermultiplexer.cxx handles fmvwimp::elementinserted before formcontroller::elementInserted
     // Perhaps other places using the same optimization need to be reviewed?  (tdf#125609)
-    Sequence< Reference< XControl > > aCachedControls = getControls();
-    Sequence< Reference< XControl > > aControls = aCachedControls;
+    Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
     // #58317# Some Models may be missing from the Container. Plus there is a
     // autoTabOrder call later on.
@@ -334,7 +337,7 @@ void StdTabController::activateTabOrder(  )
     {
         mxModel->getGroup( nG, aThisGroupModels, aName );
 
-        aControls = aCachedControls;
+        aControls = xTabController->getControls();
             // ImplCreateComponentSequence has a really strange semantics regarding it's first parameter:
             // upon method entry, it expects a super set of the controls which it returns
             // this means we need to completely fill this sequence with all available controls before
