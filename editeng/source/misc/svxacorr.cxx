@@ -285,6 +285,7 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
                     | ACFlags::ChgOrdinalNumber
                     | ACFlags::ChgToEnEmDash
                     | ACFlags::AddNonBrkSpace
+                    | ACFlags::TransliterateRTL
                     | ACFlags::ChgWeightUnderl
                     | ACFlags::SetINetAttr
                     | ACFlags::ChgQuotes
@@ -1523,6 +1524,14 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 }
                 break;
             }
+        }
+
+        if( IsAutoCorrFlag( ACFlags::TransliterateRTL ) && GetDocLanguage( rDoc, nInsPos ) == LANGUAGE_HUNGARIAN )
+        {
+            // WARNING ATTENTION: rTxt is an alias of the text node's OUString
+            // and becomes INVALID if TransliterateRTLWord returns true!
+            if ( rDoc.TransliterateRTLWord( nCapLttrPos, nInsPos ) )
+                break;
         }
 
         if( ( IsAutoCorrFlag( ACFlags::ChgOrdinalNumber ) &&
