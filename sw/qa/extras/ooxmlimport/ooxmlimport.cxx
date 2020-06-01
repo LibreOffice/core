@@ -1345,6 +1345,19 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101627, "tdf101627.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(466), getProperty<sal_Int32>(xFrame, "Height"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf133448, "tdf133448.docx")
+{
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    Graphic aGraphic(xGraphic);
+    uno::Reference<beans::XPropertySet> xGraphicDescriptor(xGraphic, uno::UNO_QUERY_THROW);
+    awt::Size aSizePixel;
+    CPPUNIT_ASSERT(xGraphicDescriptor->getPropertyValue("SizePixel") >>= aSizePixel);
+
+    //Without the fix in place, the graphic's size is 0x0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(837), aSizePixel.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(598), aSizePixel.Height);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
