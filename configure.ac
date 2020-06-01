@@ -10003,11 +10003,11 @@ serf)
 neon)
     AC_MSG_RESULT([neon])
     # Check for system neon
-    libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
+    libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.31.1])
     if test "$with_system_neon" = "yes"; then
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
     else
-        NEON_VERSION=0295
+        NEON_VERSION=0311
     fi
     AC_SUBST(NEON_VERSION)
     ;;
