@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85807212_c71362e7",
+        "filename": "include/tools/UnitConversion.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-01T10:57:54Z",
+      "side": 1,
+      "message": "Just a personal opinion: I prefer using telling constants coming from units\u0027 definition, like \"Point is 1/72 of an inch; inch is 2540 mm100s\" -\u003e fNumber / 72.0 * 2540 looks much cleaner (and doesn\u0027t limit precision to 13 decimals, which is of course not too much relevant). I am sure that two floating-point operations would be optimized away by compiler into one anyway.",
+      "range": {
+        "startLine": 28,
+        "startChar": 72,
+        "endLine": 28,
+        "endChar": 86
+      },
+      "revId": "0e29e9ea7f4fe58d8dbdc7a9b9f58543a93d5bf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
