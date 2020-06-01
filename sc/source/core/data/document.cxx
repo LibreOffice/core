@@ -4256,11 +4256,11 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bWidth, bool bTotalSize )
+                                    bool bWidth, bool bTotalSize, bool bInPrintTwips )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetNeededSize
-                ( nCol, nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, bTotalSize );
+                ( nCol, nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, bTotalSize, bInPrintTwips );
     OSL_FAIL("wrong table number");
     return 0;
 }

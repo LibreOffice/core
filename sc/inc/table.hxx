@@ -788,7 +788,8 @@ public:
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bWidth, bool bTotalSize );
+                                    bool bWidth, bool bTotalSize,
+                                    bool bInPrintTwips = false);
     void        SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight );
