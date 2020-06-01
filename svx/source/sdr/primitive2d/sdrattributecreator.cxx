@@ -215,7 +215,7 @@ namespace drawinglayer
 
         attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
         {
-            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RAD).GetValue();
+            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RADIUS).GetValue();
             if (!nRadius)
                 return attribute::SdrGlowAttribute();
             Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
@@ -229,7 +229,7 @@ namespace drawinglayer
 
         sal_Int32 getSoftEdgeRadius(const SfxItemSet& rSet)
         {
-            return rSet.Get(SDRATTR_SOFTEDGE_RAD).GetValue();
+            return rSet.Get(SDRATTR_SOFTEDGE_RADIUS).GetValue();
         }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
