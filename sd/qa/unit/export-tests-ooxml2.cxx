@@ -2855,7 +2855,7 @@ void SdOOXMLExportTest2::testShapeGlowEffect()
     xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     sal_Int32 nRadius = -1;
-    xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
+    xShape->getPropertyValue("GlowEffectRadius") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 139700 EMU = 388.0556 mm/100
     Color nColor;
     xShape->getPropertyValue("GlowEffectColor") >>= nColor;
@@ -2919,7 +2919,7 @@ void SdOOXMLExportTest2::testShapeSoftEdgeEffect()
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
     auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
     sal_Int32 nRadius = -1;
-    xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRadius;
+    xShapeProps->getPropertyValue("SoftEdgeRadius") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
 }
 
