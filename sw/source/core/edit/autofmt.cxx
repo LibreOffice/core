@@ -277,6 +277,7 @@ void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
         case STR_AUTOFMTREDL_DASH:
         case STR_AUTOFMTREDL_ORDINAL:
         case STR_AUTOFMTREDL_NON_BREAK_SPACE:
+        case STR_AUTOFMTREDL_TRANSLITERATE_RTL:
             nSeqNo = ++m_nRedlAutoFormatSeqId;
             break;
         }
@@ -1912,7 +1913,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
     if( m_aFlags.bAFormatByInput ||
         (!m_aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&
         !m_aFlags.bCapitalStartSentence && !m_aFlags.bCapitalStartWord &&
-        !m_aFlags.bChgOrdinalNumber &&
+        !m_aFlags.bChgOrdinalNumber && !m_aFlags.bTransliterateRTL &&
         !m_aFlags.bChgToEnEmDash && !m_aFlags.bSetINetAttr &&
         !m_aFlags.bChgWeightUnderl && !m_aFlags.bAddNonBrkSpace) )
         return;
@@ -1921,7 +1922,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
     if (TextFrameIndex(pText->getLength()) <= nPos)
         return;
 
-    bool bGetLanguage = m_aFlags.bChgOrdinalNumber ||
+    bool bGetLanguage = m_aFlags.bChgOrdinalNumber || m_aFlags.bTransliterateRTL ||
                         m_aFlags.bChgToEnEmDash || m_aFlags.bSetINetAttr ||
                         m_aFlags.bCapitalStartWord || m_aFlags.bCapitalStartSentence ||
                         m_aFlags.bAddNonBrkSpace;
@@ -2152,6 +2153,24 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
             LanguageType eLang = bGetLanguage
                     ? m_pCurTextFrame->GetLangOfChar(nSttPos, 0, true)
                     : LANGUAGE_SYSTEM;
+
+            if( m_aFlags.bTransliterateRTL && eLang == LANGUAGE_HUNGARIAN &&
+                SetRedlineText( STR_AUTOFMTREDL_TRANSLITERATE_RTL ) &&
+                aACorrDoc.TransliterateRTLWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos)))
+            {
+                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
+                if( m_aFlags.bWithRedlining )
+                {
+                    m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                    m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
+                    m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                    pText = &m_pCurTextFrame->GetText();
+                    m_aDelPam.SetMark();
+                    m_aDelPam.DeleteMark();
+                }
+
+                continue;       // do not check further
+            }
 
             if ( m_aFlags.bAddNonBrkSpace )
             {
@@ -2754,7 +2773,7 @@ void SwEditShell::AutoFormatBySplitNode()
                                 &pCursor->GetPoint()->nNode );
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
-                                ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber |
+                                ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |
                                 ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ))
             pACorr = nullptr;
 

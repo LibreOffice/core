@@ -71,13 +71,14 @@ enum class ACFlags : sal_uInt32 {
     IgnoreDoubleSpace    = 0x00000800,   // Ignore 2 Spaces
     ChgSglQuotes         = 0x00001000,   // Replace simple quotes
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
+    TransliterateRTL     = 0x00004000,   // Transliterate RTL text
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
     WrdSttLstLoad        = 0x80000000,   // Exception list for Word Start loaded
 };
 namespace o3tl {
-    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe0003fff> {};
+    template<> struct typed_flags<ACFlags> : is_typed_flags<ACFlags, 0xe0007fff> {};
 }
 
 enum class ACQuotes
@@ -119,6 +120,8 @@ public:
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   OUString* pPara ) = 0;
+    virtual bool TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos ) = 0;
+
     // Is called after the change of the signs by the functions
     //  - FnCapitalStartWord
     //  - FnCapitalStartSentence
