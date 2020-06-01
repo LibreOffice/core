@@ -1,0 +1,6 @@
+#ifndef INCLUDED_CUI_SOURCE_ADDITIONSDLG_HXX
+#define INCLUDED_CUI_SOURCE_ADDITIONSDLG_HXX
+
+#endif // INCLUDED_CUI_SOURCE_ADDITIONSDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
