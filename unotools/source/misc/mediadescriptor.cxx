@@ -526,7 +526,7 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
     }
     catch(const css::uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION("unotools.misc", "invalid MediaDescriptor detected");
+        TOOLS_WARN_EXCEPTION("unotools.misc", "invalid MediaDescriptor detected");
         return false;
     }
 }
