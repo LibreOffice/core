@@ -7211,7 +7211,8 @@ SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
 
 SfxVoidItem ChangeTabStop SID_TABSTOP_ADD_OR_CHANGE
     (SfxInt32Item Index SID_TABSTOP_ATTR_INDEX,
-     SfxInt32Item Position SID_TABSTOP_ATTR_POSITION)
+     SfxInt32Item Position SID_TABSTOP_ATTR_POSITION,
+     SfxBoolItem  Remove SID_TABSTOP_ATTR_REMOVE)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -7220,7 +7221,6 @@ SfxVoidItem ChangeTabStop SID_TABSTOP_ADD_OR_CHANGE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
