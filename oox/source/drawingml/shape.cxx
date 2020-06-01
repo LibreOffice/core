@@ -1470,7 +1470,7 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( aEffectProperties.maGlow.moGlowRad.has() )
         {
             uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue("GlowEffectRad", makeAny(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
+            propertySet->setPropertyValue("GlowEffectRadius", makeAny(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
             propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
             propertySet->setPropertyValue("GlowEffectTransparency", makeAny(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
@@ -1480,7 +1480,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue(
-                "SoftEdgeRad", makeAny(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
+                "SoftEdgeRadius", makeAny(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
         }
     }
 

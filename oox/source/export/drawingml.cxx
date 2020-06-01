@@ -3746,13 +3746,13 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         if( GetProperty( rXPropSet, "Shadow" ) )
             mAny >>= bHasShadow;
         bool bHasEffects = bHasShadow;
-        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffectRad"))
+        if (!bHasEffects && GetProperty(rXPropSet, "GlowEffectRadius"))
         {
             sal_Int32 rad = 0;
             mAny >>= rad;
             bHasEffects = rad > 0;
         }
-        if (!bHasEffects && GetProperty(rXPropSet, "SoftEdgeRad"))
+        if (!bHasEffects && GetProperty(rXPropSet, "SoftEdgeRadius"))
         {
             sal_Int32 rad = 0;
             mAny >>= rad;
@@ -3862,7 +3862,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 {
     sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue("GlowEffectRad") >>= nRad;
+    rXPropSet->getPropertyValue("GlowEffectRadius") >>= nRad;
     if (!nRad)
         return;
 
@@ -3884,7 +3884,7 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
 {
     sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue("SoftEdgeRad") >>= nRad;
+    rXPropSet->getPropertyValue("SoftEdgeRadius") >>= nRad;
     if (!nRad)
         return;
 

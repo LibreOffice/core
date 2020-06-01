@@ -49,7 +49,7 @@ void SoftEdgePropertyPanel::Initialize()
 
 IMPL_LINK_NOARG(SoftEdgePropertyPanel, ModifySoftEdgeRadiusHdl, weld::MetricSpinButton&, void)
 {
-    SdrMetricItem aItem(SDRATTR_SOFTEDGE_RAD, mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH));
+    SdrMetricItem aItem(SDRATTR_SOFTEDGE_RADIUS, mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::RECORD,
                                              { &aItem });
 }
