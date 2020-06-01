@@ -329,11 +329,11 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
     rPoolDefaults[ SDRATTR_TABLE_TEXT_ROTATION - SDRATTR_START ] = new SvxTextRotateItem(0, SDRATTR_TABLE_TEXT_ROTATION);
 
-    rPoolDefaults[ SDRATTR_GLOW_RAD - SDRATTR_START ] = new SdrMetricItem(SDRATTR_GLOW_RAD, 0);
+    rPoolDefaults[ SDRATTR_GLOW_RADIUS - SDRATTR_START ] = new SdrMetricItem(SDRATTR_GLOW_RADIUS, 0);
     rPoolDefaults[ SDRATTR_GLOW_COLOR - SDRATTR_START ] = new XColorItem(SDRATTR_GLOW_COLOR, aNullCol);
     rPoolDefaults[ SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START ] = new SdrPercentItem(SDRATTR_GLOW_TRANSPARENCY, 0);
 
-    rPoolDefaults[SDRATTR_SOFTEDGE_RAD - SDRATTR_START] = new SdrMetricItem(SDRATTR_SOFTEDGE_RAD, 0);
+    rPoolDefaults[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START] = new SdrMetricItem(SDRATTR_SOFTEDGE_RADIUS, 0);
 
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
@@ -349,11 +349,11 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_TLBR;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_BLTR;
 
-    mpLocalItemInfos[SDRATTR_GLOW_RAD - SDRATTR_START]._nSID = SID_ATTR_GLOW_RADIUS;
+    mpLocalItemInfos[SDRATTR_GLOW_RADIUS - SDRATTR_START]._nSID = SID_ATTR_GLOW_RADIUS;
     mpLocalItemInfos[SDRATTR_GLOW_COLOR - SDRATTR_START]._nSID = SID_ATTR_GLOW_COLOR;
     mpLocalItemInfos[SDRATTR_GLOW_TRANSPARENCY - SDRATTR_START]._nSID = SID_ATTR_GLOW_TRANSPARENCY;
 
-    mpLocalItemInfos[SDRATTR_SOFTEDGE_RAD - SDRATTR_START]._nSID = SID_ATTR_SOFTEDGE_RADIUS;
+    mpLocalItemInfos[SDRATTR_SOFTEDGE_RADIUS - SDRATTR_START]._nSID = SID_ATTR_SOFTEDGE_RADIUS;
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);
@@ -461,11 +461,11 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_SHADOW3D          : pResId = SIP_SA_SHADOW3D;break;
         case SDRATTR_SHADOWPERSP       : pResId = SIP_SA_SHADOWPERSP;break;
 
-        case SDRATTR_GLOW_RAD          : pResId = SIP_SA_GLOW_RAD;break;
+        case SDRATTR_GLOW_RADIUS       : pResId = SIP_SA_GLOW_RADIUS;break;
         case SDRATTR_GLOW_COLOR        : pResId = SIP_SA_GLOW_COLOR;break;
         case SDRATTR_GLOW_TRANSPARENCY : pResId = SIP_SA_GLOW_TRANSPARENCY;break;
 
-        case SDRATTR_SOFTEDGE_RAD      : pResId = SIP_SA_SOFTEDGE_RAD; break;
+        case SDRATTR_SOFTEDGE_RADIUS   : pResId = SIP_SA_SOFTEDGE_RADIUS; break;
 
         case SDRATTR_CAPTIONTYPE      : pResId = SIP_SA_CAPTIONTYPE;break;
         case SDRATTR_CAPTIONFIXEDANGLE: pResId = SIP_SA_CAPTIONFIXEDANGLE;break;
