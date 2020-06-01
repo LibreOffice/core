@@ -110,8 +110,9 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "DoubleQuoteAtStart",                   // 15
         "DoubleQuoteAtEnd",                     // 16
         "CorrectAccidentalCapsLock"             // 17
+        "TransliterateRTL"                      // 18
     };
-    const int nCount = 18;
+    const int nCount = 19;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -214,6 +215,10 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                     if(*o3tl::doAccess<bool>(pValues[nProp]))
                         nFlags |= ACFlags::CorrectCapsLock;
                 break;//"CorrectAccidentalCapsLock"
+                case 18:
+                    if(*o3tl::doAccess<bool>(pValues[nProp]))
+                        nFlags |= ACFlags::TransliterateRTL;
+                break;//"TransliterateRTL"
             }
         }
     }
@@ -265,8 +270,10 @@ void SvxBaseAutoCorrCfg::ImplCommit()
             // "DoubleQuoteAtStart"
          css::uno::Any(sal_Int32(rParent.pAutoCorrect->GetEndDoubleQuote())),
             // "DoubleQuoteAtEnd"
-        css::uno::Any(bool(nFlags & ACFlags::CorrectCapsLock))});
+         css::uno::Any(bool(nFlags & ACFlags::CorrectCapsLock)),
             // "CorrectAccidentalCapsLock"
+        css::uno::Any(bool(nFlags & ACFlags::TransliterateRTL))});
+            // "TransliterateRTL"
 }
 
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
@@ -324,9 +331,10 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",          //43
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //44
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"      //46
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //46
+        "Format/Option/TransliterateRTL"                                //47
     };
-    const int nCount = 47;
+    const int nCount = 48;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -476,6 +484,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                     rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
                 }
                 break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
+                case 47 : rSwFlags.bTransliterateRTL = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/TransliterateRTL",
             }
         }
     }
@@ -577,8 +586,11 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"
          css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetCharSet())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch()))});
+         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
+         css::uno::Any(rSwFlags.bTransliterateRTL)});
+            // "Format/Option/TransliterateRTL"
+
 }
 
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
