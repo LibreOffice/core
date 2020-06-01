@@ -130,12 +130,16 @@ class OfficeConnection:
             else:
                 self.soffice.terminate()
 
-            ret = self.soffice.wait()
-            self.xContext = None
-            self.socket = None
-            self.soffice = None
-            if ret != 0:
-                raise Exception("Exit status indicates failure: " + str(ret))
+            try:
+                ret = self.soffice.wait(timeout=90)
+                self.xContext = None
+                self.socket = None
+                self.soffice = None
+                if ret != 0:
+                    raise Exception("Exit status indicates failure: " + str(ret))
+            except subprocess.TimeoutExpired:
+                print("could not close soffice instance, terminating now")
+                self.soffice.terminate()
 
     @classmethod
     def getHelpText(cls):
@@ -176,6 +180,8 @@ class PersistentConnection:
         if self.connection:
             try:
                 self.connection.tearDown()
+            except subprocess.TimeoutExpired:
+                self.connection.soffice.terminate()
             finally:
                 self.connection = None
 
@@ -184,6 +190,6 @@ class PersistentConnection:
 
         Only works with the connection method path"""
         if self.connection and self.connection.soffice:
-            self.connection.soffice.kill()
+            self.connection.soffice.terminate()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
