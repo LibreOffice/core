@@ -532,6 +532,7 @@ class SfxStringItem;
 #define SID_TABSTOP_ADD_OR_CHANGE                       ( SID_SVX_START + 581 )
 #define SID_TABSTOP_ATTR_INDEX                          ( SID_SVX_START + 582 )
 #define SID_TABSTOP_ATTR_POSITION                       ( SID_SVX_START + 583 )
+#define SID_TABSTOP_ATTR_REMOVE                         ( SID_SVX_START + 584 )
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
