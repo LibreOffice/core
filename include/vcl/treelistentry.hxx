@@ -39,13 +39,15 @@ enum class SvTLEntryFlags
     DISABLE_DROP        = 0x0002,
     // is set if RequestingChildren has not set any children
     NO_NODEBMP          = 0x0004,
+    // is set if this is a separator line
+    IS_SEPARATOR        = 0x0008,
     // entry had or has children
     HAD_CHILDREN        = 0x0010,
     SEMITRANSPARENT     = 0x8000,      // draw semi-transparent entry bitmaps
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x8017> {};
+    template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
 }
 
 class VCL_DLLPUBLIC SvTreeListEntry

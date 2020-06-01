@@ -888,6 +888,9 @@ public:
         insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false, nullptr);
     }
 
+    virtual void insert_separator(int pos, const OUString& rId) = 0;
+    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
+
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
 
     /* A row is "activated" when the user double clicks a treeview row. It may

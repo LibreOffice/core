@@ -3258,6 +3258,71 @@ private:
         pEntry->AddItem(std::move(xCell));
     }
 
+    void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                   const OUString* pId, const OUString* pIconName,
+                   VirtualDevice* pImageSurface, const OUString* pExpanderName,
+                   bool bChildrenOnDemand, weld::TreeIter* pRet, bool bIsSeparator)
+    {
+        disable_notify_events();
+        const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
+        SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
+        auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
+        void* pUserData;
+        if (pId)
+        {
+            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
+            pUserData = m_aUserData.back().get();
+        }
+        else
+            pUserData = nullptr;
+
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
+        if (bIsSeparator)
+            pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+        if (pIconName || pImageSurface)
+        {
+            Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        }
+        else
+        {
+            Image aDummy;
+            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        }
+        if (pStr)
+            AddStringItem(pEntry, *pStr, 0);
+        pEntry->SetUserData(pUserData);
+        m_xTreeView->Insert(pEntry, iter, nInsertPos);
+
+        if (pExpanderName)
+        {
+            Image aImage(createImage(*pExpanderName));
+            m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
+            m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
+        }
+
+        if (pRet)
+        {
+            SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
+            pVclRetIter->iter = pEntry;
+        }
+
+        if (bChildrenOnDemand)
+        {
+            SvTreeListEntry* pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
+            pViewData->SetSelectable(false);
+        }
+
+        if (bIsSeparator)
+        {
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
+            pViewData->SetSelectable(false);
+        }
+
+        enable_notify_events();
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -3433,55 +3498,15 @@ public:
                         VirtualDevice* pImageSurface, const OUString* pExpanderName,
                         bool bChildrenOnDemand, weld::TreeIter* pRet) override
     {
-        disable_notify_events();
-        const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
-        SvTreeListEntry* iter = pVclIter ? pVclIter->iter : nullptr;
-        auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
-        void* pUserData;
-        if (pId)
-        {
-            m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
-            pUserData = m_aUserData.back().get();
-        }
-        else
-            pUserData = nullptr;
+        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface, pExpanderName,
+                  bChildrenOnDemand, pRet, false);
+    }
 
-        SvTreeListEntry* pEntry = new SvTreeListEntry;
-        if (pIconName || pImageSurface)
-        {
-            Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-        }
-        else
-        {
-            Image aDummy;
-            pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-        }
-        if (pStr)
-            AddStringItem(pEntry, *pStr, 0);
-        pEntry->SetUserData(pUserData);
-        m_xTreeView->Insert(pEntry, iter, nInsertPos);
-
-        if (pExpanderName)
-        {
-            Image aImage(createImage(*pExpanderName));
-            m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
-            m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
-        }
-
-        if (pRet)
-        {
-            SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
-            pVclRetIter->iter = pEntry;
-        }
-
-        if (bChildrenOnDemand)
-        {
-            SvTreeListEntry* pPlaceHolder = m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
-            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pPlaceHolder);
-            pViewData->SetSelectable(false);
-        }
-        enable_notify_events();
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override
+    {
+        OUString sSep(VclResId(STR_SEPARATOR));
+        do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr, nullptr,
+                  false, nullptr, true);
     }
 
     virtual void
