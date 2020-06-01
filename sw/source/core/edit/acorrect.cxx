@@ -31,6 +31,13 @@
 #include <shellio.hxx>
 #include <swundo.hxx>
 #include <viscrs.hxx>
+#include <com/sun/star/i18n/BreakType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <editeng/acorrcfg.hxx>
 
@@ -485,6 +492,76 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         SwTextFrame const*const pNewFrame(static_cast<SwTextFrame const*>(
                     pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
         *pPara = pNewFrame->GetText();
+    }
+
+    return bRet;
+}
+
+bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos )
+{
+    if( m_bUndoIdInitialized )
+        m_bUndoIdInitialized = true;
+
+    SwTextNode* pTextNd = m_rCursor.GetNode().GetTextNode();
+    OSL_ENSURE( pTextNd, "where is the TextNode?" );
+
+    bool bRet = false;
+    if( nEndPos == rSttPos )
+        return bRet;
+
+    LanguageType eLang = GetLanguage(nEndPos);
+    if(LANGUAGE_SYSTEM == eLang)
+        eLang = GetAppLanguage();
+    LanguageTag aLanguageTag(eLang);
+
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
+    assert(pFrame);
+
+    const OUString sFrameText = pFrame->GetText();
+    SwDoc* pDoc = m_rEditSh.GetDoc();
+    if ( pFrame->IsRightToLeft() )
+    {
+        // transliterate to Old Hungarian using Numbertext via NatNum12 number format modifier
+        OUString sWord(sFrameText.copy(rSttPos, nEndPos - rSttPos));
+        // Consonant disambiguation using hyphenation
+        uno::Reference< linguistic2::XHyphenator >  xHyph;
+        xHyph = ::GetHyphenator();
+        OUStringBuffer sDisambiguatedWord;
+
+        const ::css::uno::Sequence< ::css::beans::PropertyValue > aProperties;
+        css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
+        for (int i = 0; i+1 < sWord.getLength(); i++ )
+        {
+            xHyphWord = xHyph->hyphenate( sWord,
+                        aLanguageTag.getLocale(),
+                        i,
+                        aProperties );
+            // insert ZWSP at a hyphenation point, if it's not an alternative one (i.e. ssz->sz-sz)
+            if (xHyphWord.is() && xHyphWord->getHyphenationPos()+1 == i && !xHyphWord->isAlternativeSpelling())
+            {
+                sDisambiguatedWord.append(CHAR_ZWSP);
+            }
+            sDisambiguatedWord.append(sWord[i]);
+        }
+        sDisambiguatedWord.append(sWord[sWord.getLength()-1]);
+
+        SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+        OUString sConverted;
+        if (pFormatter && !sWord.isEmpty())
+        {
+            Color* pColor = nullptr;
+            Color** ppColor = &pColor;
+            // Send text as NatNum12 prefix
+            OUString sPrefix("[NatNum12 " + sDisambiguatedWord.makeStringAndClear() + "]0");
+            if (pFormatter->GetPreviewString(sPrefix, 0, sConverted, ppColor, LANGUAGE_USER_HUNGARIAN_ROVAS))
+                bRet = true;
+        }
+
+        SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(rSttPos)),
+            pFrame->MapViewToModelPos(TextFrameIndex(nEndPos)));
+        if (bRet && nEndPos <= sFrameText.getLength())
+            pDoc->getIDocumentContentOperations().ReplaceRange(aPam, sConverted, false);
     }
 
     return bRet;

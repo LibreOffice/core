@@ -428,6 +428,10 @@ private:
 
         return false;
     }
+    virtual bool TransliterateRTLWord( sal_Int32& /*rSttPos*/, sal_Int32 /*nEndPos*/ ) override
+    {
+        return false;
+    }
 };
 
 //https://bugs.libreoffice.org/show_bug.cgi?id=55693
