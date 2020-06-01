@@ -46,6 +46,7 @@
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <config_libnumbertext.h>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -370,6 +371,9 @@ public:
     void testTdf59666();
     void testTdf133524();
     void testTdf128860();
+#if ENABLE_LIBNUMBERTEXT
+    void testTdf133589();
+#endif
     void testInconsistentBookmark();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
@@ -586,6 +590,9 @@ public:
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST(testTdf133524);
     CPPUNIT_TEST(testTdf128860);
+#if ENABLE_LIBNUMBERTEXT
+    CPPUNIT_TEST(testTdf133589);
+#endif
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7266,6 +7273,45 @@ void SwUiWriterTest::testTdf128860()
     sReplaced += u" word.‘";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
+
+#if ENABLE_LIBNUMBERTEXT
+void SwUiWriterTest::testTdf133589()
+{
+#if !defined(_WIN32)
+    // Hungarian test document with right-to-left paragraph setting
+    SwDoc* pDoc = createDoc("tdf133589.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // translitere words to Old Hungarian
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(u"székely");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 ");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // disambiguate consonants: asszony -> asz|szony
+    pWrtShell->Insert(u"asszony");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // disambiguate consonants: kosszarv -> kos|szarv
+    // (add explicite ZWSP temporarily for consonant disambiguation, because the requested
+    // hu_HU hyphenation dictionary isn't installed on all testing platform)
+    // pWrtShell->Insert(u"kosszarv");
+    pWrtShell->Insert(u"kos​szarv");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳓𐳛𐳤𐳥𐳀𐳢𐳮 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // transliterate numbers to Old Hungarian
+    pWrtShell->Insert(u"2020");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+#endif
+}
+#endif
 
 #if HAVE_FEATURE_PDFIUM
 void SwUiWriterTest::testInsertPdf()
