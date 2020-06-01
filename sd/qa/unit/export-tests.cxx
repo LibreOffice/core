@@ -1248,7 +1248,7 @@ void SdExportTest::testGlow()
 
     // Check glow properties
     sal_Int32 nGlowEffectRad = 0;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRad") >>= nGlowEffectRad);
+    CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectRadius") >>= nGlowEffectRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nGlowEffectRad); // 15 pt = 529.166... mm/100
     sal_Int32 nGlowEffectColor = 0;
     CPPUNIT_ASSERT(xShape->getPropertyValue("GlowEffectColor") >>= nGlowEffectColor);
@@ -1289,7 +1289,7 @@ void SdExportTest::testSoftEdges()
 
     // Check property
     sal_Int32 nRad = 0;
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdgeRad") >>= nRad);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("SoftEdgeRadius") >>= nRad);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRad); // 18 pt
 
     // Test ODF element
