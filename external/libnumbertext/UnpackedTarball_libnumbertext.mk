@@ -15,10 +15,4 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
 
-# external/libnumbertext/0001-Don-t-depend-on-en_US.UTF-8-locale.patch is upstream at
-#  <https://github.com/Numbertext/libnumbertext/pull/43>:
-$(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
-    external/libnumbertext/0001-Don-t-depend-on-en_US.UTF-8-locale.patch \
-))
-
 # vim: set noet sw=4 ts=4:
