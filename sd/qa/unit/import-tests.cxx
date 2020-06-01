@@ -3111,7 +3111,7 @@ void SdImportTest::testShapeGlowEffectPPTXImpoer()
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     sal_Int32 nRadius = -1;
-    xShape->getPropertyValue("GlowEffectRad") >>= nRadius;
+    xShape->getPropertyValue("GlowEffectRadius") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 139700 EMU = 388.0556 mm/100
     Color nColor;
     xShape->getPropertyValue("GlowEffectColor") >>= nColor;

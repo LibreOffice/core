@@ -208,7 +208,7 @@ GapwidthSequence
 GenerateVbaEvents
 Geometry3D
 GlowEffect
-GlowEffectRad
+GlowEffectRadius
 GradientName
 HatchName
 Graphic

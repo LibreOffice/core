@@ -417,14 +417,14 @@ constexpr TypedWhichId<SvxTextRotateItem> SDRATTR_TABLE_TEXT_ROTATION (SDRATTR_T
 constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_TEXT_ROTATION);
 
 constexpr sal_uInt16                  SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_GLOW_RAD   (SDRATTR_GLOW_FIRST+0);
+constexpr TypedWhichId<SdrMetricItem> SDRATTR_GLOW_RADIUS   (SDRATTR_GLOW_FIRST+0);
 constexpr TypedWhichId<XColorItem>    SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);
 constexpr TypedWhichId<SdrPercentItem> SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST + 2);
 constexpr sal_uInt16                  SDRATTR_GLOW_LAST  (SDRATTR_GLOW_TRANSPARENCY);
 
 constexpr sal_uInt16                  SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST + 1);
-constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RAD(SDRATTR_SOFTEDGE_FIRST + 0);
-constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RAD);
+constexpr TypedWhichId<SdrMetricItem> SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST + 0);
+constexpr sal_uInt16                  SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);
 
 constexpr sal_uInt16 SDRATTR_END (SDRATTR_SOFTEDGE_LAST);      /* 1357 */ /* 1333 V4+++*/ /* 1243 V4+++*/  /*1213*/ /*1085*/ /*1040*/ /*Pool V2: 1123,V1: 1065 */
 

@@ -153,12 +153,12 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
 
     // glow attributes
-    GMAPV( "GlowEffectRad",                    XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( "GlowEffectRadius",                 XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectColor",                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectTransparency",           XML_NAMESPACE_LO_EXT, XML_GLOW_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // soft edge attributes
-    GMAPV( "SoftEdgeRad",                   XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( "SoftEdgeRadius",                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // graphic attributes
     GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
