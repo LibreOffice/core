@@ -3484,6 +3484,11 @@ public:
         enable_notify_events();
     }
 
+    virtual void insert_separator(int pos, const OUString& /*rId*/) override
+    {
+        insert_text(pos, "----------"); // TODO
+    }
+
     virtual void
     bulk_insert_for_each(int nSourceCount,
                          const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,

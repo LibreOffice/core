@@ -9050,6 +9050,31 @@ tools::Rectangle get_row_area(GtkTreeView* pTreeView, GList* pColumns, GtkTreePa
     return aRet;
 }
 
+struct GtkTreeRowReferenceDeleter
+{
+    void operator()(GtkTreeRowReference* p) const
+    {
+        gtk_tree_row_reference_free(p);
+    }
+};
+
+bool separator_function(GtkTreePath* path, const std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>>& rSeparatorRows)
+{
+    bool bFound = false;
+    for (auto& a : rSeparatorRows)
+    {
+        GtkTreePath* seppath = gtk_tree_row_reference_get_path(a.get());
+        if (seppath)
+        {
+            bFound = gtk_tree_path_compare(path, seppath) == 0;
+            gtk_tree_path_free(seppath);
+        }
+        if (bFound)
+            break;
+    }
+    return bFound;
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -9073,6 +9098,8 @@ private:
     // currently expanding parent that logically, but not currently physically,
     // contain placeholders
     o3tl::sorted_vector<GtkTreePath*, CompareGtkTreePath> m_aExpandingPlaceHolderParents;
+    // which rows are separators (rare)
+    std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -9181,6 +9208,20 @@ private:
             if (pixbuf)
                 g_object_unref(pixbuf);
         }
+    }
+
+    bool separator_function(GtkTreePath* path)
+    {
+        return ::separator_function(path, m_aSeparatorRows);
+    }
+
+    static gboolean separatorFunction(GtkTreeModel* pTreeModel, GtkTreeIter* pIter, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        GtkTreePath* path = gtk_tree_model_get_path(pTreeModel, pIter);
+        bool bRet = pThis->separator_function(path);
+        gtk_tree_path_free(path);
+        return bRet;
     }
 
     OUString get(const GtkTreeIter& iter, int col) const
@@ -9942,6 +9983,20 @@ public:
         enable_notify_events();
     }
 
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
+            gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
+        insert_row(iter, nullptr, pos, &rId, nullptr, nullptr, nullptr, nullptr);
+        GtkTreeModel* pTreeModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* pPath = gtk_tree_model_get_path(pTreeModel, &iter);
+        m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(pTreeModel, pPath));
+        gtk_tree_path_free(pPath);
+        enable_notify_events();
+    }
+
     virtual void set_font_color(int pos, const Color& rColor) override
     {
         GtkTreeIter iter;
@@ -10018,6 +10073,8 @@ public:
     virtual void clear() override
     {
         disable_notify_events();
+        gtk_tree_view_set_row_separator_func(m_pTreeView, nullptr, nullptr, nullptr);
+        m_aSeparatorRows.clear();
         gtk_tree_store_clear(m_pTreeStore);
         enable_notify_events();
     }
@@ -12668,14 +12725,6 @@ GtkBuilder* makeComboBoxBuilder()
     return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-struct GtkTreeRowReferenceDeleter
-{
-    void operator()(GtkTreeRowReference* p) const
-    {
-        gtk_tree_row_reference_free(p);
-    }
-};
-
 // pop down the toplevel combobox menu when something is activated from a custom
 // submenu, i.e. wysiwyg style menu
 class CustomRenderMenuButtonHelper : public MenuHelper
@@ -13077,19 +13126,7 @@ private:
 
     bool separator_function(GtkTreePath* path)
     {
-        bool bFound = false;
-        for (auto& a : m_aSeparatorRows)
-        {
-            GtkTreePath* seppath = gtk_tree_row_reference_get_path(a.get());
-            if (seppath)
-            {
-                bFound = gtk_tree_path_compare(path, seppath) == 0;
-                gtk_tree_path_free(seppath);
-            }
-            if (bFound)
-                break;
-        }
-        return bFound;
+        return ::separator_function(path, m_aSeparatorRows);
     }
 
     bool separator_function(int pos)
