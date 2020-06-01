@@ -62,7 +62,7 @@
  	MKSHLIB += -exported_symbols_list $(MAPFILE)
 --- a/a/nss/coreconf/UNIX.mk
 +++ a/a/nss/coreconf/UNIX.mk
-@@ -21,10 +21,14 @@
+@@ -19,10 +19,14 @@
  
  ifdef BUILD_TREE
  NSINSTALL_DIR  = $(BUILD_TREE)/nss
@@ -76,7 +76,7 @@
 +endif
  endif
  
- MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+ ####################################################################
 --- a/a/nspr/pr/include/md/_darwin.h
 +++ a/a/nspr/pr/include/md/_darwin.h
 @@ -26,6 +26,8 @@

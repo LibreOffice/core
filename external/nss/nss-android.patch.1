@@ -62,15 +62,17 @@ diff -ur nss.org/nss/Makefile nss/nss/Makefile
  	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
 --- nss/nss/lib/ckfw/builtins/manifest.mn.orig	2019-11-26 15:18:22.185985193 +0100
 +++ nss/nss/lib/ckfw/builtins/manifest.mn	2019-11-26 15:18:29.281982387 +0100
-@@ -5,7 +5,7 @@
+@@ -5,9 +5,7 @@
  
  CORE_DEPTH = ../../..
  
--DIRS = testlib
+-DIRS = . testlib
+-
+-testlib: .
 +DIRS =
  
  MODULE = nss
- MAPFILE = $(OBJDIR)/nssckbi.def
+ 
 diff -ur nss/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
 --- nss/nss/coreconf/arch.mk	2019-11-01 10:29:44.933245745 +0100
 +++ nss/nss/coreconf/arch.mk	2019-11-01 10:32:04.347181076 +0100
