@@ -28,7 +28,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/he.sor \
 	data/hr.sor \
 	data/hu.sor \
-	data/Hung.sor \
+	data/hu_Hung.sor \
 	data/id.sor \
 	data/is.sor \
 	data/it.sor \

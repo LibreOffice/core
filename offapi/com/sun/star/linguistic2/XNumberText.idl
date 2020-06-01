@@ -55,7 +55,7 @@ module com { module sun { module star { module linguistic2 {
         <li>he : Hebrew</li>
         <li>hr : Croatian</li>
         <li>hu : Hungarian</li>
-        <li>Hung : Old Hungarian</li>
+        <li>hu-Hung : Old Hungarian</li>
         <li>id : Indonesian</li>
         <li>is : Icelandic</li>
         <li>it : Italian</li>
