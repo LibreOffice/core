@@ -4328,6 +4328,14 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="TransliterateRTL" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Transliterate Hungarian to Old Hungarian -->
+            <info>
+              <desc>Transliterates RTL Hungarian text to Old Hungarian script.</desc>
+              <label>Transliterate RTL text to Old Hungarian</label>
+            </info>
+            <value>true</value>
+          </prop>
           <prop oor:name="DelEmptyParagraphs" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->

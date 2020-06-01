@@ -1080,6 +1080,8 @@ cui/source/tabpages/autocdlg.cxx:1521
     enum OfaQuoteOptions ADD_NONBRK_SPACE
 cui/source/tabpages/autocdlg.cxx:1522
     enum OfaQuoteOptions REPLACE_1ST
+cui/source/tabpages/autocdlg.cxx:1529
+    enum OfaQuoteOptions TRANSLITERATE_RTL
 dbaccess/source/core/dataaccess/databasedocument.hxx:163
     enum dbaccess::ODatabaseDocument::InitState NotInitialized
 dbaccess/source/core/dataaccess/databasedocument.hxx:641

@@ -138,6 +138,9 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     LanguageTag aLanguageTag(rLocale);
     OUString aCode(aLanguageTag.getLanguage());
     OUString aCountry(aLanguageTag.getCountry());
+    OUString aScript(aLanguageTag.getScript());
+    if (!aScript.isEmpty())
+        aCode += "-" + aScript;
     if (!aCountry.isEmpty())
         aCode += "-" + aCountry;
     OString aLangCode(OUStringToOString(aCode, RTL_TEXTENCODING_ASCII_US));

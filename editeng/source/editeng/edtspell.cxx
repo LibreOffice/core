@@ -680,6 +680,17 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     return bRet;
 }
 
+bool EdtAutoCorrDoc::TransliterateRTLWord( sal_Int32& /*rSttPos*/,
+            sal_Int32 /*nEndPos*/ )
+{
+    // Paragraph-start or a blank found, search for the word
+    // shortcut in Auto
+    bool bRet = false;
+
+    return bRet;
+}
+
+
 LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 {
     return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) );

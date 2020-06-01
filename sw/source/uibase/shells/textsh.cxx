@@ -162,7 +162,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             if( pACorr && rACfg.IsAutoFormatByInput()
                 && pACorr->IsAutoCorrFlag(
                     ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
-                    ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber |
+                    ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |
                     ACFlags::ChgToEnEmDash | ACFlags::SetINetAttr | ACFlags::Autocorrect ) )
             {
                 rSh.AutoCorrect( *pACorr, cIns );

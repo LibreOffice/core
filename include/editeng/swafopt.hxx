@@ -103,6 +103,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bChgOrdinalNumber : 1;
     bool bChgToEnEmDash : 1;
     bool bAddNonBrkSpace : 1;
+    bool bTransliterateRTL : 1;
     bool bChgWeightUnderl : 1;
     bool bSetINetAttr : 1;
 
