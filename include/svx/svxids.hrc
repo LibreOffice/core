@@ -537,12 +537,13 @@ class SvxSetItem;
 #define SID_TABSTOP_ADD_OR_CHANGE                       ( SID_SVX_START + 581 )
 #define SID_TABSTOP_ATTR_INDEX                          ( SID_SVX_START + 582 )
 #define SID_TABSTOP_ATTR_POSITION                       ( SID_SVX_START + 583 )
-#define SID_PARAGRAPH_FIRST_LINE_INDENT                 ( SID_SVX_START + 584 )
-#define SID_PARAGRAPH_LEFT_INDENT                       ( SID_SVX_START + 585 )
-#define SID_PARAGRAPH_RIGHT_INDENT                      ( SID_SVX_START + 586 )
+#define SID_TABSTOP_ATTR_REMOVE                         ( SID_SVX_START + 584 )
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
+#define SID_PARAGRAPH_FIRST_LINE_INDENT                 ( SID_SVX_START + 588 )
+#define SID_PARAGRAPH_LEFT_INDENT                       ( SID_SVX_START + 589 )
+#define SID_PARAGRAPH_RIGHT_INDENT                      ( SID_SVX_START + 590 )
 
 // CAUTION! Range <591 .. 591> used by EditEngine (!)
 

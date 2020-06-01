@@ -655,8 +655,12 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         {
             const auto aIndexItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_INDEX));
             const auto aPositionItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_POSITION));
+            const auto aRemoveItem = static_cast<const SfxBoolItem&>(pReqArgs->Get(SID_TABSTOP_ATTR_REMOVE));
             const sal_Int32 nIndex = aIndexItem.GetValue();
             const sal_Int32 nPosition = aPositionItem.GetValue();
+            const bool bRemove = aRemoveItem.GetValue();
+
+
 
             SfxItemSet aItemSet(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
             rSh.GetCurAttr(aItemSet);
@@ -680,12 +684,14 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SvxTabStop aTabStop = aTabStopItem.At(nIndex);
                     aTabStopItem.Remove(nIndex);
-                    aTabStop.GetTabPos() = nPosition;
-                    aTabStopItem.Insert(aTabStop);
+                    if (!bRemove)
+                    {
+                        aTabStop.GetTabPos() = nPosition;
+                        aTabStopItem.Insert(aTabStop);
 
-                    SvxTabStop aSwTabStop(0, SvxTabAdjust::Default);
-                    aTabStopItem.Insert(aSwTabStop);
-
+                        SvxTabStop aSwTabStop(0, SvxTabAdjust::Default);
+                        aTabStopItem.Insert(aSwTabStop);
+                    }
                     const SvxTabStopItem& rDefaultTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
                     MakeDefTabs(GetTabDist(rDefaultTabs), aTabStopItem);
                 }
