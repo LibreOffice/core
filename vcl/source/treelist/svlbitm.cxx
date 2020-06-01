@@ -25,6 +25,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/settings.hxx>
 
 struct SvLBoxButtonData_Impl
 {
@@ -196,12 +197,35 @@ SvLBoxItemType SvLBoxString::GetType() const
     return SvLBoxItemType::String;
 }
 
+namespace
+{
+    void drawSeparator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRegion)
+    {
+        Color aOldLineColor(rRenderContext.GetLineColor());
+        const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
+        Point aTmpPos = rRegion.TopLeft();
+        Size aSize = rRegion.GetSize();
+        aTmpPos.AdjustY(aSize.Height() / 2 );
+        rRenderContext.SetLineColor(rStyle.GetShadowColor());
+        rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
+        rRenderContext.SetLineColor(aOldLineColor);
+    }
+}
+
 void SvLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
-    Size aSize;
     DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
+    if (bool(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR))
+    {
+        Point aStartPos(0, rPos.Y() - 2);
+        tools::Rectangle aRegion(aStartPos, Size(rDev.GetSizePixel().Width(), 4));
+        drawSeparator(rRenderContext, aRegion);
+        return;
+    }
+
+    Size aSize;
     if (rDev.IsEntryMnemonicsEnabled())
         nStyle |= DrawTextFlags::Mnemonic;
     if (rDev.TextCenterAndClipEnabled())
@@ -266,6 +290,13 @@ void SvLBoxString::InitViewData(
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
+
+    if (bool(pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR))
+    {
+        pViewData->mnWidth = -1;
+        pViewData->mnHeight = 0;
+        return;
+    }
 
     if (mbEmphasized)
     {

@@ -153,6 +153,8 @@
 #define STR_WIZDLG_NEXT                              NC_("STR_WIZDLG_NEXT", "~Next >")
 #define STR_WIZDLG_PREVIOUS                          NC_("STR_WIZDLG_PREVIOUS", "< Bac~k")
 
+#define STR_SEPARATOR                                NC_("STR_SEPARATOR", "Separator")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
