@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afba1c1_4ea74021",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3143,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-01T20:44:14Z",
+      "side": 1,
+      "message": "So radius is in emus here? You need to decide what the unit of blur shall be. Typically we use 100th mm - just like you see in Glow. \n\nPlease address this in a another patch and leave this as is for now.",
+      "range": {
+        "startLine": 3143,
+        "startChar": 0,
+        "endLine": 3143,
+        "endChar": 4
+      },
+      "revId": "3d8591b28c0e1b2e8a88fda8be66c765d9825d96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
