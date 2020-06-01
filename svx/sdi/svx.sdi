@@ -12307,7 +12307,7 @@ SdrPercentItem GlowTransparency SID_ATTR_GLOW_TRANSPARENCY
     GroupId = SfxGroupId::Document;
 ]
 
-SdrMetricItem SoftEdgeRad SID_ATTR_SOFTEDGE_RADIUS
+SdrMetricItem SoftEdgeRadius SID_ATTR_SOFTEDGE_RADIUS
 
 [
     AutoUpdate = TRUE,
