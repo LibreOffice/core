@@ -83,8 +83,15 @@ long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
     const Fraction& rZoomX, const Fraction& rZoomY,
     bool bWidth, const ScNeededSizeOptions& rOptions,
-    const ScPatternAttr** ppPatternChange ) const
+    const ScPatternAttr** ppPatternChange, bool bInPrintTwips ) const
 {
+    // If bInPrintTwips is set, the size calculated should be in print twips,
+    // else it should be in pixels.
+
+    // Switch unit to MapTwip instead ? (temporarily and then revert before exit).
+    if (bInPrintTwips)
+        assert(pDev->GetMapMode().GetMapUnit() == MapUnit::MapTwip);
+
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
     if (it == maCells.end() || it->type == sc::element_type_empty)
@@ -94,6 +101,10 @@ long ScColumn::GetNeededSize(
     long nValue = 0;
     ScRefCellValue aCell = GetCellValue(it, aPos.second);
     double nPPT = bWidth ? nPPTX : nPPTY;
+
+    auto conditionalScaleFunc = [bInPrintTwips](long nMeasure, double fScale) {
+        return bInPrintTwips ? nMeasure : static_cast<long>(nMeasure * fScale);
+    };
 
     const ScPatternAttr* pPattern = rOptions.pPattern;
     if (!pPattern)
@@ -300,13 +311,13 @@ long ScColumn::GetNeededSize(
                     nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
                 else if ( rOptions.bTotalSize )
                 {
-                    nWidth = static_cast<long>( pDocument->GetColWidth( nCol,nTab ) * nPPT );
+                    nWidth = conditionalScaleFunc(pDocument->GetColWidth( nCol,nTab ), nPPT);
                     bAddMargin = false;
                     //  only to the right:
                     //TODO: differ on direction up/down (only Text/whole height)
                     if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
                         nWidth += static_cast<long>( pDocument->GetRowHeight( nRow,nTab ) *
-                                            nPPT * nCosAbs / nSinAbs );
+                                            (bInPrintTwips ? 1.0 : nPPT) * nCosAbs / nSinAbs );
                 }
                 else
                     nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
@@ -327,14 +338,14 @@ long ScColumn::GetNeededSize(
             {
                 if (bWidth)
                 {
-                    nValue += static_cast<long>( pMargin->GetLeftMargin() * nPPT ) +
-                              static_cast<long>( pMargin->GetRightMargin() * nPPT );
+                    nValue += conditionalScaleFunc(pMargin->GetLeftMargin(), nPPT) +
+                              conditionalScaleFunc(pMargin->GetRightMargin(), nPPT);
                     if ( nIndent )
-                        nValue += static_cast<long>( nIndent * nPPT );
+                        nValue += conditionalScaleFunc(nIndent, nPPT);
                 }
                 else
-                    nValue += static_cast<long>( pMargin->GetTopMargin() * nPPT ) +
-                              static_cast<long>( pMargin->GetBottomMargin() * nPPT );
+                    nValue += conditionalScaleFunc(pMargin->GetTopMargin(), nPPT) +
+                              conditionalScaleFunc(pMargin->GetBottomMargin(), nPPT);
             }
 
             //  linebreak done ?
@@ -344,12 +355,11 @@ long ScColumn::GetNeededSize(
                 //  test with EditEngine the safety at 90%
                 //  (due to rounding errors and because EditEngine formats partially differently)
 
-                long nDocPixel = static_cast<long>( ( pDocument->GetColWidth( nCol,nTab ) -
+                long nDocSize = conditionalScaleFunc((pDocument->GetColWidth( nCol,nTab ) -
                                     pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
-                                    nIndent )
-                                    * nPPTX );
-                nDocPixel = (nDocPixel * 9) / 10;           // for safety
-                if ( aSize.Width() > nDocPixel )
+                                    nIndent), nPPTX);
+                nDocSize = (nDocSize * 9) / 10;           // for safety
+                if ( aSize.Width() > nDocSize )
                     bEditEngine = true;
             }
         }
@@ -361,6 +371,7 @@ long ScColumn::GetNeededSize(
         vcl::Font aOldFont = pDev->GetFont();
 
         MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
+        MapMode aTwipMode(MapUnit::MapTwip, Point(), rZoomX, rZoomY);
 
         // save in document ?
         std::unique_ptr<ScFieldEditEngine> pEngine = pDocument->CreateFieldEditEngine();
@@ -403,7 +414,7 @@ long ScColumn::GetNeededSize(
             aPaper.setWidth( 1 );
         else if (bBreak)
         {
-            double fWidthFactor = nPPTX;
+            double fWidthFactor = bInPrintTwips ? 1.0 : nPPTX;
             if ( bTextWysiwyg )
             {
                 //  if text is formatted for printer, don't use PixelToLogic,
@@ -426,13 +437,19 @@ long ScColumn::GetNeededSize(
                 nDocWidth -= static_cast<long>( nIndent * fWidthFactor );
 
             // space for AutoFilter button:  20 * nZoom/100
+            constexpr long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
-                nDocWidth -= long(rZoomX*20);
+                nDocWidth -= bInPrintTwips ?
+                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : long(rZoomX * nFilterButtonWidthPix);
 
             aPaper.setWidth( nDocWidth );
 
             if ( !bTextWysiwyg )
-                aPaper = pDev->PixelToLogic( aPaper, aHMMMode );
+            {
+                aPaper = bInPrintTwips ?
+                        OutputDevice::LogicToLogic(aPaper, aTwipMode, aHMMMode) :
+                        pDev->PixelToLogic(aPaper, aHMMMode);
+            }
         }
         pEngine->SetPaperSize(aPaper);
 
@@ -475,22 +492,25 @@ long ScColumn::GetNeededSize(
                 nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
             else if ( rOptions.bTotalSize )
             {
-                nWidth = static_cast<long>( pDocument->GetColWidth( nCol,nTab ) * nPPT );
+                nWidth = conditionalScaleFunc(pDocument->GetColWidth( nCol,nTab ), nPPT);
                 bAddMargin = false;
                 if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
                     nWidth += static_cast<long>( pDocument->GetRowHeight( nRow,nTab ) *
-                                        nPPT * nCosAbs / nSinAbs );
+                                        (bInPrintTwips ? 1.0 : nPPT) * nCosAbs / nSinAbs );
             }
             else
                 nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
             aSize = Size( nWidth, nHeight );
 
-            Size aPixSize = pDev->LogicToPixel( aSize, aHMMMode );
+            Size aTextSize = bInPrintTwips ?
+                    OutputDevice::LogicToLogic(aSize, aHMMMode, aTwipMode) :
+                    pDev->LogicToPixel(aSize, aHMMMode);
+
             if ( bEdWidth )
-                nValue = aPixSize.Width();
+                nValue = aTextSize.Width();
             else
             {
-                nValue = aPixSize.Height();
+                nValue = aTextSize.Height();
 
                 if ( bBreak && !rOptions.bTotalSize )
                 {
@@ -506,13 +526,19 @@ long ScColumn::GetNeededSize(
             if (bBreak)
                 nValue = 0;
             else
-                nValue = pDev->LogicToPixel(Size( pEngine->CalcTextWidth(), 0 ),
-                                    aHMMMode).Width();
+            {
+                Size aTextSize(pEngine->CalcTextWidth(), 0);
+                nValue = bInPrintTwips ?
+                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Width() :
+                        pDev->LogicToPixel(aTextSize, aHMMMode).Width();
+            }
         }
         else            // height
         {
-            nValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ),
-                                aHMMMode).Height();
+            Size aTextSize(0, pEngine->GetTextHeight());
+            nValue = bInPrintTwips ?
+                    OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
+                    pDev->LogicToPixel(aTextSize, aHMMMode).Height();
 
             // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
             if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
@@ -520,7 +546,10 @@ long ScColumn::GetNeededSize(
             {
                 pEngine->SetControlWord( nCtrl | EEControlBits::FORMAT100 );
                 pEngine->QuickFormatDoc( true );
-                long nSecondValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ), aHMMMode).Height();
+                aTextSize = Size(0, pEngine->GetTextHeight());
+                long nSecondValue = bInPrintTwips ?
+                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
+                        pDev->LogicToPixel(aTextSize, aHMMMode).Height();
                 if ( nSecondValue > nValue )
                     nValue = nSecondValue;
             }
@@ -530,20 +559,21 @@ long ScColumn::GetNeededSize(
         {
             if (bWidth)
             {
-                nValue += static_cast<long>( pMargin->GetLeftMargin() * nPPT ) +
-                          static_cast<long>( pMargin->GetRightMargin() * nPPT );
+                nValue += conditionalScaleFunc(pMargin->GetLeftMargin(), nPPT) +
+                          conditionalScaleFunc(pMargin->GetRightMargin(), nPPT);
                 if (nIndent)
-                    nValue += static_cast<long>( nIndent * nPPT );
+                    nValue += conditionalScaleFunc(nIndent, nPPT);
             }
             else
             {
-                nValue += static_cast<long>( pMargin->GetTopMargin() * nPPT ) +
-                          static_cast<long>( pMargin->GetBottomMargin() * nPPT );
+                nValue += conditionalScaleFunc(pMargin->GetTopMargin(), nPPT) +
+                          conditionalScaleFunc(pMargin->GetBottomMargin(), nPPT);
 
                 if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
                 {
                     //  add 1pt extra (default margin value) for line breaks with SetVertical
-                    nValue += static_cast<long>( 20 * nPPT );
+                    constexpr long nDefaultMarginInPoints = 1;
+                    nValue += conditionalScaleFunc(nDefaultMarginInPoints * TWIPS_PER_POINT, nPPT);
                 }
             }
         }
@@ -562,11 +592,13 @@ long ScColumn::GetNeededSize(
         //      place for Autofilter Button
         //      20 * nZoom/100
         //      Conditional formatting is not interesting here
-
+        constexpr long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
         ScMF nFlags = pPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
         if (nFlags & ScMF::Auto)
-            nValue += long(rZoomX*20);
+            nValue += bInPrintTwips ?
+                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : long(rZoomX * nFilterButtonWidthPix);
     }
+
     return nValue;
 }
 
