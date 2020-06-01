@@ -40,12 +40,13 @@ class ScEditUtil
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    Point           aScrPos;
+    Point           aCellPos;
     VclPtr<OutputDevice> pDev; // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
     Fraction        aZoomX;
     Fraction        aZoomY;
+    bool            bInPrintTwips;
 
 public:
     static OUString ModifyDelimiters( const OUString& rOld );
@@ -78,9 +79,9 @@ public:
 
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
-                            const Point& rScrPosPixel,
+                            const Point& rCellPos,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const Fraction& rX, const Fraction& rY );
+                            const Fraction& rX, const Fraction& rY, bool bPrintTwips = false );
 
     tools::Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
 };

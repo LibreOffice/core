@@ -55,12 +55,13 @@ using namespace com::sun::star;
 //  delimiters additionally to EditEngine default:
 
 ScEditUtil::ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
-                            const Point& rScrPosPixel,
+                            const Point& rCellPos,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const Fraction& rX, const Fraction& rY ) :
+                            const Fraction& rX, const Fraction& rY, bool bPrintTwips ) :
                     pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
-                    aScrPos(rScrPosPixel),pDev(pDevice),
-                    nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}
+                    aCellPos(rCellPos),pDev(pDevice),
+                    nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY),
+                    bInPrintTwips(bPrintTwips) {}
 
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
@@ -289,24 +290,34 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     if (!pPattern)
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
 
-    Point aStartPos = aScrPos;
+    Point aStartPos = aCellPos;
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
-    long nCellX = static_cast<long>( pDoc->GetColWidth(nCol,nTab) * nPPTX );
+    long nCellX = pDoc->GetColWidth(nCol,nTab);
+    if (!bInPrintTwips)
+        nCellX = static_cast<long>( nCellX * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=1; i<nCountX; i++)
-            nCellX += static_cast<long>( pDoc->GetColWidth(nCol+i,nTab) * nPPTX );
+        {
+            long nColWidth = pDoc->GetColWidth(nCol+i,nTab);
+            nCellX += (bInPrintTwips ? nColWidth : static_cast<long>( nColWidth * nPPTX ));
+        }
     }
-    long nCellY = static_cast<long>( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
+    long nCellY = pDoc->GetRowHeight(nRow,nTab);
+    if (!bInPrintTwips)
+        nCellY = static_cast<long>( nCellY * nPPTY );
     if ( pMerge->GetRowMerge() > 1 )
     {
         SCROW nCountY = pMerge->GetRowMerge();
-        nCellY += static_cast<long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
+        if (bInPrintTwips)
+            nCellY += pDoc->GetRowHeight(nRow + 1, nRow + nCountY - 1, nTab);
+        else
+            nCellY += static_cast<long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
     }
 
     const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
@@ -314,14 +325,19 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
                 SvxCellHorJustify::Left )
         nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
-    long nPixDifX   = static_cast<long>( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.AdjustX(nPixDifX * nLayoutSign );
-    nCellX          -= nPixDifX + static_cast<long>( pMargin->GetRightMargin() * nPPTX );     // due to line feed, etc.
+    long nDifX = pMargin->GetLeftMargin() + nIndent;
+    if (!bInPrintTwips)
+        nDifX = static_cast<long>( nDifX * nPPTX );
+    aStartPos.AdjustX(nDifX * nLayoutSign );
+    nCellX -= nDifX + (bInPrintTwips ? pMargin->GetRightMargin() :
+            static_cast<long>( pMargin->GetRightMargin() * nPPTX ));     // due to line feed, etc.
 
     //  align vertical position to the one in the table
 
-    long nPixDifY;
-    long nTopMargin = static_cast<long>( pMargin->GetTopMargin() * nPPTY );
+    long nDifY;
+    long nTopMargin = pMargin->GetTopMargin();
+    if (!bInPrintTwips)
+        nTopMargin = static_cast<long>( nTopMargin * nPPTY );
     SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
@@ -330,14 +346,15 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
 
     if ( eJust == SvxCellVerJustify::Top ||
             ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
-        nPixDifY = nTopMargin;
+        nDifY = nTopMargin;
     else
     {
         MapMode aMode = pDev->GetMapMode();
-        pDev->SetMapMode(MapMode(MapUnit::MapPixel));
+        pDev->SetMapMode(MapMode(bInPrintTwips ? MapUnit::MapTwip : MapUnit::MapPixel));
 
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
-                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
+                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, false /* bWidth */,
+                                                false /* bTotalSize */, bInPrintTwips );
         if (!nTextHeight)
         {                                   // empty cell
             vcl::Font aFont;
@@ -345,24 +362,25 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
-                            static_cast<long>( pMargin->GetBottomMargin() * nPPTY );
+                            (bInPrintTwips ? pMargin->GetBottomMargin() :
+                                static_cast<long>( pMargin->GetBottomMargin() * nPPTY ));
         }
 
         pDev->SetMapMode(aMode);
 
         if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
-            nPixDifY = 0;                           // too large -> begin at the top
+            nDifY = 0;                           // too large -> begin at the top
         else
         {
             if ( eJust == SvxCellVerJustify::Center )
-                nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
+                nDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
             else
-                nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
+                nDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
         }
     }
 
-    aStartPos.AdjustY(nPixDifY );
-    nCellY      -= nPixDifY;
+    aStartPos.AdjustY(nDifY );
+    nCellY      -= nDifY;
 
     if ( bLayoutRTL )
         aStartPos.AdjustX( -(nCellX - 2) );    // excluding grid on both sides
