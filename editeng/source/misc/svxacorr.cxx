@@ -435,7 +435,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
             OUString sWord( rTxt.copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
             if( !FindInWrdSttExceptList(eLang, sWord) )
             {
-                // Check that word isn't correctly spelled before correcting:
+                // Check that word isn't correctly spelt before correcting:
                 css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
                     LinguMgr::GetSpellChecker();
                 if( xSpeller->hasLanguage(static_cast<sal_uInt16>(eLang)) )
@@ -1379,7 +1379,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert, eLang, eType );
                 break;
             }
-            // tdf#133524 change "<<" and ">>" to double angle quoation marks
+            // tdf#133524 change "<<" and ">>" to double angle quotation marks
             else if ( IsAutoCorrFlag( ACFlags::ChgQuotes ) && ('<' == cChar || '>' == cChar) &&
                 nInsPos > 0 && cChar == rTxt[ nInsPos-1 ] )
             {
