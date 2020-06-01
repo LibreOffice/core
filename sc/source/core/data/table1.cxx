@@ -433,7 +433,7 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
-                                bool bWidth, bool bTotalSize )
+                                bool bWidth, bool bTotalSize, bool bInPrintTwips )
 {
     if ( nCol >= aCol.size() )
         return 0;
@@ -443,7 +443,7 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
     aOptions.bTotalSize  = bTotalSize;
 
     return aCol[nCol].GetNeededSize
-        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, nullptr );
+        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, nullptr, bInPrintTwips );
 }
 
 bool ScTable::SetOptimalHeight(

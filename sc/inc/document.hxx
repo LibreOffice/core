@@ -1920,7 +1920,8 @@ public:
                                                OutputDevice* pDev,
                                                double nPPTX, double nPPTY,
                                                const Fraction& rZoomX, const Fraction& rZoomY,
-                                               bool bWidth, bool bTotalSize = false );
+                                               bool bWidth, bool bTotalSize = false,
+                                               bool bInPrintTwips = false );
 
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, bool bShow);
     SC_DLLPUBLIC void           ShowRow(SCROW nRow, SCTAB nTab, bool bShow);
