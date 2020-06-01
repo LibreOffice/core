@@ -511,10 +511,10 @@
 #define SIP_SA_GRAFINVERT                                   NC_("SIP_SA_GRAFINVERT", "Invert")
 #define SIP_SA_GRAFMODE                                     NC_("SIP_SA_GRAFMODE", "Image mode")
 #define SIP_SA_GRAFCROP                                     NC_("SIP_SA_GRAFCROP", "Crop")
-#define SIP_SA_GLOW_RAD                                     NC_("SIP_SA_GLOW_RAD", "Radius of glow effect")
+#define SIP_SA_GLOW_RADIUS                                  NC_("SIP_SA_GLOW_RADIUS", "Radius of glow effect")
 #define SIP_SA_GLOW_COLOR                                   NC_("SIP_SA_GLOW_COLOR", "Color of glow effect")
 #define SIP_SA_GLOW_TRANSPARENCY                            NC_("SIP_SA_GLOW_TRANSPARENCY", "Transparency of glow effect")
-#define SIP_SA_SOFTEDGE_RAD                                 NC_("SIP_SA_SOFTEDGE_RAD", "Radius of soft edge effect")
+#define SIP_SA_SOFTEDGE_RADIUS                              NC_("SIP_SA_SOFTEDGE_RADIUS", "Radius of soft edge effect")
 #define STR_ObjNameSingulMEDIA                              NC_("STR_ObjNameSingulMEDIA", "Media object")
 #define STR_ObjNamePluralMEDIA                              NC_("STR_ObjNamePluralMEDIA", "Media objects")
 // drawing layer table strings
