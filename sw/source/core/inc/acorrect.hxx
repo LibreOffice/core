@@ -80,6 +80,7 @@ public:
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   OUString* pPara ) override;
+    virtual bool TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos ) override;
 
     // Will be called after swapping characters by the functions
     //  - FnCapitalStartWord and

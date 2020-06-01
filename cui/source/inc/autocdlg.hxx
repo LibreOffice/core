@@ -268,6 +268,7 @@ class OfaQuoteTabPage : public SfxTabPage
 private:
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
+    OUString        sTransliterateRTL;
 
     sal_UCS4    cSglStartQuote;
     sal_UCS4    cSglEndQuote;
