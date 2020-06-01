@@ -519,7 +519,8 @@ public:
     long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
         const Fraction& rZoomX, const Fraction& rZoomY,
-        bool bWidth, const ScNeededSizeOptions& rOptions, const ScPatternAttr** pPatternChange ) const;
+        bool bWidth, const ScNeededSizeOptions& rOptions, const ScPatternAttr** pPatternChange,
+        bool bInPrintTwips = false ) const;
 
     sal_uInt16 GetOptimalColWidth(
         OutputDevice* pDev, double nPPTX, double nPPTY,
