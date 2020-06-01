@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91bc4e3c_dc1285b3",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-01T08:02:35Z",
+      "side": 1,
+      "message": "So here you indeed get the doc shell, and then get all the styles in the document.\n\nWhat you need is getting the formatting at the cursor. E.g., see SwUiWriterTest::testTextSearch at sw/qa/extras/uiwriter/uiwriter.cxx for how to get the cursor from edit shell. SwUiWriterTest::testTdf72788 shows how to get paragraph attributes from the cursor.",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 53
+      },
+      "revId": "bc22fc01de51af01807749f7d98fad167a6f3c1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
