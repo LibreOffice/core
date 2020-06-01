@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79e4e450_3a602ac6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-01T14:07:02Z",
+      "side": 1,
+      "message": "A small nitpick: please limit line lengths to reasonable values. Please split this line here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 74,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "ce5a5c930969ab50e7d8474da2c3f2a3b0017c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64611cd6_9264d94d",
+        "filename": "svx/source/sidebar/inspector/InspectorTextPanel.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-01T14:07:02Z",
+      "side": 1,
+      "message": "Why this include?",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 42
+      },
+      "revId": "ce5a5c930969ab50e7d8474da2c3f2a3b0017c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
