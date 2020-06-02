@@ -49,15 +49,15 @@ public:
 
     void addPoint(const css::awt::Point & rPoint);
 
-    Points_t::iterator begin();
-    Points_t::iterator end();
+    Points_t::const_iterator begin() const;
+    Points_t::const_iterator end() const;
 
-    WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
-    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
-    WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
-    WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size & rSrcSize);
+    WrapPolygon::Pointer_t move(const css::awt::Point & rMove) const;
+    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY) const;
+    WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize) const;
+    WrapPolygon::Pointer_t correctWordWrapPolygonPixel(const css::awt::Size & rSrcSize) const;
     WrapPolygon::Pointer_t correctCrop(const css::awt::Size& rGraphicSize,
-                                       const css::text::GraphicCrop& rGraphicCrop);
+                                       const css::text::GraphicCrop& rGraphicCrop) const;
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };
 

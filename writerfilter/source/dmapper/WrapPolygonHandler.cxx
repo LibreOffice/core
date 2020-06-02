@@ -48,22 +48,22 @@ void WrapPolygon::addPoint(const awt::Point & rPoint)
     mPoints.push_back(rPoint);
 }
 
-WrapPolygon::Points_t::iterator WrapPolygon::begin()
+WrapPolygon::Points_t::const_iterator WrapPolygon::begin() const
 {
     return mPoints.begin();
 }
 
-WrapPolygon::Points_t::iterator WrapPolygon::end()
+WrapPolygon::Points_t::const_iterator WrapPolygon::end() const
 {
     return mPoints.end();
 }
 
-WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
+WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint) const
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
-    Points_t::iterator aIt = begin();
-    Points_t::iterator aItEnd = end();
+    Points_t::const_iterator aIt = begin();
+    Points_t::const_iterator aItEnd = end();
 
     while (aIt != aItEnd)
     {
@@ -75,12 +75,12 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY)
+WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY) const
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
-    Points_t::iterator aIt = begin();
-    Points_t::iterator aItEnd = end();
+    Points_t::const_iterator aIt = begin();
+    Points_t::const_iterator aItEnd = end();
 
     while (aIt != aItEnd)
     {
@@ -92,7 +92,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSrcSize)
+WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSrcSize) const
 {
     WrapPolygon::Pointer_t pResult;
 
@@ -114,7 +114,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size & rSrcSize)
+WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size & rSrcSize) const
 {
     WrapPolygon::Pointer_t pResult;
 
@@ -138,7 +138,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size 
 }
 
 WrapPolygon::Pointer_t WrapPolygon::correctCrop(const awt::Size& rGraphicSize,
-                                                const text::GraphicCrop& rGraphicCrop)
+                                                const text::GraphicCrop& rGraphicCrop) const
 {
     WrapPolygon::Pointer_t pResult;
 
