@@ -12,6 +12,8 @@
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <vcl/errinf.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -58,6 +60,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
     // - Actual  : 4
     // i.e. the anchor type was at-char, not as-char.
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, rAnchor.GetAnchorId());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
+{
+    // Check the writing direction of the only TextFrame in the document.
+    SwDoc* pDoc = createDoc("textbox-textrotateangle.odt");
+    SwFrameFormats& rFrameFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFrameFormats.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT), rFrameFormats[0]->Which());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), rFrameFormats[1]->Which());
+    SvxFrameDirection eActual = rFrameFormats[1]->GetAttrSet().GetItem(RES_FRAMEDIR)->GetValue();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 5 (btlr)
+    // - Actual  : 0 (lrtb)
+    // i.e. the writing direction was in the ODT file, but it was lost on import in the textbox
+    // case.
+    CPPUNIT_ASSERT_EQUAL(SvxFrameDirection::Vertical_LR_BT, eActual);
+    ErrorRegistry::Reset();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
