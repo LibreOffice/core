@@ -59,6 +59,7 @@ public:
 
     static void                 RegisterDisplay(BasicDisplayErrorFunc*);
     static void                 RegisterDisplay(WindowDisplayErrorFunc*);
+    static void                 Reset();
 
 private:
     DisplayFnPtr                pDsp;
