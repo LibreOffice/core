@@ -39,6 +39,8 @@ struct SFX2_DLLPUBLIC LokMouseEventData
     {}
 };
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:
@@ -75,8 +77,12 @@ public:
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
     /// Invoke the LOK callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
+    /// Invoke the LOK callback of all views except pThisView, with a JSON payload created from the given property tree.
+    static void notifyOtherViews(SfxViewShell* pThisView, int nType, const boost::property_tree::ptree& rTree);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
+    /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
+    static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const boost::property_tree::ptree& rTree);
     /// Emits a LOK_CALLBACK_STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
     /// Emits a LOK_CALLBACK_WINDOW
