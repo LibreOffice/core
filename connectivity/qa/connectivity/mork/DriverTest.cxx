@@ -107,12 +107,10 @@ void MorkDriverTest::test_metadata()
     }
 
     const Any catalog;
-    const OUString schemaPattern = "%";
-    const OUString tableNamePattern = "%";
     const Sequence< OUString > types;
 
     Reference< XResultSet > xResultSet =
-        xDatabaseMetaData->getTables(catalog, schemaPattern, tableNamePattern, types);
+        xDatabaseMetaData->getTables(catalog, "%", "%", types);
     if (!xResultSet.is())
     {
         CPPUNIT_ASSERT_MESSAGE("cannot retrieve tables!", xResultSet.is());
@@ -124,8 +122,7 @@ void MorkDriverTest::test_metadata()
 
 void MorkDriverTest::test_select_default_all()
 {
-    const OUString sql = "select \"E-mail\" from \"AddressBook\" ORDER BY \"E-mail\"";
-    Reference< XPreparedStatement > xStatement = m_xConnection->prepareStatement(sql);
+    Reference< XPreparedStatement > xStatement = m_xConnection->prepareStatement("select \"E-mail\" from \"AddressBook\" ORDER BY \"E-mail\"");
     if (!xStatement.is())
     {
         CPPUNIT_ASSERT_MESSAGE("cannot create prepared statement!", xStatement.is());
@@ -164,8 +161,7 @@ void MorkDriverTest::test_select_default_all()
 
 void MorkDriverTest::test_select_list_table_joe_doe_5()
 {
-    const OUString sql = "select \"E-mail\" from \"does_5\" where \"E-mail\" LIKE '%doe5.org' ";
-    Reference< XPreparedStatement > xStatement = m_xConnection->prepareStatement(sql);
+    Reference< XPreparedStatement > xStatement = m_xConnection->prepareStatement("select \"E-mail\" from \"does_5\" where \"E-mail\" LIKE '%doe5.org' ");
     if (!xStatement.is())
     {
         CPPUNIT_ASSERT_MESSAGE("cannot create prepared statement!", xStatement.is());

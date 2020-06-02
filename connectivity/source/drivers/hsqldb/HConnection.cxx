@@ -314,17 +314,14 @@ namespace connectivity::hsqldb
             if ( m_xContext.is() )
                 xProvider.set( GraphicProvider::create(m_xContext) );
 
-            // assemble the image URL
-            OUString sImageURL =
-            // load the graphic from the global graphic repository
-                "private:graphicrepository/"
-            // the relative path within the images.zip
-                LINKED_TEXT_TABLE_IMAGE_RESOURCE;
-
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );
             aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= sImageURL;
+            aMediaProperties[0].Value <<= OUString(
+            // load the graphic from the global graphic repository
+                "private:graphicrepository/"
+            // the relative path within the images.zip
+                LINKED_TEXT_TABLE_IMAGE_RESOURCE);
             xGraphic = xProvider->queryGraphic( aMediaProperties );
             OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );
         }
