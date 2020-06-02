@@ -139,6 +139,7 @@ static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
 bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    SfxViewShell* pSomeViewForThisDoc = rDocShell.GetBestViewShell(false);
     if ( rDoc.IsImportingXML() )
     {
         //  for XML import, all row heights are updated together after importing
@@ -159,7 +160,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell)
+            if (pTabViewShell && pTabViewShell->GetDocId() == pSomeViewForThisDoc->GetDocId())
             {
                 pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
             }
@@ -181,7 +182,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
                             PaintPartFlags::Grid | PaintPartFlags::Left);
 
     if (comphelper::LibreOfficeKit::isActive())
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pSomeViewForThisDoc, ROW_HEADER, nTab);
 
     return bChanged;
 }
