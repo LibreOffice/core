@@ -122,6 +122,7 @@ SwView* SwModule::GetFirstView()
 {
     // returns only visible SwView
     SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
+    // FIXME: This is very wrong. It might be for another document.
     return pView;
 }
 
