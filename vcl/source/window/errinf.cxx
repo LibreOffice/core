@@ -69,6 +69,12 @@ void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
+void ErrorRegistry::Reset()
+{
+    ErrorRegistry &rData = TheErrorRegistry::get();
+    rData = ErrorRegistry();
+}
+
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
     SAL_WARN("vcl", "Action: " << rAction << " Error: " << rErr);
