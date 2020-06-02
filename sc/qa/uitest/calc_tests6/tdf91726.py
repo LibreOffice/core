@@ -28,7 +28,7 @@ class tdf91726(UITestCase):
         xadd = xDialog.getChild("add")
         def handle_name_dlg(dialog):
             nameEntry = dialog.getChild("name_entry")
-            nameEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"Default"}))
+            nameEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"Default Cell Style"}))
             xOKBtn = dialog.getChild("ok")
             def handle_error_dlg(dialog2):
                 #Error message: You have entered an invalid name.
@@ -43,7 +43,7 @@ class tdf91726(UITestCase):
             xDialog = self.xUITest.getTopFocusWindow()
             nameEntry = xDialog.getChild("name_entry")
             #back to name dialog, LO should not crash
-            self.assertEqual(get_state_as_dict(nameEntry)["Text"], "Default")
+            self.assertEqual(get_state_as_dict(nameEntry)["Text"], "Default Cell Style")
             xCanceltn = xDialog.getChild("cancel")
             self.ui_test.close_dialog_through_button(xCanceltn)
 

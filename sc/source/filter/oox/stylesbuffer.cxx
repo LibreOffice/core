@@ -2047,7 +2047,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             {
                 ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
                     pStylePool->Find(
-                        ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
+                        ScResId(STR_STYLENAME_STANDARD_CELL), SfxStyleFamily::Para));
 
                 if (pStyleSheet)
                     rPat.SetStyleSheet( pStyleSheet, false );
@@ -2481,7 +2481,7 @@ void CellStyle::createCellStyle()
     if( !mbCreated )
     {
         if ( bDefStyle && maFinalName.isEmpty() )
-            maFinalName = ScResId( STR_STYLENAME_STANDARD );
+            maFinalName = ScResId( STR_STYLENAME_STANDARD_CELL );
         mbCreated = maFinalName.isEmpty();
     }
 
@@ -2495,7 +2495,7 @@ void CellStyle::createCellStyle()
         {
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find(
-                ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
+                ScResId( STR_STYLENAME_STANDARD_CELL ), SfxStyleFamily::Para ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
             bCreatePattern = true;
         }

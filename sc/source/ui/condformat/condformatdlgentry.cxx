@@ -423,7 +423,7 @@ void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const Sc
     {
         // call new style dialog
         SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para) );
-        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScResId(STR_STYLENAME_STANDARD) );
+        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScResId(STR_STYLENAME_STANDARD_CELL) );
         css::uno::Any aAny(pDialogParent->GetXWindow());
         SfxUnoAnyItem aDialogParent( SID_DIALOG_PARENT, aAny );
 
