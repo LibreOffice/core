@@ -79,7 +79,7 @@ PresenterSlideShowView::PresenterSlideShowView (
       mbIsEndSlideVisible(false),
       mxCurrentSlide()
 {
-    if (mpPresenterController.get() != nullptr)
+    if (mpPresenterController)
     {
         mnPageAspectRatio = mpPresenterController->GetSlideAspectRatio();
         mpBackground = mpPresenterController->GetViewBackground(mxViewId->getResourceURL());
@@ -250,7 +250,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
     const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
 {
     mxCurrentSlide = rxSlide;
-    if (mpPresenterController.get() != nullptr
+    if (mpPresenterController
         && mxSlideShowController.is()
         && ! mpPresenterController->GetCurrentSlide().is()
         && ! mxSlideShowController->isPaused())
@@ -265,7 +265,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
         // backwards.
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindViewURL(mxViewId->getResourceURL()));
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             msTitleTemplate = pDescriptor->msTitleTemplate;
             pDescriptor->msTitleTemplate = msClickToExitPresentationTitle;
@@ -279,7 +279,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
         // Restore the title template.
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindViewURL(mxViewId->getResourceURL()));
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             pDescriptor->msTitleTemplate = msTitleTemplate;
             pDescriptor->msTitle.clear();
@@ -523,7 +523,7 @@ void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEven
     // the PresenterController so that it switches to the next slide and
     // ends the presentation.
     if (mbIsEndSlideVisible)
-        if (mpPresenterController.get() != nullptr)
+        if (mpPresenterController)
             mpPresenterController->HandleMouseClick(rEvent);
 }
 

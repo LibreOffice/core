@@ -208,7 +208,7 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
         // Activate the view.
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
             pDescriptor->SetActivationState(true);
     }
 
@@ -226,7 +226,7 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPresenterController->GetPaneContainer()->FindPaneId(
             rxView->getResourceId()->getAnchor()));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         pDescriptor->SetActivationState(false);
 
     // Dispose only views that we can not put into the cache.

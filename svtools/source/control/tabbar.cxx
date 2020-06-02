@@ -2108,7 +2108,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
 
 bool TabBar::IsInEditMode() const
 {
-    return mpImpl->mpEdit.get() != nullptr;
+    return bool(mpImpl->mpEdit);
 }
 
 void TabBar::EndEditMode(bool bCancel)

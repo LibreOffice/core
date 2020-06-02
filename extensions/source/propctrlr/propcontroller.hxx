@@ -227,7 +227,7 @@ namespace pcr
         // stop the inspection
         void stopInspection( bool _bCommitModified );
 
-        bool haveView() const { return m_xPropView.get() != nullptr; }
+        bool haveView() const { return bool(m_xPropView); }
         OPropertyEditor&    getPropertyBox() { return m_xPropView->getPropertyBox(); }
 
         // does the inspection of the objects as indicated by our model

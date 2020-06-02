@@ -1017,14 +1017,14 @@ void ViewShellManager::Implementation::DestroyViewShell (
         maShellFactories.erase(aRange.first, aRange.second);
 
     // Release the shell.
-    if (rDescriptor.mpFactory.get() != nullptr)
+    if (rDescriptor.mpFactory)
         rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
 
 void ViewShellManager::Implementation::DestroySubShell (
     const ShellDescriptor& rDescriptor)
 {
-    OSL_ASSERT(rDescriptor.mpFactory.get() != nullptr);
+    OSL_ASSERT(rDescriptor.mpFactory);
     rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
 

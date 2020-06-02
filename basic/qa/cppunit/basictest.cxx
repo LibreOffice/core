@@ -101,7 +101,7 @@ SbxVariableRef MacroSnippet::Run()
 
 bool MacroSnippet::Compile()
 {
-    CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod.get() != nullptr );
+    CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod );
     mpMod->Compile();
     return !mbError;
 }

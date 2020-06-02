@@ -100,7 +100,7 @@ void SAL_CALL FullScreenPane::disposing()
 {
     mpWindow.disposeAndClear();
 
-    if (mpWorkWindow.get() != nullptr)
+    if (mpWorkWindow)
     {
         Link<VclWindowEvent&,void> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);

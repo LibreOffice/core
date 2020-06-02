@@ -155,7 +155,7 @@ PresenterHelpView::PresenterHelpView (
         if (mpPresenterController.is())
         {
             mpFont = mpPresenterController->GetViewFont(mxViewId->getResourceURL());
-            if (mpFont.get() != nullptr)
+            if (mpFont)
             {
                 mpFont->PrepareFont(mxCanvas);
             }
@@ -464,7 +464,7 @@ void PresenterHelpView::ProvideCanvas()
 
 void PresenterHelpView::Resize()
 {
-    if (!(mpCloseButton.get() != nullptr && mxWindow.is()))
+    if (!(mpCloseButton && mxWindow.is()))
         return;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());

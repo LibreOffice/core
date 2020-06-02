@@ -45,6 +45,7 @@ public:
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const*);
+    bool VisitBinaryOperator(BinaryOperator const*);
 
     bool PreTraverseUnaryLNot(UnaryOperator* expr)
     {
@@ -303,7 +304,8 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         return true;
     if (castExpr->getCastKind() != CK_PointerToBoolean)
         return true;
-    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(castExpr->getSubExpr()->IgnoreParens());
+    auto memberCallExpr
+        = dyn_cast<CXXMemberCallExpr>(castExpr->getSubExpr()->IgnoreParenImpCasts());
     if (!memberCallExpr)
         return true;
     auto methodDecl = memberCallExpr->getMethodDecl();
@@ -413,6 +415,37 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
     }
     //        report(DiagnosticsEngine::Note, "method here", param->getLocation())
     //            << param->getSourceRange();
+    return true;
+}
+
+bool SimplifyPointerToBool::VisitBinaryOperator(BinaryOperator const* binOp)
+{
+    if (ignoreLocation(binOp))
+        return true;
+    auto opCode = binOp->getOpcode();
+    //TODO    if (opCode != BO_EQ && opCode != BO_NE)
+    //        return true;
+    if (opCode != BO_NE)
+        return true;
+    const Expr* possibleMemberCall = nullptr;
+    if (isa<CXXNullPtrLiteralExpr>(binOp->getLHS()->IgnoreParenImpCasts()))
+        possibleMemberCall = binOp->getRHS();
+    else if (isa<CXXNullPtrLiteralExpr>(binOp->getRHS()->IgnoreParenImpCasts()))
+        possibleMemberCall = binOp->getLHS();
+    else
+        return true;
+    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(possibleMemberCall);
+    if (!memberCallExpr)
+        return true;
+    auto methodDecl = memberCallExpr->getMethodDecl();
+    if (!methodDecl || !methodDecl->getIdentifier() || methodDecl->getName() != "get")
+        return true;
+    if (!loplugin::isSmartPointerType(memberCallExpr->getImplicitObjectArgument()))
+        return true;
+    report(DiagnosticsEngine::Warning,
+           std::string("simplify, convert to ") + (opCode == BO_EQ ? "'!x'" : "'x'"),
+           binOp->getExprLoc())
+        << binOp->getSourceRange();
     return true;
 }
 

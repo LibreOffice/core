@@ -100,7 +100,7 @@ IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl, Timer *, void)
 
 void QueueProcessor::ProcessRequests()
 {
-    assert(mpCacheContext.get()!=nullptr);
+    assert(mpCacheContext);
 
     // Never process more than one request at a time in order to prevent the
     // lock up of the edit view.
@@ -147,7 +147,7 @@ void QueueProcessor::ProcessOneRequest (
         ::osl::MutexGuard aGuard (maMutex);
 
         // Create a new preview bitmap and store it in the cache.
-        if (mpCache != nullptr && mpCacheContext.get() != nullptr)
+        if (mpCache != nullptr && mpCacheContext)
         {
             const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
             if (pSdPage != nullptr)

@@ -184,7 +184,7 @@ void PageEnumerationImpl::AdvanceToNextValidElement()
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
         // Test for the predicate being fulfilled.
-        if (pDescriptor.get()!=nullptr && maPredicate(pDescriptor))
+        if (pDescriptor && maPredicate(pDescriptor))
         {
             // This predicate is valid.
             break;

@@ -383,7 +383,7 @@ void ScDocument::DelayFormulaGrouping( bool delay )
     }
     else
     {
-        if( pDelayedFormulaGrouping.get() != nullptr && pDelayedFormulaGrouping->IsValid())
+        if( pDelayedFormulaGrouping && pDelayedFormulaGrouping->IsValid())
             RegroupFormulaCells( *pDelayedFormulaGrouping );
         pDelayedFormulaGrouping.reset();
     }

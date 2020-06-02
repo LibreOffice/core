@@ -530,7 +530,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
             FSNS( XML_r, XML_id ),  !sId.isEmpty()
                                        ? sId.toUtf8().getStr()
                                        : nullptr,
-            XML_location,           mxTextMark.get() != nullptr
+            XML_location,           mxTextMark
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : nullptr,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip

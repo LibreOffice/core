@@ -398,7 +398,7 @@ void PresenterProtocolHandler::Dispatch::disposing()
 {
     if (mbIsListeningToWindowManager)
     {
-        if (mpPresenterController.get() != nullptr)
+        if (mpPresenterController)
             mpPresenterController->GetWindowManager()->RemoveLayoutListener(this);
         mbIsListeningToWindowManager = false;
     }

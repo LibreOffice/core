@@ -167,7 +167,7 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != nullptr)
+    if (pFactory)
     {
         pFactory->charactersAction(pHandler, rString);
     }
@@ -178,7 +178,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler)
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != nullptr)
+    if (pFactory)
     {
         pFactory->startAction(pHandler);
     }
@@ -189,7 +189,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler)
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != nullptr)
+    if (pFactory)
     {
         pFactory->endAction(pHandler);
     }

@@ -487,7 +487,7 @@ public:
             cppuhelper::ServiceManager::Data::Implementation > const &
             implementation):
         manager_(manager), implementation_(implementation)
-    { assert(manager.is()); assert(implementation.get() != nullptr); }
+    { assert(manager.is()); assert(implementation); }
 
     SingletonFactory(const SingletonFactory&) = delete;
     const SingletonFactory& operator=(const SingletonFactory&) = delete;
@@ -539,7 +539,7 @@ public:
             cppuhelper::ServiceManager::Data::Implementation > const &
             implementation):
         manager_(manager), implementation_(implementation)
-    { assert(manager.is()); assert(implementation.get() != nullptr); }
+    { assert(manager.is()); assert(implementation); }
 
     ImplementationWrapper(const ImplementationWrapper&) = delete;
     const ImplementationWrapper& operator=(const ImplementationWrapper&) = delete;
@@ -723,7 +723,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
     for (const auto& [rName, rImpls] : data_.singletons)
     {
         assert(!rImpls.empty());
-        assert(rImpls[0].get() != nullptr);
+        assert(rImpls[0]);
         SAL_INFO_IF(
             rImpls.size() > 1, "cppuhelper",
             "Arbitrarily choosing " << rImpls[0]->name
@@ -742,7 +742,7 @@ void cppuhelper::ServiceManager::loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         std::shared_ptr< Data::Implementation > const & implementation)
 {
-    assert(implementation.get() != nullptr);
+    assert(implementation);
     {
         osl::MutexGuard g(rBHelper.rMutex);
         if (implementation->status == Data::Implementation::STATUS_LOADED) {
@@ -839,7 +839,7 @@ void cppuhelper::ServiceManager::disposing() {
         osl::MutexGuard g(rBHelper.rMutex);
         for (const auto& rEntry : data_.namedImplementations)
         {
-            assert(rEntry.second.get() != nullptr);
+            assert(rEntry.second);
             if (!rEntry.second->singletons.empty()) {
                 osl::MutexGuard g2(rEntry.second->mutex);
                 if (rEntry.second->disposeSingleton.is()) {
@@ -849,7 +849,7 @@ void cppuhelper::ServiceManager::disposing() {
         }
         for (const auto& rEntry : data_.dynamicImplementations)
         {
-            assert(rEntry.second.get() != nullptr);
+            assert(rEntry.second);
             if (!rEntry.second->singletons.empty()) {
                 osl::MutexGuard g2(rEntry.second->mutex);
                 if (rEntry.second->disposeSingleton.is()) {
@@ -1587,7 +1587,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
                 cont->removeByName(name + "/arguments");
             } catch (const css::container::NoSuchElementException &) {}
             assert(!rImpls.empty());
-            assert(rImpls[0].get() != nullptr);
+            assert(rImpls[0]);
             SAL_INFO_IF(
                 rImpls.size() > 1, "cppuhelper",
                 "Arbitrarily choosing " << rImpls[0]->name
@@ -1626,7 +1626,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
                      data_.namedImplementations.begin());
                  j != data_.namedImplementations.end();)
             {
-                assert(j->second.get() != nullptr);
+                assert(j->second);
                 if (j->second->rdbFile == rUri) {
                     clear.push_back(j->second);
                     //TODO: The below leaves data_ in an inconsistent state upon
@@ -1660,7 +1660,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
         if (i == data_.dynamicImplementations.end()) {
             return isDisposed();
         }
-        assert(i->second.get() != nullptr);
+        assert(i->second);
         clear = i->second;
         if (removeListener) {
             comp = i->second->component;
@@ -1697,7 +1697,7 @@ void cppuhelper::ServiceManager::removeImplementation(const OUString & name) {
                 "Remove non-inserted implementation " + name,
                 static_cast< cppu::OWeakObject * >(this));
         }
-        assert(i->second.get() != nullptr);
+        assert(i->second);
         clear = i->second;
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:
         removeFromImplementationMap(
@@ -1739,7 +1739,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
                     << " among multiple implementations for " << i->first);
             impl = i->second[0];
         }
-        assert(impl.get() != nullptr);
+        assert(impl);
         loaded = impl->status == Data::Implementation::STATUS_LOADED;
     }
     if (!loaded) {

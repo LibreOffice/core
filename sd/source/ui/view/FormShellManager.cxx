@@ -73,7 +73,7 @@ FormShellManager::~FormShellManager()
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
-    if (mpSubShellFactory.get() != nullptr)
+    if (mpSubShellFactory)
     {
         ViewShell* pShell = mrBase.GetMainViewShell().get();
         if (pShell != nullptr)

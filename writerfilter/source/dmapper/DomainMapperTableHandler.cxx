@@ -87,7 +87,7 @@ void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablehandler.table");
 
-    if (pProps.get() != nullptr)
+    if (pProps)
         pProps->dumpXml();
 #endif
 }

@@ -353,7 +353,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetModel().GetPageDescriptor(nFirstIndex + i));
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             rSelector.SelectPage(pDescriptor);
             // The first page of the new selection is made the current page.

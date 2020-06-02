@@ -2853,7 +2853,7 @@ namespace cppcanvas::internal
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
 
-            OSL_ENSURE( rCanvas.get() != nullptr && rCanvas->getUNOCanvas().is(),
+            OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
                         "ImplRenderer::ImplRenderer(): Invalid canvas" );
             OSL_ENSURE( rCanvas->getUNOCanvas()->getDevice().is(),
                         "ImplRenderer::ImplRenderer(): Invalid graphic device" );

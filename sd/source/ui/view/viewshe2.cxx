@@ -71,7 +71,7 @@ namespace sd {
  */
 void ViewShell::UpdateScrollBars()
 {
-    if (mpHorizontalScrollBar.get() != nullptr)
+    if (mpHorizontalScrollBar)
     {
         long nW = static_cast<long>(mpContentWindow->GetVisibleWidth() * 32000);
         long nX = static_cast<long>(mpContentWindow->GetVisibleX() * 32000);
@@ -84,7 +84,7 @@ void ViewShell::UpdateScrollBars()
         mpHorizontalScrollBar->SetPageSize(nPage);
     }
 
-    if (mpVerticalScrollBar.get() != nullptr)
+    if (mpVerticalScrollBar)
     {
         long nH = static_cast<long>(mpContentWindow->GetVisibleHeight() * 32000);
         long nY = static_cast<long>(mpContentWindow->GetVisibleY() * 32000);
@@ -317,13 +317,13 @@ void ViewShell::SetZoom(long nZoom)
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetZoom(aUIScale);
 
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->SetZoom(aUIScale);
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
     {
         mpContentWindow->SetZoomIntegral(nZoom);
 
@@ -369,13 +369,13 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
 
     Point aPos = GetActiveWindow()->GetWinViewPos();
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetZoom(aUIScale);
 
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->SetZoom(aUIScale);
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
     {
         Point aNewPos = mpContentWindow->GetWinViewPos();
         aNewPos.setX( aPos.X() );
@@ -409,7 +409,7 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                               const Point& rWinPos, bool bUpdate)
 {
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
     {
         mpContentWindow->SetViewOrigin(rViewOrigin);
         mpContentWindow->SetViewSize(rViewSize);
@@ -438,7 +438,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
  */
 void ViewShell::InvalidateWindows()
 {
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
         mpContentWindow->Invalidate();
 }
 
@@ -447,7 +447,7 @@ void ViewShell::InvalidateWindows()
  */
 void ViewShell::DrawMarkRect(const ::tools::Rectangle& rRect) const
 {
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
     {
         mpContentWindow->InvertTracking(rRect, ShowTrackFlags::Object | ShowTrackFlags::TrackWindow);
     }
@@ -822,7 +822,7 @@ void ViewShell::SetRuler(bool bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
     {
         if (mbHasRulers)
         {
@@ -834,7 +834,7 @@ void ViewShell::SetRuler(bool bRuler)
         }
     }
 
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
     {
         if (mbHasRulers)
         {
@@ -853,13 +853,13 @@ void ViewShell::SetRuler(bool bRuler)
 
 void ViewShell::SetScrollBarsVisible(bool bVisible)
 {
-    if (mpVerticalScrollBar.get() != nullptr)
+    if (mpVerticalScrollBar)
         mpVerticalScrollBar->Show( bVisible );
 
-    if (mpHorizontalScrollBar.get() != nullptr)
+    if (mpHorizontalScrollBar)
         mpHorizontalScrollBar->Show( bVisible );
 
-    if (mpScrollBarBox.get() != nullptr)
+    if (mpScrollBarBox)
         mpScrollBarBox->Show(bVisible);
 }
 
@@ -916,7 +916,7 @@ void ViewShell::VisAreaChanged(const ::tools::Rectangle& /*rRect*/)
 
 void ViewShell::SetWinViewPos(const Point& rWinPos)
 {
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
     {
         mpContentWindow->SetWinViewPos(rWinPos);
 

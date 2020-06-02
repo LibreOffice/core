@@ -266,7 +266,7 @@ ViewShellBase::~ViewShellBase()
     xSlideShow.clear();
 
     // Tell the controller that the ViewShellBase is not available anymore.
-    if (mpImpl->mpController.get() != nullptr)
+    if (mpImpl->mpController)
         mpImpl->mpController->ReleaseViewShellBase();
 
     // We have to hide the main window to prevent SFX complaining after a

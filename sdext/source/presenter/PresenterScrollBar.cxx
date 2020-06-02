@@ -520,7 +520,7 @@ void PresenterScrollBar::UpdateWidthOrHeight (
     sal_Int32& rSize,
     const SharedBitmapDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != nullptr)
+    if (rpDescriptor)
     {
         Reference<rendering::XBitmap> xBitmap (rpDescriptor->GetNormalBitmap());
         if (xBitmap.is())
@@ -620,7 +620,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     double nBottom = aWindowBox.Height;
 
-    if (mpNextButtonDescriptor.get() != nullptr)
+    if (mpNextButtonDescriptor)
     {
         Reference<rendering::XBitmap> xBitmap (mpNextButtonDescriptor->GetNormalBitmap());
         if (xBitmap.is())
@@ -631,7 +631,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
             nBottom -= aSize.Height + gnScrollBarGap;
         }
     }
-    if (mpPrevButtonDescriptor.get() != nullptr)
+    if (mpPrevButtonDescriptor)
     {
         Reference<rendering::XBitmap> xBitmap (mpPrevButtonDescriptor->GetNormalBitmap());
         if (xBitmap.is())

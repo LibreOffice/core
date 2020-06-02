@@ -503,7 +503,7 @@ void PresenterController::HideView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         mxConfigurationController->requestResourceDeactivation(
             ResourceId::createWithAnchor(
@@ -765,7 +765,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                     mpWindowManager->Update();
                     // Request the repainting of the area previously
                     // occupied by the view.
-                    if (pDescriptor.get() != nullptr)
+                    if (pDescriptor)
                         GetPaintManager()->Invalidate(pDescriptor->mxBorderWindow);
                 }
             }
@@ -953,7 +953,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
 
         case awt::Key::F1:
             // Toggle the help view.
-            if (mpWindowManager.get() != nullptr)
+            if (mpWindowManager)
             {
                 if (mpWindowManager->GetViewMode() != PresenterWindowManager::VM_Help)
                     mpWindowManager->SetViewMode(PresenterWindowManager::VM_Help);
@@ -1053,7 +1053,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     mpWindowManager->SetParentPane(rxPane);
     mpWindowManager->SetTheme(mpTheme);
 
-    if (mpPaneBorderPainter.get() != nullptr)
+    if (mpPaneBorderPainter)
         mpPaneBorderPainter->SetTheme(mpTheme);
 
     // Add key listener

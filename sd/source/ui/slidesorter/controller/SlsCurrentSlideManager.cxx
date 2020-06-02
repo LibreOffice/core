@@ -88,7 +88,7 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 
 void CurrentSlideManager::ReleaseCurrentSlide()
 {
-    if (mpCurrentSlide.get() != nullptr)
+    if (mpCurrentSlide)
         mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, false);
 
     mpCurrentSlide.reset();
@@ -106,7 +106,7 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
         // given XDrawPage may or may not be member of the slide sorter
         // document.
         mpCurrentSlide = mrSlideSorter.GetModel().GetPageDescriptor(mnCurrentSlideIndex);
-        if (mpCurrentSlide.get() != nullptr)
+        if (mpCurrentSlide)
             mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, true);
     }
 }
@@ -163,7 +163,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
 
 void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescriptor& rpDescriptor)
 {
-    OSL_ASSERT(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor);
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     if (pBase != nullptr)
@@ -182,7 +182,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
 
 void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescriptor& rpDescriptor)
 {
-    OSL_ASSERT(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor);
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     if (pBase != nullptr)
@@ -200,7 +200,7 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
 
 void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescriptor& rpDescriptor)
 {
-    OSL_ASSERT(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor);
 
     try
     {
@@ -230,7 +230,7 @@ void CurrentSlideManager::HandleModelChange()
     if (mnCurrentSlideIndex >= 0)
     {
         mpCurrentSlide = mrSlideSorter.GetModel().GetPageDescriptor(mnCurrentSlideIndex);
-        if (mpCurrentSlide.get() != nullptr)
+        if (mpCurrentSlide)
             mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, true);
     }
 }

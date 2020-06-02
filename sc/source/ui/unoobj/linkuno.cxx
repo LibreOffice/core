@@ -1541,7 +1541,7 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
 
     // #i116940# be consistent with getByName: allow only table names which have a cache already
     ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false);
-    return (pTable.get() != nullptr);
+    return bool(pTable);
 }
 
 sal_Int32 SAL_CALL ScExternalDocLinkObj::getCount()

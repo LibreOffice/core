@@ -49,7 +49,7 @@ Value::Pointer_t OOXMLProperty::getValue()
 {
     Value::Pointer_t pResult;
 
-    if (mpValue.get() != nullptr)
+    if (mpValue)
         pResult = Value::Pointer_t(mpValue->clone());
     else
         pResult = Value::Pointer_t(new OOXMLValue());
@@ -61,7 +61,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
-    if (mpValue.get() != nullptr)
+    if (mpValue)
         pResult = mpValue->getProperties();
 
     return pResult;
@@ -94,7 +94,7 @@ string OOXMLProperty::toString() const
 
     sResult += getName();
     sResult += ", ";
-    if (mpValue.get() != nullptr)
+    if (mpValue)
         sResult += mpValue->toString();
     else
         sResult +="(null)";
@@ -341,7 +341,7 @@ void OOXMLPropertySet::resolve(Properties & rHandler)
     {
         OOXMLProperty::Pointer_t pProp = mProperties[nIt];
 
-        if (pProp.get() != nullptr)
+        if (pProp)
             pProp->resolve(rHandler);
     }
 }
@@ -370,7 +370,7 @@ OOXMLPropertySet::end() const
 
 void OOXMLPropertySet::add(const OOXMLProperty::Pointer_t& pProperty)
 {
-    if (pProperty.get() != nullptr && pProperty->getId() != 0x0)
+    if (pProperty && pProperty->getId() != 0x0)
     {
         mProperties.push_back(pProperty);
     }
@@ -416,7 +416,7 @@ string OOXMLPropertySet::toString()
         if (aIt != aItBegin)
             sResult += ", ";
 
-        if ((*aIt).get() != nullptr)
+        if (*aIt)
             sResult += (*aIt)->toString();
         else
             sResult += "0x0";
@@ -772,7 +772,7 @@ void OOXMLTable::resolve(Table & rTable)
         writerfilter::Reference<Properties>::Pointer_t pProperties
             (rPropSet->getProperties());
 
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pTable->entry(nPos, pProperties);
 
         ++nPos;
@@ -781,7 +781,7 @@ void OOXMLTable::resolve(Table & rTable)
 
 void OOXMLTable::add(const ValuePointer_t& pPropertySet)
 {
-    if (pPropertySet.get() != nullptr)
+    if (pPropertySet)
         mPropertySets.push_back(pPropertySet);
 }
 
