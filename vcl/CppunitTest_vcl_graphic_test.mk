@@ -14,8 +14,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicDescriptorTest \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
     vcl/qa/cppunit/GraphicNativeMetadataTest \
+))
+
+ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/qa/cppunit/VectorGraphicSearchTest \
 ))
+endif
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test, \
     boost_headers \

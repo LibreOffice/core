@@ -330,7 +330,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicObject \
     vcl/source/graphic/UnoGraphicProvider \
     vcl/source/graphic/UnoGraphicTransformer \
-    vcl/source/graphic/VectorGraphicSearch \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \
@@ -477,6 +476,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/rectangle \
     vcl/jsdialog/jsdialogbuilder \
 ))
+
+ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/graphic/VectorGraphicSearch \
+))
+endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
