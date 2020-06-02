@@ -4967,7 +4967,12 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
                 ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
     }
 
-    if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD) )
+    if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD_CELL) )
+    {
+        //  update attributes for all note objects
+        ScDetectiveFunc::UpdateAllComments( *this );
+    }
+    else if ( pStyleSheet && pStyleSheet->GetName() == ScResId(STR_STYLENAME_STANDARD_PAGE) )
     {
         //  update attributes for all note objects
         ScDetectiveFunc::UpdateAllComments( *this );

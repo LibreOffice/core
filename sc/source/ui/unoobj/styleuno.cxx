@@ -759,7 +759,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             else
             {
                 if ( rDoc.RemovePageStyleInUse( aString ) )
-                    pDocShell->PageStyleModified( ScResId(STR_STYLENAME_STANDARD), true );
+                    pDocShell->PageStyleModified( ScResId(STR_STYLENAME_STANDARD_PAGE), true );
 
                 pStylePool->Remove( pStyle );
 
