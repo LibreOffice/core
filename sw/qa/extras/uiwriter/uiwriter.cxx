@@ -7186,6 +7186,12 @@ void SwUiWriterTest::testTdf38394()
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sReplaced(u"l\u2019« ");
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // tdf#132301 autocorrect of qu'«
+    pWrtShell->Insert(u" qu\u2019");
+    pWrtShell->AutoCorrect(corr, cChar);
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced += u" qu\u2019« ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf59666()
