@@ -2516,10 +2516,13 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
     boost::property_tree::write_json(aStream, aTree);
     std::string aPayload = aStream.str();
 
+    ScViewData* pViewData = GetViewData();
+    SfxViewShell* pThisViewShell = ( pViewData ? pViewData->GetViewShell() : nullptr );
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        if (pThisViewShell == nullptr || pViewShell->GetDocId() == pThisViewShell->GetDocId())
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

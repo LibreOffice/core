@@ -334,7 +334,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
 
     while (pViewShell)
     {
-        if (pViewShell != pThisViewShell)
+        if (pViewShell != pThisViewShell && pViewShell->GetDocId() == pThisViewShell->GetDocId())
         {
             ScTabViewShell* pOtherViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
             if (pOtherViewShell)
@@ -953,7 +953,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         while (pViewShell)
         {
-            if (pViewShell != pThisViewShell)
+            if (pViewShell != pThisViewShell && pViewShell->GetDocId() == pThisViewShell->GetDocId())
             {
                 ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
                 if (pTabViewShell)
