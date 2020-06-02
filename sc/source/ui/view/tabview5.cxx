@@ -676,6 +676,8 @@ void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        // FIXME: How to make sure we touch view shells only for the right document, it we have multiple
+        // documents open?
         if (pTabViewShell)
         {
             for (auto& pWin: pTabViewShell->pGridWin)

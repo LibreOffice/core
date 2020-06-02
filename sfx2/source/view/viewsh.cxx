@@ -225,7 +225,9 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
 ,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
-{}
+,   m_nDocId(-1)
+{
+}
 
 SfxViewShell_Impl::~SfxViewShell_Impl()
 {
@@ -1101,7 +1103,6 @@ SfxViewShell::SfxViewShell
 
 SfxViewShell::~SfxViewShell()
 {
-
     // Remove from list
     const SfxViewShell *pThis = this;
     SfxViewShellArr_Impl &rViewArr = SfxGetpApp()->GetViewShells_Impl();
@@ -1452,7 +1453,8 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->NotifyCursor(this);
+        if (pViewShell->GetDocId() == GetDocId())
+            pViewShell->NotifyCursor(this);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -1540,6 +1542,17 @@ int SfxViewShell::getPart() const
 ViewShellId SfxViewShell::GetViewShellId() const
 {
     return pImpl->m_nViewShellId;
+}
+
+void SfxViewShell::SetDocId(ViewShellDocId nId)
+{
+    assert(static_cast<int>(pImpl->m_nDocId) == -1);
+    pImpl->m_nDocId = nId;
+}
+
+ViewShellDocId SfxViewShell::GetDocId() const
+{
+    return pImpl->m_nDocId;
 }
 
 void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
