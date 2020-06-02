@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e49c48f_d74cef95",
+        "filename": "svx/uiconfig/ui/inspectortextpanel.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-02T05:40:33Z",
+      "side": 1,
+      "message": "I only see domain\u003d\"sw\" under /sw. I suppose you would need to move this to sw - maybe in a follow-up patch.",
+      "range": {
+        "startLine": 3,
+        "startChar": 19,
+        "endLine": 3,
+        "endChar": 21
+      },
+      "revId": "356863afc0f8826068f121c50e9e27f0623300f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
