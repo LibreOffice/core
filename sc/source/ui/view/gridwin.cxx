@@ -825,7 +825,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             // Something went terribly wrong!
             return;
 
-        if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, aParam.nRow1, aParam.nRow2))
+        if (ScTabViewShell::isAnyEditViewInRange(pViewData->GetViewShell(), /*bColumns*/ false, aParam.nRow1, aParam.nRow2))
             return;
 
         pEntry->bDoQuery = true;
@@ -5732,6 +5732,9 @@ void ScGridWindow::notifyKitCellCursor() const
 void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    if (pViewShell->GetDocId() != pForShell->GetDocId())
+        return;
 
     OString aCursor("EMPTY");
     if (mpOOCursors) // cf. getCellCursor above

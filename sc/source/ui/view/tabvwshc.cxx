@@ -572,7 +572,7 @@ css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipDa
     return xTransferable;
 }
 
-void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SCTAB nCurrentTabIndex)
+void ScTabViewShell::notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -595,7 +595,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SC
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
+            if (pTabViewShell && pViewShell->GetDocId() == pForViewShell->GetDocId() && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
             {
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
             }
@@ -604,13 +604,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SC
     }
 }
 
-void ScTabViewShell::notifyAllViewsHeaderInvalidation(bool bColumns, SCTAB nCurrentTabIndex)
-{
-    HeaderType eHeaderType = bColumns ? COLUMN_HEADER : ROW_HEADER;
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, nCurrentTabIndex);
-}
-
-bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
+bool ScTabViewShell::isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -618,7 +612,7 @@ bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLR
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell)
+            if (pTabViewShell && pTabViewShell->GetDocId() == pForViewShell->GetDocId())
             {
                 ScInputHandler* pInputHandler = pTabViewShell->GetInputHandler();
                 if (pInputHandler && pInputHandler->GetActiveView())
