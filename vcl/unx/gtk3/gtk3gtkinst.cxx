@@ -7531,11 +7531,16 @@ public:
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
             // https://gitlab.gnome.org/GNOME/gtk/issues/1785
-            GdkEvent *event = GtkSalFrame::makeFakeKeyPress(pWidget);
-            gtk_main_do_event(event);
-            gdk_event_free(event);
+            GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
+            gtk_main_do_event(pKeyEvent);
 
-            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
+            GdkEvent *pTriggerEvent = gtk_get_current_event();
+            if (!pTriggerEvent)
+                pTriggerEvent = pKeyEvent;
+
+            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+
+            gdk_event_free(pKeyEvent);
         }
         else
 #else
