@@ -1436,6 +1436,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 {
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
+    ScVSplitPos eVWhich = WhichV(eWhich);
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
     bool bWasThere = false;
     if (pEditView[eWhich])
@@ -1462,15 +1466,16 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     {
         pEditView[eWhich].reset(new EditView( pNewEngine, pWin ));
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (bLOKActive)
         {
-            pEditView[eWhich]->SetBroadcastLOKViewCursor(false);
+            // We can broadcast the view-cursor message in print-twips for all views.
+            pEditView[eWhich]->SetBroadcastLOKViewCursor(bLOKPrintTwips);
             pEditView[eWhich]->RegisterViewShell(pViewShell);
         }
     }
 
     // add windows from other views
-    if (!bWasThere && comphelper::LibreOfficeKit::isActive())
+    if (!bWasThere && bLOKActive)
     {
         ScTabViewShell* pThisViewShell = GetViewShell();
         SCTAB nThisTabNo = GetTabNo();
@@ -1508,13 +1513,33 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
                                             GetEditArea( pPattern, true );
 
+    tools::Rectangle aPTwipsRect;
+    if (bLOKPrintTwips)
+    {
+        aPTwipsRect = ScEditUtil(pDoc, nNewX, nNewY, nTabNo, GetPrintTwipsPos(nNewX, nNewY),
+                                 pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY(), true /* bInPrintTwips */).
+                                        GetEditArea(pPattern, true);
+    }
+
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
     if ( GetEditAdjust() == SvxAdjust::Right || bAsianVertical )
+    {
         aPixRect.AdjustRight(1 );
+        if (bLOKPrintTwips)
+            aPTwipsRect.AdjustRight(TWIPS_PER_PIXEL);
+    }
 
     tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
     pEditView[eWhich]->SetOutputArea( aOutputArea );
+
+    if (bLOKPrintTwips)
+    {
+        if (!pEditView[eWhich]->HasLOKSpecialPositioning())
+            pEditView[eWhich]->InitLOKSpecialPositioning(MapUnit::MapTwip, aPTwipsRect, Point());
+        else
+            pEditView[eWhich]->SetLOKSpecialOutputArea(aPTwipsRect);
+    }
 
     if ( bActive && eWhich == GetActivePart() )
     {
@@ -1541,9 +1566,28 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if ( bAsianVertical )
             bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
 
-        long nSizeXPix;
+        long nSizeXPix, nSizeXPTwips = 0;
+
+        const long nGridWidthPx = pView->GetGridWidth(eHWhich);
+        const long nGridHeightPx = pView->GetGridHeight(eVWhich);
+        long nGridWidthTwips = 0, nGridHeightTwips = 0;
+        if (bLOKPrintTwips)
+        {
+            Size aGridSize(nGridWidthPx, nGridHeightPx);
+            const MapMode& rWinMapMode = GetLogicMode();
+            aGridSize = OutputDevice::LogicToLogic(
+                pWin->PixelToLogic(aGridSize, rWinMapMode),
+                rWinMapMode, MapMode(MapUnit::MapTwip));
+            nGridWidthTwips = aGridSize.Width();
+            nGridHeightTwips = aGridSize.Height();
+        }
+
         if (bBreak && !bAsianVertical)
+        {
             nSizeXPix = aPixRect.GetWidth();    // papersize -> no horizontal scrolling
+            if (bLOKPrintTwips)
+                nSizeXPTwips = aPTwipsRect.GetWidth();
+        }
         else
         {
             OSL_ENSURE(pView,"no View for EditView");
@@ -1553,23 +1597,48 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                 //  growing into both directions until one edge is reached
                 //! should be limited to whole cells in both directions
                 long nLeft = aPixRect.Left();
-                long nRight = pView->GetGridWidth(eHWhich) - aPixRect.Right();
+                long nRight = nGridWidthPx - aPixRect.Right();
                 nSizeXPix = aPixRect.GetWidth() + 2 * std::min( nLeft, nRight );
+                if (bLOKPrintTwips)
+                {
+                    long nLeftPTwips = aPTwipsRect.Left();
+                    long nRightPTwips = nGridWidthTwips - aPTwipsRect.Right();
+                    nSizeXPTwips = aPTwipsRect.GetWidth() + 2 * std::min(nLeftPTwips, nRightPTwips);
+                }
             }
             else if ( bGrowToLeft )
+            {
                 nSizeXPix = aPixRect.Right();   // space that's available in the window when growing to the left
+                if (bLOKPrintTwips)
+                    nSizeXPTwips = aPTwipsRect.Right();
+            }
             else
-                nSizeXPix = pView->GetGridWidth(eHWhich) - aPixRect.Left();
+            {
+                nSizeXPix = nGridWidthPx - aPixRect.Left();
+                if (bLOKPrintTwips)
+                    nSizeXPTwips = nGridWidthTwips - aPTwipsRect.Left();
+            }
 
             if ( nSizeXPix <= 0 )
+            {
                 nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
+                if (bLOKPrintTwips)
+                    nSizeXPTwips = aPTwipsRect.GetWidth();
+            }
         }
         OSL_ENSURE(pView,"no View for EditView");
-        long nSizeYPix = pView->GetGridHeight(WhichV(eWhich)) - aPixRect.Top();
+        long nSizeYPix = nGridHeightPx - aPixRect.Top();
+        long nSizeYPTwips = bLOKPrintTwips ? (nGridHeightTwips - aPTwipsRect.Top()) : 0;
+
         if ( nSizeYPix <= 0 )
+        {
             nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
+            if (bLOKPrintTwips)
+                nSizeYPTwips = aPTwipsRect.GetHeight();
+        }
 
         Size aPaperSize = pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ), GetLogicMode() );
+        Size aPaperSizePTwips(nSizeXPTwips, nSizeYPTwips);
         if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
         {
             //  if text is formatted for printer, use the exact same paper width
@@ -1579,29 +1648,45 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             tools::Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.setWidth( aUtilRect.GetWidth() );
+            if (bLOKPrintTwips)
+                aPaperSizePTwips.setWidth(OutputDevice::LogicToLogic(
+                        aUtilRect.GetWidth(), MapUnit::Map100thMM, MapUnit::MapTwip));
         }
         pNewEngine->SetPaperSize( aPaperSize );
 
         // sichtbarer Ausschnitt
         Size aPaper = pNewEngine->GetPaperSize();
         tools::Rectangle aVis = pEditView[eWhich]->GetVisArea();
+        tools::Rectangle aVisPTwips;
+        if (bLOKPrintTwips)
+            aVisPTwips = pEditView[eWhich]->GetLOKSpecialVisArea();
+
         long nDiff = aVis.Right() - aVis.Left();
+        long nDiffPTwips = bLOKPrintTwips ? (aVisPTwips.Right() - aVisPTwips.Left()) : 0;
         if ( GetEditAdjust() == SvxAdjust::Right )
         {
             aVis.SetRight( aPaper.Width() - 1 );
+            if (bLOKPrintTwips)
+                aVisPTwips.SetRight( aPaperSizePTwips.Width() - 1 );
             bMoveArea = !bLayoutRTL;
         }
         else if ( GetEditAdjust() == SvxAdjust::Center )
         {
             aVis.SetRight( ( aPaper.Width() - 1 + nDiff ) / 2 );
+            if (bLOKPrintTwips)
+                aVisPTwips.SetRight( ( aPaperSizePTwips.Width() - 1 + nDiffPTwips ) / 2 );
             bMoveArea = true;   // always
         }
         else
         {
             aVis.SetRight( nDiff );
+            if (bLOKPrintTwips)
+                aVisPTwips.SetRight(nDiffPTwips);
             bMoveArea = bLayoutRTL;
         }
         aVis.SetLeft( aVis.Right() - nDiff );
+        if (bLOKPrintTwips)
+            aVisPTwips.SetLeft(aVisPTwips.Right() - nDiffPTwips);
         // #i49561# Important note:
         // The set offset of the visible area of the EditView for centered and
         // right alignment in horizontal layout is consider by instances of
@@ -1609,6 +1694,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         // and <PixelToLogic(..)>. This is needed for the correct visibility
         // of paragraphs in edit mode at the accessibility API.
         pEditView[eWhich]->SetVisArea(aVis);
+        if (bLOKPrintTwips)
+            pEditView[eWhich]->SetLOKSpecialVisArea(aVisPTwips);
         //  UpdateMode has been disabled in ScInputHandler::StartTable
         //  must be enabled before EditGrowY (GetTextHeight)
         pNewEngine->SetUpdateMode( true );
