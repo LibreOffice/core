@@ -361,11 +361,21 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
 
         comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
         auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+        if (it == aCustomShapeGeometry.end())
+        {
+            it = aCustomShapeGeometry.find("TextRotateAngle");
+        }
+
         if (it != aCustomShapeGeometry.end())
         {
-            auto nTextPreRotateAngle = it->second.get<sal_Int32>();
+            auto nAngle = it->second.has<sal_Int32>() ? it->second.get<sal_Int32>() : 0;
+            if (nAngle == 0)
+            {
+                nAngle = it->second.has<double>() ? it->second.get<double>() : 0;
+            }
+
             sal_Int16 nDirection = 0;
-            switch (nTextPreRotateAngle)
+            switch (nAngle)
             {
                 case -90:
                     nDirection = text::WritingMode2::TB_RL;
