@@ -554,7 +554,7 @@ void LibPage::InsertLib()
 
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC));
-    OUString aFilter = "*.sbl;*.xlc;*.xlb"        // library files
+    xFP->appendFilter( aTitle, "*.sbl;*.xlc;*.xlb"        // library files
               ";*.sdw;*.sxw;*.odt"       // text
               ";*.vor;*.stw;*.ott"       // text template
               ";*.sgl;*.sxg;*.odm"       // master document
@@ -565,8 +565,7 @@ void LibPage::InsertLib()
               ";*.std;*.otg"             // drawing template
               ";*.sdd;*.sxi;*.odp"       // presentation
               ";*.sti;*.otp"             // presentation template
-              ";*.sxm;*.odf";            // formula
-    xFP->appendFilter( aTitle, aFilter );
+              ";*.sxm;*.odf" );          // formula
 
     // set display directory and filter
     OUString aPath(GetExtraData()->GetAddLibPath());
@@ -1015,8 +1014,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
     // filter
     OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE));
-    OUString aFilter = "*.oxt" ;       // library files
-    xFP->appendFilter( aTitle, aFilter );
+    xFP->appendFilter( aTitle, "*.oxt" ); // library files
 
     // set display directory and filter
     OUString aPath = GetExtraData()->GetAddLibPath();
@@ -1080,15 +1078,12 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     xSFA->createFolder( aMetaInfFolder );
 
     std::vector< Sequence<beans::PropertyValue> > manifest;
-    const OUString strMediaType = "MediaType" ;
-    const OUString strFullPath = "FullPath" ;
-    const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;
 
     OUString fullPath = aLibName
                       + "/" ;
     auto attribs(::comphelper::InitPropertySequence({
-        { strFullPath, Any(fullPath) },
-        { strMediaType, Any(strBasicMediaType) }
+        { "FullPath", Any(fullPath) },
+        { "MediaType", Any(OUString("application/vnd.sun.star.basic-library")) }
     }));
     manifest.push_back( attribs );
 
