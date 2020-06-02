@@ -1173,8 +1173,9 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 } // anonymous namespace
 
-LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
+LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent, int nDocumentId)
     : mxComponent(xComponent)
+    , mnDocumentId(nDocumentId)
 {
     m_pDocumentClass = gDocumentClass.lock();
     if (!m_pDocumentClass)
@@ -2114,6 +2115,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     SolarMutexGuard aGuard;
 
+    static int nDocumentIdCounter = 0;
+
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
@@ -2210,7 +2213,10 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             return nullptr;
         }
 
-        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent);
+        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nDocumentIdCounter++);
+
+        // Do we know that after loading the document, its initial view is the "current" view?
+        SfxLokHelper::setDocumentIdOfView(pDocument->mnDocumentId);
         if (pLib->mpCallback)
         {
             int nState = doc_getSignatureState(pDocument);
@@ -3081,7 +3087,9 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     {
         // tile painting always needs a SfxViewShell::Current(), but actually
         // it does not really matter which one - all of them should paint the
-        // same thing.
+        // same thing. It's important to get a view for the correct document,
+        // though.
+        // doc_getViewsCount() returns the count of views for the document in the current view.
         int viewCount = doc_getViewsCount(pThis);
         if (viewCount == 0)
             return;

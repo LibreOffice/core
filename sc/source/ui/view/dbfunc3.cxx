@@ -2239,11 +2239,12 @@ void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pThisViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell)
+        if (pTabViewShell && pTabViewShell->GetDocId() == pThisViewShell->GetDocId())
         {
             if (bColumns)
                 pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStart);

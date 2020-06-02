@@ -126,6 +126,7 @@ void ScTabViewShell::Activate(bool bMDI)
                     SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
                     while ( pSh!=nullptr && pOldHdl!=nullptr)
                     {
+                        // FIXME: What if pSh is a shell for a different document?
                         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
                         {
                             pOldHdl->ResetDelayTimer();
@@ -1712,8 +1713,12 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         // have we already one view ?
         if (pViewShell)
         {
-            // this view is not yet visible at this stage, so we look for not visible views, too
-            SfxViewShell* pViewShell2 = SfxViewShell::GetNext(*pViewShell, /*only visible shells*/ false);
+            // this view is not yet visible at this stage, so we look for not visible views, too, for this same document
+            SfxViewShell* pViewShell2 = pViewShell;
+            do
+            {
+                pViewShell2 = SfxViewShell::GetNext(*pViewShell2, /*only visible shells*/ false);
+            } while (pViewShell2 && pViewShell2->GetDocId() != pViewShell->GetDocId());
             // if the second view is not this one, it means that there is
             // already more than one active view and so the formula mode
             // has already been disabled

@@ -518,6 +518,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SC
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            // FIXME: What if pViewShell is for a different document?
             if (pTabViewShell && (nCurrentTabIndex == -1 || pTabViewShell->getPart() == nCurrentTabIndex))
             {
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_HEADER, aPayload.getStr());
@@ -541,6 +542,7 @@ bool ScTabViewShell::isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLR
         while (pViewShell)
         {
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            // FIXME: What if pViewShell is for a different document?
             if (pTabViewShell)
             {
                 ScInputHandler* pInputHandler = pTabViewShell->GetInputHandler();

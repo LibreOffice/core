@@ -1471,6 +1471,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
@@ -1526,6 +1527,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
@@ -1581,6 +1583,7 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
