@@ -103,64 +103,54 @@ namespace
 
   void ScannerTest::testBlankLines()
   {
-    const OUString source1("");
-    const OUString source2("\r\n");
-    const OUString source3("\n");
-    const OUString source4("\r");
-    const OUString source5("\r\n\r\n");
-    const OUString source6("\n\r");
-    const OUString source7("\n\r\n");
-    const OUString source8("\r\n\r");
-    const OUString source9("      ");
-
     std::vector<Symbol> symbols;
-    symbols = getSymbols(source1);
+    symbols = getSymbols("");
     CPPUNIT_ASSERT(symbols.empty());
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("\r\n");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("\n");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols("\r");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols("\r\n\r\n");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols("\n\r");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source7);
+    symbols = getSymbols("\n\r\n");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source8);
+    symbols = getSymbols("\r\n\r");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source9);
+    symbols = getSymbols("      ");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -173,7 +163,6 @@ namespace
     const OUString sourceGT(">");
     const OUString sourceLTE("<=");
     const OUString sourceGTE(">=");
-    const OUString sourceEE("==");
     const OUString sourceNE("<>");
     const OUString sourceA(":=");
     const OUString sourceNot("Not");
@@ -215,7 +204,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(sourceEE);
+    symbols = getSymbols("==");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(sourceE, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -249,17 +238,11 @@ namespace
   void ScannerTest::testAlphanum()
   {
     const OUString source1("asdfghefg");
-    const OUString source2("1asfdasfd");
     const OUString source3("AdfsaAUdsl10987");
     const OUString source4("asdfa_mnvcnm");
     const OUString source5("_asdf1");
     const OUString source6("_6");
     const OUString source7("joxclk_");
-    const OUString source8("   asdf    ");
-    const OUString source9(" 19395  asdfa ");
-    const OUString source10("\n1\n2\na sdf");
-    const OUString source11("asdf.asdf");
-    const OUString source12("..");
 
     std::vector<Symbol> symbols;
 
@@ -270,7 +253,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("1asfdasfd");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT(symbols[0].text.isEmpty()); // Can't start symbol with a digit
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, symbols[0].number, 1E-12);
@@ -316,14 +299,14 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source8);
+    symbols = getSymbols("   asdf    ");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("asdf"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source9);
+    symbols = getSymbols(" 19395  asdfa ");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT(symbols[0].text.isEmpty());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(19395.0, symbols[0].number, 1E-12);
@@ -333,7 +316,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
 
-    symbols = getSymbols(source10);
+    symbols = getSymbols("\n1\n2\na sdf");
     CPPUNIT_ASSERT_EQUAL(size_t(8), symbols.size());
     CPPUNIT_ASSERT_EQUAL(cr, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -355,7 +338,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[7].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[7].type);
 
-    symbols = getSymbols(source11);
+    symbols = getSymbols("asdf.asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -366,7 +349,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[3].type);
 
-    symbols = getSymbols(source12);
+    symbols = getSymbols("..");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(dot, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -378,41 +361,33 @@ namespace
 
   void ScannerTest::testComments()
   {
-    const OUString source1("REM asdf");
-    const OUString source2("REMasdf");
-    const OUString source3("'asdf");
-    const OUString source4("asdf _\n'100");
-    const OUString source5("'asdf _\n100");
-    const OUString source6("'asdf _\n'100");
-    const OUString source7("'asdf _\n 1234 _\n asdf'");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("REM asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("REMasdf");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("REMasdf"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("'asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
     CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols("asdf _\n'100");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(rem, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols("'asdf _\n100");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -422,14 +397,14 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols("'asdf _\n'100");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(rem, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source7);
+    symbols = getSymbols("'asdf _\n 1234 _\n asdf'");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -444,20 +419,16 @@ namespace
 
   void ScannerTest::testGoto()
   {
-    const OUString source1("goto");
-    const OUString source2("go  to");
-    const OUString source3("go\nto");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("goto");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(goto_, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("go  to");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("go"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -466,7 +437,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("go\nto");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("go"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
@@ -480,23 +451,19 @@ namespace
 
   void ScannerTest::testGotoCompatible()
   {
-    const OUString source1("goto");
-    const OUString source2("go  to");
-    const OUString source3("go\nto");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1, true);
+    symbols = getSymbols("goto", true);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(goto_, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source2, true);
+    symbols = getSymbols("go  to", true);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(goto_, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source3, true);
+    symbols = getSymbols("go\nto", true);
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("go"), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
@@ -506,48 +473,41 @@ namespace
 
   void ScannerTest::testExclamation()
   {
-    const OUString source1("asdf!asdf");
-    const OUString source2("!1234");
-    const OUString source3("!_3");
-    const OUString source4("!$");
-    const OUString source5("!%");
-    const OUString source6("!\n");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("asdf!asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(excl, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("!1234");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT(symbols[1].text.isEmpty());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1234.0, symbols[1].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("!_3");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(OUString("_3"), symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols("!$");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(OUString("$"), symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols("!%");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(OUString("%"), symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols("!\n");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(excl, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
@@ -555,35 +515,17 @@ namespace
 
   void ScannerTest::testNumbers()
   {
-    const OUString source1("12345");
-    const OUString source2("1.2.3");
-    const OUString source3("123.4");
-    const OUString source4("0.5");
-    const OUString source5("5.0");
-    const OUString source6("0.0");
-    const OUString source7("-3");
-    const OUString source8("-0.0");
-    const OUString source9("12dE3");
-    const OUString source10("12e3");
-    const OUString source11("12D+3");
-    const OUString source12("12e++3");
-    const OUString source13("12e-3");
-    const OUString source14("12e-3+");
-    const OUString source15("1,2,3");
-    const OUString source16("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-    const OUString source17("10e308");
-
     std::vector<Symbol> symbols;
     sal_Int32 errors;
 
-    symbols = getSymbols(source1, errors);
+    symbols = getSymbols("12345", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12345.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source2, errors);
+    symbols = getSymbols("1.2.3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.2, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -592,35 +534,35 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source3, errors);
+    symbols = getSymbols("123.4", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(123.4, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source4, errors);
+    symbols = getSymbols("0.5", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.5, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source5, errors);
+    symbols = getSymbols("5.0", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source6, errors);
+    symbols = getSymbols("0.0", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source7, errors);
+    symbols = getSymbols("-3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("-"), symbols[0].text);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, symbols[1].number, 1E-12);
@@ -628,7 +570,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source8, errors);
+    symbols = getSymbols("-0.0", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString("-"), symbols[0].text);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[1].number, 1E-12);
@@ -636,7 +578,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source9, errors);
+    symbols = getSymbols("12dE3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -644,21 +586,21 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source10, errors);
+    symbols = getSymbols("12e3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12000.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source11, errors);
+    symbols = getSymbols("12D+3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12000.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source12, errors);
+    symbols = getSymbols("12e++3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(6), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(12.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -670,14 +612,14 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[5].text);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source13, errors);
+    symbols = getSymbols("12e-3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.012, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source14, errors);
+    symbols = getSymbols("12e-3+", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(.012, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -685,7 +627,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source15, errors);
+    symbols = getSymbols("1,2,3", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(6), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
@@ -698,7 +640,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(cr, symbols[5].text);
     CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
 
-    symbols = getSymbols(source16, errors);
+    symbols = getSymbols("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -709,7 +651,7 @@ namespace
 
     double fInf = 0.0;
     rtl::math::setInf( &fInf, false);
-    symbols = getSymbols(source17, errors);
+    symbols = getSymbols("10e308", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(fInf, symbols[0].number);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
@@ -769,47 +711,39 @@ namespace
 
   void ScannerTest::testDataType()
   {
-    const OUString source1("asdf%");
-    const OUString source2("asdf&");
-    const OUString source3("asdf!");
-    const OUString source4("asdf#");
-    const OUString source5("asdf@");
-    const OUString source6("asdf$");
-    const OUString source7("asdf ");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("asdf%");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("asdf&");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("asdf!");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxSINGLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols("asdf#");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols("asdf@");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxCURRENCY, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols("asdf$");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxSTRING, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source7);
+    symbols = getSymbols("asdf ");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
@@ -817,41 +751,31 @@ namespace
 
   void ScannerTest::testHexOctal()
   {
-    const OUString source1("&HA");
-    const OUString source2("&HASDF");
-    const OUString source3("&H10");
-    const OUString source4("&&H&1H1&H1");
-    const OUString source5("&O&O12");
-    const OUString source6("&O10");
-    const OUString source7("&HO");
-    const OUString source8("&O123000000000000000000000");
-    const OUString source9("&H1.23");
-
     sal_Int32 errors;
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("&HA");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("&HASDF");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2783.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("&H10");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source4);
+    symbols = getSymbols("&&H&1H1&H1");
     CPPUNIT_ASSERT_EQUAL(size_t(6), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString("&"), symbols[0].text);
@@ -870,7 +794,7 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[4].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[5].text);
 
-    symbols = getSymbols(source5);
+    symbols = getSymbols("&O&O12");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
@@ -880,27 +804,27 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[1].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source6);
+    symbols = getSymbols("&O10");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source7);
+    symbols = getSymbols("&HO");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source8);
+    symbols = getSymbols("&O123000000000000000000000");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     // TODO: this line fails on 64 bit systems!!!
     //    CPPUNIT_ASSERT_EQUAL(symbols[0].number, -1744830464);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    symbols = getSymbols(source9);
+    symbols = getSymbols("&H1.23");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, symbols[0].number, 1E-12);
@@ -1109,20 +1033,16 @@ namespace
 
   void ScannerTest::testTdf103104()
   {
-    const OUString source1("asdf _\n asdf");
-    const OUString source2("asdf. _\n asdf");
-    const OUString source3("asdf _\n .asdf");
-
     std::vector<Symbol> symbols;
 
-    symbols = getSymbols(source1);
+    symbols = getSymbols("asdf _\n asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[1].text);
     CPPUNIT_ASSERT(symbols[1].ws);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    symbols = getSymbols(source2);
+    symbols = getSymbols("asdf. _\n asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(dot, symbols[1].text);
@@ -1131,7 +1051,7 @@ namespace
     CPPUNIT_ASSERT(symbols[2].ws);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
 
-    symbols = getSymbols(source3);
+    symbols = getSymbols("asdf _\n .asdf");
     CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(dot, symbols[1].text);
