@@ -52,8 +52,12 @@ public:
     static int getView(SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current object shell.
     static std::size_t getViewsCount();
-    /// Get viewIds of all existing views.
+    /// Get viewIds of views of the current object shell.
     static bool getViewIds(int* pArray, size_t nSize);
+    /// Set the document id of the currently active view
+    static void setDocumentIdOfView(int nId);
+    /// Get the document id for a view
+    static int getDocumentIdOfView(int nViewId);
     /// Get the default language that should be used for views
     static LanguageTag getDefaultLanguage();
     /// Set language of the given view.
@@ -69,7 +73,7 @@ public:
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
-    /// Invoke the LOK callback of all views except pThisView, with a payload of rKey-rPayload.
+    /// Invoke the LOK callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
@@ -82,7 +86,7 @@ public:
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
-    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views - if @bInvalidateAll - first invalidates all parts
+    /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload);
@@ -117,7 +121,7 @@ void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType 
     while (pViewShell)
     {
         auto pOtherViewShell = dynamic_cast<ViewShellType*>(pViewShell);
-        if (pOtherViewShell != nullptr && pOtherViewShell != pThisViewShell)
+        if (pOtherViewShell != nullptr && pOtherViewShell != pThisViewShell && pOtherViewShell->GetDocId() == pThisViewShell->GetDocId())
         {
             f(pOtherViewShell);
         }
