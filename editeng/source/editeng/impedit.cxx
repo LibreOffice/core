@@ -39,6 +39,7 @@
 #include <sot/formats.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/string.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -1017,16 +1018,13 @@ void ImpEditView::CalcAnchorPoint()
 namespace
 {
 
-// Build JSON message to be sent to Online
-OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
+// For building JSON message to be sent to Online
+boost::property_tree::ptree getHyperlinkPropTree(const OUString& sText, const OUString& sLink)
 {
     boost::property_tree::ptree aTree;
     aTree.put("text", sText);
     aTree.put("link", sLink);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree, false);
-
-    return OString(aStream.str().c_str()).trim();
+    return aTree;
 }
 
 } // End of anon namespace
@@ -1264,6 +1262,27 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
         {
             Point aPos = GetCursor()->GetPos();
+            boost::property_tree::ptree aMessageParams;
+            if (mpLOKSpecialPositioning)
+            {
+                // Sending the absolute (pure) logical coordinates of the cursor to the client is not
+                // enough for it to accurately reconstruct the corresponding tile-twips coordinates of the cursor.
+                // This is because the editeng(doc) positioning is not pixel aligned for each cell involved in the output-area
+                // (it better not be!). A simple solution is to send the coordinates of a point ('refpoint') in the output-area
+                // along with the relative position of the cursor w.r.t this chosen 'refpoint'.
+
+                MapUnit eDevUnit = rOutDev.GetMapMode().GetMapUnit();
+                tools::Rectangle aCursorRectPureLogical(aEditCursor.TopLeft(), GetCursor()->GetSize());
+                // Get rectangle in window-coordinates from editeng(doc) coordinates.
+                aCursorRectPureLogical = mpLOKSpecialPositioning->GetWindowPos(aCursorRectPureLogical, eDevUnit);
+                // Lets use the editeng(doc) origin as the refpoint.
+                const Point aCursorOrigin = mpLOKSpecialPositioning->GetWindowPos(Point(0, 0), eDevUnit);
+                // Get the relative coordinates w.r.t aCursorOrigin.
+                aCursorRectPureLogical.Move(-aCursorOrigin.X(), -aCursorOrigin.Y());
+                aMessageParams.put("relrect", aCursorRectPureLogical.toString());
+                aMessageParams.put("refpoint", aCursorOrigin.toString());
+            }
+
             if (pOutWin && pOutWin->IsChart())
             {
                 const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
@@ -1291,11 +1310,17 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();
-            if (mpOtherShell)
+            aMessageParams.put("rectangle", sRect);
+
+            SfxViewShell* pThisShell = dynamic_cast<SfxViewShell*>(mpViewShell);
+            SfxViewShell* pOtherShell = dynamic_cast<SfxViewShell*>(mpOtherShell);
+            assert(pThisShell);
+
+            if (pOtherShell && pThisShell != pOtherShell)
             {
                 // Another shell wants to know about our existing cursor.
-                if (mpViewShell != mpOtherShell)
-                    mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                SfxLokHelper::notifyOtherView(pThisShell, pOtherShell,
+                        LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
             }
             else
             {
@@ -1303,12 +1328,12 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 Reference< linguistic2::XSpellChecker1 >  xSpeller( pEditEngine->pImpEditEngine->GetSpeller() );
                 bool bIsWrong = xSpeller.is() && IsWrongSpelledWord(aPaM, /*bMarkIfWrong*/ false);
 
-                OString sHyperlink;
+                boost::property_tree::ptree aHyperlinkTree;
                 if (const SvxFieldItem* pFld = GetField(aPos, nullptr, nullptr))
                 {
                     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
                     {
-                        sHyperlink = buildHyperlinkJSON(pUrlField->GetRepresentation(), pUrlField->GetURL());
+                        aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                     }
                 }
                 else if (GetEditSelection().HasRange())
@@ -1323,15 +1348,25 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                             const SvxFieldData* pField = pFieldItem->GetField();
                             if ( auto pUrlField = dynamic_cast<const SvxURLField*>( pField) )
                             {
-                                sHyperlink = buildHyperlinkJSON(pUrlField->GetRepresentation(), pUrlField->GetURL());
+                                aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                             }
                         }
                     }
                 }
 
-                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong, sHyperlink);
                 if (mbBroadcastLOKViewCursor)
-                    mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                    SfxLokHelper::notifyOtherViews(pThisShell,
+                            LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
+
+                aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
+                aMessageParams.add_child("hyperlink", aHyperlinkTree);
+
+                if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+                    SfxLokHelper::notifyOtherView(pThisShell, pThisShell,
+                            LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
+                else
+                    pThisShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+                            aMessageParams.get<std::string>("rectangle").c_str());
             }
         }
 
