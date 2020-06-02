@@ -55,7 +55,7 @@ public:
     /** Returns the text data of this portion. */
     const OUString& getText() const { return maText; }
     /** Returns true, if the portion contains font formatting. */
-    bool         hasFont() const { return mxFont.get() != nullptr; }
+    bool         hasFont() const { return bool(mxFont); }
 
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(

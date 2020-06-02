@@ -231,7 +231,7 @@ void SelectionManager::SelectionHasChanged ()
 
     OSL_ASSERT(mrController.GetCurrentSlideManager());
     SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         pViewShell->UpdatePreview(pDescriptor->GetPage());
 
     // Tell the selection change listeners that the selection has changed.

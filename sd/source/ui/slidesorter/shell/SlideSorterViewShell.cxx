@@ -182,7 +182,7 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
         pActiveWindow->Show();
     mpSlideSorter->GetModel().UpdatePageList();
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
         mpContentWindow->SetViewShell(this);
 }
 
@@ -239,7 +239,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     if (mpView == nullptr || mpSlideSorter == nullptr)
         return nullptr;
 
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
 
     ::accessibility::AccessibleSlideSorterView *pAccessibleView =
     new ::accessibility::AccessibleSlideSorterView(
@@ -267,7 +267,7 @@ void SlideSorterViewShell::SwitchViewFireFocus(const css::uno::Reference< css::a
 
 SlideSorter& SlideSorterViewShell::GetSlideSorter() const
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     return *mpSlideSorter;
 }
 
@@ -326,7 +326,7 @@ SdPage* SlideSorterViewShell::GetActualPage()
     {
         model::SharedPageDescriptor pDescriptor (
             mpSlideSorter->GetController().GetCurrentSlideManager()->GetCurrentSlide());
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
             pCurrentPage = pDescriptor->GetPage();
     }
 
@@ -336,32 +336,32 @@ SdPage* SlideSorterViewShell::GetActualPage()
 void SlideSorterViewShell::GetMenuState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetSlotManager()->GetMenuState(rSet);
 }
 
 void SlideSorterViewShell::GetClipboardState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetSlotManager()->GetClipboardState(rSet);
 }
 
 void SlideSorterViewShell::ExecCtrl (SfxRequest& rRequest)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().ExecCtrl(rRequest);
 }
 
 void SlideSorterViewShell::GetCtrlState (SfxItemSet& rSet)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetCtrlState(rSet);
 }
 
 void SlideSorterViewShell::FuSupport (SfxRequest& rRequest)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().FuSupport(rRequest);
 }
 
@@ -370,7 +370,7 @@ void SlideSorterViewShell::FuSupport (SfxRequest& rRequest)
 */
 void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     switch (rRequest.GetSlot())
     {
         case SID_MODIFYPAGE:
@@ -394,19 +394,19 @@ void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
 
 void SlideSorterViewShell::GetStatusBarState (SfxItemSet& rSet)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetStatusBarState(rSet);
 }
 
 void SlideSorterViewShell::FuPermanent (SfxRequest& rRequest)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().FuPermanent(rRequest);
 }
 
 void SlideSorterViewShell::GetAttrState (SfxItemSet& rSet)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetAttrState(rSet);
 }
 
@@ -428,7 +428,7 @@ void SlideSorterViewShell::ArrangeGUIElements()
 {
     if (IsActive())
     {
-        assert(mpSlideSorter.get()!=nullptr);
+        assert(mpSlideSorter);
         mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
         mbIsArrangeGUIElementsPending = false;
     }
@@ -482,14 +482,14 @@ void SlideSorterViewShell::Command (
     const CommandEvent& rEvent,
     ::sd::Window* pWindow)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     if ( ! mpSlideSorter->GetController().Command (rEvent, pWindow))
         ViewShell::Command (rEvent, pWindow);
 }
 
 void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     if (pFrameView != nullptr)
     {
         view::SlideSorterView& rView (mpSlideSorter->GetView());
@@ -525,7 +525,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
 
 void SlideSorterViewShell::WriteFrameViewData()
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     if (mpFrameView == nullptr)
         return;
 
@@ -563,7 +563,7 @@ void SlideSorterViewShell::SetZoom (long int )
 
 void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     Size aPageSize (mpSlideSorter->GetView().GetLayouter().GetPageObjectSize());
 
     ::tools::Rectangle aRect(rZoomRect);
@@ -611,7 +611,7 @@ void SlideSorterViewShell::StartDrag (
     const Point& rDragPt,
     vcl::Window* pWindow )
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetClipboard().StartDrag (
         rDragPt,
         pWindow);
@@ -624,7 +624,7 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
     sal_uInt16 nPage,
     SdrLayerID nLayer)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     return mpSlideSorter->GetController().GetClipboard().AcceptDrop (
         rEvt,
         rTargetHelper,
@@ -640,7 +640,7 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
     sal_uInt16 nPage,
     SdrLayerID nLayer)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     return mpSlideSorter->GetController().GetClipboard().ExecuteDrop (
         rEvt,
         rTargetHelper,
@@ -652,28 +652,28 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
 std::shared_ptr<SlideSorterViewShell::PageSelection>
     SlideSorterViewShell::GetPageSelection() const
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     return mpSlideSorter->GetController().GetPageSelector().GetPageSelection();
 }
 
 void SlideSorterViewShell::SetPageSelection (
     const std::shared_ptr<PageSelection>& rSelection)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetPageSelector().SetPageSelection(rSelection, true);
 }
 
 void SlideSorterViewShell::AddSelectionChangeListener (
     const Link<LinkParamNone*,void>& rCallback)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetSelectionManager()->AddSelectionChangeListener(rCallback);
 }
 
 void SlideSorterViewShell::RemoveSelectionChangeListener (
     const Link<LinkParamNone*,void>& rCallback)
 {
-    assert(mpSlideSorter.get()!=nullptr);
+    assert(mpSlideSorter);
     mpSlideSorter->GetController().GetSelectionManager()->RemoveSelectionChangeListener(rCallback);
 }
 

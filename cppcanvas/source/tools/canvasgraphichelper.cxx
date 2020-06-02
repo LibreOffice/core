@@ -37,8 +37,7 @@ namespace cppcanvas::internal
             maClipPolyPolygon(),
             mpCanvas( rParentCanvas )
         {
-            OSL_ENSURE( mpCanvas.get() != nullptr &&
-                        mpCanvas->getUNOCanvas().is(),
+            OSL_ENSURE( mpCanvas && mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );
 
             ::canvas::tools::initRenderState( maRenderState );

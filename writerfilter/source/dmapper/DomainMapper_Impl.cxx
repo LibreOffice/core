@@ -5957,7 +5957,7 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != nullptr)
+                        if (pFormControlHelper)
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
                             assert(xCrsr.is());

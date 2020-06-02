@@ -412,7 +412,7 @@ void SAL_CALL PresenterToolBar::disposing()
         OSL_ASSERT(rxPart != nullptr);
         for (rtl::Reference<Element>& pElement : *rxPart)
         {
-            if (pElement.get() != nullptr)
+            if (pElement)
             {
                 Reference<lang::XComponent> xComponent (
                     static_cast<XWeak*>(pElement.get()), UNO_QUERY);
@@ -657,7 +657,7 @@ void PresenterToolBar::ProcessEntry (
     {
         pElement->SetModes( pNormalMode, pMouseOverMode, pSelectedMode, pDisabledMode);
         pElement->UpdateState();
-        if (mpCurrentContainerPart.get() != nullptr)
+        if (mpCurrentContainerPart)
             mpCurrentContainerPart->push_back(pElement);
     }
 }
@@ -928,7 +928,7 @@ void PresenterToolBar::Paint (
     {
         for (auto& rxElement : *rxPart)
         {
-            if (rxElement.get() != nullptr)
+            if (rxElement)
             {
                 if ( ! rxElement->IsOutside(rUpdateBox))
                     rxElement->Paint(mxCanvas, rViewState);
@@ -945,7 +945,7 @@ void PresenterToolBar::UpdateSlideNumber()
         {
             for (auto& rxElement : *rxPart)
             {
-                if (rxElement.get() != nullptr)
+                if (rxElement)
                     rxElement->CurrentSlideHasChanged();
             }
         }
@@ -1136,7 +1136,7 @@ Element::Element (
       mbIsSelected(false),
       mbIsEnabled(true)
 {
-    if (mpToolBar.get() != nullptr)
+    if (mpToolBar)
     {
         OSL_ASSERT(mpToolBar->GetPresenterController().is());
         OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
@@ -1210,7 +1210,7 @@ bool Element::SetState (
 
     if (bClicked && mbIsEnabled)
     {
-        if (mpMode.get() != nullptr)
+        if (mpMode)
         {
             do
             {
@@ -1266,8 +1266,8 @@ bool Element::IsFilling() const
 
 void Element::UpdateState()
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
-    OSL_ASSERT(mpToolBar->GetPresenterController().get() != nullptr);
+    OSL_ASSERT(mpToolBar);
+    OSL_ASSERT(mpToolBar->GetPresenterController());
 
     if (mpMode.get() == nullptr)
         return;
@@ -1391,7 +1391,7 @@ Button::Button (
     : Element(rpToolBar),
       mbIsListenerRegistered(false)
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
+    OSL_ASSERT(mpToolBar);
     OSL_ASSERT(mpToolBar->GetPresenterController().is());
     OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
 }
@@ -1404,9 +1404,8 @@ void Button::Initialize()
 
 void Button::disposing()
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
-    if (mpToolBar.get() != nullptr
-        && mbIsListenerRegistered)
+    OSL_ASSERT(mpToolBar);
+    if (mpToolBar && mbIsListenerRegistered)
     {
         OSL_ASSERT(mpToolBar->GetPresenterController().is());
         OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
@@ -1447,7 +1446,7 @@ awt::Size Button::CreateBoundingSize (
     sal_Int32 nTextHeight (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
     sal_Int32 nTextWidth (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.X2 - aTextBBox.X1));
     Reference<rendering::XBitmap> xBitmap;
-    if (mpMode->mpIcon.get() != nullptr)
+    if (mpMode->mpIcon)
         xBitmap = mpMode->mpIcon->GetNormalBitmap();
     if (xBitmap.is())
     {
@@ -1544,7 +1543,7 @@ awt::Size Label::CreateBoundingSize (
 
 void Label::SetText (const OUString& rsText)
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
+    OSL_ASSERT(mpToolBar);
     if (mpMode.get() == nullptr)
         return;
 
@@ -1655,7 +1654,7 @@ void Text::Paint (
 
 geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanvas>& rxCanvas)
 {
-    if (mpFont.get() != nullptr && !msText.isEmpty())
+    if (mpFont && !msText.isEmpty())
     {
         if ( ! mpFont->mxFont.is())
             mpFont->PrepareFont(rxCanvas);
@@ -1853,10 +1852,10 @@ void VerticalSeparator::Paint (
         nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::OVER);
-    if (mpMode.get() != nullptr)
+    if (mpMode)
     {
         PresenterTheme::SharedFontDescriptor pFont (mpMode->maText.GetFont());
-        if (pFont.get() != nullptr)
+        if (pFont)
             PresenterCanvasHelper::SetDeviceColor(aRenderState, pFont->mnColor);
     }
 
@@ -1898,10 +1897,10 @@ void HorizontalSeparator::Paint (
         nullptr,
         Sequence<double>(4),
         rendering::CompositeOperation::OVER);
-    if (mpMode.get() != nullptr)
+    if (mpMode)
     {
         PresenterTheme::SharedFontDescriptor pFont (mpMode->maText.GetFont());
-        if (pFont.get() != nullptr)
+        if (pFont)
             PresenterCanvasHelper::SetDeviceColor(aRenderState, pFont->mnColor);
     }
 

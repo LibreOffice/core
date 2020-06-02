@@ -449,7 +449,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
         DoesStyleMatchStyleSheetPredicate predicate(this);
         rtl::Reference< SfxStyleSheetBase > ref =
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(nIdx, predicate);
-        if (ref.get() != nullptr)
+        if (ref)
         {
             nCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
             retval = ref.get();

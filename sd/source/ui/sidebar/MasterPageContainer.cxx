@@ -245,7 +245,7 @@ MasterPageContainer::Token MasterPageContainer::PutMasterPage (
 void MasterPageContainer::AcquireToken (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         ++pDescriptor->mnUseCount;
     }
@@ -361,7 +361,7 @@ OUString MasterPageContainer::GetURLForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->msURL;
     else
         return OUString();
@@ -373,7 +373,7 @@ OUString MasterPageContainer::GetPageNameForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->msPageName;
     else
         return OUString();
@@ -385,7 +385,7 @@ OUString MasterPageContainer::GetStyleNameForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->msStyleName;
     else
         return OUString();
@@ -399,7 +399,7 @@ SdPage* MasterPageContainer::GetPageObjectForToken (
 
     SdPage* pPageObject = nullptr;
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         pPageObject = pDescriptor->mpMasterPage;
         if (pPageObject == nullptr)
@@ -421,7 +421,7 @@ MasterPageContainer::Origin MasterPageContainer::GetOriginForToken (Token aToken
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->meOrigin;
     else
         return UNKNOWN;
@@ -432,7 +432,7 @@ sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->mnTemplateIndex;
     else
         return -1;
@@ -675,7 +675,7 @@ bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
         && o3tl::make_unsigned(aToken)<maContainer.size()
-        && maContainer[aToken].get()!=nullptr;
+        && maContainer[aToken];
 }
 
 SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (Token aToken) const
@@ -691,7 +691,7 @@ void MasterPageContainer::Implementation::InvalidatePreview (Token aToken)
     const ::osl::MutexGuard aGuard (maMutex);
 
     SharedMasterPageDescriptor pDescriptor (GetDescriptor(aToken));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         pDescriptor->maSmallPreview = Image();
         pDescriptor->maLargePreview = Image();
@@ -712,7 +712,7 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
     // When the preview is missing but inexpensively creatable then do that
     // now.
-    if (pDescriptor.get()!=nullptr)
+    if (pDescriptor)
     {
         if (ePreviewState == PS_CREATABLE)
             if (UpdateDescriptor(pDescriptor, false,false, true))
@@ -760,7 +760,7 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
     PreviewState eState (PS_NOT_AVAILABLE);
 
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         if (pDescriptor->maLargePreview.GetSizePixel().Width() != 0)
             eState = PS_AVAILABLE;
@@ -783,7 +783,7 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
 bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return mpRequestQueue->RequestPreview(pDescriptor);
     else
         return false;

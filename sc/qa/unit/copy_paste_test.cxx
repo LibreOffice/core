@@ -117,7 +117,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+    CPPUNIT_ASSERT(xDocSh);
 
     // Get the document controller
     pViewShell = xDocSh->GetBestViewShell(false);
@@ -185,7 +185,7 @@ void ScCopyPasteTest::testTdf84411()
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
     ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+    CPPUNIT_ASSERT(xDocSh);
 
     uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
     CPPUNIT_ASSERT( xModel2.is() );

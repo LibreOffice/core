@@ -59,7 +59,7 @@ void PresenterPaneContainer::PreparePane (
         return;
 
     SharedPaneDescriptor pPane (FindPaneURL(rxPaneId->getResourceURL()));
-    if (pPane.get() != nullptr)
+    if (pPane)
         return;
 
     // No entry found for the given pane id.  Create a new one.
@@ -110,7 +110,7 @@ PresenterPaneContainer::SharedPaneDescriptor
             PreparePane(xPaneId, OUString(), OUString(), OUString(),
                 false, ViewInitializationFunction());
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             Reference<awt::XWindow> xWindow (rxPane->getWindow());
             pDescriptor->mxContentWindow = xWindow;
@@ -138,7 +138,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         sPaneURL = rxPaneId->getResourceURL();
 
     SharedPaneDescriptor pDescriptor (FindPaneURL(sPaneURL));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         pDescriptor->mxBorderWindow = rxBorderWindow;
         return pDescriptor;
@@ -165,7 +165,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         }
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             pDescriptor->mxView = rxView;
             try
@@ -187,7 +187,7 @@ PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::RemovePane (const Reference<XResourceId>& rxPaneId)
 {
     SharedPaneDescriptor pDescriptor (FindPaneId(rxPaneId));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         if (pDescriptor->mxContentWindow.is())
             pDescriptor->mxContentWindow->removeEventListener(this);
@@ -217,7 +217,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         }
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             pDescriptor->mxView = nullptr;
         }
@@ -282,7 +282,7 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL
 OUString PresenterPaneContainer::GetPaneURLForViewURL (const OUString& rsViewURL)
 {
     SharedPaneDescriptor pDescriptor (FindViewURL(rsViewURL));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         if (pDescriptor->mxPaneId.is())
             return pDescriptor->mxPaneId->getResourceURL();
     return OUString();
@@ -315,7 +315,7 @@ void SAL_CALL PresenterPaneContainer::disposing (
 {
     SharedPaneDescriptor pDescriptor (
         FindContentWindow(Reference<awt::XWindow>(rEvent.Source, UNO_QUERY)));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         RemovePane(pDescriptor->mxPaneId);
     }

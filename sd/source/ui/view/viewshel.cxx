@@ -111,7 +111,7 @@ namespace sd {
 
 bool ViewShell::IsPageFlipMode() const
 {
-    return dynamic_cast< const DrawViewShell *>( this ) !=  nullptr && mpContentWindow.get() != nullptr &&
+    return dynamic_cast< const DrawViewShell *>( this ) !=  nullptr && mpContentWindow &&
         mpContentWindow->GetVisibleHeight() >= 1.0;
 }
 
@@ -149,7 +149,7 @@ ViewShell::~ViewShell()
 
     mpLayerTabBar.disposeAndClear();
 
-    if (mpImpl->mpSubShellFactory.get() != nullptr)
+    if (mpImpl->mpSubShellFactory)
         GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
             this,mpImpl->mpSubShellFactory);
 
@@ -299,9 +299,9 @@ void ViewShell::Activate(bool bIsMDIActivate)
        is sent sometimes asynchronous,  it can happen, that the wrong window
        gets the focus. */
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetActive();
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->SetActive();
 
     if (bIsMDIActivate)
@@ -376,9 +376,9 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
             GetCurrentFunction()->Deactivate();
     }
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetActive(false);
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->SetActive(false);
 
     SfxShell::Deactivate(bIsMDIActivate);
@@ -762,7 +762,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
 void ViewShell::SetupRulers()
 {
-    if(!(mbHasRulers && (mpContentWindow.get() != nullptr) && !SlideShow::IsRunning(GetViewShellBase())))
+    if(!(mbHasRulers && mpContentWindow && !SlideShow::IsRunning(GetViewShellBase())))
         return;
 
     long nHRulerOfs = 0;
@@ -770,7 +770,7 @@ void ViewShell::SetupRulers()
     if ( mpVerticalRuler.get() == nullptr )
     {
         mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
-        if ( mpVerticalRuler.get() != nullptr )
+        if ( mpVerticalRuler )
         {
             nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
             mpVerticalRuler->SetActive();
@@ -780,7 +780,7 @@ void ViewShell::SetupRulers()
     if ( mpHorizontalRuler.get() == nullptr )
     {
         mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow()));
-        if ( mpHorizontalRuler.get() != nullptr )
+        if ( mpHorizontalRuler )
         {
             mpHorizontalRuler->SetWinPos(nHRulerOfs);
             mpHorizontalRuler->SetActive();
@@ -899,26 +899,26 @@ SvBorder ViewShell::GetBorder()
     SvBorder aBorder;
 
     // Horizontal scrollbar.
-    if (mpHorizontalScrollBar.get()!=nullptr
+    if (mpHorizontalScrollBar
         && mpHorizontalScrollBar->IsVisible())
     {
         aBorder.Bottom() = maScrBarWH.Height();
     }
 
     // Vertical scrollbar.
-    if (mpVerticalScrollBar.get()!=nullptr
+    if (mpVerticalScrollBar
         && mpVerticalScrollBar->IsVisible())
     {
         aBorder.Right() = maScrBarWH.Width();
     }
 
     // Place horizontal ruler below tab bar.
-    if (mbHasRulers && mpContentWindow.get() != nullptr)
+    if (mbHasRulers && mpContentWindow)
     {
         SetupRulers();
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
             aBorder.Top() = mpHorizontalRuler->GetSizePixel().Height();
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
             aBorder.Left() = mpVerticalRuler->GetSizePixel().Width();
     }
 
@@ -940,11 +940,11 @@ void ViewShell::ArrangeGUIElements()
     long nBottom = maViewPos.Y() + maViewSize.Height();
 
     // Horizontal scrollbar.
-    if (mpHorizontalScrollBar.get()!=nullptr
+    if (mpHorizontalScrollBar
         && mpHorizontalScrollBar->IsVisible())
     {
         nBottom -= maScrBarWH.Height();
-        if (mpLayerTabBar.get()!=nullptr && mpLayerTabBar->IsVisible())
+        if (mpLayerTabBar && mpLayerTabBar->IsVisible())
             nBottom -= mpLayerTabBar->GetSizePixel().Height();
         mpHorizontalScrollBar->SetPosSizePixel (
             Point(nLeft, nBottom),
@@ -952,7 +952,7 @@ void ViewShell::ArrangeGUIElements()
     }
 
     // Vertical scrollbar.
-    if (mpVerticalScrollBar.get()!=nullptr
+    if (mpVerticalScrollBar
         && mpVerticalScrollBar->IsVisible())
     {
         nRight -= maScrBarWH.Width();
@@ -962,11 +962,11 @@ void ViewShell::ArrangeGUIElements()
     }
 
     // Filler in the lower right corner.
-    if (mpScrollBarBox.get() != nullptr)
+    if (mpScrollBarBox)
     {
-        if (mpHorizontalScrollBar.get()!=nullptr
+        if (mpHorizontalScrollBar
             && mpHorizontalScrollBar->IsVisible()
-            && mpVerticalScrollBar.get()!=nullptr
+            && mpVerticalScrollBar
             && mpVerticalScrollBar->IsVisible())
         {
             mpScrollBarBox->Show();
@@ -977,20 +977,20 @@ void ViewShell::ArrangeGUIElements()
     }
 
     // Place horizontal ruler below tab bar.
-    if (mbHasRulers && mpContentWindow.get() != nullptr)
+    if (mbHasRulers && mpContentWindow)
     {
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
         {
             Size aRulerSize = mpHorizontalRuler->GetSizePixel();
             aRulerSize.setWidth( nRight - nLeft );
             mpHorizontalRuler->SetPosSizePixel (
                 Point(nLeft,nTop), aRulerSize);
-            if (mpVerticalRuler.get() != nullptr)
+            if (mpVerticalRuler)
                 mpHorizontalRuler->SetBorderPos(
                     mpVerticalRuler->GetSizePixel().Width()-1);
             nTop += aRulerSize.Height();
         }
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
         {
             Size aRulerSize = mpVerticalRuler->GetSizePixel();
             aRulerSize.setHeight( nBottom  - nTop );
@@ -1021,7 +1021,7 @@ void ViewShell::ArrangeGUIElements()
         Size(maViewSize.Width()-maScrBarWH.Width(),
             maViewSize.Height()-maScrBarWH.Height()));
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
         mpContentWindow->UpdateMapOrigin();
 
     UpdateScrollBars();
@@ -1032,10 +1032,10 @@ void ViewShell::ArrangeGUIElements()
 void ViewShell::SetUIUnit(FieldUnit eUnit)
 {
     // Set unit at horizontal and vertical rulers.
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetUnit(eUnit);
 
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->SetUnit(eUnit);
 }
 
@@ -1044,7 +1044,7 @@ void ViewShell::SetUIUnit(FieldUnit eUnit)
  */
 void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 {
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->SetDefTabDist( nDefTab );
 }
 
@@ -1499,23 +1499,23 @@ void ViewShell::ShowUIControls (bool bVisible)
 {
     if (mbHasRulers)
     {
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
             mpHorizontalRuler->Show( bVisible );
 
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
             mpVerticalRuler->Show( bVisible );
     }
 
-    if (mpVerticalScrollBar.get() != nullptr)
+    if (mpVerticalScrollBar)
         mpVerticalScrollBar->Show( bVisible );
 
-    if (mpHorizontalScrollBar.get() != nullptr)
+    if (mpHorizontalScrollBar)
         mpHorizontalScrollBar->Show( bVisible );
 
-    if (mpScrollBarBox.get() != nullptr)
+    if (mpScrollBarBox)
         mpScrollBarBox->Show(bVisible);
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
         mpContentWindow->Show( bVisible );
 }
 
@@ -1525,14 +1525,14 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 
     mpParentWindow->SetBackground (Wallpaper());
 
-    if (mpContentWindow.get() != nullptr)
+    if (mpContentWindow)
         mpContentWindow->SetParent(pParentWindow);
 
-    if (mpHorizontalScrollBar.get() != nullptr)
+    if (mpHorizontalScrollBar)
         mpHorizontalScrollBar->SetParent(mpParentWindow);
-    if (mpVerticalScrollBar.get() != nullptr)
+    if (mpVerticalScrollBar)
         mpVerticalScrollBar->SetParent(mpParentWindow);
-    if (mpScrollBarBox.get() != nullptr)
+    if (mpScrollBarBox)
         mpScrollBarBox->SetParent(mpParentWindow);
 
     return true;

@@ -428,7 +428,7 @@ namespace pcr
             _out_rpLine = line->pLine;
         else
             _out_rpLine.reset();
-        return ( nullptr != _out_rpLine.get() );
+        return bool(_out_rpLine);
     }
 
     void OBrowserListBox::EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )

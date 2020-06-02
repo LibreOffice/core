@@ -111,7 +111,7 @@ namespace slideshow::internal
                 << " with delay " << rEvent->getActivationTime(0.0)
                 );
 
-            ENSURE_OR_RETURN_FALSE( rEvent.get() != nullptr,
+            ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.emplace_back( rEvent, rEvent->getActivationTime(
                                 mpTimer->getElapsedTime()) );
@@ -128,9 +128,7 @@ namespace slideshow::internal
                 << " with delay " << rpEvent->getActivationTime(0.0)
                 );
 
-            ENSURE_OR_RETURN_FALSE(
-                rpEvent.get() != nullptr,
-                    "EventQueue::addEvent: event ptr NULL");
+            ENSURE_OR_RETURN_FALSE( rpEvent, "EventQueue::addEvent: event ptr NULL");
 
             maNextNextEvents.push(
                 EventEntry(

@@ -6591,7 +6591,7 @@ void Test::testExternalRef()
     // have been cached.
     ScExternalRefCache::TableTypeRef pCacheTab = pRefMgr->getCacheTable(
         nFileId, aExtSh1Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab.get() != nullptr);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab);
     ScRange aCachedRange = getCachedRange(pCacheTab);
     CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
@@ -6603,7 +6603,7 @@ void Test::testExternalRef()
 
     // Sheet3's row 5 is not referenced; it should not be cached.
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
-    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab.get() != nullptr);
+    CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab);
     aCachedRange = getCachedRange(pCacheTab);
     CPPUNIT_ASSERT_MESSAGE("Unexpected cached data range.",
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&

@@ -999,7 +999,7 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
     mbOnTOXEnding = false;
     m_rWW8Export.pO->clear();
 
-    if ( pTextNodeInfoInner.get() != nullptr )
+    if ( pTextNodeInfoInner )
     {
         if ( pTextNodeInfoInner->isEndOfLine() )
         {

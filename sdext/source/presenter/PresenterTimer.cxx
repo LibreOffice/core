@@ -249,7 +249,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // from being scheduled again and b) tries to prevent its execution.
     {
         ::osl::MutexGuard aGuard (maCurrentTaskMutex);
-        if (mpCurrentTask.get() != nullptr
+        if (mpCurrentTask
             && mpCurrentTask->mnTaskId == nTaskId)
             mpCurrentTask->mbIsCanceled = true;
     }

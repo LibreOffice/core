@@ -110,7 +110,7 @@ const OUString & OOXMLParserState::getTarget() const
 
 void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 {
-    if (mpCharacterProps.get() != nullptr)
+    if (mpCharacterProps)
     {
         rStream.props(mpCharacterProps.get());
         mpCharacterProps = new OOXMLPropertySet;
@@ -157,7 +157,7 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
-        if (rCellProps.get() != nullptr)
+        if (rCellProps)
         {
             rStream.props(rCellProps.get());
             rCellProps = new OOXMLPropertySet;
@@ -171,7 +171,7 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
-        if (rRowProps.get() != nullptr)
+        if (rRowProps)
         {
             rStream.props(rRowProps.get());
             rRowProps = new OOXMLPropertySet;
@@ -185,7 +185,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
 
-        if (rTableProps.get() != nullptr)
+        if (rTableProps)
         {
             rStream.props(rTableProps.get());
             // Don't clean the table props to send them again for each row

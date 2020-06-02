@@ -83,7 +83,7 @@ void LifecycleTest::testVirtualDevice()
 void LifecycleTest::testMultiDispose()
 {
     VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != nullptr);
+    CPPUNIT_ASSERT(xWin);
     xWin->disposeOnce();
     xWin->disposeOnce();
     xWin->disposeOnce();
@@ -141,7 +141,7 @@ void LifecycleTest::testIsolatedWidgets()
 void LifecycleTest::testParentedWidgets()
 {
     ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != nullptr);
+    CPPUNIT_ASSERT(xWin);
     xWin->Show();
     testWidgets(xWin);
 }
@@ -163,7 +163,7 @@ public:
 void LifecycleTest::testChildDispose()
 {
     VclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    CPPUNIT_ASSERT(xWin.get() != nullptr);
+    CPPUNIT_ASSERT(xWin);
     VclPtrInstance< DisposableChild > xChild( xWin.get() );
     xWin->Show();
     xChild->disposeOnce();

@@ -232,7 +232,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-        CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+        CPPUNIT_ASSERT(xDocSh);
 
         // put some content into the first row with default font
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -291,7 +291,7 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-        CPPUNIT_ASSERT(xDocSh.get() != nullptr);
+        CPPUNIT_ASSERT(xDocSh);
 
         // put some content into the table
         ScDocument& rDoc = xDocSh->GetDocument();

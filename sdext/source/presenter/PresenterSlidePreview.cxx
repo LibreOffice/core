@@ -80,7 +80,7 @@ PresenterSlidePreview::PresenterSlidePreview (
         mxWindow->setVisible(true);
     }
 
-    if (mpPresenterController.get() != nullptr)
+    if (mpPresenterController)
         mnSlideAspectRatio = mpPresenterController->GetSlideAspectRatio();
 
     Reference<lang::XMultiComponentFactory> xFactory = rxContext->getServiceManager();

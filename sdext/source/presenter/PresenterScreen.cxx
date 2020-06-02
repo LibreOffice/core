@@ -560,7 +560,7 @@ void PresenterScreen::ShutdownPresenterScreen()
         xPaneFactoryComponent->dispose();
     mxPaneFactory = nullptr;
 
-    if (mpPresenterController.get() != nullptr)
+    if (mpPresenterController)
     {
         mpPresenterController->dispose();
         mpPresenterController.clear();
@@ -784,7 +784,7 @@ void PresenterScreen::SetupView(
         aViewDescriptor = iDescriptor->second;
 
     // Prepare the pane.
-    OSL_ASSERT(mpPaneContainer.get() != nullptr);
+    OSL_ASSERT(mpPaneContainer);
     mpPaneContainer->PreparePane(
         xPaneId,
         rsViewURL,

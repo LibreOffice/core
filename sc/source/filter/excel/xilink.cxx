@@ -545,7 +545,7 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
 
 bool XclImpExtName::HasFormulaTokens() const
 {
-    return (mxArray.get() != nullptr);
+    return bool(mxArray);
 }
 
 // Cached external cells ======================================================

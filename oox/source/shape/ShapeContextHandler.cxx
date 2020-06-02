@@ -501,7 +501,7 @@ ShapeContextHandler::getShape()
                 mxWpgContext.clear();
             }
         }
-        else if (mpShape.get() != nullptr)
+        else if (mpShape)
         {
             basegfx::B2DHomMatrix aTransformation;
             mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );

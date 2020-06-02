@@ -208,19 +208,19 @@ SlideSorter::~SlideSorter()
 
 model::SlideSorterModel& SlideSorter::GetModel() const
 {
-    assert(mpSlideSorterModel.get()!=nullptr);
+    assert(mpSlideSorterModel);
     return *mpSlideSorterModel;
 }
 
 view::SlideSorterView& SlideSorter::GetView() const
 {
-    assert(mpSlideSorterView.get()!=nullptr);
+    assert(mpSlideSorterView);
     return *mpSlideSorterView;
 }
 
 controller::SlideSorterController& SlideSorter::GetController() const
 {
-    assert(mpSlideSorterController.get()!=nullptr);
+    assert(mpSlideSorterController);
     return *mpSlideSorterController;
 }
 
@@ -364,7 +364,7 @@ void SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
     // view shell.  (One is created earlier while the constructor of the base
     // class is executed.  But because at that time the correct
     // accessibility object can not be constructed we do that now.)
-    if (mpContentWindow.get() !=nullptr)
+    if (mpContentWindow)
     {
         mpContentWindow->Hide();
         mpContentWindow->Show();

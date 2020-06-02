@@ -151,7 +151,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
                 mpPresenterController->GetPaneContainer());
             PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
                 pPaneContainer->FindPaneURL(sPaneURL));
-            if (pDescriptor.get() != nullptr)
+            if (pDescriptor)
             {
                 pDescriptor->SetActivationState(true);
                 if (pDescriptor->mxBorderWindow.is())
@@ -277,7 +277,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         pContainer->StoreBorderWindow(rxPaneId, xPane->GetBorderWindow()));
     pContainer->StorePane(xPane);
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         pDescriptor->mbIsSprite = bIsSpritePane;
 

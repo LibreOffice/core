@@ -445,7 +445,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
     for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
     {
         pDescriptor = mrModel.GetPageDescriptor(nIndex);
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
             SetState(
                 pDescriptor,
                 PageDescriptor::ST_Visible,
@@ -484,7 +484,7 @@ void SlideSorterView::UpdatePreciousFlags()
     for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
     {
         pDescriptor = mrModel.GetPageDescriptor(nIndex);
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
         {
             pCache->SetPreciousFlag(
                 pDescriptor->GetPage(),

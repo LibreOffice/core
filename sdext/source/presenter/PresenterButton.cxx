@@ -266,7 +266,7 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent&)
 
     if (meState == PresenterBitmapDescriptor::ButtonDown)
     {
-        OSL_ASSERT(mpPresenterController.get()!=nullptr);
+        OSL_ASSERT(mpPresenterController);
         mpPresenterController->DispatchUnoCommand(msAction);
 
         meState = PresenterBitmapDescriptor::Normal;
@@ -299,7 +299,7 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
 
 css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize()
 {
-    if (mpFont.get()!=nullptr && !mpFont->mxFont.is() && mxCanvas.is())
+    if (mpFont && !mpFont->mxFont.is() && mxCanvas.is())
         mpFont->PrepareFont(mxCanvas);
     if (mpFont.get()==nullptr || !mpFont->mxFont.is())
         return geometry::IntegerSize2D(-1,-1);
@@ -364,11 +364,11 @@ Reference<rendering::XBitmap> PresenterButton::GetBitmap (
     const SharedBitmapDescriptor& mpIcon,
     const PresenterBitmapDescriptor::Mode eMode)
 {
-    if (mpIcon.get() != nullptr)
+    if (mpIcon)
         return mpIcon->GetBitmap(eMode);
     else
     {
-        OSL_ASSERT(mpIcon.get()!=nullptr);
+        OSL_ASSERT(mpIcon);
         return nullptr;
     }
 }
@@ -404,7 +404,7 @@ void PresenterButton::SetupButtonBitmaps()
 
     mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
     xCanvas.set(mxMouseOverBitmap, UNO_QUERY);
-    if (mpMouseOverFont.get()!=nullptr && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
+    if (mpMouseOverFont && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
         mpMouseOverFont->PrepareFont(mxCanvas);
     if (xCanvas.is())
         RenderButton(

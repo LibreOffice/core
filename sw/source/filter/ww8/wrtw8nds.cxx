@@ -1840,7 +1840,7 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
 
     m_rWW8Export.WriteCR( pTextNodeInfoInner );
 
-    if ( pTextNodeInfo.get() != nullptr )
+    if ( pTextNodeInfo )
     {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.ww8", pTextNodeInfo->toString());
@@ -2294,7 +2294,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         sal_Int32 nOpenAttrWithRange = 0;
 
         ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
-        if ( pTextNodeInfo.get() != nullptr )
+        if ( pTextNodeInfo )
         {
             pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
         }
@@ -2729,7 +2729,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         if ( m_pParentFrame && IsInTable() )    // Fly-Attrs
             OutputFormat( m_pParentFrame->GetFrameFormat(), false, false, true );
 
-        if ( pTextNodeInfo.get() != nullptr )
+        if ( pTextNodeInfo )
         {
 #ifdef DBG_UTIL
             SAL_INFO( "sw.ww8", pTextNodeInfo->toString());

@@ -1357,7 +1357,7 @@ public:
     /// If set, joining cells into shared formula groups will be delayed until reset again
     /// (RegroupFormulaCells() will be called as needed).
     void            DelayFormulaGrouping( bool delay );
-    bool            IsDelayedFormulaGrouping() const { return pDelayedFormulaGrouping.get() != nullptr; }
+    bool            IsDelayedFormulaGrouping() const { return bool(pDelayedFormulaGrouping); }
     /// To be used only by SharedFormulaUtil::joinFormulaCells().
     void            AddDelayedFormulaGroupingCell( const ScFormulaCell* cell );
 

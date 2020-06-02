@@ -1386,7 +1386,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             //there seems to be no way to detect the original size via _real_ API
             uno::Reference< beans::XPropertySet > xGraphicProperties(rxGraphic, uno::UNO_QUERY_THROW);
 
-            if (m_pImpl->mpWrapPolygon.get() != nullptr)
+            if (m_pImpl->mpWrapPolygon)
             {
                 uno::Any aContourPolyPolygon;
                 awt::Size aGraphicSize;

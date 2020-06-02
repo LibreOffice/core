@@ -1635,7 +1635,7 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
     switch (nType)
     {
         case AccessibleStateType::EDITABLE:
-            return mpParagraph.get()!=nullptr;
+            return bool(mpParagraph);
 
         case AccessibleStateType::ACTIVE:
             return true;

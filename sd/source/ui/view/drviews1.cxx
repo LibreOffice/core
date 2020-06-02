@@ -575,7 +575,7 @@ void DrawViewShell::UpdateHRuler()
     Invalidate( SID_RULER_OBJECT );
     Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-    if (mpHorizontalRuler.get() != nullptr)
+    if (mpHorizontalRuler)
         mpHorizontalRuler->ForceUpdate();
 }
 
@@ -589,7 +589,7 @@ void DrawViewShell::UpdateVRuler()
     Invalidate( SID_RULER_PAGE_POS );
     Invalidate( SID_RULER_OBJECT );
 
-    if (mpVerticalRuler.get() != nullptr)
+    if (mpVerticalRuler)
         mpVerticalRuler->ForceUpdate();
 }
 
