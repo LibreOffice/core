@@ -59,6 +59,14 @@ public:
     FontWeight              GetWeight() const { return GetValue(); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+    virtual bool IsSortable() const override { return true; }
+
+    virtual bool operator<(const SfxPoolItem& rCmp) const override
+    {
+        auto const & other = static_cast<const SvxWeightItem&>(rCmp);
+        return GetValue() < other.GetValue();
+    }
 };
 
 #endif // INCLUDED_EDITENG_WGHTITEM_HXX
