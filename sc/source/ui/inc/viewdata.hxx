@@ -595,7 +595,7 @@ public:
     SCROW           GetEditEndRow() const           { return nEditEndRow; }
 
     tools::Rectangle       GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY, vcl::Window* pWin,
-                                    const ScPatternAttr* pPattern, bool bForceToTop );
+                                    const ScPatternAttr* pPattern, bool bForceToTop, bool bInPrintTwips = false );
 
     void            SetTabNo( SCTAB nNewTab );
     void            SetActivePart( ScSplitPos eNewActive );

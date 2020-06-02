@@ -1421,10 +1421,12 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
 
 tools::Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
                                           vcl::Window* pWin, const ScPatternAttr* pPattern,
-                                          bool bForceToTop )
+                                          bool bForceToTop, bool bInPrintTwips )
 {
-    return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, GetScrPos(nPosX,nPosY,eWhich,true),
-                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY() ).
+    Point aCellTopLeft = bInPrintTwips ?
+            GetPrintTwipsPos(nPosX, nPosY) : GetScrPos(nPosX, nPosY, eWhich, true);
+    return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, aCellTopLeft,
+                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY(), bInPrintTwips ).
                             GetEditArea( pPattern, bForceToTop );
 }
 
