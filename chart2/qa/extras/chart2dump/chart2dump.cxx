@@ -1099,9 +1099,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
 {
-    const OUString aTestFile = "pivotchart_data_button.ods";
-
-    setTestFileName( aTestFile );
+    setTestFileName( "pivotchart_data_button.ods" );
     load( getTestFileDirName(), getTestFileName() );
 
     // Check that we have pivot chart in the document
