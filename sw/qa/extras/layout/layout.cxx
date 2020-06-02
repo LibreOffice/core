@@ -36,6 +36,7 @@ public:
     void testTdf117188();
     void testTdf119875();
     void testTdf116989();
+    void testAbi11870();
     void testStableAtPageAnchoredFlyPosition();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf116989);
+    CPPUNIT_TEST(testAbi11870);
     CPPUNIT_TEST(testStableAtPageAnchoredFlyPosition);
     CPPUNIT_TEST_SUITE_END();
 
@@ -308,6 +310,12 @@ void SwLayoutWriter::testTdf116989()
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);
     }
+}
+
+void SwLayoutWriter::testAbi11870()
+{
+    //just care it doesn't assert
+    createDoc("abi11870-2.odt");
 }
 
 static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
