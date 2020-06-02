@@ -1326,7 +1326,13 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                     // tdf#38394 use opening quotation mark << in French l'<<word>>
                     if ( !bSingle && !bSttQuote && cPrev == cApostrophe &&
                         primary(eLang) == primary(LANGUAGE_FRENCH) &&
-                        (nInsPos == 2 || (nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ))) )
+                        ( ( ( nInsPos == 2 || ( nInsPos > 2 && IsWordDelim( rTxt[ nInsPos-3 ] ) ) ) &&
+                               // abbreviated form of ce, de, je, la, le, ne, me, te, se or si
+                               OUString("cdjlnmtsCDJLNMTS").indexOf( rTxt[ nInsPos-2 ] ) > -1 ) ||
+                          ( ( nInsPos == 3 || (nInsPos > 3 && IsWordDelim( rTxt[ nInsPos-4 ] ) ) ) &&
+                               // abbreviated form of que
+                               ( rTxt[ nInsPos-2 ] == 'u' || rTxt[ nInsPos-2 ] == 'U' ) &&
+                               ( rTxt[ nInsPos-3 ] == 'q' || rTxt[ nInsPos-3 ] == 'Q' ) ) ) )
                     {
                         bSttQuote = true;
                     }
