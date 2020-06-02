@@ -319,6 +319,22 @@ public:
     void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Trigger selection drawing callback in pOtherShell based on our shell's selection state.
     void DrawSelectionXOR(OutlinerViewShell* pOtherShell);
+
+    /**
+     * This is meant for Calc(LOK), but there may be other use-cases.
+     * In Calc, all logical positions are computed by
+     * doing independent pixel-alignment for each cell's size. The *LOKSpecial* methods
+     * can be used to set/get the output-area and visible-area in real logical
+     * units. This enables EditView to send cursor/selection messages in
+     * real logical units like it is done for Writer.
+     */
+    void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
+                                   const Point& rVisDocStartPos);
+    void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
+    tools::Rectangle GetLOKSpecialOutputArea() const;
+    void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
+    tools::Rectangle GetLOKSpecialVisArea() const;
+    bool HasLOKSpecialPositioning() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX
