@@ -1862,6 +1862,11 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DROP_DOWN:
     {
+        // tdf#133555 don't export in strict ODF versions that don't have it
+        if (GetExport().getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+        {
+            break;
+        }
         ProcessString(XML_NAME, GetStringProperty(gsPropertyName, rPropSet));
         ProcessString(XML_HELP,
                       GetStringProperty(gsPropertyHelp, rPropSet), true);
