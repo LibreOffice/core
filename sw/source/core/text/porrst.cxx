@@ -630,13 +630,4 @@ sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTextSizeInfo& rInf ) cons
     return mnViewWidth;
 }
 
-SwLinePortion * SwBookmarkPortion::Unchain()
-{
-    assert(!m_pPrevious || m_pPrevious->GetNextPortion() == this);
-    m_pPrevious->SetNextPortion(nullptr);
-    auto const pTmp(m_pPrevious);
-    m_pPrevious = nullptr;
-    return pTmp;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

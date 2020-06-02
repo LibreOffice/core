@@ -2039,7 +2039,13 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         if (rInf.GetLast()->GetWhichPor() == PortionType::Bookmark)
         {
             auto const pBookmark(static_cast<SwBookmarkPortion*>(rInf.GetLast()));
-            rInf.SetLast(pBookmark->Unchain());
+            auto *const pPrevious = pBookmark->FindPrevPortion(rInf.GetRoot());
+            assert(!pPrevious || pPrevious->GetNextPortion() == pBookmark);
+            if (pPrevious)
+            {
+                pPrevious->SetNextPortion(nullptr);
+            }
+            rInf.SetLast(pPrevious);
             assert(m_pCurr->GetNextPortion() == nullptr);
             m_pCurr->SetNextPortion(pBookmark);
         }
