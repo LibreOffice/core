@@ -1120,28 +1120,35 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
             pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
 
-            // Now we need to get relative cursor position within the editview.
-            // This is for sending the absolute twips position of the cursor to the specific views with
-            // the same given zoom level.
-            tools::Rectangle aCursorRect = pEditView->GetEditCursor();
-            Point aCursPos = OutputDevice::LogicToLogic(aCursorRect.TopLeft(), MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            // EditView will do the cursor notifications correctly if we're in
+            // print-twips messaging mode.
+            if (!comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+            {
+                // Now we need to get relative cursor position within the editview.
+                // This is for sending the pixel-aligned twips position of the cursor to the specific views with
+                // the same given zoom level.
+                tools::Rectangle aCursorRect = pEditView->GetEditCursor();
+                Point aCursPos = OutputDevice::LogicToLogic(aCursorRect.TopLeft(),
+                        MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+
+                const MapMode& rDevMM = rDevice.GetMapMode();
+                MapMode aMM(MapUnit::MapTwip);
+                aMM.SetScaleX(rDevMM.GetScaleX());
+                aMM.SetScaleY(rDevMM.GetScaleY());
+
+                aBGAbs.AdjustLeft(1);
+                aBGAbs.AdjustTop(1);
+                aCursorRect = OutputDevice::PixelToLogic(aBGAbs, aMM);
+                aCursorRect.setWidth(0);
+                aCursorRect.Move(aCursPos.getX(), 0);
+                // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
+                InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+            }
 
             // Rollback the mapmode and 'output area'.
             SetMapMode(aOrigMapMode);
             pEditView->SetOutputArea(aOrigOutputArea);
-
-            const MapMode& rDevMM = rDevice.GetMapMode();
-            MapMode aMM(MapUnit::MapTwip);
-            aMM.SetScaleX(rDevMM.GetScaleX());
-            aMM.SetScaleY(rDevMM.GetScaleY());
-
-            aBGAbs.AdjustLeft(1);
-            aBGAbs.AdjustTop(1);
-            aCursorRect = OutputDevice::PixelToLogic(aBGAbs, aMM);
-            aCursorRect.setWidth(0);
-            aCursorRect.Move(aCursPos.getX(), 0);
-            // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-            InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
         }
         else
         {
