@@ -1209,7 +1209,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
                 assert(bookmark & SwScriptInfo::MarkKind::Point);
                 mark = '|';
             }
-            pPor = new SwBookmarkPortion(rInf.GetLast(), mark);
+            pPor = new SwBookmarkPortion(mark);
         }
     }
 
