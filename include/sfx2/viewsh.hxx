@@ -339,6 +339,8 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;
+    void SetDocId(ViewShellDocId nId) override;
+    ViewShellDocId GetDocId() const override;
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().

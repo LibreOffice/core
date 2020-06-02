@@ -177,7 +177,7 @@ bool LokChartHelper::HitAny(const Point& aPos)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->getPart() == nPartForCurView)
+        if (pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
             LokChartHelper aChartHelper(pViewShell);
             if (aChartHelper.Hit(aPos))
@@ -260,7 +260,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->getPart() == nPartForCurView)
+        if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
             LokChartHelper aChartHelper(pViewShell);
             aChartHelper.PaintTile(rDevice, aTileRect);
