@@ -1507,7 +1507,7 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
         pStylePool->FindCaseIns( rStyle, SfxStyleFamily::Para );
     if (!pStyleSheet)
         pStyleSheet = static_cast<ScStyleSheet*>(
-            pStylePool->Find( ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para ));
+            pStylePool->Find( ScResId(STR_STYLENAME_STANDARD_CELL), SfxStyleFamily::Para ));
     if (pStyleSheet)
     {
         OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
