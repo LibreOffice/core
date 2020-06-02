@@ -307,7 +307,7 @@ void StdTabController::activateTabOrder(  )
         return;
 
     // This may return a TabController, which returns desired list of controls faster
-    // (the dreaded UNO aggregration, retrieve the thing that we are part of)
+    // (the dreaded UNO aggregation, retrieve the thing that we are part of)
     Reference<XTabController> xTabController( static_cast<XTabController*>(this), UNO_QUERY );
 
     // Get a flattened list of controls sequences
