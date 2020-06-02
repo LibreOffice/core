@@ -246,8 +246,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
-        const OUString aVBAHook("VBAGlobals");
-        pVBAGlobals = static_cast<SbUnoObject*>(Find( aVBAHook , SbxClassType::DontCare ));
+        pVBAGlobals = static_cast<SbUnoObject*>(Find( "VBAGlobals" , SbxClassType::DontCare ));
     }
     return pVBAGlobals.get();
 }

@@ -63,12 +63,10 @@ void EnableTest::testDimEnable()
 
 void EnableTest::testWin64()
 {
-    OUString aSource1 = "   #If Win64\n"
+    MacroSnippet myMacro("   #If Win64\n"
         "Declare PtrSafe Function aht_apiGetOpenFileName Lib \"comdlg32.dll\""
         "\n"
-        "#End if\n";
-
-    MacroSnippet myMacro(aSource1);
+        "#End if\n");
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("#if Win64 Declare PtrSafe causes compile error", !myMacro.HasError() );
 }

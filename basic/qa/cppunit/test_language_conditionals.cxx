@@ -35,38 +35,36 @@ public:
 void Language_Conditionals::testIfNot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 1\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "op1 = False\n"
-                                "If Not op1 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 1\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "op1 = False\n"
+                             "If Not op1 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 0\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "op1 = False\n"
-                                "If Not op1 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 0\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "op1 = False\n"
+                             "If Not op1 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
@@ -77,42 +75,40 @@ void Language_Conditionals::testIfNot()
 void Language_Conditionals::testIfAndNot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 1\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "Dim op2 As Boolean\n"
-                                "op1 = True\n"
-                                "op2 = False\n"
-                                "If op1 And Not op2 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 1\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "Dim op2 As Boolean\n"
+                             "op1 = True\n"
+                             "op2 = False\n"
+                             "If op1 And Not op2 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 0\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "Dim op2 As Boolean\n"
-                                "op1 = True\n"
-                                "op2 = False\n"
-                                "If op1 And Not op2 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 0\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "Dim op2 As Boolean\n"
+                             "op1 = True\n"
+                             "op2 = False\n"
+                             "If op1 And Not op2 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
@@ -123,42 +119,40 @@ void Language_Conditionals::testIfAndNot()
 void Language_Conditionals::testNENot()
 {
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 1\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "Dim op2 As Boolean\n"
-                                "op1 = False\n"
-                                "op2 = False\n"
-                                "If op1 <> Not op2 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 1\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "Dim op2 As Boolean\n"
+                             "op1 = False\n"
+                             "op2 = False\n"
+                             "If op1 <> Not op2 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), pNew->GetInteger());
     }
     { // need a block to ensure MacroSnippet is cleaned properly
-        const OUString aSnippet("Option VBASupport 0\n"
-                                "Option Explicit\n"
-                                "\n"
-                                "Function doUnitTest() As Integer\n"
-                                "Dim op1 As Boolean\n"
-                                "Dim op2 As Boolean\n"
-                                "op1 = False\n"
-                                "op2 = False\n"
-                                "If op1 <> Not op2 Then\n"
-                                "doUnitTest = 1\n"
-                                "Else\n"
-                                "doUnitTest = 0\n"
-                                "End If\n"
-                                "End Function\n");
-        MacroSnippet myMacro(aSnippet);
+        MacroSnippet myMacro("Option VBASupport 0\n"
+                             "Option Explicit\n"
+                             "\n"
+                             "Function doUnitTest() As Integer\n"
+                             "Dim op1 As Boolean\n"
+                             "Dim op2 As Boolean\n"
+                             "op1 = False\n"
+                             "op2 = False\n"
+                             "If op1 <> Not op2 Then\n"
+                             "doUnitTest = 1\n"
+                             "Else\n"
+                             "doUnitTest = 0\n"
+                             "End If\n"
+                             "End Function\n");
         myMacro.Compile();
         CPPUNIT_ASSERT(!myMacro.HasError());
         SbxVariableRef pNew = myMacro.Run();
