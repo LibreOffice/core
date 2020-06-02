@@ -1570,4 +1570,36 @@ void EditView::DrawSelectionXOR(OutlinerViewShell* pOtherShell)
     pImpEditView->RegisterOtherShell(nullptr);
 }
 
+void EditView::InitLOKSpecialPositioning(MapUnit eUnit,
+                                         const tools::Rectangle& rOutputArea,
+                                         const Point& rVisDocStartPos)
+{
+    pImpEditView->InitLOKSpecialPositioning(eUnit, rOutputArea, rVisDocStartPos);
+}
+
+void EditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
+{
+    pImpEditView->SetLOKSpecialOutputArea(rOutputArea);
+}
+
+tools::Rectangle EditView::GetLOKSpecialOutputArea() const
+{
+    return pImpEditView->GetLOKSpecialOutputArea();
+}
+
+void EditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
+{
+    pImpEditView->SetLOKSpecialVisArea(rVisArea);
+}
+
+tools::Rectangle EditView::GetLOKSpecialVisArea() const
+{
+    return pImpEditView->GetLOKSpecialVisArea();
+}
+
+bool EditView::HasLOKSpecialPositioning() const
+{
+    return pImpEditView->HasLOKSpecialPositioning();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
