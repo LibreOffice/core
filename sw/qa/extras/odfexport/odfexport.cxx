@@ -468,6 +468,13 @@ DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf130950, "tdf130950.odt")
+{
+    //Crashes at import time
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
