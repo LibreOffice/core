@@ -179,7 +179,7 @@ void ScUndoMakeOutline::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
-    ScTabViewShell::notifyAllViewsHeaderInvalidation( bColumns, nTab );
+    ScTabViewShell::notifyAllViewsHeaderInvalidation( pViewShell, bColumns ? COLUMN_HEADER : ROW_HEADER, nTab );
 
     EndUndo();
 }
@@ -449,7 +449,7 @@ void ScUndoRemoveAllOutlines::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, nTab);
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, BOTH_HEADERS, nTab);
 
     EndUndo();
 }
@@ -733,13 +733,13 @@ OUString ScUndoQuery::GetComment() const
 
 void ScUndoQuery::Undo()
 {
-    if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, aQueryParam.nRow1, aQueryParam.nRow2))
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (ScTabViewShell::isAnyEditViewInRange(pViewShell, /*bColumns*/ false, aQueryParam.nRow1, aQueryParam.nRow2))
         return;
 
     BeginUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     bool bCopy = !aQueryParam.bInplace;
     SCCOL nDestEndCol = 0;
@@ -814,7 +814,7 @@ void ScUndoQuery::Undo()
 
     // invalidate cache positions and update cursor and selection
     pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, nTab);
 
     //  Paint
 
