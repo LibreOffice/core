@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d2b91ef_d6de2085",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-02T07:27:43Z",
+      "side": 0,
+      "message": "I would generally advise against unrelated cosmetic clean-up like this removal of an empty line.",
+      "revId": "80c9fae6aa8638e192e5b622d12305b304890b43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

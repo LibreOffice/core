@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b978e772_70560094",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-02T07:27:43Z",
+      "side": 1,
+      "message": "Here and elsewhere: what is the rationale for making these static?  Static data with non-trivial con-/destructors comes at a cost (e.g., vals now needs to be destroyed atexit), and it is not clear that the costs would outweigh any benefits here.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 10
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59435b3e_6335c4b8",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-02T07:27:43Z",
+      "side": 1,
+      "message": "Are these explicit OUString constructors necessary?",
+      "range": {
+        "startLine": 120,
+        "startChar": 7,
+        "endLine": 120,
+        "endChar": 16
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca7abbe_4a2299d8",
+        "filename": "sd/source/ui/accessibility/AccessibleDrawDocumentView.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-02T07:27:43Z",
+      "side": 1,
+      "message": "The first half of the original pair of comments no longer makes much sense on its own.",
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "566d31e5_e833c8e7",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-02T07:27:43Z",
+      "side": 1,
+      "message": "The trailing ellipsis no longer makes much sense with the follow-up comment gone.",
+      "range": {
+        "startLine": 880,
+        "startChar": 31,
+        "endLine": 880,
+        "endChar": 34
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
