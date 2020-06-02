@@ -170,6 +170,8 @@ SwSaveSetLRUOfst::SwSaveSetLRUOfst()
          pView != nullptr;
          pView = SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>))
     {
+        // Apparently we are not interested here what document pView is for, but only in the
+        // total number of shells in the process?
         ++nVisibleShells;
     }
 

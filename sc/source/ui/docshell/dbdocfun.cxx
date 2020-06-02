@@ -628,7 +628,8 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    if (ScTabViewShell::isAnyEditViewInRange(/*bColumns*/ false, rQueryParam.nRow1, rQueryParam.nRow2))
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if (pViewSh && ScTabViewShell::isAnyEditViewInRange(pViewSh, /*bColumns*/ false, rQueryParam.nRow1, rQueryParam.nRow2))
     {
         return false;
     }
@@ -941,7 +942,6 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                         pOld, bDoSize, pAdvSource ) );
     }
 
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
     {
         // could there be horizontal autofilter ?

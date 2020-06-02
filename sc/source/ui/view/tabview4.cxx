@@ -391,7 +391,7 @@ static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, 
 
 void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 {
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(eHeaderType, GetViewData().GetTabNo());
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().GetTabNo());
 
     long        nDiff;
     bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
