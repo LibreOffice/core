@@ -2499,9 +2499,11 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
 
 void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 {
-    // do not export in ODF 1.2 or older
-    if (getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
+    // do not export in standard ODF 1.3 or older
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+    {
         return;
+    }
 
     Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );
     if( xAnnotationAccess.is() ) try
