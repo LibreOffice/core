@@ -21,6 +21,7 @@
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/ivctrl.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/field.hxx>
@@ -1506,6 +1507,57 @@ std::unique_ptr<UIObject> RoadmapWizardUIObject::create(vcl::Window* pWindow)
     vcl::RoadmapWizard* pRoadmapWizard = dynamic_cast<vcl::RoadmapWizard*>(pWindow);
     assert(pRoadmapWizard);
     return std::unique_ptr<UIObject>(new RoadmapWizardUIObject(pRoadmapWizard));
+}
+
+VerticalTabControlUIObject::VerticalTabControlUIObject(const VclPtr<VerticalTabControl>& xTabControl):
+    WindowUIObject(xTabControl),
+    mxTabControl(xTabControl)
+{
+}
+
+VerticalTabControlUIObject::~VerticalTabControlUIObject()
+{
+}
+
+void VerticalTabControlUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            sal_uInt32 nPos = itr->second.toUInt32();
+            OString xid = mxTabControl->GetPageId(nPos);
+            mxTabControl->SetCurPageId(xid);
+        }
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap VerticalTabControlUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["PageCount"] = OUString::number(mxTabControl->GetPageCount());
+
+    OString nPageId = mxTabControl->GetCurPageId();
+    aMap["CurrPageTitel"] = mxTabControl->GetPageText(nPageId);
+    aMap["CurrPagePos"] = OUString::number(mxTabControl->GetPagePos(nPageId));
+
+    return aMap;
+}
+
+OUString VerticalTabControlUIObject::get_name() const
+{
+    return "VerticalTabControlUIObject";
+}
+
+std::unique_ptr<UIObject> VerticalTabControlUIObject::create(vcl::Window* pWindow)
+{
+    VerticalTabControl* pTabControl = dynamic_cast<VerticalTabControl*>(pWindow);
+    assert(pTabControl);
+    return std::unique_ptr<UIObject>(new VerticalTabControlUIObject(pTabControl));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
