@@ -378,8 +378,7 @@ void TestString::testReverseString()
 
 void TestString::testSplit()
 {
-    OUString aIn("CTRL+ALT+F1");
-    std::vector<OUString> aRet = ::comphelper::string::split(aIn, '+');
+    std::vector<OUString> aRet = ::comphelper::string::split("CTRL+ALT+F1", '+');
     CPPUNIT_ASSERT_EQUAL(size_t(3), aRet.size());
     CPPUNIT_ASSERT_EQUAL(OUString("CTRL"), aRet[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("ALT"), aRet[1]);

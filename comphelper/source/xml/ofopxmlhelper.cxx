@@ -91,8 +91,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
-    OUString aStringID = "[Content_Types].xml";
-    return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, rContext );
+    return ReadSequence_Impl( xInStream, "[Content_Types].xml", CONTENTTYPE_FORMAT, rContext );
 }
 
 OUString GetContentTypeByName(
