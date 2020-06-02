@@ -120,13 +120,9 @@ void TestHash::testSHA512_NoSaltNoSpin()
 // tdf#104250 https://bugs.documentfoundation.org/attachment.cgi?id=129104
 void TestHash::testSHA512_saltspin()
 {
-    const OUString aPass("pwd");
-    const OUString aAlgo("SHA-512");
-    const OUString aSalt("876MLoKTq42+/DLp415iZQ==");
-    const OUString aHash = comphelper::DocPasswordHelper::GetOoxHashAsBase64( aPass, aSalt, 100000,
-            comphelper::Hash::IterCount::APPEND, aAlgo);
-    const OUString aStr("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g==");
-    CPPUNIT_ASSERT_EQUAL(aStr, aHash);
+    const OUString aHash = comphelper::DocPasswordHelper::GetOoxHashAsBase64( "pwd", "876MLoKTq42+/DLp415iZQ==", 100000,
+            comphelper::Hash::IterCount::APPEND, "SHA-512");
+    CPPUNIT_ASSERT_EQUAL(OUString("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g=="), aHash);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHash);

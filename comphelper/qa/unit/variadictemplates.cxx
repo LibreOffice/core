@@ -90,8 +90,6 @@ void VariadicTemplatesTest::testUnwrapArgs() {
     OUString tmp1   = "Test1";
     sal_Int32 tmp2  = 42;
     sal_uInt32 tmp3 = 42;
-    OUString tmp4   = "Test2";
-    OUString tmp5   = "Test3";
     ::com::sun::star::uno::Any tmp6(
         ::com::sun::star::uno::makeAny( tmp1 )
         );
@@ -102,10 +100,10 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         ::com::sun::star::uno::makeAny( tmp3 )
         );
     ::com::sun::star::uno::Any tmp9(
-        ::com::sun::star::uno::makeAny( tmp4 )
+        ::com::sun::star::uno::makeAny( OUString("Test2") )
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp10(
-        ::com::sun::star::uno::makeAny( tmp5 )
+        ::com::sun::star::uno::makeAny( OUString("Test3") )
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp11(
         ::com::sun::star::uno::makeAny( tmp1 )

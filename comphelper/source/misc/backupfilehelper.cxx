@@ -666,11 +666,10 @@ namespace
             // first appearance to check
             {
                 const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "bundle" + aRegPathBack);
-                const OUString aTagToSearch("extension");
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
-                    aTagToSearch,
+                    "extension",
                     rToBeEnabled,
                     rToBeDisabled);
             }
@@ -678,11 +677,10 @@ namespace
             // second appearance to check
             {
                 const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "configuration" + aRegPathBack);
-                const OUString aTagToSearch("configuration");
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
-                    aTagToSearch,
+                    "configuration",
                     rToBeEnabled,
                     rToBeDisabled);
             }
@@ -690,11 +688,10 @@ namespace
             // third appearance to check
             {
                 const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "script" + aRegPathBack);
-                const OUString aTagToSearch("script");
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
-                    aTagToSearch,
+                    "script",
                     rToBeEnabled,
                     rToBeDisabled);
             }
