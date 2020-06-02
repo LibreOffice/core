@@ -76,6 +76,7 @@ class ul_Compiler:
             "# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-\n\n"
             + "from uitest.framework import UITestCase\n"
             + "from libreoffice.uno.propertyvalue import mkPropertyValues\n"
+            + "from uitest.uihelper.common import get_state_as_dict\n"
             + "import importlib\n\n"
             + "class TestClass(UITestCase):\n"
             + tab
@@ -806,14 +807,7 @@ class ul_Compiler:
         # this put a prefix of char 'x' to avoid variable with name equal to number only
         element_name="x"+str(math_element_selector.element_no)
 
-        line = (
-            double_tab
-            + str(element_name)
-            + ' = element_selector.getChild("'
-            + str(math_element_selector.element_no)
-            + '")\n'
-        )
-        self.variables.append(line)
+        self.init_Object(element_name,str(math_element_selector.element_no),"element_selector")
 
         self.write_line_without_parameters(
             str(element_name), "SELECT", "tuple"
