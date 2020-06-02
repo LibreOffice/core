@@ -209,6 +209,45 @@ public:
     EditView*   GetView()       { return pView; }
 };
 
+class ImpEditView;
+/// This is meant just for Calc, where all positions in logical units (twips for LOK) are computed by
+/// doing independent pixel-alignment for each cell's size. LOKSpecialPositioning stores
+/// both 'output-area' and 'visible-doc-position' in pure logical unit (twips for LOK).
+/// This allows the cursor/selection messages to be in regular(print) twips unit like in Writer.
+class LOKSpecialPositioning
+{
+public:
+    LOKSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit, const tools::Rectangle& rOutputArea,
+                          const Point& rVisDocStartPos);
+
+    void ReInit(MapUnit eUnit, const tools::Rectangle& rOutputArea, const Point& rVisDocStartPos);
+
+    void SetOutputArea(const tools::Rectangle& rOutputArea);
+    const tools::Rectangle& GetOutputArea() const;
+    void SetVisDocStartPos(const Point& rVisDocStartPos);
+
+    bool IsVertical() const;
+    bool IsTopToBottom() const;
+
+    long GetVisDocLeft() const { return maVisDocStartPos.X(); }
+    long GetVisDocTop() const  { return maVisDocStartPos.Y(); }
+    long GetVisDocRight() const  { return maVisDocStartPos.X() + (!IsVertical() ? maOutArea.GetWidth() : maOutArea.GetHeight()); }
+    long GetVisDocBottom() const { return maVisDocStartPos.Y() + (!IsVertical() ? maOutArea.GetHeight() : maOutArea.GetWidth()); }
+    tools::Rectangle GetVisDocArea() const;
+
+    Point            GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const;
+    tools::Rectangle GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const;
+
+private:
+    Point convertUnit(const Point& rPos, MapUnit ePosUnit) const;
+    tools::Rectangle convertUnit(const tools::Rectangle& rRect, MapUnit eRectUnit) const;
+
+    const ImpEditView& mrImpEditView;
+    tools::Rectangle maOutArea;
+    Point maVisDocStartPos;
+    MapUnit meUnit;
+};
+
 
 
 class ImpEditView : public vcl::unohelper::DragAndDropClient
@@ -262,6 +301,7 @@ private:
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
     const EditViewCallbacks* mpEditViewCallbacks;
+    std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
     bool mbBroadcastLOKViewCursor;
 
     const EditViewCallbacks* getEditViewCallbacks() const
@@ -414,6 +454,14 @@ public:
     //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
     sal_uInt16      GetInvalidateMore() const { return static_cast<sal_uInt16>(nInvMore); }
+
+    void InitLOKSpecialPositioning(MapUnit eUnit, const tools::Rectangle& rOutputArea,
+                                   const Point& rVisDocStartPos);
+    void SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea);
+    tools::Rectangle GetLOKSpecialOutputArea() const;
+    void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
+    tools::Rectangle GetLOKSpecialVisArea() const;
+    bool HasLOKSpecialPositioning() const;
 };
 
 

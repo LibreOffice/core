@@ -60,6 +60,113 @@ static void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDev, shor
     rPoint = pOutDev->PixelToLogic( rPoint );
 }
 
+LOKSpecialPositioning::LOKSpecialPositioning(const ImpEditView& rImpEditView, MapUnit eUnit,
+                                             const tools::Rectangle& rOutputArea,
+                                             const Point& rVisDocStartPos) :
+                                             mrImpEditView(rImpEditView),
+                                             maOutArea(rOutputArea),
+                                             maVisDocStartPos(rVisDocStartPos),
+                                             meUnit(eUnit)
+{
+}
+
+void LOKSpecialPositioning::ReInit(MapUnit eUnit, const tools::Rectangle& rOutputArea, const Point& rVisDocStartPos)
+{
+    meUnit = eUnit;
+    maOutArea = rOutputArea;
+    maVisDocStartPos = rVisDocStartPos;
+}
+
+void LOKSpecialPositioning::SetOutputArea(const tools::Rectangle& rOutputArea)
+{
+    maOutArea = rOutputArea;
+}
+
+const tools::Rectangle& LOKSpecialPositioning::GetOutputArea() const
+{
+    return maOutArea;
+}
+
+void LOKSpecialPositioning::SetVisDocStartPos(const Point& rVisDocStartPos)
+{
+    maVisDocStartPos = rVisDocStartPos;
+}
+
+tools::Rectangle LOKSpecialPositioning::GetVisDocArea() const
+{
+    return tools::Rectangle(GetVisDocLeft(), GetVisDocTop(), GetVisDocRight(), GetVisDocBottom());
+}
+
+bool LOKSpecialPositioning::IsVertical() const
+{
+    return mrImpEditView.IsVertical();
+}
+
+bool LOKSpecialPositioning::IsTopToBottom() const
+{
+    return mrImpEditView.IsTopToBottom();
+}
+
+Point LOKSpecialPositioning::GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const
+{
+    const Point aDocPos = convertUnit(rDocPos, eDocPosUnit);
+    Point aPoint;
+    if ( !IsVertical() )
+    {
+        aPoint.setX(aDocPos.X() + maOutArea.Left() - GetVisDocLeft());
+        aPoint.setY(aDocPos.Y() + maOutArea.Top() - GetVisDocTop());
+    }
+    else
+    {
+        if (IsTopToBottom())
+        {
+            aPoint.setX(maOutArea.Right() - aDocPos.Y() + GetVisDocTop());
+            aPoint.setY(aDocPos.X() + maOutArea.Top() - GetVisDocLeft());
+        }
+        else
+        {
+            aPoint.setX(maOutArea.Left() + aDocPos.Y() - GetVisDocTop());
+            aPoint.setY(maOutArea.Bottom() - aDocPos.X() + GetVisDocLeft());
+        }
+    }
+
+    return aPoint;
+}
+
+tools::Rectangle LOKSpecialPositioning::GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const
+{
+    const tools::Rectangle aDocRect = convertUnit(rDocRect, eDocRectUnit);
+    Point aPos(GetWindowPos(aDocRect.TopLeft(), meUnit));
+    Size aSz = aDocRect.GetSize();
+    tools::Rectangle aRect;
+    if (!IsVertical())
+    {
+        aRect = tools::Rectangle(aPos, aSz);
+    }
+    else
+    {
+        Point aNewPos(aPos.X() - aSz.Height(), aPos.Y());
+        aRect = tools::Rectangle(aNewPos, Size(aSz.Height(), aSz.Width()));
+    }
+    return aRect;
+}
+
+Point LOKSpecialPositioning::convertUnit(const Point& rPos, MapUnit ePosUnit) const
+{
+    if (ePosUnit == meUnit)
+        return rPos;
+
+    return OutputDevice::LogicToLogic(rPos, MapMode(ePosUnit), MapMode(meUnit));
+}
+
+tools::Rectangle LOKSpecialPositioning::convertUnit(const tools::Rectangle& rRect, MapUnit eRectUnit) const
+{
+    if (eRectUnit == meUnit)
+        return rRect;
+
+    return OutputDevice::LogicToLogic(rRect, MapMode(eRectUnit), MapMode(meUnit));
+}
+
 
 //  class ImpEditView
 
@@ -2471,6 +2578,45 @@ void ImpEditView::RemoveDragAndDropListeners()
     }
 
     bActiveDragAndDropListener = false;
+}
+
+void ImpEditView::InitLOKSpecialPositioning(MapUnit eUnit,
+                                           const tools::Rectangle& rOutputArea,
+                                           const Point& rVisDocStartPos)
+{
+    if (!mpLOKSpecialPositioning)
+        mpLOKSpecialPositioning.reset(new LOKSpecialPositioning(*this, eUnit, rOutputArea, rVisDocStartPos));
+    else
+        mpLOKSpecialPositioning->ReInit(eUnit, rOutputArea, rVisDocStartPos);
+}
+
+void ImpEditView::SetLOKSpecialOutputArea(const tools::Rectangle& rOutputArea)
+{
+    assert(mpLOKSpecialPositioning);
+    mpLOKSpecialPositioning->SetOutputArea(rOutputArea);
+}
+
+tools::Rectangle ImpEditView::GetLOKSpecialOutputArea() const
+{
+    assert(mpLOKSpecialPositioning);
+    return mpLOKSpecialPositioning->GetOutputArea();
+}
+
+void ImpEditView::SetLOKSpecialVisArea(const tools::Rectangle& rVisArea)
+{
+    assert(mpLOKSpecialPositioning);
+    mpLOKSpecialPositioning->SetVisDocStartPos(rVisArea.TopLeft());
+}
+
+tools::Rectangle ImpEditView::GetLOKSpecialVisArea() const
+{
+    assert(mpLOKSpecialPositioning);
+    return mpLOKSpecialPositioning->GetVisDocArea();
+}
+
+bool ImpEditView::HasLOKSpecialPositioning() const
+{
+    return bool(mpLOKSpecialPositioning);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
