@@ -32,6 +32,7 @@ class SvTreeListBox;
 class SvTreeListEntry;
 class SpinButton;
 class SpinField;
+class VerticalTabControl;
 class VclMultiLineEdit;
 
 typedef std::map<const OUString, OUString> StringMap;
@@ -404,6 +405,28 @@ public:
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
     virtual OUString get_action(VclEventId nEvent) const override;
+
+private:
+
+    virtual OUString get_name() const override;
+};
+
+class VerticalTabControlUIObject final : public WindowUIObject
+{
+private:
+    VclPtr<VerticalTabControl> mxTabControl;
+
+public:
+
+    VerticalTabControlUIObject(const VclPtr<VerticalTabControl>& mxTabControl);
+    virtual ~VerticalTabControlUIObject() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 private:
 
