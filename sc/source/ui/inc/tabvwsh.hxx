@@ -388,9 +388,8 @@ public:
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
-    static void notifyAllViewsHeaderInvalidation(HeaderType eHeaderType, SCTAB nCurrentTabIndex);
-    static void notifyAllViewsHeaderInvalidation(bool Columns, SCTAB nCurrentTabIndex);
-    static bool isAnyEditViewInRange(bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
+    static void notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex);
+    static bool isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     static  css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 

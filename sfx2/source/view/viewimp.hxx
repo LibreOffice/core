@@ -54,6 +54,7 @@ struct SfxViewShell_Impl
     bool m_bTiledSearching;
     static sal_uInt32 m_nLastViewShellId;
     const ViewShellId m_nViewShellId;
+    ViewShellDocId m_nDocId;
 
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags);
     ~SfxViewShell_Impl();
