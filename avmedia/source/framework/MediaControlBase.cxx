@@ -121,8 +121,7 @@ void MediaControlBase::InitializeWidgets()
     mxZoomListBox->set_help_id( HID_AVMEDIA_ZOOMLISTBOX );
     mxZoomListBox->set_tooltip_text(AvmResId( AVMEDIA_STR_ZOOM_TOOLTIP ));
 
-    const OUString aTimeText( " 00:00:00/00:00:00 " );
-    mxTimeEdit->set_text( aTimeText );
+    mxTimeEdit->set_text( " 00:00:00/00:00:00 " );
     mxTimeEdit->set_help_id( HID_AVMEDIA_TIMEEDIT );
     mxTimeEdit->set_sensitive(false);
 
