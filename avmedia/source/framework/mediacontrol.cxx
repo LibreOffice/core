@@ -69,8 +69,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maChangeTimeIdle.SetPriority( TaskPriority::LOWEST );
     maChangeTimeIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeEndHdl ) );
 
-    const OUString aTimeText( " 00:00:00/00:00:00 " );
-    mxTimeEdit->set_text(aTimeText);
+    mxTimeEdit->set_text(" 00:00:00/00:00:00 ");
     Size aTextSize = mxTimeEdit->get_preferred_size();
     mxTimeEdit->set_size_request(aTextSize.Width(), aTextSize.Height());
     mxTimeEdit->set_text(OUString());
