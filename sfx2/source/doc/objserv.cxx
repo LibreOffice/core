@@ -1568,6 +1568,10 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
                 else
                 {
                     // Not ZIP-based, e.g. PDF.
+
+                    // Create temp file if needed.
+                    GetMedium()->CreateTempFile(/*bReplace=*/false);
+
                     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetMedium()->GetName(), StreamMode::READ));
                     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
                     uno::Reference<io::XInputStream> xInputStream(xStream, uno::UNO_QUERY);
