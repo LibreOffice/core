@@ -1925,7 +1925,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
                 bChartRowAsHdr = false;
             else if ( pEntry->nWID == SC_WID_UNO_CELLSTYL )
             {
-                OUString aStyleName( ScResId( STR_STYLENAME_STANDARD ) );
+                OUString aStyleName( ScResId( STR_STYLENAME_STANDARD_CELL ) );
                 pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aStyleName, true );
             }
         }
@@ -1977,7 +1977,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                         break;
                     case SC_WID_UNO_CELLSTYL:
                         aAny <<= ScStyleNameConversion::DisplayToProgrammaticName(
-                                    ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para );
+                                    ScResId(STR_STYLENAME_STANDARD_CELL), SfxStyleFamily::Para );
                         break;
                     case SC_WID_UNO_TBLBORD:
                     case SC_WID_UNO_TBLBORD2:
