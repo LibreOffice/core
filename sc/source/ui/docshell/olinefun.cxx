@@ -317,6 +317,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
                                     bool bRecord, bool bPaint )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
 
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
@@ -364,7 +365,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         sal_uInt16 nThisLevel = aIter.LastLevel();
         bool bShow = (nThisLevel < nLevel);
 
-        if (!bShow && ScTabViewShell::isAnyEditViewInRange(bColumns, nThisStart, nThisEnd))
+        if (!bShow && pViewSh && ScTabViewShell::isAnyEditViewInRange(pViewSh, bColumns, nThisStart, nThisEnd))
             continue;
 
         if (bShow)                                          // enable
@@ -412,7 +413,6 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.SetDrawPageSize(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
         pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
 
@@ -735,8 +735,8 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     SCCOLROW nStart = pEntry->GetStart();
     SCCOLROW nEnd   = pEntry->GetEnd();
 
-
-    if (ScTabViewShell::isAnyEditViewInRange(bColumns, nStart, nEnd))
+    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
+    if (pViewSh && ScTabViewShell::isAnyEditViewInRange(pViewSh, bColumns, nStart, nEnd))
         return false;
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
@@ -777,7 +777,6 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     rDoc.InvalidatePageBreaks(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
     if ( pViewSh )
         pViewSh->OnLOKShowHideColRow(bColumns, nStart - 1);
 
