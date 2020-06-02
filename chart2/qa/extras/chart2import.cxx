@@ -1962,8 +1962,7 @@ void Chart2ImportTest::testTdf116163()
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    const OUString sXAxisName = "CID/D=0:CS=0:Axis=0,0";
-    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, sXAxisName,
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=0,0",
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
@@ -2008,8 +2007,7 @@ void Chart2ImportTest::testTdf48041()
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapes.is());
 
-    const OUString sYAxisName = "CID/D=0:CS=0:Axis=1,0"; // Y Axis
-    uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(xShapes, sYAxisName,
+    uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=1,0", // Y Axis
         // Axis occurs twice in chart xshape representation so need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool
     {
