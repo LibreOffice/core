@@ -12,6 +12,10 @@
 
 #include <sal/config.h>
 
+#include <config_features.h>
+
+#if HAVE_FEATURE_PDFIUM
+
 #include <fpdf_doc.h>
 #include <fpdf_text.h>
 
@@ -258,5 +262,40 @@ std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
 
     return std::vector<basegfx::B2DRectangle>();
 }
+
+#else
+
+class VectorGraphicSearch::Implementation
+{
+};
+
+class SearchContext
+{
+};
+
+VectorGraphicSearch::VectorGraphicSearch(Graphic const& /*rGraphic*/) {}
+
+VectorGraphicSearch::~VectorGraphicSearch() {}
+
+bool VectorGraphicSearch::search(OUString const& /*rSearchString*/) { return false; }
+
+bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& /*rData*/,
+                                    OUString const& /*rSearchString*/)
+{
+    return false;
+}
+
+basegfx::B2DSize VectorGraphicSearch::pageSize() { return basegfx::B2DSize(); }
+
+bool VectorGraphicSearch::next() { return false; }
+
+int VectorGraphicSearch::index() { return -1; }
+
+std::vector<basegfx::B2DRectangle> VectorGraphicSearch::getTextRectangles()
+{
+    return std::vector<basegfx::B2DRectangle>();
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
