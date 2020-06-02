@@ -27,6 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 using namespace ::com::sun::star::accessibility;
 
@@ -626,6 +627,11 @@ void VerticalTabControl::SetPageText(const OString& rPageId, const OUString& rTe
     if (!pData)
         return;
     pData->pEntry->SetText(rText);
+}
+
+FactoryFunction VerticalTabControl::GetUITestFactory() const
+{
+    return VerticalTabControlUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
