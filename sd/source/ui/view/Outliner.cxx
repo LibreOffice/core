@@ -731,26 +731,12 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
     std::vector<::tools::Rectangle> aLogicRects;
     if (mpImpl->mbCurrentIsVectorGraphic)
     {
-        basegfx::B2DSize aPdfPageSize = mpImpl->mpVectorGraphicSearch->pageSize();
+        basegfx::B2DRectangle aSelectionHMM = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
 
-        tools::Rectangle aObjectRectTwip = OutputDevice::LogicToLogic(mpObj->GetLogicRect(), MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-        basegfx::B2DRectangle aObjectB2DRectTwip(vcl::unotools::b2DRectangleFromRectangle(aObjectRectTwip));
-
-        // Setup coordinate conversion matrix to convert the inner PDF
-        // coordinates to the page relative coordinates
-        basegfx::B2DHomMatrix aB2DMatrix;
-
-        aB2DMatrix.scale(aObjectB2DRectTwip.getWidth() / aPdfPageSize.getX(),
-                         aObjectB2DRectTwip.getHeight() / aPdfPageSize.getY());
-
-        aB2DMatrix.translate(aObjectB2DRectTwip.getMinX(), aObjectB2DRectTwip.getMinY());
-
-        for (auto const & rRectangle : mpImpl->mpVectorGraphicSearch->getTextRectangles())
-        {
-            basegfx::B2DRectangle aRectangle(rRectangle);
-            aRectangle *= aB2DMatrix;
-            aLogicRects.emplace_back(Point(aRectangle.getMinX(), aRectangle.getMinY()), Size(aRectangle.getWidth(), aRectangle.getHeight()));
-        }
+        tools::Rectangle aSelection(Point(aSelectionHMM.getMinX(), aSelectionHMM.getMinY()),
+                                    Size(aSelectionHMM.getWidth(), aSelectionHMM.getHeight()));
+        aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+        aLogicRects.push_back(aSelection);
     }
     else
     {
