@@ -179,7 +179,7 @@ void ScUndoMakeOutline::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
-    ScTabViewShell::notifyAllViewsHeaderInvalidation( bColumns, nTab );
+    ScTabViewShell::notifyAllViewsHeaderInvalidation( bColumns, pViewShell, nTab );
 
     EndUndo();
 }
@@ -449,7 +449,7 @@ void ScUndoRemoveAllOutlines::Undo()
 
     pDocShell->PostPaint(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, nTab);
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(BOTH_HEADERS, pViewShell, nTab);
 
     EndUndo();
 }
@@ -814,7 +814,7 @@ void ScUndoQuery::Undo()
 
     // invalidate cache positions and update cursor and selection
     pViewShell->OnLOKShowHideColRow(/*bColumns*/ false, aQueryParam.nRow1 - 1);
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, nTab);
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, pViewShell, nTab);
 
     //  Paint
 

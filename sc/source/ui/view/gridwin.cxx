@@ -5704,6 +5704,9 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
+    if (pViewShell->GetDocId() != pForShell->GetDocId())
+        return;
+
     OString aCursor("EMPTY");
     if (mpOOCursors) // cf. getCellCursor above
     {

@@ -955,6 +955,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
+            // FIXME: What if pViewShell is for a different document?
             if(pViewShell->GetWindow())
             {
                 if(dynamic_cast< const SwView *>( pViewShell ) !=  nullptr ||

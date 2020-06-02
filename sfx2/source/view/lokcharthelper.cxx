@@ -177,6 +177,7 @@ bool LokChartHelper::HitAny(const Point& aPos)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         if (pViewShell->getPart() == nPartForCurView)
         {
             LokChartHelper aChartHelper(pViewShell);
@@ -260,6 +261,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         if (pViewShell->getPart() == nPartForCurView)
         {
             LokChartHelper aChartHelper(pViewShell);

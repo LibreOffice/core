@@ -1471,6 +1471,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
@@ -1526,6 +1527,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
@@ -1581,6 +1583,7 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document?
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell)
         {
@@ -1623,10 +1626,10 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 if (bInsertCols)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetViewShell(), GetViewData().GetTabNo());
 
                 if (bInsertRows)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetViewShell(), GetViewData().GetTabNo());
             }
         }
         OUString aStartAddress =  aRange.aStart.GetColRowString();
@@ -1701,10 +1704,10 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (eCmd == DelCellCmd::Cols)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetViewShell(), GetViewData().GetTabNo());
 
             if (eCmd == DelCellCmd::Rows)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetViewShell(), GetViewData().GetTabNo());
         }
     }
     else
