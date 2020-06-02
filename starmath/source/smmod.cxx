@@ -139,6 +139,9 @@ void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
+        // FIXME: What if pViewShell is for a different document,
+        // but OTOH Math is presumably never used through
+        // LibreOfficeKit, so maybe an irrelevant concern?
         if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
         {
             SmViewShell *pSmView = static_cast<SmViewShell *>(pViewShell);

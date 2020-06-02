@@ -28,6 +28,8 @@
 #include <vector>
 
 typedef o3tl::strong_int<sal_Int32, struct ViewShellIdTag> ViewShellId;
+typedef o3tl::strong_int<int, struct ViewShellDocIdTag> ViewShellDocId;
+
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
