@@ -1014,7 +1014,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
 
         // if necessary create derivative Styles, if not available:
 
-        if ( ScResId(STR_STYLENAME_STANDARD) != aStrParent &&
+        if ( (ScResId(STR_STYLENAME_STANDARD_CELL) != aStrParent || ScResId(STR_STYLENAME_STANDARD_PAGE) != aStrParent) &&
              aStrSrcStyle != aStrParent &&
              !pDestPool->Find( aStrParent, eFamily ) )
         {
