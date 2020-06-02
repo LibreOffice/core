@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -126,6 +126,11 @@ void ScTabViewShell::Activate(bool bMDI)
                     SfxViewShell* pSh = SfxViewShell::GetFirst( true, checkSfxViewShell<ScTabViewShell> );
                     while ( pSh!=nullptr && pOldHdl!=nullptr)
                     {
+                        // Hmm, what if pSh is a shell for a different document? But as this code
+                        // does not seem to be LibreOfficeKit-specific, probably that doesn't
+                        // happen, because having multiple documents open simultaneously has of
+                        // course not been a problem at all in traditional desktop LibreOffice.
+                        // (Unlike in a LibreOfficeKit-based process where it has been a problem.)
                         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
                         {
                             pOldHdl->ResetDelayTimer();
@@ -1712,8 +1717,12 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         // have we already one view ?
         if (pViewShell)
         {
-            // this view is not yet visible at this stage, so we look for not visible views, too
-            SfxViewShell* pViewShell2 = SfxViewShell::GetNext(*pViewShell, /*only visible shells*/ false);
+            // this view is not yet visible at this stage, so we look for not visible views, too, for this same document
+            SfxViewShell* pViewShell2 = pViewShell;
+            do
+            {
+                pViewShell2 = SfxViewShell::GetNext(*pViewShell2, /*only visible shells*/ false);
+            } while (pViewShell2 && pViewShell2->GetDocId() != pViewShell->GetDocId());
             // if the second view is not this one, it means that there is
             // already more than one active view and so the formula mode
             // has already been disabled
