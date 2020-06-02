@@ -1044,10 +1044,14 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     if (comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        if (pViewShell)
+        while (pViewShell)
         {
-            SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(pViewShell->GetCurrentDocument());
-            SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+            if (pViewShell->GetDocId() == mrBase.GetDocId())
+            {
+                SdXImpressDocument* pModel = SdXImpressDocument::getImplementation(pViewShell->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+            }
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
     }
 }

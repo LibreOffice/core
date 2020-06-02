@@ -1481,11 +1481,12 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell)
+        if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStartCol);
 
@@ -1536,11 +1537,12 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell)
+        if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex)->invalidateByIndex(nStartRow);
 
@@ -1591,11 +1593,12 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
         return;
 
     SCTAB nCurTab = GetViewData().GetTabNo();
+    SfxViewShell* pCurrentViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pTabViewShell)
+        if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             if (bWidth)
                 pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab)->invalidateByIndex(nStart);
@@ -1636,10 +1639,10 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 if (bInsertCols)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().GetTabNo());
 
                 if (bInsertRows)
-                    ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+                    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNo());
             }
         }
         return bSuccess;
@@ -1711,10 +1714,10 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (eCmd == DelCellCmd::Cols)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(COLUMN_HEADER, GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().GetTabNo());
 
             if (eCmd == DelCellCmd::Rows)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+                ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNo());
         }
     }
     else
