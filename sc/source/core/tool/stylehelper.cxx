@@ -60,7 +60,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     {
         static ScDisplayNameMap const aCellMap[]
         {
-            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_STANDARD_CELL ), OUString(SC_STYLE_PROG_STANDARD) },
             { ScResId( STR_STYLENAME_RESULT ), OUString(SC_STYLE_PROG_RESULT) },
             { ScResId( STR_STYLENAME_RESULT1 ), OUString(SC_STYLE_PROG_RESULT1) },
             { ScResId( STR_STYLENAME_HEADLINE ), OUString(SC_STYLE_PROG_HEADLINE) },
@@ -80,7 +80,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     {
         static ScDisplayNameMap const aPageMap[]
         {
-            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_STANDARD_PAGE ), OUString(SC_STYLE_PROG_STANDARD) },
             { ScResId( STR_STYLENAME_REPORT ),   OUString(SC_STYLE_PROG_REPORT) },
             //  last entry remains empty
             { OUString(), OUString() },

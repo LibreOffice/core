@@ -553,7 +553,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
 
     if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
     {
-        aStyleName = ScResId( STR_STYLENAME_STANDARD );
+        aStyleName = ScResId( STR_STYLENAME_STANDARD_CELL );
     }
     else
     {
@@ -577,7 +577,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
 bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyleId, sal_Int32* pnNextChar )
 {
     // "Default" becomes "Normal"
-    if (rStyleName == ScResId(STR_STYLENAME_STANDARD))
+    if (rStyleName == ScResId(STR_STYLENAME_STANDARD_CELL))
     {
         if( pnStyleId ) *pnStyleId = EXC_STYLE_NORMAL;
         if( pnNextChar ) *pnNextChar = rStyleName.getLength();

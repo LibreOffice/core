@@ -1358,7 +1358,7 @@ void XclImpXF::ApplyPatternToAttrVector(
             {
                 ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
                     pStylePool->Find(
-                        ScResId(STR_STYLENAME_STANDARD), SfxStyleFamily::Para));
+                        ScResId(STR_STYLENAME_STANDARD_CELL), SfxStyleFamily::Para));
 
                 if (pStyleSheet)
                     rPat.SetStyleSheet(pStyleSheet, false);
@@ -1520,7 +1520,7 @@ ScStyleSheet* XclImpStyle::CreateStyleSheet()
             if( pXF ) pXF->SetAllUsedFlags( true );
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find(
-                ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
+                ScResId( STR_STYLENAME_STANDARD_CELL ), SfxStyleFamily::Para ) );
             OSL_ENSURE( mpStyleSheet, "XclImpStyle::CreateStyleSheet - Default style not found" );
             bCreatePattern = true;
         }
@@ -1618,7 +1618,7 @@ void XclImpXFBuffer::CreateUserStyles()
         BIFF4W import filter is never used to import from clipboard... */
     bool bReserveAll = (GetBiff() == EXC_BIFF4) && (GetCurrScTab() > 0);
     SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SfxStyleFamily::Para );
-    OUString aStandardName = ScResId( STR_STYLENAME_STANDARD );
+    OUString aStandardName = ScResId( STR_STYLENAME_STANDARD_CELL );
     for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
         if( (pStyleSheet->GetName() != aStandardName) && (bReserveAll || !pStyleSheet->IsUserDefined()) )
             if( aCellStyles.count( pStyleSheet->GetName() ) == 0 )

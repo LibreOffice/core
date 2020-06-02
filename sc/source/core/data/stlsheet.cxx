@@ -281,7 +281,9 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 bool ScStyleSheet::SetName(const OUString& rNew, bool bReindexNow)
 {
     OUString aFileStdName = STRING_STANDARD;
-    if ( rNew == aFileStdName && aFileStdName != ScResId(STR_STYLENAME_STANDARD) )
+    if ( rNew == aFileStdName && aFileStdName != ScResId(STR_STYLENAME_STANDARD_CELL) )
+        return false;
+    else if ( rNew == aFileStdName && aFileStdName != ScResId(STR_STYLENAME_STANDARD_PAGE) )
         return false;
     else
         return SfxStyleSheet::SetName(rNew, bReindexNow);
