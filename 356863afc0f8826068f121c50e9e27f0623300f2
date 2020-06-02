@@ -22,6 +22,30 @@
       "revId": "356863afc0f8826068f121c50e9e27f0623300f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef420ed9_63aa5b52",
+        "filename": "svx/uiconfig/ui/inspectortextpanel.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-06-02T05:57:10Z",
+      "side": 1,
+      "message": "I would like to keep it in /svx folder.\nso i will make it domain\u003d\"svx\" in the next patch",
+      "parentUuid": "0e49c48f_d74cef95",
+      "range": {
+        "startLine": 3,
+        "startChar": 19,
+        "endLine": 3,
+        "endChar": 21
+      },
+      "revId": "356863afc0f8826068f121c50e9e27f0623300f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
