@@ -170,7 +170,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         pDocSh->UpdateOle(&GetViewData());
 
     if (comphelper::LibreOfficeKit::isActive())
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNo());
 
     return bAnyChanged;
 }
@@ -219,7 +219,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
                                             PaintPartFlags::Grid | PaintPartFlags::Left );
 
     if (comphelper::LibreOfficeKit::isActive())
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNo());
 
     return bChanged;
 }
