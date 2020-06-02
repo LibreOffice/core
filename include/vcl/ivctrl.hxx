@@ -323,6 +323,8 @@ public:
     void SetPageText(const OString& rPageId, const OUString& rText);
 
     vcl::Window* GetPageParent() { return m_xBox.get(); }
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #endif // INCLUDED_VCL_IVCTRL_HXX
