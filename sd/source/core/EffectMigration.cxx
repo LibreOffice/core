@@ -684,7 +684,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         }
     }
 
-    if( pGroup.get() != nullptr )
+    if( pGroup )
     {
         const bool bLaserEffect = (eEffect >= AnimationEffect_LASER_FROM_LEFT) && (eEffect <= AnimationEffect_LASER_FROM_LOWERRIGHT);
 

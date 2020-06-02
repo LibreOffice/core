@@ -260,7 +260,7 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(
             mpRenderer->GetRendererPaneStyle(rsPaneBorderStyleName));
-        if (pRendererPaneStyle != nullptr && pRendererPaneStyle->mpBottomCallout.get() != nullptr)
+        if (pRendererPaneStyle != nullptr && pRendererPaneStyle->mpBottomCallout)
         {
             return awt::Point (
                 0,
@@ -771,7 +771,7 @@ RendererPaneStyle::RendererPaneStyle (
     mpFont = rpTheme->GetFont(rsStyleName);
 
     OUString sAnchor ("Left");
-    if (mpFont.get() != nullptr)
+    if (mpFont)
     {
         sAnchor = mpFont->msAnchor;
         mnFontXOffset = mpFont->mnXOffset;
@@ -887,7 +887,7 @@ SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
     const OUString& rsBitmapName)
 {
     SharedBitmapDescriptor pDescriptor (rpTheme->GetBitmap(rsStyleName, rsBitmapName));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor;
     else
         return mpEmpty;

@@ -346,7 +346,7 @@ bool SlideSorterController::Command (
                 // focused page as top left position of the context menu.
                 model::SharedPageDescriptor pDescriptor (
                     GetFocusManager().GetFocusedPageDescriptor());
-                if (pDescriptor.get() != nullptr)
+                if (pDescriptor)
                 {
                     ::tools::Rectangle aBBox (
                         mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
@@ -803,7 +803,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
 {
     // Request a repaint for the page object whose name has changed.
     model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         mrView.RequestRepaint(pDescriptor);
 
     // Get a pointer to the corresponding accessible object and notify

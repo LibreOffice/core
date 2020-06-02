@@ -877,7 +877,7 @@ void OOXMLFastContextHandler::sendPropertyToParent()
     {
         OOXMLPropertySet::Pointer_t pProps(mpParent->getPropertySet());
 
-        if (pProps.get() != nullptr)
+        if (pProps)
         {
             pProps->add(mId, getValue(), OOXMLProperty::SPRM);
         }
@@ -890,11 +890,11 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
     {
         OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
 
-        if (pParentProps.get() != nullptr)
+        if (pParentProps)
         {
             OOXMLPropertySet::Pointer_t pProps(getPropertySet());
 
-            if (pProps.get() != nullptr)
+            if (pProps)
             {
                 OOXMLValue::Pointer_t pValue
                     (new OOXMLPropertySetValue(getPropertySet()));
@@ -1123,7 +1123,7 @@ void OOXMLFastContextHandlerProperties::handleHyperlinkURL() {
 void OOXMLFastContextHandlerProperties::setPropertySet
 (const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
-    if (pPropertySet.get() != nullptr)
+    if (pPropertySet)
         mpPropertySet = pPropertySet;
 }
 
@@ -1289,7 +1289,7 @@ void OOXMLFastContextHandlerTable::addCurrentChild()
     {
         OOXMLValue::Pointer_t pValue(pHandler->getValue());
 
-        if (pValue.get() != nullptr)
+        if (pValue)
         {
             OOXMLTable::ValuePointer_t pTmpVal(pValue->clone());
             mTable.add(pTmpVal);

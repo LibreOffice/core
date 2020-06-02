@@ -143,7 +143,7 @@ model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor() const
 
 bool FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != nullptr)
+    if (rpDescriptor)
     {
         FocusHider aFocusHider (*this);
         mnPageIndex = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
@@ -170,7 +170,7 @@ bool FocusManager::IsFocusShowing() const
 
 void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != nullptr)
+    if (rpDescriptor)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, false);
 

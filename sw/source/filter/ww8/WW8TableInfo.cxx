@@ -812,7 +812,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
         }
         while (!bDone);
 
-        if (pEndOfCellInfo.get() != nullptr)
+        if (pEndOfCellInfo)
         {
             pEndOfCellInfo->setEndOfCell(true);
 
@@ -917,7 +917,7 @@ const SwNode * WW8TableInfo::getNextNode(const SwNode * pNode)
 
     WW8TableNodeInfo::Pointer_t pNodeInfo = getTableNodeInfo(pNode);
 
-    if (pNodeInfo.get() != nullptr)
+    if (pNodeInfo)
     {
         WW8TableNodeInfo * pNextInfo = pNodeInfo->getNext();
 
@@ -1153,7 +1153,7 @@ void WW8TableCellGrid::addShadowCells()
         }
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
-        if (pRow.get() != nullptr)
+        if (pRow)
             pRow->setRowSpans(pRowSpans);
 
         ++aTopsIt;
@@ -1322,7 +1322,7 @@ std::string WW8TableCellGrid::toString()
         }
 
         RowSpansPtr pRowSpans = pRow->getRowSpans();
-        if (pRowSpans.get() != nullptr)
+        if (pRowSpans)
         {
             sResult += "<rowspans>";
 
@@ -1358,7 +1358,7 @@ TableBoxVectorPtr WW8TableCellGrid::getTableBoxesOfRow
     WW8TableCellGridRow::Pointer_t pRow =
         getRow(pNodeInfoInner->getRect().Top(), false);
 
-    if (pRow.get() != nullptr)
+    if (pRow)
     {
         pResult = pRow->getTableBoxVector();
     }
@@ -1374,7 +1374,7 @@ WidthsPtr WW8TableCellGrid::getWidthsOfRow
     WW8TableCellGridRow::Pointer_t pRow =
         getRow(pNodeInfoInner->getRect().Top(), false);
 
-    if (pRow.get() != nullptr)
+    if (pRow)
     {
         pResult = pRow->getWidths();
     }
@@ -1390,7 +1390,7 @@ RowSpansPtr WW8TableCellGrid::getRowSpansOfRow
     WW8TableCellGridRow::Pointer_t pRow =
         getRow(pNodeInfoInner->getRect().Top(), false);
 
-    if (pRow.get() != nullptr)
+    if (pRow)
     {
         pResult = pRow->getRowSpans();
     }

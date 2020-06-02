@@ -258,7 +258,7 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
 
     Layout();
 
-    if (mpScrollBar.get() != nullptr)
+    if (mpScrollBar)
     {
         mpScrollBar->SetThumbPosition(0, false);
         UpdateScrollBar();
@@ -405,13 +405,13 @@ void PresenterNotesView::Layout()
             mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
             aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
             // Place the close button.
-            if (mpCloseButton.get() != nullptr)
+            if (mpCloseButton)
                 mpCloseButton->SetCenter(geometry::RealPoint2D(
                                                                (aWindowBox.Width +  aToolBarSize.Width) / 2,
                                                                aWindowBox.Height - aToolBarSize.Height/2));
         }
     // Check whether the vertical scroll bar is necessary.
-    if (mpScrollBar.get() != nullptr)
+    if (mpScrollBar)
         {
             bool bShowVerticalScrollbar (false);
             try
@@ -514,7 +514,7 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    if (mpBackground.get() != nullptr)
+    if (mpBackground)
     {
         // Paint the background.
         mpPresenterController->GetCanvasHelper()->Paint(
@@ -544,7 +544,7 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
     if (aBox.Width <= 0 || aBox.Height <= 0)
         return;
 
-    if (mpBackground.get() != nullptr)
+    if (mpBackground)
     {
         // Paint the background.
         mpPresenterController->GetCanvasHelper()->Paint(

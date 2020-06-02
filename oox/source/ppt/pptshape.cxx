@@ -348,7 +348,7 @@ void PPTShape::addShape(
             } else
                 setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder.get() != nullptr, aTransformation, getFillProperties() ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, bool(mpPlaceholder), aTransformation, getFillProperties() ) );
             if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && mnSubType == XML_title)
              {
                 try
@@ -369,7 +369,7 @@ void PPTShape::addShape(
             }
 
             // Apply text properties on placeholder text inside this placeholder shape
-            if (meShapeLocation == Slide && mpPlaceholder.get() != nullptr && getTextBody() && getTextBody()->isEmpty())
+            if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())
             {
                 Reference < XText > xText(mxShape, UNO_QUERY);
                 if (xText.is())

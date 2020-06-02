@@ -1881,7 +1881,7 @@ void WW8Export::OutSwString(const OUString& rStr, sal_Int32 nStt,
 
 void WW8Export::WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
-    if (pTableTextNodeInfoInner.get() != nullptr && pTableTextNodeInfoInner->getDepth() == 1 && pTableTextNodeInfoInner->isEndOfCell())
+    if (pTableTextNodeInfoInner && pTableTextNodeInfoInner->getDepth() == 1 && pTableTextNodeInfoInner->isEndOfCell())
         WriteChar('\007');
     else
         WriteChar( '\015' );
@@ -2952,11 +2952,11 @@ bool MSWordExportBase::IsInTable() const
     {
         SwNode& rNode = m_pCurPam->GetNode();
 
-        if (m_pTableInfo.get() != nullptr)
+        if (m_pTableInfo)
         {
             ww8::WW8TableNodeInfo::Pointer_t pTableNodeInfo = m_pTableInfo->getTableNodeInfo(&rNode);
 
-            if (pTableNodeInfo.get() != nullptr && pTableNodeInfo->getDepth() > 0)
+            if (pTableNodeInfo && pTableNodeInfo->getDepth() > 0)
             {
                 bResult = true;
             }
@@ -4391,7 +4391,7 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo =
         m_pTableInfo->getTableNodeInfo( &rNode );
 
-    if (pNodeInfo.get() != nullptr)
+    if (pNodeInfo)
     {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.ww8", pNodeInfo->toString());
@@ -4418,7 +4418,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = m_pTableInfo->getTableNodeInfo( &rNode );
 
-    if (pNodeInfo.get() != nullptr)
+    if (pNodeInfo)
     {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.ww8", pNodeInfo->toString());

@@ -423,7 +423,7 @@ public:
             std::shared_ptr<PageData> tmp (rxAllocator->construct<T>(), PageData::Deallocate(rxAllocator));
             m_xPage.swap (tmp);
         }
-        return (m_xPage.get() != nullptr);
+        return bool(m_xPage);
     }
 
     explicit PageHolderObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
@@ -448,7 +448,7 @@ public:
 
     bool is() const
     {
-        return (m_xPage.get() != nullptr);
+        return bool(m_xPage);
     }
 
     std::shared_ptr<PageData> & get() { return m_xPage; }

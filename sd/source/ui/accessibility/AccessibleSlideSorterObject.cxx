@@ -421,7 +421,7 @@ SdPage* AccessibleSlideSorterObject::GetPage() const
 {
     ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
         mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->GetPage();
     else
         return nullptr;

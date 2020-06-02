@@ -200,7 +200,7 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
             aNumber >>= nNumber;
             nNumber -= 1;
             SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
-            if (pDescriptor.get() != nullptr
+            if (pDescriptor
                 && pDescriptor->GetXDrawPage() == rxSlide)
             {
                 return nNumber;
@@ -244,7 +244,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
     // First try to guess the right index.
     sal_Int16 nNumber ((pPage->GetPageNum()-1)/2);
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
-    if (pDescriptor.get() != nullptr
+    if (pDescriptor
         && pDescriptor->GetPage() == pPage)
     {
         return nNumber;

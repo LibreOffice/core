@@ -34,7 +34,7 @@ VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
 
 bool VCLXAccessibleListBox::IsValid() const
 {
-    return GetWindow().get() != nullptr;
+    return GetWindow();
 }
 
 // XServiceInfo

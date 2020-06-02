@@ -660,7 +660,7 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
     VclPtr<Deck> aDeck = xDeckDescriptor->mpDeck;
     if (aDeck.get()==nullptr || bForceCreate)
     {
-        if (aDeck.get()!=nullptr)
+        if (aDeck)
             aDeck.disposeAndClear();
 
         aDeck = VclPtr<Deck>::Create(
@@ -723,7 +723,7 @@ void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rCo
                                             rPanelContexDescriptor.mbIsInitiallyVisible,
                                             rContext,
                                             pDeck);
-                if (aPanel.get()!=nullptr )
+                if (aPanel )
                 {
                     aNewPanels[nWriteIndex] = aPanel;
 

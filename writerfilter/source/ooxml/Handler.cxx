@@ -299,7 +299,7 @@ void OOXMLPictureHandler::attribute(Id name, Value & val)
     {
         writerfilter::Reference<Properties>::Pointer_t pProps
             (val.getProperties());
-        if (pProps.get() != nullptr)
+        if (pProps)
             pProps->resolve(*this);
     }
 }
@@ -309,7 +309,7 @@ void OOXMLPictureHandler::sprm(Sprm & rSprm)
     writerfilter::Reference<Properties>::Pointer_t pProps
         (rSprm.getProps());
 
-    if (pProps.get() != nullptr)
+    if (pProps)
         pProps->resolve(*this);
 }
 

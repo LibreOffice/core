@@ -69,7 +69,7 @@ bool PanelBase::ProvideWrappedControl()
         if (mpWrappedControl)
             mpWrappedControl->Show();
     }
-    return mpWrappedControl.get() != nullptr;
+    return bool(mpWrappedControl);
 }
 
 ISidebarReceiver::~ISidebarReceiver()

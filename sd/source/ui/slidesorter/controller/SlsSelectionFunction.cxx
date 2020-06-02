@@ -588,7 +588,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
 {
     model::SharedPageDescriptor pDescriptor
         = mrController.GetCurrentSlideManager()->GetCurrentSlide();
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         SdPage* pPage = pDescriptor->GetPage();
         OSL_ASSERT(pPage!=nullptr);
@@ -610,11 +610,11 @@ void SelectionFunction::GotoPage (int nIndex)
     mrController.GetFocusManager().SetFocusedPage(nIndex);
     model::SharedPageDescriptor pNextPageDescriptor (
         mrSlideSorter.GetModel().GetPageDescriptor (nIndex));
-    if (pNextPageDescriptor.get() != nullptr)
+    if (pNextPageDescriptor)
         mpModeHandler->SetCurrentPage(pNextPageDescriptor);
     else
     {
-        OSL_ASSERT(pNextPageDescriptor.get() != nullptr);
+        OSL_ASSERT(pNextPageDescriptor);
     }
     ResetShiftKeySelectionAnchor();
 }
@@ -930,7 +930,7 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
     if (pViewShell==nullptr || !pViewShell->IsMainViewShell())
         return;
 
-    if (rpDescriptor.get()!=nullptr && rpDescriptor->GetPage()!=nullptr)
+    if (rpDescriptor && rpDescriptor->GetPage()!=nullptr)
     {
         mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), true);
         pViewShell->GetFrameView()->SetSelectedPage(

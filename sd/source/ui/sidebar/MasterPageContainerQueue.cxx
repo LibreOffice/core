@@ -117,7 +117,7 @@ void MasterPageContainerQueue::LateInit()
 bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor& rpDescriptor)
 {
     bool bSuccess (false);
-    if (rpDescriptor.get() != nullptr
+    if (rpDescriptor
         && rpDescriptor->maLargePreview.GetSizePixel().Width() == 0)
     {
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
@@ -215,7 +215,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
 
         mpRequestQueue->erase(mpRequestQueue->begin());
 
-        if (aRequest.mpDescriptor.get() != nullptr)
+        if (aRequest.mpDescriptor)
         {
             mnRequestsServedCount += 1;
             if ( ! mpWeakContainer.expired())

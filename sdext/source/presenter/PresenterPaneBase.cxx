@@ -47,7 +47,7 @@ PresenterPaneBase::PresenterPaneBase (
       msTitle(),
       mxComponentContext(rxContext)
 {
-    if (mpPresenterController.get() != nullptr)
+    if (mpPresenterController)
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
@@ -98,7 +98,7 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
 
-    OSL_ASSERT(mpPresenterController.get()!=nullptr);
+    OSL_ASSERT(mpPresenterController);
     OSL_ASSERT(mpPresenterController->GetPaintManager() != nullptr);
 
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);

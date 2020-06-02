@@ -310,7 +310,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         {
             bool bInsideOtherWindow = false;
 
-            if (mpContentWindow.get() != nullptr)
+            if (mpContentWindow)
             {
                 aOutputArea = ::tools::Rectangle(Point(0,0),
                     mpContentWindow->GetOutputSizePixel());
@@ -791,19 +791,19 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
         long        nVOffs = 0;
         sal_uInt16      nCnt;
 
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
             mpHorizontalRuler->SetLines();
 
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
             mpVerticalRuler->SetLines();
 
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
         {
             nHOffs = mpHorizontalRuler->GetNullOffset() +
                      mpHorizontalRuler->GetPageOffset();
         }
 
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
         {
             nVOffs = mpVerticalRuler->GetNullOffset() +
                      mpVerticalRuler->GetPageOffset();
@@ -820,9 +820,9 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
             nCnt++;
         }
 
-        if (mpHorizontalRuler.get() != nullptr)
+        if (mpHorizontalRuler)
             mpHorizontalRuler->SetLines(nCnt, pHLines);
-        if (mpVerticalRuler.get() != nullptr)
+        if (mpVerticalRuler)
             mpVerticalRuler->SetLines(nCnt, pVLines);
     }
 

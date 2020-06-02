@@ -117,7 +117,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     , m_bOrigStatus( false )
     , m_bNeedsChange( false )
     , m_bApi(i_bApi)
-    , m_bTempPrinter( i_rPrinter.get() != nullptr )
+    , m_bTempPrinter( i_rPrinter )
 {
     if ( mpViewShell )
     {

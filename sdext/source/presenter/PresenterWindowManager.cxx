@@ -152,8 +152,8 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneId(rxView->getResourceId()->getAnchor()));
-    OSL_ASSERT(pDescriptor.get() != nullptr);
-    if (pDescriptor.get() != nullptr)
+    OSL_ASSERT(pDescriptor);
+    if (pDescriptor)
     {
         Layout();
 
@@ -173,7 +173,7 @@ void PresenterWindowManager::SetPanePosSizeAbsolute (
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneURL(rsPaneURL));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         if (pDescriptor->mxBorderWindow.is())
             pDescriptor->mxBorderWindow->setPosSize(
@@ -357,7 +357,7 @@ void PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
-    OSL_ASSERT(mpPresenterController.get() != nullptr);
+    OSL_ASSERT(mpPresenterController);
 
     if (meLayoutMode == eMode
         && !mbIsSlideSorterActive
@@ -581,7 +581,7 @@ void PresenterWindowManager::LayoutStandardMode()
     // go over the inner pane size.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
-    if (pPane.get() != nullptr)
+    if (pPane)
     {
         const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
             nHorizontalSlideDivide - 1.5*nGap,
@@ -603,7 +603,7 @@ void PresenterWindowManager::LayoutStandardMode()
     // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
-    if (pPane.get() != nullptr)
+    if (pPane)
     {
         const awt::Size aNextSlideOuterBox (CalculatePaneSize(
             aBox.Width - nHorizontalSlideDivide - 1.5*nGap,
@@ -642,7 +642,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // The notes view has no fixed aspect ratio.
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
-    if (pPane.get() != nullptr)
+    if (pPane)
     {
         const geometry::RealSize2D aNotesViewOuterSize(
             nPrimaryWidth - 1.5*nGap + 0.5,
@@ -666,7 +666,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
-    if (pPane.get() != nullptr)
+    if (pPane)
     {
         const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
             nSecondaryWidth - 1.5*nGap,
@@ -745,7 +745,7 @@ geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar()
     // Get access to the tool bar.
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msToolBarPaneURL));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         PresenterToolBarView* pToolBarView
             = dynamic_cast<PresenterToolBarView*>(pDescriptor->mxView.get());
@@ -871,7 +871,7 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindBorderWindow(rxBorderWindow));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         mxClipPolygon = nullptr;
 

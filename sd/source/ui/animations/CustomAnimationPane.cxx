@@ -2506,7 +2506,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
     SdrPathObj* pPathObj = xTag->getPathObj();
     CustomAnimationEffectPtr pEffect = xTag->getEffect();
-    if( (pPathObj != nullptr) && pEffect.get() != nullptr )
+    if( (pPathObj != nullptr) && pEffect )
     {
         SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
         if( pManager )

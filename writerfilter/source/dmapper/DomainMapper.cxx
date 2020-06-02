@@ -2508,7 +2508,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_ffdata:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
         {
             FFDataHandler::Pointer_t pFFDataHandler(new FFDataHandler());
 
@@ -2522,14 +2522,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         m_pImpl->m_pSdtHelper->setInsideDropDownControl(true);
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_SdtDropDownList_listItem:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
     }
     break;
@@ -2590,7 +2590,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
         // process subitems
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
 
         if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
@@ -2879,21 +2879,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_DocPartPr_name:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_DocPartPr_category:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_DocPartCategory_gallery:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != nullptr)
+        if (pProperties)
             pProperties->resolve(*this);
     }
     break;

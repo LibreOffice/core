@@ -159,7 +159,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         // do we have a handle column?
         bool bHandleCol = !mvCols.empty() && (0 == mvCols[ 0 ]->GetId());
         // do we have a header bar?
-        bool bHeaderBar = (nullptr != pDataWin->pHeaderBar.get());
+        bool bHeaderBar(pDataWin->pHeaderBar);
 
         if  (   nTitleLines
             &&  (   !bHeaderBar
@@ -552,7 +552,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     BrowserColumn *pFirstCol = mvCols[ 0 ].get();
     bool bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
-    bool bHeaderBar = pDataWin->pHeaderBar.get() != nullptr;
+    bool bHeaderBar(pDataWin->pHeaderBar);
 
     // draw delimitational lines
     if (!pDataWin->bNoHScroll)

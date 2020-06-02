@@ -788,7 +788,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 AtkObject *
 atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAccessible, bool create )
 {
-    g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
+    g_return_val_if_fail( bool(rxAccessible), nullptr );
 
     AtkObject *obj = ooo_wrapper_registry_get(rxAccessible);
     if( obj )
@@ -807,14 +807,14 @@ AtkObject *
 atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
                         AtkObject* parent, AtkObject* orig )
 {
-    g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
+    g_return_val_if_fail( bool(rxAccessible), nullptr );
 
     AtkObjectWrapper *pWrap = nullptr;
 
     try {
         uno::Reference< accessibility::XAccessibleContext > xContext(rxAccessible->getAccessibleContext());
 
-        g_return_val_if_fail( xContext.get() != nullptr, nullptr );
+        g_return_val_if_fail( bool(xContext), nullptr );
 
         GType nType = ensureTypeFor( xContext.get() );
         gpointer obj = g_object_new( nType, nullptr);

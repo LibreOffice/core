@@ -82,7 +82,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     {
         // Make the frame window transparent and make the parent able to
         // draw behind it.
-        if (pParentWindow.get() != nullptr)
+        if (pParentWindow)
             pParentWindow->EnableChildTransparentMode();
     }
 
@@ -386,7 +386,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     const cppcanvas::CanvasSharedPtr pCanvas (
         cppcanvas::VCLFactory::createCanvas(rxCanvas));
 
-    if (pCanvas.get() != nullptr)
+    if (pCanvas)
     {
         BitmapEx aBitmapEx(bmpid);
         cppcanvas::BitmapSharedPtr xBitmap(

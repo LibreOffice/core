@@ -125,7 +125,7 @@ void PageSelector::SetCoreSelection()
 void PageSelector::SelectPage (int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         SelectPage(pDescriptor);
 }
 
@@ -133,7 +133,7 @@ void PageSelector::SelectPage (const SdPage* pPage)
 {
     const sal_Int32 nPageIndex (mrModel.GetIndex(pPage));
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get()!=nullptr && pDescriptor->GetPage()==pPage)
+    if (pDescriptor && pDescriptor->GetPage()==pPage)
         SelectPage(pDescriptor);
 }
 
@@ -163,7 +163,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 void PageSelector::DeselectPage (int nPageIndex)
 {
     model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         DeselectPage(pDescriptor);
 }
 
@@ -213,7 +213,7 @@ void PageSelector::CheckConsistency() const
 bool PageSelector::IsPageSelected(int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->HasState(PageDescriptor::ST_Selected);
     else
         return false;
@@ -222,7 +222,7 @@ bool PageSelector::IsPageSelected(int nPageIndex)
 bool PageSelector::IsPageVisible(int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         return pDescriptor->HasState(PageDescriptor::ST_Visible);
     else
         return false;
@@ -270,7 +270,7 @@ std::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection() co
     for (int nIndex=0; nIndex<nPageCount; nIndex++)
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
-        if (pDescriptor.get()!=nullptr && pDescriptor->HasState(PageDescriptor::ST_Selected))
+        if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
             pSelection->push_back(pDescriptor->GetPage());
     }
 

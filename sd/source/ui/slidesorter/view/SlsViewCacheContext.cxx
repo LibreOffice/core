@@ -45,7 +45,7 @@ ViewCacheContext::~ViewCacheContext()
 void ViewCacheContext::NotifyPreviewCreation(cache::CacheKey aKey)
 {
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
     {
         // Force a repaint that will trigger their re-creation.
         mrSlideSorter.GetView().RequestRepaint(pDescriptor);

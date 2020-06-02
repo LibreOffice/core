@@ -1041,7 +1041,7 @@ IMPL_LINK( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )
 
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (mpTabCtrlData->mpListBox.get() != nullptr || !rMEvt.IsLeft())
+    if (mpTabCtrlData->mpListBox || !rMEvt.IsLeft())
         return;
 
     ImplTabItem *pItem = ImplGetItem(rMEvt.GetPosPixel());

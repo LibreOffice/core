@@ -1018,7 +1018,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
                             // Writer core doesn't support numbering styles having a parent style, it seems
-                            if (pParent.get() != nullptr && !bListStyle)
+                            if (pParent && !bListStyle)
                             {
                                 const OUString sParentStyleName = ConvertStyleName( pParent->sStyleName );
                                 if ( !sParentStyleName.isEmpty() && !xStyles->hasByName( sParentStyleName ) )

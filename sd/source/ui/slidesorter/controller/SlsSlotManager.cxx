@@ -952,7 +952,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
     model::SharedPageDescriptor pDescriptor (
         mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
     SdPage* pCurrentPage = nullptr;
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor)
         pCurrentPage = pDescriptor->GetPage();
 
     return (pCurrentPage!=nullptr && aNewName == pCurrentPage->GetName())
@@ -980,7 +980,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor)
             pPageToRename = pDescriptor->GetPage();
 
         if (pPageToRename != nullptr)

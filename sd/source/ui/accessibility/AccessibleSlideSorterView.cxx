@@ -387,7 +387,7 @@ Reference<XAccessible> SAL_CALL
     const Point aTestPoint (aPoint.X, aPoint.Y);
     ::sd::slidesorter::model::SharedPageDescriptor pHitDescriptor (
         mrSlideSorter.GetController().GetPageAt(aTestPoint));
-    if (pHitDescriptor.get() != nullptr)
+    if (pHitDescriptor)
         xAccessible = mpImpl->GetAccessibleChild(
             (pHitDescriptor->GetPage()->GetPageNum()-1)/2);
 
@@ -737,7 +737,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
         {
             ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
                 mrSlideSorter.GetModel().GetPageDescriptor(nIndex));
-            if (pDescriptor.get() != nullptr)
+            if (pDescriptor)
             {
                 maPageObjects[nIndex] = new AccessibleSlideSorterObject(
                     &mrAccessibleSlideSorter,
