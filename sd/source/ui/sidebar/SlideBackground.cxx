@@ -1083,6 +1083,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
     if (comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        // FIXME: This is extremely broken. What if pViewShell is for a different document?
         if (pViewShell)
         {
             SdXImpressDocument* pDoc = comphelper::getUnoTunnelImplementation<SdXImpressDocument>(pViewShell->GetCurrentDocument());

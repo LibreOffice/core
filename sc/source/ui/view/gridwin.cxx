@@ -5720,6 +5720,8 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
 // if @pForShell is null. In each case send the current view a cell-cursor
 // event, and others a cell_view_cursor event.
 //
+// FIXME: What if multiple documents are open? How do we know which shells to handle?
+//
 // NB. we need to re-construct the cursor details for each other view in their
 // own zoomed co-ordinate system.
 void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
@@ -6143,6 +6145,7 @@ void ScGridWindow::UpdateCursorOverlay()
         if (comphelper::LibreOfficeKit::isActive())
         {
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
+            // FIXME: This is totally wrong in case we have multiple documents open
             updateKitCellCursor(nullptr);
         }
         else

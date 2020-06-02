@@ -170,6 +170,7 @@ SwSaveSetLRUOfst::SwSaveSetLRUOfst()
          pView != nullptr;
          pView = SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>))
     {
+        // FIXME: What if pView is for a different document?
         ++nVisibleShells;
     }
 
