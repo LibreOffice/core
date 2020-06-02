@@ -464,6 +464,8 @@ bool ScTable::SetOptimalHeight(
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, pDocument);
 
+    mpRowHeights->enableTreeSearch(false);
+
     GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());
@@ -471,6 +473,8 @@ bool ScTable::SetOptimalHeight(
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
+
+    mpRowHeights->enableTreeSearch(true);
 
     return bChanged;
 }
