@@ -74,6 +74,7 @@ namespace drawinglayer::processor3d
                     primitive2d::BasePrimitive2D* pNew = new primitive2d::ShadowPrimitive2D(
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
+                        0,  // shadow3d doesn't have rPrimitive.getShadowBlur() yet.
                         aNewSubList);
 
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
