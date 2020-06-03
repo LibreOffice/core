@@ -2076,7 +2076,7 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( m_aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
     {
         m_aSelEng.SelMouseMove(rMEvt);
-        if (m_pView->mbHoverSelection && !m_pView->IsSelected(pEntry))
+        if (m_pView->mbHoverSelection && !m_pView->IsSelected(pEntry) && IsSelectable(pEntry))
             m_pView->Select(pEntry);
     }
 }
