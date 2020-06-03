@@ -60,7 +60,12 @@ SharedString SharedStringPool::intern( const OUString& rStr )
             // need to use the same underlying rtl_uString object so the
             // upper->upper detection in purge() works
             auto pData = insertResult.first->pData;
-            mpImpl->maStrMap.insert_or_assign(mapIt, pData, pData);
+            // This is dodgy, but necessary. I don't want to do a delete/insert because
+            // this class is very performance sensitive. This does not violate the internals
+            // the map because the new key points to something with the same hash and equality
+            // as the old key.
+            const_cast<OUString&>(mapIt->first) = *insertResult.first;
+            mapIt->second = pData;
         }
         else
         {
