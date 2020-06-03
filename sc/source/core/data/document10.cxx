@@ -378,7 +378,7 @@ void ScDocument::DelayFormulaGrouping( bool delay )
 {
     if( delay )
     {
-        if( pDelayedFormulaGrouping.get() == nullptr )
+        if( !pDelayedFormulaGrouping )
             pDelayedFormulaGrouping.reset( new ScRange( ScAddress::INITIALIZE_INVALID ));
     }
     else

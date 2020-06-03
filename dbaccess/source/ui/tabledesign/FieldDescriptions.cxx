@@ -176,7 +176,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
         SetControlDefault(Any());
     }
 
-    bool bForce = _bForce || pOldType.get() == nullptr || pOldType->nType != _pType->nType;
+    bool bForce = _bForce || !pOldType || pOldType->nType != _pType->nType;
     switch ( _pType->nType )
     {
         case DataType::CHAR:

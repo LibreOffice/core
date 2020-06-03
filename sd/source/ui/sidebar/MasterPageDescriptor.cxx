@@ -268,7 +268,7 @@ MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
 bool MasterPageDescriptor::URLComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == nullptr)
+    if (!rDescriptor)
         return false;
     else
         return rDescriptor->msURL == msURL;
@@ -284,7 +284,7 @@ MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& 
 bool MasterPageDescriptor::StyleNameComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == nullptr)
+    if (!rDescriptor)
         return false;
     else
         return rDescriptor->msStyleName == msStyleName;
@@ -300,7 +300,7 @@ MasterPageDescriptor::PageObjectComparator::PageObjectComparator (const SdPage* 
 bool MasterPageDescriptor::PageObjectComparator::operator() (
     const SharedMasterPageDescriptor& rDescriptor)
 {
-    if (rDescriptor.get() == nullptr)
+    if (!rDescriptor)
         return false;
     else
         return rDescriptor->mpMasterPage==mpMasterPage;
@@ -315,7 +315,7 @@ MasterPageDescriptor::AllComparator::AllComparator(const SharedMasterPageDescrip
 
 bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDescriptor&rDescriptor)
 {
-    if (rDescriptor.get() == nullptr)
+    if (!rDescriptor)
         return false;
     else
     {

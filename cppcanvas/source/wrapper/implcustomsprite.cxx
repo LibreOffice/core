@@ -57,7 +57,7 @@ namespace cppcanvas::internal
                 return CanvasSharedPtr();
 
             // cache content canvas C++ wrapper
-            if( mpLastCanvas.get() == nullptr ||
+            if( !mpLastCanvas ||
                 mpLastCanvas->getUNOCanvas() != xCanvas )
             {
                 mpLastCanvas = std::make_shared<ImplCanvas>( xCanvas );

@@ -445,7 +445,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             pPageSelection = pSlideSorter->GetPageSelection();
         }
 
-        if( (pSlideSorter == nullptr) || (pPageSelection.get() == nullptr) || pPageSelection->empty() )
+        if( (pSlideSorter == nullptr) || !pPageSelection || pPageSelection->empty() )
         {
             // No valid slide sorter available.  Ask the main view shell for
             // its current page.

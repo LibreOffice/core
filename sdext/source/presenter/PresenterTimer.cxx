@@ -220,7 +220,7 @@ SharedTimerTask TimerScheduler::CreateTimerTask (
 
 void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
 {
-    if (rpTask.get() == nullptr)
+    if (!rpTask)
         return;
     if (rpTask->mbIsCanceled)
         return;
@@ -326,7 +326,7 @@ void SAL_CALL TimerScheduler::run()
             mpCurrentTask = pTask;
         }
 
-        if (pTask.get() == nullptr)
+        if (!pTask)
         {
             // Wait until the first task becomes due.
             TimeValue aTimeValue;

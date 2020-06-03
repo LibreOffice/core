@@ -1155,7 +1155,7 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     model::SharedPageDescriptor pAnchor (rSelector.GetSelectionAnchor());
     DeselectAllPages();
 
-    if (pAnchor.get() == nullptr)
+    if (!pAnchor)
         return;
 
     // Select all pages between the anchor and the given one, including

@@ -767,7 +767,7 @@ void ViewShell::SetupRulers()
 
     long nHRulerOfs = 0;
 
-    if ( mpVerticalRuler.get() == nullptr )
+    if ( !mpVerticalRuler )
     {
         mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
         if ( mpVerticalRuler )
@@ -777,7 +777,7 @@ void ViewShell::SetupRulers()
             mpVerticalRuler->Show();
         }
     }
-    if ( mpHorizontalRuler.get() == nullptr )
+    if ( !mpHorizontalRuler )
     {
         mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow()));
         if ( mpHorizontalRuler )

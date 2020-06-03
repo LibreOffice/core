@@ -638,7 +638,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
     }
 
     // if there is not yet a group, create it
-    if( pGroup.get() == nullptr )
+    if( !pGroup )
     {
         CustomAnimationEffectPtr pShapeEffect;
 
