@@ -1549,7 +1549,6 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
     {
         _rEvent.Accessor >>= sName;
         Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
-        OUString sNewName;
 
         ElementType eType = getElementType(xContainer);
         switch( eType )
@@ -1558,7 +1557,9 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
             {
                 ensureConnection();
                 if ( xProp.is() && m_xMetaData.is() )
-                    sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
+                    //TODO: tdf#133497 "OApplicationController::elementReplaced effectively does
+                    // nothing":
+                    (void) ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
             }
             break;
             case E_FORM:

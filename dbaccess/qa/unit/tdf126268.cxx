@@ -64,9 +64,9 @@ void Tdf126268Test::testNumbers()
 
     // select basically everything from the .odb
     uno::Reference<XStatement> statement = xConnection->createStatement();
-    const OUString sql{ "SELECT ID, Column1, Column2 FROM tableTest ORDER BY ID" };
 
-    uno::Reference<XResultSet> xRes = statement->executeQuery(sql);
+    uno::Reference<XResultSet> xRes
+        = statement->executeQuery("SELECT ID, Column1, Column2 FROM tableTest ORDER BY ID");
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // check result

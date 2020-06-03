@@ -810,8 +810,7 @@ void OTableController::loadData()
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             bool bForce;
-            OUString const sCreate("x");
-            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
+            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,"x",nPrecision,nScale,bIsAutoIncrement,bForce);
             if ( !pTypeInfo )
                 pTypeInfo = m_pTypeInfo;
             pTabEdRow->SetFieldType( pTypeInfo, bForce );

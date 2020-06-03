@@ -87,9 +87,8 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 
         m_pActFieldDescr = new OFieldDescription(_xColumn,true);
         // search for type
-        OUString const sCreateParam("x");
         bool bForce;
-        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
+        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,"x",nPrecision,nScale,bAutoIncrement,bForce);
         if ( !pTypeInfo )
             pTypeInfo = pFieldControl->getDefaultTyp();
 
