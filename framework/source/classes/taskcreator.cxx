@@ -56,11 +56,10 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor )
 {
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
-    OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
 
     try
     {
-        xCreator.set( m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);
+        xCreator.set( m_xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_FWK_TASKCREATOR, m_xContext), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {}

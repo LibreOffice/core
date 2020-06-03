@@ -576,9 +576,6 @@ std::vector<OUString> PathSettings::impl_readOldFormat(const OUString& sPath)
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 {
-    const OUString CFGPROP_INTERNALPATHS("InternalPaths");
-    const OUString CFGPROP_ISSINGLEPATH("IsSinglePath");
-
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew();
 
     // get access to the "queried" path
@@ -589,7 +586,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
-    xPath->getByName(CFGPROP_INTERNALPATHS) >>= xIPath;
+    xPath->getByName("InternalPaths") >>= xIPath;
     aPathVal.lInternalPaths = comphelper::sequenceToContainer<std::vector<OUString>>(xIPath->getElementNames());
 
     // read user defined path list
@@ -607,7 +604,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
         aPathVal.lUserPaths.erase(aI);
 
     // read state props
-    xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
+    xPath->getByName("IsSinglePath") >>= aPathVal.bIsSinglePath;
 
     // analyze finalized/mandatory states
     aPathVal.bIsReadonly = false;
@@ -1360,8 +1357,6 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
-    const OUString CFG_NODE_OLD("org.openoffice.Office.Common/Path/Current");
-
     css::uno::Reference< css::container::XNameAccess > xCfg;
     { // SAFE ->
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1372,7 +1367,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
     {
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
-                        CFG_NODE_OLD,
+                        "org.openoffice.Office.Common/Path/Current",
                         ::comphelper::EConfigurationModes::Standard), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
@@ -1387,8 +1382,6 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
-    const OUString CFG_NODE_NEW("org.openoffice.Office.Paths/Paths");
-
     css::uno::Reference< css::container::XNameAccess > xCfg;
     { // SAFE ->
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1399,7 +1392,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     {
         xCfg.set(  ::comphelper::ConfigurationHelper::openConfig(
                         m_xContext,
-                        CFG_NODE_NEW,
+                        "org.openoffice.Office.Paths/Paths",
                         ::comphelper::EConfigurationModes::Standard),
                    css::uno::UNO_QUERY_THROW);
 
