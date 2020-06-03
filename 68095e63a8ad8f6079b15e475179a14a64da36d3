@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abb86925_d26de5e5",
+        "filename": "offapi/com/sun/star/drawing/ShadowProperties.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-06-03T08:08:36Z",
+      "side": 1,
+      "message": "please add \"@since LibreOffice 7.1\" for newly added API entities",
+      "revId": "68095e63a8ad8f6079b15e475179a14a64da36d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
