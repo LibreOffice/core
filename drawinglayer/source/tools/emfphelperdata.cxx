@@ -1566,10 +1566,9 @@ namespace emfplushelper
                             }
                             mrPropertyHolders.Current().setFont(vcl::Font(font->family, Size(font->emSize, font->emSize)));
 
-                            const OUString emptyString;
                             drawinglayer::attribute::FontAttribute fontAttribute(
                                 font->family,                                          // font family
-                                emptyString,                                           // (no) font style
+                                "",                                                    // (no) font style
                                 font->Bold() ? 8u : 1u,                                // weight: 8 = bold
                                 font->family == "SYMBOL",                              // symbol
                                 stringFormat && stringFormat->DirectionVertical(),     // vertical
@@ -2088,10 +2087,9 @@ namespace emfplushelper
                             }
                             // done reading
 
-                            const OUString emptyString;
                             drawinglayer::attribute::FontAttribute fontAttribute(
                                 font->family,                                    // font family
-                                emptyString,                                     // (no) font style
+                                "",                                              // (no) font style
                                 font->Bold() ? 8u : 1u,                          // weight: 8 = bold
                                 font->family == "SYMBOL",                        // symbol
                                 optionFlags & 0x2,                               // vertical
