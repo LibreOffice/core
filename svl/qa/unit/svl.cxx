@@ -392,10 +392,10 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
-    // Ditto...
+    // Nothing changes, because the upper-string is still in the map
     pStr3.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // Again.
