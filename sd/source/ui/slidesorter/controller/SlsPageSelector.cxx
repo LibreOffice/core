@@ -139,7 +139,7 @@ void PageSelector::SelectPage (const SdPage* pPage)
 
 void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get()==nullptr
+    if (!rpDescriptor
         || !mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, true))
         return;
 
@@ -171,7 +171,7 @@ void PageSelector::DeselectPage (
     const SharedPageDescriptor& rpDescriptor,
     const bool bUpdateCurrentPage)
 {
-    if (rpDescriptor.get()==nullptr
+    if (!rpDescriptor
         || !mrSlideSorter.GetView().SetState(rpDescriptor, PageDescriptor::ST_Selected, false))
         return;
 

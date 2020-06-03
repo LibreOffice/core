@@ -182,7 +182,7 @@ void PresenterNotesView::CreateToolBar (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
 {
-    if (rpPresenterController.get() == nullptr)
+    if (!rpPresenterController)
         return;
 
     Reference<drawing::XPresenterHelper> xPresenterHelper (
@@ -484,7 +484,7 @@ void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
     if ( ! mxCanvas.is())
         return;
 
-    if (mpBackground.get() == nullptr)
+    if (!mpBackground)
         mpBackground = mpPresenterController->GetViewBackground(mxViewId->getResourceURL());
 
     if (rUpdateBox.Y < maTextBoundingBox.Y2
@@ -637,7 +637,7 @@ const std::shared_ptr<PresenterTextView>& PresenterNotesView::GetTextView() cons
 
 void PresenterNotesView::UpdateScrollBar()
 {
-    if (mpScrollBar.get() == nullptr)
+    if (!mpScrollBar)
         return;
 
     try

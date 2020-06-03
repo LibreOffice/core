@@ -137,7 +137,7 @@ namespace pcr
 
     private:
         /// determines whether the instance is already disposed
-        bool impl_isDisposed() const { return m_pCollectedUIs.get() == nullptr; }
+        bool impl_isDisposed() const { return !m_pCollectedUIs; }
 
         /// throws an exception if the component is already disposed
                 void impl_checkDisposed() const;

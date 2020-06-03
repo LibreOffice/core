@@ -301,7 +301,7 @@ css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize()
 {
     if (mpFont && !mpFont->mxFont.is() && mxCanvas.is())
         mpFont->PrepareFont(mxCanvas);
-    if (mpFont.get()==nullptr || !mpFont->mxFont.is())
+    if (!mpFont || !mpFont->mxFont.is())
         return geometry::IntegerSize2D(-1,-1);
 
     geometry::RealSize2D aTextSize (PresenterCanvasHelper::GetTextSize(mpFont->mxFont,msText));
@@ -333,7 +333,7 @@ void PresenterButton::RenderButton (
         GetBitmap(rpCenter, eMode),
         GetBitmap(rpRight, eMode));
 
-    if (rpFont.get()==nullptr || ! rpFont->mxFont.is())
+    if (!rpFont || ! rpFont->mxFont.is())
         return;
 
     const rendering::StringContext aContext (msText, 0, msText.getLength());

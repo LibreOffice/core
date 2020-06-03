@@ -650,7 +650,7 @@ void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox
     if ( ! mxCanvas.is())
         return;
 
-    if (mpBackground.get() == nullptr)
+    if (!mpBackground)
         return;
 
     const rendering::ViewState aViewState(
@@ -727,7 +727,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 
     do
     {
-        if (mpPresenterController.get() == nullptr)
+        if (!mpPresenterController)
             break;
         std::shared_ptr<PresenterTheme> pTheme (mpPresenterController->GetTheme());
         if (pTheme == nullptr)
@@ -735,7 +735,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 
         const OUString sViewStyle (pTheme->GetStyleName(mxViewId->getResourceURL()));
         PresenterTheme::SharedFontDescriptor pFont (pTheme->GetFont(sViewStyle));
-        if (pFont.get() == nullptr)
+        if (!pFont)
             break;
 
         /// this is responsible of the " presentation exit " text inside the slide windows

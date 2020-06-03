@@ -1178,7 +1178,7 @@ namespace svx
         // if we found a rich text control, we need context menu support
         if ( m_bActiveControlIsRichText )
         {
-            DBG_ASSERT( nullptr == m_aContextMenuObserver.get(), "FmTextControlShell::controlActivated: already have an observer!" );
+            DBG_ASSERT( !m_aContextMenuObserver, "FmTextControlShell::controlActivated: already have an observer!" );
             m_aContextMenuObserver = MouseListenerAdapter( new FmMouseListenerAdapter( _rxControl, this ) );
         }
 

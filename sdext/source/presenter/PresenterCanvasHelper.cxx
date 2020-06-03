@@ -64,7 +64,7 @@ void PresenterCanvasHelper::PaintRectangle (
     const css::rendering::ViewState& rDefaultViewState,
     const css::rendering::RenderState& rDefaultRenderState)
 {
-    if (rpBitmap.get() == nullptr)
+    if (!rpBitmap)
         return;
 
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())

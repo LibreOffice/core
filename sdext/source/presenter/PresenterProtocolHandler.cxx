@@ -706,13 +706,13 @@ NotesFontSizeCommand::NotesFontSizeCommand(
 
 ::rtl::Reference<PresenterNotesView> NotesFontSizeCommand::GetNotesView() const
 {
-    if (mpPresenterController.get() == nullptr)
+    if (!mpPresenterController)
         return nullptr;
 
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPresenterController->GetPaneContainer()->FindViewURL(
             PresenterViewFactory::msNotesViewURL));
-    if (pDescriptor.get() == nullptr)
+    if (!pDescriptor)
         return nullptr;
 
     return dynamic_cast<PresenterNotesView*>(pDescriptor->mxView.get());

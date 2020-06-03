@@ -36,7 +36,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() == nullptr)
+    if (!pFactory)
         return;
 
     sax_fastparser::FastAttributeList& rAttribs =
