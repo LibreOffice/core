@@ -1495,8 +1495,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
         if ( !pType )
         {
             _bNotConvert = false;
-            OUString const sCreate("x");
-            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,false,bForce);
+            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,"x",50,0,false,bForce);
             if ( !pType )
                 pType = m_pTypeInfo;
         }

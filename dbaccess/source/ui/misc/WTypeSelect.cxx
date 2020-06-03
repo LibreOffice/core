@@ -352,8 +352,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt
     _pFieldDescr->SetPrimaryKey(_bSet);
     if( _bSet )
     {
-        OUString sImage(BMP_PRIMARY_KEY);
-        m_xControl->set_image(_nPos, sImage);
+        m_xControl->set_image(_nPos, BMP_PRIMARY_KEY);
     }
     else if( _pFieldDescr->getTypeInfo()->bNullable )
     {

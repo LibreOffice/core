@@ -49,10 +49,10 @@ void HsqlBinaryImportTest::testBinaryImport()
     // at this point migration is already done
 
     uno::Reference<XStatement> statement = xConnection->createStatement();
-    OUString sql{ "SELECT \"ID\", \"Power_value\", \"Power_name\", \"Retired\", "
-                  "\"Birth_date\" FROM \"TestTable\" ORDER BY \"ID\"" };
 
-    uno::Reference<XResultSet> xRes = statement->executeQuery(sql);
+    uno::Reference<XResultSet> xRes
+        = statement->executeQuery("SELECT \"ID\", \"Power_value\", \"Power_name\", \"Retired\", "
+                                  "\"Birth_date\" FROM \"TestTable\" ORDER BY \"ID\"");
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // assert first row

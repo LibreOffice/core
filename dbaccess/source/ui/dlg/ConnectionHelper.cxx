@@ -217,24 +217,22 @@ namespace dbaui
             break;
             case  ::dbaccess::DST_MSACCESS:
             {
-                const OUString sExt("*.mdb;*.mde");
                 OUString sFilterName(DBA_RES (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.AddFilter(sFilterName,"*.mdb;*.mde");
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
             }
             break;
             case  ::dbaccess::DST_MSACCESS_2007:
             {
-                const OUString sAccdb("*.accdb;*.accde");
                 OUString sFilterName2(DBA_RES (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName2,sAccdb);
+                aFileDlg.AddFilter(sFilterName2,"*.accdb;*.accde");
                 aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
             }
@@ -321,12 +319,11 @@ namespace dbaui
             }
             case ::dbaccess::DST_FIREBIRD:
             {
-                const OUString sExt("*.fdb");
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.AddFilter(sFilterName,"*.fdb");
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
                 break;
@@ -346,12 +343,11 @@ namespace dbaui
         {
         case ::dbaccess::DST_FIREBIRD:
             {
-                const OUString sExt("*.fdb");
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                     FileDialogFlags::NONE, GetFrameWeld());
-                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.AddFilter(sFilterName,"*.fdb");
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
                 break;
