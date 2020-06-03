@@ -23,6 +23,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
+#include <sal/log.hxx>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -32,10 +34,12 @@ namespace drawinglayer::primitive2d
         ShadowPrimitive2D::ShadowPrimitive2D(
             const basegfx::B2DHomMatrix& rShadowTransform,
             const basegfx::BColor& rShadowColor,
+            double fShadowBlur,
             const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
             maShadowTransform(rShadowTransform),
-            maShadowColor(rShadowColor)
+            maShadowColor(rShadowColor),
+            mfShadowBlur(fShadowBlur)
         {
         }
 
@@ -46,7 +50,8 @@ namespace drawinglayer::primitive2d
                 const ShadowPrimitive2D& rCompare = static_cast< const ShadowPrimitive2D& >(rPrimitive);
 
                 return (getShadowTransform() == rCompare.getShadowTransform()
-                    && getShadowColor() == rCompare.getShadowColor());
+                    && getShadowColor() == rCompare.getShadowColor()
+                    && getShadowBlur() == rCompare.getShadowBlur());
             }
 
             return false;
@@ -55,6 +60,7 @@ namespace drawinglayer::primitive2d
         basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
+            aRetval.grow(getShadowBlur());
             aRetval.transform(getShadowTransform());
             return aRetval;
         }
