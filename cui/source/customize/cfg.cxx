@@ -382,8 +382,7 @@ MenuSaveInData::MenuSaveInData(
 {
     try
     {
-        OUString url( ITEM_MENUBAR_URL  );
-        m_xMenuSettings = GetConfigManager()->getSettings( url, false );
+        m_xMenuSettings = GetConfigManager()->getSettings( ITEM_MENUBAR_URL, false );
     }
     catch ( container::NoSuchElementException& )
     {
@@ -2152,8 +2151,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 // insert into std::unordered_map to filter duplicates from the parent
                 aToolbarInfo.emplace( systemname, true );
 
-                OUString custom(CUSTOM_TOOLBAR_STR);
-                if ( systemname.startsWith( custom ) )
+                if ( systemname.startsWith( CUSTOM_TOOLBAR_STR ) )
                 {
                     pEntry->SetUserDefined();
                 }
