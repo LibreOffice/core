@@ -784,6 +784,10 @@ STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
         {
             IMAccessible* pIMAcc = nullptr;
             g_pAgent->GetIAccessibleFromResID(m_dFocusChildID,&pIMAcc);
+            if (pIMAcc == nullptr)
+            {
+                return E_FAIL;
+            }
             pIMAcc->AddRef();
             pvarChild->vt = VT_DISPATCH;
             pvarChild->pdispVal = pIMAcc;
