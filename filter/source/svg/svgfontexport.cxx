@@ -181,11 +181,9 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
     if( rGlyphSet.empty() )
         return;
 
-    const OUString aEmbeddedFontStr( "EmbeddedFont_" );
-
     {
         SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", true, true );
-        OUString     aCurIdStr( aEmbeddedFontStr );
+        OUString     aCurIdStr( "EmbeddedFont_" );
         OUString     aUnitsPerEM( OUString::number( nFontEM ) );
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         vcl::Font           aFont( rFont );
