@@ -254,7 +254,7 @@ void MasterPageContainer::AcquireToken (Token aToken)
 void MasterPageContainer::ReleaseToken (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() == nullptr)
+    if (!pDescriptor)
         return;
 
     OSL_ASSERT(pDescriptor->mnUseCount>0);
@@ -885,7 +885,7 @@ void MasterPageContainer::Implementation::CleanContainer()
     // elements in the middle can not be removed because that would
     // invalidate the references still held by others.
     int nIndex (maContainer.size()-1);
-    while (nIndex>=0 && maContainer[nIndex].get()==nullptr)
+    while (nIndex>=0 && !maContainer[nIndex])
         --nIndex;
     maContainer.resize(++nIndex);
 }

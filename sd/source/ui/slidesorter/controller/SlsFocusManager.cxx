@@ -183,7 +183,7 @@ void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bScrollToFocus)
 {
-    if (rpDescriptor.get() == nullptr)
+    if (!rpDescriptor)
         return;
 
     mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);

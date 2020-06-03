@@ -181,7 +181,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     const OUString sPaneURL (rxResource->getResourceId()->getResourceURL());
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         pPaneContainer->FindPaneURL(sPaneURL));
-    if (pDescriptor.get() == nullptr)
+    if (!pDescriptor)
         return;
 
     pDescriptor->SetActivationState(false);

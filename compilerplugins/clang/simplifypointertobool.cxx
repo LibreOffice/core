@@ -423,9 +423,7 @@ bool SimplifyPointerToBool::VisitBinaryOperator(BinaryOperator const* binOp)
     if (ignoreLocation(binOp))
         return true;
     auto opCode = binOp->getOpcode();
-    //TODO    if (opCode != BO_EQ && opCode != BO_NE)
-    //        return true;
-    if (opCode != BO_NE)
+    if (opCode != BO_EQ && opCode != BO_NE)
         return true;
     const Expr* possibleMemberCall = nullptr;
     if (isa<CXXNullPtrLiteralExpr>(binOp->getLHS()->IgnoreParenImpCasts()))

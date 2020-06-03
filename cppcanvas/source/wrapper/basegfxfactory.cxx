@@ -40,7 +40,7 @@ namespace cppcanvas
         OSL_ENSURE( rCanvas &&  rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createPolyPolygon(): Invalid canvas" );
 
-        if( rCanvas.get() == nullptr )
+        if( !rCanvas )
             return PolyPolygonSharedPtr();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
@@ -59,7 +59,7 @@ namespace cppcanvas
         OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
 
-        if( rCanvas.get() == nullptr )
+        if( !rCanvas )
             return BitmapSharedPtr();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
@@ -77,7 +77,7 @@ namespace cppcanvas
         OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
 
-        if( rCanvas.get() == nullptr )
+        if( !rCanvas )
             return BitmapSharedPtr();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );

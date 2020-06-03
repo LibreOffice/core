@@ -791,7 +791,7 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize (
         // Calculate the summed width of all elements.
         for (const auto& rxElement : *rpPart)
         {
-            if (rxElement.get() == nullptr)
+            if (!rxElement)
                 continue;
 
             const awt::Size aBSize (rxElement->GetBoundingSize(rxCanvas));
@@ -836,7 +836,7 @@ void PresenterToolBar::LayoutPart (
     if(!AllSettings::GetLayoutRTL()){
         for (auto& rxElement : *rpPart)
         {
-            if (rxElement.get() == nullptr)
+            if (!rxElement)
                 continue;
 
             const awt::Size aElementSize (rxElement->GetBoundingSize(rxCanvas));
@@ -966,7 +966,7 @@ void PresenterToolBar::CheckMouseOver (
     {
         for (auto& rxElement : *rxPart)
         {
-            if (rxElement.get() == nullptr)
+            if (!rxElement)
                 continue;
 
             awt::Rectangle aBox (rxElement->GetBoundingBox());
@@ -1217,10 +1217,10 @@ bool Element::SetState (
                 if (mpMode->msAction.isEmpty())
                     break;
 
-                if (mpToolBar.get() == nullptr)
+                if (!mpToolBar)
                     break;
 
-                if (mpToolBar->GetPresenterController().get() == nullptr)
+                if (!mpToolBar->GetPresenterController())
                     break;
 
                 mpToolBar->GetPresenterController()->DispatchUnoCommand(mpMode->msAction);
@@ -1269,7 +1269,7 @@ void Element::UpdateState()
     OSL_ASSERT(mpToolBar);
     OSL_ASSERT(mpToolBar->GetPresenterController());
 
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return;
 
     util::URL aURL (mpToolBar->GetPresenterController()->CreateURLFromString(mpMode->msAction));
@@ -1422,10 +1422,10 @@ void Button::Paint (
 {
     OSL_ASSERT(rxCanvas.is());
 
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return;
 
-    if (mpMode->mpIcon.get() == nullptr)
+    if (!mpMode->mpIcon)
         return;
 
     geometry::RealRectangle2D aTextBBox (mpMode->maText.GetBoundingBox(rxCanvas));
@@ -1438,7 +1438,7 @@ void Button::Paint (
 awt::Size Button::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return awt::Size();
 
     geometry::RealRectangle2D aTextBBox (mpMode->maText.GetBoundingBox(rxCanvas));
@@ -1464,7 +1464,7 @@ void Button::PaintIcon (
     const sal_Int32 nTextHeight,
     const rendering::ViewState& rViewState)
 {
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return;
 
     Reference<rendering::XBitmap> xBitmap (mpMode->mpIcon->GetBitmap(GetMode()));
@@ -1532,7 +1532,7 @@ Label::Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 awt::Size Label::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return awt::Size(0,0);
 
     geometry::RealRectangle2D aTextBBox (mpMode->maText.GetBoundingBox(rxCanvas));
@@ -1544,7 +1544,7 @@ awt::Size Label::CreateBoundingSize (
 void Label::SetText (const OUString& rsText)
 {
     OSL_ASSERT(mpToolBar);
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return;
 
     const bool bRequestLayout (mpMode->maText.GetText().getLength() != rsText.getLength());
@@ -1564,7 +1564,7 @@ void Label::Paint (
     const rendering::ViewState& rViewState)
 {
     OSL_ASSERT(rxCanvas.is());
-    if (mpMode.get() == nullptr)
+    if (!mpMode)
         return;
 
     mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox());
@@ -1620,7 +1620,7 @@ void Text::Paint (
 
     if (msText.isEmpty())
         return;
-    if (mpFont.get() == nullptr)
+    if (!mpFont)
         return;
 
     if ( ! mpFont->mxFont.is())

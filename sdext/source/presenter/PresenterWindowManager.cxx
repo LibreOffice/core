@@ -687,7 +687,7 @@ void PresenterWindowManager::LayoutNotesMode()
     // width.  This takes into account the slide aspect ratio and thus has to
     // go over the inner pane size.
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
-    if (pPane.get() == nullptr)
+    if (!pPane)
         return;
 
     const awt::Size aNextSlideOuterBox (CalculatePaneSize(
@@ -907,7 +907,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
         rendering::CompositeOperation::SOURCE);
 
     // Paint the background.
-    if (mpBackgroundBitmap.get() == nullptr)
+    if (!mpBackgroundBitmap)
         return;
 
     ProvideBackgroundBitmap();

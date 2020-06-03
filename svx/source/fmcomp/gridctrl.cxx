@@ -178,7 +178,7 @@ void GridFieldValueListener::dispose()
 {
     if (m_bDisposed)
     {
-        DBG_ASSERT(m_pRealListener.get() == nullptr, "GridFieldValueListener::dispose : inconsistent !");
+        DBG_ASSERT(!m_pRealListener, "GridFieldValueListener::dispose : inconsistent !");
         return;
     }
 

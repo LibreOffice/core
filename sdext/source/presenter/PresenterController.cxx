@@ -484,7 +484,7 @@ void PresenterController::ShowView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() == nullptr)
+    if (!pDescriptor)
         return;
 
     pDescriptor->mbIsActive = true;
@@ -994,7 +994,7 @@ void PresenterController::HandleNumericKeyPress (
             // Ctrl-1, Ctrl-2, and Ctrl-3 are used to switch between views
             // (slide view, notes view, normal). Ctrl-4 switches monitors
             mnPendingSlideNumber = -1;
-            if (mpWindowManager.get() == nullptr)
+            if (!mpWindowManager)
                 return;
             switch(nKey)
             {
@@ -1129,7 +1129,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
 
     PresenterTheme::SharedFontDescriptor pFont (
         mpTheme->GetFont("PendingSlideNumberFont"));
-    if (pFont.get() == nullptr)
+    if (!pFont)
         return;
 
     pFont->PrepareFont(mxCanvas);

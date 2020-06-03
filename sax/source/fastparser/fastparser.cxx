@@ -955,7 +955,7 @@ void FastSaxParserImpl::produce( bool bForceFlush )
     }
 
     rEntity.maPendingEvents.push(std::move(rEntity.mxProducedEvents));
-    assert(rEntity.mxProducedEvents.get() == nullptr);
+    assert(!rEntity.mxProducedEvents);
 
     aGuard.clear(); // unlock
 

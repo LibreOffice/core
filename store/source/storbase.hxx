@@ -418,7 +418,7 @@ class PageHolderObject
 public:
     bool construct (rtl::Reference< PageData::Allocator > const & rxAllocator)
     {
-        if ((m_xPage.get() == nullptr) && rxAllocator.is())
+        if (!m_xPage && rxAllocator.is())
         {
             std::shared_ptr<PageData> tmp (rxAllocator->construct<T>(), PageData::Deallocate(rxAllocator));
             m_xPage.swap (tmp);

@@ -121,7 +121,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
     const SharedPageDescriptor& rpDescriptor,
     const bool bUpdateSelection)
 {
-    if (rpDescriptor.get() == nullptr || mpCurrentSlide==rpDescriptor)
+    if (!rpDescriptor || mpCurrentSlide==rpDescriptor)
         return;
 
     ReleaseCurrentSlide();

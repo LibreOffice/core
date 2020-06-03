@@ -629,7 +629,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
                     // if we stop pressing the button without a mouse move we open the popup
                     mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
                     mpListenWindow = nullptr;
-                    if( mpAnnotationWindow.get() == nullptr )
+                    if( !mpAnnotationWindow )
                         OpenPopup(false);
                 }
                 break;
