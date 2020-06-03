@@ -385,8 +385,12 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         {
             xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
 
-            for (SwAnchoredObject* pObject : *pAnchored)
+            // TODO: this is only a workaround (using indexing instead of iteration): for some reason using the iterator
+            // causes an unexpected exception in DEBUG mode when we reach the "end" iterator in the "for" loop
+            auto start_size = pAnchored->size();
+            for (size_t idx = 0; idx < start_size; ++idx)
             {
+                SwAnchoredObject* pObject = (*pAnchored)[idx];
                 pObject->dumpAsXml( writer );
             }
 
