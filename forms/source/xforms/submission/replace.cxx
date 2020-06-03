@@ -67,8 +67,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                 -1, makeAny(true), PropertyState_DIRECT_VALUE);
 
             OUString aURL = m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            OUString aTarget = "_default";
-            xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
+            xLoader->loadComponentFromURL(aURL, "_default", FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;
 
