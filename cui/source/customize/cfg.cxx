@@ -906,7 +906,7 @@ void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
 
 void SvxMenuEntriesListBox::CreateDropDown()
 {
-    int nWidth = m_xControl->get_text_height() / 2;
+    int nWidth = (m_xControl->get_text_height() * 3) / 4;
     m_xDropDown->SetOutputSizePixel(Size(nWidth, nWidth));
     DecorationView aDecoView(m_xDropDown.get());
     aDecoView.DrawSymbol(tools::Rectangle(Point(0, 0), Size(nWidth, nWidth)),
