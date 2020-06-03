@@ -211,7 +211,6 @@ static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdat
 
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > const &xContext )
 {
-    OUString sServiceName = "com.sun.star.deployment.ui.UpdateRequiredDialog";
     uno::Reference< uno::XInterface > xService;
     sal_Int16 nRet = 0;
 
@@ -220,7 +219,7 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
         throw uno::RuntimeException(
             "impl_showExtensionDialog(): unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
-    xService = xServiceManager->createInstanceWithContext( sServiceName, xContext );
+    xService = xServiceManager->createInstanceWithContext( "com.sun.star.deployment.ui.UpdateRequiredDialog", xContext );
     uno::Reference< ui::dialogs::XExecutableDialog > xExecuteable( xService, uno::UNO_QUERY );
     if ( xExecuteable.is() )
         nRet = xExecuteable->execute();

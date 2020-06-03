@@ -3564,13 +3564,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     }
     else if (aMap.find("id") != aMap.end())
     {
-        const OUString sClickAction("CLICK");
         const OUString sSelectAction("SELECT");
-        const OUString sClearAction("CLEAR");
-        const OUString sTypeAction("TYPE");
-        const OUString sUpAction("UP");
-        const OUString sDownAction("DOWN");
-        const OUString sValue("VALUE");
 
         try
         {
@@ -3589,23 +3583,23 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     }
                     else if (aMap["cmd"] == "plus")
                     {
-                        pUIWindow->execute(sUpAction, aMap);
+                        pUIWindow->execute("UP", aMap);
                     }
                     else if (aMap["cmd"] == "minus")
                     {
-                        pUIWindow->execute(sDownAction, aMap);
+                        pUIWindow->execute("DOWN", aMap);
                     }
                     else if (aMap["cmd"] == "set")
                     {
                         aMap["TEXT"] = aMap["data"];
 
-                        pUIWindow->execute(sClearAction, aMap);
-                        pUIWindow->execute(sTypeAction, aMap);
+                        pUIWindow->execute("CLEAR", aMap);
+                        pUIWindow->execute("TYPE", aMap);
                     }
                     else if (aMap["cmd"] == "value")
                     {
                         aMap["VALUE"] = aMap["data"];
-                        pUIWindow->execute(sValue, aMap);
+                        pUIWindow->execute("VALUE", aMap);
                     }
                     else if (aMap["cmd"] == "selecttab")
                     {
@@ -3620,7 +3614,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     bIsClickAction = true;
 
                 if (bIsClickAction)
-                    pUIWindow->execute(sClickAction, aMap);
+                    pUIWindow->execute("CLICK", aMap);
             }
         } catch(...) {}
 
@@ -5544,15 +5538,13 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
 static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
 {
     SetLastExceptionMsg();
-    const OUString sVersionStrTemplate(
+    return convertOUString(ReplaceStringHookProc(
         "{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
         "\"BuildId\": \"%BUILDID\" "
-        "}"
-    );
-    return convertOUString(ReplaceStringHookProc(sVersionStrTemplate));
+        "}"));
 }
 
 static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)

@@ -400,10 +400,9 @@ void BackendImpl::implProcessHelp(
                             langFolderDest, xCmdEnv);
 
                         const OUString aHelpStr("help");
-                        const OUString aSlash("/");
 
                         OUString aJarFile(
-                            makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr + ".jar"));
+                            makeURL(sHelpFolder, langFolderURLSegment + "/" + aHelpStr + ".jar"));
                         aJarFile = ::dp_misc::expandUnoRcUrl(aJarFile);
 
                         OUString aEncodedJarFilePath = rtl::Uri::encode(

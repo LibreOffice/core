@@ -576,10 +576,9 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
     OUString sURL;
     if (node.is())
     {
-        const OUString exp1("text()");
         css::uno::Reference< css::xml::dom::XNode > xPathName;
         try {
-            xPathName = m_xpath->selectSingleNode(node, exp1);
+            xPathName = m_xpath->selectSingleNode(node, "text()");
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
@@ -587,10 +586,9 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
         if (xPathName.is())
             sPublisherName = xPathName->getNodeValue();
 
-        const OUString exp2("@xlink:href");
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
-            xURL = m_xpath->selectSingleNode(node, exp2);
+            xURL = m_xpath->selectSingleNode(node, "@xlink:href");
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
@@ -612,10 +610,9 @@ OUString DescriptionInfoset::getLocalizedDisplayName() const
         getLocalizedChild("desc:display-name");
     if (node.is())
     {
-        const OUString exp("text()");
         css::uno::Reference< css::xml::dom::XNode > xtext;
         try {
-            xtext = m_xpath->selectSingleNode(node, exp);
+            xtext = m_xpath->selectSingleNode(node, "text()");
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
@@ -764,9 +761,8 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         }
     }
 
-    const OUString exp2("*[1]");
     try {
-        return m_xpath->selectSingleNode(xParent, exp2);
+        return m_xpath->selectSingleNode(xParent, "*[1]");
     } catch (const css::xml::xpath::XPathException &) {
         // ignore
         return nullptr;
@@ -785,10 +781,9 @@ OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
     {
         if (out_bParentExists)
             *out_bParentExists = true;
-        const OUString exp("@xlink:href");
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
-            xURL = m_xpath->selectSingleNode(node, exp);
+            xURL = m_xpath->selectSingleNode(node, "@xlink:href");
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }

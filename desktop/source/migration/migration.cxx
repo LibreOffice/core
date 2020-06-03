@@ -122,8 +122,7 @@ static OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
 
 bool MigrationImpl::alreadyMigrated()
 {
-    OUString const MIGRATION_STAMP_NAME("/MIGRATED4");
-    OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
+    OUString aStr = m_aInfo.userdata + "/MIGRATED4";
     File aFile(aStr);
     // create migration stamp, and/or check its existence
     bool bRet = aFile.open (osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock) == FileBase::E_EXIST;
