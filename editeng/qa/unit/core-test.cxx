@@ -225,8 +225,7 @@ void Test::testConstruction()
 {
     EditEngine aEngine(mpItemPool);
 
-    OUString aParaText = "I am Edit Engine.";
-    aEngine.SetText(aParaText);
+    aEngine.SetText("I am Edit Engine.");
 }
 
 bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
@@ -444,63 +443,58 @@ void Test::testAutocorrect()
     {
         OUString sInput("TEst-TEst");
         sal_Unicode const cNextChar(' ');
-        OUString const sExpected("Test-Test ");
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test-Test "), aFoo.getResult());
     }
 
     {
         OUString sInput("TEst/TEst");
         sal_Unicode const cNextChar(' ');
-        OUString const sExpected("Test/Test ");
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test/Test "), aFoo.getResult());
     }
 
     {
         // test auto-bolding with '*'
         OUString sInput("*foo");
         sal_Unicode const cNextChar('*');
-        OUString const sExpected("foo");
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), aFoo.getResult());
     }
 
     {
         OUString sInput("Test. test");
         sal_Unicode const cNextChar(' ');
-        OUString const sExpected("Test. Test ");
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test. Test "), aFoo.getResult());
     }
 
     // don't autocapitalize after a field mark
     {
         OUString sInput("Test. \x01 test");
         sal_Unicode const cNextChar(' ');
-        OUString const sExpected("Test. \x01 test ");
         bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", OUString("Test. \x01 test "), aFoo.getResult());
     }
 
     // consider field contents as text for auto quotes
@@ -749,12 +743,11 @@ void Test::testMultiParaSelCopyPaste()
 
     // Assert changes
     OUString aThirdParaAfterCopyPaste = aThirdPara + "first paragraph";
-    OUString aFourthPara = "This is second";
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
-    CPPUNIT_ASSERT_EQUAL( aFourthPara, rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("This is second"), rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
 void Test::testTabsCopyPaste()
@@ -1383,12 +1376,11 @@ void Test::testParaBoldItalicCopyPaste()
 
     // Assert changes
     OUString aThirdParaAfterCopyPaste = aThirdPara + "first paragraph";
-    OUString aFourthParaAfterCopyPaste = "This is second";
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(2)) );
-    CPPUNIT_ASSERT_EQUAL( aFourthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("This is second"), rDoc.GetParaAsString(sal_Int32(3)) );
 
     // Check updated text for appropriate Bold/Italics
     std::unique_ptr<EditTextObject> pEditText3( aEditEngine.CreateTextObject() );
@@ -1523,10 +1515,9 @@ void Test::testParaStartCopyPaste()
     aEditEngine.InsertText( xData, OUString(), rDoc.GetStartPaM(), true );
 
     // Assert changes
-    OUString aFirstParaAfterCopyPaste = "first paragraph";
     OUString aSecondParaAfterCopyPaste = "This is second" + aFirstPara;
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
-    CPPUNIT_ASSERT_EQUAL( aFirstParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("first paragraph"), rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(2)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(3)) );
@@ -1541,8 +1532,7 @@ void Test::testSectionAttributes()
     SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
 
     {
-        OUString aParaText = "aaabbbccc";
-        aEngine.SetText(aParaText);
+        aEngine.SetText("aaabbbccc");
         pSet->Put(aBold);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one item.", static_cast<sal_uInt16>(1), pSet->Count());
         aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
@@ -1730,14 +1720,13 @@ void Test::testLargeParaCopyPaste()
 
     // Assert changes
     OUString aFourthParaAfterCopyPaste = aFourthPara + "sixth paragraph";
-    OUString aSixthParaAfterCopyPaste = "This is eighth";
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
     CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
     CPPUNIT_ASSERT_EQUAL( aFourthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(3)) );
     CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(4)) );
-    CPPUNIT_ASSERT_EQUAL( aSixthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(5)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("This is eighth"), rDoc.GetParaAsString(sal_Int32(5)) );
     CPPUNIT_ASSERT_EQUAL( aFifthPara, rDoc.GetParaAsString(sal_Int32(6)) );
     CPPUNIT_ASSERT_EQUAL( aSixthPara, rDoc.GetParaAsString(sal_Int32(7)) );
     CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(8)) );

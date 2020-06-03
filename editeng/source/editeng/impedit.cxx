@@ -411,12 +411,11 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 OString sRectangle = comphelper::string::join("; ", v);
 
                 const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-                const OUString rAction("text_selection");
                 std::vector<vcl::LOKPayloadItem> aItems;
                 aItems.emplace_back("rectangles", sRectangle);
                 aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
                 aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
-                pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+                pNotifier->notifyWindow(pParent->GetLOKWindowId(), "text_selection", aItems);
                 pPolyPoly.reset();
                 return;
             }
@@ -1830,10 +1829,9 @@ void ImpEditView::DeselectAll()
         if (pParent && pParent->GetLOKWindowId())
         {
             const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-            const OUString rAction("text_selection");
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
-            pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+            pNotifier->notifyWindow(pParent->GetLOKWindowId(), "text_selection", aItems);
         }
     }
 }
