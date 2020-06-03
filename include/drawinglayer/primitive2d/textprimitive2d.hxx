@@ -22,15 +22,14 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <vector>
 #include <com/sun/star/lang/Locale.hpp>
-#include <drawinglayer/attribute/fontattribute.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
+#include <vector>
 
 namespace drawinglayer::primitive2d
 {
