@@ -393,7 +393,9 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 }
 
                 // Ignore drop portion height
-                if( pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
+                // tdf#130804 ... and bookmark portions
+                if ((pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
+                    || pPos->GetWhichPor() == POR_BOOKMARK)
                 {
                     pLast = pPos;
                     pPos = pPos->GetPortion();
@@ -603,6 +605,8 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     while ( pTmpPortion )
     {
         if ( !pTmpPortion->IsBreakPortion() && !pTmpPortion->IsFlyPortion() &&
+            // tdf#130804 ignore bookmark portions
+             pTmpPortion->GetWhichPor() != POR_BOOKMARK &&
              ( !_bNoFlyCntPorAndLinePor ||
                ( !pTmpPortion->IsFlyCntPortion() &&
                  !(pTmpPortion == this && pTmpPortion->GetPortion() ) ) ) )
