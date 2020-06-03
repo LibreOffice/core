@@ -551,6 +551,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Open donation page based on language + script (BCP47) with language as fall back.
             OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            if (aLang == "zh") aLang = "zh-cn";//tdf#127401
             OUString aBcp47 = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
             OUString sURL(officecfg::Office::Common::Menus::DonationURL::get() + //https://hub.libreoffice.org/donation/
                 "?BCP47=" + aBcp47 + "&LOlang=" + aLang );
@@ -560,9 +561,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_WHATSNEW:
         {
             // Open release notes depending on version and locale
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            if (aLang == "zh") aLang = "zh-cn";//tdf#127401
             OUString sURL(officecfg::Office::Common::Menus::ReleaseNotesURL::get() + //https://hub.libreoffice.org/ReleaseNotes/
                 "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
+                "&LOlocale=" + aLang );
             sfx2::openUriExternally(sURL, false);
             break;
         }
