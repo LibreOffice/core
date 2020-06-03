@@ -489,6 +489,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
     CPPUNIT_ASSERT_EQUAL(sectionId, textUpper);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132420)
+{
+    load(DATA_DIRECTORY, "tdf132420.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(12, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //Without the fix in place, 1 frame and 1 image would be gone and getShapes would return 10
+    CPPUNIT_ASSERT_EQUAL(12, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
