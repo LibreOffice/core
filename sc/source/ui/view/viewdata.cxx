@@ -1758,6 +1758,10 @@ void ScViewData::EditGrowX()
 
     comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
 
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
     ScDocument* pLocalDoc = GetDocument();
 
     ScSplitPos eWhich = GetActivePart();
@@ -1777,8 +1781,18 @@ void ScViewData::EditGrowX()
     SCCOL nLeft = GetPosX(eHWhich);
     SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
 
+    MapUnit eWinUnit = GetLogicMode(eWhich).GetMapUnit();
     Size        aSize = pEngine->GetPaperSize();
+    Size aSizePTwips;
+
+    if (bLOKPrintTwips)
+        aSizePTwips = OutputDevice::LogicToLogic(aSize, MapMode(eWinUnit), MapMode(MapUnit::MapTwip));
+
     tools::Rectangle   aArea = pCurView->GetOutputArea();
+    tools::Rectangle aAreaPTwips;
+    if (bLOKPrintTwips)
+        aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
+
     long        nOldRight = aArea.Right();
 
     // Margin is already included in the original width.
@@ -1804,22 +1818,35 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && ( nEditStartCol > nLeft || nEditEndCol < nRight ) )
         {
             long nLogicLeft = 0;
+            long nLogicLeftPTwips = 0;
             if ( nEditStartCol > nLeft )
             {
                 --nEditStartCol;
-                long nLeftPix = ToPixel( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+                long nColWidth = pLocalDoc->GetColWidth( nEditStartCol, nTabNo );
+                long nLeftPix = ToPixel( nColWidth, nPPTX );
                 nLogicLeft = pWin->PixelToLogic(Size(nLeftPix,0)).Width();
+                if (bLOKPrintTwips)
+                    nLogicLeftPTwips = nColWidth;
             }
             long nLogicRight = 0;
+            long nLogicRightPTwips = 0;
             if ( nEditEndCol < nRight )
             {
                 ++nEditEndCol;
-                long nRightPix = ToPixel( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+                long nColWidth = pLocalDoc->GetColWidth( nEditEndCol, nTabNo );
+                long nRightPix = ToPixel( nColWidth, nPPTX );
                 nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
+                if (bLOKPrintTwips)
+                    nLogicRightPTwips = nColWidth;
             }
 
             aArea.AdjustLeft( -(bLayoutRTL ? nLogicRight : nLogicLeft) );
             aArea.AdjustRight(bLayoutRTL ? nLogicLeft : nLogicRight );
+            if (bLOKPrintTwips)
+            {
+                aAreaPTwips.AdjustLeft( -(bLayoutRTL ? nLogicRightPTwips : nLogicLeftPTwips) );
+                aAreaPTwips.AdjustRight(bLayoutRTL ? nLogicLeftPTwips : nLogicRightPTwips );
+            }
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
@@ -1827,6 +1854,14 @@ void ScViewData::EditGrowX()
                 long nHalf = aSize.Width() / 2;
                 aArea.SetLeft( nCenter - nHalf + 1 );
                 aArea.SetRight( nCenter + aSize.Width() - nHalf - 1 );
+
+                if (bLOKPrintTwips)
+                {
+                    long nCenterPTwips = ( aAreaPTwips.Left() + aAreaPTwips.Right() ) / 2;
+                    long nHalfPTwips = aSizePTwips.Width() / 2;
+                    aAreaPTwips.SetLeft( nCenterPTwips - nHalfPTwips + 1 );
+                    aAreaPTwips.SetRight( nCenterPTwips + aSizePTwips.Width() - nHalfPTwips - 1 );
+                }
             }
 
             bChanged = true;
@@ -1839,19 +1874,38 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditStartCol > nLeft)
         {
             --nEditStartCol;
-            long nPix = ToPixel( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+            long nColWidth = pLocalDoc->GetColWidth( nEditStartCol, nTabNo );
+            long nPix = ToPixel( nColWidth, nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            long& nLogicWidthPTwips = nColWidth;
+
             if ( !bLayoutRTL )
+            {
                 aArea.AdjustLeft( -nLogicWidth );
+                if (bLOKPrintTwips)
+                    aAreaPTwips.AdjustLeft( -nLogicWidthPTwips );
+            }
             else
+            {
                 aArea.AdjustRight(nLogicWidth );
+                if (bLOKPrintTwips)
+                    aAreaPTwips.AdjustRight(nLogicWidthPTwips);
+            }
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
                 if ( !bLayoutRTL )
+                {
                     aArea.SetLeft( aArea.Right() - aSize.Width() + 1 );
+                    if (bLOKPrintTwips)
+                        aAreaPTwips.SetLeft( aAreaPTwips.Right() - aSizePTwips.Width() + 1 );
+                }
                 else
+                {
                     aArea.SetRight( aArea.Left() + aSize.Width() - 1 );
+                    if (bLOKPrintTwips)
+                        aAreaPTwips.SetRight( aAreaPTwips.Left() + aSizePTwips.Width() - 1 );
+                }
             }
 
             bChanged = true;
@@ -1862,19 +1916,37 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
         {
             ++nEditEndCol;
-            long nPix = ToPixel( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+            long nColWidth = pLocalDoc->GetColWidth( nEditEndCol, nTabNo );
+            long nPix = ToPixel( nColWidth, nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            long& nLogicWidthPTwips = nColWidth;
             if ( bLayoutRTL )
+            {
                 aArea.AdjustLeft( -nLogicWidth );
+                if (bLOKPrintTwips)
+                    aAreaPTwips.AdjustLeft( -nLogicWidthPTwips );
+            }
             else
+            {
                 aArea.AdjustRight(nLogicWidth );
+                if (bLOKPrintTwips)
+                    aAreaPTwips.AdjustRight(nLogicWidthPTwips);
+            }
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
                 if ( bLayoutRTL )
+                {
                     aArea.SetLeft( aArea.Right() - aSize.Width() + 1 );
+                    if (bLOKPrintTwips)
+                        aAreaPTwips.SetLeft( aAreaPTwips.Right() - aSizePTwips.Width() + 1 );
+                }
                 else
+                {
                     aArea.SetRight( aArea.Left() + aSize.Width() - 1 );
+                    if (bLOKPrintTwips)
+                        aAreaPTwips.SetRight( aAreaPTwips.Left() + aSizePTwips.Width() - 1 );
+                }
             }
 
             bChanged = true;
@@ -1886,6 +1958,9 @@ void ScViewData::EditGrowX()
         if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
         {
             tools::Rectangle aVis = pCurView->GetVisArea();
+            tools::Rectangle aVisPTwips;
+            if (bLOKPrintTwips)
+                aVisPTwips = pCurView->GetLOKSpecialVisArea();
 
             if ( bGrowCentered )
             {
@@ -1897,6 +1972,14 @@ void ScViewData::EditGrowX()
                 long nVisSize = aArea.GetWidth();
                 aVis.SetLeft( nCenter - nVisSize / 2 );
                 aVis.SetRight( aVis.Left() + nVisSize - 1 );
+
+                if (bLOKPrintTwips)
+                {
+                    long nCenterPTwips = aSizePTwips.Width() / 2;
+                    long nVisSizePTwips = aAreaPTwips.GetWidth();
+                    aVisPTwips.SetLeft( nCenterPTwips - nVisSizePTwips / 2 );
+                    aVisPTwips.SetRight( aVisPTwips.Left() + nVisSizePTwips - 1 );
+                }
             }
             else if ( bGrowToLeft )
             {
@@ -1906,6 +1989,12 @@ void ScViewData::EditGrowX()
 
                 aVis.SetRight( aSize.Width() - 1 );
                 aVis.SetLeft( aSize.Width() - aArea.GetWidth() );     // with the new, increased area
+
+                if (bLOKPrintTwips)
+                {
+                    aVisPTwips.SetRight( aSizePTwips.Width() - 1 );
+                    aVisPTwips.SetLeft( aSizePTwips.Width() - aAreaPTwips.GetWidth() ); // with the new, increased area
+                }
             }
             else
             {
@@ -1916,12 +2005,25 @@ void ScViewData::EditGrowX()
                 long nMove = aVis.Left();
                 aVis.SetLeft( 0 );
                 aVis.AdjustRight( -nMove );
+
+                if (bLOKPrintTwips)
+                {
+                    long nMovePTwips = aVisPTwips.Left();
+                    aVisPTwips.SetLeft( 0 );
+                    aVisPTwips.AdjustRight( -nMovePTwips );
+                }
             }
+
             pCurView->SetVisArea( aVis );
+            if (bLOKPrintTwips)
+                pCurView->SetLOKSpecialVisArea( aVisPTwips );
+
             bMoveArea = false;
         }
 
         pCurView->SetOutputArea(aArea);
+        if (bLOKPrintTwips)
+            pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
 
         //  In vertical mode, the whole text is moved to the next cell (right-aligned),
         //  so everything must be repainted. Otherwise, paint only the new area.
