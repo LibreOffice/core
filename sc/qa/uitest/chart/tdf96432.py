@@ -7,11 +7,8 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.calc import enter_text_to_cell
-from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.debug import sleep
+from uitest.uihelper.common import get_state_as_dict
 import org.libreoffice.unotest
 import pathlib
 
@@ -25,7 +22,11 @@ class tdf96432(UITestCase):
     calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf96432.ods"))
     xCalcDoc = self.xUITest.getTopFocusWindow()
     gridwin = xCalcDoc.getChild("grid_window")
+
     document = self.ui_test.get_component()
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertEqual(0, xDataSeries[0].ErrorBarY.LineTransparence)
+
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
     xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -47,7 +48,9 @@ class tdf96432(UITestCase):
 
     #verify - we didn't crash
     gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-    self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 7)
+
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertEqual(5, xDataSeries[0].ErrorBarY.LineTransparence)
 
     #reopen and try again
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -72,7 +75,9 @@ class tdf96432(UITestCase):
 
     #verify - we didn't crash
     gridwin.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-    self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 7)
+
+    xDataSeries = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
+    self.assertEqual(10, xDataSeries[0].ErrorBarY.LineTransparence)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
