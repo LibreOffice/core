@@ -2816,6 +2816,16 @@ void EditEngine::DisableAttributeExpanding() {
     pImpEditEngine->GetEditDoc().DisableAttributeExpanding();
 }
 
+void EditEngine::SetLOKSpecialPaperSize(const Size& rSize)
+{
+    pImpEditEngine->SetLOKSpecialPaperSize(rSize);
+}
+
+const Size& EditEngine::GetLOKSpecialPaperSize() const
+{
+    return pImpEditEngine->GetLOKSpecialPaperSize();
+}
+
 EFieldInfo::EFieldInfo()
 {
 }
