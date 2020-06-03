@@ -33,152 +33,151 @@
 
 namespace drawinglayer::primitive2d
 {
-        /** TextSimplePortionPrimitive2D class
+/** TextSimplePortionPrimitive2D class
 
-            This is the basic primitive for representing a text portion. It contains
-            all needed information. If it is not handled by a renderer, its decomposition
-            will provide the text tools::PolyPolygon outlines as filled polygons, correctly
-            transformed.
+    This is the basic primitive for representing a text portion. It contains
+    all needed information. If it is not handled by a renderer, its decomposition
+    will provide the text tools::PolyPolygon outlines as filled polygons, correctly
+    transformed.
 
-            To get better text quality, it is suggested to handle this primitive directly
-            in a renderer. In that case, e.g. hintings on the system can be supported.
+    To get better text quality, it is suggested to handle this primitive directly
+    in a renderer. In that case, e.g. hintings on the system can be supported.
 
-            @param maTextTransform
-            The text transformation contains the text start position (always baselined)
-            as translation, the FontSize as scale (where width relative to height defines
-            font scaling and width == height means no font scaling) and the font rotation
-            and shear.
-            When shear is used and a renderer does not support it, it may be better to use
-            the decomposition which will do everything correctly. Same is true for mirroring
-            which would be expressed as negative scalings.
+    @param maTextTransform
+    The text transformation contains the text start position (always baselined)
+    as translation, the FontSize as scale (where width relative to height defines
+    font scaling and width == height means no font scaling) and the font rotation
+    and shear.
+    When shear is used and a renderer does not support it, it may be better to use
+    the decomposition which will do everything correctly. Same is true for mirroring
+    which would be expressed as negative scalings.
 
-            @param rText
-            The text to be used. Only a part may be used, but a bigger part of the string
-            may be necessary for correct layouting (e.g. international)
+    @param rText
+    The text to be used. Only a part may be used, but a bigger part of the string
+    may be necessary for correct layouting (e.g. international)
 
-            @param aTextPosition
-            The index to the first character to use from rText
+    @param aTextPosition
+    The index to the first character to use from rText
 
-            @param aTextLength
-            The number of characters to use from rText
+    @param aTextLength
+    The number of characters to use from rText
 
-            @param rDXArray
-            The distances between the characters. This parameter may be empty, in that case
-            the renderer is responsible to do something useful. If it is given, it has to be of
-            the size aTextLength. Its values are in logical coordinates and describe the
-            distance for each character to use. This is independent from the font width which
-            is given with maTextTransform. The first value is the offset to use from the start
-            point in FontCoordinateSystem X-Direction (given by maTextTransform) to the start
-            point of the second character
+    @param rDXArray
+    The distances between the characters. This parameter may be empty, in that case
+    the renderer is responsible to do something useful. If it is given, it has to be of
+    the size aTextLength. Its values are in logical coordinates and describe the
+    distance for each character to use. This is independent from the font width which
+    is given with maTextTransform. The first value is the offset to use from the start
+    point in FontCoordinateSystem X-Direction (given by maTextTransform) to the start
+    point of the second character
 
-            @param rFontAttribute
-            The font definition
+    @param rFontAttribute
+    The font definition
 
-            @param rLocale
-            The locale to use
+    @param rLocale
+    The locale to use
 
-            @param rFontColor
-            The font color to use
+    @param rFontColor
+    The font color to use
 
-            @param bFilled
+    @param bFilled
 
-            @param nWidthToFill
+    @param nWidthToFill
 
-            @param rTextFillColor
-            Text background color (has nothing to do with bFilled and nWidthToFill)
+    @param rTextFillColor
+    Text background color (has nothing to do with bFilled and nWidthToFill)
 
-         */
-        class DRAWINGLAYER_DLLPUBLIC TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// text transformation (FontCoordinateSystem)
-            basegfx::B2DHomMatrix                   maTextTransform;
+ */
+class DRAWINGLAYER_DLLPUBLIC TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// text transformation (FontCoordinateSystem)
+    basegfx::B2DHomMatrix maTextTransform;
 
-            /// The text, used from maTextPosition up to maTextPosition + maTextLength
-            OUString                                maText;
+    /// The text, used from maTextPosition up to maTextPosition + maTextLength
+    OUString maText;
 
-            /// The index from where on maText is used
-            sal_Int32                               mnTextPosition;
+    /// The index from where on maText is used
+    sal_Int32 mnTextPosition;
 
-            /// The length for maText usage, starting from maTextPosition
-            sal_Int32                               mnTextLength;
+    /// The length for maText usage, starting from maTextPosition
+    sal_Int32 mnTextLength;
 
-            /// The DX array in logic units
-            ::std::vector< double >                 maDXArray;
+    /// The DX array in logic units
+    std::vector<double> maDXArray;
 
-            /// The font definition
-            attribute::FontAttribute                maFontAttribute;
+    /// The font definition
+    attribute::FontAttribute maFontAttribute;
 
-            /// The Locale for the text
-            css::lang::Locale                       maLocale;
+    /// The Locale for the text
+    css::lang::Locale maLocale;
 
-            /// font color
-            basegfx::BColor                         maFontColor;
+    /// font color
+    basegfx::BColor maFontColor;
 
-            // Whether to fill a given width with the text
-            bool                                    mbFilled;
+    // Whether to fill a given width with the text
+    bool mbFilled;
 
-            // the width to fill
-            long                                    mnWidthToFill;
+    // the width to fill
+    long mnWidthToFill;
 
-            /// The fill color of the text
-            Color                                   maTextFillColor;
+    /// The fill color of the text
+    Color maTextFillColor;
 
-            /// #i96669# internal: add simple range buffering for this primitive
-            basegfx::B2DRange                       maB2DRange;
+    /// #i96669# internal: add simple range buffering for this primitive
+    basegfx::B2DRange maB2DRange;
 
-        protected:
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+protected:
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
 
-        public:
-            /// constructor
-            TextSimplePortionPrimitive2D(
-                const basegfx::B2DHomMatrix& rNewTransform,
-                const OUString& rText,
-                sal_Int32 nTextPosition,
-                sal_Int32 nTextLength,
-                const ::std::vector< double >& rDXArray,
-                const attribute::FontAttribute& rFontAttribute,
-                const css::lang::Locale& rLocale,
-                const basegfx::BColor& rFontColor,
-                bool bFilled = false,
-                long nWidthToFill = 0,
-                const Color& rTextFillColor = COL_TRANSPARENT );
+public:
+    /// constructor
+    TextSimplePortionPrimitive2D(const basegfx::B2DHomMatrix& rNewTransform, const OUString& rText,
+                                 sal_Int32 nTextPosition, sal_Int32 nTextLength,
+                                 const ::std::vector<double>& rDXArray,
+                                 const attribute::FontAttribute& rFontAttribute,
+                                 const css::lang::Locale& rLocale,
+                                 const basegfx::BColor& rFontColor, bool bFilled = false,
+                                 long nWidthToFill = 0,
+                                 const Color& rTextFillColor = COL_TRANSPARENT);
 
-            /// helpers
-            /** get text outlines as polygons and their according ObjectTransformation. Handles all
-                the necessary VCL outline extractions, scaling adaptations and other stuff.
-             */
-            void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const;
+    /** get text outlines as polygons and their according ObjectTransformation. Handles all
+        the necessary VCL outline extractions, scaling adaptations and other stuff.
+     */
+    void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget,
+                                          basegfx::B2DHomMatrix& rTransformation) const;
 
-            /// data read access
-            const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
-            const OUString& getText() const { return maText; }
-            sal_Int32 getTextPosition() const { return mnTextPosition; }
-            sal_Int32 getTextLength() const { return mnTextLength; }
-            const ::std::vector< double >& getDXArray() const { return maDXArray; }
-            const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
-            const css::lang::Locale& getLocale() const { return  maLocale; }
-            const basegfx::BColor& getFontColor() const { return maFontColor; }
-            const Color& getTextFillColor() const { return maTextFillColor; }
-            bool isFilled() const { return mbFilled; }
-            long getWidthToFill() const { return mnWidthToFill; }
+    /// data read access
+    const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
+    const OUString& getText() const { return maText; }
+    sal_Int32 getTextPosition() const { return mnTextPosition; }
+    sal_Int32 getTextLength() const { return mnTextLength; }
+    const ::std::vector<double>& getDXArray() const { return maDXArray; }
+    const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
+    const css::lang::Locale& getLocale() const { return maLocale; }
+    const basegfx::BColor& getFontColor() const { return maFontColor; }
+    const Color& getTextFillColor() const { return maTextFillColor; }
+    bool isFilled() const { return mbFilled; }
+    long getWidthToFill() const { return mnWidthToFill; }
 
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
 
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
 
-        /// small helper to have a compare operator for Locale
-        bool DRAWINGLAYER_DLLPUBLIC LocalesAreEqual(const css::lang::Locale& rA, const css::lang::Locale& rB);
+/// small helper to have a compare operator for Locale
+bool DRAWINGLAYER_DLLPUBLIC LocalesAreEqual(const css::lang::Locale& rA,
+                                            const css::lang::Locale& rB);
 
 } // end of namespace drawinglayer::primitive2d
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

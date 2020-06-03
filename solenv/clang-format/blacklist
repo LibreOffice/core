@@ -5870,7 +5870,6 @@ include/drawinglayer/primitive2d/textdecoratedprimitive2d.hxx
 include/drawinglayer/primitive2d/textenumsprimitive2d.hxx
 include/drawinglayer/primitive2d/texthierarchyprimitive2d.hxx
 include/drawinglayer/primitive2d/textlayoutdevice.hxx
-include/drawinglayer/primitive2d/textprimitive2d.hxx
 include/drawinglayer/primitive2d/transformprimitive2d.hxx
 include/drawinglayer/primitive2d/transparenceprimitive2d.hxx
 include/drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx
