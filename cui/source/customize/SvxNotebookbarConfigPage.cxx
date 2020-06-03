@@ -249,8 +249,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
 
     if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
     {
-        OUString sDataInTree = "--------------------------------------------";
-        rTreeView.set_text(rIter, sDataInTree, nStartCol + 1);
+        rTreeView.set_text(rIter, "--------------------------------------------", nStartCol + 1);
     }
     else
     {

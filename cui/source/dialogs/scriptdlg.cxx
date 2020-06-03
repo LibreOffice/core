@@ -1144,7 +1144,6 @@ OUString GetErrorMessage(
     OUString language = unknown;
     OUString script = unknown;
     OUString line = unknown;
-    OUString type = "";
     OUString message = eScriptError.Message;
 
     if ( !eScriptError.language.isEmpty() )
@@ -1172,7 +1171,7 @@ OUString GetErrorMessage(
     }
 
     return FormatErrorString(
-        unformatted, language, script, line, type, message );
+        unformatted, language, script, line, "", message );
 }
 
 OUString GetErrorMessage(

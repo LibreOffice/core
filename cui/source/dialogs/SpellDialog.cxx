@@ -1007,10 +1007,6 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                 nEndPosition += elem.sText.getLength();
                 if(elem.xAlternatives.is())
                 {
-                    uno::Reference< container::XNamed > xNamed( elem.xAlternatives, uno::UNO_QUERY );
-                    OUString sServiceName;
-                    if( xNamed.is() )
-                        sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, elem.xAlternatives->getWord(),
                                     elem.xAlternatives->getLocale(), elem.xAlternatives->getAlternatives(), nullptr);
                     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
@@ -1779,15 +1775,11 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
     OUString aWord;
     lang::Locale    aLocale;
     uno::Sequence< OUString >    aAlts;
-    OUString sServiceName;
     if (xAlt.is())
     {
         aWord   = xAlt->getWord();
         aLocale = xAlt->getLocale();
         aAlts   = xAlt->getAlternatives();
-        uno::Reference< container::XNamed > xNamed( xAlt, uno::UNO_QUERY );
-        if (xNamed.is())
-            sServiceName = xNamed->getName();
     }
     SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, nullptr);
     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
