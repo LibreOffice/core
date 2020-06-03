@@ -50,9 +50,7 @@ void SvxConfigPageHelper::RemoveEntry( SvxEntries* pEntries, SvxConfigEntry cons
 
 OUString SvxConfigPageHelper::replaceSaveInName( const OUString& rMessage, const OUString& rSaveInName )
 {
-    const OUString placeholder("%SAVE IN SELECTION%" );
-
-    OUString name = rMessage.replaceFirst(placeholder, rSaveInName);
+    OUString name = rMessage.replaceFirst("%SAVE IN SELECTION%", rSaveInName);
 
     return name;
 }

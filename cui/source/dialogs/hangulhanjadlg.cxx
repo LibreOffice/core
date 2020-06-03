@@ -294,8 +294,7 @@ namespace svx
         m_xValueSet->SetLineCount( LINE_CNT );
         m_xValueSet->SetStyle( m_xValueSet->GetStyle() | WB_ITEMBORDER | WB_VSCROLL );
 
-        OUString const aOneCharacter("AU");
-        auto nItemWidth = 2 * m_xListBox->get_pixel_size(aOneCharacter).Width();
+        auto nItemWidth = 2 * m_xListBox->get_pixel_size("AU").Width();
         m_xValueSet->SetItemWidth( nItemWidth );
 
         Size aSize(m_xListBox->get_approximate_digit_width() * 42, m_xListBox->get_text_height() * 5);
