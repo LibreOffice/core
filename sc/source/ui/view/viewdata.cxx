@@ -2050,6 +2050,10 @@ void ScViewData::EditGrowY( bool bInitial )
 
     comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
 
+    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
+            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+
     ScSplitPos eWhich = GetActivePart();
     ScVSplitPos eVWhich = WhichV(eWhich);
     EditView* pCurView = pEditView[eWhich].get();
@@ -2069,11 +2073,21 @@ void ScViewData::EditGrowY( bool bInitial )
 
     EditEngine* pEngine = pCurView->GetEditEngine();
     vcl::Window* pWin = pCurView->GetWindow();
+    MapUnit eWinUnit = GetLogicMode(eWhich).GetMapUnit();
 
     SCROW nBottom = GetPosY(eVWhich) + VisibleCellsY(eVWhich);
 
     Size        aSize = pEngine->GetPaperSize();
+    Size aSizePTwips;
     tools::Rectangle   aArea = pCurView->GetOutputArea();
+    tools::Rectangle aAreaPTwips;
+
+    if (bLOKPrintTwips)
+    {
+        aSizePTwips = OutputDevice::LogicToLogic(aSize, MapMode(eWinUnit), MapMode(MapUnit::MapTwip));
+        aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
+    }
+
     long        nOldBottom = aArea.Bottom();
     long        nTextHeight = pEngine->GetTextHeight();
 
@@ -2100,12 +2114,17 @@ void ScViewData::EditGrowY( bool bInitial )
     {
         ++nEditEndRow;
         ScDocument* pLocalDoc = GetDocument();
-        long nPix = ToPixel( pLocalDoc->GetRowHeight( nEditEndRow, nTabNo ), nPPTY );
+        long nRowHeight = pLocalDoc->GetRowHeight( nEditEndRow, nTabNo );
+        long nPix = ToPixel( nRowHeight, nPPTY );
         aArea.AdjustBottom(pWin->PixelToLogic(Size(0,nPix)).Height() );
+        if (bLOKPrintTwips)
+            aAreaPTwips.AdjustBottom(nRowHeight);
 
         if ( aArea.Bottom() > aArea.Top() + aSize.Height() - 1 )
         {
             aArea.SetBottom( aArea.Top() + aSize.Height() - 1 );
+            if (bLOKPrintTwips)
+                aAreaPTwips.SetBottom( aAreaPTwips.Top() + aSizePTwips.Height() - 1 );
             bMaxReached = true;     // don't occupy more cells beyond paper size
         }
 
@@ -2116,6 +2135,8 @@ void ScViewData::EditGrowY( bool bInitial )
     if (bChanged)
     {
         pCurView->SetOutputArea(aArea);
+        if (bLOKPrintTwips)
+            pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
 
         if (nEditEndRow >= nBottom || bMaxReached)
         {
