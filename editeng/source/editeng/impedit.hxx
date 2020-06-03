@@ -562,6 +562,8 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
+    Size                aLOKSpecialPaperSize;
+
     Link<EditStatus&,void>         aStatusHdlLink;
     Link<EENotify&,void>           aNotifyHdl;
     Link<HtmlImportInfo&,void>     aHtmlImportHdl;
@@ -1109,6 +1111,8 @@ public:
     bool            IsNbspRunNext() const { return mbNbspRunNext; }
 
     void Dispose();
+    void SetLOKSpecialPaperSize(const Size& rSize) { aLOKSpecialPaperSize = rSize; }
+    const Size& GetLOKSpecialPaperSize() const { return aLOKSpecialPaperSize; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

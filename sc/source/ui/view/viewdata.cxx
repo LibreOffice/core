@@ -1652,7 +1652,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                 aPaperSizePTwips.setWidth(OutputDevice::LogicToLogic(
                         aUtilRect.GetWidth(), MapUnit::Map100thMM, MapUnit::MapTwip));
         }
+
         pNewEngine->SetPaperSize( aPaperSize );
+        if (bLOKPrintTwips)
+            pNewEngine->SetLOKSpecialPaperSize(aPaperSizePTwips);
 
         // sichtbarer Ausschnitt
         Size aPaper = pNewEngine->GetPaperSize();
@@ -1781,12 +1784,10 @@ void ScViewData::EditGrowX()
     SCCOL nLeft = GetPosX(eHWhich);
     SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
 
-    MapUnit eWinUnit = GetLogicMode(eWhich).GetMapUnit();
     Size        aSize = pEngine->GetPaperSize();
     Size aSizePTwips;
-
     if (bLOKPrintTwips)
-        aSizePTwips = OutputDevice::LogicToLogic(aSize, MapMode(eWinUnit), MapMode(MapUnit::MapTwip));
+        aSizePTwips = pEngine->GetLOKSpecialPaperSize();
 
     tools::Rectangle   aArea = pCurView->GetOutputArea();
     tools::Rectangle aAreaPTwips;
@@ -2074,7 +2075,6 @@ void ScViewData::EditGrowY( bool bInitial )
 
     EditEngine* pEngine = pCurView->GetEditEngine();
     vcl::Window* pWin = pCurView->GetWindow();
-    MapUnit eWinUnit = GetLogicMode(eWhich).GetMapUnit();
 
     SCROW nBottom = GetPosY(eVWhich) + VisibleCellsY(eVWhich);
 
@@ -2085,7 +2085,7 @@ void ScViewData::EditGrowY( bool bInitial )
 
     if (bLOKPrintTwips)
     {
-        aSizePTwips = OutputDevice::LogicToLogic(aSize, MapMode(eWinUnit), MapMode(MapUnit::MapTwip));
+        aSizePTwips = pEngine->GetLOKSpecialPaperSize();
         aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
     }
 
