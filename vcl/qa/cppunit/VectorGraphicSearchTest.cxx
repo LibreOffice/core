@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
+#if HAVE_FEATURE_PDFIUM
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -194,5 +198,7 @@ void VectorGraphicSearchTest::testSearchStringChange()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
