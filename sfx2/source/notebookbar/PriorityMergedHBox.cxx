@@ -23,6 +23,10 @@
 #include <bitmaps.hlst>
 #include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
+#include <sfx2/viewfrm.hxx>
+
+#define DUMMY_WIDTH 50
+#define BUTTON_WIDTH 30
 
 /*
 * PriorityMergedHBox is a VclHBox which hides its own children if there is no sufficient space.
@@ -54,7 +58,60 @@ public:
 
     virtual void Resize() override
     {
-        PriorityHBox::Resize();
+        if (!m_bInitialized && SfxViewFrame::Current())
+            Initialize();
+
+        if (!m_bInitialized)
+        {
+            return VclHBox::Resize();
+        }
+
+        long nWidth = GetSizePixel().Width();
+        long nCurrentWidth = VclHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
+
+        // Hide lower priority controls
+        for (int i = GetChildCount() - 1; i >= 0; i--)
+        {
+            vcl::Window* pWindow = GetChild(i);
+
+            if (nCurrentWidth <= nWidth)
+                break;
+
+            if (pWindow && pWindow->GetParent() == this && pWindow->IsVisible())
+            {
+                if (pWindow->GetOutputWidthPixel())
+                    nCurrentWidth -= pWindow->GetOutputWidthPixel();
+                else
+                    nCurrentWidth -= DUMMY_WIDTH;
+                pWindow->Hide();
+            }
+        }
+
+        // Show higher priority controls if we already have enough space
+        for (int i = 0; i < GetChildCount(); i++)
+        {
+            vcl::Window* pWindow = GetChild(i);
+
+            if (pWindow->GetParent() != this)
+            {
+                continue;
+            }
+
+            if (pWindow && !pWindow->IsVisible())
+            {
+                pWindow->Show();
+                nCurrentWidth += getLayoutRequisition(*pWindow).Width() + get_spacing();
+
+                if (nCurrentWidth > nWidth)
+                {
+                    pWindow->Hide();
+                    break;
+                }
+            }
+        }
+
+        VclHBox::Resize();
+
         if (GetHiddenCount())
             m_pButton->Show();
         else
@@ -68,6 +125,51 @@ public:
             m_pPopup.disposeAndClear();
         PriorityHBox::dispose();
     }
+
+    int GetHiddenCount() const override
+    {
+        int nCount = 0;
+
+        for (int i = GetChildCount() - 1; i >= 0; i--)
+        {
+            vcl::Window* pWindow = GetChild(i);
+            if (pWindow && pWindow->GetParent() == this && !pWindow->IsVisible())
+                nCount++;
+        }
+
+        return nCount;
+    }
+
+    Size calculateRequisition() const override
+    {
+        if (!m_bInitialized)
+        {
+            return VclHBox::calculateRequisition();
+        }
+
+        sal_uInt16 nVisibleChildren = 0;
+
+        Size aSize;
+        for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+             pChild = pChild->GetWindow(GetWindowType::Next))
+        {
+            if (!pChild->IsVisible())
+                continue;
+            ++nVisibleChildren;
+            Size aChildSize = getLayoutRequisition(*pChild);
+
+            long nPrimaryDimension = getPrimaryDimension(aChildSize);
+            nPrimaryDimension += pChild->get_padding() * 2;
+            setPrimaryDimension(aChildSize, nPrimaryDimension);
+
+            accumulateMaxes(aChildSize, aSize);
+        }
+
+        setPrimaryDimension(aSize, 200);
+        return finalizeMaxes(aSize, nVisibleChildren);
+    }
+
+    void GetChildrenWithPriorities() override{};
 };
 }
 
@@ -83,11 +185,8 @@ IMPL_LINK(PriorityMergedHBox, PBClickHdl, Button*, /*pButton*/, void)
         vcl::Window* pWindow = GetChild(i);
         if (pWindow != m_pButton)
         {
-            vcl::IPrioritable* pChild = dynamic_cast<vcl::IPrioritable*>(pWindow);
-
-            if (pChild && pChild->IsHidden())
+            if (!pWindow->IsVisible())
             {
-                pChild->ShowContent();
                 pWindow->Show();
                 pWindow->SetParent(m_pPopup->getBox());
                 // count is decreased because we moved child

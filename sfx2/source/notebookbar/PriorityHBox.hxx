@@ -33,13 +33,14 @@
 
 class PriorityHBox : public VclHBox
 {
-private:
+protected:
     bool m_bInitialized;
 
     std::vector<vcl::IPrioritable*> m_aSortedChildren;
 
-protected:
-    int GetHiddenCount() const;
+    virtual int GetHiddenCount() const;
+
+    virtual void GetChildrenWithPriorities();
 
 public:
     explicit PriorityHBox(vcl::Window* pParent);
@@ -55,8 +56,6 @@ public:
     virtual void Resize() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-
-    void GetChildrenWithPriorities();
 };
 
 #endif
