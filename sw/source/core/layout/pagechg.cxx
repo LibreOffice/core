@@ -2512,6 +2512,18 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
     return true;
 }
 
+const SwFooterFrame* SwPageFrame::GetFooterFrame() const
+{
+    const SwFrame* pLowerFrame = Lower();
+    while (pLowerFrame)
+    {
+        if (pLowerFrame->IsFooterFrame())
+            return dynamic_cast<const SwFooterFrame*>(pLowerFrame);
+        pLowerFrame = pLowerFrame->GetNext();
+    }
+    return nullptr;
+}
+
 SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
 {
     if (pPage && pPage->HasGrid())

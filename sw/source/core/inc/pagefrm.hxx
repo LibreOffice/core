@@ -21,6 +21,7 @@
 
 #include <viewsh.hxx>
 #include "ftnboss.hxx"
+#include "hffrm.hxx"
 
 #include <SidebarWindowsTypes.hxx>
 
@@ -328,6 +329,8 @@ public:
     /// Is bottom-of-page-frame - bottom-of-text-frame difference valid in case whitespace is hidden?
     /// If false is returned, then the caller should handle negative difference as (at least) zero difference instead.
     bool CheckPageHeightValidForHideWhitespace(SwTwips nDiff);
+
+    const SwFooterFrame* GetFooterFrame() const;
 };
 
 inline SwContentFrame *SwPageFrame::FindFirstBodyContent()
