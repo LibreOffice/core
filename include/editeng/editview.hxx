@@ -335,6 +335,9 @@ public:
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
+
+    void SupressLOKMessages(bool bSet);
+    bool IsSupressLOKMessages() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX
