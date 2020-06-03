@@ -589,11 +589,10 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             xFields->getByName( rField ) >>= xField;
 
             OUString sCurrentModelType;
-            const OUString sType("Type");
             sal_Int32 nType = 0;
             bool bIsFormatted           = false;
             bool bFormattedIsNumeric    = true;
-            xField->getPropertyValue(sType) >>= nType;
+            xField->getPropertyValue("Type") >>= nType;
             switch(nType)
             {
                 case DataType::BIT:
@@ -1189,9 +1188,8 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             aElement = xFields->getByName(rName);
             aElement >>= xField;
 
-            const OUString sType("Type");
             sal_Int32 nFormatKey = 0;
-            xField->getPropertyValue(sType) >>= nFormatKey;
+            xField->getPropertyValue("Type") >>= nFormatKey;
 
             OUString aInstanceName("com.sun.star.form.component.");
 

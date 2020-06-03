@@ -619,10 +619,8 @@ namespace pcr
                 aComposeBuffer.append( xScriptUri->getName() );
 
                 // location
-                const OUString sLocationParamName(  "location"  );
-                const OUString sLocation = xScriptUri->getParameter( sLocationParamName );
-                const OUString sLangParamName(  "language"  );
-                const OUString sLanguage = xScriptUri->getParameter( sLangParamName );
+                const OUString sLocation = xScriptUri->getParameter( "location" );
+                const OUString sLanguage = xScriptUri->getParameter( "language" );
 
                 if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
                 {
