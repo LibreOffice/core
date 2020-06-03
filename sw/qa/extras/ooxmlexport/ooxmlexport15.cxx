@@ -39,6 +39,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMargin,
+                         "tdf133070_testRelativeAnchorHeightFromBottomMargin.docx")
+{
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    // tdf#133070 The height was set relative from bottom margin, but this was handled relative from page height.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredHeight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(898), nAnchoredHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
