@@ -20,6 +20,8 @@
 #include <navipi.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <appoptio.hxx>
+#include <scmod.hxx>
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -72,6 +74,9 @@ StringMap ScGridWinUIObject::get_state()
     ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
 
     aMap["MarkedArea"] = aMarkedAreaString;
+
+    ScAppOptions aOpt = SC_MOD()->GetAppOptions();
+    aMap["Zoom"] = OUString::number( aOpt.GetZoom() );
     return aMap;
 }
 
@@ -219,6 +224,28 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             OUString aVal = itr->second;
             ::sfx2::sidebar::Sidebar::ShowPanel(aVal, pViewFrm->GetFrame().GetFrameInterface());
+        }
+    }
+    else if (rAction == "SET")
+    {
+        if (rParameters.find("ZOOM") != rParameters.end())
+        {
+            auto itr = rParameters.find("ZOOM");
+            OUString aVal = itr->second;
+            sal_Int32 nVal = aVal.toInt32();
+            ScTabViewShell* pViewShell = getViewShell();
+            ScModule*  pScMod = SC_MOD();
+            if( nVal )
+            {
+                ScAppOptions aNewOpt = pScMod->GetAppOptions();
+                aNewOpt.SetZoom( nVal );
+                pScMod->SetAppOptions( aNewOpt );
+                Fraction aFract( nVal, 100 );
+                pViewShell->SetZoom( aFract, aFract, true );
+                pViewShell->PaintGrid();
+                pViewShell->PaintTop();
+                pViewShell->PaintLeft();
+            }
         }
     }
     else
