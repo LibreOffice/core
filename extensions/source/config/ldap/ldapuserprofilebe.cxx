@@ -87,16 +87,6 @@ bool LdapUserProfileBe::readLdapConfiguration(
     LdapDefinition * definition, OUString * loggedOnUser)
 {
     OSL_ASSERT(context.is() && definition != nullptr && loggedOnUser != nullptr);
-    const OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
-    const OUString kComponent("org.openoffice.LDAP/UserDirectory");
-    const OUString kServerDefinition("ServerDefinition");
-    const OUString kServer("Server");
-    const OUString kPort("Port");
-    const OUString kBaseDN("BaseDN");
-    const OUString kUser("SearchUser");
-    const OUString kPassword("SearchPassword");
-    const OUString kUserObjectClass("UserObjectClass");
-    const OUString kUserUniqueAttr("UserUniqueAttribute");
 
     uno::Reference< XInterface > xIface;
     try
@@ -104,35 +94,35 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath("nodepath", uno::makeAny(kComponent) );
+        css::beans::NamedValue aPath("nodepath", uno::makeAny(OUString("org.openoffice.LDAP/UserDirectory")) );
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<=  aPath;
 
-        xIface = xCfgProvider->createInstanceWithArguments(kReadOnlyViewService, aArgs);
+        xIface = xCfgProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aArgs);
 
         uno::Reference<container::XNameAccess > xAccess(xIface, uno::UNO_QUERY_THROW);
-        xAccess->getByName(kServerDefinition) >>= xIface;
+        xAccess->getByName("ServerDefinition") >>= xIface;
 
         uno::Reference<container::XNameAccess > xChildAccess(xIface, uno::UNO_QUERY_THROW);
 
-        if (!getLdapStringParam(xChildAccess, kServer, definition->mServer))
+        if (!getLdapStringParam(xChildAccess, "Server", definition->mServer))
             return false;
-        if (!getLdapStringParam(xChildAccess, kBaseDN, definition->mBaseDN))
+        if (!getLdapStringParam(xChildAccess, "BaseDN", definition->mBaseDN))
             return false;
 
         definition->mPort=0;
-        xChildAccess->getByName(kPort) >>= definition->mPort ;
+        xChildAccess->getByName("Port") >>= definition->mPort ;
         if (definition->mPort == 0)
             return false;
 
-        if (!getLdapStringParam(xAccess, kUserObjectClass, definition->mUserObjectClass))
+        if (!getLdapStringParam(xAccess, "UserObjectClass", definition->mUserObjectClass))
             return false;
-        if (!getLdapStringParam(xAccess, kUserUniqueAttr, definition->mUserUniqueAttr))
+        if (!getLdapStringParam(xAccess, "UserUniqueAttribute", definition->mUserUniqueAttr))
             return false;
 
-        getLdapStringParam(xAccess, kUser, definition->mAnonUser);
-        getLdapStringParam(xAccess, kPassword, definition->mAnonCredentials);
+        getLdapStringParam(xAccess, "SearchUser", definition->mAnonUser);
+        getLdapStringParam(xAccess, "SearchPassword", definition->mAnonCredentials);
     }
     catch (const uno::Exception&)
     {
