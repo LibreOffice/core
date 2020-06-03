@@ -593,6 +593,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testRelativeAnchorHeightFromBottomMargin,
+                         "tdf133070_testRelativeAnchorHeightFromBottomMargin.docx")
+{
+    // tdf#133070 The height was set relative from bottom margin, but this was handled relative from page height.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredHeight
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(898), nAnchoredHeight);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
