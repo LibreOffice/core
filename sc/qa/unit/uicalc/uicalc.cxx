@@ -257,6 +257,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
+{
+    ScModelObj* pModelObj = createDoc("tdf133342.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    //Select cell A1
+    CPPUNIT_ASSERT_EQUAL(OUString("12,35 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+    //Add decimals
+    dispatchCommand(mxComponent, ".uno:NumberFormatIncDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12,346 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    //Delete decimals
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    dispatchCommand(mxComponent, ".uno:NumberFormatDecDecimals", {});
+    //Space should preserved before percent sign
+    CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
