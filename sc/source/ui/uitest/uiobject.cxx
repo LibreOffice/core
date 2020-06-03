@@ -221,6 +221,21 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             ::sfx2::sidebar::Sidebar::ShowPanel(aVal, pViewFrm->GetFrame().GetFrameInterface());
         }
     }
+    else if (rAction == "SET")
+    {
+        if (rParameters.find("ZOOM") != rParameters.end())
+        {
+            auto itr = rParameters.find("ZOOM");
+            OUString aVal = itr->second;
+            sal_Int32 nVal = aVal.toInt32();
+            ScTabViewShell* pViewShell = getViewShell();
+            Fraction aFract( nVal, 100 );
+            pViewShell->SetZoom( aFract, aFract, true );
+            pViewShell->PaintGrid();
+            pViewShell->PaintTop();
+            pViewShell->PaintLeft();
+        }
+    }
     else
     {
         WindowUIObject::execute(rAction, rParameters);
