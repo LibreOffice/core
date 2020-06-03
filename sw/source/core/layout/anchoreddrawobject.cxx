@@ -644,13 +644,22 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         long nTargetHeight = aCurrObjRect.GetHeight( );
         if ( GetDrawObj( )->GetRelativeHeight( ) )
         {
-            tools::Rectangle aPageRect;
+            long nHeight = 0;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                aPageRect = GetPageFrame()->getFramePrintArea().SVRect();
+                nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();
+            else if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+            {
+                // TODO: another UNO API value should be used instead of text::RelOrientation::PAGE_PRINT_AREA_BOTTOM,
+                // but this situation does not created yet, so we use this temporarily
+                auto pOut = GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut();
+                const tools::Rectangle aPageRect = GetPageFrame()->GetBoundRect(pOut).SVRect();
+                const tools::Rectangle aPageFrameRect = GetPageFrame()->getFramePrintArea().SVRect();
+                nHeight = aPageRect.Bottom() - aPageFrameRect.Bottom();
+            }
             else
-                aPageRect = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect();
-            nTargetHeight = aPageRect.GetHeight( ) * (*GetDrawObj( )->GetRelativeHeight());
+                nHeight = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetHeight();
+            nTargetHeight = nHeight * (*GetDrawObj( )->GetRelativeHeight());
         }
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
