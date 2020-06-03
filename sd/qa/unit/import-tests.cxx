@@ -3135,7 +3135,7 @@ void SdImportTest::testShapeBlurPPTXImport()
 
     sal_Int32 nRadius = -1;
     xShape->getPropertyValue("ShadowBlur") >>= nRadius;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(139700), nRadius); // 584200EMU=46pt - 139700EMU = 11pt
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 584200EMU=46pt - 139700EMU = 388Hmm = 11pt
 
 }
 
