@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,cui))
 
 $(eval $(call gb_Module_add_targets,cui,\
 	Library_cui \
+	Package_cui \
 	UIConfig_cui \
 ))
 
