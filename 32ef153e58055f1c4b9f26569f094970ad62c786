@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0eff118c_fd6077a7",
+        "filename": "offapi/com/sun/star/linguistic2/XNumberText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-06-03T08:14:35Z",
+      "side": 1,
+      "message": "i\u0027m assuming this language isn\u0027t of any practical relevance so we don\u0027t need to list this as an API change?",
+      "revId": "32ef153e58055f1c4b9f26569f094970ad62c786",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
