@@ -385,9 +385,8 @@ void LwpParaStyle::ApplyBreaks(XFParaStyle* pParaStyle, const LwpBreaksOverride*
 void LwpParaStyle::ApplyAlignment(XFParaStyle* pParaStyle, const LwpAlignmentOverride* pAlign)
 {
     enumXFAlignType alignType = enumXFAlignStart;
-    LwpAlignmentOverride::AlignType type;
+    auto type = pAlign->GetAlignType();
 
-    type = pAlign->GetAlignType();
     pParaStyle->SetNumberRight(false);//to identify its align attribute
     switch(type)
     {
