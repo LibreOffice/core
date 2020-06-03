@@ -7301,7 +7301,7 @@ void SwUiWriterTest::testTdf133589()
     sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
     // disambiguate consonants: kosszarv -> kos|szarv
-    // (add explicite ZWSP temporarily for consonant disambiguation, because the requested
+    // (add explicit ZWSP temporarily for consonant disambiguation, because the requested
     // hu_HU hyphenation dictionary isn't installed on all testing platform)
     // pWrtShell->Insert(u"kosszarv");
     pWrtShell->Insert(u"kos​szarv");

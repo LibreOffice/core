@@ -278,7 +278,7 @@ void lcl_convertRectangle(const OUString& rString, ::tools::Rectangle& rRectangl
     rRectangle.setHeight(aSeq[3].toInt32());
 }
 
-} // end anonymouse namespace
+} // end anonymous namespace
 
 void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
