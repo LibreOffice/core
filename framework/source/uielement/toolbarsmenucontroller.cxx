@@ -450,8 +450,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     }
 
     OUString aLabelStr(FwkResId(STR_RESTORE_TOOLBARS));
-    OUString aRestoreCmd( CMD_RESTOREVISIBILITY );
-    addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
+    addCommand( m_xPopupMenu, CMD_RESTOREVISIBILITY, aLabelStr );
 }
 
 // XEventListener

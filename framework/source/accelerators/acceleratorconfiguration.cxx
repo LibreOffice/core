@@ -479,9 +479,8 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
                                 : m_xContext      (xContext                     )
 {
-    const OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg.set(
-             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_ACCELERATORS, ::comphelper::EConfigurationModes::AllLocales ),
+             ::comphelper::ConfigurationHelper::openConfig( m_xContext, "org.openoffice.Office.Accelerators", ::comphelper::EConfigurationModes::AllLocales ),
              css::uno::UNO_QUERY );
 }
 
