@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-
-// predefines
 
 namespace rtl {
    class OUString;
@@ -34,11 +31,8 @@ namespace drawinglayer::attribute {
     class ImpFontAttribute;
 }
 
-
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         /** FontAttribute class
 
             This attribute class is able to hold all parameters needed/used
@@ -88,10 +82,6 @@ namespace drawinglayer
             bool getBiDiStrong() const;
             bool getMonospaced() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
-
-
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
+} // end of namespace drawinglayer::attribute
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
