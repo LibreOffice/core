@@ -628,6 +628,9 @@ public:
     // the same type expands the original instead of inserting another. But the
     // spell check dialog doesn't want that behaviour
     void DisableAttributeExpanding();
+
+    void SetLOKSpecialPaperSize(const Size& rSize);
+    const Size& GetLOKSpecialPaperSize() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
