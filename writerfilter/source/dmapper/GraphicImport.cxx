@@ -994,6 +994,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
+                case NS_ooxml::LN_ST_SizeRelFromV_bottomMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                    }
+                    break;
                 default:
                     SAL_WARN("writerfilter", "GraphicImport::lcl_attribute: unhandled NS_ooxml::LN_CT_SizeRelV_relativeFrom value: " << nIntValue);
                     break;
