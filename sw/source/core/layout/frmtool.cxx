@@ -2696,7 +2696,8 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
             if ( pFlyFrame->IsFlyFreeFrame() )
             {
                 // #i28701# - use new method <GetPageFrame()>
-                pFlyFrame->GetPageFrame()->RemoveFlyFromPage( pFlyFrame );
+                if (SwPageFrame *pPg = pFlyFrame->GetPageFrame())
+                    pPg->RemoveFlyFromPage(pFlyFrame);
             }
         }
         // #115759# - remove also drawing objects from page
