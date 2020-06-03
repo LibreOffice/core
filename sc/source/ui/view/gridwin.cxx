@@ -4554,6 +4554,18 @@ void ScGridWindow::UpdateEditViewPos()
         {
             // bForceToTop = sal_True for editing
             tools::Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
+
+            if (comphelper::LibreOfficeKit::isActive() &&
+                comphelper::LibreOfficeKit::isCompatFlagSet(
+                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+            {
+                tools::Rectangle aPTwipsRect = pViewData->GetEditArea(eWhich, nCol, nRow, this, nullptr,
+                        true, true /* bInPrintTwips */);
+                tools::Rectangle aOutputAreaPTwips = pView->GetLOKSpecialOutputArea();
+                aOutputAreaPTwips.SetPos(aPTwipsRect.TopLeft());
+                pView->SetLOKSpecialOutputArea(aOutputAreaPTwips);
+            }
+
             Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
 
             tools::Rectangle aRect = pView->GetOutputArea();
