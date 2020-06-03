@@ -191,6 +191,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     eAnchorMode         = EEAnchorMode::TopLeft;
     mpEditViewCallbacks = nullptr;
     mbBroadcastLOKViewCursor = comphelper::LibreOfficeKit::isActive();
+    mbSupressLOKMessages = false;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nControl            = EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE;
@@ -1263,7 +1264,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !mbSupressLOKMessages)
         {
             Point aPos = GetCursor()->GetPos();
             boost::property_tree::ptree aMessageParams;
