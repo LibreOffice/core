@@ -309,7 +309,8 @@ private:
     // repaints of the EditView(s)
     const EditViewCallbacks* mpEditViewCallbacks;
     std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
-    bool mbBroadcastLOKViewCursor;
+    bool mbBroadcastLOKViewCursor:1;
+    bool mbSupressLOKMessages:1;
 
     const EditViewCallbacks* getEditViewCallbacks() const
     {
@@ -469,6 +470,9 @@ public:
     void SetLOKSpecialVisArea(const tools::Rectangle& rVisArea);
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
+
+    void SupressLOKMessages(bool bSet) { mbSupressLOKMessages = bSet; }
+    bool IsSupressLOKMessages() const { return mbSupressLOKMessages; }
 };
 
 

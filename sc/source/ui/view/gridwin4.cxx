@@ -571,6 +571,32 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     rDoc.PrepareFormulaCalc();
 }
 
+namespace {
+
+class SupressEditViewMessagesGuard
+{
+public:
+    SupressEditViewMessagesGuard(EditView& rEditView) :
+        mrEditView(rEditView),
+        mbOrigSupressFlag(rEditView.IsSupressLOKMessages())
+    {
+        if (!mbOrigSupressFlag)
+            mrEditView.SupressLOKMessages(true);
+    }
+
+    ~SupressEditViewMessagesGuard()
+    {
+        if (mrEditView.IsSupressLOKMessages() != mbOrigSupressFlag)
+            mrEditView.SupressLOKMessages(mbOrigSupressFlag);
+    }
+
+private:
+    EditView& mrEditView;
+    const bool mbOrigSupressFlag;
+};
+
+}
+
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
@@ -1019,6 +1045,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             const tools::Rectangle aOrigOutputArea(pOtherEditView->GetOutputArea()); // Not in pixels.
                             const MapMode aOrigMapMode = pOtherWin->GetMapMode();
                             pOtherWin->SetMapMode(rDevice.GetMapMode());
+
+                            // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
+                            // to be tweaked temporarily to match the current view's zoom.
+                            SupressEditViewMessagesGuard aGuard(*pOtherEditView);
+
                             pOtherEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
                             pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
 
@@ -1117,6 +1148,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             const tools::Rectangle aOrigOutputArea(pEditView->GetOutputArea()); // Not in pixels.
             const MapMode aOrigMapMode = GetMapMode();
             SetMapMode(rDevice.GetMapMode());
+
+            // Avoid sending wrong cursor/selection messages by the current view, as the output-area is going
+            // to be tweaked temporarily to match other view's zoom. (This does not affect the manual
+            // cursor-messaging done in the non print-twips mode)
+            SupressEditViewMessagesGuard aGuard(*pEditView);
+
             pEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
             pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
 

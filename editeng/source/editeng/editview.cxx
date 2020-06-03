@@ -1606,4 +1606,14 @@ bool EditView::HasLOKSpecialPositioning() const
     return pImpEditView->HasLOKSpecialPositioning();
 }
 
+void EditView::SupressLOKMessages(bool bSet)
+{
+    pImpEditView->SupressLOKMessages(bSet);
+}
+
+bool EditView::IsSupressLOKMessages() const
+{
+    return pImpEditView->IsSupressLOKMessages();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
