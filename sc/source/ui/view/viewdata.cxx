@@ -1528,9 +1528,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             aPTwipsRect.AdjustRight(TWIPS_PER_PIXEL);
     }
 
-    tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
-    pEditView[eWhich]->SetOutputArea( aOutputArea );
-
     if (bLOKPrintTwips)
     {
         if (!pEditView[eWhich]->HasLOKSpecialPositioning())
@@ -1538,6 +1535,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         else
             pEditView[eWhich]->SetLOKSpecialOutputArea(aPTwipsRect);
     }
+
+    tools::Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
+    pEditView[eWhich]->SetOutputArea( aOutputArea );
 
     if ( bActive && eWhich == GetActivePart() )
     {
@@ -2019,9 +2019,10 @@ void ScViewData::EditGrowX()
             bMoveArea = false;
         }
 
-        pCurView->SetOutputArea(aArea);
         if (bLOKPrintTwips)
             pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+
+        pCurView->SetOutputArea(aArea);
 
         //  In vertical mode, the whole text is moved to the next cell (right-aligned),
         //  so everything must be repainted. Otherwise, paint only the new area.
@@ -2132,9 +2133,10 @@ void ScViewData::EditGrowY( bool bInitial )
 
     if (bChanged)
     {
-        pCurView->SetOutputArea(aArea);
         if (bLOKPrintTwips)
             pCurView->SetLOKSpecialOutputArea(aAreaPTwips);
+
+        pCurView->SetOutputArea(aArea);
 
         if (nEditEndRow >= nBottom || bMaxReached)
         {
