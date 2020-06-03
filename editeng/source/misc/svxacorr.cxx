@@ -2387,8 +2387,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
     try
     {
         tools::SvRef<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
-        OUString sTemp ( pXMLImplCplStt_ExcptLstStr );
-        if( xStg.is() && xStg->IsContained( sTemp ) )
+        if( xStg.is() && xStg->IsContained( pXMLImplCplStt_ExcptLstStr ) )
             LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
     }
     catch (const css::ucb::ContentCreationException&)
@@ -2417,8 +2416,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
     try
     {
         tools::SvRef<SotStorage> xStg = new SotStorage( sShareAutoCorrFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
-        OUString sTemp ( pXMLImplWrdStt_ExcptLstStr );
-        if( xStg.is() && xStg->IsContained( sTemp ) )
+        if( xStg.is() && xStg->IsContained( pXMLImplWrdStt_ExcptLstStr ) )
             LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
     }
     catch (const css::ucb::ContentCreationException &)
@@ -2528,11 +2526,9 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 
         if( xSrcStg.is() && xDstStg.is() )
         {
-            OUString sXMLWord     ( pXMLImplWrdStt_ExcptLstStr );
-            OUString sXMLSentence ( pXMLImplCplStt_ExcptLstStr );
             std::unique_ptr<SvStringsISortDtor> pTmpWordList;
 
-            if (xSrcStg->IsContained( sXMLWord ) )
+            if (xSrcStg->IsContained( pXMLImplWrdStt_ExcptLstStr ) )
                 LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xSrcStg );
 
             if (pTmpWordList)
@@ -2542,7 +2538,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             }
 
 
-            if (xSrcStg->IsContained( sXMLSentence ) )
+            if (xSrcStg->IsContained( pXMLImplCplStt_ExcptLstStr ) )
                 LoadXMLExceptList_Imp( pTmpWordList, pXMLImplCplStt_ExcptLstStr, xSrcStg );
 
             if (pTmpWordList)
