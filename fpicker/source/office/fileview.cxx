@@ -1709,15 +1709,13 @@ const SortingData_Impl& SvtFileView_Impl::FolderInserted( const OUString& rURL, 
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
     pData->maImage = SvFileInformationManager::GetFolderImageId( aVolInfo );
 
-    OUString const aDateSep( ", " );
-
     // title, type, size, date
     pData->maDisplayName = ReplaceTabWithString(pData->GetTitle());
     // set the date
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     pData->maDisplayDate = rLocaleData.getDate( pData->maModDate )
-                           + aDateSep
+                           + ", "
                            + rLocaleData.getTime( pData->maModDate );
 
     maContent.push_back( std::move(pData) );
