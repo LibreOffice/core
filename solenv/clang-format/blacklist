@@ -5823,7 +5823,6 @@ include/drawinglayer/animation/animationtiming.hxx
 include/drawinglayer/attribute/fillgradientattribute.hxx
 include/drawinglayer/attribute/fillgraphicattribute.hxx
 include/drawinglayer/attribute/fillhatchattribute.hxx
-include/drawinglayer/attribute/fontattribute.hxx
 include/drawinglayer/attribute/linestartendattribute.hxx
 include/drawinglayer/attribute/materialattribute3d.hxx
 include/drawinglayer/attribute/sdrallattribute3d.hxx

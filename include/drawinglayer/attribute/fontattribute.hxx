@@ -21,67 +21,56 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <rtl/ustring.hxx>
 
-
-namespace rtl {
-   class OUString;
-}
-
-namespace drawinglayer::attribute {
-    class ImpFontAttribute;
+namespace drawinglayer::attribute
+{
+class ImpFontAttribute;
 }
 
 namespace drawinglayer::attribute
 {
-        /** FontAttribute class
+/** FontAttribute class
 
-            This attribute class is able to hold all parameters needed/used
-            to completely define the parametrisation of a text portion.
-         */
-        class DRAWINGLAYER_DLLPUBLIC FontAttribute
-        {
-        public:
-            typedef o3tl::cow_wrapper< ImpFontAttribute > ImplType;
+    This attribute class is able to hold all parameters needed/used
+    to completely define the parametrisation of a text portion.
+ */
+class DRAWINGLAYER_DLLPUBLIC FontAttribute
+{
+public:
+    typedef o3tl::cow_wrapper<ImpFontAttribute> ImplType;
 
-        private:
-            ImplType mpFontAttribute;
+private:
+    ImplType mpFontAttribute;
 
-        public:
-            /// constructors/assignmentoperator/destructor
-            /// TODO: pair kerning and CJK kerning
-            FontAttribute(
-                const rtl::OUString& rFamilyName,
-                const rtl::OUString& rStyleName,
-                sal_uInt16 nWeight,
-                bool bSymbol = false,
-                bool bVertical = false,
-                bool bItalic = false,
-                bool bMonospaced = false,
-                bool bOutline = false,
-                bool bRTL = false,
-                bool bBiDiStrong = false);
-            FontAttribute();
-            FontAttribute(const FontAttribute&);
-            FontAttribute(FontAttribute&&);
-            FontAttribute& operator=(const FontAttribute&);
-            FontAttribute& operator=(FontAttribute&&);
-            ~FontAttribute();
+public:
+    /// TODO: pair kerning and CJK kerning
+    FontAttribute(const OUString& rFamilyName, const OUString& rStyleName, sal_uInt16 nWeight,
+                  bool bSymbol = false, bool bVertical = false, bool bItalic = false,
+                  bool bMonospaced = false, bool bOutline = false, bool bRTL = false,
+                  bool bBiDiStrong = false);
+    FontAttribute();
+    FontAttribute(const FontAttribute&);
+    FontAttribute(FontAttribute&&);
+    FontAttribute& operator=(const FontAttribute&);
+    FontAttribute& operator=(FontAttribute&&);
+    ~FontAttribute();
 
-            // compare operator
-            bool operator==(const FontAttribute& rCandidate) const;
+    // compare operator
+    bool operator==(const FontAttribute& rCandidate) const;
 
-            /// data read access
-            const rtl::OUString& getFamilyName() const;
-            const rtl::OUString& getStyleName() const;
-            sal_uInt16 getWeight() const;
-            bool getSymbol() const;
-            bool getVertical() const;
-            bool getItalic() const;
-            bool getOutline() const;
-            bool getRTL() const;
-            bool getBiDiStrong() const;
-            bool getMonospaced() const;
-        };
+    /// data read access
+    const OUString& getFamilyName() const;
+    const OUString& getStyleName() const;
+    sal_uInt16 getWeight() const;
+    bool getSymbol() const;
+    bool getVertical() const;
+    bool getItalic() const;
+    bool getOutline() const;
+    bool getRTL() const;
+    bool getBiDiStrong() const;
+    bool getMonospaced() const;
+};
 } // end of namespace drawinglayer::attribute
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
