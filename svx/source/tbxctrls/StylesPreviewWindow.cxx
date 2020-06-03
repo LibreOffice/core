@@ -388,7 +388,7 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
 
 OUString StylesPreviewWindow_Base::GetVisibleStyle(unsigned nPosition)
 {
-    if (nPosition < 0 || nPosition >= STYLES_COUNT || !m_aAllStyles.size())
+    if (nPosition >= STYLES_COUNT || !m_aAllStyles.size())
         return "";
 
     return m_aAllStyles[(m_nStyleIterator + nPosition) % m_aAllStyles.size()];
