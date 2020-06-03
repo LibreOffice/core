@@ -77,7 +77,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   m_bDiscardChildren(false),
   m_bTookChoice(false)
 {
-    if (mpParserState.get() == nullptr)
+    if (!mpParserState)
         mpParserState = new OOXMLParserState();
 
     mpParserState->incContextCount();
@@ -101,7 +101,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   m_bDiscardChildren(pContext->m_bDiscardChildren),
   m_bTookChoice(pContext->m_bTookChoice)
 {
-    if (mpParserState.get() == nullptr)
+    if (!mpParserState)
         mpParserState = new OOXMLParserState();
 
     mpParserState->incContextCount();
@@ -1197,7 +1197,7 @@ void OOXMLFastContextHandlerValue::lcl_endFastElement
 
 void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
-    if (mpValue.get() == nullptr)
+    if (!mpValue)
     {
         OOXMLValue::Pointer_t pValue = OOXMLBooleanValue::Create(true);
         setValue(pValue);
@@ -1206,7 +1206,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 
 void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
-    if (mpValue.get() == nullptr)
+    if (!mpValue)
     {
         OOXMLValue::Pointer_t pValue = OOXMLIntegerValue::Create(0);
         setValue(pValue);
@@ -1215,7 +1215,7 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 
 void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
-    if (mpValue.get() == nullptr)
+    if (!mpValue)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLHexValue(sal_uInt32(0)));
         setValue(pValue);
@@ -1224,7 +1224,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 
 void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
-    if (mpValue.get() == nullptr)
+    if (!mpValue)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
         setValue(pValue);

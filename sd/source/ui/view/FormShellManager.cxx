@@ -147,7 +147,7 @@ void FormShellManager::RegisterAtCenterPane()
             WindowEventHandler));
 
     // Create a shell factory and with it activate the form shell.
-    OSL_ASSERT(mpSubShellFactory.get()==nullptr);
+    OSL_ASSERT(!mpSubShellFactory);
     mpSubShellFactory = std::make_shared<FormShellManagerFactory>(*pShell, *this);
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, ToolbarId::FormLayer_Toolbox);

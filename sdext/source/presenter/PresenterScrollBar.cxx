@@ -440,7 +440,7 @@ void PresenterScrollBar::Repaint (
 void PresenterScrollBar::PaintBackground(
     const css::awt::Rectangle& rUpdateBox)
 {
-    if (mpBackgroundBitmap.get() == nullptr)
+    if (!mpBackgroundBitmap)
         return;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
@@ -537,7 +537,7 @@ css::uno::Reference<css::rendering::XBitmap> PresenterScrollBar::GetBitmap (
     const Area eArea,
     const SharedBitmapDescriptor& rpBitmaps) const
 {
-    if (rpBitmaps.get() == nullptr)
+    if (!rpBitmaps)
         return nullptr;
     else
         return rpBitmaps->GetBitmap(GetBitmapMode(eArea));
@@ -797,7 +797,7 @@ void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollB
 
 void PresenterScrollBar::MousePressRepeater::Callback ()
 {
-    if (mpScrollBar.get() == nullptr)
+    if (!mpScrollBar)
     {
         Stop();
         return;

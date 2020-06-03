@@ -1156,7 +1156,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
         addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
-        addValue( pSet, nHandleAnimateForm, makeAny( pTextGroup.get() == nullptr || pTextGroup->getAnimateForm() ) );
+        addValue( pSet, nHandleAnimateForm, makeAny( !pTextGroup || pTextGroup->getAnimateForm() ) );
         addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
         addValue( pSet, nHandleTextReverse, makeAny( pTextGroup && pTextGroup->getTextReverse() ) );
 

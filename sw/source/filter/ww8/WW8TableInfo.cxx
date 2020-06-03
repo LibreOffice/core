@@ -136,7 +136,7 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow() const
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
 
-    if (pCellGrid.get() == nullptr)
+    if (!pCellGrid)
     {
         const SwTableLine * pTabLine = getTableBox()->GetUpper();
         const SwTableBoxes & rTableBoxes = pTabLine->GetTabBoxes();
@@ -227,7 +227,7 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows() const
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
 
-    if (pCellGrid.get() == nullptr)
+    if (!pCellGrid)
     {
         const SwTable * pTable = getTable();
         const SwTableLines& rTableLines = pTable->GetTabLines();
@@ -284,7 +284,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow() const
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
 
-    if (pCellGrid.get() == nullptr)
+    if (!pCellGrid)
     {
         const SwTableBox * pTabBox = getTableBox();
         const SwTableLine * pTabLine = pTabBox->GetUpper();
@@ -317,7 +317,7 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow() const
     WW8TableCellGrid::Pointer_t pCellGrid =
         mpParent->getParent()->getCellGridForTable(getTable(), false);
 
-    if (pCellGrid.get() == nullptr)
+    if (!pCellGrid)
     {
         const SwTableBox * pTabBox = getTableBox();
         const SwTableLine * pTabLine = pTabBox->GetUpper();
@@ -840,7 +840,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
 {
     WW8TableNodeInfo::Pointer_t pNodeInfo = getTableNodeInfo(pNode);
 
-    if (pNodeInfo.get() == nullptr)
+    if (!pNodeInfo)
     {
         pNodeInfo =
             std::make_shared<ww8::WW8TableNodeInfo>(this, pNode);

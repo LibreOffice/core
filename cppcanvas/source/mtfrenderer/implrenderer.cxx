@@ -2860,7 +2860,7 @@ namespace cppcanvas::internal
 
             // make sure canvas and graphic device are valid; action
             // creation don't check that every time
-            if( rCanvas.get() == nullptr ||
+            if( !rCanvas ||
                 !rCanvas->getUNOCanvas().is() ||
                 !rCanvas->getUNOCanvas()->getDevice().is() )
             {

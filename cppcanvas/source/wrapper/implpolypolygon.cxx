@@ -91,7 +91,7 @@ namespace cppcanvas::internal
             OSL_ENSURE( pCanvas && pCanvas->getUNOCanvas().is(),
                         "ImplBitmap::draw: invalid canvas" );
 
-            if( pCanvas.get() == nullptr ||
+            if( !pCanvas ||
                 !pCanvas->getUNOCanvas().is() )
                 return false;
 

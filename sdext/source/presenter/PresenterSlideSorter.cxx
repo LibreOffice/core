@@ -254,7 +254,7 @@ PresenterSlideSorter::PresenterSlideSorter (
     if ( ! rxContext.is()
         || ! rxViewId.is()
         || ! rxController.is()
-        || rpPresenterController.get()==nullptr)
+        || ! rpPresenterController)
     {
         throw lang::IllegalArgumentException();
     }
@@ -642,7 +642,7 @@ void PresenterSlideSorter::UpdateLayout()
             mxViewId->getResourceURL()));
     do
     {
-        if (pPane.get() == nullptr)
+        if (!pPane)
             break;
         if ( ! pPane->mxPane.is())
             break;
@@ -1532,7 +1532,7 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
     if ( ! mxCanvas.is())
         return nullptr;
 
-    if (mpFont.get()==nullptr || !mpFont->mxFont.is())
+    if (!mpFont || !mpFont->mxFont.is())
         return nullptr;
 
     // Long text has to be shortened.

@@ -40,7 +40,7 @@ public:
 
 AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a )
 {
-    if( a.get() == nullptr )
+    if( !a )
         return;
     const uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
     for( const xml::FastAttribute& rFastAttr : aFastAttrSeq )

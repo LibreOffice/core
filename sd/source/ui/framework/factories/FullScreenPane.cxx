@@ -51,7 +51,7 @@ FullScreenPane::FullScreenPane (
     sal_Int32 nScreenNumber = 1;
     ExtractArguments(rxPaneId, nScreenNumber);
 
-    if (mpWorkWindow.get() == nullptr)
+    if (!mpWorkWindow)
         return;
 
     // Create a new top-level window that is displayed full screen.

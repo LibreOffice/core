@@ -370,7 +370,7 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
             if (rsBitmapName == "Background")
             {
                 std::shared_ptr<Theme> pTheme (mpTheme);
-                while (pTheme != nullptr && pTheme->mpBackground.get() == nullptr)
+                while (pTheme != nullptr && !pTheme->mpBackground)
                     pTheme = pTheme->mpParentTheme;
                 if (pTheme != nullptr)
                     return pTheme->mpBackground;
@@ -409,7 +409,7 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
         if (rsBitmapName == "Background")
         {
             std::shared_ptr<Theme> pTheme (mpTheme);
-            while (pTheme != nullptr && pTheme->mpBackground.get() == nullptr)
+            while (pTheme != nullptr && !pTheme->mpBackground)
                 pTheme = pTheme->mpParentTheme;
             if (pTheme != nullptr)
                 return pTheme->mpBackground;

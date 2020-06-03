@@ -375,7 +375,7 @@ void PresenterHelpView::ProcessString (
 
 void PresenterHelpView::CheckFontSize()
 {
-    if (mpFont.get() == nullptr)
+    if (!mpFont)
         return;
 
     sal_Int32 nBestSize (6);

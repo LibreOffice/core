@@ -392,7 +392,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
         cppcanvas::BitmapSharedPtr xBitmap(
             cppcanvas::VCLFactory::createBitmap(pCanvas,
                 aBitmapEx));
-        if (xBitmap.get() == nullptr)
+        if (!xBitmap)
             return nullptr;
         return xBitmap->getUNOBitmap();
     }

@@ -106,7 +106,7 @@ PresenterPaneContainer::SharedPaneDescriptor
             sPaneURL = xPaneId->getResourceURL();
 
         pDescriptor = FindPaneURL(sPaneURL);
-        if (pDescriptor.get() == nullptr)
+        if (!pDescriptor)
             PreparePane(xPaneId, OUString(), OUString(), OUString(),
                 false, ViewInitializationFunction());
         pDescriptor = FindPaneURL(sPaneURL);
@@ -290,7 +290,7 @@ OUString PresenterPaneContainer::GetPaneURLForViewURL (const OUString& rsViewURL
 
 void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() == nullptr)
+    if (!rpDescriptor)
         return;
 
     // Find iterator for pDescriptor.

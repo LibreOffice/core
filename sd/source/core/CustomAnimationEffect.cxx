@@ -3216,7 +3216,7 @@ CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< cs
 {
     CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
 
-    if( pEffect.get() == nullptr )
+    if( !pEffect )
     {
         for (auto const& interactiveSequence : maInteractiveSequenceVector)
         {

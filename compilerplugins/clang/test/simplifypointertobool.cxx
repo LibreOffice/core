@@ -31,7 +31,7 @@ void test2(std::shared_ptr<int> p)
     // expected-error@+1 {{simplify, drop the get() [loplugin:simplifypointertobool]}}
     if (p.get())
         foo();
-    // TODOexpected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
+    // expected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
     if (p.get() == nullptr)
         foo();
     // TODOexpected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
@@ -40,7 +40,7 @@ void test2(std::shared_ptr<int> p)
     // TODOexpected-error@+1 {{simplify, convert to 'x' [loplugin:simplifypointertobool]}}
     if (p != nullptr)
         foo();
-    // TODOexpected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
+    // expected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
     if (nullptr == p.get())
         foo();
     // expected-error@+1 {{simplify, convert to 'x' [loplugin:simplifypointertobool]}}
@@ -66,7 +66,7 @@ void test2(css::uno::Reference<css::uno::XInterface> const& p)
     // expected-error@+1 {{simplify, drop the get() [loplugin:simplifypointertobool]}}
     if (p.get())
         foo();
-    // TODOexpected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
+    // expected-error@+1 {{simplify, convert to '!x' [loplugin:simplifypointertobool]}}
     if (p.get() == nullptr)
         foo();
 }

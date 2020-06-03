@@ -658,7 +658,7 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
         return;
 
     VclPtr<Deck> aDeck = xDeckDescriptor->mpDeck;
-    if (aDeck.get()==nullptr || bForceCreate)
+    if (!aDeck || bForceCreate)
     {
         if (aDeck)
             aDeck.disposeAndClear();
