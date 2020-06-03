@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "074b4459_f7a20b35",
+        "filename": "cui/source/dialogs/SignatureLineDialogBase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-06-03T12:09:12Z",
+      "side": 1,
+      "message": "please fix this error message, otherwise no objections :)",
+      "range": {
+        "startLine": 51,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 72
+      },
+      "revId": "5e38471a08504fd9281247f760d7c1f052182ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
