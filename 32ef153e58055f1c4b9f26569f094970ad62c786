@@ -16,6 +16,24 @@
       "revId": "32ef153e58055f1c4b9f26569f094970ad62c786",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1021d9f1_2894afd4",
+        "filename": "offapi/com/sun/star/linguistic2/XNumberText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-03T08:54:14Z",
+      "side": 1,
+      "message": "Yes, it isn\u0027t, because it doesn\u0027t work for numbering, so we don\u0027t need to list.\n\nThanks for your review!",
+      "parentUuid": "0eff118c_fd6077a7",
+      "revId": "32ef153e58055f1c4b9f26569f094970ad62c786",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
