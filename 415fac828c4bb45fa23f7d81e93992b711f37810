@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1909a21_683fab8c",
+        "filename": "xmloff/source/style/PageMasterExportPropMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-06-03T19:06:01Z",
+      "side": 1,
+      "message": "FWIW https://dev-builds.libreoffice.org/crashtest/f68749054f36f070310e70e2dbf0a11c496539c0/backtraces/task143-core.backtrace.txt seems to suggest that exporting tdf125455-2.odt back to odt triggers this assert",
+      "revId": "415fac828c4bb45fa23f7d81e93992b711f37810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
