@@ -11,7 +11,7 @@ wiki_pages = [
 
 # get all commit hashes mentioned in implementer notes
 wiki_commit_hashes = {}
-query = re.compile('\{\{commit\|(\\w+).*\}\}', re.IGNORECASE)
+query = re.compile('\{\{commit\|(\\w+)\|\\w*\|\\w*\}\}', re.IGNORECASE)
 for page in wiki_pages:
     r = http.request('GET', page)
     data = json.loads(r.data.decode('utf-8'))
@@ -21,10 +21,10 @@ for page in wiki_pages:
 
 # get all commits that change core/schema/* - and are _not_ mentioned
 # in the wiki page
-# Cut-off is Jan 1st 2020, when we started cleaning this up
+# Cut-off is May 18th 2020, when Michael Stahl had finished cleaning this up
 for commit in subprocess.check_output(
         ['git', '--no-pager', '-C', sys.path[0]+'/..', 'log',
-         '--since=2020-01-01', '--format=%H', '--', 'schema/'],
+         '--since=2020-05-18', '--format=%H', '--', 'schema/'],
         stderr=subprocess.STDOUT).decode("utf-8").split("\n"):
     if commit != '' and commit not in wiki_commit_hashes:
         print('missing commit: %s' % commit)
