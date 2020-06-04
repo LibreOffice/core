@@ -252,20 +252,16 @@ bool ZipPackageFolder::saveChild(
         sal_Int32 nPBKDF2IterationCount,
         const rtlRandomPool &rRandomPool)
 {
-    const OUString sMediaTypeProperty ("MediaType");
-    const OUString sVersionProperty ("Version");
-    const OUString sFullPathProperty ("FullPath");
-
     uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
     OUString sTempName = rPath + "/";
 
     if ( !GetMediaType().isEmpty() )
     {
-        aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+        aPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
         aPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType();
-        aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+        aPropSet[PKG_MNFST_VERSION].Name = "Version";
         aPropSet[PKG_MNFST_VERSION].Value <<= GetVersion();
-        aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+        aPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
         aPropSet[PKG_MNFST_FULLPATH].Value <<= sTempName;
     }
     else

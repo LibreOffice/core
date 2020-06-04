@@ -661,18 +661,15 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     // move storage properties to the destination one ( means changeable properties )
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        OUString aMediaTypeString = "MediaType";
-        OUString aVersionString = "Version";
-        xPropSet->setPropertyValue( aMediaTypeString, uno::makeAny( m_aMediaType ) );
-        xPropSet->setPropertyValue( aVersionString, uno::makeAny( m_aVersion ) );
+        xPropSet->setPropertyValue( "MediaType", uno::makeAny( m_aMediaType ) );
+        xPropSet->setPropertyValue( "Version", uno::makeAny( m_aVersion ) );
     }
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // if this is a root storage, the common key from current one should be moved there
         bool bIsRoot = false;
-        OUString aRootString = "IsRoot";
-        if ( ( xPropSet->getPropertyValue( aRootString ) >>= bIsRoot ) && bIsRoot )
+        if ( ( xPropSet->getPropertyValue( "IsRoot" ) >>= bIsRoot ) && bIsRoot )
         {
             try
             {

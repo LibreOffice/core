@@ -455,13 +455,6 @@ bool ZipPackageStream::saveChild(
 {
     bool bSuccess = true;
 
-    const OUString sMediaTypeProperty ("MediaType");
-    const OUString sVersionProperty ("Version");
-    const OUString sFullPathProperty ("FullPath");
-    const OUString sInitialisationVectorProperty ("InitialisationVector");
-    const OUString sSaltProperty ("Salt");
-    const OUString sIterationCountProperty ("IterationCount");
-    const OUString sSizeProperty ("Size");
     const OUString sDigestProperty ("Digest");
     const OUString sEncryptionAlgProperty    ("EncryptionAlgorithm");
     const OUString sStartKeyAlgProperty  ("StartKeyAlgorithm");
@@ -484,11 +477,11 @@ bool ZipPackageStream::saveChild(
     const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.hasElements() || m_bHaveOwnKey);
     const bool bToBeCompressed = bToBeEncrypted || m_bToBeCompressed;
 
-    aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
+    aPropSet[PKG_MNFST_MEDIATYPE].Name = "MediaType";
     aPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );
-    aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
+    aPropSet[PKG_MNFST_VERSION].Name = "Version";
     aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
-    aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
+    aPropSet[PKG_MNFST_FULLPATH].Name = "FullPath";
     aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
     OSL_ENSURE( m_nStreamMode != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
@@ -611,16 +604,16 @@ bool ZipPackageStream::saveChild(
             // a magic header
             aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
 
-            aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
+            aPropSet[PKG_MNFST_INIVECTOR].Name = "InitialisationVector";
             aPropSet[PKG_MNFST_INIVECTOR].Value <<= m_xBaseEncryptionData->m_aInitVector;
-            aPropSet[PKG_MNFST_SALT].Name = sSaltProperty;
+            aPropSet[PKG_MNFST_SALT].Name = "Salt";
             aPropSet[PKG_MNFST_SALT].Value <<= m_xBaseEncryptionData->m_aSalt;
-            aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
+            aPropSet[PKG_MNFST_ITERATION].Name = "IterationCount";
             aPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
 
             // Need to store the uncompressed size in the manifest
             OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!" );
-            aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
+            aPropSet[PKG_MNFST_UCOMPSIZE].Name = "Size";
             aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
 
             if ( m_bRawStream || bTransportOwnEncrStreamAsRaw )
