@@ -9809,6 +9809,11 @@ public:
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
+        /* The outside concept of a column maps to a gtk CellRenderer, rather than
+           a TreeViewColumn. If the first TreeViewColumn has two CellRenderers, and
+           the first CellRenderer is an image, that CellRenderer is considered to
+           be index -1.
+        */
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
         int nViewColumn(0);
@@ -9820,7 +9825,6 @@ public:
             for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-                g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                 if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     if (m_nTextCol == -1)
@@ -9850,6 +9854,8 @@ public:
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
                 }
+                int nExternalIndex = to_external_model(nIndex);
+                g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nExternalIndex));
                 ++nIndex;
             }
             g_list_free(pRenderers);
