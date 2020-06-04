@@ -560,121 +560,94 @@ public:
         {
             // search for sun, start at the end, found (pos==0)
             OUString aStr("sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, 0, aStr.getLength());
+            lastIndexOf_oustring_offset(aStr, "sun", 0, aStr.getLength());
         }
 
     void lastIndexOf_test_oustring_offset_002()
         {
             // search for sun, start at pos = 3, found (pos==0)
-            OUString aStr("sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, 0, 3);
+            lastIndexOf_oustring_offset("sun java system", "sun", 0, 3);
         }
 
     void lastIndexOf_test_oustring_offset_003()
         {
             // search for sun, start at pos = 2, found (pos==-1)
-            OUString aStr("sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 2);
+            lastIndexOf_oustring_offset("sun java system", "sun", -1, 2);
         }
 
     void lastIndexOf_test_oustring_offset_004()
         {
             // search for sun, start at the end, found (pos==0)
-            OUString aStr("sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 1);
+            lastIndexOf_oustring_offset("sun java system", "sun", -1, 1);
         }
 
     void lastIndexOf_test_oustring_001()
         {
             // search for sun, found (pos==0)
-            OUString aStr("sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 0);
+            lastIndexOf_oustring("sun java system", "sun", 0);
         }
 
     void lastIndexOf_test_oustring_002()
         {
             // search for sun, found (pos==4)
-            OUString aStr("the sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 4);
+            lastIndexOf_oustring("the sun java system", "sun", 4);
         }
 
     void lastIndexOf_test_oustring_003()
         {
             // search for sun, found (pos==8)
-            OUString aStr("the sun sun java system");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 8);
+            lastIndexOf_oustring("the sun sun java system", "sun", 8);
         }
 
     void lastIndexOf_test_oustring_004()
         {
             // search for sun, found (pos==8)
-            OUString aStr("the sun sun");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 8);
+            lastIndexOf_oustring("the sun sun", "sun", 8);
         }
 
     void lastIndexOf_test_oustring_005()
         {
             // search for sun, found (pos==4)
-            OUString aStr("the sun su");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 4);
+            lastIndexOf_oustring("the sun su", "sun", 4);
         }
 
     void lastIndexOf_test_oustring_006()
         {
             // search for sun, found (pos==-1)
-            OUString aStr("the su su");
-            OUString aSearchStr("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
+            lastIndexOf_oustring("the su su", "sun", -1);
         }
 
     void lastIndexOf_test_oustring_007()
         {
             // search for earth, not found (-1)
-            OUString aStr("the su su");
-            OUString aSearchStr("earth");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
+            lastIndexOf_oustring("the su su", "earth", -1);
         }
 
     void lastIndexOf_test_oustring_008()
         {
             // search for earth, not found (-1)
-            OUString aStr;
-            OUString aSearchStr("earth");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
+            lastIndexOf_oustring("", "earth", -1);
         }
 
     void lastIndexOf_test_oustring_009()
         {
             // search for earth, not found (-1)
-            OUString aStr;
-            OUString aSearchStr;
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
+            lastIndexOf_oustring("", "", -1);
 
         }
 
     void lastIndexOf_test_salunicode_001()
         {
             // search for 's', found (19)
-            OUString aStr("the sun sun java system");
             sal_Unicode suChar = L's';
-            lastIndexOf_salunicode(aStr, suChar, 19);
+            lastIndexOf_salunicode("the sun sun java system", suChar, 19);
         }
 
     void lastIndexOf_test_salunicode_002()
         {
             // search for 'x', not found (-1)
-            OUString aStr("the sun sun java system");
             sal_Unicode suChar = L'x';
-            lastIndexOf_salunicode(aStr, suChar, -1);
+            lastIndexOf_salunicode("the sun sun java system", suChar, -1);
         }
 
     void lastIndexOf_test_salunicode_offset_001()
@@ -687,16 +660,14 @@ public:
     void lastIndexOf_test_salunicode_offset_002()
         {
             // search for 's', start pos is last occur from search behind, found (17)
-            OUString aStr("the sun sun java system");
             sal_Unicode cuChar = L's';
-            lastIndexOf_salunicode_offset(aStr, cuChar, 17, 19);
+            lastIndexOf_salunicode_offset("the sun sun java system", cuChar, 17, 19);
         }
     void lastIndexOf_test_salunicode_offset_003()
         {
             // search for 't', start pos is 1, found (0)
-            OUString aStr("the sun sun java system");
             sal_Unicode cuChar = L't';
-            lastIndexOf_salunicode_offset(aStr, cuChar, 0, 1);
+            lastIndexOf_salunicode_offset("the sun sun java system", cuChar, 0, 1);
         }
 
     // Change the following lines only, if you add, remove or rename
