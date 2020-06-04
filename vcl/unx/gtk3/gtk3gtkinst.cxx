@@ -9108,10 +9108,10 @@ private:
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
-    std::vector<int> m_aModelColToViewCol;
     bool m_bWorkAroundBadDragRegion;
     bool m_bInDrag;
     gint m_nTextCol;
+    gint m_nTextView;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
@@ -9545,9 +9545,22 @@ private:
         return m_aViewColToModelCol[viewcol];
     }
 
-    int get_view_col(int modelcol) const
+    // We allow only one CellRenderer per TreeViewColumn except for the first
+    // TreeViewColumn which can have two, where the first CellRenderer is
+    // either an expander image. From outside the second CellRenderer is
+    // considered index 0 in the model and the expander as -1
+    int to_external_model(int modelcol) const
     {
-        return m_aModelColToViewCol[modelcol];
+        if (m_nExpanderImageCol == -1)
+            return modelcol;
+        return modelcol - 1;
+    }
+
+    int to_internal_model(int modelcol) const
+    {
+        if (m_nExpanderImageCol == -1)
+            return modelcol;
+        return modelcol + 1;
     }
 
     void set_column_editable(int nCol, bool bEditable)
@@ -9780,6 +9793,7 @@ public:
         , m_bWorkAroundBadDragRegion(false)
         , m_bInDrag(false)
         , m_nTextCol(-1)
+        , m_nTextView(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nPendingVAdjustment(-1)
@@ -9797,6 +9811,7 @@ public:
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
+        int nViewColumn(0);
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
@@ -9809,7 +9824,10 @@ public:
                 if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     if (m_nTextCol == -1)
+                    {
                         m_nTextCol = nIndex;
+                        m_nTextView = nViewColumn;
+                    }
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
                     m_aIndentMap[nIndex] = -1;
@@ -9832,11 +9850,11 @@ public:
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
                 }
-                m_aModelColToViewCol.push_back(m_aViewColToModelCol.size());
                 ++nIndex;
             }
             g_list_free(pRenderers);
             m_aViewColToModelCol.push_back(nIndex - 1);
+            ++nViewColumn;
         }
 
         m_nIdCol = nIndex++;
@@ -10159,7 +10177,7 @@ public:
         gint sort_column_id(0);
         if (!gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr))
             return -1;
-        return get_view_col(sort_column_id);
+        return to_external_model(sort_column_id);
     }
 
     virtual void set_sort_column(int nColumn) override
@@ -10172,7 +10190,7 @@ public:
         GtkSortType eSortType;
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
         gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
-        int nSortCol = get_model_col(nColumn);
+        int nSortCol = to_internal_model(nColumn);
         gtk_tree_sortable_set_sort_func(pSortable, nSortCol, sortFunc, this, nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, nSortCol, eSortType);
     }
@@ -11272,8 +11290,7 @@ public:
 
     virtual void start_editing(const weld::TreeIter& rIter) override
     {
-        int col = get_view_col(m_nTextCol);
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextView));
         assert(pColumn && "wrong column");
 
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
