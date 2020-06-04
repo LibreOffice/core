@@ -101,6 +101,22 @@ void TableManager::cellProps(const TablePropertyMapPtr& pProps)
 #endif
 }
 
+void TableManager::tableExceptionProps(const TablePropertyMapPtr& pProps)
+{
+#ifdef DBG_UTIL
+    TagLogger::getInstance().startElement("tablemanager.tableExceptionProps");
+#endif
+
+    if (getTableExceptionProps())
+        getTableExceptionProps()->InsertProps(pProps.get());
+    else
+        mState.setTableExceptionProps(pProps);
+
+#ifdef DBG_UTIL
+    TagLogger::getInstance().endElement();
+#endif
+}
+
 void TableManager::utext(const sal_uInt8* data, std::size_t len)
 {
     // optimization: cell/row end characters are the last characters in a run
