@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20f5e202_e90fa208",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-04T14:09:32Z",
+      "side": 1,
+      "message": "cstdlib is not windows-specific include (it\u0027s part of C++ standard library), so it should not be inside prewin-postwin. The prewin and postwin are intended to prevent name conflicts of the defines in windows headers, like Yield, which prevent other includes from working. So the rule is start windows headers with \u003cprewin.h\u003e (which by itself includes \u003cwindows.h\u003e), then proceed with other Windows includes (e.g. COM, DDE, shell, ...), then close with \u003cpostwin.h\u003e which will undef multiple defines from Windows headers. Then go other (non-WinSDK) includes, that don\u0027t depend on those defines, and which may even break if those defines present.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 18
+      },
+      "revId": "fdbbbb4b8d480f1dbe2b10715813256a1c923d54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e7e421_60735e97",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-04T14:09:32Z",
+      "side": 1,
+      "message": "You start namespace inside the #ifdef, but end outside.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 1
+      },
+      "revId": "fdbbbb4b8d480f1dbe2b10715813256a1c923d54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
