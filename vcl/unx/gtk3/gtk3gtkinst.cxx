@@ -9545,10 +9545,10 @@ private:
         return m_aViewColToModelCol[viewcol];
     }
 
-    // We allow only one CellRenderer per TreeViewColumn except for the first
-    // TreeViewColumn which can have two, where the first CellRenderer is
-    // either an expander image. From outside the second CellRenderer is
-    // considered index 0 in the model and the expander as -1
+    // The outside concept of a column maps to a gtk CellRenderer, rather than
+    // a TreeViewColumn. If the first TreeViewColumn has two CellRenderers, and
+    // the first CellRenderer is an image, that CellRenderer is considered to
+    // be index -1.
     int to_external_model(int modelcol) const
     {
         if (m_nExpanderImageCol == -1)
