@@ -891,8 +891,9 @@ static gboolean postDocumentLoad(gpointer pData)
 
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
-    // FIXME: This returns the view id of the "current" view, but sadly if you load multiple
-    // documents that is apparently not a view showing the most recently loaded document.
+    // This returns the view id of the "current" view, but sadly if you load multiple documents that
+    // is apparently not a view showing the most recently loaded document. Not much we can do here,
+    // though. If that is fixed, this comment becomes incorrect.
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     g_aAuthorViews[getAuthorRenderingArgument(priv)] = priv->m_nViewId;
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
