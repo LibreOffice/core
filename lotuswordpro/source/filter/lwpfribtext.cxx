@@ -261,7 +261,6 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
         pContent = new XFInitialCreator;
         break;
     case DOCSIZE:
-    {
 /*      pContent = new XFAnnotation;
         XFTextContent* pSpan = new XFTextContent();
         pSpan->SetText("Document Size is Here");
@@ -270,106 +269,56 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
         static_cast<XFAnnotation*>(pContent)->Add(pPara);
         break;
 */
-        OUString text = "<Document Size>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Document Size>");
         return;
-    }
     case SMARTMASTER:
-    {
-        OUString text = "<Smart master>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Smart master>");
         return;
-    }
     case DIVISIONNAME:
-    {
-        OUString text = "<Division name>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Division name>");
         return;
-    }
     case SECTIONNAME:
-    {
-        OUString text = "<Section name>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Section name>");
         return;
-    }
     case VERSIONCREATEBY:
-    {
-        OUString text = "<Version Creat by>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Creat by>");
         return;
-    }
     case VERSIONCREATEDATE:
-    {
-        OUString text = "<Version Creat date>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Creat date>");
         return;
-    }
     case VERSIONOTHEREDITORS:
-    {
-        OUString text = "<Version other Editors>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version other Editors>");
         return;
-    }
     case VERSIONNAME:
-    {
-        OUString text = "<Version Name>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Name>");
         return;
-    }
     case VERSIONNUMBER:
-    {
-        OUString text = "<Version Numbers>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Numbers>");
         return;
-    }
     case ALLVERSIONNAME:
-    {
-        OUString text = "<All Version Name>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<All Version Name>");
         return;
-    }
     case VERSIONREMARK:
-    {
-        OUString text = "<Version Remark>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Remark>");
         return;
-    }
     case DOCUMENTCATEGORY:
-    {
-        OUString text = "<Document Category>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Document Category>");
         return;
-    }
     case VERSIONLASTDATE:
-    {
-        OUString text = "<Version Last Modify Date>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Last Modify Date>");
         return;
-    }
     case VERSIONLASTEDITOR:
-    {
-        OUString text = "<Version Last Editor>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Version Last Editor>");
         return;
-    }
     case LASTEDIT:
-    {
-        OUString text = "<Last Editor>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Last Editor>");
         return;
-    }
     case OTHEREDITORS:
-    {
-        OUString text = "<Other Editors>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Other Editors>");
         return;
-    }
     case NUMOFREVISION:
-    {
-        OUString text = "<Number of Revision>";
-        LwpFrib::ConvertChars(pXFPara,text);
+        LwpFrib::ConvertChars(pXFPara,"<Number of Revision>");
         return;
-    }
     default:
         return;
     }
