@@ -108,8 +108,7 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
     try
     {
         ::ucbhelper::Content root( url, nullptr, comphelper::getProcessComponentContext() );
-        OUString propName =  "DocumentModel";
-        result = getUCBProperty( root, propName );
+        result = getUCBProperty( root, "DocumentModel" );
     }
     catch ( css::ucb::ContentCreationException& )
     {

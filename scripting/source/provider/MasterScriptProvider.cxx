@@ -345,8 +345,7 @@ MasterScriptProvider::providerCache()
         ::osl::MutexGuard aGuard( m_mutex );
         if ( !m_pPCache )
         {
-            OUString serviceName1 = "com.sun.star.script.provider.ScriptProviderForBasic";
-            Sequence<OUString> blacklist { serviceName1 };
+            Sequence<OUString> blacklist { "com.sun.star.script.provider.ScriptProviderForBasic" };
 
             if ( !m_bIsPkgMSP )
             {
