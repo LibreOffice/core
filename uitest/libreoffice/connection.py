@@ -107,10 +107,9 @@ class OfficeConnection:
     def tearDown(self):
         """Terminate a LibreOffice instance created with the path connection method.
 
-        First tries to terminate the soffice instance through the normal
-        XDesktop::terminate method and waits for about 30 seconds before
-        considering this attempt failed. After the 30 seconds the subprocess
-        is terminated """
+        Tries to terminate the soffice instance through the normal
+        XDesktop::terminate method and waits indefinitely for the subprocess
+        to terminate """
 
         if self.soffice:
             if self.xContext:
