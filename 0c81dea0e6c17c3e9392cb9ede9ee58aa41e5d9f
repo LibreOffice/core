@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b0c1695_29d5dd84",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-04T13:27:16Z",
+      "side": 1,
+      "message": "It should #include \u003cprewin.h\u003e, #include \u003cheader for CoInitializeEx\u003e, #include \u003cpostwin.h\u003e, #include \u003cwhat is needed for std::abort\u003e. Possibly just put it all into a common #ifdef _WIN32.",
+      "revId": "0c81dea0e6c17c3e9392cb9ede9ee58aa41e5d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd8fa0d_73974eab",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-04T13:27:16Z",
+      "side": 1,
+      "message": "Likely we need to init the variable to 0 on entry here (would be robust, and not require to initialize by user code)",
+      "range": {
+        "startLine": 20,
+        "startChar": 55,
+        "endLine": 20,
+        "endChar": 63
+      },
+      "revId": "0c81dea0e6c17c3e9392cb9ede9ee58aa41e5d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
