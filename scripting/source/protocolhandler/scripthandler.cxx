@@ -80,8 +80,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     // but usually it's a "real" frame)
     if ( aArguments.hasElements() && !( aArguments[ 0 ] >>= m_xFrame ) )
     {
-        OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
-        throw RuntimeException( temp );
+        throw RuntimeException( "ScriptProtocolHandler::initialize: could not extract reference to the frame" );
     }
 
     ENSURE_OR_THROW( m_xContext.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );

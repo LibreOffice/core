@@ -136,10 +136,8 @@ ProviderCache::populateCache()
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
     {
-        OUString const languageProviderName( "com.sun.star.script.provider.LanguageScriptProvider"  );
-
         Reference< container::XContentEnumerationAccess > xEnumAccess( m_xMgr, UNO_QUERY_THROW );
-        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
+        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );
 
         while ( xEnum->hasMoreElements() )
         {
