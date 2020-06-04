@@ -762,11 +762,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         pCellProperties[nRow].realloc( aRowOfCellsIterator->size() );
         beans::PropertyValues* pSingleCellProperties = pCellProperties[nRow].getArray();
 
-        static const PropertyIds pBorders[] =
-        {
-            PROP_TOP_BORDER, PROP_LEFT_BORDER, PROP_BOTTOM_BORDER, PROP_RIGHT_BORDER
-        };
-
         while( aCellIterator != aCellIteratorEnd )
         {
             PropertyMapPtr pAllCellProps( new PropertyMap );
@@ -823,33 +818,15 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCnfStyleMask );
 
                     // Check if we need to clean up some empty border definitions to match what Word does.
-                    // Apply also possible tblPrEx borders on cells
+                    static const PropertyIds pBorders[] =
+                    {
+                        PROP_TOP_BORDER, PROP_LEFT_BORDER, PROP_BOTTOM_BORDER, PROP_RIGHT_BORDER
+                    };
                     for (const PropertyIds& rBorder : pBorders)
                     {
                         std::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
                         std::optional<PropertyMap::Property> oRowCellBorder;
-                        // we can have table border exception in row properties
-                        if (*aRowIter && (*aRowIter)->isSet(rBorder))
-                            oRowCellBorder = (*aRowIter)->getProperty(rBorder);
                         std::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
-                        if (oRowCellBorder && oDirectCellBorder)
-                        {
-                            table::BorderLine2 aRowCellBorder = oRowCellBorder->second.get<table::BorderLine2>();
-                            table::BorderLine2 aDirectCellBorder = oDirectCellBorder->second.get<table::BorderLine2>();
-                            if (aRowCellBorder.LineStyle != table::BorderLineStyle::NONE && aDirectCellBorder.LineStyle == table::BorderLineStyle::NONE)
-                                oDirectCellBorder = std::optional<PropertyMap::Property>();
-                        }
-                        if (oRowCellBorder && !oDirectCellBorder)
-                        {
-                            table::BorderLine2 aRowCellBorder = oRowCellBorder->second.get<table::BorderLine2>();
-                            if ( (rBorder == PROP_LEFT_BORDER && nCnfStyleMask&CNF_FIRST_COLUMN)
-                                    || (rBorder == PROP_RIGHT_BORDER && bIsEndCol)
-                                    || (rBorder != PROP_LEFT_BORDER && rBorder != PROP_RIGHT_BORDER) )
-                            {
-                                (*aCellIterator)->Insert(rBorder, uno::makeAny(aRowCellBorder));
-                                oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
-                            }
-                        }
                         if (oStyleCellBorder && oDirectCellBorder)
                         {
                             // We have a cell border from the table style and as direct formatting as well.
@@ -972,14 +949,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             ++nCell;
             ++aCellIterator;
         }
-
-        // remove tblPrEx table border properties stored in row properties temporarily
-        for (const PropertyIds& rBorder : pBorders)
-        {
-            if (*aRowIter && (*aRowIter)->isSet(rBorder))
-                (*aRowIter)->Erase(rBorder);
-        }
-
         ++nRow;
         ++aRowOfCellsIterator;
         ++aRowIter;

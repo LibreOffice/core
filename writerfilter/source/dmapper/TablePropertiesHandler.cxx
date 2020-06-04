@@ -224,9 +224,7 @@ namespace writerfilter::dmapper {
 #ifdef DBG_UTIL
                     pTablePropMap->dumpXml();
 #endif
-                    // store row-level table border exceptions in row properties temporarily
-                    // and apply them on cells later
-                    insertRowProps( pTablePropMap );
+                    tableExceptionProps( pTablePropMap );
                 }
             }
             break;
