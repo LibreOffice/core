@@ -22,6 +22,30 @@
       "revId": "7e1ede9f214c0e89f2fb370175721741f642a394",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3808f2_ca29886d",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 15341,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-06-04T07:49:51Z",
+      "side": 1,
+      "message": "The reason is I followed UseHeaderFooterMenu option to accomplish this ShowOutlineContentVisiblityButton option but now see that the addition of UserHeaderFooterMenu to this file was not made in that patch. I was suspicious about this. When I added [property, optional] boolean ShowOutlineContentVisibilityButton without [property, optional] boolean ShowBookmarks I got IDL compile error. Removing both lines I receive no compile error.",
+      "parentUuid": "cf1e2188_5429bd76",
+      "range": {
+        "startLine": 15340,
+        "startChar": 0,
+        "endLine": 15341,
+        "endChar": 69
+      },
+      "revId": "7e1ede9f214c0e89f2fb370175721741f642a394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
