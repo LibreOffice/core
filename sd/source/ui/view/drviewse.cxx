@@ -449,6 +449,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_CONNECTOR_LINES_CIRCLE_START:
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
+        case SID_INSERT_SIGNATURELINE:
         {
             SetCurrentFunction( FuConstructRectangle::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
             rReq.Done();
