@@ -591,19 +591,22 @@ void XMLPageMasterExportPropMapper::ContextFilter(
                 backgroundSize <<= true;
                 break;
             case drawing::FillStyle_BITMAP:
-                assert(pFillBitmapMode);
-                switch (pFillBitmapMode->maValue.get<drawing::BitmapMode>())
+                if (pFillBitmapMode)
                 {
-                    case drawing::BitmapMode_REPEAT:
-                        backgroundSize <<= true;
-                        break;
-                    case drawing::BitmapMode_STRETCH:
-                    case drawing::BitmapMode_NO_REPEAT:
-                        backgroundSize <<= false;
-                        break;
-                    default:
-                        assert(false);
+                    switch (pFillBitmapMode->maValue.get<drawing::BitmapMode>())
+                    {
+                        case drawing::BitmapMode_REPEAT:
+                            backgroundSize <<= true;
+                            break;
+                        case drawing::BitmapMode_STRETCH:
+                        case drawing::BitmapMode_NO_REPEAT:
+                            backgroundSize <<= false;
+                            break;
+                        default:
+                            assert(false);
+                    }
                 }
+                // else: leave it ambiguous if not explicitly defined
                 break;
             default:
                 assert(false);
