@@ -13518,6 +13518,8 @@ CFLAGS=$my_original_CFLAGS
 CXXFLAGS=$my_original_CXXFLAGS
 CPPFLAGS=$my_original_CPPFLAGS
 
+AC_LINK_FILES([include], [include])
+
 # Keep in sync with list of files far up, at AC_MSG_CHECKING([for
 # BUILD platform configuration] - otherwise breaks cross building
 AC_CONFIG_FILES([config_host.mk
