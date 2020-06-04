@@ -50,6 +50,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <uno/dispatcher.hxx>
@@ -873,10 +874,25 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
             "com.sun.star.uno.XInterface::queryInterface"),
         false, inArgs, &ret, &outArgs);
     throwException(bExc, ret);
+    auto const t = ret.getType();
+    if (t.get()->eTypeClass == typelib_TypeClass_VOID) {
+        return {};
+    }
+    if (!t.equals(ifc)) {
+        throw css::uno::RuntimeException(
+            "initial object queryInterface for OID \"" + sInstanceName + "\" returned ANY of type "
+            + OUString::unacquired(&t.get()->pTypeName));
+    }
+    auto const val = *static_cast< uno_Interface ** >(ret.getValue(ifc));
+    if (val == nullptr) {
+        throw css::uno::RuntimeException(
+            "initial object queryInterface for OID \"" + sInstanceName
+            + "\" returned null css.uno.XInterface ANY");
+    }
     return css::uno::Reference< css::uno::XInterface >(
         static_cast< css::uno::XInterface * >(
             binaryToCppMapping_.mapInterface(
-                *static_cast< uno_Interface ** >(ret.getValue(ifc)),
+                val,
                 ifc.get())),
         SAL_NO_ACQUIRE);
 }
