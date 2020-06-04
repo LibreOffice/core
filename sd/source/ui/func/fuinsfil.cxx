@@ -174,8 +174,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // get Powerpoint filter
-                OUString aExt = ".ppt";
-                pFilter = aMatch.GetFilter4Extension( aExt );
+                pFilter = aMatch.GetFilter4Extension( ".ppt" );
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // Get other draw/impress filters

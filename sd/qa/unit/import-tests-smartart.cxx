@@ -804,8 +804,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xManager.is());
     // Without the accompanying fix in place, this test would have failed: this
     // was just "Manager", and the second paragraph was lost.
-    OUString aExpected("Manager\nSecond para");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xManager->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Manager\nSecond para"), xManager->getString());
 
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xManager, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();

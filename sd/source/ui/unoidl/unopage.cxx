@@ -2778,9 +2778,8 @@ void SdMasterPage::setBackground( const Any& rValue )
         {
             Reference< container::XNameAccess >  xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
-            OUString aStyleName(sUNO_PseudoSheet_Background);
 
-            Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
+            Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( sUNO_PseudoSheet_Background ), UNO_QUERY_THROW );
 
             Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
             Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
@@ -2872,8 +2871,7 @@ void SdMasterPage::getBackground( Any& rValue )
             Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_SET_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
 
-            const OUString aStyleName(sUNO_PseudoSheet_Background);
-            rValue <<= Reference< beans::XPropertySet >( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
+            rValue <<= Reference< beans::XPropertySet >( xFamily->getByName( sUNO_PseudoSheet_Background ), UNO_QUERY_THROW );
         }
         else
         {

@@ -1430,11 +1430,10 @@ void SdImportTest::testRowHeight()
     CPPUNIT_ASSERT( pTableObj );
 
     sal_Int32 nHeight;
-    const OUString sHeight("Height");
     uno::Reference< css::table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
     uno::Reference< css::table::XTableRows > xRows( xTable->getRows(), uno::UNO_SET_THROW);
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
-    xRefRow->getPropertyValue( sHeight ) >>= nHeight;
+    xRefRow->getPropertyValue( "Height" ) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(507), nHeight);
 
     xDocShRef->DoClose();
@@ -2935,8 +2934,7 @@ void SdImportTest::testTdf122899()
     // Error was, that the path coordinates of a mso_sptArc shape were read as sal_Int16
     // although they are unsigned 16 bit. This leads to wrong positions of start and end
     // point and results to a huge shape width in the test document.
-    OUString aSrc="sd/qa/unit/data/ppt/tdf122899_Arc_90_to_91_clockwise.ppt";
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(aSrc), PPT);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf122899_Arc_90_to_91_clockwise.ppt"), PPT);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Could not get XDrawPagesSupplier", xDrawPagesSupplier.is());

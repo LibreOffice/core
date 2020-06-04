@@ -271,8 +271,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
     {
         bDisableCtrls = true;
         m_xBtnStop->set_sensitive(true);
-        OUString const aStr("Animator:"); // here we should think about something smart
-        pProgress.reset(new SfxProgress( nullptr, aStr, nFullTime ));
+        pProgress.reset(new SfxProgress( nullptr, "Animator:", nFullTime )); // "Animator:" here we should think about something smart
     }
 
     sal_uLong nTmpTime = 0;

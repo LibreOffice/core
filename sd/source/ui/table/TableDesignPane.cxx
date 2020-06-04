@@ -109,8 +109,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
         Reference< XController > xController( mrBase.GetController(), UNO_SET_THROW );
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( "table" );
-        mxTableFamily.set( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+        mxTableFamily.set( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
     }
     catch (const Exception&)
     {
@@ -717,8 +716,7 @@ void TableDesignWidget::FillDesignPreviewControl()
             Reference< XPropertySet > xPageSet( mxView->getCurrentPage(), UNO_QUERY );
             if( xPageSet.is() )
             {
-                const OUString sIsBackgroundDark( "IsBackgroundDark" );
-                xPageSet->getPropertyValue(sIsBackgroundDark) >>= bIsPageDark;
+                xPageSet->getPropertyValue("IsBackgroundDark") >>= bIsPageDark;
             }
         }
 

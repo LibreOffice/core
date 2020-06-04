@@ -787,8 +787,7 @@ void SdMiscTest::testTdf119956()
 void SdMiscTest::testTdf98839_ShearVFlipH()
 {
     // Loads a document with a sheared shape and mirrors it
-    const OUString sURL = "sd/qa/unit/data/tdf98839_ShearVFlipH.odg";
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf98839_ShearVFlipH.odg"), ODG);
     sd::GraphicViewShell* pViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
@@ -812,8 +811,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
 
 void SdMiscTest::testTdf130988()
 {
-    const OUString sURL("sd/qa/unit/data/tdf130988_3D_create_lathe.odg");
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf130988_3D_create_lathe.odg"), ODG);
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
@@ -834,8 +832,7 @@ void SdMiscTest::testTdf130988()
 
 void SdMiscTest::testTdf131033()
 {
-    const OUString sURL("sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg");
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg"), ODG);
 
     // The document contains a polygon, so that emulate command .uno:ConvertInto3DLathe
     // by direct call of ConvertMarkedObjTo3D works.
@@ -860,8 +857,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 {
     // Versions LO 6.2 to 6.4 have produced files, where the layer DrawnInSlideshow has
     // got visible=false and printable=false attributes. Those files should be repaired now.
-    const OUString sURL = "sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp";
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODP);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp"), ODP);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Verify model
