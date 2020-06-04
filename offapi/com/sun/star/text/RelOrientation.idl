@@ -78,7 +78,6 @@ published constants RelOrientation
         @since LibreOffice 7.0
      */
     const short PAGE_PRINT_AREA_BOTTOM = 10;
-
 };
 
 
