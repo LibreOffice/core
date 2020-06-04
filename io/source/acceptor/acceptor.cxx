@@ -119,8 +119,7 @@ namespace io_acceptor
             m_sLastDescription != sConnectionDescription )
         {
             // instantiate another acceptor for different ports
-            OUString sMessage = "acceptor::accept called multiple times with different connection strings\n";
-            throw ConnectionSetupException( sMessage );
+            throw ConnectionSetupException( "acceptor::accept called multiple times with different connection strings\n" );
         }
 
         if( m_sLastDescription.isEmpty() )
