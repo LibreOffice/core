@@ -58,6 +58,11 @@ class TableManager : public virtual SvRefBase
         TablePropertyMapPtr mpRowProps;
 
         /**
+         table exception properties of the current row
+         */
+        TablePropertyMapPtr mpTableExceptionProps;
+
+        /**
          properties of the current table
          */
         std::stack<TablePropertyMapPtr> mTableProps;
@@ -109,7 +114,7 @@ class TableManager : public virtual SvRefBase
 
         void resetCellProps()
         {
-            mpCellProps.clear();
+            mpCellProps = getTableExceptionProps();
         }
 
         void setCellProps(TablePropertyMapPtr pProps)
@@ -124,6 +129,10 @@ class TableManager : public virtual SvRefBase
 
         void resetRowProps()
         {
+            // reset also table exception and
+            // its copy set by the previous resetCellProps()
+            mpTableExceptionProps.clear();
+            resetCellProps();
             mpRowProps.clear();
         }
 
@@ -135,6 +144,16 @@ class TableManager : public virtual SvRefBase
         const TablePropertyMapPtr& getRowProps() const
         {
             return mpRowProps;
+        }
+
+        void setTableExceptionProps(TablePropertyMapPtr pProps)
+        {
+            mpTableExceptionProps = pProps;
+        }
+
+        const TablePropertyMapPtr& getTableExceptionProps() const
+        {
+            return mpTableExceptionProps;
         }
 
         void resetTableProps()
@@ -207,6 +226,11 @@ public:
     TablePropertyMapPtr const & getRowProps() const
     {
         return mState.getRowProps();
+    }
+
+    TablePropertyMapPtr const & getTableExceptionProps() const
+    {
+        return mState.getTableExceptionProps();
     }
 
 protected:
@@ -453,6 +477,13 @@ public:
        @param pProps   the properties
      */
     virtual void insertRowProps(const TablePropertyMapPtr& pProps);
+
+    /**
+       Handle table exception properties of the current row.
+
+       @param pProps   the properties
+     */
+    virtual void tableExceptionProps(const TablePropertyMapPtr& pProps);
 
     /**
        Handle properties of the current table.
