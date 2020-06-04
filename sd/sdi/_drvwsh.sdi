@@ -1315,6 +1315,7 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
         Export = FALSE ;
+        ReadOnlyDoc = TRUE ;
     ]
 
      // Begin FormSlots
@@ -2585,6 +2586,12 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_SIGNATURELINE
+    [
+        ExecMethod = FuPermanent ;
+        StateMethod = GetMenuState ;
+        ReadOnlyDoc = TRUE ;
     ]
     SID_AVMEDIA_PLAYER // ole : yes, status : ?
     [
