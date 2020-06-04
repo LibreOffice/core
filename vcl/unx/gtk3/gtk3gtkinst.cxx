@@ -9546,9 +9546,9 @@ private:
     }
 
     // We allow only one CellRenderer per TreeViewColumn except for the first
-    // TreeViewColumn which can have two, where the first CellRenderer is
-    // either an expander image. From outside the second CellRenderer is
-    // considered index 0 in the model and the expander as -1
+    // TreeViewColumn which can have two, where the first CellRenderer is an
+    // expander image. From outside the second CellRenderer is considered index
+    // 0 in the model and the expander as -1
     int to_external_model(int modelcol) const
     {
         if (m_nExpanderImageCol == -1)
@@ -9809,6 +9809,13 @@ public:
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
+        /* We allow only one CellRenderer per TreeViewColumn, except for the
+           first TreeViewColumn which can contain two CellRenderers.
+
+           The first CellRenderer is an expander image (or a toggle button in
+           place of an expander image). From outside the second CellRenderer is
+           considered index 0 in the model and the expander as -1
+        */
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
         int nViewColumn(0);
@@ -9835,12 +9842,14 @@ public:
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
+                    assert(!g_list_next(pRenderer) && "only one CellRenderer per TreeViewColumn allowed, except for a single expander column");
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                     m_aToggleVisMap[nIndex] = -1;
                     m_aToggleTriStateMap[nIndex] = -1;
+                    assert(!g_list_next(pRenderer) && "only one CellRenderer per TreeViewColumn allowed, except for a single expander column");
                 }
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
@@ -9849,6 +9858,7 @@ public:
                         m_nExpanderImageCol = nIndex;
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
+                    assert(bExpander || !g_list_next(pRenderer) && "only one CellRenderer per TreeViewColumn allowed, except for a single expander column");
                 }
                 ++nIndex;
             }
