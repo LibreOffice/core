@@ -395,6 +395,54 @@ void ScDocument::AddDelayedFormulaGroupingCell( const ScFormulaCell* cell )
         pDelayedFormulaGrouping->ExtendTo( cell->aPos );
 }
 
+void ScDocument::EnableDelayStartListeningFormulaCells( ScColumn* column, bool delay )
+{
+    if( delay )
+    {
+        if( pDelayedStartListeningFormulaCells.find( column ) == pDelayedStartListeningFormulaCells.end())
+            pDelayedStartListeningFormulaCells[ column ] = std::pair<SCROW, SCROW>( -1, -1 );
+    }
+    else
+    {
+        auto it = pDelayedStartListeningFormulaCells.find( column );
+        if( it != pDelayedStartListeningFormulaCells.end())
+        {
+            if( it->second.first != -1 )
+            {
+                auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+                sc::StartListeningContext aStartCxt(*this, pPosSet);
+                sc::EndListeningContext aEndCxt(*this, pPosSet);
+                column->StartListeningFormulaCells(aStartCxt, aEndCxt, it->second.first, it->second.second);
+            }
+            pDelayedStartListeningFormulaCells.erase( it );
+        }
+    }
+}
+
+bool ScDocument::IsEnabledDelayStartListeningFormulaCells( ScColumn* column ) const
+{
+    return pDelayedStartListeningFormulaCells.find( column ) != pDelayedStartListeningFormulaCells.end();
+}
+
+bool ScDocument::CanDelayStartListeningFormulaCells( ScColumn* column, SCROW row1, SCROW row2 )
+{
+    auto it = pDelayedStartListeningFormulaCells.find( column );
+    if( it == pDelayedStartListeningFormulaCells.end())
+        return false; // not enabled
+    if( it->second.first == -1 && it->second.second == -1 ) // uninitialized
+        pDelayedStartListeningFormulaCells[ column ] = std::make_pair( row1, row2 );
+    else
+    {
+        if( row1 > it->second.second + 1 || row2 < it->second.first - 1 )
+        { // two non-adjacent ranges, just bail out
+            return false;
+        }
+        it->second.first = std::min( it->second.first, row1 );
+        it->second.second = std::max( it->second.second, row2 );
+    }
+    return true;
+}
+
 bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
 {
     if (!rRange.IsValid())

@@ -9,6 +9,7 @@
 
 #include <scopetools.hxx>
 #include <document.hxx>
+#include <column.hxx>
 #include <vcl/window.hxx>
 
 namespace sc {
@@ -71,6 +72,27 @@ DelayFormulaGroupingSwitch::~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALS
 void DelayFormulaGroupingSwitch::reset()
 {
     mrDoc.DelayFormulaGrouping(mbOldValue);
+}
+
+DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& column, bool delay)
+    : mColumn(column), mbOldValue(column.GetDoc()->IsEnabledDelayStartListeningFormulaCells(&column))
+{
+    column.GetDoc()->EnableDelayStartListeningFormulaCells(&column, delay);
+}
+
+DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& column)
+    : mColumn(column), mbOldValue(column.GetDoc()->IsEnabledDelayStartListeningFormulaCells(&column))
+{
+}
+
+DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
+{
+    mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+}
+
+void DelayStartListeningFormulaCells::set()
+{
+    mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, true);
 }
 
 }
