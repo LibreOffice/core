@@ -653,9 +653,8 @@ void
 ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::Any& /*IgnoreUppercase*/,const uno::Any& /*AlwaysSuggest*/, const uno::Any& /*SpellingLang*/ )
 {
     // #TODO# #FIXME# unused params above, can we do anything with those
-    OUString url = ".uno:SpellDialog";
     uno::Reference< frame::XModel > xModel( getModel() );
-    dispatchRequests(xModel,url);
+    dispatchRequests(xModel,".uno:SpellDialog");
 }
 
 uno::Reference< excel::XRange >

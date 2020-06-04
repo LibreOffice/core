@@ -162,8 +162,7 @@ void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap
     {
         pRangeName.reset(new ScRangeName());
     }
-    OUString aGlobal(STR_GLOBAL_RANGE_NAME);
-    aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aGlobal, pRangeName.get()));
+    aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(STR_GLOBAL_RANGE_NAME, pRangeName.get()));
 }
 
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const

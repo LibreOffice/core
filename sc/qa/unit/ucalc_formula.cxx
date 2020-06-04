@@ -89,14 +89,10 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 void Test::testFormulaCreateStringFromTokens()
 {
     // Insert sheets.
-    OUString const aTabName1("Test");
-    OUString const aTabName2("Kevin's Data");
-    OUString const aTabName3("Past Data");
-    OUString const aTabName4("2013");
-    m_pDoc->InsertTab(0, aTabName1);
-    m_pDoc->InsertTab(1, aTabName2);
-    m_pDoc->InsertTab(2, aTabName3);
-    m_pDoc->InsertTab(3, aTabName4);
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(1, "Kevin's Data");
+    m_pDoc->InsertTab(2, "Past Data");
+    m_pDoc->InsertTab(3, "2013");
 
     // Insert named ranges.
     static const struct {
@@ -1021,10 +1017,8 @@ void Test::testFormulaCompilerJumpReordering()
     getDocShell().SetFormulaOptions(aOptions);
 
     {
-        OUString const aInput("=IF(B1;12;\"text\")");
-
         // Compile formula string first.
-        std::unique_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
+        std::unique_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, "=IF(B1;12;\"text\")"));
         CPPUNIT_ASSERT(pCode);
 
         // Then generate RPN tokens.
@@ -4818,9 +4812,8 @@ void Test::testFuncMIN()
 
 void Test::testFuncN()
 {
-    OUString const aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     double result;
 
@@ -5202,10 +5195,8 @@ void Test::testFuncIFERROR()
 
 void Test::testFuncSHEET()
 {
-    OUString const aTabName1("test1");
-    OUString const aTabName2("test2");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
+                            m_pDoc->InsertTab (SC_TAB_APPEND, "test1"));
 
     m_pDoc->SetString(0, 0, 0, "=SHEETS()");
     m_pDoc->CalcFormulaTree(false, false);
@@ -5216,7 +5207,7 @@ void Test::testFuncSHEET()
                            static_cast<SCTAB>(original), m_pDoc->GetTableCount());
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName2));
+                            m_pDoc->InsertTab (SC_TAB_APPEND, "test2"));
 
     double modified;
     m_pDoc->GetValue(0, 0, 0, modified);
@@ -5822,9 +5813,8 @@ void Test::testFuncMATCH()
 
 void Test::testFuncCELL()
 {
-    OUString const aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 2, 20, 0)); // Clear A1:C21.
 
@@ -6465,21 +6455,13 @@ void Test::testExternalRef()
 
     OUString const name("Name");
     OUString const value("Value");
-    OUString const andy("Andy");
-    OUString const bruce("Bruce");
-    OUString const charlie("Charlie");
-    OUString const david("David");
-    OUString const edward("Edward");
-    OUString const frank("Frank");
-    OUString const george("George");
-    OUString const henry("Henry");
 
     // Sheet 1
     rExtDoc.SetString(0, 0, 0, name);
-    rExtDoc.SetString(0, 1, 0, andy);
-    rExtDoc.SetString(0, 2, 0, bruce);
-    rExtDoc.SetString(0, 3, 0, charlie);
-    rExtDoc.SetString(0, 4, 0, david);
+    rExtDoc.SetString(0, 1, 0, "Andy");
+    rExtDoc.SetString(0, 2, 0, "Bruce");
+    rExtDoc.SetString(0, 3, 0, "Charlie");
+    rExtDoc.SetString(0, 4, 0, "David");
     rExtDoc.SetString(1, 0, 0, value);
     double val = 10;
     rExtDoc.SetValue(1, 1, 0, val);
@@ -6494,10 +6476,10 @@ void Test::testExternalRef()
 
     // Sheet 3
     rExtDoc.SetString(0, 0, 2, name);
-    rExtDoc.SetString(0, 1, 2, edward);
-    rExtDoc.SetString(0, 2, 2, frank);
-    rExtDoc.SetString(0, 3, 2, george);
-    rExtDoc.SetString(0, 4, 2, henry);
+    rExtDoc.SetString(0, 1, 2, "Edward");
+    rExtDoc.SetString(0, 2, 2, "Frank");
+    rExtDoc.SetString(0, 3, 2, "George");
+    rExtDoc.SetString(0, 4, 2, "Henry");
     rExtDoc.SetString(1, 0, 2, value);
     val = 99;
     rExtDoc.SetValue(1, 1, 2, val);
@@ -6622,14 +6604,13 @@ void Test::testExternalRangeName()
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
     OUString const aExtDocName("file:///extdata.fake");
-    OUString const aExtSh1Name("Data1");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, aExtSh1Name);
+    rExtDoc.InsertTab(0, "Data1");
     rExtDoc.SetValue(0, 0, 0, 123.456);
 
     ScRangeName* pRangeName = rExtDoc.GetRangeName();
@@ -8229,8 +8210,7 @@ void Test::testFuncMDETERM()
     m_pDoc->InsertTab(0, "MDETERM_test");
     ScAddress aPos(8,0,0);
     OUString const aColCodes("ABCDEFGH");
-    OUString const aFormulaTemplate("=MDETERM(A1:B2)");
-    OUStringBuffer aFormulaBuffer(aFormulaTemplate);
+    OUStringBuffer aFormulaBuffer("=MDETERM(A1:B2)");
     for( SCSIZE nSize = 3; nSize <= 8; nSize++ )
     {
         double fVal = 1.0;

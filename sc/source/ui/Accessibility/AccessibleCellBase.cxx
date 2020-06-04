@@ -197,9 +197,7 @@ sal_Int32
 OUString
     ScAccessibleCellBase::createAccessibleDescription()
 {
-    OUString sDescription = STR_ACC_CELL_DESCR;
-
-    return sDescription;
+    return STR_ACC_CELL_DESCR;
 }
 
 OUString

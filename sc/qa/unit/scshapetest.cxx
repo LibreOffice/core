@@ -156,12 +156,11 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("expected object meta data", pData);
 
-    const OUString sExpected("start col 1 row 1 end col 2 row 8");
     const OUString sActual("start col " + OUString::number(pData->maStart.Col()) + " row "
                            + OUString::number(pData->maStart.Row()) + " end col "
                            + OUString::number(pData->maEnd.Col()) + " row "
                            + OUString::number(pData->maEnd.Row()));
-    CPPUNIT_ASSERT_EQUAL(sExpected, sActual);
+    CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 1 end col 2 row 8"), sActual);
 
     pDocSh->DoClose();
 }

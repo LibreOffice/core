@@ -77,9 +77,8 @@ void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xCo
 // module, we could move the test there then ) - relates to fdo#67547
 void ScMacrosTest::testMSP()
 {
-    const OUString aFileNameBase("MasterScriptProviderProblem.ods");
     OUString aFileName;
-    createFileURL(aFileNameBase, aFileName);
+    createFileURL("MasterScriptProviderProblem.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
@@ -109,9 +108,8 @@ void ScMacrosTest::testMSP()
 
 void ScMacrosTest::testPasswordProtectedStarBasic()
 {
-    const OUString aFileNameBase("testTypePassword.ods");
     OUString aFileName;
-    createFileURL(aFileNameBase, aFileName);
+    createFileURL("testTypePassword.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load testTypePassword.ods", xComponent.is());
@@ -164,9 +162,8 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
 void ScMacrosTest::testStarBasic()
 {
-    const OUString aFileNameBase("StarBasic.ods");
     OUString aFileName;
-    createFileURL(aFileNameBase, aFileName);
+    createFileURL("StarBasic.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
@@ -361,9 +358,8 @@ void ScMacrosTest::testVba()
 
 void ScMacrosTest::testRowColumn()
 {
-    const OUString aFileNameBase("StarBasic.ods");
     OUString aFileName;
-    createFileURL(aFileNameBase, aFileName);
+    createFileURL("StarBasic.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());

@@ -781,8 +781,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
         xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(bUsePrettyPrinting));
 
-        const OUString sTargetStorage("TargetStorage");
-        xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
+        xInfoSet->setPropertyValue( "TargetStorage", uno::Any( xStorage ) );
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!" );
         OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : OUString();

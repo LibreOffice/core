@@ -463,12 +463,11 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-            OUString const aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
             WriteUnicodeOrByteString( rStrm, aRefName, true );
-            WriteUnicodeOrByteString( rStrm, aExtraBits, true );
+            WriteUnicodeOrByteString( rStrm, "calc:extref", true );
             if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
                 rStrm.WriteUInt16( 0 );
             else
