@@ -684,7 +684,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
     // a boolean variable like m_bRun...
     while ( pInst->m_bRunClipboardNotifierThread )
     {
-        // process window messages because of CoInitialize
+        // process window messages because of CoInitializeEx
         MSG Msg;
         while (PeekMessageW(&Msg, nullptr, 0, 0, PM_REMOVE))
             DispatchMessageW(&Msg);
