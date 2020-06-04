@@ -43,8 +43,7 @@ public:
 void TestLanguageTag::testAllTags()
 {
     {
-        OUString const s_de_Latn_DE( "de-Latn-DE" );
-        LanguageTag de_DE( s_de_Latn_DE, true );
+        LanguageTag de_DE( "de-Latn-DE", true );
         OUString aBcp47 = de_DE.getBcp47();
         lang::Locale aLocale = de_DE.getLocale();
         LanguageType nLanguageType = de_DE.getLanguageType();
@@ -61,8 +60,7 @@ void TestLanguageTag::testAllTags()
     }
 
     {
-        OUString const s_klingon( "i-klingon" );
-        LanguageTag klingon( s_klingon, true );
+        LanguageTag klingon( "i-klingon", true );
         lang::Locale aLocale = klingon.getLocale();
         CPPUNIT_ASSERT_EQUAL( OUString("tlh"), klingon.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString("tlh"), aLocale.Language );
@@ -141,8 +139,7 @@ void TestLanguageTag::testAllTags()
 
     // 'sh-RS' has an internal override to 'sr-Latn-RS'
     {
-        OUString const s_sh_RS( "sh-RS" );
-        LanguageTag sh_RS( s_sh_RS, true );
+        LanguageTag sh_RS( "sh-RS", true );
         lang::Locale aLocale = sh_RS.getLocale();
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-RS"), sh_RS.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString(I18NLANGTAG_QLT) , aLocale.Language);
@@ -173,8 +170,7 @@ void TestLanguageTag::testAllTags()
     // known LangID with an override and canonicalization should work the same
     // without liblangtag.
     {
-        OUString const s_bs_Latn_BA( "bs-Latn-BA" );
-        LanguageTag bs_Latn_BA( s_bs_Latn_BA, true );
+        LanguageTag bs_Latn_BA( "bs-Latn-BA", true );
         lang::Locale aLocale = bs_Latn_BA.getLocale();
         CPPUNIT_ASSERT_EQUAL( OUString("bs-BA"), bs_Latn_BA.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString("bs"), aLocale.Language );
@@ -248,9 +244,8 @@ void TestLanguageTag::testAllTags()
 
     // 'ca-XV' has an internal override to 'ca-ES-valencia'
     {
-        OUString const s_ca_XV( "ca-XV" );
         OUString s_ca_ES_valencia( "ca-ES-valencia" );
-        LanguageTag ca_XV( s_ca_XV, true );
+        LanguageTag ca_XV( "ca-XV", true );
         lang::Locale aLocale = ca_XV.getLocale();
         CPPUNIT_ASSERT_EQUAL( s_ca_ES_valencia, ca_XV.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString(I18NLANGTAG_QLT) , aLocale.Language);
@@ -298,10 +293,9 @@ void TestLanguageTag::testAllTags()
     }
 
     {
-        OUString const s_de_DE( "de-DE" );
         LanguageTag de_DE( lang::Locale( "de", "DE", "" ) );
         lang::Locale aLocale = de_DE.getLocale();
-        CPPUNIT_ASSERT_EQUAL( s_de_DE, de_DE.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("de-DE"), de_DE.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString("de"), aLocale.Language );
         CPPUNIT_ASSERT_EQUAL( OUString("DE"), aLocale.Country );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
@@ -309,10 +303,9 @@ void TestLanguageTag::testAllTags()
     }
 
     {
-        OUString const s_de_DE( "de-DE" );
         LanguageTag de_DE( LANGUAGE_GERMAN );
         lang::Locale aLocale = de_DE.getLocale();
-        CPPUNIT_ASSERT_EQUAL( s_de_DE, de_DE.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("de-DE"), de_DE.getBcp47() );
         CPPUNIT_ASSERT_EQUAL( OUString("de"), aLocale.Language );
         CPPUNIT_ASSERT_EQUAL( OUString("DE"), aLocale.Country );
         CPPUNIT_ASSERT( aLocale.Variant.isEmpty() );
@@ -541,8 +534,7 @@ void TestLanguageTag::testAllTags()
 
     // 'qtx' is an unknown new mslangid
     {
-        OUString const s_qtx( "qtx" );
-        LanguageTag qtx( s_qtx );
+        LanguageTag qtx( "qtx" );
         qtx.setScriptType( LanguageTag::ScriptType::RTL );
         LanguageType n_qtx = qtx.getLanguageType();
         CPPUNIT_ASSERT_EQUAL( css::i18n::ScriptType::COMPLEX, MsLangId::getScriptType(n_qtx) );
