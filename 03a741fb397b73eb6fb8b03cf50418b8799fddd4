@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a19d9b19_784543bb",
+        "filename": "sw/uiconfig/swriter/ui/wrappage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-04T09:37:37Z",
+      "side": 1,
+      "message": "In the context menu resp. the UNO command it\u0027s None. Wouldn\u0027t read not so easy on the dialog, so fine with Wrap Off.",
+      "range": {
+        "startLine": 57,
+        "startChar": 86,
+        "endLine": 57,
+        "endChar": 95
+      },
+      "revId": "03a741fb397b73eb6fb8b03cf50418b8799fddd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
