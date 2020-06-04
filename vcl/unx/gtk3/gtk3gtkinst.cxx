@@ -8017,16 +8017,19 @@ private:
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
-    std::vector<int> m_aModelColToViewCol;
     bool m_bWorkAroundBadDragRegion;
     bool m_bInDrag;
     gint m_nTextCol;
+    gint m_nTextView;
     gint m_nImageCol;
+    gint m_nExpanderToggleCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
+    int m_nPendingVAdjustment;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
+    gulong m_nTestCollapseRowSignalId;
     gulong m_nVAdjustmentChangedSignalId;
     gulong m_nRowDeletedSignalId;
     gulong m_nRowInsertedSignalId;
@@ -8034,6 +8037,8 @@ private:
     gulong m_nDragBeginSignalId;
     gulong m_nDragEndSignalId;
     gulong m_nKeyPressSignalId;
+    gulong m_nQueryTooltipSignalId;
+    GtkAdjustment* m_pVAdjustment;
     ImplSVEvent* m_pChangeEvent;
 
     DECL_LINK(async_signal_changed, void*, void);
@@ -8249,6 +8254,12 @@ private:
         return !pThis->signal_test_expand_row(*iter);
     }
 
+    static gboolean signalTestCollapseRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        return !pThis->signal_test_collapse_row(*iter);
+    }
+
     bool signal_test_expand_row(GtkTreeIter& iter)
     {
         disable_notify_events();
@@ -8279,6 +8290,17 @@ private:
             OUString sDummy("<dummy>");
             insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
         }
+
+        enable_notify_events();
+        return bRet;
+    }
+
+    bool signal_test_collapse_row(const GtkTreeIter& iter)
+    {
+        disable_notify_events();
+
+        GtkInstanceTreeIter aIter(iter);
+        bool bRet = signal_collapsing(aIter);
 
         enable_notify_events();
         return bRet;
@@ -8411,9 +8433,22 @@ private:
         return m_aViewColToModelCol[viewcol];
     }
 
-    int get_view_col(int modelcol) const
+    // We allow only one CellRenderer per TreeViewColumn except for the first
+    // TreeViewColumn which can have two, where the first CellRenderer is
+    // either an expander image. From outside the second CellRenderer is
+    // considered index 0 in the model and the expander as -1
+    int to_external_model(int modelcol) const
     {
-        return m_aModelColToViewCol[modelcol];
+        if (m_nExpanderImageCol == -1)
+            return modelcol;
+        return modelcol - 1;
+    }
+
+    int to_internal_model(int modelcol) const
+    {
+        if (m_nExpanderImageCol == -1)
+            return modelcol;
+        return modelcol + 1;
     }
 
     static void signalRowDeleted(GtkTreeModel*, GtkTreePath*, gpointer widget)
@@ -8494,6 +8529,92 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    void set_font_color(const GtkTreeIter& iter, const Color& rColor)
+    {
+        if (rColor == COL_AUTO)
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
+        else
+        {
+            GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
+        }
+    }
+
+    int get_expander_size() const
+    {
+        gint nExpanderSize;
+        gint nHorizontalSeparator;
+
+        gtk_widget_style_get(GTK_WIDGET(m_pTreeView),
+                             "expander-size", &nExpanderSize,
+                             "horizontal-separator", &nHorizontalSeparator,
+                             nullptr);
+
+        return nExpanderSize + (nHorizontalSeparator/ 2);
+    }
+
+    void real_vadjustment_set_value(int value)
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pVAdjustment, value);
+        enable_notify_events();
+    }
+
+    static gboolean setAdjustmentCallback(GtkWidget*, GdkFrameClock*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        if (pThis->m_nPendingVAdjustment != -1)
+        {
+            pThis->real_vadjustment_set_value(pThis->m_nPendingVAdjustment);
+            pThis->m_nPendingVAdjustment = -1;
+        }
+        return false;
+    }
+
+    bool iter_next(weld::TreeIter& rIter, bool bOnlyExpanded) const
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
+        GtkTreeIter iter = rGtkIter.iter;
+
+        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &iter);
+        if (ret && bOnlyExpanded && !get_row_expanded(rGtkIter))
+            ret = false;
+        rGtkIter.iter = tmp;
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter, bOnlyExpanded);
+            return true;
+        }
+
+        tmp = iter;
+        if (gtk_tree_model_iter_next(pModel, &tmp))
+        {
+            rGtkIter.iter = tmp;
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter, bOnlyExpanded);
+            return true;
+        }
+        // Move up level(s) until we find the level where the next node exists.
+        while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        {
+            iter = tmp;
+            if (gtk_tree_model_iter_next(pModel, &tmp))
+            {
+                rGtkIter.iter = tmp;
+                //on-demand dummy entry doesn't count
+                if (get_text(rGtkIter, -1) == "<dummy>")
+                    return iter_next(rGtkIter, bOnlyExpanded);
+                return true;
+            }
+        }
+        return false;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -8502,21 +8623,25 @@ public:
         , m_bWorkAroundBadDragRegion(false)
         , m_bInDrag(false)
         , m_nTextCol(-1)
+        , m_nTextView(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
+        , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
+        , m_nTestCollapseRowSignalId(g_signal_connect(pTreeView, "test-collapse-row", G_CALLBACK(signalTestCollapseRow), this))
         , m_nVAdjustmentChangedSignalId(0)
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
-        , m_nDragBeginSignalId(g_signal_connect(pTreeView, "drag-begin", G_CALLBACK(signalDragBegin), this))
-        , m_nDragEndSignalId(g_signal_connect(pTreeView, "drag-end", G_CALLBACK(signalDragEnd), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
+        , m_nQueryTooltipSignalId(0)
+        , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
+        int nViewColumn(0);
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
@@ -8529,7 +8654,10 @@ public:
                 if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     if (m_nTextCol == -1)
+                    {
                         m_nTextCol = nIndex;
+                        m_nTextView = nViewColumn;
+                    }
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
@@ -8550,11 +8678,11 @@ public:
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
                 }
-                m_aModelColToViewCol.push_back(m_aViewColToModelCol.size());
                 ++nIndex;
             }
             g_list_free(pRenderers);
             m_aViewColToModelCol.push_back(nIndex - 1);
+            ++nViewColumn;
         }
 
         m_nIdCol = nIndex++;
@@ -8791,8 +8919,7 @@ public:
 
     virtual void set_sort_indicator(TriState eState, int col) override
     {
-        if (col == -1)
-            col = get_view_col(m_nTextCol);
+        assert(col >= 0 && "cannot sort on expander column");
 
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
         assert(pColumn && "wrong count");
@@ -8808,8 +8935,7 @@ public:
 
     virtual TriState get_sort_indicator(int col) const override
     {
-        if (col == -1)
-            col = get_view_col(m_nTextCol);
+        assert(col >= 0 && "cannot sort on expander column");
 
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
         if (!gtk_tree_view_column_get_sort_indicator(pColumn))
@@ -8823,7 +8949,7 @@ public:
         gint sort_column_id(0);
         if (!gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr))
             return -1;
-        return get_view_col(sort_column_id);
+        return to_external_model(sort_column_id);
     }
 
     virtual void set_sort_column(int nColumn) override
@@ -8836,7 +8962,7 @@ public:
         GtkSortType eSortType;
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
         gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
-        int nSortCol = get_model_col(nColumn);
+        int nSortCol = to_internal_model(nColumn);
         gtk_tree_sortable_set_sort_func(pSortable, nSortCol, sortFunc, this, nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, nSortCol, eSortType);
     }
@@ -9024,7 +9150,11 @@ public:
 
     virtual TriState get_toggle(int pos, int col) const override
     {
-        col = get_model_col(col);
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         if (get_bool(pos, m_aToggleTriStateMap.find(col)->second))
             return TRISTATE_INDET;
         return get_bool(pos, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
@@ -9032,7 +9162,11 @@ public:
 
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col) const override
     {
-        col = get_model_col(col);
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         if (get_bool(rGtkIter.iter, m_aToggleTriStateMap.find(col)->second))
             return TRISTATE_INDET;
@@ -9823,8 +9957,7 @@ public:
 
     virtual void start_editing(const weld::TreeIter& rIter) override
     {
-        int col = get_view_col(m_nTextCol);
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextView));
         assert(pColumn && "wrong column");
 
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
