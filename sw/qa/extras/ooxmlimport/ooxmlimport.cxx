@@ -355,6 +355,19 @@ DECLARE_OOXMLIMPORT_TEST(testN766477, "n766477.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Checkbox_Checked"), aElementNames[0]);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf130804, "tdf130804.docx")
+{
+    OUString flyHeight = parseDump("/root/page/body/txt[1]/infos/bounds", "height");
+    OUString txtHeight = parseDump("/root/page/body/txt[1]/anchored/fly/infos/bounds", "height");
+
+    //Without the fix in place, txtHeight would have been flyHeight + 55
+    CPPUNIT_ASSERT_EQUAL(flyHeight, txtHeight);
+
+    // Also check the bookmark portion is ignored in the next paragraph
+    OUString aTop = parseDump("/root/page/body/txt[2]/infos/prtBounds", "top");
+    CPPUNIT_ASSERT_EQUAL(OUString("240"), aTop);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
 {
     /*
