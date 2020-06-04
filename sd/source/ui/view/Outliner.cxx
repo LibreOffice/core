@@ -829,8 +829,12 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 OUString const & rString = mpSearchItem->GetSearchString();
                 bool bBackwards = mpSearchItem->GetBackward();
 
-                SearchStartPosition eSearchStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
-                bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, eSearchStartPosition);
+                VectorGraphicSearchOptions aOptions;
+                aOptions.meStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
+                aOptions.mbMatchCase = mpSearchItem->GetExact();
+                aOptions.mbMatchWholeWord = mpSearchItem->GetWordOnly();
+
+                bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, aOptions);
 
                 if (bResult)
                 {
@@ -1242,11 +1246,15 @@ void SdOutliner::ProvideNextTextObject()
                     auto* pGraphicObject = static_cast<SdrGrafObj*>(mpObj);
                     OUString const & rString = mpSearchItem->GetSearchString();
                     bool bBackwards = mpSearchItem->GetBackward();
-                    SearchStartPosition eSearchStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
+
+                    VectorGraphicSearchOptions aOptions;
+                    aOptions.meStartPosition = bBackwards ? SearchStartPosition::End : SearchStartPosition::Begin;
+                    aOptions.mbMatchCase = mpSearchItem->GetExact();
+                    aOptions.mbMatchWholeWord = mpSearchItem->GetWordOnly();
 
                     mpImpl->mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
 
-                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, eSearchStartPosition);
+                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, aOptions);
                     if (bResult)
                     {
                         if (bBackwards)

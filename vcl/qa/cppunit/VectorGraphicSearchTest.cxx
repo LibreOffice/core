@@ -32,11 +32,15 @@ class VectorGraphicSearchTest : public test::BootstrapFixtureBase
     void test();
     void testNextPrevious();
     void testSearchStringChange();
+    void testSearchMatchWholeWord();
+    void testSearchMatchCase();
 
     CPPUNIT_TEST_SUITE(VectorGraphicSearchTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testNextPrevious);
     CPPUNIT_TEST(testSearchStringChange);
+    CPPUNIT_TEST(testSearchMatchWholeWord);
+    CPPUNIT_TEST(testSearchMatchCase);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -134,7 +138,8 @@ void VectorGraphicSearchTest::testNextPrevious()
 
     { // Start from the end of the page
         VectorGraphicSearch aSearch(aGraphic);
-        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("lazy", SearchStartPosition::End));
+        CPPUNIT_ASSERT_EQUAL(true,
+                             aSearch.search("lazy", { SearchStartPosition::End, false, false }));
 
         // no next - we are at the end
         CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
@@ -195,6 +200,87 @@ void VectorGraphicSearchTest::testSearchStringChange()
     CPPUNIT_ASSERT_EQUAL(true, aSearch.search("Quick"));
     CPPUNIT_ASSERT_EQUAL(true, aSearch.previous());
     CPPUNIT_ASSERT_EQUAL(784, aSearch.index());
+}
+
+void VectorGraphicSearchTest::testSearchMatchWholeWord()
+{
+    OUString aURL = getFullUrl("Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search, whole word disabled - "Flummoxed" - found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("Flummoxed"));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search, whole word disabled - "Flummo" - found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("Flummo"));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search, whole word enabled - "Flummoxed" - found
+        CPPUNIT_ASSERT_EQUAL(
+            true, aSearch.search("Flummoxed", { SearchStartPosition::Begin, false, true }));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search, whole word enabled - "Flummo" - not found
+        CPPUNIT_ASSERT_EQUAL(true,
+                             aSearch.search("Flummo", { SearchStartPosition::Begin, false, true }));
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+    }
+}
+
+void VectorGraphicSearchTest::testSearchMatchCase()
+{
+    OUString aURL = getFullUrl("Pangram.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search "Flummoxed" - case insensitive - found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("Flummoxed"));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search "FLUMMOXED" - case insensitive - found
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.search("FLUMMOXED"));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search "Flummoxed" - case sensitive - found
+        CPPUNIT_ASSERT_EQUAL(
+            true, aSearch.search("Flummoxed", { SearchStartPosition::Begin, true, false }));
+        CPPUNIT_ASSERT_EQUAL(true, aSearch.next());
+        CPPUNIT_ASSERT_EQUAL(618, aSearch.index());
+    }
+
+    {
+        VectorGraphicSearch aSearch(aGraphic);
+        // Search to "FLUMMOXED" - case sensitive - not found
+        CPPUNIT_ASSERT_EQUAL(
+            true, aSearch.search("FLUMMOXED", { SearchStartPosition::Begin, true, false }));
+        CPPUNIT_ASSERT_EQUAL(false, aSearch.next());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorGraphicSearchTest);
