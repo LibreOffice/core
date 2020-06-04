@@ -318,16 +318,7 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                 xmlFree(UriValue);
 
                 CategoriesEntries aCategoryEntry;
-                if (sClassId == "sfxlo-PriorityHBox")
-                {
-                    aCategoryEntry.sDisplayName = sUIItemId;
-                    aCategoryEntry.sUIItemId = sUIItemId;
-                    aCategoryEntry.sClassType = sClassId;
-                    aCategoryList.push_back(aCategoryEntry);
-
-                    aCurItemEntry = aCategoryEntry;
-                }
-                else if (sClassId == "sfxlo-PriorityMergedHBox")
+                if (sClassId == "sfxlo-PriorityMergedHBox")
                 {
                     aCategoryEntry.sDisplayName = aCurItemEntry.sDisplayName + " | " + sUIItemId;
                     aCategoryEntry.sUIItemId = sUIItemId;
@@ -381,8 +372,7 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                         nodeEntries.sActionName = "Null";
                         aEntries.push_back(nodeEntries);
                     }
-                    else if (sClassId == "sfxlo-PriorityHBox"
-                             || sClassId == "sfxlo-PriorityMergedHBox"
+                    else if (sClassId == "sfxlo-PriorityMergedHBox"
                              || sClassId == "svtlo-ManagedMenuButton")
                     {
                         nodeEntries.sClassId = sClassId;
@@ -431,8 +421,7 @@ void SvxNotebookbarConfigPage::SelectElement()
                                        aCategoryList[nIdx].sDisplayName);
     }
     unsigned long nStart = 0;
-    if (aEntries[nStart].sClassId == "sfxlo-PriorityHBox"
-        || aEntries[nStart].sClassId == "sfxlo-PriorityMergedHBox")
+    if (aEntries[nStart].sClassId == "sfxlo-PriorityMergedHBox")
         nStart = 1;
 
     std::vector<NotebookbarEntries> aTempEntries;

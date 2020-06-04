@@ -158,7 +158,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/mnemonicengine \
     vcl/source/window/mouse \
     vcl/source/window/NotebookBarAddonsMerger \
-    vcl/source/window/OptionalBox \
     vcl/source/window/popupmenuwindow \
     vcl/source/window/printdlg \
     vcl/source/window/scrwnd \

@@ -25,8 +25,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/IPrioritable.hxx>
-#include <OptionalBox.hxx>
+#include <vcl/layout.hxx>
 
 static const char STYLE_TEXT[] = "Text";
 static const char STYLE_ICON[] = "Icon";
@@ -118,7 +117,6 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
-    sal_uInt16 nPriorityIdx = aImageVec.size();
     css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
     for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
     {
@@ -128,13 +126,8 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
              std::as_const(aExtension))
         {
             VclPtr<vcl::Window> pOptionalParent;
-            pOptionalParent = VclPtr<OptionalBox>::Create(pParent);
+            pOptionalParent = VclPtr<VclHBox>::Create(pParent);
             pOptionalParent->Show();
-
-            vcl::IPrioritable* pPrioritable
-                = dynamic_cast<vcl::IPrioritable*>(pOptionalParent.get());
-            if (pPrioritable)
-                pPrioritable->SetPriority(nPriorityIdx - nIter);
 
             VclPtr<vcl::Window> pNotebookbarToolBox;
             pFunction(pNotebookbarToolBox, pOptionalParent, rMap);

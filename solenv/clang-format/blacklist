@@ -12177,9 +12177,7 @@ sfx2/source/inc/versdlg.hxx
 sfx2/source/inc/workwin.hxx
 sfx2/source/inet/inettbc.cxx
 sfx2/source/notebookbar/ContextVBox.cxx
-sfx2/source/notebookbar/DropdownBox.cxx
 sfx2/source/notebookbar/NotebookbarTabControl.cxx
-sfx2/source/notebookbar/PriorityHBox.cxx
 sfx2/source/notebookbar/SfxNotebookBar.cxx
 sfx2/source/notify/eventsupplier.cxx
 sfx2/source/notify/globalevents.cxx

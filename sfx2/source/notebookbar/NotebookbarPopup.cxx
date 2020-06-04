@@ -8,7 +8,6 @@
  */
 
 #include "NotebookbarPopup.hxx"
-#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 
 NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
@@ -33,18 +32,12 @@ VclHBox* NotebookbarPopup::getBox() { return m_pBox.get(); }
 void NotebookbarPopup::PopupModeEnd()
 {
     hideSeparators(false);
+
     while (m_pBox->GetChildCount())
     {
-        vcl::IPrioritable* pChild = dynamic_cast<vcl::IPrioritable*>(GetChild(0));
-        if (pChild)
-            pChild->HideContent();
-
         vcl::Window* pWindow = m_pBox->GetChild(0);
         pWindow->SetParent(m_pParent);
-
-        // resize after all children of box are empty
-        if (m_pParent && !m_pBox->GetChildCount())
-            m_pParent->Resize();
+        pWindow->Hide();
     }
 
     FloatingWindow::PopupModeEnd();
