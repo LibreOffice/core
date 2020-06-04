@@ -8018,7 +8018,6 @@ private:
     std::map<int, int> m_aAlignMap;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
-    std::vector<int> m_aViewColToModelCol;
     bool m_bWorkAroundBadDragRegion;
     bool m_bInDrag;
     gint m_nTextCol;
@@ -8440,11 +8439,6 @@ private:
         pThis->signal_visible_range_changed();
     }
 
-    int get_model_col(int viewcol) const
-    {
-        return m_aViewColToModelCol[viewcol];
-    }
-
     // The outside concept of a column maps to a gtk CellRenderer, rather than
     // a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
     // and/or a leading Image Renderer, those are considered special expander
@@ -8706,7 +8700,6 @@ public:
                 ++nIndex;
             }
             g_list_free(pRenderers);
-            m_aViewColToModelCol.push_back(nIndex - 1);
             ++nViewColumn;
         }
 
@@ -9162,8 +9155,10 @@ public:
     virtual OUString get_text(int pos, int col) const override
     {
         if (col == -1)
-            return get(pos, m_nTextCol);
-        return get(pos, get_model_col(col));
+            col = m_nTextCol;
+        else
+            col = to_internal_model(col);
+        return get(pos, col);
     }
 
     virtual void set_text(int pos, const OUString& rText, int col) override
@@ -9171,7 +9166,7 @@ public:
         if (col == -1)
             col = m_nTextCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         set(pos, col, rText);
     }
 
@@ -9249,26 +9244,26 @@ public:
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        col = get_model_col(col);
+        col = to_internal_model(col);
         set(rGtkIter.iter, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
     }
 
     virtual void set_text_emphasis(int pos, bool bOn, int col) override
     {
-        col = get_model_col(col);
+        col = to_internal_model(col);
         set(pos, m_aWeightMap[col], bOn ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
     }
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        col = get_model_col(col);
+        col = to_internal_model(col);
         return get_int(rGtkIter.iter, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
     }
 
     virtual bool get_text_emphasis(int pos, int col) const override
     {
-        col = get_model_col(col);
+        col = to_internal_model(col);
         return get_int(pos, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
     }
 
@@ -9292,7 +9287,7 @@ public:
         if (col == -1)
             col = m_nTextCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         set(pos, m_aSensitiveMap[col], bSensitive);
     }
 
@@ -9301,7 +9296,7 @@ public:
         if (col == -1)
             col = m_nTextCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         set(rGtkIter.iter, m_aSensitiveMap[col], bSensitive);
     }
@@ -9311,7 +9306,7 @@ public:
         if (col == -1)
             col = m_nExpanderImageCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, pixbuf, -1);
         if (pixbuf)
             g_object_unref(pixbuf);
@@ -9756,7 +9751,7 @@ public:
         if (col == -1)
             col = m_nTextCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         return get(rGtkIter.iter, col);
     }
 
@@ -9766,7 +9761,7 @@ public:
         if (col == -1)
             col = m_nTextCol;
         else
-            col = get_model_col(col);
+            col = to_internal_model(col);
         set(rGtkIter.iter, col, rText);
     }
 
