@@ -398,6 +398,9 @@ ScDocument::~ScDocument()
     if(mpCellStringPool.use_count() > 1)
         mpCellStringPool->purge();
     mpCellStringPool.reset();
+
+    assert( pDelayedFormulaGrouping == nullptr );
+    assert( pDelayedStartListeningFormulaCells.empty());
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )

@@ -49,6 +49,7 @@
 #include <memory>
 #include <map>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 #include "markdata.hxx"
@@ -129,6 +130,7 @@ class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
 class ScChartListenerCollection;
 class ScClipOptions;
+class ScColumn;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScDBCollection;
@@ -519,6 +521,10 @@ private:
     // If the pointer is set, formula cells will not be automatically grouped into shared formula groups,
     // instead the range will be extended to contain all such cells.
     std::unique_ptr< ScRange > pDelayedFormulaGrouping;
+    // If non-empty, ScColumn::StartListeningFormulaCells() calls may be delayed using this,
+    // avoiding repeated calling for the same cells in the given range. The function will be called once
+    // later for all the cells in the range.
+    std::unordered_map< ScColumn*, std::pair<SCROW, SCROW>> pDelayedStartListeningFormulaCells;
 
     bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde and ocWebservice
 
@@ -1360,6 +1366,14 @@ public:
     bool            IsDelayedFormulaGrouping() const { return bool(pDelayedFormulaGrouping); }
     /// To be used only by SharedFormulaUtil::joinFormulaCells().
     void            AddDelayedFormulaGroupingCell( const ScFormulaCell* cell );
+    /// If set, ScColumn::StartListeningFormulaCells() calls may be delayed using
+    /// CanDelayStartListeningFormulaCells() until reset again, at which point the function will
+    /// be called as necessary.
+    void            EnableDelayStartListeningFormulaCells( ScColumn* column, bool delay );
+    bool            IsEnabledDelayStartListeningFormulaCells( ScColumn* column ) const;
+    /// If true is returned, ScColumn::StartListeningFormulaCells() for the given cells will be performed
+    /// later. If false is returned, it needs to be done explicitly.
+    bool            CanDelayStartListeningFormulaCells( ScColumn* column, SCROW row1, SCROW row2 );
 
     FormulaError    GetErrCode( const ScAddress& ) const;
 
