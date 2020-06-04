@@ -3019,13 +3019,13 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="sfxlo-PriorityHBox" id="Toolbar">
+          <object class="GtkBox" id="Toolbar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_left">5</property>
             <property name="margin_right">5</property>
             <child>
-              <object class="sfxlo-DropdownBox" id="File">
+              <object class="GtkBox" id="File">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">5</property>
@@ -3122,7 +3122,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-DropdownBox" id="Clipboard">
+              <object class="GtkBox" id="Clipboard">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -3241,7 +3241,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Default">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Slide">
+                      <object class="GtkBox" id="Default-Section-Slide">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -3364,7 +3364,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Draw">
+                      <object class="GtkBox" id="Default-Section-Draw">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -3525,7 +3525,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Draw1">
+                      <object class="GtkBox" id="Default-Section-Draw1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -3663,7 +3663,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Draw2">
+                      <object class="GtkBox" id="Default-Section-Draw2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -3835,7 +3835,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Snap">
+                      <object class="GtkBox" id="Default-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -3997,7 +3997,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Insert">
+                      <object class="GtkBox" id="Default-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4111,7 +4111,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-View">
+                      <object class="GtkBox" id="Default-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4236,7 +4236,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Review">
+                      <object class="GtkBox" id="Default-Section-Review">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4350,7 +4350,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Default-Section-Extension">
+                      <object class="GtkBox" id="Default-Section-Extension">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -4460,7 +4460,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Text">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Slide-Slide">
+                      <object class="GtkBox" id="Text-Slide-Slide">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4586,7 +4586,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-Font">
+                      <object class="GtkBox" id="Text-Section-Font">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4820,7 +4820,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-Paragraph">
+                      <object class="GtkBox" id="Text-Section-Paragraph">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -4975,7 +4975,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-Paragraph1">
+                      <object class="GtkBox" id="Text-Section-Paragraph1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5117,7 +5117,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-FormatLineArea">
+                      <object class="GtkBox" id="Text-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5203,7 +5203,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Text-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5291,7 +5291,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Text-Section-View">
+                      <object class="GtkBox" id="Text-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5430,7 +5430,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Table">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Font">
+                      <object class="GtkBox" id="Table-Section-Font">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5664,7 +5664,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Paragraph">
+                      <object class="GtkBox" id="Table-Section-Paragraph">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5795,7 +5795,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Paragraph1">
+                      <object class="GtkBox" id="Table-Section-Paragraph1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -5948,7 +5948,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Table">
+                      <object class="GtkBox" id="Table-Section-Table">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6071,7 +6071,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Table1">
+                      <object class="GtkBox" id="Table-Section-Table1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6227,7 +6227,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Table2">
+                      <object class="GtkBox" id="Table-Section-Table2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6423,7 +6423,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Table-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6512,7 +6512,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-FormatLineArea2">
+                      <object class="GtkBox" id="Table-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6633,7 +6633,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Calc">
+                      <object class="GtkBox" id="Table-Section-Calc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6747,7 +6747,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Insert">
+                      <object class="GtkBox" id="Table-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -6885,7 +6885,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Draw">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Edit">
+                      <object class="GtkBox" id="Draw-Section-Edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7018,7 +7018,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-FormatLineArea">
+                      <object class="GtkBox" id="Draw-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7104,7 +7104,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Draw-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7234,7 +7234,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-FormatLineArea2">
+                      <object class="GtkBox" id="Draw-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7308,7 +7308,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Arrange">
+                      <object class="GtkBox" id="Draw-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7459,7 +7459,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Arrange1">
+                      <object class="GtkBox" id="Draw-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7601,7 +7601,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Snap">
+                      <object class="GtkBox" id="Draw-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7763,7 +7763,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Shape">
+                      <object class="GtkBox" id="Draw-Section-Shape">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7927,7 +7927,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Shape1">
+                      <object class="GtkBox" id="Draw-Section-Shape1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8088,7 +8088,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Group">
+                      <object class="GtkBox" id="Draw-Section-Group">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8202,7 +8202,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-MergeCombine">
+                      <object class="GtkBox" id="Draw-Section-MergeCombine">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8322,7 +8322,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-3d">
+                      <object class="GtkBox" id="Draw-Section-3d">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8447,7 +8447,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-3d1">
+                      <object class="GtkBox" id="Draw-Section-3d1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8567,7 +8567,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Fontwork">
+                      <object class="GtkBox" id="Draw-Section-Fontwork">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8681,7 +8681,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Grid">
+                      <object class="GtkBox" id="Draw-Section-Grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8810,7 +8810,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Image">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Graphic">
+                      <object class="GtkBox" id="Image-Section-Graphic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -8932,7 +8932,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-FormatLineArea">
+                      <object class="GtkBox" id="Image-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9018,7 +9018,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Imag-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Imag-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9151,7 +9151,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Imag-Section-FormatLineArea2">
+                      <object class="GtkBox" id="Imag-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9225,7 +9225,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Arrange">
+                      <object class="GtkBox" id="Image-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9376,7 +9376,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Arrange1">
+                      <object class="GtkBox" id="Image-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9518,7 +9518,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Snap">
+                      <object class="GtkBox" id="Image-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9680,7 +9680,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Color">
+                      <object class="GtkBox" id="Image-Section-Color">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9769,7 +9769,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-ColorSettings">
+                      <object class="GtkBox" id="Image-Section-ColorSettings">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -9846,7 +9846,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-ColorSettings2">
+                      <object class="GtkBox" id="Image-Section-ColorSettings2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">5</property>
@@ -9936,7 +9936,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Object">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-Graphic">
+                      <object class="GtkBox" id="OLE-Section-Graphic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10058,7 +10058,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-FormatLineArea">
+                      <object class="GtkBox" id="OLE-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10144,7 +10144,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-FormatLineArea1">
+                      <object class="GtkBox" id="OLE-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10274,7 +10274,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-FormatLineArea2">
+                      <object class="GtkBox" id="OLE-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10348,7 +10348,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-Arrange">
+                      <object class="GtkBox" id="OLE-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10499,7 +10499,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-Arrange1">
+                      <object class="GtkBox" id="OLE-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10641,7 +10641,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="OLE-Section-Snap">
+                      <object class="GtkBox" id="OLE-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10817,7 +10817,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Media">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Graphic">
+                      <object class="GtkBox" id="Media-Section-Graphic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -10939,7 +10939,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-AVMediaToolBox">
+                      <object class="GtkBox" id="Media-Section-AVMediaToolBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11025,7 +11025,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Arrange">
+                      <object class="GtkBox" id="Media-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -11177,7 +11177,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Arrange1">
+                      <object class="GtkBox" id="Media-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -11320,7 +11320,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Snap">
+                      <object class="GtkBox" id="Media-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11495,7 +11495,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Multiobject">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-Edit">
+                      <object class="GtkBox" id="Multi-Section-Edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11628,7 +11628,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-FormatLineArea">
+                      <object class="GtkBox" id="Multi-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11714,7 +11714,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Multi-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11844,7 +11844,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-FormatLineArea2">
+                      <object class="GtkBox" id="Multi-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -11918,7 +11918,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-Arrange">
+                      <object class="GtkBox" id="Multi-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12069,7 +12069,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-Arrange1">
+                      <object class="GtkBox" id="Multi-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12211,7 +12211,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-Snap">
+                      <object class="GtkBox" id="Multi-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12373,7 +12373,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Multi-Section-Group">
+                      <object class="GtkBox" id="Multi-Section-Group">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12500,7 +12500,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Master Page">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="SectionSlideShow5">
+                      <object class="GtkBox" id="SectionSlideShow5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12622,7 +12622,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Draw">
+                      <object class="GtkBox" id="Master-Section-Draw">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12786,7 +12786,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Draw1">
+                      <object class="GtkBox" id="Master-Section-Draw1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -12924,7 +12924,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Draw2">
+                      <object class="GtkBox" id="Master-Section-Draw2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13062,7 +13062,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Insert">
+                      <object class="GtkBox" id="Master-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13176,7 +13176,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Snap">
+                      <object class="GtkBox" id="Master-Section-Snap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13338,7 +13338,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-View">
+                      <object class="GtkBox" id="Master-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13463,7 +13463,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Master-Section-Review">
+                      <object class="GtkBox" id="Master-Section-Review">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13592,7 +13592,7 @@
                   <object class="sfxlo-PriorityMergedHBox" id="Context Form">
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form">
+                      <object class="GtkBox" id="Form-Section-Form">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="baseline_position">bottom</property>
@@ -13706,7 +13706,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form2">
+                      <object class="GtkBox" id="Form-Section-Form2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13794,7 +13794,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form3">
+                      <object class="GtkBox" id="Form-Section-Form3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13867,7 +13867,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form4">
+                      <object class="GtkBox" id="Form-Section-Form4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -13958,7 +13958,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form5">
+                      <object class="GtkBox" id="Form-Section-Form5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -14093,7 +14093,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form6">
+                      <object class="GtkBox" id="Tools-Section-Form6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -14228,7 +14228,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form7">
+                      <object class="GtkBox" id="Form-Section-Form7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -14380,7 +14380,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-DropdownBox" id="Tools">
+              <object class="GtkBox" id="Tools">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>

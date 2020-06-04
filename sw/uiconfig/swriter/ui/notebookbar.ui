@@ -2227,7 +2227,7 @@
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="sfxlo-PriorityHBox" id="File Tab">
+              <object class="GtkBox" id="File Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -2237,7 +2237,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-New">
+                      <object class="GtkBox" id="File-Section-New">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2277,7 +2277,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-New1">
+                      <object class="GtkBox" id="File-Section-New1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2356,7 +2356,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Open">
+                      <object class="GtkBox" id="File-Section-Open">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2412,7 +2412,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Open1">
+                      <object class="GtkBox" id="File-Section-Open1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2482,7 +2482,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Save">
+                      <object class="GtkBox" id="File-Section-Save">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2538,7 +2538,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Save1">
+                      <object class="GtkBox" id="File-Section-Save1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2617,7 +2617,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Export">
+                      <object class="GtkBox" id="File-Section-Export">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2673,7 +2673,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Export1">
+                      <object class="GtkBox" id="File-Section-Export1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2776,7 +2776,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Print">
+                      <object class="GtkBox" id="File-Section-Print">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2832,7 +2832,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Print1">
+                      <object class="GtkBox" id="File-Section-Print1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2911,7 +2911,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Property">
+                      <object class="GtkBox" id="File-Section-Property">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -2967,7 +2967,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="File-Section-Property1">
+                      <object class="GtkBox" id="File-Section-Property1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3053,7 +3053,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="File-Menu">
+                  <object class="GtkBox" id="File-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -3220,7 +3220,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Home Tab">
+              <object class="GtkBox" id="Home Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
@@ -3232,7 +3232,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Clipboard">
+                      <object class="GtkBox" id="Home-Section-Clipboard">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3336,7 +3336,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Style">
+                      <object class="GtkBox" id="Home-Section-Style">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3720,7 +3720,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Paragraph">
+                      <object class="GtkBox" id="Home-Section-Paragraph">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -3929,7 +3929,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Paragraph1">
+                      <object class="GtkBox" id="Home-Section-Paragraph1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4118,7 +4118,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Style2">
+                      <object class="GtkBox" id="Home-Section-Style2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4214,7 +4214,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Style3">
+                      <object class="GtkBox" id="Home-Section-Style3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4264,7 +4264,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="VclOptionalBox" id="StyleParagraphSection2">
+                              <object class="GtkBox" id="StyleParagraphSection2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -4406,7 +4406,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Style4">
+                      <object class="GtkBox" id="Home-Section-Style4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4512,7 +4512,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Insert">
+                      <object class="GtkBox" id="Home-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4629,7 +4629,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-View">
+                      <object class="GtkBox" id="Home-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4751,7 +4751,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Home-Menu">
+                  <object class="GtkBox" id="Home-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -4869,7 +4869,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Insert Tab">
+              <object class="GtkBox" id="Insert Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -4879,7 +4879,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Pagebreak">
+                      <object class="GtkBox" id="Insert-Section-Pagebreak">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4919,7 +4919,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Pagebreak1">
+                      <object class="GtkBox" id="Insert-Section-Pagebreak1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4996,7 +4996,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Table">
+                      <object class="GtkBox" id="Insert-Section-Table">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5051,7 +5051,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Table1">
+                      <object class="GtkBox" id="Insert-Section-Table1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5128,7 +5128,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Image">
+                      <object class="GtkBox" id="Insert-Section-Image">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5183,7 +5183,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Image1">
+                      <object class="GtkBox" id="Insert-Section-Image1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5260,7 +5260,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Bookmark">
+                      <object class="GtkBox" id="Insert-Section-Bookmark">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5315,7 +5315,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Bookmark1">
+                      <object class="GtkBox" id="Insert-Section-Bookmark1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5392,7 +5392,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Field">
+                      <object class="GtkBox" id="Insert-Section-Field">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5447,7 +5447,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-DrawText">
+                      <object class="GtkBox" id="Insert-Section-DrawText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5513,7 +5513,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Draw">
+                      <object class="GtkBox" id="Insert-Section-Draw">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5671,7 +5671,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Draw2">
+                      <object class="GtkBox" id="Insert-Section-Draw2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5803,7 +5803,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-AutoText">
+                      <object class="GtkBox" id="Insert-Section-AutoText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5858,7 +5858,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Symbol">
+                      <object class="GtkBox" id="Insert-Section-Symbol">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5913,7 +5913,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Insert-Section-Symbol1">
+                      <object class="GtkBox" id="Insert-Section-Symbol1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5997,7 +5997,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Insert-Menu">
+                  <object class="GtkBox" id="Insert-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -6129,7 +6129,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Layout Tab">
+              <object class="GtkBox" id="Layout Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
@@ -6141,7 +6141,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-File">
+                      <object class="GtkBox" id="Layout-Section-File">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6181,7 +6181,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-File2">
+                      <object class="GtkBox" id="Layout-Section-File2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6221,7 +6221,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-File3">
+                      <object class="GtkBox" id="Layout-Section-File3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6261,7 +6261,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-File4">
+                      <object class="GtkBox" id="Layout-Section-File4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6304,7 +6304,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-File5">
+                      <object class="GtkBox" id="Layout-Section-File5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6382,7 +6382,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-ParaMargin">
+                      <object class="GtkBox" id="Layout-Section-ParaMargin">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6473,7 +6473,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-ParaMargin1">
+                      <object class="GtkBox" id="Layout-Section-ParaMargin1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6546,7 +6546,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Backgrounds">
+                      <object class="GtkBox" id="Layout-Section-Backgrounds">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6638,7 +6638,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Backgrounds1">
+                      <object class="GtkBox" id="Layout-Section-Backgrounds1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6720,7 +6720,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-SelectGroup">
+                      <object class="GtkBox" id="Layout-Section-SelectGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6812,7 +6812,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Wrap">
+                      <object class="GtkBox" id="Layout-Section-Wrap">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -6948,7 +6948,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Wrap1">
+                      <object class="GtkBox" id="Layout-Section-Wrap1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7025,7 +7025,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Arrange">
+                      <object class="GtkBox" id="Layout-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7116,7 +7116,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Arrange1">
+                      <object class="GtkBox" id="Layout-Section-Arrange1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7199,7 +7199,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Layout-Menu">
+                  <object class="GtkBox" id="Layout-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -7309,7 +7309,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="References Tab">
+              <object class="GtkBox" id="References Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -7319,7 +7319,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Index">
+                      <object class="GtkBox" id="Reference-Section-Index">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7359,7 +7359,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Index1">
+                      <object class="GtkBox" id="Reference-Section-Index1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7437,7 +7437,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Reference">
+                      <object class="GtkBox" id="Reference-Section-Reference">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7492,7 +7492,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Reference1">
+                      <object class="GtkBox" id="Reference-Section-Reference1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7574,7 +7574,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Caption">
+                      <object class="GtkBox" id="Reference-Section-Caption">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7629,7 +7629,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Caption1">
+                      <object class="GtkBox" id="Reference-Section-Caption1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7707,7 +7707,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Field">
+                      <object class="GtkBox" id="Reference-Section-Field">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7762,7 +7762,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Field1">
+                      <object class="GtkBox" id="Reference-Section-Field1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7873,7 +7873,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Bibliothek">
+                      <object class="GtkBox" id="Reference-Section-Bibliothek">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -7931,7 +7931,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Reference-Section-Bibliothek1">
+                      <object class="GtkBox" id="Reference-Section-Bibliothek1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8016,7 +8016,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="References-Menu">
+                  <object class="GtkBox" id="References-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -8125,7 +8125,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Review Tab">
+              <object class="GtkBox" id="Review Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -8135,7 +8135,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Language">
+                      <object class="GtkBox" id="Review-Section-Language">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8186,7 +8186,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Language1">
+                      <object class="GtkBox" id="Review-Section-Language1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8264,7 +8264,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Annotation">
+                      <object class="GtkBox" id="Review-Section-Annotation">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8319,7 +8319,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Annotation1">
+                      <object class="GtkBox" id="Review-Section-Annotation1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8401,7 +8401,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-TrackChanges">
+                      <object class="GtkBox" id="Review-Section-TrackChanges">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8467,7 +8467,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-TrackChanges1">
+                      <object class="GtkBox" id="Review-Section-TrackChanges1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8545,7 +8545,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-TrackChanges2">
+                      <object class="GtkBox" id="Review-Section-TrackChanges2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8623,7 +8623,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-TrackChanges3">
+                      <object class="GtkBox" id="Review-Section-TrackChanges3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8701,7 +8701,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-TrackChanges4">
+                      <object class="GtkBox" id="Review-Section-TrackChanges4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8779,7 +8779,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Document">
+                      <object class="GtkBox" id="Review-Section-Document">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8837,7 +8837,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-Document1">
+                      <object class="GtkBox" id="Review-Section-Document1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8915,7 +8915,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-RedactDoc">
+                      <object class="GtkBox" id="Review-Section-RedactDoc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -8973,7 +8973,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Review-Section-EditDoc">
+                      <object class="GtkBox" id="Review-Section-EditDoc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9038,7 +9038,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Review-Menu">
+                  <object class="GtkBox" id="Review-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -9148,7 +9148,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="View Tab">
+              <object class="GtkBox" id="View Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -9158,7 +9158,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-View">
+                      <object class="GtkBox" id="View-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9198,7 +9198,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-View1">
+                      <object class="GtkBox" id="View-Section-View1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9238,7 +9238,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-View2">
+                      <object class="GtkBox" id="View-Section-View2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9281,7 +9281,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-View3">
+                      <object class="GtkBox" id="View-Section-View3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9359,7 +9359,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Zoom">
+                      <object class="GtkBox" id="View-Section-Zoom">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9414,7 +9414,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Zoom1">
+                      <object class="GtkBox" id="View-Section-Zoom1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9492,7 +9492,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Zoom2">
+                      <object class="GtkBox" id="View-Section-Zoom2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9570,7 +9570,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Visible">
+                      <object class="GtkBox" id="View-Section-Visible">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9625,7 +9625,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Visible1">
+                      <object class="GtkBox" id="View-Section-Visible1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9707,7 +9707,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Visible2">
+                      <object class="GtkBox" id="View-Section-Visible2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9789,7 +9789,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-SelectObject">
+                      <object class="GtkBox" id="View-Section-SelectObject">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9847,7 +9847,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-Grid1">
+                      <object class="GtkBox" id="View-Section-Grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9929,7 +9929,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="View-Section-New">
+                      <object class="GtkBox" id="View-Section-New">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -9994,7 +9994,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="View-Menu">
+                  <object class="GtkBox" id="View-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -10104,7 +10104,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Table Tab">
+              <object class="GtkBox" id="Table Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -10114,7 +10114,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Layout">
+                      <object class="GtkBox" id="Table-Section-Layout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10156,7 +10156,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Layout1">
+                      <object class="GtkBox" id="Table-Section-Layout1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10274,7 +10274,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Merge">
+                      <object class="GtkBox" id="Table-Section-Merge">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10331,7 +10331,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Merge1">
+                      <object class="GtkBox" id="Table-Section-Merge1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10408,7 +10408,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Select">
+                      <object class="GtkBox" id="Table-Section-Select">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10466,7 +10466,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Select1">
+                      <object class="GtkBox" id="Table-Section-Select1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10565,7 +10565,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Style">
+                      <object class="GtkBox" id="Table-Section-Style">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10619,7 +10619,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-FormatLineArea3">
+                      <object class="GtkBox" id="Object-Section-FormatLineArea3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10744,7 +10744,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Optimize">
+                      <object class="GtkBox" id="Table-Section-Optimize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10802,7 +10802,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Optimize1">
+                      <object class="GtkBox" id="Table-Section-Optimize1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -10959,7 +10959,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Calc">
+                      <object class="GtkBox" id="Table-Section-Calc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11019,7 +11019,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-Calc1">
+                      <object class="GtkBox" id="Table-Section-Calc1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11096,7 +11096,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-FormatCalc">
+                      <object class="GtkBox" id="Table-Section-FormatCalc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11154,7 +11154,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Table-Section-FormatCalc1">
+                      <object class="GtkBox" id="Table-Section-FormatCalc1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11260,7 +11260,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Table-Menu">
+                  <object class="GtkBox" id="Table-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -11372,7 +11372,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Image Tab">
+              <object class="GtkBox" id="Image Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -11382,7 +11382,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Crop">
+                      <object class="GtkBox" id="Image-Section-Crop">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11557,7 +11557,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-FormatLineArea">
+                      <object class="GtkBox" id="Image-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11645,7 +11645,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Image-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11765,7 +11765,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Anchor">
+                      <object class="GtkBox" id="Image-Section-Anchor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11825,7 +11825,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Wrap1">
+                      <object class="GtkBox" id="Image-Section-Wrap1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -11945,7 +11945,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Wrap2">
+                      <object class="GtkBox" id="Image-Section-Wrap2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12021,7 +12021,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-ObjectAlign">
+                      <object class="GtkBox" id="Image-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12167,7 +12167,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-Arrange">
+                      <object class="GtkBox" id="Image-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12301,7 +12301,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-FormatImageFilter">
+                      <object class="GtkBox" id="Image-Section-FormatImageFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12351,7 +12351,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-ColorSettings1">
+                      <object class="GtkBox" id="Image-Section-ColorSettings1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12435,7 +12435,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Image-Section-ColorSettings2">
+                      <object class="GtkBox" id="Image-Section-ColorSettings2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12523,7 +12523,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Image-Menu">
+                  <object class="GtkBox" id="Image-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -12650,7 +12650,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Draw Tab">
+              <object class="GtkBox" id="Draw Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -12660,7 +12660,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Edit">
+                      <object class="GtkBox" id="Draw-Section-Edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12798,7 +12798,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-FormatLineArea2">
+                      <object class="GtkBox" id="Draw-Section-FormatLineArea2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -12886,7 +12886,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-FormatLineArea3">
+                      <object class="GtkBox" id="Draw-Section-FormatLineArea3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13018,7 +13018,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Anchor">
+                      <object class="GtkBox" id="Draw-Section-Anchor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13078,7 +13078,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Wrap1">
+                      <object class="GtkBox" id="Draw-Section-Wrap1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13198,7 +13198,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Wrap2">
+                      <object class="GtkBox" id="Draw-Section-Wrap2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13274,7 +13274,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-ObjectAlign">
+                      <object class="GtkBox" id="Draw-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13420,7 +13420,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Arrange">
+                      <object class="GtkBox" id="Draw-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13554,7 +13554,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Group">
+                      <object class="GtkBox" id="Draw-Section-Group">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13612,7 +13612,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Group1">
+                      <object class="GtkBox" id="Draw-Section-Group1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13693,7 +13693,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-3D">
+                      <object class="GtkBox" id="Draw-Section-3D">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13818,7 +13818,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Fontwork">
+                      <object class="GtkBox" id="Draw-Section-Fontwork">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13876,7 +13876,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Draw-Section-Fontwork1">
+                      <object class="GtkBox" id="Draw-Section-Fontwork1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -13986,7 +13986,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Draw-Menu">
+                  <object class="GtkBox" id="Draw-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -14126,7 +14126,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Object Tab">
+              <object class="GtkBox" id="Object Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -14136,7 +14136,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-Edit">
+                      <object class="GtkBox" id="Object-Section-Edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14239,7 +14239,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-FormatLineArea">
+                      <object class="GtkBox" id="Object-Section-FormatLineArea">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14327,7 +14327,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-FormatLineArea1">
+                      <object class="GtkBox" id="Object-Section-FormatLineArea1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14447,7 +14447,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-Anchor">
+                      <object class="GtkBox" id="Object-Section-Anchor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14507,7 +14507,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-Wrap1">
+                      <object class="GtkBox" id="Object-Section-Wrap1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14627,7 +14627,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-Wrap2">
+                      <object class="GtkBox" id="Object-Section-Wrap2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14703,7 +14703,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-ObjectAlign">
+                      <object class="GtkBox" id="Object-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14849,7 +14849,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Object-Section-Arrange">
+                      <object class="GtkBox" id="Object-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -14990,7 +14990,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Object-Menu">
+                  <object class="GtkBox" id="Object-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -15104,7 +15104,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Media Tab">
+              <object class="GtkBox" id="Media Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -15114,7 +15114,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Edit">
+                      <object class="GtkBox" id="Media-Section-Edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15251,7 +15251,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Anchor">
+                      <object class="GtkBox" id="Media-Section-Anchor">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15311,7 +15311,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Wrap1">
+                      <object class="GtkBox" id="Media-Section-Wrap1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15431,7 +15431,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Wrap2">
+                      <object class="GtkBox" id="Media-Section-Wrap2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15507,7 +15507,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-ObjectAlign">
+                      <object class="GtkBox" id="Media-Section-ObjectAlign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15653,7 +15653,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-Arrange">
+                      <object class="GtkBox" id="Media-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15787,7 +15787,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Media-Section-AVMediaToolBox">
+                      <object class="GtkBox" id="Media-Section-AVMediaToolBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -15881,7 +15881,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Media-Menu">
+                  <object class="GtkBox" id="Media-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -16015,7 +16015,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Print Tab">
+              <object class="GtkBox" id="Print Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -16025,7 +16025,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Print-Section-ShowPageGroup">
+                      <object class="GtkBox" id="Print-Section-ShowPageGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16065,7 +16065,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Print-Section-ShowPageGroup1">
+                      <object class="GtkBox" id="Print-Section-ShowPageGroup1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16110,7 +16110,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Print-Section-ShowPageGroup2">
+                      <object class="GtkBox" id="Print-Section-ShowPageGroup2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16190,7 +16190,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Print-Section-Arrange">
+                      <object class="GtkBox" id="Print-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16351,7 +16351,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Print-Section-Print">
+                      <object class="GtkBox" id="Print-Section-Print">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16441,7 +16441,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Print-Menu">
+                  <object class="GtkBox" id="Print-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -16551,7 +16551,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Form Tab">
+              <object class="GtkBox" id="Form Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -16561,7 +16561,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form">
+                      <object class="GtkBox" id="Form-Section-Form">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16601,7 +16601,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form1">
+                      <object class="GtkBox" id="Form-Section-Form1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16683,7 +16683,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form2">
+                      <object class="GtkBox" id="Form-Section-Form2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16773,7 +16773,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form3">
+                      <object class="GtkBox" id="Form-Section-Form3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16848,7 +16848,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form4">
+                      <object class="GtkBox" id="Form-Section-Form4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -16941,7 +16941,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form5">
+                      <object class="GtkBox" id="Form-Section-Form5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17078,7 +17078,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form6">
+                      <object class="GtkBox" id="Tools-Section-Form6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17215,7 +17215,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Form-Section-Form7">
+                      <object class="GtkBox" id="Form-Section-Form7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17359,7 +17359,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Form-Menu">
+                  <object class="GtkBox" id="Form-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -17471,7 +17471,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Extension Tab">
+              <object class="GtkBox" id="Extension Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -17501,7 +17501,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Extension-Menu">
+                  <object class="GtkBox" id="Extension-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -17610,7 +17610,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-PriorityHBox" id="Tools Tab">
+              <object class="GtkBox" id="Tools Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -17620,7 +17620,7 @@
                     <property name="valign">center</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Macro">
+                      <object class="GtkBox" id="Tools-Section-Macro">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17660,7 +17660,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Macro1">
+                      <object class="GtkBox" id="Tools-Section-Macro1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17737,7 +17737,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-MailMerge">
+                      <object class="GtkBox" id="Tools-Section-MailMerge">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17792,7 +17792,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-MailMerge1">
+                      <object class="GtkBox" id="Tools-Section-MailMerge1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17874,7 +17874,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form">
+                      <object class="GtkBox" id="Tools-Section-Form">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -17929,7 +17929,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form1">
+                      <object class="GtkBox" id="Tools-Section-Form1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -18011,7 +18011,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form2">
+                      <object class="GtkBox" id="Tools-Section-Form2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -18148,7 +18148,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form3">
+                      <object class="GtkBox" id="Tools-Section-Form3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -18285,7 +18285,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form4">
+                      <object class="GtkBox" id="Tools-Section-Form4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -18422,7 +18422,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Tools-Section-Form5">
+                      <object class="GtkBox" id="Tools-Section-Form5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -18566,7 +18566,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-DropdownBox" id="Tool-Menu">
+                  <object class="GtkBox" id="Tool-Menu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
