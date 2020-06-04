@@ -587,16 +587,13 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             aGeomPropSeq );
 
     // Reset old properties
-    const OUString sCoordinateSize( "CoordinateSize" );
-    const OUString sEquations( "Equations" );
-    const OUString sPath( "Path" );
     const OUString sTextPath( "TextPath" );
     const OUString sAdjustmentValues( "AdjustmentValues" );
     const OUString sPresetTextWarp( "PresetTextWarp" );
 
-    lcl_resetPropertyValue( aGeomPropVec, sCoordinateSize );
-    lcl_resetPropertyValue( aGeomPropVec, sEquations );
-    lcl_resetPropertyValue( aGeomPropVec, sPath );
+    lcl_resetPropertyValue( aGeomPropVec, "CoordinateSize" );
+    lcl_resetPropertyValue( aGeomPropVec, "Equations" );
+    lcl_resetPropertyValue( aGeomPropVec, "Path" );
     lcl_resetPropertyValue( aGeomPropVec, sAdjustmentValues);
 
     bool bFromWordArt(false);
@@ -899,8 +896,7 @@ Reference< XShape > const & Shape::createAndInsert(
         }
         if( !msDescription.isEmpty() )
         {
-            const OUString sDescription( "Description" );
-            xSet->setPropertyValue( sDescription, Any( msDescription ) );
+            xSet->setPropertyValue( "Description", Any( msDescription ) );
         }
         if (aServiceName != "com.sun.star.text.TextFrame")
             rxShapes->add( mxShape );
@@ -908,11 +904,9 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( mbHidden || mbHiddenMasterShape )
         {
             SAL_INFO("oox.drawingml", "Shape::createAndInsert: invisible shape with id='" << msId << "'");
-            const OUString sVisible( "Visible" );
-            xSet->setPropertyValue( sVisible, Any( false ) );
+            xSet->setPropertyValue( "Visible", Any( false ) );
             // In Excel hidden means not printed, let's use visibility for now until that's handled separately
-            const OUString sPrintable( "Printable" );
-            xSet->setPropertyValue( sPrintable, Any( false ) );
+            xSet->setPropertyValue( "Printable", Any( false ) );
         }
 
         if (mbLocked)

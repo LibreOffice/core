@@ -85,9 +85,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
             sal_Int32 nIndex = aPPAct.indexOf( '?' );
             OUString aPPAction( nIndex > 0 ? aPPAct.copy( 0, nIndex ) : aPPAct );
 
-            const OUString sHlinkshowjump( "hlinkshowjump" );
-            const OUString sHlinksldjump( "hlinksldjump" );
-            if ( aPPAction.match( sHlinkshowjump ) )
+            if ( aPPAction.match( "hlinkshowjump" ) )
             {
                 const OUString sJump( "jump=" );
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
@@ -96,7 +94,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                     sURL += "#action?jump=" + aDestination;
                 }
             }
-            else if ( aPPAction.match( sHlinksldjump ) )
+            else if ( aPPAction.match( "hlinksldjump" ) )
             {
                 sURL.clear();
 
@@ -121,12 +119,10 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                     sal_Int32 nPageNumber = sHref.copy( nIndex2, nLength ).toInt32();
                     if ( nPageNumber )
                     {
-                        const OUString sSlide( "slide" );
-                        const OUString sNotesSlide( "notesSlide" );
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
-                        if ( aSlideType.match( sSlide ) )
+                        if ( aSlideType.match( "slide" ) )
                             sURL = "#Slide " + OUString::number( nPageNumber );
-                        else if ( aSlideType.match( sNotesSlide ) )
+                        else if ( aSlideType.match( "notesSlide" ) )
                             sURL = "#Notes " + OUString::number( nPageNumber );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
                     }
