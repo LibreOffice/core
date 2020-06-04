@@ -35,7 +35,6 @@ namespace com::sun::star {
 
 namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::sheet { class XSpreadsheet; }
-namespace com::sun::star::sheet { class XSheetCellRanges; }
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 
 namespace sc { class DataTransformation; }
@@ -207,7 +206,7 @@ class ScXMLExport : public SvXMLExport
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
     void AddStyleFromCells(
-        const css::uno::Reference< css::sheet::XSheetCellRanges >& xCellRanges,
+        const css::uno::Reference< css::beans::XPropertySet >& xProperties,
         const css::uno::Reference< css::sheet::XSpreadsheet >& xTable,
         sal_Int32 nTable, const OUString* pOldName );
     void AddStyleFromColumn(
