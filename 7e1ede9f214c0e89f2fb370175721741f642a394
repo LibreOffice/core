@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf1e2188_5429bd76",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 15341,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-04T07:03:10Z",
+      "side": 1,
+      "message": "Is there a reason you added these two lines?  Was that necessary to fix a build breaker?  Normally, there should be no need to modify this file manually, see offapi/README.",
+      "range": {
+        "startLine": 15340,
+        "startChar": 0,
+        "endLine": 15341,
+        "endChar": 69
+      },
+      "revId": "7e1ede9f214c0e89f2fb370175721741f642a394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
