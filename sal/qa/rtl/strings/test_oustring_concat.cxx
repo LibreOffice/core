@@ -93,11 +93,13 @@ void test::oustring::StringConcat::checkConcatAsciiL()
 {
     {
         OUString s("foo");
-        CPPUNIT_ASSERT_EQUAL(OUString("foo"), s += "");
+        s += "";
+        CPPUNIT_ASSERT_EQUAL(OUString("foo"), s);
     }
     {
         OUString s("foo");
-        CPPUNIT_ASSERT_EQUAL(OUString("foobar"), s += "bar");
+        s += "bar";
+        CPPUNIT_ASSERT_EQUAL(OUString("foobar"), s);
     }
 }
 
