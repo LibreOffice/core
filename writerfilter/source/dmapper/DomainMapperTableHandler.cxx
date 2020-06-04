@@ -911,13 +911,25 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( bMergedVertically )
                 {
                     const sal_uInt32 nColumn = m_rDMapper_Impl.getTableManager().findColumn(nRow, nCell);
+                    sal_Int32 nLastMergedRow = 0;
                     for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
                     {
                         const sal_uInt32 nColumnCell = m_rDMapper_Impl.getTableManager().findColumnCell(i, nColumn);
                         if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nColumnCell) )
                         {
                             bMergedVertically = bool(m_aCellProperties[i][nColumnCell]->getProperty(PROP_VERTICAL_MERGE));
+                            if ( bMergedVertically )
+                                nLastMergedRow = i;
                         }
+                    }
+
+                    // Only consider the bottom border setting from the last merged cell.
+                    // Note: in MSO, left/right apply per-unmerged-row. Can't do that in LO, so just using the top cell's borders should be fine.
+                    if ( nRow < nLastMergedRow )
+                    {
+                        (*aCellIterator)->Erase(PROP_BOTTOM_BORDER);
+                        const sal_uInt32 nColumnCell = m_rDMapper_Impl.getTableManager().findColumnCell(nLastMergedRow, nColumn);
+                        lcl_mergeBorder( PROP_BOTTOM_BORDER, m_aCellProperties[nLastMergedRow][nColumnCell], *aCellIterator );
                     }
                 }
 
