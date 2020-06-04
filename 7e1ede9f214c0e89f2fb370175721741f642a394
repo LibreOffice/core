@@ -70,6 +70,30 @@
       "revId": "7e1ede9f214c0e89f2fb370175721741f642a394",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ffb3ded_d28762c4",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 15341,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-06-04T11:00:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e89ab61_30b780cd",
+      "range": {
+        "startLine": 15340,
+        "startChar": 0,
+        "endLine": 15341,
+        "endChar": 69
+      },
+      "revId": "7e1ede9f214c0e89f2fb370175721741f642a394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
