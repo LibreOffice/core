@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e0b1c5c_eb165351",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-04T13:55:47Z",
+      "side": 1,
+      "message": "all Windows-specific includes must be between prewin.h and postwin.h (as in my previous comment ;-))",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 23
+      },
+      "revId": "d9cf5b80e0ca10d258ac3a05b40af82e1718cf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
