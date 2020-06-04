@@ -45,7 +45,7 @@ class tdf129587(UITestCase):
     self.assertEqual("0%", get_state_as_dict(xPosField)['Text'])
     self.assertEqual("0%", get_state_as_dict(xNegField)['Text'])
 
-    #Increate value by one
+    #Increase value by one
     xPosField.executeAction("UP", tuple())
 
     #Both fields are updated because 'Same value for both' is enabled
