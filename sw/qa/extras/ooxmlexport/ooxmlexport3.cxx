@@ -1118,6 +1118,32 @@ DECLARE_OOXMLEXPORT_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx")
         "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", "arrow");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
+{
+    // tdf#92526: Make sure that line with stays 0.
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    if (!pXml)
+        return;
+
+    // "w" attribute was not exported.
+    assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing"
+        "/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "0");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromLeftMargin, "tdf132976_testRelativeAnchorWidthFromLeftMargin.docx")
+{
+    // TODO: Fix export.
+    if (mbExported)
+        return;
+
+    // tdf#132976 The size of the width of this shape should come from the size of the left margin.
+    // It was set to the size of the width of the entire page before.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredWidth
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1133), nAnchoredWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
