@@ -27,7 +27,6 @@ class OfficeConnection:
         self.soffice = None
         self.socket = None
         self.xContext = None
-        self.pro = None
 
     def setUp(self):
         """  Create a new connection to a LibreOffice process
@@ -83,8 +82,7 @@ class OfficeConnection:
             env = environ
             env['LC_ALL'] = environ['LIBO_LANG']
 
-        self.pro = subprocess.Popen(argv, env=env)
-        return self.pro
+        return subprocess.Popen(argv, env=env)
 
     def connect(self, socket):
         """ Tries to connect to the LibreOffice instance through the specified socket"""
