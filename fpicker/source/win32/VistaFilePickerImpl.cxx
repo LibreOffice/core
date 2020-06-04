@@ -190,6 +190,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_hParentWindow(choose_parent_window())
     , m_sDirectory   ()
     , m_sFilename    ()
+    , mnNbCallCoInitializeExForReinit(0)
 {
 }
 
@@ -208,15 +209,18 @@ void VistaFilePickerImpl::before()
     // osl::Thread class initializes COm already in MTA mode because it's needed
     // by VCL and UNO so. There is no way to change that from outside...
     // but we need a STA environment...
-    // So we make it by try-and-error...
-    // If first CoInitializeEx will fail... we uninitialize COM initialize it new .-)
-
-    m_hLastResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    if ( FAILED(m_hLastResult) )
+    while ((m_hLastResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) == RPC_E_CHANGED_MODE)
     {
+        // so we're in RPC_E_CHANGED_MODE case
+        // the pb was it was already initialized with COINIT_MULTITHREADED
+        // close this init
         CoUninitialize();
-        m_hLastResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+        // increment counter for "after" method
+        ++mnNbCallCoInitializeExForReinit;
+        // and keep on the loop if there were multi initializations
     }
+    if (FAILED(m_hLastResult))
+        std::abort();
 }
 
 
@@ -325,6 +329,9 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
 void VistaFilePickerImpl::after()
 {
     CoUninitialize();
+    // Put back all the inits, if there were, before the use of ADO
+    for (int i = 0; i < mnNbCallCoInitializeExForReinit; ++i)
+        CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 }
 
 
