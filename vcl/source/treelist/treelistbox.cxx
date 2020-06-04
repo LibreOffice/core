@@ -1677,7 +1677,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
     assert(pItem);
     pItem->SetBitmap2( aBmp );
 
-    GetModel()->InvalidateEntry( pEntry );
+    ModelHasEntryInvalidated(pEntry);
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
     short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
@@ -1695,7 +1695,7 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
     assert(pItem);
     pItem->SetBitmap1( aBmp );
 
-    GetModel()->InvalidateEntry( pEntry );
+    ModelHasEntryInvalidated(pEntry);
     SetEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
     short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
