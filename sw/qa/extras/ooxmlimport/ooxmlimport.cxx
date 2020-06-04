@@ -355,6 +355,15 @@ DECLARE_OOXMLIMPORT_TEST(testN766477, "n766477.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Checkbox_Checked"), aElementNames[0]);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf130804, "tdf130804.docx")
+{
+    OUString flyHeight = parseDump("/root/page/body/txt[1]/infos/bounds", "height");
+    OUString txtHeight = parseDump("/root/page/body/txt[1]/anchored/fly/infos/bounds", "height");
+
+    //Without the fix in place, txtHeight would have been flyHeight + 55
+    CPPUNIT_ASSERT_EQUAL(flyHeight, txtHeight);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN758883, "n758883.docx")
 {
     /*
