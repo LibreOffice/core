@@ -61,11 +61,14 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_hsqlschema_import \
 ))
 
+# this test fails 50% of the time on the mac jenkins buildbots
 ifeq ($(ENABLE_JAVA),TRUE)
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_hsqldb_test \
     CppunitTest_dbaccess_RowSetClones \
 ))
+endif
 endif
 
 # This runs a suite of performance tests on embedded firebird and HSQLDB.
