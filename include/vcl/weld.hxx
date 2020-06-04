@@ -686,6 +686,8 @@ protected:
     Link<const std::pair<const TreeIter&, OUString>&, bool> m_aEditingDoneHdl;
     // if handler returns false, the expansion of the row is refused
     Link<const TreeIter&, bool> m_aExpandingHdl;
+    // if handler returns false, the collapse of the row is refused
+    Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
@@ -699,6 +701,10 @@ protected:
     bool signal_expanding(const TreeIter& rIter)
     {
         return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
+    }
+    bool signal_collapsing(const TreeIter& rIter)
+    {
+        return !m_aCollapsingHdl.IsSet() || m_aCollapsingHdl.Call(rIter);
     }
     void signal_visible_range_changed() { m_aVisibleRangeChangedHdl.Call(*this); }
     void signal_model_changed() { m_aModelChangedHdl.Call(*this); }
