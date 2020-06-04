@@ -1113,8 +1113,6 @@ callback (gpointer pData)
 
         priv->m_aVisibleCursor = payloadToRectangle(pDocView, rRectangle.c_str());
         priv->m_bCursorOverlayVisible = true;
-        std::cerr << nViewId;
-        std::cerr << priv->m_nViewId;
         if(nViewId == priv->m_nViewId)
         {
             g_signal_emit(pDocView, doc_view_signals[CURSOR_CHANGED], 0,
