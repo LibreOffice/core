@@ -513,8 +513,7 @@ void TextParagraphProperties::dump() const
 
     PropertyMap emptyMap;
 
-    const OUString sText = "debug";
-    xText->setString( sText );
+    xText->setString( "debug" );
     Reference< css::text::XTextCursor > xStart = xText->createTextCursor();
     xStart->gotoEnd( true );
     Reference< XPropertySet > xPropSet( xStart, UNO_QUERY );

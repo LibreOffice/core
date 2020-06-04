@@ -159,8 +159,7 @@ void TextParagraph::insertAt(
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
         {
-            const OUString sNumberingLevel( "NumberingLevel" );
-            xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
+            xProps->setPropertyValue( "NumberingLevel", Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 
 // FIXME this is causing a lot of disruption (ie does not work). I wonder what to do -- Hub

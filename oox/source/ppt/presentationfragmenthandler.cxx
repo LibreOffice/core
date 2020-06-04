@@ -378,7 +378,6 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
             {
                 // Comments are present and commentAuthors.xml has still not been read
                 mbCommentAuthorsRead = true;
-                OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                 Reference< XDrawPage > xCommentAuthorsPage( xPresentationPage->getNotesPage() );
                 SlidePersistPtr pCommentAuthorsPersistPtr =
@@ -388,7 +387,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                       mpTextListStyle );
                 FragmentHandlerRef xCommentAuthorsFragmentHandler(
                     new SlideFragmentHandler( getFilter(),
-                                              aCommentAuthorsFragmentPath,
+                                              "ppt/commentAuthors.xml",
                                               pCommentAuthorsPersistPtr,
                                               Slide ) );
 
@@ -568,9 +567,8 @@ void PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         Reference< drawing::XDrawPage > xMasterSlide(pMasterPersistPtr->getPage());
         const int nCount = xMasterSlide->getCount();
 
-        const OUString sLayout = "Layout";
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-        xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+        xSet->setPropertyValue( "Layout", Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
 
         while( nCount < xMasterSlide->getCount())
         {
