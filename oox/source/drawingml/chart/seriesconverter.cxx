@@ -343,7 +343,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         // tdf#132174: the inner data table has no own cell number format.
-        if( getChartDocument()->hasInternalDataProvider() )
+        if( getChartDocument()->hasInternalDataProvider() && mrModel.mobShowVal.get(!bMSO2007Doc) )
             mrModel.maNumberFormat.mbSourceLinked = false;
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
 
