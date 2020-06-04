@@ -349,9 +349,15 @@ void ScColumn::StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows 
         sc::StartListeningContext aStartCxt(*pDoc, pPosSet);
         sc::EndListeningContext aEndCxt(*pDoc, pPosSet);
         if (rNewSharedRows.size() >= 2)
-            StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[0], rNewSharedRows[1]);
+        {
+            if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[0], rNewSharedRows[1]))
+                StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[0], rNewSharedRows[1]);
+        }
         if (rNewSharedRows.size() >= 4)
-            StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[2], rNewSharedRows[3]);
+        {
+            if(!pDoc->CanDelayStartListeningFormulaCells( this, rNewSharedRows[2], rNewSharedRows[3]))
+                StartListeningFormulaCells(aStartCxt, aEndCxt, rNewSharedRows[2], rNewSharedRows[3]);
+        }
     }
 }
 
