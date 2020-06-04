@@ -571,8 +571,7 @@ bool CustomAnimationEffect::checkForText( const std::vector<sal_Int32>* paragrap
                             xEnumeration->nextElement() >>= xParaSet;
                             if( xParaSet.is() )
                             {
-                                const OUString strNumberingLevel( "NumberingLevel" );
-                                xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                                xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
                             }
                         }
                     }
@@ -2180,8 +2179,7 @@ bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape 
                     sal_Int32 nParaDepth = 0;
                     if( xParaSet.is() )
                     {
-                        const OUString strNumberingLevel( "NumberingLevel" );
-                        xParaSet->getPropertyValue( strNumberingLevel ) >>= nParaDepth;
+                        xParaSet->getPropertyValue( "NumberingLevel" ) >>= nParaDepth;
                     }
 
                     rParagraphNumberingLevel.push_back( nParaDepth );

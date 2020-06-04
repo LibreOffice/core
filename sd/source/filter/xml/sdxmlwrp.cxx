@@ -943,8 +943,7 @@ bool SdXMLFilter::Export()
                     xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",
                                               uno::makeAny( true ) );
 
-                    const OUString sStreamName( "StreamName");
-                    xInfoSet->setPropertyValue( sStreamName, Any( sDocName ) );
+                    xInfoSet->setPropertyValue( "StreamName", Any( sDocName ) );
                 }
 
                 xWriter->setOutputStream( xDocOut );

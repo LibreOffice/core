@@ -459,8 +459,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
             //we start without wizard
 
             //check whether we should load a template document
-            const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
-            OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
+            OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( "com.sun.star.presentation.PresentationDocument" ) );
 
             if( !aStandardTemplate.isEmpty() )
             {

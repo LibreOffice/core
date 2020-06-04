@@ -288,8 +288,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         const OUString aSelectionLangPrefix("Current_");
                         const OUString aParagraphLangPrefix("Paragraph_");
                         const OUString aDocumentLangPrefix("Default_");
-                        const OUString aStrNone("LANGUAGE_NONE");
-                        const OUString aStrResetLangs("RESET_LANGUAGES");
 
                         bool bSelection = false;
                         bool bParagraph = false;
@@ -300,9 +298,9 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         {
                             aNewLangTxt = aNewLangTxt.replaceAt( nPos, aDocumentLangPrefix.getLength(), "" );
 
-                            if (aNewLangTxt == aStrNone)
+                            if (aNewLangTxt == "LANGUAGE_NONE")
                                 lcl_setLanguage( pDoc, OUString(), true );
-                            else if (aNewLangTxt == aStrResetLangs)
+                            else if (aNewLangTxt == "RESET_LANGUAGES")
                                 lcl_setLanguage( pDoc, OUString() );
                             else
                                 lcl_setLanguage( pDoc, aNewLangTxt );
@@ -374,8 +372,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             if (pItem2)
                 sIgnoreText = pItem2->GetValue();
 
-            const OUString sSpellingType("Spelling");
-            if(sIgnoreText == sSpellingType)
+            if(sIgnoreText == "Spelling")
             {
                 ESelection aOldSel = rEditView.GetSelection();
                 rEditView.SpellIgnoreWord();

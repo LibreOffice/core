@@ -188,8 +188,7 @@ OUString SAL_CALL SdStyleFamily::getName()
             throw DisposedException();
 
         OUString aLayoutName( pPage->GetLayoutName() );
-        const OUString aSep( SD_LT_SEPARATOR );
-        sal_Int32 nIndex = aLayoutName.indexOf(aSep);
+        sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
         if( nIndex != -1 )
             aLayoutName = aLayoutName.copy(0, nIndex);
 

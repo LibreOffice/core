@@ -365,12 +365,11 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // CreateSdInsertPagesObjsDlg(const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName) override;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
-            const OUString aFileName("foo");
             pRetval = getSdAbstractDialogFactory()->CreateSdInsertPagesObjsDlg(
                 getViewShell()->GetFrameWeld(),
                 pDrawDoc,
                 nullptr,
-                aFileName);
+                "foo");
             break;
         }
         case 10:
