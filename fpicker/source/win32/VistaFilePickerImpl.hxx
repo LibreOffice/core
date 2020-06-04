@@ -36,6 +36,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
+#include <o3tl/safeCoInitUninit.hxx>
 #include <rtl/ustring.hxx>
 
 namespace fpicker{
@@ -326,6 +327,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 
         OUString m_sFilename;
+
+        // to put back all the inits with COINIT_MULTITHREADED if needed
+        int mnNbCallCoInitializeExForReinit;
 };
 
 } // namespace vista
