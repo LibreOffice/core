@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "69eaf378_cb012659",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-04T13:48:46Z",
+      "side": 1,
+      "message": "I\u0027m not sure, should I merge both #ifdef _WIN32 in the last version I\u0027ve just submitted?",
+      "parentUuid": "7b0c1695_29d5dd84",
+      "revId": "0c81dea0e6c17c3e9392cb9ede9ee58aa41e5d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cd8fa0d_73974eab",
         "filename": "include/o3tl/safeCoInitUninit.hxx",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "0c81dea0e6c17c3e9392cb9ede9ee58aa41e5d9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04f5b193_119c7b45",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-04T13:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cd8fa0d_73974eab",
+      "range": {
+        "startLine": 20,
+        "startChar": 55,
+        "endLine": 20,
+        "endChar": 63
+      },
+      "revId": "0c81dea0e6c17c3e9392cb9ede9ee58aa41e5d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
