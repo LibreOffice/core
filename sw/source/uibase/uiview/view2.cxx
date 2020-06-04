@@ -572,32 +572,36 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_TO_PREV_PAGE:
         case FN_TO_NEXT_PAGE:
         {
-            SwFrame* pPageFrame = m_pWrtShell->Imp()->GetFirstVisPage(m_pWrtShell->GetOut());
-            if (pPageFrame)
+            sal_uInt16 nPage = 0;
+            if (m_pWrtShell->IsCursorVisible())
+                nPage = m_pWrtShell->GetCursor()->GetPageNum();
+            else
             {
-                sal_uInt16 nPage(pPageFrame->GetPhyPageNum());
-                if (nPage != 0)
+                SwFrame* pPageFrame = m_pWrtShell->Imp()->GetFirstVisPage(m_pWrtShell->GetOut());
+                if (pPageFrame)
+                    nPage = pPageFrame->GetPhyPageNum();
+            }
+            if (nPage != 0)
+            {
+                sal_uInt16 nOldPage(nPage);
+                if (FN_TO_PREV_PAGE == nSlot && nPage > 1)
+                    nPage--;
+                else if (FN_TO_NEXT_PAGE == nSlot && nPage < m_pWrtShell->GetPageCount())
+                    nPage++;
+                if (nPage != nOldPage)
                 {
-                    sal_uInt16 nOldPage(nPage);
-                    if (FN_TO_PREV_PAGE == nSlot && nPage > 1)
-                        nPage--;
-                    else if (FN_TO_NEXT_PAGE == nSlot && nPage < m_pWrtShell->GetPageCount())
-                        nPage++;
-                    if (nPage != nOldPage)
-                    {
-                        m_pWrtShell->LockPaint();
-                        if (IsDrawMode())
-                            LeaveDrawCreate();
-                        m_pWrtShell->EnterStdMode();
-                        m_pWrtShell->GotoPage(nPage, true);
-                        // set visible area (borrowed from SwView::PhyPageUp/Down)
-                        const Point aPt(m_aVisArea.Left(), m_pWrtShell->GetPagePos(nPage).Y());
-                        Point aAlPt(AlignToPixel(aPt));
-                        if(aPt.Y() != aAlPt.Y())
-                            aAlPt.AdjustY(3 * GetEditWin().PixelToLogic(Size(0, 1)).Height());
-                        SetVisArea(aAlPt);
-                        m_pWrtShell->UnlockPaint();
-                    }
+                    m_pWrtShell->LockPaint();
+                    if (IsDrawMode())
+                        LeaveDrawCreate();
+                    m_pWrtShell->EnterStdMode();
+                    m_pWrtShell->GotoPage(nPage, true);
+                    // set visible area (borrowed from SwView::PhyPageUp/Down)
+                    const Point aPt(m_aVisArea.Left(), m_pWrtShell->GetPagePos(nPage).Y());
+                    Point aAlPt(AlignToPixel(aPt));
+                    if(aPt.Y() != aAlPt.Y())
+                        aAlPt.AdjustY(3 * GetEditWin().PixelToLogic(Size(0, 1)).Height());
+                    SetVisArea(aAlPt);
+                    m_pWrtShell->UnlockPaint();
                 }
             }
         }
