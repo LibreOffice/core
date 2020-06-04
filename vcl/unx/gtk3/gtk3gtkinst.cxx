@@ -11151,9 +11151,9 @@ public:
         return gtk_tree_selection_count_selected_rows(gtk_tree_view_get_selection(m_pTreeView));
     }
 
-    int starts_with(const OUString& rStr, int col, int nStartRow, bool bCaseSensitive)
+    int starts_with(const OUString& rStr, int nStartRow, bool bCaseSensitive)
     {
-        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, get_model_col(col), nStartRow, bCaseSensitive);
+        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, m_nTextCol, nStartRow, bCaseSensitive);
     }
 
     virtual void disable_notify_events() override
@@ -14638,32 +14638,32 @@ private:
             nStart = 0;
 
         // Try match case sensitive from current position
-        int nPos = m_pTreeView->starts_with(aStartText, 0, nStart, true);
+        int nPos = m_pTreeView->starts_with(aStartText, nStart, true);
         if (nPos == -1 && nStart != 0)
         {
             // Try match case insensitive, but from start
-            nPos = m_pTreeView->starts_with(aStartText, 0, 0, true);
+            nPos = m_pTreeView->starts_with(aStartText, 0, true);
         }
 
         if (!m_bAutoCompleteCaseSensitive)
         {
             // Try match case insensitive from current position
-            nPos = m_pTreeView->starts_with(aStartText, 0, nStart, false);
+            nPos = m_pTreeView->starts_with(aStartText, nStart, false);
             if (nPos == -1 && nStart != 0)
             {
                 // Try match case insensitive, but from start
-                nPos = m_pTreeView->starts_with(aStartText, 0, 0, false);
+                nPos = m_pTreeView->starts_with(aStartText, 0, false);
             }
         }
 
         if (nPos == -1)
         {
             // Try match case sensitive from current position
-            nPos = m_pTreeView->starts_with(aStartText, 0, nStart, true);
+            nPos = m_pTreeView->starts_with(aStartText, nStart, true);
             if (nPos == -1 && nStart != 0)
             {
                 // Try match case sensitive, but from start
-                nPos = m_pTreeView->starts_with(aStartText, 0, 0, true);
+                nPos = m_pTreeView->starts_with(aStartText, 0, true);
             }
         }
 
