@@ -1475,8 +1475,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 OUString ScAccessibleDocumentPagePreview::createAccessibleDescription()
 {
-    OUString sDescription = STR_ACC_PREVIEWDOC_DESCR;
-    return sDescription;
+    return STR_ACC_PREVIEWDOC_DESCR;
 }
 
 OUString ScAccessibleDocumentPagePreview::createAccessibleName()

@@ -1171,8 +1171,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const OUString aSelectionLangPrefix("Current_");
                 const OUString aParagraphLangPrefix("Paragraph_");
                 const OUString aDocLangPrefix("Default_");
-                const OUString aNoLang("LANGUAGE_NONE");
-                const OUString aResetLang("RESET_LANGUAGES");
 
                 bool bSelection = false;
                 bool bParagraph = false;
@@ -1193,12 +1191,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     aLangText = aLangText.replaceAt(nPos, aDocLangPrefix.getLength(), "");
 
-                    if ( aLangText == aNoLang )
+                    if ( aLangText == "LANGUAGE_NONE" )
                     {
                         eLang = LANGUAGE_NONE;
                         rDoc.SetLanguage( eLang, eCjk, eCtl );
                     }
-                    else if ( aLangText == aResetLang )
+                    else if ( aLangText == "RESET_LANGUAGES" )
                     {
                         bool bAutoSpell;
 
@@ -1296,8 +1294,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pItem2)
                 sIgnoreText = pItem2->GetValue();
 
-            const OUString sSpellingType("Spelling");
-            if(sIgnoreText == sSpellingType)
+            if(sIgnoreText == "Spelling")
             {
                 ESelection aOldSel = pEditView->GetSelection();
                 pEditView->SpellIgnoreWord();

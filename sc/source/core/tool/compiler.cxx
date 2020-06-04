@@ -1902,9 +1902,8 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
             if( bNeedsQuote )
             {
                 const OUString one_quote('\'');
-                const OUString two_quote("''");
                 // escape embedded quotes
-                rString = rString.replaceAll( one_quote, two_quote );
+                rString = rString.replaceAll( one_quote, "''" );
             }
             break;
     }

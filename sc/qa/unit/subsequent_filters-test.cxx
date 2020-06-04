@@ -711,11 +711,10 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //we want to me sure that volatile functions are always recalculated
         //regardless of cached results.  if you update the ods file, you must
         //update the values here.
-        //if NOW() is recalculated, then it should never equal sTodayCache
-        OUString const sTodayCache("01/25/13 01:06 PM");
+        //if NOW() is recalculated, then it should never equal "01/25/13 01:06 PM"
         OUString sTodayRecalc(rDoc.GetString(0,0,1));
 
-        CPPUNIT_ASSERT(sTodayCache != sTodayRecalc);
+        CPPUNIT_ASSERT("01/25/13 01:06 PM" != sTodayRecalc);
 
         OUString sTodayRecalcRef(rDoc.GetString(1,0,1));
         CPPUNIT_ASSERT_EQUAL(sTodayRecalc, sTodayRecalcRef);
@@ -1554,11 +1553,10 @@ void ScFiltersTest::testDataTableMultiTableXLSX()
 
 void ScFiltersTest::testBrokenQuotesCSV()
 {
-    const OUString aFileNameBase("fdo48621_broken_quotes.");
     OUString aFileExtension(getFileFormats()[FORMAT_CSV].pName, strlen(getFileFormats()[FORMAT_CSV].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(getFileFormats()[FORMAT_CSV].pFilterName, strlen(getFileFormats()[FORMAT_CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    createFileURL("fdo48621_broken_quotes.", aFileExtension, aFileName);
     OUString aFilterType(getFileFormats()[FORMAT_CSV].pTypeName, strlen(getFileFormats()[FORMAT_CSV].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << getFileFormats()[FORMAT_CSV].pName << " Test" << std::endl;
 
@@ -1670,23 +1668,20 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 void ScFiltersTest::testPasswordNew()
 {
     //tests opening a file with new password algorithm
-    const OUString aFileNameBase("password.");
-    testPassword_Impl(aFileNameBase);
+    testPassword_Impl("password.");
 }
 
 void ScFiltersTest::testPasswordOld()
 {
     //tests opening a file with old password algorithm
-    const OUString aFileNameBase("passwordOld.");
-    testPassword_Impl(aFileNameBase);
+    testPassword_Impl("passwordOld.");
 }
 
 void ScFiltersTest::testPasswordWrongSHA()
 {
     //tests opening a file wrongly using the new password algorithm
     //in a sxc with the key algorithm missing
-    const OUString aFileNameBase("passwordWrongSHA.");
-    testPassword_Impl(aFileNameBase);
+    testPassword_Impl("passwordWrongSHA.");
 }
 
 void ScFiltersTest::testControlImport()

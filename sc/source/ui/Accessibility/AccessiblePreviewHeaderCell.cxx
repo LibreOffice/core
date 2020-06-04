@@ -339,8 +339,7 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
 
 OUString ScAccessiblePreviewHeaderCell::createAccessibleDescription()
 {
-    OUString sDescription = STR_ACC_HEADERCELL_DESCR;
-    return sDescription;
+    return STR_ACC_HEADERCELL_DESCR;
 }
 
 OUString ScAccessiblePreviewHeaderCell::createAccessibleName()

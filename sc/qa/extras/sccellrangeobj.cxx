@@ -249,8 +249,7 @@ void ScCellRangeObj::setUp()
     CalcUnoApiTest::setUp();
 
     OUString aFileURL;
-    const OUString aFileBase("xcellrangesquery.ods");
-    createFileURL(aFileBase, aFileURL);
+    createFileURL("xcellrangesquery.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 
