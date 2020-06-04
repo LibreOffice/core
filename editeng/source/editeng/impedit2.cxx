@@ -496,13 +496,17 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 if ( nInputEnd > rLine.GetEnd() )
                     nInputEnd = rLine.GetEnd();
                 tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
-                tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
-                pView->GetWindow()->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+                if (vcl::Window* pWindow = pView->GetWindow())
+                {
+                    tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
+                    pWindow->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
+                }
             }
         }
         else
         {
-            pView->GetWindow()->SetCursorRect();
+            if (vcl::Window* pWindow = pView->GetWindow())
+              pWindow->SetCursorRect();
         }
     }
     else if ( rCEvt.GetCommand() == CommandEventId::SelectionChange )
@@ -563,7 +567,8 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                     tools::Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
                     aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
                 }
-                pView->GetWindow()->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
+                if (vcl::Window* pWindow = pView->GetWindow())
+                    pWindow->SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
             }
         }
     }

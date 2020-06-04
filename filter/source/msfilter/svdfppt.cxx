@@ -105,6 +105,7 @@
 #include <svx/sxekitm.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/UnitConversion.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/brushitem.hxx>
@@ -5827,7 +5828,6 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nIn
     PPTNumberFormatCreator  ( nullptr ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
-    mbTab                   ( true ),      // style sheets always have to get the right tabulator setting
     mnCurrentObject         ( 0 )
 {
     mxParaSet->mnDepth = sanitizeForMaxPPTLevels(nDepth);
@@ -5842,7 +5842,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
     PPTTextRulerInterpreter ( rRuler ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
-    mbTab                   ( false ),
     mnCurrentObject         ( 0 )
 {
     if (rnCurCharPos < rPropReader.aCharPropList.size())
@@ -5857,10 +5856,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
                 rPropReader.aCharPropList[rnCurCharPos].get();
             std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
                     *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
-            if (!mbTab)
-            {
-                mbTab = pPPTPortion->HasTabulator();
-            }
             m_PortionList.push_back(std::move(pPPTPortion));
         }
     }
@@ -5874,10 +5869,6 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
     m_PortionList.push_back(
             std::make_unique<PPTPortionObj>(rPPTPortion));
-    if ( !mbTab )
-    {
-        mbTab = m_PortionList.back()->HasTabulator();
-    }
 }
 
 void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
@@ -6322,50 +6313,44 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         rSet.Put( aULSpaceItem );
     }
 
-    if ( mbTab )    // makes it sense to apply tabsettings
+    sal_uInt32 i, nDefaultTab, nTab, nTextOfs2 = 0;
+    sal_uInt32 nLatestManTab = 0;
+    GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs2, nDestinationInstance );
+    GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
+    GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
+
+    SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
+    if ( GetTabCount() )
     {
-        sal_uInt32 i, nDefaultTab, nTab, nTextOfs2 = 0;
-        sal_uInt32 nLatestManTab = 0;
-        GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs2, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
-        SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
-        if ( GetTabCount() )
+        for ( i = 0; i < GetTabCount(); i++ )
         {
-            //paragraph offset = MIN(first_line_offset, hanging_offset)
-            sal_uInt32 nParaOffset = std::min(nTextOfs2, nTab);
-            for ( i = 0; i < GetTabCount(); i++ )
+            SvxTabAdjust eTabAdjust;
+            nTab = GetTabOffsetByIndex( static_cast<sal_uInt16>(i) );
+            switch( GetTabStyleByIndex( static_cast<sal_uInt16>(i) ) )
             {
-                SvxTabAdjust eTabAdjust;
-                nTab = GetTabOffsetByIndex( static_cast<sal_uInt16>(i) );
-                switch( GetTabStyleByIndex( static_cast<sal_uInt16>(i) ) )
-                {
-                    case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
-                    case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
-                    case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
-                    default :   eTabAdjust = SvxTabAdjust::Left;
-                }
-                if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
-                    aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );
+                case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
+                case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
+                case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
+                default :   eTabAdjust = SvxTabAdjust::Left;
             }
-            nLatestManTab = nTab;
+            aTabItem.Insert(SvxTabStop(convertMasterUnitToTwip(nTab), eTabAdjust));
         }
-        if ( nIsBullet2 == 0 )
-            aTabItem.Insert( SvxTabStop( sal_uInt16(0) ) );
-        if ( nDefaultTab )
-        {
-            nTab = std::max( nTextOfs2, nLatestManTab );
-            nTab /= nDefaultTab;
-            nTab = nDefaultTab * ( 1 + nTab );
-            for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
-            {
-                aTabItem.Insert( SvxTabStop( static_cast<sal_uInt16>( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
-                nTab += nDefaultTab;
-            }
-        }
-        rSet.Put( aTabItem );
+        nLatestManTab = nTab;
     }
+    if ( nIsBullet2 == 0 )
+        aTabItem.Insert( SvxTabStop( sal_uInt16(0) ) );
+    if ( nDefaultTab )
+    {
+        nTab = std::max( nTextOfs2, nLatestManTab );
+        nTab /= nDefaultTab;
+        nTab = nDefaultTab * ( 1 + nTab );
+        for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
+        {
+            aTabItem.Insert( SvxTabStop( convertMasterUnitToTwip(nTab)));
+            nTab += nDefaultTab;
+        }
+    }
+    rSet.Put( aTabItem );
 }
 
 sal_uInt32 PPTParagraphObj::GetTextSize()

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PageMasterPropMapper.hxx"
+#include <PageMasterPropMapper.hxx>
 
 #include <rtl/ref.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
-#include "PageMasterPropHdlFactory.hxx"
+#include <PageMasterPropHdlFactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

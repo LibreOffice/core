@@ -22,6 +22,8 @@
 
 #include <oox/core/contexthandler2.hxx>
 
+#include <vector>
+
 namespace oox {
 namespace drawingml {
 
@@ -65,6 +67,19 @@ private:
     Color&              mrColor;
 };
 
+/// Same as ColorContext, but handles multiple colors.
+class ColorsContext : public ::oox::core::ContextHandler2
+{
+public:
+    explicit ColorsContext(::oox::core::ContextHandler2Helper const& rParent,
+                           std::vector<Color>& rColors);
+
+    virtual ::oox::core::ContextHandlerRef
+    onCreateContext(sal_Int32 nElement, const ::oox::AttributeList& rAttribs) override;
+
+private:
+    std::vector<Color>& mrColors;
+};
 
 } // namespace drawingml
 } // namespace oox

@@ -47,12 +47,14 @@ private:
     XMLPropStyleContext(XMLPropStyleContext const &) = delete;
     XMLPropStyleContext& operator =(XMLPropStyleContext const &) = delete;
 
-protected:
+public:
 
     // Helper to check if the local maProperties contains the given
     // FillStyle tag and if the FillStyle there is different from FillStyle_NONE
     bool doNewDrawingLayerFillStyleDefinitionsExist(
         const OUString& rFillStyleTag) const;
+
+protected:
 
     // Helper which will deactivate all old fill definitions (identified by
     // the given OldFillStyleDefinitionSet) in the local maProperties. Deactivation

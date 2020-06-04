@@ -1148,9 +1148,6 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
     void operator=(PPTParagraphObj const&) = delete;
 
 public:
-
-    bool                    mbTab;          // if true, this paragraph has tabulators in text
-
     sal_uInt32              mnCurrentObject;
     ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
 

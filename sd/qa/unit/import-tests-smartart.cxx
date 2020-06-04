@@ -105,6 +105,7 @@ public:
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
+    void testFillColorList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -149,6 +150,7 @@ public:
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
+    CPPUNIT_TEST(testFillColorList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1450,6 +1452,41 @@ void SdImportTestSmartArt::testOrgChart2()
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeC2->getPosition().Y + xShapeC2->getSize().Height, xShapeD1->getPosition().Y);
 
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeD1->getPosition().X + xShapeD1->getSize().Width, xShapeC4->getPosition().X);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFillColorList()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/fill-color-list.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 0);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY_THROW);
+    sal_Int32 nFillColor = 0;
+    xPropertySet->getPropertyValue("FillColor") >>= nFillColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 12603469 (0xc0504d)
+    // - Actual  : 16225862 (0xf79646)
+    // i.e. the background of the "A" shape was orange-ish, rather than red-ish.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xC0504D), nFillColor);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2239
+    // - Actual  : 5199
+    // i.e. the "A" shape's height/width aspect ratio was not 0.4 but rather close to 1.0, even if
+    // ppt/diagrams/layout1.xml's <dgm:constr type="h" refType="w" op="lte" fact="0.4"/> requested
+    // 0.4.
+    awt::Size aActualSize = xShape->getSize();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2239), aActualSize.Height);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1738 (2766)
+    // - Actual  : 1738
+    // i.e. the columns were not centered vertically.
+    sal_Int32 nGroupTop = xGroup->getPosition().Y;
+    sal_Int32 nShapeTop = xShape->getPosition().Y;
+    CPPUNIT_ASSERT_GREATER(nGroupTop, nShapeTop);
 
     xDocShRef->DoClose();
 }

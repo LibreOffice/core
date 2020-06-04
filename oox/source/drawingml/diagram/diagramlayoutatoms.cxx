@@ -430,6 +430,42 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
     return nCount;
 }
 
+namespace
+{
+/**
+ * Apply rConstraint to the rProperties shared layout state.
+ *
+ * Note that the order in which constraints are applied matters, given that constraints can refer to
+ * each other, and in case A depends on B and A is applied before B, the effect of A won't be
+ * updated when B is applied.
+ */
+void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& rProperties)
+{
+    const LayoutPropertyMap::const_iterator aRef = rProperties.find(rConstraint.msRefForName);
+    if (aRef != rProperties.end())
+    {
+        const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
+        if (aRefType != aRef->second.end())
+            rProperties[rConstraint.msForName][rConstraint.mnType]
+                = aRefType->second * rConstraint.mfFactor;
+        else
+        {
+            // Values are never in EMU, while oox::drawingml::Shape position and size are always in
+            // EMU.
+            double fUnitFactor = 0;
+            if (isFontUnit(rConstraint.mnRefType))
+                // Points -> EMU.
+                fUnitFactor = EMU_PER_PT;
+            else
+                // Millimeters -> EMU.
+                fUnitFactor = EMU_PER_HMM * 100;
+            rProperties[rConstraint.msForName][rConstraint.mnType]
+                = rConstraint.mfValue * fUnitFactor;
+        }
+    }
+}
+}
+
 void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const std::vector<Constraint>& rConstraints )
 {
@@ -443,6 +479,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             LayoutProperty& rParent = aProperties[""];
 
             sal_Int32 nParentXOffset = 0;
+
+            // Track min/max vertical positions, so we can center everything at the end, if needed.
+            sal_Int32 nVertMin = std::numeric_limits<sal_Int32>::max();
+            sal_Int32 nVertMax = 0;
+
             if (mfAspectRatio != 1.0)
             {
                 rParent[XML_w] = rShape->getSize().Width;
@@ -467,31 +508,74 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             for (const auto & rConstr : rConstraints)
             {
-                const LayoutPropertyMap::const_iterator aRef = aProperties.find(rConstr.msRefForName);
-                if (aRef != aProperties.end())
-                {
-                    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstr.mnRefType);
-                    if (aRefType != aRef->second.end())
-                        aProperties[rConstr.msForName][rConstr.mnType] = aRefType->second * rConstr.mfFactor;
-                    else
-                    {
-                        // Values are never in EMU, while oox::drawingml::Shape
-                        // position and size are always in EMU.
-                        double fUnitFactor = 0;
-                        if (isFontUnit(rConstr.mnRefType))
-                            // Points -> EMU.
-                            fUnitFactor = EMU_PER_PT;
-                        else
-                            // Millimeters -> EMU.
-                            fUnitFactor = EMU_PER_HMM * 100;
-                        aProperties[rConstr.msForName][rConstr.mnType]
-                            = rConstr.mfValue * fUnitFactor;
-                    }
-                }
+                // Apply direct constraints for all layout nodes.
+                ApplyConstraintToLayout(rConstr, aProperties);
             }
 
-            for (auto & aCurrShape : rShape->getChildren())
+            for (auto& aCurrShape : rShape->getChildren())
             {
+                // Apply constraints from the current layout node for this child shape.
+                // Previous child shapes may have changed aProperties.
+                for (const auto& rConstr : rConstraints)
+                {
+                    if (rConstr.msForName != aCurrShape->getInternalName())
+                    {
+                        continue;
+                    }
+
+                    ApplyConstraintToLayout(rConstr, aProperties);
+                }
+
+                // Apply constraints from the child layout node for this child shape.
+                // This builds on top of the own parent state + the state of previous shapes in the
+                // same composite algorithm.
+                const LayoutNode& rLayoutNode = getLayoutNode();
+                for (const auto& pDirectChild : rLayoutNode.getChildren())
+                {
+                    auto pLayoutNode = dynamic_cast<LayoutNode*>(pDirectChild.get());
+                    if (!pLayoutNode)
+                    {
+                        continue;
+                    }
+
+                    if (pLayoutNode->getName() != aCurrShape->getInternalName())
+                    {
+                        continue;
+                    }
+
+                    for (const auto& pChild : pLayoutNode->getChildren())
+                    {
+                        auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
+                        if (!pConstraintAtom)
+                        {
+                            continue;
+                        }
+
+                        const Constraint& rConstraint = pConstraintAtom->getConstraint();
+                        if (!rConstraint.msForName.isEmpty())
+                        {
+                            continue;
+                        }
+
+                        if (!rConstraint.msRefForName.isEmpty())
+                        {
+                            continue;
+                        }
+
+                        // Either an absolute value or a factor of a property.
+                        if (rConstraint.mfValue == 0.0 && rConstraint.mnRefType == XML_none)
+                        {
+                            continue;
+                        }
+
+                        Constraint aConstraint(rConstraint);
+                        aConstraint.msForName = pLayoutNode->getName();
+                        aConstraint.msRefForName = pLayoutNode->getName();
+
+                        ApplyConstraintToLayout(aConstraint, aProperties);
+                    }
+                }
+
                 awt::Size aSize = rShape->getSize();
                 awt::Point aPos(0, 0);
 
@@ -535,6 +619,24 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrShape->setSize(aSize);
                 aCurrShape->setChildSize(aSize);
                 aCurrShape->setPosition(aPos);
+
+                nVertMin = std::min(aPos.Y, nVertMin);
+                nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
+            }
+
+            // See if all vertical space is used or we have to center the content.
+            if (nVertMin >= 0 && nVertMax <= rParent[XML_h])
+            {
+                sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
+                if (nDiff > 0)
+                {
+                    for (auto& aCurrShape : rShape->getChildren())
+                    {
+                        awt::Point aPosition = aCurrShape->getPosition();
+                        aPosition.Y += nDiff / 2;
+                        aCurrShape->setPosition(aPosition);
+                    }
+                }
             }
             break;
         }
@@ -1275,7 +1377,7 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode ) const
+bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode, sal_Int32 nCurrIdx ) const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -1413,15 +1515,17 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
         if( aColor != mrDgm.getColors().end() )
         {
+            // Take the nth color from the color list in case we are the nth shape in a
+            // <dgm:forEach> loop.
             const DiagramColor& rColor=aColor->second;
-            if( rColor.maFillColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = rColor.maFillColor;
-            if( rColor.maLineColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = rColor.maLineColor;
-            if( rColor.maEffectColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = rColor.maEffectColor;
-            if( rColor.maTextFillColor.isUsed() )
-                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
+            if( !rColor.maFillColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = DiagramColor::getColorByIndex(rColor.maFillColors, nCurrIdx);
+            if( !rColor.maLineColors.empty() )
+                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = DiagramColor::getColorByIndex(rColor.maLineColors, nCurrIdx);
+            if( !rColor.maEffectColors.empty() )
+                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = DiagramColor::getColorByIndex(rColor.maEffectColors, nCurrIdx);
+            if( !rColor.maTextFillColors.empty() )
+                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = DiagramColor::getColorByIndex(rColor.maTextFillColors, nCurrIdx);
         }
     }
 

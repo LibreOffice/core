@@ -17,18 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_ACCFLOWENUM_HXX
-#define INCLUDED_COMPHELPER_ACCFLOWENUM_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
 
-#include <sal/types.h>
+#include <xmloff/xmlprmap.hxx>
 
-enum AccessibilityFlowTo : sal_Int32
+class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
-    FORSPELLCHECKFLOWTO = 1,
-    FORFINDREPLACEFLOWTO_ITEM = 2,
-    FORFINDREPLACEFLOWTO_RANGE = 3
+public:
+    explicit XMLPageMasterPropSetMapper();
+    XMLPageMasterPropSetMapper(const XMLPropertyMapEntry* pEntries,
+                               const rtl::Reference<XMLPropertyHandlerFactory>& rFactory);
+    virtual ~XMLPageMasterPropSetMapper() override;
 };
 
-#endif // INCLUDED_COMPHELPER_ACCFLOWENUM_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

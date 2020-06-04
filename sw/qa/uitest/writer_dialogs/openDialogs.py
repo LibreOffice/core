@@ -99,7 +99,8 @@ dialogs = [
     # {"command": ".uno:LineNumberingDialog", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests3/lineNumbering.py
     {"command": ".uno:FootnoteDialog", "closeButton": "cancel"},
-    {"command": ".uno:MailMergeWizard", "closeButton": "cancel"},
+    # {"command": ".uno:MailMergeWizard", "closeButton": "cancel"},
+        # may hang forever in e_book_client_connect_direct_sync
     {"command": ".uno:AddressBookSource", "closeButton": "cancel"},
     {"command": ".uno:RunMacro", "closeButton": "cancel"},
     {"command": ".uno:ScriptOrganizer", "closeButton": "close"},

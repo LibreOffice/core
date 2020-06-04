@@ -49,6 +49,8 @@
 #include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
+#include <xmloff/XMLDrawingPageStyleContext.hxx>
+#include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlimp.hxx"
@@ -828,6 +830,10 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         pStyle = new XMLTextShapeStyleContext( GetImport(), nPrefix,
                             rLocalName, xAttrList, *this, nFamily );
         break;
+    case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
+        pStyle = new XMLDrawingPageStyleContext(GetImport(), nPrefix, rLocalName,
+                xAttrList, *this, g_MasterPageContextIDs, g_MasterPageFamilies);
+        break;
     default:
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily,
                                                                    nPrefix,
@@ -927,6 +933,11 @@ rtl::Reference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportP
     else if( nFamily == XML_STYLE_FAMILY_TABLE_CELL )
         xMapper = XMLTextImportHelper::CreateTableCellExtPropMapper(
             const_cast<SwXMLStylesContext_Impl*>( this )->GetImport() );
+    else if (nFamily == XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID)
+    {
+        xMapper = XMLTextImportHelper::CreateDrawingPageExtPropMapper(
+            const_cast<SwXMLStylesContext_Impl*>(this)->GetImport());
+    }
     else
         xMapper = SvXMLStylesContext::GetImportPropertyMapper( nFamily );
     return xMapper;

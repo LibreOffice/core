@@ -225,10 +225,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
             {
                 DBG_ASSERT( dynamic_cast<const XLineWidthItem*>( pState) !=  nullptr, "wrong ItemType" );
 
-                // Core-Unit handed over to MetricField
-                // Should not happen in CreateItemWin ()!
-                // CD!!! GetCoreMetric();
-                pFld->SetCoreUnit( MapUnit::Map100thMM );
+                pFld->SetDestCoreUnit(GetCoreMetric());
 
                 pFld->Update( static_cast<const XLineWidthItem*>(pState) );
             }
@@ -238,6 +235,13 @@ void SvxLineWidthToolBoxControl::StateChanged(
     }
 }
 
+MapUnit SvxLineWidthToolBoxControl::GetCoreMetric()
+{
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    SfxItemPool& rPool = pSh ? pSh->GetPool() : SfxGetpApp()->GetPool();
+    sal_uInt16 nWhich = rPool.GetWhich(SID_ATTR_LINE_WIDTH);
+    return rPool.GetMetric(nWhich);
+}
 
 VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *pParent )
 {

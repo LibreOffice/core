@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
 
-#include <xmloff/xmlprmap.hxx>
+#include <xmloff/prhdlfac.hxx>
 
-class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
+class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
 {
 public:
-    explicit XMLPageMasterPropSetMapper();
-                        XMLPageMasterPropSetMapper(
-                            const XMLPropertyMapEntry* pEntries,
-                            const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
-    virtual             ~XMLPageMasterPropSetMapper() override;
+    XMLPageMasterPropHdlFactory();
+    virtual ~XMLPageMasterPropHdlFactory() override;
+
+    virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 nType) const override;
 };
 
 #endif

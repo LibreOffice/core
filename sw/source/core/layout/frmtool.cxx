@@ -1478,7 +1478,23 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         if( ( !pLay->IsInFootnote() || pSct->IsInFootnote() ) &&
             ( !pLay->IsInTab() || pSct->IsInTab() ) )
         {
-            pActualSection.reset(new SwActualSection( nullptr, pSct, nullptr ));
+            pActualSection.reset(new SwActualSection(nullptr, pSct, pSct->GetSection()->GetFormat()->GetSectionNode()));
+            // tdf#132236 for SwUndoDelete: find outer sections whose start
+            // nodes aren't contained in the range but whose end nodes are,
+            // because section frames may need to be created for them
+            SwActualSection * pUpperSection(pActualSection.get());
+            while (pUpperSection->GetSectionNode()->EndOfSectionIndex() < nEndIndex)
+            {
+                SwStartNode *const pStart(pUpperSection->GetSectionNode()->StartOfSectionNode());
+                if (!pStart->IsSectionNode())
+                {
+                    break;
+                }
+                // note: these don't have a section frame, check it in EndNode case!
+                auto const pTmp(new SwActualSection(nullptr, nullptr, static_cast<SwSectionNode*>(pStart)));
+                pUpperSection->SetUpper(pTmp);
+                pUpperSection = pTmp;
+            }
             OSL_ENSURE( !pLay->Lower() || !pLay->Lower()->IsColumnFrame(),
                 "InsertCnt_: Wrong Call" );
         }
@@ -1678,6 +1694,36 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                             static_cast<SwTextFrame*>(pPrv)->Prepare( PREP_QUOVADIS, nullptr, false );
                     }
                 }
+                if (nIndex + 1 == nEndIndex)
+                {   // tdf#131684 tdf#132236 fix upper of frame moved in
+                    // SwUndoDelete; can't be done there unfortunately
+                    // because empty section frames are deleted here
+                    SwFrame *const pNext(
+                        // if there's a parent section, it has been split
+                        // into 2 SwSectionFrame already :(
+                        (   pFrame->GetNext()->IsSctFrame()
+                         && pActualSection->GetUpper()
+                         && pActualSection->GetUpper()->GetSectionNode() ==
+                             static_cast<SwSectionFrame const*>(pFrame->GetNext())->GetSection()->GetFormat()->GetSectionNode())
+                        ? static_cast<SwSectionFrame *>(pFrame->GetNext())->ContainsContent()
+                        : pFrame->GetNext());
+                    if (pNext
+                        && pNext->IsTextFrame()
+                        && static_cast<SwTextFrame*>(pNext)->GetTextNodeFirst() == pDoc->GetNodes()[nEndIndex]
+                        && (pNext->GetUpper() == pFrame->GetUpper()
+                            || pFrame->GetNext()->IsSctFrame())) // checked above
+                    {
+                        pNext->Cut();
+                        pNext->InvalidateInfFlags(); // mbInfSct changed
+                        // could have columns
+                        SwSectionFrame *const pSection(static_cast<SwSectionFrame*>(pFrame));
+                        assert(!pSection->Lower() || pSection->Lower()->IsLayoutFrame());
+                        SwLayoutFrame *const pParent(pSection->Lower() ? pSection->GetNextLayoutLeaf() : pSection);
+                        assert(!pParent->Lower());
+                        // paste invalidates, section could have indent...
+                        pNext->Paste(pParent, nullptr);
+                    }
+                }
                 // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
@@ -1770,7 +1816,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 SwSectionFrame* pOuterSectionFrame = pActualSection->GetSectionFrame();
 
                 // a follow has to be appended to the new section frame
-                SwSectionFrame* pFollow = pOuterSectionFrame->GetFollow();
+                SwSectionFrame* pFollow = pOuterSectionFrame ? pOuterSectionFrame->GetFollow() : nullptr;
                 if ( pFollow )
                 {
                     pOuterSectionFrame->SetFollow( nullptr );
@@ -1779,7 +1825,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
 
                 // We don't want to leave empty parts back.
-                if( ! pOuterSectionFrame->IsColLocked() &&
+                if (pOuterSectionFrame &&
+                    ! pOuterSectionFrame->IsColLocked() &&
                     ! pOuterSectionFrame->ContainsContent() )
                 {
                     pOuterSectionFrame->DelEmpty( true );
