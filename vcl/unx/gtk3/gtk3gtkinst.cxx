@@ -10127,8 +10127,7 @@ public:
 
     virtual void set_sort_indicator(TriState eState, int col) override
     {
-        if (col == -1)
-            col = get_view_col(m_nTextCol);
+        assert(col >= 0 && "cannot sort on expander column");
 
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
         assert(pColumn && "wrong count");
@@ -10144,8 +10143,7 @@ public:
 
     virtual TriState get_sort_indicator(int col) const override
     {
-        if (col == -1)
-            col = get_view_col(m_nTextCol);
+        assert(col >= 0 && "cannot sort on expander column");
 
         GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, col));
         if (!gtk_tree_view_column_get_sort_indicator(pColumn))
