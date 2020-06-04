@@ -70,9 +70,6 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 CacheConfiguration::CacheConfiguration()
 {
     // Get the cache size from configuration.
-    const OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
-    const OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
-
     try
     {
         // Obtain access to the configuration.
@@ -82,7 +79,7 @@ CacheConfiguration::CacheConfiguration()
         // Obtain access to Impress configuration.
         Sequence<Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", makeAny(sPathToImpressConfigurationRoot)},
+            {"nodepath", makeAny(OUString("/org.openoffice.Office.Impress/"))},
             {"depth", makeAny(sal_Int32(-1))}
         }));
 
@@ -96,7 +93,7 @@ CacheConfiguration::CacheConfiguration()
             return;
 
         // Get the node for the slide sorter preview cache.
-        mxCacheNode.set( xHierarchy->getByHierarchicalName(sPathToNode), UNO_QUERY);
+        mxCacheNode.set( xHierarchy->getByHierarchicalName("MultiPaneGUI/SlideSorter/PreviewCache"), UNO_QUERY);
     }
     catch (RuntimeException &)
     {

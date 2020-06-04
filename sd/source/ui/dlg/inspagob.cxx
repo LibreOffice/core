@@ -74,8 +74,7 @@ void SdInsertPagesObjsDlg::Reset()
     }
     else
     {
-        OUString sImgText(BMP_DOC_TEXT);
-        m_xLbTree->InsertEntry(m_rName, sImgText);
+        m_xLbTree->InsertEntry(m_rName, BMP_DOC_TEXT);
     }
 
     m_xCbxMasters->set_active(true);

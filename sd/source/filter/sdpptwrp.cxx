@@ -181,8 +181,7 @@ bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
             pStorage = xDualStorage;
         }
-        OUString sDRMContent("\011DRMContent");
-        if (pStorage->IsContained(sDRMContent))
+        if (pStorage->IsContained("\011DRMContent"))
         {
             // Document is DRM encrypted
             pStorage = lcl_DRMDecrypt(mrMedium, pStorage, aDecryptedStorageStrm);

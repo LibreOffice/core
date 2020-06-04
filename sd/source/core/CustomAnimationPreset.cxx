@@ -334,28 +334,21 @@ void CustomAnimationPresets::importResources()
         Reference< XMultiServiceFactory > xConfigProvider =
              configuration::theDefaultProvider::get( xContext );
 
-        const OUString aPropertyPath("/org.openoffice.Office.UI.Effects/UserInterface/Properties" );
-        implImportLabels( xConfigProvider, aPropertyPath, maPropertyNameMap );
+        implImportLabels( xConfigProvider, "/org.openoffice.Office.UI.Effects/UserInterface/Properties", maPropertyNameMap );
 
-        const OUString aEffectsPath( "/org.openoffice.Office.UI.Effects/UserInterface/Effects" );
-        implImportLabels( xConfigProvider, aEffectsPath, maEffectNameMap );
+        implImportLabels( xConfigProvider, "/org.openoffice.Office.UI.Effects/UserInterface/Effects", maEffectNameMap );
 
         importEffects();
 
-        const OUString aEntrancePath( "/org.openoffice.Office.UI.Effects/Presets/Entrance" );
-        importPresets( xConfigProvider, aEntrancePath, maEntrancePresets );
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Entrance", maEntrancePresets );
 
-        const OUString aEmphasisPath( "/org.openoffice.Office.UI.Effects/Presets/Emphasis" );
-        importPresets( xConfigProvider, aEmphasisPath, maEmphasisPresets );
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Emphasis", maEmphasisPresets );
 
-        const OUString aExitPath( "/org.openoffice.Office.UI.Effects/Presets/Exit" );
-        importPresets( xConfigProvider, aExitPath, maExitPresets );
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Exit", maExitPresets );
 
-        const OUString aMotionPathsPath( "/org.openoffice.Office.UI.Effects/Presets/MotionPaths" );
-        importPresets( xConfigProvider, aMotionPathsPath, maMotionPathsPresets );
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/MotionPaths", maMotionPathsPresets );
 
-        const OUString aMiscPath( "/org.openoffice.Office.UI.Effects/Presets/Misc" );
-        importPresets( xConfigProvider, aMiscPath, maMiscPresets );
+        importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Misc", maMiscPresets );
     }
     catch (const lang::WrappedTargetException&)
     {
