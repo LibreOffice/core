@@ -25,6 +25,28 @@ enum class SearchStartPosition
     End
 };
 
+struct VCL_DLLPUBLIC VectorGraphicSearchOptions final
+{
+    SearchStartPosition meStartPosition;
+    bool mbMatchCase;
+    bool mbMatchWholeWord;
+
+    VectorGraphicSearchOptions()
+        : meStartPosition(SearchStartPosition::Begin)
+        , mbMatchCase(false)
+        , mbMatchWholeWord(false)
+    {
+    }
+
+    VectorGraphicSearchOptions(SearchStartPosition eStartPosition, bool bMatchCase,
+                               bool bMatchWholeWord)
+        : meStartPosition(eStartPosition)
+        , mbMatchCase(bMatchCase)
+        , mbMatchWholeWord(bMatchWholeWord)
+    {
+    }
+};
+
 class VCL_DLLPUBLIC VectorGraphicSearch final
 {
 private:
@@ -38,7 +60,7 @@ public:
     VectorGraphicSearch(Graphic const& rGraphic);
     ~VectorGraphicSearch();
     bool search(OUString const& rSearchString,
-                SearchStartPosition eStartPosition = SearchStartPosition::Begin);
+                VectorGraphicSearchOptions const& rOptions = VectorGraphicSearchOptions());
     basegfx::B2DSize pageSize();
     bool next();
     bool previous();
