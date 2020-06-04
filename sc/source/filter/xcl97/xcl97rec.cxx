@@ -278,6 +278,21 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 
 void SaveFormControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
 {
+    bool hasControls = false;
+    for (const auto& rxObj : rList)
+    {
+        if (IsFormControlObject(rxObj.get()))
+        {
+            hasControls = true;
+            break;
+        }
+    }
+
+    if (!hasControls)
+    {
+        return;
+    }
+
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
