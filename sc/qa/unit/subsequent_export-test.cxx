@@ -4423,9 +4423,8 @@ void ScExportTest::testExponentWithoutSignFormatXLSX()
     rDoc.GetNumberFormat(0, 0, 0, nNumberFormat);
     const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
     const OUString& rFormatStr = pNumberFormat->GetFormatstring();
-    const OUString aExpectedFormatStr = "0.00E0";
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format lost exponent without sign during Excel export", aExpectedFormatStr, rFormatStr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format lost exponent without sign during Excel export", OUString("0.00E0"), rFormatStr);
 
     xDocSh->DoClose();
 }

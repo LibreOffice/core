@@ -3044,8 +3044,6 @@ void Test::testToggleRefFlag()
 
 void Test::testAutofilter()
 {
-    OUString const aDBName("NONAME");
-
     m_pDoc->InsertTab( 0, "Test" );
 
     // cell contents (0 = empty cell)
@@ -3066,7 +3064,7 @@ void Test::testAutofilter()
             if (aData[i][j])
                 m_pDoc->SetString(j, i, 0, OUString::createFromAscii(aData[i][j]));
 
-    ScDBData* pDBData = new ScDBData(aDBName, 0, 0, 0, nCols-1, nRows-1);
+    ScDBData* pDBData = new ScDBData("NONAME", 0, 0, 0, nCols-1, nRows-1);
     m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
@@ -3325,17 +3323,14 @@ void Test::testCopyPaste()
 
     // add notes to A1:C1
     ScAddress aAdrA1 (0, 0, 0); // empty cell content
-    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, aHelloA1);
+    pNoteA1->SetText(aAdrA1, "Hello world in A1");
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
-    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, aHelloB1);
+    pNoteB1->SetText(aAdrB1, "Hello world in B1");
     ScAddress aAdrC1 (2, 0, 0); // string cell content
-    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, aHelloC1);
+    pNoteC1->SetText(aAdrC1, "Hello world in C1");
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -3508,17 +3503,14 @@ void Test::testCopyPasteTranspose()
 
     // add notes to A1:C1
     ScAddress aAdrA1 (0, 0, 0); // numerical cell content
-    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
-    pNoteA1->SetText(aAdrA1, aHelloA1);
+    pNoteA1->SetText(aAdrA1, "Hello world in A1");
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
-    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
-    pNoteB1->SetText(aAdrB1, aHelloB1);
+    pNoteB1->SetText(aAdrB1, "Hello world in B1");
     ScAddress aAdrC1 (2, 0, 0); // string cell content
-    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
-    pNoteC1->SetText(aAdrC1, aHelloC1);
+    pNoteC1->SetText(aAdrC1, "Hello world in C1");
 
     // transpose clipboard, paste and check on Sheet2
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4089,17 +4081,14 @@ void Test::testMoveBlock()
 
     // add notes to A1:C1
     ScAddress aAddrA1 (0, 0, 0);
-    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAddrA1);
-    pNoteA1->SetText(aAddrA1, aHelloA1);
+    pNoteA1->SetText(aAddrA1, "Hello world in A1");
     ScAddress aAddrB1 (1, 0, 0);
-    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAddrB1);
-    pNoteB1->SetText(aAddrB1, aHelloB1);
+    pNoteB1->SetText(aAddrB1, "Hello world in B1");
     ScAddress aAddrC1 (2, 0, 0);
-    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAddrC1);
-    pNoteC1->SetText(aAddrC1, aHelloC1);
+    pNoteC1->SetText(aAddrC1, "Hello world in C1");
     ScAddress aAddrD1 (3, 0, 0);
 
     // previous tests on cell note content are ok. this one fails !!! :(
@@ -4871,24 +4860,21 @@ void Test::testCopyPasteFormulas()
 
 void Test::testCopyPasteFormulasExternalDoc()
 {
-    OUString const aDocName("file:///source.fake");
-    SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
+    SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
     m_pDoc = &getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
     OUString const aExtDocName("file:///extdata.fake");
-    OUString const aExtSh1Name("ExtSheet1");
-    OUString const aExtSh2Name("ExtSheet2");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, aExtSh1Name);
-    rExtDoc.InsertTab(1, aExtSh2Name);
+    rExtDoc.InsertTab(0, "ExtSheet1");
+    rExtDoc.InsertTab(1, "ExtSheet2");
 
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4934,22 +4920,20 @@ void Test::testCopyPasteFormulasExternalDoc()
 
 void Test::testCopyPasteReferencesExternalDoc()
 {
-    OUString const aDocName("file:///source.fake");
-    SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
+    SfxMedium* pMedium = new SfxMedium("file:///source.fake", StreamMode::STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
     m_pDoc = &getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
-    OUString const aExtSh1Name("ExtSheet1");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != nullptr);
 
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
-    rExtDoc.InsertTab(0, aExtSh1Name);
+    rExtDoc.InsertTab(0, "ExtSheet1");
 
     m_pDoc->InsertTab(0, "Sheet1");
 
@@ -5234,12 +5218,10 @@ void Test::testNoteDeleteRow()
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(&getDocShell());
 
-    OUString const aHello("Hello");
-    OUString const aJimBob("Jim Bob");
     ScAddress aPos(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
-    pNote->SetText(aPos, aHello);
-    pNote->SetAuthor(aJimBob);
+    pNote->SetText(aPos, "Hello");
+    pNote->SetAuthor("Jim Bob");
 
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(1, 1, 0));
 

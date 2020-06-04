@@ -2054,8 +2054,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 OUString
     ScAccessibleDocument::createAccessibleDescription()
 {
-    OUString sDescription = STR_ACC_DOC_DESCR;
-    return sDescription;
+    return STR_ACC_DOC_DESCR;
 }
 
 OUString

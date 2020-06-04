@@ -189,14 +189,11 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         weld::WaitObject aWait(m_xDialog.get());
 
         // replace HTML filter with DataQuery filter
-        const OUString aHTMLFilterName( FILTERNAME_HTML );
-        const OUString aWebQFilterName( FILTERNAME_QUERY );
-
         std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
-        if (pFilter && aHTMLFilterName == pFilter->GetFilterName())
+        if (pFilter && FILTERNAME_HTML == pFilter->GetFilterName())
         {
             std::shared_ptr<const SfxFilter> pNewFilter =
-                ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
+                ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( FILTERNAME_QUERY );
             if( pNewFilter )
                 pMed->SetFilter( pNewFilter );
         }
