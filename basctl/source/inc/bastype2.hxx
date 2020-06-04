@@ -272,7 +272,6 @@ public:
         return m_xControl->get_sort_indicator(nColumn);
     }
 
-    int get_sort_column() const { return m_xControl->get_sort_column(); }
     void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
 
     void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func)
