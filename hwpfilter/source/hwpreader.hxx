@@ -199,9 +199,8 @@ Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
 
 HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
 {
-    OUString sService( WRITER_IMPORTER_NAME );
     try {
-        Reference< XDocumentHandler > xHandler( rFact->createInstance( sService ), UNO_QUERY );
+        Reference< XDocumentHandler > xHandler( rFact->createInstance( WRITER_IMPORTER_NAME ), UNO_QUERY );
 
         HwpReader *p = new HwpReader;
         p->setDocumentHandler( xHandler );
