@@ -1104,8 +1104,8 @@ public:
     virtual void set_sort_order(bool bAscending) = 0;
 
     // TRUE ascending, FALSE, descending, INDET, neither (off)
-    virtual void set_sort_indicator(TriState eState, int nColumn = -1) = 0;
-    virtual TriState get_sort_indicator(int nColumn = -1) const = 0;
+    virtual void set_sort_indicator(TriState eState, int nColumn) = 0;
+    virtual TriState get_sort_indicator(int nColumn) const = 0;
 
     virtual int get_sort_column() const = 0;
     virtual void set_sort_column(int nColumn) = 0;
