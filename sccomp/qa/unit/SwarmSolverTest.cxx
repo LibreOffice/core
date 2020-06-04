@@ -67,9 +67,9 @@ void SwarmSolverTest::testUnconstrained()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSolver> xSolver;
-    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -117,9 +117,9 @@ void SwarmSolverTest::testVariableBounded()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSolver> xSolver;
-    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -169,9 +169,9 @@ void SwarmSolverTest::testVariableConstrained()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSolver> xSolver;
-    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
@@ -225,9 +225,9 @@ void SwarmSolverTest::testTwoVariables()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSolver> xSolver;
-    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 5);
@@ -288,9 +288,9 @@ void SwarmSolverTest::testMultipleVariables()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     uno::Reference<sheet::XSolver> xSolver;
-    const OUString sSolverName("com.sun.star.comp.Calc.SwarmSolver");
 
-    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(sSolverName, m_xContext),
+    xSolver.set(m_xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.comp.Calc.SwarmSolver", m_xContext),
                 uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
