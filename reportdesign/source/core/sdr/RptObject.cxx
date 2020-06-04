@@ -615,8 +615,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         if ( xFormatted.is() )
         {
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
-            const OUString sTreatAsNumberProperty = "TreatAsNumber";
-            xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( false ) );
+            xModelProps->setPropertyValue( "TreatAsNumber", makeAny( false ) );
             xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
     }

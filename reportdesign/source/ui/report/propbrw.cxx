@@ -135,8 +135,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
             m_xBrowserController = inspection::ObjectInspector::createWithModel(m_xInspectorContext, xInspectorModel);
             if ( !m_xBrowserController.is() )
             {
-                const OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
-                ShowServiceNotAvailableError(pParent ? pParent->GetFrameWeld() : nullptr, sServiceName, true);
+                ShowServiceNotAvailableError(pParent ? pParent->GetFrameWeld() : nullptr, "com.sun.star.inspection.ObjectInspector", true);
             }
             else
             {

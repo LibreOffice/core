@@ -2821,8 +2821,7 @@ Reference<XFrame> OReportController::getXFrame()
         m_xFrameLoader.set( frame::Desktop::create(m_xContext) );
     }
     const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-    const OUString sTarget("_blank");
-    Reference<XFrame> xFrame = m_xFrameLoader->findFrame(sTarget,nFrameSearchFlag);
+    Reference<XFrame> xFrame = m_xFrameLoader->findFrame("_blank",nFrameSearchFlag);
     return xFrame;
 }
 
@@ -3989,13 +3988,12 @@ void OReportController::checkChartEnabled()
         return;
 
     m_bChartEnabledAsked = true;
-    const OUString sConfigName( "/org.openoffice.Office.ReportDesign" );
     const OUString sPropertyName( "UserData/Chart" );
 
     try
     {
         ::utl::OConfigurationTreeRoot aConfiguration(
-            ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, sConfigName ) );
+            ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, "/org.openoffice.Office.ReportDesign" ) );
 
         bool bChartEnabled = false;
         if ( aConfiguration.hasByHierarchicalName(sPropertyName) )
