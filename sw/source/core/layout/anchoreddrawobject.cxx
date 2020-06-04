@@ -632,13 +632,18 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
         long nTargetWidth = aCurrObjRect.GetWidth( );
         if ( GetDrawObj( )->GetRelativeWidth( ) )
         {
-            tools::Rectangle aPageRect;
+            long nWidth = 0;
             if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
-                aPageRect = GetPageFrame()->getFramePrintArea().SVRect();
+                nWidth = GetPageFrame()->getFramePrintArea().SVRect().GetWidth();
+            // Here we handle the relative size of the width of some shape.
+            // The size of the shape's width is going to be relative to the size of the left margin.
+            // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
+            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_LEFT)
+                nWidth = GetPageFrame()->GetLeftMargin();
             else
-                aPageRect = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect();
-            nTargetWidth = aPageRect.GetWidth( ) * (*GetDrawObj( )->GetRelativeWidth());
+                nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
+            nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
         }
 
         long nTargetHeight = aCurrObjRect.GetHeight( );
