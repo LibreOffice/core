@@ -92,7 +92,6 @@ void TestTextSearch::testSearches()
 {
     OUString str( "acababaabcababadcdaa" );
     sal_Int32 startPos = 2, endPos = 20 ;
-    OUString const searchStr( "(ab)*a(c|d)+" );
     sal_Int32 const fStartRes = 10, fEndRes = 18 ;
     sal_Int32 const bStartRes = 18, bEndRes = 10 ;
 
@@ -100,7 +99,7 @@ void TestTextSearch::testSearches()
     util::SearchOptions aOptions;
     aOptions.algorithmType = util::SearchAlgorithms_REGEXP ;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
-    aOptions.searchString = searchStr;
+    aOptions.searchString = "(ab)*a(c|d)+";
     m_xSearch->setOptions( aOptions );
 
     util::SearchResult aRes;

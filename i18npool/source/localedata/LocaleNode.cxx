@@ -711,12 +711,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (strcmp( of.getLocale(), "en_US") != 0)
                     {
                         const OUString& aCode( n->getValue());
-                        OUString const aPar1( "0)");
-                        OUString const aPar2( "-)" );
-                        OUString const aPar3( " )" );
-                        OUString const aPar4( "])" );
-                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 ||
-                                aCode.indexOf( aPar3 ) > 0 || aCode.indexOf( aPar4 ) > 0)
+                        if (aCode.indexOf( "0)" ) > 0 || aCode.indexOf( "-)" ) > 0 ||
+                                aCode.indexOf( " )" ) > 0 || aCode.indexOf( "])" ) > 0)
                             fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
                     }
                     // Check if we have replaceTo for "[CURRENCY]" placeholder.
