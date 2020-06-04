@@ -20,15 +20,15 @@ then
     do
         if [ -f "$COREFILE" ]
         then
-            printf '\nIt looks like %s generated %s\nBacktraces:\n' \
-                "$EXECUTABLE" "$COREFILE"
-            GDBCOMMANDFILE=$(mktemp)
-            printf "info registers\nthread apply all backtrace full\n" \
-                >"$GDBCOMMANDFILE"
             guess=$(file "$COREFILE")
             guess=${guess#* execfn: \'}
             guess=${guess%%\'*}
             if [ ! -x "$guess" ]; then guess=$EXECUTABLE; fi
+            printf '\nIt looks like %s generated %s\nBacktraces:\n' \
+                "$guess" "$COREFILE"
+            GDBCOMMANDFILE=$(mktemp)
+            printf "info registers\nthread apply all backtrace full\n" \
+                >"$GDBCOMMANDFILE"
             gdb -iex "add-auto-load-safe-path ${INSTDIR?}" -x "$GDBCOMMANDFILE" --batch "$guess" \
                 "$COREFILE" && found=x
             rm "$GDBCOMMANDFILE"

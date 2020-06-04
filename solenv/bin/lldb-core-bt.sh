@@ -20,13 +20,13 @@ then
     do
         if [ -f "$COREFILE" ]
         then
-            printf '\nIt looks like %s generated %s\nBacktraces:\n' \
-                "$EXECUTABLE" "$COREFILE"
-            $LLDBCOMMANDFILE=$(mktemp)
             guess=$(file "$COREFILE")
             guess=${guess#* execfn: \'}
             guess=${guess%%\'*}
             if [ ! -x "$guess" ]; then guess=$EXECUTABLE; fi
+            printf '\nIt looks like %s generated %s\nBacktraces:\n' \
+                "$guess" "$COREFILE"
+            $LLDBCOMMANDFILE=$(mktemp)
             printf "target create -c $COREFILE $guess\nthread backtrace all\nquit\n" >"$LLDBCOMMANDFILE"
             lldb -s "$LLDBCOMMANDFILE" --batch \
                 && found=x
