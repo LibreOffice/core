@@ -172,7 +172,6 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
 {
     oslConditionImpl* pCond;
     int nRet=0;
-    oslConditionResult Result = osl_cond_result_ok;
 
     assert(Condition);
     pCond = static_cast<oslConditionImpl*>(Condition);
@@ -206,18 +205,16 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
                 {
                     if ( ret == ETIME || ret == ETIMEDOUT )
                     {
-                        Result = osl_cond_result_timeout;
                         nRet = pthread_mutex_unlock(&pCond->m_Lock);
                         SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_waitCondition(" << pCond << "): pthread_mutex_unlock failed: " << UnixErrnoString(nRet) );
 
-                        return Result;
+                        return osl_cond_result_timeout;
                     }
                     if ( ret != EINTR )
                     {
-                        Result = osl_cond_result_error;
                         nRet = pthread_mutex_unlock(&pCond->m_Lock);
                         SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_waitCondition(" << pCond << "): pthread_mutex_unlock failed: " << UnixErrnoString(nRet) );
-                        return Result;
+                        return osl_cond_result_error;
                     }
                 }
             }
@@ -232,11 +229,10 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
             if ( nRet != 0 )
             {
                 SAL_WARN( "sal.osl.condition", "osl_waitCondition(" << pCond << "): pthread_cond_wait failed: " << UnixErrnoString(nRet) );
-                Result = osl_cond_result_error;
                 nRet = pthread_mutex_unlock(&pCond->m_Lock);
                 SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_waitCondition(" << pCond << "): pthread_mutex_unlock failed: " << UnixErrnoString(nRet) );
 
-                return Result;
+                return osl_cond_result_error;
             }
         }
     }
@@ -244,9 +240,9 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     nRet = pthread_mutex_unlock(&pCond->m_Lock);
     SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_waitCondition(" << pCond << "): pthread_mutex_unlock failed: " << UnixErrnoString(nRet) );
 
-    SAL_INFO( "sal.osl.condition", "osl_waitCondition(" << pCond << "): " << (Result == osl_cond_result_ok ? "OK" : "ERROR") );
+    SAL_INFO( "sal.osl.condition", "osl_waitCondition(" << pCond << "): OK" );
 
-    return Result;
+    return osl_cond_result_ok;
 }
 
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
