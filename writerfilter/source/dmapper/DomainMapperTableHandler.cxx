@@ -929,9 +929,24 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // This must be done in order to apply the bottom border of the table to the first cell in a vertical merge.
                 bool bMergedVertically = bool(m_aCellProperties[nRow][nCell]->getProperty(PROP_VERTICAL_MERGE));
 
+                sal_Int32 nLastMergedRow = 0;
                 for (size_t i = nRow + 1; bMergedVertically && i < m_aCellProperties.size(); i++)
+                {
                     if ( m_aCellProperties[i].size() > sal::static_int_cast<std::size_t>(nCell) )
+                    {
                         bMergedVertically = bool(m_aCellProperties[i][nCell]->getProperty(PROP_VERTICAL_MERGE));
+                        if ( bMergedVertically )
+                            nLastMergedRow = i;
+                    }
+                }
+
+                // Only consider the bottom border setting from the last merged cell.
+                // Note: in MSO, left/right apply per-unmerged-row. Can't do that in LO, so just using the top cell's borders should be fine.
+                if ( nRow < nLastMergedRow )
+                {
+                    (*aCellIterator)->Erase(PROP_BOTTOM_BORDER);
+                    lcl_mergeBorder( PROP_BOTTOM_BORDER, m_aCellProperties[nLastMergedRow][nCell], *aCellIterator );
+                }
 
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow, bMergedVertically );
 
