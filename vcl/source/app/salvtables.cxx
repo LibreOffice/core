@@ -4465,8 +4465,7 @@ public:
 
     virtual void set_sort_indicator(TriState eState, int col) override
     {
-        if (col == -1)
-            col = 0;
+        assert(col >= 0 && "cannot sort on expander column");
 
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
         if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
@@ -4488,8 +4487,7 @@ public:
 
     virtual TriState get_sort_indicator(int col) const override
     {
-        if (col == -1)
-            col = 0;
+        assert(col >= 0 && "cannot sort on expander column");
 
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
         if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
