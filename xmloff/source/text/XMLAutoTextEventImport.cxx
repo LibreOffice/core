@@ -91,24 +91,11 @@ SvXMLImportContext* XMLAutoTextEventImport::CreateFastContext(
     return nullptr;
 }
 
-
-Sequence< OUString >
-    XMLAutoTextEventImport_getSupportedServiceNames()
-        throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_Writer_XMLOasisAutotextEventsImporter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence<OUString> aSeq { XMLAutoTextEventImport_getImplementationName() };
-    return aSeq;
-}
-
-OUString XMLAutoTextEventImport_getImplementationName() throw()
-{
-    return "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter";
-}
-
-Reference< XInterface > XMLAutoTextEventImport_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) ));
+    return cppu::acquire(new XMLAutoTextEventImport(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
