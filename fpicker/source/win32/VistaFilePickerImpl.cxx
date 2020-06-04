@@ -190,6 +190,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_hParentWindow(choose_parent_window())
     , m_sDirectory   ()
     , m_sFilename    ()
+    , mnNbCallCoInitializeExForReinit(0)
 {
 }
 
@@ -208,15 +209,7 @@ void VistaFilePickerImpl::before()
     // osl::Thread class initializes COm already in MTA mode because it's needed
     // by VCL and UNO so. There is no way to change that from outside...
     // but we need a STA environment...
-    // So we make it by try-and-error...
-    // If first CoInitializeEx will fail... we uninitialize COM initialize it new .-)
-
-    m_hLastResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    if ( FAILED(m_hLastResult) )
-    {
-        CoUninitialize();
-        m_hLastResult = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    }
+    m_hLastResult = o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 
@@ -324,7 +317,7 @@ void VistaFilePickerImpl::doRequest(const RequestRef& rRequest)
 
 void VistaFilePickerImpl::after()
 {
-    CoUninitialize();
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 
