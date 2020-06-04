@@ -1982,14 +1982,16 @@ void ScXMLExport::ExportStyles_( bool bUsed )
     SvXMLExport::ExportStyles_(bUsed);
 }
 
-void ScXMLExport::AddStyleFromCells(const uno::Reference<sheet::XSheetCellRanges>& xCellRanges,
+void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& xProperties,
                                     const uno::Reference<sheet::XSpreadsheet>& xTable,
                                     sal_Int32 nTable, const OUString* pOldName)
 {
-    uno::Reference<beans::XPropertySet> xProperties(xCellRanges, uno::UNO_QUERY_THROW);
     css::uno::Any aAny = xProperties->getPropertyValue("FormatID");
     sal_uInt64 nKey = 0;
     aAny >>= nKey;
+
+    //! pass xCellRanges instead
+    uno::Reference<sheet::XSheetCellRanges> xCellRanges( xProperties, uno::UNO_QUERY );
 
     OUString sStyleName;
     sal_Int32 nNumberFormat(-1);
@@ -2256,10 +2258,10 @@ void ScXMLExport::collectAutoStyles()
                 if (bCopySheet)
                 {
                     uno::Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                    uno::Reference <sheet::XSheetCellRanges> xCellRanges(
+                    uno::Reference <beans::XPropertySet> xProperties(
                         xTable->getCellByPosition( aPos.Col(), aPos.Row() ), uno::UNO_QUERY );
 
-                    AddStyleFromCells(xCellRanges, xTable, nTable, &rCellEntry.maName);
+                    AddStyleFromCells(xProperties, xTable, nTable, &rCellEntry.maName);
                 }
             }
 
@@ -2514,8 +2516,12 @@ void ScXMLExport::collectAutoStyles()
                         uno::Reference< sheet::XSheetCellRanges> xCellRanges(xFormatRangesIndex->getByIndex(nFormatRange), uno::UNO_QUERY);
                         if (xCellRanges.is())
                         {
-                            AddStyleFromCells(xCellRanges, xTable, nTable, nullptr);
-                            IncrementProgressBar(false);
+                            uno::Reference <beans::XPropertySet> xProperties (xCellRanges, uno::UNO_QUERY);
+                            if (xProperties.is())
+                            {
+                                AddStyleFromCells(xProperties, xTable, nTable, nullptr);
+                                IncrementProgressBar(false);
+                            }
                         }
                     }
                 }
