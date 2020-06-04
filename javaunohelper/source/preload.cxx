@@ -50,9 +50,8 @@ static bool inited_juhx( JNIEnv * jni_env )
 {
     if (s_inited)
         return true;
-    OUString lib_name = SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION;
     osl::Module aModule;
-    if (!aModule.loadRelative(&thisModule, lib_name, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL))
+    if (!aModule.loadRelative(&thisModule, SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL))
     {
         jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
         jni_env->ThrowNew(
