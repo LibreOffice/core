@@ -91,6 +91,7 @@ public:
     void testTextBreakXLSX();
     void testNumberFormatsXLSX();
     void testNumberFormatsDOCX();
+    void testPercentageNumberFormatsDOCX();
 
     void testTransparentBackground(OUString const & filename);
 
@@ -208,6 +209,7 @@ public:
     CPPUNIT_TEST(testTextBreakXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST(testNumberFormatsDOCX);
+    CPPUNIT_TEST(testPercentageNumberFormatsDOCX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
     CPPUNIT_TEST(testDispBlanksAsDefaultValue2007XLSX);
@@ -1310,6 +1312,26 @@ void Chart2ImportTest::testNumberFormatsDOCX()
     // LinkNumberFormatToSource should be set to false even if the OOXML contain a true value,
     // because the inner data table of charts have no own number format!
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !bLinkNumberFormatToSource);
+}
+
+void Chart2ImportTest::testPercentageNumberFormatsDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf133632.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+
+    bool bLinkNumberFormatToSource = false;
+    chart2::DataPointLabel aLabel;
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    bool bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
 }
 
 void Chart2ImportTest::testAutoTitleDelDefaultValue2007XLSX()
