@@ -113,14 +113,12 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=17155
     {
-        OUString const aTest("foo /bar/baz");
-
         aLocale.Language = "en";
         aLocale.Country = "US";
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
-            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("foo /bar/ba"), aLocale, 0,
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak("foo /bar/baz", strlen("foo /bar/ba"), aLocale, 0,
                 aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break at the first slash", static_cast<sal_Int32>(4), aResult.breakIndex);
         }
