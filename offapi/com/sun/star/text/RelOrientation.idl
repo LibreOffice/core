@@ -79,6 +79,9 @@ published constants RelOrientation
      */
     const short PAGE_PRINT_AREA_BOTTOM = 10;
 
+    const short LEFT_MARGIN = 13;
+    const short RIGHT_MARGIN = 14;
+
 };
 
 
