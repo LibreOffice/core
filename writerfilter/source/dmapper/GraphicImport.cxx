@@ -945,6 +945,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::FRAME));
                     }
                     break;
+                case NS_ooxml::LN_ST_SizeRelFromH_leftMargin:
+                    if (m_xShape.is())
+                    {
+                        // Here we handle the relative size of the width of some shape.
+                        // The size of the shape's width is going to be relative to the size of the left margin.
+                        // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::PAGE_LEFT));
+                    }
+                    break;
                 case NS_ooxml::LN_ST_SizeRelFromH_page:
                     if (m_xShape.is())
                     {
