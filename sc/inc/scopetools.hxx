@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 
 class ScDocument;
+class ScColumn;
 namespace vcl { class Window; }
 
 namespace sc {
@@ -71,6 +72,18 @@ public:
     DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay);
     ~DelayFormulaGroupingSwitch() COVERITY_NOEXCEPT_FALSE;
     void reset();
+};
+
+/// Wrapper for ScDocument::EnableDelayStartListeningFormulaCells()
+class DelayStartListeningFormulaCells
+{
+    ScColumn& mColumn;
+    bool const mbOldValue;
+public:
+    DelayStartListeningFormulaCells(ScColumn& column, bool delay);
+    DelayStartListeningFormulaCells(ScColumn& column);
+    ~DelayStartListeningFormulaCells();
+    void set();
 };
 
 }

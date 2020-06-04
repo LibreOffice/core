@@ -1661,6 +1661,7 @@ public:
                 sc::formula_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
 
+                sc::DelayStartListeningFormulaCells startDelay(mrDestCol); // disabled
                 if(nDataSize > 1024 && (mnCopyFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE)
                 {
                     // If the column to be replaced contains a long formula group (tdf#102364), there can
@@ -1668,6 +1669,9 @@ public:
                     // the first element becomes very high. Optimize this by removing them in one go.
                     sc::EndListeningContext context(*mrDestCol.GetDoc());
                     mrDestCol.EndListeningFormulaCells( context, nRow, nRow + nDataSize - 1, nullptr, nullptr );
+                    // There can be a similar problem with starting to listen to cells repeatedly (tdf#133302).
+                    // Delay it.
+                    startDelay.set();
                 }
 
                 for (; it != itEnd; ++it, ++nRow)
