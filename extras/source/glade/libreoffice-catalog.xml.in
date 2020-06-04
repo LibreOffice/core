@@ -42,17 +42,8 @@
     <glade-widget-class title="Notebook switching tabs depending on context" name="sfxlo-NotebookbarTabControl"
                         generic-name="NotebookbarTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
-    <glade-widget-class title="Horizontal box hiding children depending on its priorities" name="sfxlo-PriorityHBox"
-                        generic-name="PriorityHBox" parent="GtkBox"
-                        icon-name="widget-gtk-box"/>
     <glade-widget-class title="Horizontal box hiding children depending on its priorities" name="sfxlo-PriorityMergedHBox"
                         generic-name="PriorityMergedHBox" parent="GtkBox"
-                        icon-name="widget-gtk-box"/>
-    <glade-widget-class title="Box which can move own content to the popup" name="sfxlo-DropdownBox"
-                        generic-name="DropdownBox" parent="GtkBox"
-                        icon-name="widget-gtk-box"/>
-    <glade-widget-class title="Box which can hide own content" name="VclOptionalBox"
-                        generic-name="VclOptionalBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
     <glade-widget-class title="Notebookbar ToolBox" name="sfxlo-NotebookbarToolBox"
                         generic-name="Notebookbar ToolBox" parent="sfxlo-SidebarToolBox"

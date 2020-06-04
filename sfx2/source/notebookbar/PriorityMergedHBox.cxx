@@ -21,7 +21,6 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <bitmaps.hlst>
-#include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
 #include <sfx2/viewfrm.hxx>
 
@@ -34,9 +33,11 @@
 
 namespace
 {
-class PriorityMergedHBox : public PriorityHBox
+class PriorityMergedHBox : public VclHBox
 {
 private:
+    bool m_bInitialized;
+
     VclPtr<PushButton> m_pButton;
     VclPtr<NotebookbarPopup> m_pPopup;
 
@@ -44,7 +45,8 @@ private:
 
 public:
     explicit PriorityMergedHBox(vcl::Window* pParent)
-        : PriorityHBox(pParent)
+        : VclHBox(pParent)
+        , m_bInitialized(false)
     {
         m_pButton = VclPtr<PushButton>::Create(this, WB_FLATBUTTON);
         m_pButton->SetClickHdl(LINK(this, PriorityMergedHBox, PBClickHdl));
@@ -55,6 +57,23 @@ public:
     }
 
     virtual ~PriorityMergedHBox() override { disposeOnce(); }
+
+    void Initialize()
+    {
+        m_bInitialized = true;
+
+        SetSizeFromParent();
+    }
+
+    void SetSizeFromParent()
+    {
+        vcl::Window* pParent = GetParent();
+        if (pParent)
+        {
+            Size aParentSize = pParent->GetSizePixel();
+            SetSizePixel(Size(aParentSize.getWidth(), aParentSize.getHeight()));
+        }
+    }
 
     virtual void Resize() override
     {
@@ -123,10 +142,11 @@ public:
         m_pButton.disposeAndClear();
         if (m_pPopup)
             m_pPopup.disposeAndClear();
-        PriorityHBox::dispose();
+
+        VclHBox::dispose();
     }
 
-    int GetHiddenCount() const override
+    int GetHiddenCount() const
     {
         int nCount = 0;
 
@@ -153,9 +173,9 @@ public:
         for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
              pChild = pChild->GetWindow(GetWindowType::Next))
         {
-            if (!pChild->IsVisible())
-                continue;
-            ++nVisibleChildren;
+            if (pChild->IsVisible())
+                ++nVisibleChildren;
+
             Size aChildSize = getLayoutRequisition(*pChild);
 
             long nPrimaryDimension = getPrimaryDimension(aChildSize);
@@ -165,11 +185,12 @@ public:
             accumulateMaxes(aChildSize, aSize);
         }
 
-        setPrimaryDimension(aSize, 200);
+        // if opened in non-fullscreen window require less space for resizing
+        if (GetParent()->GetOutputSizePixel().getWidth() < 1200)
+            setPrimaryDimension(aSize, GetParent()->GetOutputSizePixel().getWidth() * 0.7);
+
         return finalizeMaxes(aSize, nVisibleChildren);
     }
-
-    void GetChildrenWithPriorities() override{};
 };
 }
 
