@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "801c2d01_e8109de9",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-04T19:43:11Z",
+      "side": 1,
+      "message": "You\u0027re right of course, I hadn\u0027t thought it could be interpreted as macro preprocessing",
+      "parentUuid": "021a6280_d114678f",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 4
+      },
+      "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea90f449_adf673e5",
         "filename": "include/o3tl/safeCoInitUninit.hxx",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "66068d99_4d72492b",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-04T19:43:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea90f449_adf673e5",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 4
+      },
+      "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "935528f8_74910dd4",
         "filename": "include/o3tl/safeCoInitUninit.hxx",
         "patchSetId": 7
@@ -68,6 +116,30 @@
       "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d3e1d91_108e528a",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-04T19:43:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "935528f8_74910dd4",
+      "range": {
+        "startLine": 52,
+        "startChar": 64,
+        "endLine": 52,
+        "endChar": 67
+      },
+      "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
