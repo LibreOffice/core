@@ -105,8 +105,7 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     {
         css::uno::Reference< css::beans::XPropertySet > xLMPropSet( xFrame->getLayoutManager(), css::uno::UNO_QUERY_THROW );
 
-        const OUString aAutomaticToolbars( "AutomaticToolbars" );
-        xLMPropSet->setPropertyValue( aAutomaticToolbars, css::uno::Any( false ));
+        xLMPropSet->setPropertyValue( "AutomaticToolbars", css::uno::Any( false ));
     }
     catch( css::uno::RuntimeException& )
     {

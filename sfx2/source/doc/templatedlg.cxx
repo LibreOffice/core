@@ -1029,13 +1029,12 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
 void SfxTemplateManagerDlg::OnTemplateLink ()
 {
-    OUString sNodePath("/org.openoffice.Office.Common/Help/StartCenter");
     try
     {
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
         uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(sNodePath)}
+            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
         }));
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args), UNO_QUERY);
         if( xNameAccess.is() )

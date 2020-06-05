@@ -128,7 +128,6 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
                     : SfxChildWindow( pParentWnd , nId )
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    const OUString aDockWindowResourceURL( "private:resource/dockingwindow/" );
 
     VclPtr<SfxTitleDockingWindow> pTitleDockWindow = VclPtr<SfxTitleDockingWindow>::Create( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
@@ -141,7 +140,7 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
     uno::Reference< frame::XFrame > xFrame = pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
     // create a resource URL from the nId provided by the sfx2
-    OUString aResourceURL =  aDockWindowResourceURL + OUString::number(nId);
+    OUString aResourceURL =  "private:resource/dockingwindow/" + OUString::number(nId);
     uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
     {
         {"Frame", uno::Any(xFrame)},
