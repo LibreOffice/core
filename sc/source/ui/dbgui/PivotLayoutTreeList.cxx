@@ -101,7 +101,7 @@ void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, in
     maItemValues.push_back(std::unique_ptr<ScItemValue>(pListItemValue));
     OUString sName = pListItemValue->maName;
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pListItemValue)));
-    mxControl->insert(nullptr, nPosition, &sName, &sId, nullptr, nullptr, nullptr, false, nullptr);
+    mxControl->insert(nullptr, nPosition, &sName, &sId, nullptr, nullptr, false, nullptr);
 }
 
 IMPL_LINK(ScPivotLayoutTreeList, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)

@@ -589,7 +589,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
 
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));
-    xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, nullptr, false, nullptr);
+    xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, false, nullptr);
     return pPageInfo;
 }
 

@@ -331,7 +331,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
 
                 std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
-                mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr, nullptr, nullptr, false, xEntry.get());
+                mxLbTree->insert(pParentEntry, -1, &aStrDisplayname, &sId, nullptr, nullptr, false, xEntry.get());
 
                 try
                 {

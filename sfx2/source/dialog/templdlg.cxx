@@ -491,7 +491,7 @@ static void FillBox_Impl(weld::TreeView& rBox,
 {
     std::unique_ptr<weld::TreeIter> xResult = rBox.make_iterator();
     const OUString& rName = pEntry->getName();
-    rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, nullptr, false, xResult.get());
+    rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
 
     for (size_t i = 0; i < pEntry->getChildren().size(); ++i)
         FillBox_Impl(rBox, pEntry->getChildren()[i].get(), rEntries, eStyleFamily, xResult.get());

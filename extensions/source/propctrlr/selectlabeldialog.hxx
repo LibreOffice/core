@@ -43,6 +43,7 @@ namespace pcr
 
         std::unique_ptr<weld::Label> m_xMainDesc;
         std::unique_ptr<weld::TreeView> m_xControlTree;
+        std::unique_ptr<weld::TreeIter> m_xScratchIter;
         std::unique_ptr<weld::CheckButton> m_xNoAssignment;
 
     public:

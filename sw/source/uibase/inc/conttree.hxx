@@ -84,6 +84,7 @@ public:
 class SwContentTree final : public SfxListener
 {
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     SwContentTreeDropTarget m_aDropTargetHelper;
     VclPtr<SwNavigationPI> m_xDialog;
     OUString            m_sSpace;
@@ -129,7 +130,7 @@ class SwContentTree final : public SfxListener
     void                FindActiveTypeAndRemoveUserData();
 
     void insert(const weld::TreeIter* pParent, const OUString& rStr, const OUString& rId,
-                const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet);
+                bool bChildrenOnDemand, weld::TreeIter* pRet);
 
     void remove(const weld::TreeIter& rIter);
 

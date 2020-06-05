@@ -753,7 +753,7 @@ void CustomAnimationList::update()
                 mxEntries.emplace_back(std::make_unique<CustomAnimationListEntryItem>(aDescription, nullptr));
 
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(mxEntries.back().get())));
-                mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, nullptr, false, nullptr);
+                mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, false, nullptr);
                 std::for_each( pIS->getBegin(), pIS->getEnd(), stl_append_effect_func( *this ) );
                 mxLastParentEntry.reset();
             }
@@ -894,12 +894,12 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         if (xParentEntry)
         {
             // add a subentry
-            mxTreeView->insert(xParentEntry.get(), -1, &aDescription, &sId, nullptr, nullptr, nullptr, false, xEntry.get());
+            mxTreeView->insert(xParentEntry.get(), -1, &aDescription, &sId, nullptr, nullptr, false, xEntry.get());
         }
         else
         {
             // add a root entry
-            mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, nullptr, false, xEntry.get());
+            mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, false, xEntry.get());
 
             // and the new root entry becomes the possible next group header
             mxLastTargetShape = xTargetShape;

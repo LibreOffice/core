@@ -3260,8 +3260,8 @@ private:
 
     void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
                    const OUString* pId, const OUString* pIconName,
-                   VirtualDevice* pImageSurface, const OUString* pExpanderName,
-                   bool bChildrenOnDemand, weld::TreeIter* pRet, bool bIsSeparator)
+                   VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                   weld::TreeIter* pRet, bool bIsSeparator)
     {
         disable_notify_events();
         const SalInstanceTreeIter* pVclIter = static_cast<const SalInstanceTreeIter*>(pParent);
@@ -3293,13 +3293,6 @@ private:
             AddStringItem(pEntry, *pStr, 0);
         pEntry->SetUserData(pUserData);
         m_xTreeView->Insert(pEntry, iter, nInsertPos);
-
-        if (pExpanderName)
-        {
-            Image aImage(createImage(*pExpanderName));
-            m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
-            m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
-        }
 
         if (pRet)
         {
@@ -3495,17 +3488,17 @@ public:
 
     virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
                         const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, const OUString* pExpanderName,
-                        bool bChildrenOnDemand, weld::TreeIter* pRet) override
+                        VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                        weld::TreeIter* pRet) override
     {
-        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface, pExpanderName,
+        do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
                   bChildrenOnDemand, pRet, false);
     }
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override
     {
         OUString sSep(VclResId(STR_SEPARATOR));
-        do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr, nullptr,
+        do_insert(nullptr, pos, &sSep, nullptr, nullptr, nullptr,
                   false, nullptr, true);
     }
 

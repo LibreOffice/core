@@ -229,7 +229,8 @@ void ContentTabPage_Impl::InitRoot()
         OUString sId;
         if (bIsFolder)
             sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
-        m_xContentBox->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, &aClosedBookImage, true, nullptr);
+        m_xContentBox->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, m_xScratchIter.get());
+        m_xContentBox->set_image(*m_xScratchIter, aClosedBookImage);
     }
 }
 
@@ -267,7 +268,8 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                     if ( bIsFolder )
                     {
                         OUString sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
-                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, &aClosedBookImage, true, nullptr);
+                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, true, m_xScratchIter.get());
+                        m_xContentBox->set_image(*m_xScratchIter, aClosedBookImage);
                     }
                     else
                     {
@@ -276,7 +278,8 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
                             sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aTargetURL, false)));
-                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, &aDocumentImage, false, nullptr);
+                        m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, false, m_xScratchIter.get());
+                        m_xContentBox->set_image(*m_xScratchIter, aDocumentImage);
                     }
                 }
             }
@@ -328,6 +331,7 @@ ContentTabPage_Impl::ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWind
     : HelpTabPage_Impl(pParent, pIdxWin, "HelpContentPage",
         "sfx/ui/helpcontentpage.ui")
     , m_xContentBox(m_xBuilder->weld_tree_view("content"))
+    , m_xScratchIter(m_xContentBox->make_iterator())
     , aOpenBookImage(BMP_HELP_CONTENT_BOOK_OPEN)
     , aClosedBookImage(BMP_HELP_CONTENT_BOOK_CLOSED)
     , aDocumentImage(BMP_HELP_CONTENT_DOC)

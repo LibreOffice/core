@@ -386,7 +386,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
             OUString sId(OUString::number(DatabaseObjectContainer::TABLES));
             OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
             std::unique_ptr<weld::TreeIter> xRet(m_xTreeView->make_iterator());
-            m_xTreeView->insert(nullptr, -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+            m_xTreeView->insert(nullptr, -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
             m_xTreeView->set_image(*xRet, sImageId, -1);
             if (m_bShowToggles)
                 m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE, 0);
@@ -431,7 +431,7 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
                     if (!xFolder)
                     {
                         OUString sId(OUString::number(nFolderType));
-                        m_xTreeView->insert(xRootEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+                        m_xTreeView->insert(xRootEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xRet.get());
                         m_xTreeView->set_image(*xRet, sImageId, -1);
                         if (m_bShowToggles)
                             m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE, 0);
@@ -707,7 +707,7 @@ void TableTreeListBox::implAddEntry(
             xFolder = m_xTreeView->make_iterator();
             OUString sId(OUString::number(nFirstFolderType));
             OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
-            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xFolder.get());
+            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xFolder.get());
             m_xTreeView->set_image(*xFolder, sImageId, -1);
             if (m_bShowToggles)
                 m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE, 0);
@@ -724,7 +724,7 @@ void TableTreeListBox::implAddEntry(
             xFolder = m_xTreeView->make_iterator();
             OUString sId(OUString::number(nSecondFolderType));
             OUString sImageId = ImageProvider::getFolderImageId(DatabaseObject::TABLE);
-            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xFolder.get());
+            m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, false, xFolder.get());
             m_xTreeView->set_image(*xFolder, sImageId, -1);
             if (m_bShowToggles)
                 m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE, 0);
@@ -734,7 +734,7 @@ void TableTreeListBox::implAddEntry(
     }
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-    m_xTreeView->insert(xParentEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+    m_xTreeView->insert(xParentEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
 
     auto xGraphic = m_xImageProvider->getXGraphic(_rTableName, DatabaseObject::TABLE);
     if (xGraphic.is())

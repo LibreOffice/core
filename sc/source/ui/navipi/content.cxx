@@ -186,7 +186,8 @@ void ScContentTree::InitRoot( ScContentId nType )
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     m_aRootNodes[nType] = m_xTreeView->make_iterator();
-    m_xTreeView->insert(nullptr, nPos, &aName, nullptr, nullptr, nullptr, &aImage, false, m_aRootNodes[nType].get());
+    m_xTreeView->insert(nullptr, nPos, &aName, nullptr, nullptr, nullptr, false, m_aRootNodes[nType].get());
+    m_xTreeView->set_image(*m_aRootNodes[nType], aImage);
 }
 
 void ScContentTree::ClearAll()
@@ -227,7 +228,7 @@ void ScContentTree::InsertContent( ScContentId nType, const OUString& rValue )
     weld::TreeIter* pParent = m_aRootNodes[nType].get();
     if (pParent)
     {
-        m_xTreeView->insert(pParent, -1, &rValue, nullptr, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->insert(pParent, -1, &rValue, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
         m_xTreeView->set_sensitive(*m_xScratchIter, true);
     }
     else
@@ -889,7 +890,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                                 weld::TreeIter* pParent = m_aRootNodes[nType].get();
                                 if (pParent)
                                 {
-                                    m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+                                    m_xTreeView->insert(pParent, -1, &aName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
                                     m_xTreeView->set_sensitive(*m_xScratchIter, true);
                                 }//end if parent
                                 else

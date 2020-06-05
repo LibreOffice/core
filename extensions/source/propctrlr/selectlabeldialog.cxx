@@ -56,6 +56,7 @@ namespace pcr
         , m_bHaveAssignableControl(false)
         , m_xMainDesc(m_xBuilder->weld_label("label"))
         , m_xControlTree(m_xBuilder->weld_tree_view("control"))
+        , m_xScratchIter(m_xControlTree->make_iterator())
         , m_xNoAssignment(m_xBuilder->weld_check_button("noassignment"))
     {
         m_xControlTree->connect_changed(LINK(this, OSelectLabelDialog, OnEntrySelected));
@@ -105,7 +106,8 @@ namespace pcr
             OUString sRootName(PcrRes(RID_STR_FORMS));
             OUString aFormImage(RID_EXTBMP_FORMS);
             m_xControlTree->insert(nullptr, -1, &sRootName, nullptr,
-                                   nullptr, nullptr, &aFormImage, false, nullptr);
+                                   nullptr, nullptr, false, m_xScratchIter.get());
+            m_xControlTree->set_image(*m_xScratchIter, aFormImage);
 
             // build the tree
             m_xInitialSelection.reset();
@@ -180,7 +182,8 @@ namespace pcr
                     OUString aFormImage(RID_EXTBMP_FORM);
 
                     m_xControlTree->insert(&rContainerEntry, -1, &sName, nullptr,
-                                           nullptr, nullptr, &aFormImage, false, nullptr);
+                                           nullptr, nullptr, false, m_xScratchIter.get());
+                    m_xControlTree->set_image(*m_xScratchIter, aFormImage);
                     auto xIter = m_xControlTree->make_iterator(&rContainerEntry);
                     m_xControlTree->iter_nth_child(*xIter, nChildren);
                     sal_Int32 nContChildren = InsertEntries(xCont, *xIter);
@@ -209,7 +212,8 @@ namespace pcr
             // all requirements met -> insert
             m_xUserData.emplace_back(new Reference<XPropertySet>(xAsSet));
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_xUserData.back().get())));
-            m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, &m_aRequiredControlImage, false, nullptr);
+            m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, false, m_xScratchIter.get());
+            m_xControlTree->set_image(*m_xScratchIter, m_aRequiredControlImage);
 
             if (m_xInitialLabelControl == xAsSet)
             {

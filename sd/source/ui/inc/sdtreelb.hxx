@@ -70,6 +70,7 @@ private:
     static bool SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<SdPageObjsTLVDropTarget> m_xDropTargetHelper;
     std::unique_ptr<::svt::AcceleratorExecute> m_xAccel;
     VclPtr<SdNavigatorWin> m_xNavigator;
@@ -319,12 +320,16 @@ public:
 
     void InsertEntry(const OUString &rName, const OUString &rExpander)
     {
-        m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, &rExpander, false, nullptr);
+        m_xTreeView->insert(nullptr, -1, &rName, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->set_image(*m_xScratchIter, rExpander);
     }
 
     void InsertEntry(const weld::TreeIter* pParent, const OUString& rId, const OUString &rName, const OUString &rExpander, weld::TreeIter* pEntry = nullptr)
     {
-        m_xTreeView->insert(pParent, -1, &rName, &rId, nullptr, nullptr, &rExpander, false, pEntry);
+        m_xTreeView->insert(pParent, -1, &rName, &rId, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->set_image(*m_xScratchIter, rExpander);
+        if (pEntry)
+            m_xTreeView->copy_iterator(*m_xScratchIter, *pEntry);
     }
 
     //Mark Current Entry

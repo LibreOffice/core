@@ -160,7 +160,7 @@ EntryDescriptor::EntryDescriptor (
 
 SbTreeListBox::SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Window* pTopLevel)
     : m_xControl(std::move(xControl))
-    , m_xIter(m_xControl->make_iterator())
+    , m_xScratchIter(m_xControl->make_iterator())
     , m_pTopLevel(pTopLevel)
     , m_bFreezeOnFirstAddRemove(false)
     , m_aNotifier(*this)
@@ -174,12 +174,12 @@ SbTreeListBox::~SbTreeListBox()
 {
     m_aNotifier.dispose();
 
-    bool bValidIter = m_xControl->get_iter_first(*m_xIter);
+    bool bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     while (bValidIter)
     {
-        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(*m_xIter).toInt64());
+        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(*m_xScratchIter).toInt64());
         delete pBasicEntry;
-        bValidIter = m_xControl->iter_next(*m_xIter);
+        bValidIter = m_xControl->iter_next(*m_xScratchIter);
     }
 }
 
@@ -193,9 +193,9 @@ void SbTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation 
 
     // actually test if basic's in the tree already?!
     // level 1: BasicManager (application, document, ...)
-    bool bDocumentRootEntry = FindRootEntry(rDocument, eLocation, *m_xIter);
-    if (bDocumentRootEntry && m_xControl->get_row_expanded(*m_xIter))
-        ImpCreateLibEntries(*m_xIter, rDocument, eLocation);
+    bool bDocumentRootEntry = FindRootEntry(rDocument, eLocation, *m_xScratchIter);
+    if (bDocumentRootEntry && m_xControl->get_row_expanded(*m_xScratchIter))
+        ImpCreateLibEntries(*m_xScratchIter, rDocument, eLocation);
     if (!bDocumentRootEntry)
     {
         OUString aRootName(GetRootEntryName(rDocument, eLocation));
@@ -538,29 +538,29 @@ void SbTreeListBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ 
 
 void SbTreeListBox::UpdateEntries()
 {
-    bool bValidIter = m_xControl->get_selected(m_xIter.get());
-    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xIter.get() : nullptr));
+    bool bValidIter = m_xControl->get_selected(m_xScratchIter.get());
+    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xScratchIter.get() : nullptr));
 
     // removing the invalid entries
     std::unique_ptr<weld::TreeIter> xLastValid(m_xControl->make_iterator(nullptr));
     bool bLastValid = false;
-    bValidIter = m_xControl->get_iter_first(*m_xIter);
+    bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     while (bValidIter)
     {
-        if (IsValidEntry(*m_xIter))
+        if (IsValidEntry(*m_xScratchIter))
         {
-            m_xControl->copy_iterator(*m_xIter, *xLastValid);
+            m_xControl->copy_iterator(*m_xScratchIter, *xLastValid);
             bLastValid = true;
         }
         else
-            RemoveEntry(*m_xIter);
+            RemoveEntry(*m_xScratchIter);
         if (bLastValid)
         {
-            m_xControl->copy_iterator(*xLastValid, *m_xIter);
-            bValidIter = m_xControl->iter_next(*m_xIter);
+            m_xControl->copy_iterator(*xLastValid, *m_xScratchIter);
+            bValidIter = m_xControl->iter_next(*m_xScratchIter);
         }
         else
-            bValidIter = m_xControl->get_iter_first(*m_xIter);
+            bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     }
 
     ScanAllEntries();
@@ -588,15 +588,15 @@ void SbTreeListBox::RemoveEntry(const weld::TreeIter& rIter)
 void SbTreeListBox::RemoveEntry (ScriptDocument const& rDocument)
 {
     // finding the entry of rDocument
-    bool bValidIter = m_xControl->get_iter_first(*m_xIter);
+    bool bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     while (bValidIter)
     {
-        if (rDocument == GetEntryDescriptor(m_xIter.get()).GetDocument())
+        if (rDocument == GetEntryDescriptor(m_xScratchIter.get()).GetDocument())
         {
-            RemoveEntry(*m_xIter);
+            RemoveEntry(*m_xScratchIter);
             break;
         }
-        bValidIter = m_xControl->iter_next(*m_xIter);
+        bValidIter = m_xControl->iter_next(*m_xScratchIter);
     }
 }
 
@@ -653,7 +653,10 @@ void SbTreeListBox::AddEntry(
         m_bFreezeOnFirstAddRemove= false;
     }
     OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(rUserData.release())));
-    m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, &rImage, bChildrenOnDemand, pRet);
+    m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, bChildrenOnDemand, m_xScratchIter.get());
+    m_xControl->set_image(*m_xScratchIter, rImage);
+    if (pRet)
+        m_xControl->copy_iterator(*m_xScratchIter, *pRet);
 }
 
 void SbTreeListBox::SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage)
@@ -737,16 +740,16 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
     ScriptDocument aDocument = aDesc.GetDocument();
     OSL_ENSURE( aDocument.isValid(), "TreeListBox::SetCurrentEntry: invalid document!" );
     LibraryLocation eLocation = aDesc.GetLocation();
-    bool bRootEntry = FindRootEntry(aDocument, eLocation, *m_xIter);
+    bool bRootEntry = FindRootEntry(aDocument, eLocation, *m_xScratchIter);
     if (bRootEntry)
     {
-        m_xControl->copy_iterator(*m_xIter, *xCurIter);
+        m_xControl->copy_iterator(*m_xScratchIter, *xCurIter);
         bCurEntry = true;
         const OUString& aLibName( aDesc.GetLibName() );
         if ( !aLibName.isEmpty() )
         {
-            m_xControl->expand_row(*m_xIter);
-            auto xLibIter = m_xControl->make_iterator(m_xIter.get());
+            m_xControl->expand_row(*m_xScratchIter);
+            auto xLibIter = m_xControl->make_iterator(m_xScratchIter.get());
             bool bLibEntry = FindEntry(aLibName, OBJ_TYPE_LIBRARY, *xLibIter);
             if (bLibEntry)
             {
@@ -802,7 +805,7 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
             }
             else
             {
-                auto xSubLibIter = m_xControl->make_iterator(m_xIter.get());
+                auto xSubLibIter = m_xControl->make_iterator(m_xScratchIter.get());
                 if (m_xControl->iter_children(*xSubLibIter))
                     m_xControl->copy_iterator(*xLibIter, *xCurIter);
             }
@@ -821,15 +824,15 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
 
 IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, bool)
 {
-    bool bValidIter = m_xControl->get_cursor(m_xIter.get());
+    bool bValidIter = m_xControl->get_cursor(m_xScratchIter.get());
     if (!bValidIter)
         return true;
-    if (!m_xControl->get_row_expanded(*m_xIter))
-        m_xControl->expand_row(*m_xIter);
+    if (!m_xControl->get_row_expanded(*m_xScratchIter))
+        m_xControl->expand_row(*m_xScratchIter);
     else
-        m_xControl->collapse_row(*m_xIter);
+        m_xControl->collapse_row(*m_xScratchIter);
 
-    EntryDescriptor aDesc = GetEntryDescriptor(m_xIter.get());
+    EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
     switch (aDesc.GetType())
     {
         case OBJ_TYPE_METHOD:

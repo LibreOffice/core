@@ -20,6 +20,7 @@ using namespace ::com::sun::star::task;
 
 FolderTree::FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel)
     : m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
     , m_pTopLevel(pTopLevel)
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 24,
@@ -44,11 +45,11 @@ IMPL_LINK(FolderTree, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool
 
 void FolderTree::InsertRootEntry(const OUString& rId, const OUString& rRootLabel)
 {
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
     OUString sFolderImage(RID_BMP_FOLDER);
     m_xTreeView->insert(nullptr, -1, &rRootLabel, &rId, nullptr, nullptr,
-                        &sFolderImage, true, xEntry.get());
-    m_xTreeView->set_cursor(*xEntry);
+                        true, m_xScratchIter.get());
+    m_xTreeView->set_image(*m_xScratchIter, sFolderImage);
+    m_xTreeView->set_cursor(*m_xScratchIter);
 }
 
 void FolderTree::FillTreeEntry(const weld::TreeIter& rEntry)
@@ -83,7 +84,8 @@ void FolderTree::FillTreeEntry(const weld::TreeIter& rEntry)
                 if (!i->mbIsFolder)
                     continue;
                 m_xTreeView->insert(&rEntry, -1, &i->GetTitle(), &i->maTargetURL,
-                    nullptr, nullptr, &sFolderImage, true, nullptr);
+                    nullptr, nullptr, true, m_xScratchIter.get());
+                m_xTreeView->set_image(*m_xScratchIter, sFolderImage);
             }
         }
     }
@@ -116,7 +118,8 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
     for (auto const& folder : rFolders)
     {
         m_xTreeView->insert(xParent.get(), -1, &folder.first, &folder.second,
-            nullptr, nullptr, &sFolderImage, true, nullptr);
+            nullptr, nullptr, true, m_xScratchIter.get());
+        m_xTreeView->set_image(*m_xScratchIter, sFolderImage);
     }
 
     m_sLastUpdatedDir = rUrl;
