@@ -841,12 +841,12 @@ public:
 
     virtual void insert(const TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const OUString* pExpanderName, bool bChildrenOnDemand, TreeIter* pRet)
+                        bool bChildrenOnDemand, TreeIter* pRet)
         = 0;
 
     void insert(int nRow, TreeIter* pRet = nullptr)
     {
-        insert(nullptr, nRow, nullptr, nullptr, nullptr, nullptr, nullptr, false, pRet);
+        insert(nullptr, nRow, nullptr, nullptr, nullptr, nullptr, false, pRet);
     }
 
     void append(TreeIter* pRet = nullptr) { insert(-1, pRet); }
@@ -854,36 +854,36 @@ public:
     void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
                 VirtualDevice* pImageSurface)
     {
-        insert(nullptr, pos, &rStr, pId, pIconName, pImageSurface, nullptr, false, nullptr);
+        insert(nullptr, pos, &rStr, pId, pIconName, pImageSurface, false, nullptr);
     }
     void insert_text(int pos, const OUString& rStr)
     {
-        insert(nullptr, pos, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
+        insert(nullptr, pos, &rStr, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append_text(const OUString& rStr)
     {
-        insert(nullptr, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
+        insert(nullptr, -1, &rStr, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, nullptr);
+        insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
+        insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, false, nullptr);
     }
     void append(const TreeIter* pParent, const OUString& rId, const OUString& rStr,
                 const OUString& rImage)
     {
-        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false, nullptr);
+        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, false, nullptr);
     }
     void append(const TreeIter* pParent, const OUString& rStr)
     {
-        insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false, nullptr);
+        insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, false, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false, nullptr);
+        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, false, nullptr);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
@@ -921,8 +921,11 @@ public:
     virtual void set_id(int row, const OUString& rId) = 0;
     virtual void set_toggle(int row, TriState eState, int col) = 0;
     virtual TriState get_toggle(int row, int col) const = 0;
+    // col index -1 sets the expander image
     virtual void set_image(int row, const OUString& rImage, int col = -1) = 0;
+    // col index -1 sets the expander image
     virtual void set_image(int row, VirtualDevice& rImage, int col = -1) = 0;
+    // col index -1 sets the expander image
     virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1)
         = 0;
@@ -1022,8 +1025,11 @@ public:
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
+    // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, const OUString& rImage, int col = -1) = 0;
+    // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter, VirtualDevice& rImage, int col = -1) = 0;
+    // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter,
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;

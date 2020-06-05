@@ -418,6 +418,7 @@ CuiConfigGroupListBox::CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTr
     , m_pFunctionListBox(nullptr)
     , m_pStylesInfo(nullptr)
     , m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
 {
     m_xTreeView->connect_expanding(LINK(this, CuiConfigGroupListBox, ExpandingHdl));
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
@@ -583,7 +584,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                             0, static_cast<void *>( theChild.get())));
 
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-                    m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, &aImage, bChildOnDemand, nullptr);
+                    m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
+                    m_xTreeView->set_image(*m_xScratchIter, aImage);
                 }
             }
         }
@@ -658,7 +660,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                     static_cast<void *>(rootNode.get())));
             OUString aTitle(xImp->m_sDlgMacros);
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-            m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, nullptr, true, nullptr);
+            m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, nullptr);
         }
         else
         {
@@ -674,7 +676,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         OUString sStyle(xImp->m_aStrGroupStyles);
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-        m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, nullptr, true, nullptr);
+        m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, true, nullptr);
     }
 
     m_xTreeView->thaw();
@@ -966,7 +968,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
                     aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-                    m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, nullptr, false, nullptr);
+                    m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, false, nullptr);
                 }
             }
             break;

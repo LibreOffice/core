@@ -644,7 +644,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             }
 
             m_xSignaturesLB->insert(nullptr, n, nullptr, nullptr,
-                                    &sImage, nullptr, nullptr, false, nullptr);
+                                    &sImage, nullptr, false, nullptr);
             m_xSignaturesLB->set_text(n, aSubject, 1);
             m_xSignaturesLB->set_text(n, aIssuer, 2);
             m_xSignaturesLB->set_text(n, aDateTimeStr, 3);

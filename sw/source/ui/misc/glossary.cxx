@@ -475,7 +475,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
             else if (m_xCategoryBox->get_iter_depth(*xEntry))
                 m_xCategoryBox->iter_parent(*xEntry);
             m_xCategoryBox->insert(xEntry.get(), -1, &aStr, &aShortName,
-                                   nullptr, nullptr, nullptr, false, nullptr);
+                                   nullptr, nullptr, false, nullptr);
 
             m_xNameED->set_text(aStr);
             m_xShortNameEdit->set_text(aShortName);
@@ -515,7 +515,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
                 OUString sName(aNewNameDlg.GetNewName());
 
                 m_xCategoryBox->insert(xEntry.get(), -1, &sName, &sId,
-                                       nullptr, nullptr, nullptr, false, xNewEntry.get());
+                                       nullptr, nullptr, false, xNewEntry.get());
 
                 m_xCategoryBox->remove(*xOldEntry);
                 m_xCategoryBox->select(*xNewEntry);
@@ -737,7 +737,7 @@ void SwGlossaryDlg::Init()
                 OUString sEntryName = m_pGlossaryHdl->GetGlossaryName(i);
                 OUString sId = m_pGlossaryHdl->GetGlossaryShortName(i);
                 m_xCategoryBox->insert(xEntry.get(), -1, &sEntryName, &sId,
-                                       nullptr, nullptr, nullptr, false, nullptr);
+                                       nullptr, nullptr, false, nullptr);
             }
         }
     }

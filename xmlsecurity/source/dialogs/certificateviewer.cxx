@@ -254,6 +254,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParen
     , mpParent(pDlg)
     , mbFirstActivateDone(false)
     , mxCertPathLB(mxBuilder->weld_tree_view("signatures"))
+    , mxScratchIter(mxCertPathLB->make_iterator())
     , mxViewCertPB(mxBuilder->weld_button("viewcert"))
     , mxCertStatusML(mxBuilder->weld_text_view("status"))
     , mxCertOK(mxBuilder->weld_label("certok"))
@@ -358,7 +359,8 @@ void CertificateViewerCertPathTP::InsertCert(const weld::TreeIter* pParent, cons
     OUString sImage = bValid ? OUStringLiteral(BMP_CERT_OK) : OUStringLiteral(BMP_CERT_NOT_OK);
     maUserData.emplace_back(std::make_unique<CertPath_UserData>(rxCert, bValid));
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maUserData.back().get())));
-    mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, &sImage, false, nullptr);
+    mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, false, mxScratchIter.get());
+    mxCertPathLB->set_image(*mxScratchIter, sImage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

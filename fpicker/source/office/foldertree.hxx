@@ -23,6 +23,7 @@ class FolderTree
 {
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     weld::Window* m_pTopLevel;
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;

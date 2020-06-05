@@ -44,8 +44,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
     {
         OUString sNodeId = mpDiagramData->addNode(sText);
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-        mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, nullptr, false,
-                              pEntry.get());
+        mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
         mpTreeDiagram->select(*pEntry);
         comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
     }
@@ -70,8 +69,8 @@ void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& 
     for (auto& aItem : aItems)
     {
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-        mpTreeDiagram->insert(pParent, -1, &aItem.second, &aItem.first, nullptr, nullptr, nullptr,
-                              false, pEntry.get());
+        mpTreeDiagram->insert(pParent, -1, &aItem.second, &aItem.first, nullptr, nullptr, false,
+                              pEntry.get());
         populateTree(pEntry.get(), aItem.first);
     }
 }

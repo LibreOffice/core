@@ -63,6 +63,7 @@ class ContentTabPage_Impl : public HelpTabPage_Impl
 {
 private:
     std::unique_ptr<weld::TreeView> m_xContentBox;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     OUString aOpenBookImage;
     OUString aClosedBookImage;
     OUString aDocumentImage;

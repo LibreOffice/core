@@ -132,6 +132,7 @@ SwDBTreeList::SwDBTreeList(std::unique_ptr<weld::TreeView> xTreeView)
     , bShowColumns(false)
     , pImpl(new SwDBTreeList_Impl)
     , m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
 {
     m_xTreeView->connect_expanding(LINK(this, SwDBTreeList, RequestingChildrenHdl));
 }
@@ -160,7 +161,8 @@ void SwDBTreeList::InitTreeList()
         Reference<XConnection> xConnection = pImpl->GetConnection(rDBName);
         if (xConnection.is())
         {
-            m_xTreeView->insert(nullptr, -1, &rDBName, nullptr, nullptr, nullptr, &aImg, true, nullptr);
+            m_xTreeView->insert(nullptr, -1, &rDBName, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
+            m_xTreeView->set_image(*m_xScratchIter, aImg);
         }
     }
     Select(OUString(), OUString(), OUString());
@@ -171,9 +173,9 @@ void SwDBTreeList::InitTreeList()
 void SwDBTreeList::AddDataSource(const OUString& rSource)
 {
     OUString aImg(RID_BMP_DB);
-    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    m_xTreeView->insert(nullptr, -1, &rSource, nullptr, nullptr, nullptr, &aImg, true, xIter.get());
-    m_xTreeView->select(*xIter);
+    m_xTreeView->insert(nullptr, -1, &rSource, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
+    m_xTreeView->set_image(*m_xScratchIter, aImg);
+    m_xTreeView->select(*m_xScratchIter);
 }
 
 IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, bool)
@@ -266,7 +268,8 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                         for (const OUString& rTableName : aTableNames)
                         {
                             m_xTreeView->insert(&rParent, -1, &rTableName, nullptr,
-                                                nullptr, nullptr, &aImg, bShowColumns, nullptr);
+                                                nullptr, nullptr, bShowColumns, m_xScratchIter.get());
+                            m_xTreeView->set_image(*m_xScratchIter, aImg);
                         }
                     }
 
@@ -281,7 +284,8 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                             //to discriminate between queries and tables the user data of query entries is set
                             OUString sId(OUString::number(1));
                             m_xTreeView->insert(&rParent, -1, &rQueryName, &sId,
-                                                nullptr, nullptr, &aImg, bShowColumns, nullptr);
+                                                nullptr, nullptr, bShowColumns, m_xScratchIter.get());
+                            m_xTreeView->set_image(*m_xScratchIter, aImg);
                         }
                     }
                 }

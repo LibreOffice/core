@@ -137,6 +137,7 @@ private:
     std::vector<std::unique_ptr<CertPath_UserData>> maUserData;
 
     std::unique_ptr<weld::TreeView> mxCertPathLB;
+    std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Button> mxViewCertPB;
     std::unique_ptr<weld::TextView> mxCertStatusML;
     std::unique_ptr<weld::Label> mxCertOK;

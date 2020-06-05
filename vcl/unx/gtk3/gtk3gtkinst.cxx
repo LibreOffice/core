@@ -9173,7 +9173,7 @@ private:
     }
 
     void insert_row(GtkTreeIter& iter, const GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
-                    const OUString* pIconName, const VirtualDevice* pDevice, const OUString* pExpanderName)
+                    const OUString* pIconName, const VirtualDevice* pDevice)
     {
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, const_cast<GtkTreeIter*>(parent), pos,
                                           m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -9203,14 +9203,6 @@ private:
 
             gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, target, -1);
             cairo_surface_destroy(target);
-        }
-
-        if (pExpanderName)
-        {
-            GdkPixbuf* pixbuf = getPixbuf(*pExpanderName);
-            gtk_tree_store_set(m_pTreeStore, &iter, m_nExpanderImageCol, pixbuf, -1);
-            if (pixbuf)
-                g_object_unref(pixbuf);
         }
     }
 
@@ -9401,7 +9393,7 @@ private:
             {
                 GtkTreeIter subiter;
                 OUString sDummy("<dummy>");
-                insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+                insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr);
             }
             m_aExpandingPlaceHolderParents.erase(pPlaceHolderPath);
             gtk_tree_path_free(pPlaceHolderPath);
@@ -9984,18 +9976,18 @@ public:
     }
 
     virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
-                        VirtualDevice* pImageSurface, const OUString* pExpanderName,
+                        VirtualDevice* pImageSurface,
                         bool bChildrenOnDemand, weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;
         const GtkInstanceTreeIter* pGtkIter = static_cast<const GtkInstanceTreeIter*>(pParent);
-        insert_row(iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, pText, pIconName, pImageSurface, pExpanderName);
+        insert_row(iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, pText, pIconName, pImageSurface);
         if (bChildrenOnDemand)
         {
             GtkTreeIter subiter;
             OUString sDummy("<dummy>");
-            insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+            insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr);
         }
         if (pRet)
         {
@@ -10011,7 +10003,7 @@ public:
         GtkTreeIter iter;
         if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
             gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
-        insert_row(iter, nullptr, pos, &rId, nullptr, nullptr, nullptr, nullptr);
+        insert_row(iter, nullptr, pos, &rId, nullptr, nullptr, nullptr);
         GtkTreeModel* pTreeModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreePath* pPath = gtk_tree_model_get_path(pTreeModel, &iter);
         m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(pTreeModel, pPath));
@@ -10996,7 +10988,7 @@ public:
         {
             GtkTreeIter subiter;
             OUString sDummy("<dummy>");
-            insert_row(subiter, &rGtkIter.iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
+            insert_row(subiter, &rGtkIter.iter, -1, nullptr, &sDummy, nullptr, nullptr);
         }
         else if (!bChildrenOnDemand && bPlaceHolder)
             remove(aPlaceHolderIter);

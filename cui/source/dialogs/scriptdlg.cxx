@@ -317,16 +317,14 @@ void SvxScriptOrgDialog::insertEntry(
     const OUString& rText, const OUString& rBitmap, const weld::TreeIter* pParent,
     bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData, bool bSelect)
 {
-    std::unique_ptr<weld::TreeIter> xRetIter;
-    if (bSelect)
-        xRetIter = m_xScriptsBox->make_iterator();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aUserData.release()))); // XXX possible leak
-    m_xScriptsBox->insert(pParent, -1, &rText, &sId, nullptr, nullptr, &rBitmap,
-                          bChildrenOnDemand, xRetIter.get());
+    m_xScriptsBox->insert(pParent, -1, &rText, &sId, nullptr, nullptr,
+                          bChildrenOnDemand, m_xScratchIter.get());
+    m_xScriptsBox->set_image(*m_xScratchIter, rBitmap);
     if (bSelect)
     {
-        m_xScriptsBox->set_cursor(*xRetIter);
-        m_xScriptsBox->select(*xRetIter);
+        m_xScriptsBox->set_cursor(*m_xScratchIter);
+        m_xScriptsBox->select(*m_xScratchIter);
     }
 }
 
@@ -391,6 +389,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, const OUString& la
     , m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS))
     , m_xScriptsBox(m_xBuilder->weld_tree_view("scripts"))
+    , m_xScratchIter(m_xScriptsBox->make_iterator())
     , m_xRunButton(m_xBuilder->weld_button("ok"))
     , m_xCloseButton(m_xBuilder->weld_button("close"))
     , m_xCreateButton(m_xBuilder->weld_button("create"))
