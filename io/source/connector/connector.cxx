@@ -92,8 +92,8 @@ namespace stoc_connector
                 else
                 {
                     OUString const sMessage(
-                        "Connector : couldn't connect to pipe " + aName + "("
-                        + OUString::number(pConn->m_pipe.getError()) + ")");
+                        "Connector : couldn't connect to pipe \"" + aName + "\": "
+                        + OUString::number(pConn->m_pipe.getError()));
                     SAL_WARN("io.connector", sMessage);
                     throw NoConnectException( sMessage );
                 }
