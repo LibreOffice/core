@@ -58,6 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
+#include <sal/log.hxx>
 #include <memory>
 
 #include "clone.hxx"
@@ -311,7 +312,11 @@ void LwpAlignmentOverride::Read(LwpObjectStream * pStrm)
     if (pStrm->QuickReadBool())
     {
         ReadCommon(pStrm);
-        m_nAlignType = static_cast<AlignType>(pStrm->QuickReaduInt8());
+        sal_uInt8 nAlignType = pStrm->QuickReaduInt8();
+        if (nAlignType <= ALIGN_SQUEEZE)
+            m_nAlignType = static_cast<AlignType>(nAlignType);
+        else
+            SAL_WARN("lwp", "unknown align type:" << nAlignType);
         m_nPosition = pStrm->QuickReaduInt32();
         m_nAlignChar = pStrm->QuickReaduInt16();
     }
