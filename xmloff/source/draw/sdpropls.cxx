@@ -1520,9 +1520,8 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         {
             try
             {
-                const OUString sVisibleArea( "VisibleArea" );
                 awt::Rectangle aRect;
-                if( rPropSet->getPropertyValue( sVisibleArea ) >>= aRect )
+                if( rPropSet->getPropertyValue( "VisibleArea" ) >>= aRect )
                 {
                     if( pOLEVisAreaLeft )
                     {

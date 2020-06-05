@@ -256,11 +256,9 @@ void XMLTableImport::insertTabletemplate(const OUString& rsStyleName, bool bOver
     {
         Reference<XStyleFamiliesSupplier> xFamiliesSupp(mrImport.GetModel(), UNO_QUERY_THROW);
         Reference<XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
-        const OUString sFamilyName("TableStyles");
-        const OUString sCellFamilyName("CellStyles");
 
-        Reference<XNameContainer> xTableFamily(xFamilies->getByName(sFamilyName), UNO_QUERY_THROW);
-        Reference<XIndexAccess> xCellFamily(xFamilies->getByName(sCellFamilyName), UNO_QUERY_THROW);
+        Reference<XNameContainer> xTableFamily(xFamilies->getByName("TableStyles"), UNO_QUERY_THROW);
+        Reference<XIndexAccess> xCellFamily(xFamilies->getByName("CellStyles"), UNO_QUERY_THROW);
 
         const OUString sTemplateName(it->first);
         Reference<XMultiServiceFactory> xFactory(mrImport.GetModel(), UNO_QUERY_THROW);
@@ -313,11 +311,9 @@ void XMLTableImport::finishStyles()
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrImport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( "table" );
-        const OUString sCellFamilyName( "cell" );
 
-        Reference< XNameContainer > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xCellFamily( xFamilies->getByName( sCellFamilyName ), UNO_QUERY_THROW );
+        Reference< XNameContainer > xTableFamily( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xCellFamily( xFamilies->getByName( "cell" ), UNO_QUERY_THROW );
 
         Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
 

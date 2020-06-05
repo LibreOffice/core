@@ -182,8 +182,7 @@ bool XMLTextAnimationStepPropertyHdl::importXML(
     bool bRet = false;
     sal_Int32 nValue = 0;
 
-    const OUString aPX( "px" );
-    sal_Int32 nPos = rStrImpValue.indexOf( aPX );
+    sal_Int32 nPos = rStrImpValue.indexOf( "px" );
     if( nPos != -1 )
     {
         if (::sax::Converter::convertNumber(nValue, std::u16string_view(rStrImpValue).substr(0, nPos)))

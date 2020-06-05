@@ -2034,8 +2034,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
     {
         Reference<XPropertySet> xChapterNumRule(
             m_xImpl->m_xChapterNumbering, UNO_QUERY);
-        const OUString sName("Name");
-        xChapterNumRule->getPropertyValue(sName) >>= sOutlineStyleName;
+        xChapterNumRule->getPropertyValue("Name") >>= sOutlineStyleName;
     }
 
     const sal_Int32 nCount = m_xImpl->m_xChapterNumbering->getCount();

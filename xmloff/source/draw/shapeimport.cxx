@@ -148,8 +148,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
-    const OUString aSName( "com.sun.star.presentation.PresentationDocument" );
-    mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( aSName );
+    mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" );
 }
 
 XMLShapeImportHelper::~XMLShapeImportHelper()

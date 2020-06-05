@@ -736,8 +736,7 @@ void SvxXMLNumRuleExport::exportOutline()
                     xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
                 if (xNumRulePropSet.is())
                 {
-                    const OUString sName( "Name" );
-                    xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
+                    xNumRulePropSet->getPropertyValue( "Name" ) >>= sOutlineStyleName;
                 }
             }
             const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion =
