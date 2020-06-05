@@ -393,6 +393,18 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
     return uno::Sequence< document::CmisVersion > ( );
 }
 
+bool SfxObjectShell::IsSignPDF() const
+{
+    if (pMedium && !pMedium->IsOriginallyReadOnly())
+    {
+        const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
+        if (pFilter && pFilter->GetName() == "draw_pdf_import")
+            return true;
+    }
+
+    return false;
+}
+
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();

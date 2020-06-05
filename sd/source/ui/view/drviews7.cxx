@@ -1588,6 +1588,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if (GetObjectShell()->isExportLocked())
         rSet.DisableItem(SID_PRESENTATION_MINIMIZER);
 
+    if (rSet.GetItemState(SID_INSERT_SIGNATURELINE) == SfxItemState::DEFAULT)
+    {
+        if (!GetObjectShell()->IsSignPDF())
+        {
+            // Currently SID_INSERT_SIGNATURELINE assumes a PDF that was opened for signing, disable
+            // it otherwise.
+            rSet.DisableItem(SID_INSERT_SIGNATURELINE);
+        }
+    }
+
     GetModeSwitchingMenuState (rSet);
 }
 
