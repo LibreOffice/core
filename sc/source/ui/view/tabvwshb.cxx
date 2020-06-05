@@ -413,6 +413,17 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 break;
             }
 
+        case SID_ADDITIONS_DIALOG:
+            {
+            const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
+
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractAdditionsDialog> pDialog(pFact->CreateAdditionsDialog(
+                pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_ADDITIONS_DIALOG));
+            pDialog->Execute();
+            break;
+            }
+
         case SID_OBJECTRESIZE:
             {
                 //         the server would like to change the client size

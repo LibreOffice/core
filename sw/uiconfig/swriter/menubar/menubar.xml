@@ -812,6 +812,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ShowLicense"/>
       <menu:menuitem menu:id=".uno:About"/>
+      <menu:menuitem menu:id=".uno:AdditionsDialog"/>
     </menu:menupopup>
   </menu:menu>
 </menu:menubar>
