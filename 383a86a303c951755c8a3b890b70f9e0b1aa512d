@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "88dd3e6a_ecbee768",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-05T03:13:55Z",
+      "side": 1,
+      "message": "Seems you forgot to change this",
+      "parentUuid": "801c2d01_e8109de9",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 4
+      },
+      "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea90f449_adf673e5",
         "filename": "include/o3tl/safeCoInitUninit.hxx",
         "patchSetId": 7
@@ -93,6 +117,30 @@
       "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55363f53_cc3ee218",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-05T03:13:55Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "66068d99_4d72492b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 4
+      },
+      "revId": "383a86a303c951755c8a3b890b70f9e0b1aa512d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     },
     {
       "key": {
