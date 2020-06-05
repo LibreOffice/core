@@ -66,6 +66,12 @@ interface TextEditView : BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_ADDITIONS_DIALOG // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_EDIT_FOOTNOTE // status(final|play)
     [
         ExecMethod = ExecDlgExt ;

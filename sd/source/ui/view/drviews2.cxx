@@ -3488,6 +3488,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_ADDITIONS_DIALOG:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractAdditionsDialog> pDlg(
+                pFact->CreateAdditionsDialog(GetFrameWeld()));
+            pDlg->Execute();
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:
