@@ -42,37 +42,32 @@ void XNamedRanges::testAddNewByName()
     table::CellAddress aBaseAddress(0, 0, 0);
 
     sal_Int32 nType = 0;
-    OUString const aContent1("D1");
     OUString aName1("type_0");
-    xNamedRanges->addNewByName(aName1, aContent1, aBaseAddress, nType);
+    xNamedRanges->addNewByName(aName1, "D1", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type 0 - Normal case",
                            xNamedRanges->hasByName(aName1));
 
     nType = ::sheet::NamedRangeFlag::COLUMN_HEADER;
-    OUString const aContent2("D2");
     OUString aName2("type_COLUMN_HEADER");
-    xNamedRanges->addNewByName(aName2, aContent2, aBaseAddress, nType);
+    xNamedRanges->addNewByName(aName2, "D2", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type COLUMN_HEADER",
                            xNamedRanges->hasByName(aName2));
 
     nType = ::sheet::NamedRangeFlag::FILTER_CRITERIA;
-    OUString const aContent3("D3");
     OUString aName3("type_FILTER_CRITERIA");
-    xNamedRanges->addNewByName(aName3, aContent3, aBaseAddress, nType);
+    xNamedRanges->addNewByName(aName3, "D3", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type FILTER_CRITERIA",
                            xNamedRanges->hasByName(aName3));
 
     nType = ::sheet::NamedRangeFlag::PRINT_AREA;
-    OUString const aContent4("D4");
     OUString aName4("type_PRINT_AREA");
-    xNamedRanges->addNewByName(aName4, aContent4, aBaseAddress, nType);
+    xNamedRanges->addNewByName(aName4, "D4", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type PRINT_AREA",
                            xNamedRanges->hasByName(aName4));
 
     nType = ::sheet::NamedRangeFlag::ROW_HEADER;
-    OUString const aContent5("D5");
     OUString aName5("type_ROW_HEADER");
-    xNamedRanges->addNewByName(aName5, aContent5, aBaseAddress, nType);
+    xNamedRanges->addNewByName(aName5, "D5", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type ROW_HEADER",
                            xNamedRanges->hasByName(aName5));
 }
