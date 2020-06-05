@@ -19,6 +19,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 class SfxBindings;
 class SfxViewFrame;
 class SystemWindow;
+class WeldedTabbedNotebookbar;
 
 namespace sfx2 {
 
@@ -59,6 +60,9 @@ public:
 private:
     static bool m_bLock;
     static bool m_bHide;
+    static std::unique_ptr<WeldedTabbedNotebookbar> m_pNotebookBarWeldedWrapper;
+
+    DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const void*, void);
 };
 
 } // namespace sfx2
