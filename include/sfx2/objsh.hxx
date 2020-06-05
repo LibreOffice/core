@@ -769,6 +769,9 @@ public:
 
     /** override this if you have a XmlIdRegistry. */
     virtual const sfx2::IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
+
+    /// Is this read-only object shell opened via .uno:SignPDF?
+    bool IsSignPDF() const;
 };
 
 #define SFX_GLOBAL_CLASSID \

@@ -210,23 +210,6 @@ private:
     }
 };
 
-/// Is this read-only object shell opened via .uno:SignPDF?
-bool IsSignPDF(const SfxObjectShellRef& xObjSh)
-{
-    if (!xObjSh.is())
-        return false;
-
-    SfxMedium* pMedium = xObjSh->GetMedium();
-    if (pMedium && !pMedium->IsOriginallyReadOnly())
-    {
-        const std::shared_ptr<const SfxFilter>& pFilter = pMedium->GetFilter();
-        if (pFilter && pFilter->GetName() == "draw_pdf_import")
-            return true;
-    }
-
-    return false;
-}
-
 bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const std::shared_ptr<const SfxFilter>& pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
@@ -1381,7 +1364,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
                         (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
-                    bool bSignPDF = IsSignPDF(m_xObjSh);
+                    bool bSignPDF = m_xObjSh->IsSignPDF();
 
                     auto pInfoBar = AppendInfoBar("readonly", "", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT), InfobarType::INFO);
                     if (pInfoBar)
@@ -1535,7 +1518,7 @@ IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, Button*, void)
 
 IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, Button*, pButton, void)
 {
-    if (m_xObjSh.is() && IsSignPDF(m_xObjSh))
+    if (m_xObjSh.is() && m_xObjSh->IsSignPDF())
     {
         SfxEditDocumentDialog aDialog(pButton->GetFrameWeld());
         if (aDialog.run() != RET_OK)
