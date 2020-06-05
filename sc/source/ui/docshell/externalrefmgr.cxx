@@ -2224,7 +2224,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
     ScRefCellValue aCell(*pSrcDoc, rPos);
     ScExternalRefCache::TokenRef pToken(convertToToken(mpDoc, pSrcDoc, aCell));
 
-    if (!pToken.get())
+    if (!pToken)
     {
         // Generate an error for unresolvable cells.
         pToken.reset( new FormulaErrorToken( FormulaError::NoValue));

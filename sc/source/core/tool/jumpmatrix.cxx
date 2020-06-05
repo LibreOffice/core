@@ -165,7 +165,7 @@ void ScJumpMatrix::SetNewResMat(SCSIZE nNewCols, SCSIZE nNewRows)
 bool ScJumpMatrix::HasResultMatrix() const
 {
     // We now always have a matrix but caller logic may still want to check it.
-    return pMat.get() != nullptr;
+    return bool(pMat);
 }
 
 ScRefList& ScJumpMatrix::GetRefList()

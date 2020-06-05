@@ -218,7 +218,7 @@ public:
 
     FormulaError        GetErrCode() const      { return nErrCode; }
     bool                HasString() const       { return bHasString; }
-    bool                HasMatrix() const       { return xMatrix.get(); }
+    bool                HasMatrix() const       { return bool(xMatrix); }
     bool                HasVarRes() const       { return xVarRes.is(); }
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }

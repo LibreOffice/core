@@ -176,7 +176,7 @@ void ScInterpreter::ScIfJump()
                     xNew = new ScJumpMatrixToken( pJumpMat );
                     GetTokenMatrixMap().emplace(pCur, xNew);
                 }
-                if (!xNew.get())
+                if (!xNew)
                 {
                     PushIllegalArgument();
                     return;
@@ -481,7 +481,7 @@ void ScInterpreter::ScChooseJump()
                     xNew = new ScJumpMatrixToken( pJumpMat );
                     GetTokenMatrixMap().emplace(pCur, xNew);
                 }
-                if (xNew.get())
+                if (xNew)
                 {
                     PushTokenRef( xNew);
                     // set endpoint of path for main code line

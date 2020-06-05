@@ -1374,21 +1374,22 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
                 sal_uInt32 nScNumFmt = 0;
                 ScExternalRefCache::TokenRef xToken = mxCacheTable->getCell( nScCol, nScRow, &nScNumFmt );
                 using namespace ::formula;
-                if( xToken.get() ) switch( xToken->GetType() )
-                {
-                    case svDouble:
-                        bValid = (rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL) ?
-                            rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
-                            rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
-                    break;
-                    case svString:
-                        // do not save empty strings (empty cells) to cache
-                        if( !xToken->GetString().isEmpty() )
-                            bValid = rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetString().getString() ) );
-                    break;
-                    default:
-                    break;
-                }
+                if( xToken )
+                    switch( xToken->GetType() )
+                    {
+                        case svDouble:
+                            bValid = (rFormatter.GetType( nScNumFmt ) == SvNumFormatType::LOGICAL) ?
+                                rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
+                                rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
+                        break;
+                        case svString:
+                            // do not save empty strings (empty cells) to cache
+                            if( !xToken->GetString().isEmpty() )
+                                bValid = rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetString().getString() ) );
+                        break;
+                        default:
+                        break;
+                    }
             }
         }
     }
