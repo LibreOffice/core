@@ -10430,6 +10430,24 @@ public:
         }
     }
 
+    virtual void set_toggle_columns_as_radio() override
+    {
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (!GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+                    continue;
+                GtkCellRendererToggle* pToggle = GTK_CELL_RENDERER_TOGGLE(pCellRenderer);
+                gtk_cell_renderer_toggle_set_radio(pToggle, true);
+            }
+            g_list_free(pRenderers);
+        }
+    }
+
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

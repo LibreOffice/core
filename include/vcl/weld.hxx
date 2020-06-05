@@ -793,8 +793,6 @@ protected:
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
 protected:
-    std::vector<int> m_aRadioIndexes;
-
     void signal_changed() { m_aChangeHdl.Call(*this); }
     bool signal_row_activated() { return m_aRowActivatedHdl.Call(*this); }
     void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
@@ -1134,7 +1132,8 @@ public:
     // remove the selected nodes
     virtual void remove_selection() = 0;
 
-    void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
+    // call before inserting any content
+    virtual void set_toggle_columns_as_radio() = 0;
 
     virtual void vadjustment_set_value(int value) = 0;
     virtual int vadjustment_get_value() const = 0;
