@@ -386,10 +386,7 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
 SvxGalleryDrawModel::SvxGalleryDrawModel()
 : mpFormModel( nullptr )
 {
-
-    const OUString sFactoryURL("sdraw");
-
-    mxDoc = SfxObjectShell::CreateObjectByFactoryName( sFactoryURL );
+    mxDoc = SfxObjectShell::CreateObjectByFactoryName( "sdraw" );
 
     if( mxDoc.Is() )
     {

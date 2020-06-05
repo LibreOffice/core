@@ -287,9 +287,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
             mxMTRAngle->hide();
             mxBmpImport->hide();
             mxToolBoxColor->show();
-            const OUString aTmpStr;
             const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
-            const XFillColorItem aXFillColorItem( aTmpStr, aColor );
+            const XFillColorItem aXFillColorItem( "", aColor );
 
             // #i122676# change FillStyle and Color in one call
             XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);

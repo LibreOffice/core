@@ -700,9 +700,8 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             {
                 mpLbFillAttr->hide();
                 mpToolBoxColor->show();
-                const OUString aTmpStr;
                 const ::Color aColor = mpColorItem->GetColorValue();
-                const XFillColorItem aXFillColorItem( aTmpStr, aColor );
+                const XFillColorItem aXFillColorItem( "", aColor );
 
                 // #i122676# change FillStyle and Color in one call
                 SfxViewFrame::Current()->GetDispatcher()->ExecuteList(

@@ -281,8 +281,7 @@ bool SvxXMLXTableExportComponent::save(
             xGraphicStorageHandler = xGraphicHelper.get();
 
         // Finally do the export
-        const OUString aName;
-        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xWriter, xTable, xGraphicStorageHandler ) );
+        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, "", xWriter, xTable, xGraphicStorageHandler ) );
         bRet = xExporter->exportTable();
 
         if( xGraphicHelper )

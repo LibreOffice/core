@@ -460,8 +460,7 @@ namespace svxform
 
                         pFormModel->BegUndo(aUndoStr);
                         // slot was valid for (exactly) one selected form
-                        OUString fControlName = FM_COMPONENT_HIDDEN;
-                        NewControl( fControlName, *m_arrCurrentSelection.begin(), true );
+                        NewControl( FM_COMPONENT_HIDDEN, *m_arrCurrentSelection.begin(), true );
                         pFormModel->EndUndo();
                     }
                     else if (sIdent == "cut")
@@ -952,8 +951,7 @@ namespace svxform
             for (sal_Int32 i=0; i<nCount; ++i)
             {
                 // create new control
-                OUString fControlName = FM_COMPONENT_HIDDEN;
-                FmControlData* pNewControlData = NewControl( fControlName, _pTargetEntry, false);
+                FmControlData* pNewControlData = NewControl( FM_COMPONENT_HIDDEN, _pTargetEntry, false);
                 Reference< XPropertySet >  xNewPropSet( pNewControlData->GetPropertySet() );
 
                 // copy properties form old control to new one

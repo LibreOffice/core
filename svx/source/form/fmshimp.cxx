@@ -3421,8 +3421,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                 // column type : listbox
                 pDispatchArgs->Name = FMARG_ADDCOL_COLUMNTYPE;
-                OUString fColName = FM_COL_LISTBOX;
-                pDispatchArgs->Value <<= fColName;
+                pDispatchArgs->Value <<= OUString(FM_COL_LISTBOX);
 //              pDispatchArgs->Value <<= (OUString)FM_COL_LISTBOX;
                 ++pDispatchArgs;
 

@@ -132,9 +132,8 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
     bool bStatus = false;
     try
     {
-        const OUString aServiceName("com.sun.star.svtools.SvFilterOptionsDialog");
         Reference< XExecutableDialog > xFilterDialog(
-                comphelper::getProcessServiceFactory()->createInstance( aServiceName ), UNO_QUERY );
+                comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.svtools.SvFilterOptionsDialog" ), UNO_QUERY );
         Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
 
         if( xFilterDialog.is() && xFilterProperties.is() )

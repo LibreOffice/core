@@ -73,8 +73,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
     // They are converted to rotate * shear horizontal * scale.
     // Besides using a wrong sign in shear angle, error was, that TRSetGeometry of SdrPathObj did
     // not consider the additional scaling (tdf#98565).
-    const OUString sFileName("tdf98584_ShearVertical.odg");
-    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + sFileName);
+    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + "tdf98584_ShearVertical.odg");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
@@ -149,8 +148,8 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98583ShearHorizontal)
     // LT 8000,5000 and RB 14000, 9000, which means width 6001, height 4001.
     // Error was, that not the mathematical matrix was used, but the API matrix, which has
     // wrong sign in shear angle.
-    const OUString sFileName("tdf98583_ShearHorizontal.odp");
-    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory) + sFileName);
+    const OUString sURL(m_directories.getURLFromSrc(sDataDirectory)
+                        + "tdf98583_ShearHorizontal.odp");
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
