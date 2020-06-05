@@ -576,15 +576,13 @@ void Test::testBinHorInSubSup()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    OUString sExpected = " { a ^ { b + c } + d } ";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", OUString(" { a ^ { b + c } + d } "), xDocShRef->GetText());
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
     // set up a unary operator
-    OUString sInput = "- 1";
-    auto pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser().Parse("- 1");
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -617,8 +615,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
-    OUString sExpected = " { 2 { - 1 over 2 } + 4 } ";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", OUString(" { 2 { - 1 over 2 } + 4 } "), xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()

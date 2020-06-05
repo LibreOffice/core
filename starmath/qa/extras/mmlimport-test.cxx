@@ -118,22 +118,19 @@ void Test::testColor()
 void Test::testSimple()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/simple.mml"));
-    OUString const sExpected("left ( {a + b} right )^2");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( {a + b} right )^2"), mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
-    OUString const sExpected("left ( {a + b} right )^2");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( {a + b} right )^2"), mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/maction.mml"));
-    OUString const sExpected("matrix {1 ## 2 ## 3}");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix {1 ## 2 ## 3}"), mxDocShell->GetText());
 }
 
 void Test::testMspace()
@@ -145,8 +142,7 @@ void Test::testMspace()
 void Test::testtdf99556()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
-    OUString const sExpected("sqrt { {} }");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("sqrt { {} }"), mxDocShell->GetText());
 }
 
 void Test::testTdf103430()

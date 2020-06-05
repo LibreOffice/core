@@ -188,7 +188,6 @@ void Test::editMarker()
     }
 
     {
-        OUString const sTargetText("a under b under c");
         ESelection aSelection;
 
         m_pEditWindow->SelNextMark();
@@ -222,7 +221,7 @@ void Test::editMarker()
 
         m_pEditWindow->Flush();
         OUString sFinalText = m_pEditWindow->GetText();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", sTargetText, sFinalText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be a under b under c", OUString("a under b under c"), sFinalText);
     }
 
     {
