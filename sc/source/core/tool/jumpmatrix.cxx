@@ -29,7 +29,10 @@ const SCSIZE kBufferThreshold = 128;
 
 ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
     : mvJump(nColsP * nRowsP)
-    , pMat(new ScMatrix(nColsP, nRowsP))
+    // Initialize result matrix in case of
+    // a premature end of the interpreter
+    // due to errors.
+    , pMat(new ScMatrix(nColsP, nRowsP, CreateDoubleError(FormulaError::NotAvailable)))
     , nCols(nColsP)
     , nRows(nRowsP)
     , nCurCol(0)
@@ -43,10 +46,6 @@ ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
     , mnBufferEmptyCount(0)
     , mnBufferEmptyPathCount(0)
 {
-    // Initialize result matrix in case of
-    // a premature end of the interpreter
-    // due to errors.
-    pMat->FillDouble(CreateDoubleError(FormulaError::NotAvailable), 0, 0, nCols - 1, nRows - 1);
     /*! pJump not initialized */
 }
 
