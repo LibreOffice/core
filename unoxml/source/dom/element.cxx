@@ -189,12 +189,11 @@ namespace DOM
                 i_rContext.mxCurrentHandler->endFastElement( nElementToken );
             else
             {
-                const OUString aNamespace;
                 const OUString aElementName( reinterpret_cast<char const *>(pPrefix),
                                              strlen(reinterpret_cast<char const *>(pPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
-                i_rContext.mxCurrentHandler->endUnknownElement( aNamespace, aElementName );
+                i_rContext.mxCurrentHandler->endUnknownElement( "", aElementName );
             }
         }
         catch( Exception& )
