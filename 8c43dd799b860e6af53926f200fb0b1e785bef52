@@ -22,6 +22,30 @@
       "revId": "8c43dd799b860e6af53926f200fb0b1e785bef52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3500fb30_9d0230c5",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-05T12:31:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "498d56fe_20027397",
+      "range": {
+        "startLine": 30,
+        "startChar": 50,
+        "endLine": 30,
+        "endChar": 54
+      },
+      "revId": "8c43dd799b860e6af53926f200fb0b1e785bef52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
