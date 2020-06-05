@@ -780,10 +780,8 @@ void FmSearchEngine::SearchNextImpl()
         {   // since in all other cases * and ? in the search string are of course
             // also allowed, but should not count as WildCards, I need to normalize
             OUString aTmp(strSearchExpression);
-            const OUString s_sStar("\\*");
-            const OUString s_sQuotation("\\?");
-            aTmp = aTmp.replaceAll("*", s_sStar);
-            aTmp = aTmp.replaceAll("?", s_sQuotation);
+            aTmp = aTmp.replaceAll("*", "\\*");
+            aTmp = aTmp.replaceAll("?", "\\?");
             strSearchExpression = aTmp;
 
             switch (m_nPosition)

@@ -1068,8 +1068,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     {
         Reference< XStyleFamiliesSupplier > xSFS( rModel.getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
-        const OUString sFamilyName( "table" );
-        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( "table" ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( pArg->GetValue() ) )
         {

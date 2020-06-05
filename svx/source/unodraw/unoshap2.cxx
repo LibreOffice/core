@@ -1689,8 +1689,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     // tdf#98163 Use a custom slot to have filter code flush the UNO
     // API implementations of SdrObjCustomShape. Used e.g. by
     // ~SdXMLCustomShapeContext, see there for more information
-    const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
-    if(sFlushCustomShapeUnoApiObjects == aPropertyName)
+    if("FlushCustomShapeUnoApiObjects" == aPropertyName)
     {
         SdrObjCustomShape* pTarget = dynamic_cast< SdrObjCustomShape* >(pObject);
         if(pTarget)

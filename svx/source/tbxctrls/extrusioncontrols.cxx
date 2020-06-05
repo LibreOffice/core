@@ -453,8 +453,6 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
 
     if (mxCustom->get_active())
     {
-        const OUString aCommand( ".uno:ExtrusionDepthDialog" );
-
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Depth";
         aArgs[0].Value <<= mfDepth;
@@ -463,7 +461,7 @@ IMPL_LINK(ExtrusionDepthWindow, SelectHdl, weld::ToggleButton&, rButton, void)
 
         rtl::Reference<svt::PopupWindowController> xControl(mxControl);
         xControl->EndPopupMode();
-        xControl->dispatchCommand(aCommand, aArgs);
+        xControl->dispatchCommand(".uno:ExtrusionDepthDialog", aArgs);
     }
     else
     {

@@ -183,8 +183,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testWidthOrientationCommandU)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document with path "M 750 0 L 750 500 250 500 250 0 U 500 0 500 500 0 180 N"
     // in viewBox="0 0 1000 500" and width="10cm", height="5cm".
-    const OUString sFileName("tdf121845_WidthOrientation_command_U.odg");
-    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    const OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_WidthOrientation_command_U.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that the width and height of the ellipse was halved and that the ellipse
@@ -207,8 +207,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testHalfEllipseVML)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
     // path="m750,al500,,500,500,,-11796480e" resulting in a lower half circle.
-    const OUString sFileName("tdf121845_HalfEllipseVML.doc");
-    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    const OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_HalfEllipseVML.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that a full circle instead of the half circle was draw.
@@ -227,8 +227,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testLargeSwingAngleVML)
     // tdf121845 custom shape with command U (angleellipse) is  wrongly drawn
     // Load a document which was converted from VML to doc by Word. It had a VML
     // path="al50,50,45,45,2621440,31457280e" resulting in a full circle plus 120 deg segment.
-    const OUString sFileName("tdf121845_start40_swing480.doc");
-    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    const OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_start40_swing480.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     // Error was, that only the 120 deg segment was drawn.
@@ -247,8 +247,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf121845_two_commands_U)
     // Load a document with path "U 950 250 200 200 90 180 250 250 200 200 180 270 N"
     // Error was, that the second ellipse segment was interpreted as command T and
     // thus a line from first to second segment was drawn.
-    const OUString sFileName("tdf121845_Two_commands_U.odg");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf121845_Two_commands_U.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -269,8 +268,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124212_handle_position)
     // default viewBox. Load a document with svg:viewBox="10800 0 10800 21600"
     // Error was, that moving the controller results in a handle position that
     // does not reflect the movement.
-    const OUString sFileName("tdf124212_handle_position.odg");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf124212_handle_position.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -294,8 +292,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124029_arc_position)
     // tdf121029 MS binary custom shape mso_sptArc has wrong position
     // MS uses the sector for position reference. Error was, that
     // LibreOffice has used the underlying ellipse.
-    const OUString sFileName("tdf124029_Arc_position.doc");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf124029_Arc_position.doc";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.text.TextDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -313,8 +310,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf124740_handle_path_coordsystem)
     // tdf124740 OOXML shape with handle and w and h attribute on path has wrong
     // handle position
     // The handle position was scaled erroneously twice.
-    const OUString sFileName("tdf124740_HandleInOOXMLUserShape.pptx");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf124740_HandleInOOXMLUserShape.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -339,8 +336,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf115813_OOXML_XY_handle)
     // Connectors are included as ordinary shapes to prevent converting.
     // Error was, that the handle movement and the changes to the shape did not follow
     // the mouse movement.
-    const OUString sFileName("tdf115813_HandleMovementOOXMLPresetShapes.pptx");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory)
+                    + "tdf115813_HandleMovementOOXMLPresetShapes.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
@@ -398,8 +395,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testQuadraticCurveTo)
     // When converting to cubic Bezier curve, this had resulted in a wrong first control point.
     // The quadraticcurveto segment starts in shape center in the test file. The first control
     // point should produce a horizontal tangent in the start point.
-    const OUString sFileName("tdf125782_QuadraticCurveTo.odg");
-    const OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    const OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf125782_QuadraticCurveTo.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -419,8 +416,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126512_OOXML_handle_in_ODP)
     // opened and exported to ODF format by LibreOffice.
     // Error was, that for shapes, which were originally imported from OOXML, the handles
     // could not be moved at all.
-    const OUString sFileName("tdf126512_OOXMLHandleMovementInODF.odp");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf126512_OOXMLHandleMovementInODF.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
 
@@ -467,8 +464,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Mirror)
     // and therefore equals approximately the text frame.
     // Error was, that because of wrong calculation, the flipped shapes do not use the
     // text frame but the frame rectangle for their text.
-    const OUString sFileName("tdf127785_Mirror.odp");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_Mirror.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
@@ -510,8 +506,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
     // and the text has 3D z rotation. When we open the document we
     // should see the text vertically and rotated from text bound center not text box.
 
-    const OUString sFileName("tdf126060_3D_Z_Rotation.pptx");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf126060_3D_Z_Rotation.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
@@ -542,8 +537,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
     // the text and therefore equals approximately the text frame.
     // Error was, that the 180deg text rotation was not compensated for the position of
     // the flipped text box.
-    const OUString sFileName("tdf127785_asymmetricTextBoxFlipV.odg");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_asymmetricTextBoxFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
@@ -576,8 +571,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_TextRotateAngle)
     // surrounds the text and therefore equals approximately the text frame.
     // Error was, that the compensation for the 180° rotation added for vertical
     // flip were not made to the text box position but to the text matrix.
-    const OUString sFileName("tdf127785_TextRotateAngle.odp");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf127785_TextRotateAngle.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
@@ -608,8 +602,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
     // The document contains a rotated shape with text. The error was, that switching
     // tb-rl writing-mode on, changed the shape size and position.
 
-    const OUString sFileName("tdf128413_tbrl_OnOff.odp");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf128413_tbrl_OnOff.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -639,8 +632,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     // attribute. That should result in mirroring on the x-axis. Error was, that the lines
     // which are drawn on the shape rectangle were mirrored, but not the rectangle itself.
     // The rectangle was only shifted.
-    const OUString sFileName("tdf129532_MatrixFlipV.odg");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf129532_MatrixFlipV.odg";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.

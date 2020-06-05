@@ -301,8 +301,7 @@ namespace {
 
 IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, weld::Button&, /*rBtn*/, void)
 {
-    const OUString zipFileName("libreoffice-profile.zip");
-    const OUString zipFileURL(comphelper::BackupFileHelper::getUserProfileURL() + "/" + zipFileName);
+    const OUString zipFileURL(comphelper::BackupFileHelper::getUserProfileURL() + "/libreoffice-profile.zip");
     osl::File::remove(zipFileURL); // Remove previous exports
     try
     {
