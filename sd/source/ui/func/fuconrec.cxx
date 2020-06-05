@@ -58,6 +58,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/xfillit0.hxx>
 
 #include <sdresid.hxx>
 #include <View.hxx>
@@ -67,6 +68,8 @@
 #include <unokywds.hxx>
 
 #include <strings.hrc>
+
+using namespace com::sun::star;
 
 namespace sd {
 
@@ -407,6 +410,11 @@ void FuConstructRectangle::Activate()
             mpView->SetGlueVisible();
         }
         break;
+        case SID_INSERT_SIGNATURELINE:
+        {
+            aObjKind = OBJ_GRAF;
+        }
+        break;
 
         default:
         {
@@ -422,6 +430,28 @@ void FuConstructRectangle::Activate()
 
 void FuConstructRectangle::Deactivate()
 {
+    if (nSlotId == SID_INSERT_SIGNATURELINE)
+    {
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() > 0)
+        {
+            // Avoid the default solid fill and line, we'll set a graphic instead.
+            const SdrMark* pMark = rMarkList.GetMark(0);
+            SdrObject* pObject = pMark->GetMarkedSdrObj();
+            SfxItemSet aSet = pObject->GetMergedItemSet();
+
+            XFillStyleItem aFillStyleItem(aSet.Get(XATTR_FILLSTYLE));
+            aFillStyleItem.SetValue(drawing::FillStyle_NONE);
+            aSet.Put(aFillStyleItem);
+
+            XLineStyleItem aLineStyleItem(aSet.Get(XATTR_LINESTYLE));
+            aLineStyleItem.SetValue(drawing::LineStyle_NONE);
+            aSet.Put(aLineStyleItem);
+
+            pObject->SetMergedItemSet(aSet);
+        }
+    }
+
     if( nSlotId == SID_TOOL_CONNECTOR               ||
         nSlotId == SID_CONNECTOR_ARROW_START        ||
         nSlotId == SID_CONNECTOR_ARROW_END          ||
