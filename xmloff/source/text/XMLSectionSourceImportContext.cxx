@@ -108,22 +108,18 @@ void XMLSectionSourceImportContext::StartElement(
         }
     }
 
-    // we only need them once
-    const OUString sFileLink("FileLink");
-    const OUString sLinkRegion("LinkRegion");
-
     if (!sURL.isEmpty() || !sFilterName.isEmpty())
     {
         SectionFileLink aFileLink;
         aFileLink.FileURL = GetImport().GetAbsoluteReference( sURL );
         aFileLink.FilterName = sFilterName;
 
-        rSectionPropertySet->setPropertyValue(sFileLink, Any(aFileLink));
+        rSectionPropertySet->setPropertyValue("FileLink", Any(aFileLink));
     }
 
     if (!sSectionName.isEmpty())
     {
-        rSectionPropertySet->setPropertyValue(sLinkRegion, Any(sSectionName));
+        rSectionPropertySet->setPropertyValue("LinkRegion", Any(sSectionName));
     }
 }
 

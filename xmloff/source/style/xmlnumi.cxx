@@ -519,9 +519,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
             // Must append 'cBullet' even if it is zero
             // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
-            OUString sTmp = OUStringChar( cBullet );
             pProps[nPos].Name = "BulletChar";
-            pProps[nPos++].Value <<= sTmp;
+            pProps[nPos++].Value <<= OUString( cBullet );
 
             pProps[nPos].Name = "BulletFont";
             pProps[nPos++].Value <<= aFDesc;
@@ -1261,9 +1260,8 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         pProps->Name = "BulletFont";
         (pProps++)->Value <<= aFDesc;
 
-        OUString sTmp = OUStringChar(sal_Unicode(0xF000 + 149));
         pProps->Name = "BulletChar";
-        (pProps++)->Value <<= sTmp;
+        (pProps++)->Value <<= OUString(sal_Unicode(0xF000 + 149));
         pProps->Name = "CharStyleName";
         (pProps++)->Value <<= OUString( "Numbering Symbols"  );
     }

@@ -435,8 +435,7 @@ bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 {
     bool bRet = false;
 
-    const OUString astrHSL( "hsl"  );
-    if( rStrImpValue.matchIgnoreAsciiCase( astrHSL ) )
+    if( rStrImpValue.matchIgnoreAsciiCase( "hsl" ) )
     {
         sal_Int32 nOpen = rStrImpValue.indexOf( '(' );
         sal_Int32 nClose = rStrImpValue.lastIndexOf( ')' );

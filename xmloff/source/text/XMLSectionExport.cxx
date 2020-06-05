@@ -1586,32 +1586,24 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
             OSL_ENSURE( xPropSet.is(), "field master must have XPropSet" );
 
-            const OUString sBracketBefore("BracketBefore");
-            const OUString sBracketAfter("BracketAfter");
-            const OUString sIsNumberEntries("IsNumberEntries");
-            const OUString sIsSortByPosition("IsSortByPosition");
-            const OUString sSortKeys("SortKeys");
-            const OUString sSortAlgorithm("SortAlgorithm");
-            const OUString sLocale("Locale");
-
             OUString sTmp;
 
-            aAny = xPropSet->getPropertyValue(sBracketBefore);
+            aAny = xPropSet->getPropertyValue("BracketBefore");
             aAny >>= sTmp;
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_PREFIX, sTmp);
 
-            aAny = xPropSet->getPropertyValue(sBracketAfter);
+            aAny = xPropSet->getPropertyValue("BracketAfter");
             aAny >>= sTmp;
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_SUFFIX, sTmp);
 
-            aAny = xPropSet->getPropertyValue(sIsNumberEntries);
+            aAny = xPropSet->getPropertyValue("IsNumberEntries");
             if (*o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_NUMBERED_ENTRIES, XML_TRUE);
             }
 
-            aAny = xPropSet->getPropertyValue(sIsSortByPosition);
+            aAny = xPropSet->getPropertyValue("IsSortByPosition");
             if (! *o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
@@ -1619,7 +1611,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             }
 
             // sort algorithm
-            aAny = xPropSet->getPropertyValue(sSortAlgorithm);
+            aAny = xPropSet->getPropertyValue("SortAlgorithm");
             OUString sAlgorithm;
             aAny >>= sAlgorithm;
             if( !sAlgorithm.isEmpty() )
@@ -1629,7 +1621,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             }
 
             // locale
-            aAny = xPropSet->getPropertyValue(sLocale);
+            aAny = xPropSet->getPropertyValue("Locale");
             Locale aLocale;
             aAny >>= aLocale;
             rExport.AddLanguageTagAttributes( XML_NAMESPACE_FO, XML_NAMESPACE_STYLE, aLocale, true);
@@ -1640,7 +1632,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                         true, true);
 
             // sort keys
-            aAny = xPropSet->getPropertyValue(sSortKeys);
+            aAny = xPropSet->getPropertyValue("SortKeys");
             Sequence<Sequence<PropertyValue> > aKeys;
             aAny >>= aKeys;
             for(const Sequence<PropertyValue> & rKey : std::as_const(aKeys))

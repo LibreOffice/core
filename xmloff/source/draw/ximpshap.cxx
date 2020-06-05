@@ -2139,8 +2139,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
         if( xText.is() )
         {
-            const OUString aEmpty(  " "  );
-            xText->setString( aEmpty );
+            xText->setString( " " );
         }
 
         SdXMLShapeContext::StartElement(xAttrList);
@@ -2544,9 +2543,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
                 uno::Any aAny;
 
-                const OUString aCLSID( "12DCAE26-281F-416F-a234-c3086127382e");
-
-                xProps->setPropertyValue("CLSID", Any(aCLSID) );
+                xProps->setPropertyValue("CLSID", Any(OUString("12DCAE26-281F-416F-a234-c3086127382e")) );
 
                 aAny = xProps->getPropertyValue("Model");
                 uno::Reference< frame::XModel > xChartModel;
@@ -3821,8 +3818,6 @@ void SdXMLCustomShapeContext::EndElement()
 
     if ( !maCustomShapeGeometry.empty() )
     {
-        const OUString sCustomShapeGeometry    (  "CustomShapeGeometry"  );
-
         // converting the vector to a sequence
         uno::Sequence< beans::PropertyValue > aSeq( comphelper::containerToSequence(maCustomShapeGeometry) );
 
@@ -3831,7 +3826,7 @@ void SdXMLCustomShapeContext::EndElement()
             uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
             if( xPropSet.is() )
             {
-                xPropSet->setPropertyValue( sCustomShapeGeometry, Any(aSeq) );
+                xPropSet->setPropertyValue( "CustomShapeGeometry", Any(aSeq) );
             }
         }
         catch(const uno::Exception&)
@@ -3950,8 +3945,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
             {
                 Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetImport().GetModel(), UNO_QUERY_THROW );
                 Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-                const OUString sFamilyName( "table"  );
-                Reference< XNameAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
+                Reference< XNameAccess > xTableFamily( xFamilies->getByName( "table" ), UNO_QUERY_THROW );
                 Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
                 xProps->setPropertyValue("TableTemplate", Any( xTableStyle ) );
             }

@@ -1647,9 +1647,7 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
         // field (StarCalc, StarDraw, ...)
         Reference< beans::XPropertySet > xPropSet( rImport.GetTextImport()->GetCursor(), UNO_QUERY );
 
-        const OUString sHyperLinkURL("HyperLinkURL");
-
-        if ( xPropSet->getPropertySetInfo()->hasPropertyByName( sHyperLinkURL ) )
+        if ( xPropSet->getPropertySetInfo()->hasPropertyByName( "HyperLinkURL" ) )
         {
             pContext = new XMLImpHyperlinkContext_Impl(
                     rImport,

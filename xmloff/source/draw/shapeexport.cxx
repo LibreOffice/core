@@ -2374,8 +2374,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 // apply possible changed stream URL to embedded image object
                 if (!sRequestedName.isEmpty())
                 {
-                    const OUString sPackageURL("vnd.sun.star.Package:");
-                    OUString newStreamURL = sPackageURL;
+                    OUString newStreamURL = "vnd.sun.star.Package:";
                     if (sInternalURL[0] == '#')
                     {
                         newStreamURL += sInternalURL.copy(1, sInternalURL.getLength() - 1);
@@ -3333,14 +3332,12 @@ void XMLShapeExport::ImpExportMediaShape(
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     sal_Int16 nVolumeDB = 0;
-    const OUString aVolumeDBStr(  "VolumeDB"  );
     xPropSet->getPropertyValue("VolumeDB") >>= nVolumeDB;
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, "VolumeDB" );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::number( nVolumeDB ) );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     media::ZoomLevel eZoom;
-    const OUString aZoomStr(  "Zoom"  );
     OUString aZoomValue;
     xPropSet->getPropertyValue("Zoom") >>= eZoom;
     switch( eZoom )
@@ -3360,7 +3357,7 @@ void XMLShapeExport::ImpExportMediaShape(
 
     if( !aZoomValue.isEmpty() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
+        mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, "Zoom" );
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
         delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
     }
