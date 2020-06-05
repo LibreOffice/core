@@ -347,16 +347,14 @@ namespace
         // the returned value to test
         DAVOptions aDavOptCached;
         // init the values
-        OUString aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
         OUString aURL = "http://my.server.org/a%20fake%20url/to%20test/another-url";
-        OUString aRedirectedURL = "http://my.server.org/a%20fake%20url/to%20test/another-url/redirected";
         aDavOpt.setURL( aURL );
-        aDavOpt.setRedirectedURL( aRedirectedURL );
+        aDavOpt.setRedirectedURL( "http://my.server.org/a%20fake%20url/to%20test/another-url/redirected" );
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();
         aDavOpt.setHeadAllowed( false );
-        aDavOpt.setAllowedMethods( aAllowedMethods );
+        aDavOpt.setAllowedMethods( "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK" );
         // add to cache
         aDAVOptsCache.addDAVOptions( aDavOpt, 30000 );
         CPPUNIT_ASSERT_EQUAL( true ,aDAVOptsCache.getDAVOptions( aURL, aDavOptCached ) );
