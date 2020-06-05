@@ -262,9 +262,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
     if (!xCertificate.is())
         return;
-    OUString aDescription;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId, false);
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/true);
@@ -302,9 +301,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
     if (!xCertificate.is())
         return;
-    OUString aDescription;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId,
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId,
                  /*bAdESCompliant=*/false);
 
     // Read back the signature and make sure that it's valid.
@@ -343,9 +341,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
         = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::ECDSA);
     if (!xCertificate.is())
         return;
-    OUString aDescription;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId,
+    aManager.add(xCertificate, mxSecurityContext, "", nSecurityId,
                  /*bAdESCompliant=*/true);
 
     // Read back the signature and make sure that it's valid.
