@@ -333,10 +333,9 @@ awt::Size ExportDialog::GetOriginalSize()
         aTransformation.m11 = aViewTransformation.get(1,1);
         aTransformation.m12 = aViewTransformation.get(1,2);
 
-        const OUString sViewTransformation( "ViewTransformation" );
         uno::Sequence< beans::PropertyValue > aViewInformation( 1 );
         aViewInformation[ 0 ].Value <<= aTransformation;
-        aViewInformation[ 0 ].Name  = sViewTransformation;
+        aViewInformation[ 0 ].Name  = "ViewTransformation";
 
         if ( mxShape.is() )
             aShapesRange = GetShapeRangeForXShape( mxShape, xPrimitiveFactory, aViewInformation );

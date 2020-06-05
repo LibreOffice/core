@@ -447,8 +447,7 @@ SvtPrinterOptions::SvtPrinterOptions()
     // ... and initialize our data container only if it not already!
     if( m_pStaticDataContainer == nullptr )
     {
-        OUString aRootPath = ROOTNODE_START "/Printer";
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( ROOTNODE_START "/Printer" );
         pPrinterOptionsDataContainer = m_pStaticDataContainer;
         svtools::ItemHolder2::holdConfigItem(EItem::PrintOptions);
     }
@@ -481,8 +480,7 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     // ... and initialize our data container only if it not already!
     if( m_pStaticDataContainer == nullptr )
     {
-        OUString aRootPath = ROOTNODE_START "/File";
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( ROOTNODE_START "/File" );
         pPrintFileOptionsDataContainer = m_pStaticDataContainer;
 
         svtools::ItemHolder2::holdConfigItem(EItem::PrintFileOptions);
