@@ -14,8 +14,8 @@
 # configurability on platforms like Android and iOS where apps based on LO
 # code are very much self-contained pre-packaged thingies.
 
-SODEST=jniLibs/$(ANDROID_APP_ABI)
-OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
+SODEST=$(BUILDDIR)/android/jniLibs/$(ANDROID_APP_ABI)
+OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 #
 # Helpful rules ...
