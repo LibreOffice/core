@@ -38,10 +38,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     aWidths.push_back(m_xCertPathList->get_checkbox_column_width());
     aWidths.push_back(m_xCertPathList->get_approximate_digit_width() * 20);
     m_xCertPathList->set_column_fixed_widths(aWidths);
-
-    std::vector<int> aRadioColumns;
-    aRadioColumns.push_back(0);
-    m_xCertPathList->set_toggle_columns_as_radio(aRadioColumns);
+    m_xCertPathList->set_toggle_columns_as_radio();
 
     m_xCertPathList->connect_toggled(LINK(this, CertPathDialog, CheckHdl_Impl));
     m_xManualButton->connect_clicked( LINK( this, CertPathDialog, ManualHdl_Impl ) );

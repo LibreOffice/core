@@ -197,10 +197,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
     std::vector<int> aWidths;
     aWidths.push_back(m_xRadioLB->get_checkbox_column_width());
     m_xRadioLB->set_column_fixed_widths(aWidths);
-
-    std::vector<int> aRadioColumns;
-    aRadioColumns.push_back(0);
-    m_xRadioLB->set_toggle_columns_as_radio(aRadioColumns);
+    m_xRadioLB->set_toggle_columns_as_radio();
     m_xRadioLB->connect_toggled(LINK(this, SvxMultiPathDialog, CheckHdl_Impl));
     m_xRadioLB->connect_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
     m_xAddBtn->connect_clicked(LINK(this, SvxMultiPathDialog, AddHdl_Impl));

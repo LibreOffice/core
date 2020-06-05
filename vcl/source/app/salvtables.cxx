@@ -3202,6 +3202,7 @@ private:
     o3tl::sorted_vector<SvTreeListEntry*> m_aExpandingPlaceHolderParents;
     // which columns should be custom rendered
     o3tl::sorted_vector<int> m_aCustomRenders;
+    bool m_bTogglesAsRadio;
     bool m_bDisableCheckBoxAutoWidth;
     int m_nSortColumn;
 
@@ -3322,6 +3323,7 @@ public:
         , m_xTreeView(pTreeView)
         , m_aCheckButtonData(pTreeView, false)
         , m_aRadioButtonData(pTreeView, true)
+        , m_bTogglesAsRadio(false)
         , m_bDisableCheckBoxAutoWidth(false)
         , m_nSortColumn(-1)
     {
@@ -3807,10 +3809,13 @@ public:
         return ::get_toggle(rVclIter.iter, col);
     }
 
+    virtual void set_toggle_columns_as_radio() override
+    {
+        m_bTogglesAsRadio = true;
+    }
+
     void set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
     {
-        bool bRadio = std::find(m_aRadioIndexes.begin(), m_aRadioIndexes.end(), col)
-                      != m_aRadioIndexes.end();
         ++col; //skip dummy/expander column
 
         // blank out missing entries
@@ -3819,7 +3824,7 @@ public:
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
-            SvLBoxButtonData* pData = bRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
+            SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
 
             // if we want to have the implicit auto-sizing of the checkbox
             // column we need to call EnableCheckButton and CheckBoxInserted to

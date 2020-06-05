@@ -92,10 +92,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     aWidths.push_back(m_xJavaList->get_checkbox_column_width());
     aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
     m_xJavaList->set_column_fixed_widths(aWidths);
-
-    std::vector<int> aRadioColumns;
-    aRadioColumns.push_back(0);
-    m_xJavaList->set_toggle_columns_as_radio(aRadioColumns);
+    m_xJavaList->set_toggle_columns_as_radio();
 
     m_xJavaEnableCB->connect_clicked( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
     m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
