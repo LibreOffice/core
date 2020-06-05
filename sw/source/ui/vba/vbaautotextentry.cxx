@@ -62,8 +62,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_SET_THROW );
                 xTVCursor->gotoRange( xCurrentRange, false );
-                OUString url = ".uno:Delete";
-                dispatchRequests( xModel,url );
+                dispatchRequests( xModel,".uno:Delete" );
                 xTVCursor->gotoRange( xEndMarker->getEnd(), false );
             }
         }

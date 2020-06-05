@@ -553,8 +553,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved
-    OUString const sImageFile( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a unique name
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( sImageFile ), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName( "word/media/OOXDiagramDataRels1_0.jpeg" /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream.is() );
 }
 
@@ -580,13 +579,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
 
     //check that images are also saved
-    OUString const sImageFile1( "word/media/OOXDiagramDataRels1_0.jpeg" ); //added anchor id to form a unique name
-    uno::Reference<io::XInputStream> xInputStream1(xNameAccess->getByName( sImageFile1 ), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream1(xNameAccess->getByName( "word/media/OOXDiagramDataRels1_0.jpeg" /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream1.is() );
 
     //check that images are saved for other smart-arts as well.
-    OUString const sImageFile2( "word/media/OOXDiagramDataRels2_0.jpeg" ); //added anchor id to form a unique name
-    uno::Reference<io::XInputStream> xInputStream2(xNameAccess->getByName( sImageFile2 ), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream2(xNameAccess->getByName( "word/media/OOXDiagramDataRels2_0.jpeg" /*added anchor id to form a unique name*/ ), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xInputStream2.is() );
 }
 
@@ -1019,10 +1016,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
 
-        const OUString aMustHaveText = "Requerimientos del  Cliente";
         const OUString aActualText   = xCell->getString();
 
-        CPPUNIT_ASSERT(aActualText.indexOf(aMustHaveText) > 0);
+        CPPUNIT_ASSERT(aActualText.indexOf("Requerimientos del  Cliente") > 0);
     }
 }
 

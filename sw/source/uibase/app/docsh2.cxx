@@ -1578,8 +1578,7 @@ ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rO
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
-                const OUString aMediaTypePropName( "MediaType" );
-                xProps->getPropertyValue( aMediaTypePropName );
+                xProps->getPropertyValue( "MediaType" );
                 bImport = true;
             }
             catch (const uno::Exception&)

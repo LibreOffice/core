@@ -72,9 +72,8 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
     {
         const sw::mark::IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
 
-        OUString sListKey = ODF_FORMDROPDOWN_LISTENTRY;
         sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries
-            = pParameters->find(sListKey);
+            = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         css::uno::Sequence<OUString> vListEntries;
         if (pListEntries != pParameters->end())
         {
@@ -89,9 +88,8 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, l
         }
 
         // Select the current one
-        OUString sResultKey = ODF_FORMDROPDOWN_RESULT;
         sw::mark::IFieldmark::parameter_map_t::const_iterator pResult
-            = pParameters->find(sResultKey);
+            = pParameters->find(ODF_FORMDROPDOWN_RESULT);
         if (pResult != pParameters->end())
         {
             sal_Int32 nSelection = -1;
@@ -138,8 +136,7 @@ IMPL_LINK(SwFieldDialog, MyListBoxHandler, weld::TreeView&, rBox, bool)
     sal_Int32 nSelection = rBox.get_selected_index();
     if (nSelection >= 0)
     {
-        OUString sKey = ODF_FORMDROPDOWN_RESULT;
-        (*m_pFieldmark->GetParameters())[sKey] <<= nSelection;
+        (*m_pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
         m_pFieldmark->Invalidate();
         SwView& rView = static_cast<SwEditWin*>(GetParent())->GetView();
         rView.GetDocShell()->SetModified();

@@ -1157,12 +1157,11 @@ void SwUiWriterTest::testWatermarkPosition()
         SwDoc* pDoc = createDoc("watermark-position.odt");
         SwEditShell* pEditShell = pDoc->GetEditShell();
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-        const OUString rPageStyleName = "Default Page Style";
         uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName("Default Page Style"), uno::UNO_QUERY);
 
         // 1. Add additional page breaks
         for (int j = 0; j < aAdditionalPagesCount[i]; ++j)
@@ -2736,13 +2735,12 @@ void SwUiWriterTest::testTdf73660()
     OUString aData2 = "Seco" + OUStringChar(CHAR_SOFTHYPHEN) + "nd";
     OUString aData3 = OUStringChar(CHAR_SOFTHYPHEN) + "Third";
     OUString aData4 = "Fourth" + OUStringChar(CHAR_SOFTHYPHEN);
-    OUString aData5 = "Fifth";
     pWrtShell->Insert("We are inserting some text in the document to check the search feature ");
     pWrtShell->Insert(aData1 + " ");
     pWrtShell->Insert(aData2 + " ");
     pWrtShell->Insert(aData3 + " ");
     pWrtShell->Insert(aData4 + " ");
-    pWrtShell->Insert(aData5 + " ");
+    pWrtShell->Insert("Fifth ");
     pWrtShell->Insert("Now we have enough text let's test search for all the cases");
     //searching for all 5 strings entered with soft-hyphen, search string contains no soft-hyphen
     i18nutil::SearchOptions2 searchOpt;

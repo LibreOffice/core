@@ -2200,8 +2200,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
                 sBookmarkName = sName;
             }
             OUString sURL = "#" + sBookmarkName;
-            const OUString sTarget;
-            SwFormatINetFormat aURL( sURL, sTarget );
+            SwFormatINetFormat aURL( sURL, "" );
             const OUString sLinkStyle("Index Link");
             const sal_uInt16 nPoolId =
                 SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );

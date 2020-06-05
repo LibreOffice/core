@@ -116,13 +116,11 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
 static void testTdf43569_CheckIfFieldParse()
 {
     {
-        const OUString fieldDefinition("IF A B C");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("IF A B C", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B"), paramTrue);
@@ -130,13 +128,11 @@ static void testTdf43569_CheckIfFieldParse()
     }
 
     {
-        const OUString fieldDefinition("  IF AAA BBB CCC  ");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("  IF AAA BBB CCC  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
@@ -144,13 +140,11 @@ static void testTdf43569_CheckIfFieldParse()
     }
 
     {
-        const OUString fieldDefinition("  IF AAA \"BBB\" \"CCC\"  ");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("  IF AAA \"BBB\" \"CCC\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("AAA"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("BBB"), paramTrue);
@@ -159,13 +153,11 @@ static void testTdf43569_CheckIfFieldParse()
 
     // true-case and false-case have spaces inside
     {
-        const OUString fieldDefinition("  IF A A A \"B B B\" \"C C C\"  ");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("  IF A A A \"B B B\" \"C C C\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A A A"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B B B"), paramTrue);
@@ -174,13 +166,11 @@ static void testTdf43569_CheckIfFieldParse()
 
     // true-case and false-case have leading/trailing space
     {
-        const OUString fieldDefinition("IF A1 A2 A3 \"B1 B2 \" \" C1 C2\"  ");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("IF A1 A2 A3 \"B1 B2 \" \" C1 C2\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("A1 A2 A3"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString("B1 B2 "), paramTrue);
@@ -189,13 +179,11 @@ static void testTdf43569_CheckIfFieldParse()
 
     // true-case and false-case are empty
     {
-        const OUString fieldDefinition("IF condition \"\" \"\"  ");
-
         OUString paramCondition;
         OUString paramTrue;
         OUString paramFalse;
 
-        SwHiddenTextField::ParseIfFieldDefinition(fieldDefinition, paramCondition, paramTrue, paramFalse);
+        SwHiddenTextField::ParseIfFieldDefinition("IF condition \"\" \"\"  ", paramCondition, paramTrue, paramFalse);
 
         CPPUNIT_ASSERT_EQUAL(OUString("condition"), paramCondition);
         CPPUNIT_ASSERT_EQUAL(OUString(""), paramTrue);

@@ -403,8 +403,7 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     }
     if( !pRet )
     {
-        const OUString aNothing;
-        pRet = new SwFieldPortion( aNothing );
+        pRet = new SwFieldPortion( "" );
         rInf.SetLen(TextFrameIndex(1));
     }
     return pRet;

@@ -752,8 +752,7 @@ namespace sw::mark
                 sPayload.append("], ");
 
                 // Selected item
-                OUString sResultKey = ODF_FORMDROPDOWN_RESULT;
-                auto pSelectedItemIter = pParameters->find(sResultKey);
+                auto pSelectedItemIter = pParameters->find(ODF_FORMDROPDOWN_RESULT);
                 sal_Int32 nSelection = -1;
                 if (pSelectedItemIter != pParameters->end())
                 {

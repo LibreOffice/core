@@ -956,9 +956,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         {
                             fExtraTextRotation /= 100.0;
                             SdrCustomShapeGeometryItem aGeometryItem( pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                            const OUString sTextRotateAngle( "TextRotateAngle" );
                             css::beans::PropertyValue aPropVal;
-                            aPropVal.Name = sTextRotateAngle;
+                            aPropVal.Name = "TextRotateAngle";
                             aPropVal.Value <<= fExtraTextRotation;
                             aGeometryItem.SetPropertyValue( aPropVal );
                             pCustomShape->SetMergedItem( aGeometryItem );

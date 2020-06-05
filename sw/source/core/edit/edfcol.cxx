@@ -1394,10 +1394,9 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
 
-        OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
         OUString sWatermark = "";
         bool bSuccess = false;
-        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark, bSuccess);
+        uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, "com.sun.star.drawing.CustomShape", sWatermark, bSuccess);
 
         if (xWatermark.is())
         {

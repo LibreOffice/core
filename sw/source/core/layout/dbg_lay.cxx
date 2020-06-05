@@ -242,8 +242,7 @@ void SwProtocol::Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, 
 void SwProtocol::Init()
 {
     nRecord = PROT::FileInit;
-    OUString aName("dbg_lay.go");
-    SvFileStream aStream( aName, StreamMode::READ );
+    SvFileStream aStream( "dbg_lay.go", StreamMode::READ );
     if( aStream.IsOpen() )
     {
         pImpl = new SwImplProtocol();
@@ -275,9 +274,8 @@ SwImplProtocol::SwImplProtocol()
 
 bool SwImplProtocol::NewStream()
 {
-    OUString aName("dbg_lay.out");
     nLineCount = 0;
-    pStream.reset( new SvFileStream( aName, StreamMode::WRITE | StreamMode::TRUNC ) );
+    pStream.reset( new SvFileStream( "dbg_lay.out", StreamMode::WRITE | StreamMode::TRUNC ) );
     if( pStream->GetError() )
     {
         pStream.reset();
@@ -396,8 +394,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
 /// read the file "dbg_lay.ini" in the current directory and evaluate it.
 void SwImplProtocol::FileInit()
 {
-    OUString aName("dbg_lay.ini");
-    SvFileStream aStream( aName, StreamMode::READ );
+    SvFileStream aStream( "dbg_lay.ini", StreamMode::READ );
     if( aStream.IsOpen() )
     {
         OString aLine;

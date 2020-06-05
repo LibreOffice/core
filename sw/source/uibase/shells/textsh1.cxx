@@ -410,8 +410,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const OUString aSelectionLangPrefix("Current_");
                     const OUString aParagraphLangPrefix("Paragraph_");
                     const OUString aDocumentLangPrefix("Default_");
-                    const OUString aStrNone("LANGUAGE_NONE");
-                    const OUString aStrResetLangs("RESET_LANGUAGES");
 
                     SfxItemSet aCoreSet( GetPool(),
                             svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -457,9 +455,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
 
                     rWrtSh.StartUndo( ( !bForParagraph && !bForSelection ) ? SwUndoId::SETDEFTATTR : SwUndoId::EMPTY );
-                    if (aNewLangText == aStrNone)
+                    if (aNewLangText == "LANGUAGE_NONE")
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
-                    else if (aNewLangText == aStrResetLangs)
+                    else if (aNewLangText == "RESET_LANGUAGES")
                         SwLangHelper::ResetLanguages( rWrtSh );
                     else
                         SwLangHelper::SetLanguage( rWrtSh, aNewLangText, bForSelection, aCoreSet );
@@ -1457,10 +1455,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (pItem2)
             sApplyText = pItem2->GetValue();
 
-        const OUString sGrammarType("Grammar");
-        const OUString sSpellingType("Spelling");
-
-        if(sApplyText == sGrammarType)
+        if(sApplyText == "Grammar")
         {
             linguistic2::ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
@@ -1488,7 +1483,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
             }
         }
-        else if (sApplyText == sSpellingType)
+        else if (sApplyText == "Spelling")
         {
             SwRect aToFill;
             uno::Reference< linguistic2::XSpellAlternatives >  xSpellAlt( rWrtSh.GetCorrection(nullptr, aToFill) );

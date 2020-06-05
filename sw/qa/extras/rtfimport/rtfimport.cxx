@@ -969,9 +969,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo82114)
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Converted1"), "HeaderText");
     OUString aActual = xHeaderText->getString();
-    OUString const aExpected("First page header, section 2");
     // This was 'Right page header, section 1'.
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString("First page header, section 2"), aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo44984)
@@ -1442,11 +1441,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
 
     //Document is very fragile, hence we need this guard.
 #if HAVE_MORE_FONTS
-    OUString aExpected = SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?";
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?"),
+                         aActual);
 #endif
 }
 

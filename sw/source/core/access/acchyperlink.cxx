@@ -189,8 +189,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         if (SwFormatINetFormat const*const pINetFormat = GetTextAttr())
         {
             OUString const sText(pINetFormat->GetValue());
-            OUString sToken = "#";
-            sal_Int32 nPos = sText.indexOf(sToken);
+            sal_Int32 nPos = sText.indexOf("#");
             if (nPos==0)//document link
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );

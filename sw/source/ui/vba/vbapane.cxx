@@ -42,8 +42,7 @@ SwVbaPane::View()
 void SAL_CALL
 SwVbaPane::Close( )
 {
-    OUString url = ".uno:CloseWin";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:CloseWin" );
 }
 
 OUString

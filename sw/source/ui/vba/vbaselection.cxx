@@ -215,8 +215,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count )
             }
         }
     }
-    OUString url = ".uno:Delete";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:Delete" );
 }
 
 void
@@ -544,8 +543,7 @@ SwVbaSelection::getFont()
 void SAL_CALL
 SwVbaSelection::TypeBackspace()
 {
-    OUString url = ".uno:SwBackspace";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:SwBackspace" );
 }
 
 uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name )
@@ -1026,8 +1024,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
 
 void SAL_CALL SwVbaSelection::Copy(  )
 {
-    OUString url = ".uno:Copy";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:Copy" );
 }
 
 void SAL_CALL SwVbaSelection::CopyAsPicture(  )
@@ -1038,8 +1035,7 @@ void SAL_CALL SwVbaSelection::CopyAsPicture(  )
 
 void SAL_CALL SwVbaSelection::Paste(  )
 {
-    OUString url = ".uno:Paste";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:Paste" );
 }
 
 void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction )
@@ -1086,8 +1082,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  )
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, false );
-            OUString url = ".uno:InsertPara";
-            dispatchRequests( mxModel,url );
+            dispatchRequests( mxModel,".uno:InsertPara" );
         }
     }
     uno::Reference< text::XTextRange > xStart = xText->getStart();
