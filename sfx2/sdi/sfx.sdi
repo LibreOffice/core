@@ -5624,3 +5624,20 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Options;
 ]
+
+SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
