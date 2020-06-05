@@ -167,6 +167,7 @@ enum class SfxObjectCreateMode
     The class SfxObjectShell is the base class for SFx-objects, ie documents
     and parts of documents that can be integrated as separate objects
     into foreign objects.
+    There can be multiple edit windows (SfxViewShell) for one SfxObjectShell.
 */
 
 struct TransferableObjectDescriptor;
