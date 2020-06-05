@@ -146,6 +146,10 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
+/**
+ * One SfxViewShell more or less represents one edit window for a document, there can be multiple
+ * ones for a single opened document (SfxObjectShell).
+ */
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::ILibreOfficeKitNotifier
 {
 friend class SfxViewFrame;
