@@ -1277,7 +1277,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // Get rectangle in window-coordinates from editeng(doc) coordinates.
                 aCursorRectPureLogical = mpLOKSpecialPositioning->GetWindowPos(aCursorRectPureLogical, eDevUnit);
                 // Lets use the editeng(doc) origin as the refpoint.
-                const Point aCursorOrigin = mpLOKSpecialPositioning->GetWindowPos(Point(0, 0), eDevUnit);
+                const Point aCursorOrigin = mpLOKSpecialPositioning->GetOutputArea().TopLeft();
                 // Get the relative coordinates w.r.t aCursorOrigin.
                 aCursorRectPureLogical.Move(-aCursorOrigin.X(), -aCursorOrigin.Y());
                 aMessageParams.put("relrect", aCursorRectPureLogical.toString());
