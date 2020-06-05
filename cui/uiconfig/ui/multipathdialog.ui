@@ -181,7 +181,7 @@
                                   <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                                     <property name="resizable">True</property>
                                     <property name="spacing">6</property>
-                                    <property name="alignment">0.5</property>
+                                    <property name="title" translatable="yes" context="multipathdialog|pathlist">Path list</property>
                                     <child>
                                       <object class="GtkCellRendererToggle" id="cellrenderer5">
                                         <property name="radio">True</property>
@@ -191,13 +191,6 @@
                                         <attribute name="active">0</attribute>
                                       </attributes>
                                     </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                                    <property name="resizable">True</property>
-                                    <property name="spacing">6</property>
-                                    <property name="title" translatable="yes" context="multipathdialog|pathlist">Path list</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderer4"/>
                                       <attributes>
