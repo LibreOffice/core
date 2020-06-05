@@ -53,28 +53,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage, weld::DialogC
     m_xContentsListBox.reset(new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
     m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
 
-    std::vector<int> aWidths;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
-
-    int nExpectedSize = 16;
-
-    int nStandardImageColWidth = rTreeView.get_checkbox_column_width();
-    int nMargin = nStandardImageColWidth - nExpectedSize;
-    if (nMargin < 16)
-        nMargin = 16;
-
-    if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
-        nExpectedSize = 24;
-    else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
-        nExpectedSize = 32;
-
-    int nImageColWidth = nExpectedSize + nMargin;
-
-    aWidths.push_back(nStandardImageColWidth);
-    aWidths.push_back(nImageColWidth);
-    rTreeView.set_column_fixed_widths(aWidths);
 
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
@@ -467,7 +448,7 @@ IMPL_LINK(SvxToolbarConfigPage, InsertHdl, const OString&, rIdent, void)
         pNewEntryData->SetUserDefined();
 
         int nPos = AppendEntry(pNewEntryData, -1);
-        InsertEntryIntoUI(pNewEntryData, m_xContentsListBox->get_widget(), nPos, 1);
+        InsertEntryIntoUI(pNewEntryData, m_xContentsListBox->get_widget(), nPos);
 
         static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
 
@@ -516,7 +497,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             else
                 pEntry->SetName( aNewName );
 
-            m_xContentsListBox->set_text(nActEntry, aNewName, 2);
+            m_xContentsListBox->set_text(nActEntry, aNewName, 0);
             bNeedsApply = true;
         }
     }
@@ -564,8 +545,8 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
                     m_xContentsListBox->insert(nActEntry, sId);
-                    m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
+                    m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry);
 
                     m_xContentsListBox->select(nActEntry);
                     m_xContentsListBox->scroll_to_row(nActEntry);
@@ -604,8 +585,8 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
 
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
             m_xContentsListBox->insert(nActEntry, sId);
-            m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
+            m_xContentsListBox->set_toggle(nActEntry, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
+            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry);
 
             m_xContentsListBox->select(nActEntry);
             m_xContentsListBox->scroll_to_row(nActEntry);
@@ -638,7 +619,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         {
             pEntry->SetName( aSystemName );
             m_xContentsListBox->set_text(
-                nActEntry, SvxConfigPageHelper::stripHotKey(aSystemName), 2);
+                nActEntry, SvxConfigPageHelper::stripHotKey(aSystemName), 0);
             bNeedsApply = true;
         }
 
@@ -661,8 +642,8 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OString&, rIdent, void)
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
             m_xContentsListBox->insert(nActEntry, sId);
             m_xContentsListBox->set_toggle(nActEntry,
-                pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry, 1);
+                pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
+            InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nActEntry);
 
             m_xContentsListBox->select(nActEntry);
             m_xContentsListBox->scroll_to_row(nActEntry);
@@ -793,8 +774,8 @@ void SvxToolbarConfigPage::SelectElement()
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
         m_xContentsListBox->insert(i, sId);
         if (entry->IsBinding() && !entry->IsSeparator())
-            m_xContentsListBox->set_toggle(i,  entry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-        InsertEntryIntoUI(entry, m_xContentsListBox->get_widget(), i, 1);
+            m_xContentsListBox->set_toggle(i,  entry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
+        InsertEntryIntoUI(entry, m_xContentsListBox->get_widget(), i);
         ++i;
     }
 
@@ -820,10 +801,10 @@ void SvxToolbarConfigPage::AddFunction(int nTarget)
     if ( pEntry->IsBinding() ) //TODO sep ?
     {
         pEntry->SetVisible(true);
-        m_xContentsListBox->set_toggle(nNewLBEntry, TRISTATE_TRUE, 0);
+        m_xContentsListBox->set_toggle(nNewLBEntry, TRISTATE_TRUE);
     }
 
-    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nNewLBEntry, 1);
+    InsertEntryIntoUI(pEntry, m_xContentsListBox->get_widget(), nNewLBEntry);
 
     // Changes are not visible on the toolbar until this point
     // TODO: Figure out a way to show the changes on the toolbar, but revert if
@@ -854,7 +835,7 @@ void SvxToolbarEntriesListBox::ChangedVisibility(int nRow)
 
     if (pEntryData->IsBinding())
     {
-        pEntryData->SetVisible(m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE);
+        pEntryData->SetVisible(m_xControl->get_toggle(nRow) == TRISTATE_TRUE);
 
         SvxConfigEntry* pToolbar = m_pPage->GetTopLevelSelection();
 
@@ -879,7 +860,7 @@ IMPL_LINK(SvxToolbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, boo
         SvxConfigEntry* pEntryData = reinterpret_cast<SvxConfigEntry*>(m_xControl->get_id(nRow).toInt64());
         if (pEntryData->IsBinding() && !pEntryData->IsSeparator())
         {
-            m_xControl->set_toggle(nRow, m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE ? TRISTATE_FALSE : TRISTATE_TRUE, 0);
+            m_xControl->set_toggle(nRow, m_xControl->get_toggle(nRow) == TRISTATE_TRUE ? TRISTATE_FALSE : TRISTATE_TRUE);
             ChangedVisibility(nRow);
         }
         return true;

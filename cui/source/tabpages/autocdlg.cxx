@@ -189,9 +189,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(weld::Container* pPage, weld::Dia
     , m_sAccidentalCaps(CuiResId(RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
-    m_xCheckLB->set_column_fixed_widths(aWidths);
+    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xCheckLB->set_size_request(-1, m_xCheckLB->get_height_rows(10));
 }
 
@@ -215,14 +213,14 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
     int nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
 
     bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -243,8 +241,8 @@ void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
 {
     m_xCheckLB->append();
     const int nRow = m_xCheckLB->n_children() - 1;
-    m_xCheckLB->set_toggle(nRow, TRISTATE_FALSE, CBCOL_FIRST);
-    m_xCheckLB->set_text(nRow, rTxt, 1);
+    m_xCheckLB->set_toggle(nRow, TRISTATE_FALSE);
+    m_xCheckLB->set_text(nRow, rTxt, 0);
 }
 
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
@@ -265,14 +263,14 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     InsertEntry(m_sAccidentalCaps);
 
     int nPos = 0;
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE );
 
     m_xCheckLB->thaw();
 }
@@ -374,6 +372,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
 {
     m_xCheckLB->connect_changed(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     m_xCheckLB->connect_row_activated(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
+    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(0)).Width() * 2);
@@ -1578,6 +1577,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
 
     if ( bShowSWOptions )
     {
+        m_xSwCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
         std::vector<int> aWidths;
         aWidths.push_back(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(0)).Width() * 2);
         aWidths.push_back(m_xSwCheckLB->get_pixel_size(m_xSwCheckLB->get_column_title(1)).Width() * 2);
@@ -1586,9 +1586,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     }
     else
     {
-        std::vector<int> aWidths;
-        aWidths.push_back(m_xSwCheckLB->get_checkbox_column_width());
-        m_xCheckLB->set_column_fixed_widths(aWidths);
+        m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
         m_xSwCheckLB->hide();
     }
 
@@ -1619,9 +1617,9 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     if (m_xCheckLB->get_visible())
     {
         int nPos = 0;
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::TransliterateRTL, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST) == TRISTATE_TRUE);
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::TransliterateRTL, m_xCheckLB->get_toggle(nPos++) == TRISTATE_TRUE);
     }
 
     bool bModified = false;
@@ -1723,14 +1721,16 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         m_xCheckLB->freeze();
         m_xCheckLB->clear();
 
-        CreateEntry(*m_xCheckLB, sNonBrkSpace, CBCOL_FIRST, 1);
-        CreateEntry(*m_xCheckLB, sOrdinal, CBCOL_FIRST, 1);
-        CreateEntry(*m_xCheckLB, sTransliterateRTL, CBCOL_FIRST, 1);
-
         int nPos = 0;
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::AddNonBrkSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::ChgOrdinalNumber) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::TransliterateRTL) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+        m_xCheckLB->append();
+        m_xCheckLB->set_toggle(nPos, bool(nFlags & ACFlags::AddNonBrkSpace) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xCheckLB->set_text(nPos++, sNonBrkSpace, 0);
+        m_xCheckLB->append();
+        m_xCheckLB->set_toggle(nPos, bool(nFlags & ACFlags::ChgOrdinalNumber) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xCheckLB->set_text(nPos++, sOrdinal, 0);
+        m_xCheckLB->append();
+        m_xCheckLB->set_toggle(nPos, bool(nFlags & ACFlags::TransliterateRTL) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xCheckLB->set_text(nPos++, sTransliterateRTL, 0);
 
         m_xCheckLB->thaw();
     }
@@ -2134,9 +2134,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(weld::Container* pPage, wel
     m_xSmartTagTypesLB->set_size_request(m_xSmartTagTypesLB->get_approximate_digit_width() * 50,
                                          m_xSmartTagTypesLB->get_height_rows(6));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xSmartTagTypesLB->get_checkbox_column_width());
-    m_xSmartTagTypesLB->set_column_fixed_widths(aWidths);
+    m_xSmartTagTypesLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     // set the handlers:
     m_xMainCB->connect_toggled(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
@@ -2218,8 +2216,8 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
             m_xSmartTagTypesLB->append();
             const int nRow = m_xSmartTagTypesLB->n_children() - 1;
             const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
-            m_xSmartTagTypesLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
-            m_xSmartTagTypesLB->set_text(nRow, aLBEntry, 1);
+            m_xSmartTagTypesLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+            m_xSmartTagTypesLB->set_text(nRow, aLBEntry, 0);
             m_xSmartTagTypesLB->set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(new ImplSmartTagLBUserData(aSmartTagType, xRec, j))));
         }
     }
@@ -2293,7 +2291,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
     for (int i = 0; i < nCount; ++i)
     {
         const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(i).toInt64());
-        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i, CBCOL_FIRST) == TRISTATE_TRUE;
+        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i) == TRISTATE_TRUE;
         const bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );

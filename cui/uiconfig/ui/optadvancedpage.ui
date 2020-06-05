@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name check2 -->
       <column type="gboolean"/>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -14,7 +16,11 @@
       <column type="gchararray"/>
       <!-- column-name checkvis1 -->
       <column type="gboolean"/>
+      <!-- column-name checkvis2 -->
+      <column type="gboolean"/>
       <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri2 -->
       <column type="gboolean"/>
     </columns>
   </object>
@@ -194,8 +200,17 @@
                                                 <property name="radio">True</property>
                                               </object>
                                               <attributes>
-                                                <attribute name="visible">4</attribute>
+                                                <attribute name="visible">5</attribute>
                                                 <attribute name="active">0</attribute>
+                                              </attributes>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCellRendererToggle" id="cellrenderer9">
+                                                <property name="radio">True</property>
+                                              </object>
+                                              <attributes>
+                                                <attribute name="visible">6</attribute>
+                                                <attribute name="active">1</attribute>
                                               </attributes>
                                             </child>
                                           </object>
@@ -208,7 +223,7 @@
                                             <child>
                                               <object class="GtkCellRendererText" id="cellrenderer4"/>
                                               <attributes>
-                                                <attribute name="text">1</attribute>
+                                                <attribute name="text">2</attribute>
                                               </attributes>
                                             </child>
                                           </object>
@@ -221,7 +236,7 @@
                                             <child>
                                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                                               <attributes>
-                                                <attribute name="text">2</attribute>
+                                                <attribute name="text">3</attribute>
                                               </attributes>
                                             </child>
                                           </object>
@@ -274,6 +289,9 @@
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>

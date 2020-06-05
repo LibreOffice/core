@@ -70,9 +70,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     m_xLbSettings->set_size_request(m_xLbSettings->get_approximate_digit_width() * 32,
                                     m_xLbSettings->get_height_rows(6));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xLbSettings->get_checkbox_column_width());
-    m_xLbSettings->set_column_fixed_widths(aWidths);
+    m_xLbSettings->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     m_xLbEngine->connect_changed( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
 
@@ -138,7 +136,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
                     rValue <<= pStringItem->GetIntValue();
             }
             else
-                rValue <<= m_xLbSettings->get_toggle(nEntryPos, 0) == TRISTATE_TRUE;
+                rValue <<= m_xLbSettings->get_toggle(nEntryPos) == TRISTATE_TRUE;
         }
     }
     else
@@ -194,13 +192,13 @@ void ScSolverOptionsDialog::FillListBox()
         if ( eClass == uno::TypeClass_BOOLEAN )
         {
             // check box entry
-            m_xLbSettings->set_toggle(nPos, ScUnoHelpFunctions::GetBoolFromAny(aValue) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            m_xLbSettings->set_text(nPos, aVisName, 1);
+            m_xLbSettings->set_toggle(nPos, ScUnoHelpFunctions::GetBoolFromAny(aValue) ? TRISTATE_TRUE : TRISTATE_FALSE);
+            m_xLbSettings->set_text(nPos, aVisName, 0);
         }
         else
         {
             // value entry
-            m_xLbSettings->set_text(nPos, aVisName, 1);
+            m_xLbSettings->set_text(nPos, aVisName, 0);
             m_aOptions.emplace_back(new ScSolverOptionsString(aVisName));
             if (eClass == uno::TypeClass_DOUBLE)
             {
@@ -213,7 +211,7 @@ void ScSolverOptionsDialog::FillListBox()
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                     ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
 
-                m_xLbSettings->set_text(nPos, sTxt, 1);
+                m_xLbSettings->set_text(nPos, sTxt, 0);
             }
             else
             {
@@ -223,7 +221,7 @@ void ScSolverOptionsDialog::FillListBox()
 
                 OUString sTxt = aVisName + ": " + OUString::number(nIntValue);
 
-                m_xLbSettings->set_text(nPos, sTxt, 1);
+                m_xLbSettings->set_text(nPos, sTxt, 0);
             }
             m_xLbSettings->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(m_aOptions.back().get())));
         }
@@ -261,7 +259,7 @@ void ScSolverOptionsDialog::EditOption()
                     rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                     ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true );
 
-                m_xLbSettings->set_text(nEntry, sTxt, 1);
+                m_xLbSettings->set_text(nEntry, sTxt, 0);
             }
             m_xValDialog.reset();
         });
@@ -279,7 +277,7 @@ void ScSolverOptionsDialog::EditOption()
                 OUString sTxt(pStringItem->GetText() + ": ");
                 sTxt += OUString::number(pStringItem->GetIntValue());
 
-                m_xLbSettings->set_text(nEntry, sTxt, 1);
+                m_xLbSettings->set_text(nEntry, sTxt, 0);
             }
             m_xIntDialog.reset();
         });

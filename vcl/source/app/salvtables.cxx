@@ -3156,33 +3156,6 @@ struct SalInstanceTreeIter : public weld::TreeIter
     SvTreeListEntry* iter;
 };
 
-TriState get_toggle(SvTreeListEntry* pEntry, int col)
-{
-    ++col; //skip dummy/expander column
-
-    if (static_cast<size_t>(col) == pEntry->ItemCount())
-        return TRISTATE_FALSE;
-
-    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
-    SvLBoxItem& rItem = pEntry->GetItem(col);
-    assert(dynamic_cast<SvLBoxButton*>(&rItem));
-    SvLBoxButton& rToggle = static_cast<SvLBoxButton&>(rItem);
-    if (rToggle.IsStateTristate())
-        return TRISTATE_INDET;
-    else if (rToggle.IsStateChecked())
-        return TRISTATE_TRUE;
-    return TRISTATE_FALSE;
-}
-
-bool get_text_emphasis(SvTreeListEntry* pEntry, int col)
-{
-    ++col; //skip dummy/expander column
-
-    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
-    SvLBoxItem& rItem = pEntry->GetItem(col);
-    assert(dynamic_cast<SvLBoxString*>(&rItem));
-    return static_cast<SvLBoxString&>(rItem).IsEmphasized();
-}
 }
 
 class SalInstanceTreeView;
@@ -3225,6 +3198,25 @@ private:
     DECL_LINK(TooltipHdl, const HelpEvent&, bool);
     DECL_LINK(CustomRenderHdl, svtree_render_args, void);
     DECL_LINK(CustomMeasureHdl, svtree_measure_args, Size);
+
+    // Each row has a cell for the expander image, (and an optional cell for a
+    // checkbutton if enable_toggle_buttons has been called) which preceed
+    // index 0
+    int to_internal_model(int col) const
+    {
+        if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+            ++col; // skip checkbutton column
+        ++col; //skip expander column
+        return col;
+    }
+
+    int to_external_model(int col) const
+    {
+        if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+            --col; // skip checkbutton column
+        --col; //skip expander column
+        return col;
+    }
 
     bool IsDummyEntry(SvTreeListEntry* pEntry) const
     {
@@ -3280,6 +3272,10 @@ private:
         SvTreeListEntry* pEntry = new SvTreeListEntry;
         if (bIsSeparator)
             pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+
+        if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+            AddStringItem(pEntry, "", -1);
+
         if (pIconName || pImageSurface)
         {
             Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
@@ -3315,6 +3311,105 @@ private:
         }
 
         enable_notify_events();
+    }
+
+    void update_checkbutton_column_width(SvTreeListEntry* pEntry)
+    {
+        SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
+        m_xTreeView->InitViewData(pViewData, pEntry);
+        if (!m_bDisableCheckBoxAutoWidth)
+            m_xTreeView->CheckBoxInserted(pEntry);
+    }
+
+    void do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
+    {
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+        // if its the placeholder to allow a blank column, replace it now
+        if (pEntry->GetItem(col).GetType() != SvLBoxItemType::Button)
+        {
+            SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
+            pEntry->ReplaceItem(std::make_unique<SvLBoxButton>(pData), 0);
+            update_checkbutton_column_width(pEntry);
+
+        }
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxButton*>(&rItem));
+        switch (eState)
+        {
+            case TRISTATE_TRUE:
+                static_cast<SvLBoxButton&>(rItem).SetStateChecked();
+                break;
+            case TRISTATE_FALSE:
+                static_cast<SvLBoxButton&>(rItem).SetStateUnchecked();
+                break;
+            case TRISTATE_INDET:
+                static_cast<SvLBoxButton&>(rItem).SetStateTristate();
+                break;
+        }
+
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    }
+
+    static TriState do_get_toggle(SvTreeListEntry* pEntry, int col)
+    {
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+            return TRISTATE_FALSE;
+
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxButton*>(&rItem));
+        SvLBoxButton& rToggle = static_cast<SvLBoxButton&>(rItem);
+        if (rToggle.IsStateTristate())
+            return TRISTATE_INDET;
+        else if (rToggle.IsStateChecked())
+            return TRISTATE_TRUE;
+        return TRISTATE_FALSE;
+    }
+
+    TriState get_toggle(SvTreeListEntry* pEntry, int col) const
+    {
+        if (col == -1)
+        {
+            assert(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
+            return do_get_toggle(pEntry, 0);
+        }
+        col = to_internal_model(col);
+        return do_get_toggle(pEntry, col);
+    }
+
+    void set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
+    {
+        if (col == -1)
+        {
+            assert(m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN);
+            do_set_toggle(pEntry, eState, 0);
+            return;
+        }
+
+        col = to_internal_model(col);
+
+        // blank out missing entries
+        for (int i = pEntry->ItemCount(); i < col; ++i)
+            AddStringItem(pEntry, "", i - 1);
+
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+        {
+            SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
+            pEntry->AddItem(std::make_unique<SvLBoxButton>(pData));
+            update_checkbutton_column_width(pEntry);
+        }
+
+        do_set_toggle(pEntry, eState, col);
+    }
+
+    bool get_text_emphasis(SvTreeListEntry* pEntry, int col) const
+    {
+        col = to_internal_model(col);
+
+        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxString*>(&rItem));
+        return static_cast<SvLBoxString&>(rItem).IsEmphasized();
     }
 
 public:
@@ -3522,6 +3617,8 @@ public:
         for (int i = 0; i < nSourceCount; ++i)
         {
             aVclIter.iter = new SvTreeListEntry;
+            if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
+                AddStringItem(aVclIter.iter, "", -1);
             aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
             m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
             func(aVclIter, i);
@@ -3694,12 +3791,12 @@ public:
         return aRows;
     }
 
-    static OUString get_text(SvTreeListEntry* pEntry, int col)
+    OUString get_text(SvTreeListEntry* pEntry, int col) const
     {
         if (col == -1)
             return SvTabListBox::GetEntryText(pEntry, 0);
 
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
             return OUString();
@@ -3724,7 +3821,7 @@ public:
             return;
         }
 
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col; ++i)
@@ -3774,7 +3871,7 @@ public:
             return;
         }
 
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
@@ -3800,72 +3897,24 @@ public:
     virtual TriState get_toggle(int pos, int col) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        return ::get_toggle(pEntry, col);
+        return get_toggle(pEntry, col);
     }
 
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return ::get_toggle(rVclIter.iter, col);
+        return get_toggle(rVclIter.iter, col);
     }
 
-    virtual void set_toggle_columns_as_radio() override
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
     {
-        m_bTogglesAsRadio = true;
-    }
+        assert(n_children() == 0 && "tree must be empty");
+        m_bTogglesAsRadio = eType == weld::ColumnToggleType::Radio;
 
-    void set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
-    {
-        ++col; //skip dummy/expander column
-
-        // blank out missing entries
-        for (int i = pEntry->ItemCount(); i < col; ++i)
-            AddStringItem(pEntry, "", i - 1);
-
-        if (static_cast<size_t>(col) == pEntry->ItemCount())
-        {
-            SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
-
-            // if we want to have the implicit auto-sizing of the checkbox
-            // column we need to call EnableCheckButton and CheckBoxInserted to
-            // let it figure out that width. But we don't want to override any
-            // explicitly set column width, so disable this if we've set
-            // explicit column widths
-            if (!m_bDisableCheckBoxAutoWidth)
-            {
-                if (!(m_xTreeView->GetTreeFlags() & SvTreeFlags::CHKBTN))
-                {
-                    m_xTreeView->EnableCheckButton(pData);
-                    // EnableCheckButton clobbered this, restore it
-                    pData->SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
-                }
-            }
-
-            pEntry->AddItem(std::make_unique<SvLBoxButton>(pData));
-            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
-            m_xTreeView->InitViewData(pViewData, pEntry);
-
-            if (!m_bDisableCheckBoxAutoWidth)
-                m_xTreeView->CheckBoxInserted(pEntry);
-        }
-
-        assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
-        SvLBoxItem& rItem = pEntry->GetItem(col);
-        assert(dynamic_cast<SvLBoxButton*>(&rItem));
-        switch (eState)
-        {
-            case TRISTATE_TRUE:
-                static_cast<SvLBoxButton&>(rItem).SetStateChecked();
-                break;
-            case TRISTATE_FALSE:
-                static_cast<SvLBoxButton&>(rItem).SetStateUnchecked();
-                break;
-            case TRISTATE_INDET:
-                static_cast<SvLBoxButton&>(rItem).SetStateTristate();
-                break;
-        }
-
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
+        m_xTreeView->EnableCheckButton(pData);
+        // EnableCheckButton clobbered this, restore it
+        pData->SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
     }
 
     virtual void set_toggle(int pos, TriState eState, int col) override
@@ -3889,7 +3938,7 @@ public:
 
     void set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col)
     {
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
@@ -3914,18 +3963,18 @@ public:
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return ::get_text_emphasis(rVclIter.iter, col);
+        return get_text_emphasis(rVclIter.iter, col);
     }
 
     virtual bool get_text_emphasis(int pos, int col) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        return ::get_text_emphasis(pEntry, col);
+        return get_text_emphasis(pEntry, col);
     }
 
     void set_text_align(SvTreeListEntry* pEntry, double fAlign, int col)
     {
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
         SvLBoxItem& rItem = pEntry->GetItem(col);
@@ -3972,7 +4021,7 @@ public:
             return;
         }
 
-        ++col; //skip dummy/expander column
+        col = to_internal_model(col);
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col; ++i)
@@ -4659,9 +4708,7 @@ IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int
 
     if (m_nSortColumn != -1)
     {
-        size_t col = m_nSortColumn;
-
-        ++col; //skip dummy/expander column
+        size_t col = to_internal_model(m_nSortColumn);
 
         if (col < pLHS->ItemCount())
         {
@@ -4740,7 +4787,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
         SvLBoxItem& rItem = pEntry->GetItem(i);
         if (&rItem == pBox)
         {
-            int nCol = i - 1; // less dummy/expander column
+            int nCol = to_external_model(i);
             signal_toggled(iter_col(SalInstanceTreeIter(pEntry), nCol));
             break;
         }

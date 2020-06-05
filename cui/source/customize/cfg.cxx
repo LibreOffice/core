@@ -926,6 +926,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xCo
     , m_xDropDown(m_xControl->create_virtual_device())
     , m_pPage(pPg)
 {
+    m_xControl->enable_toggle_buttons(weld::ColumnToggleType::Check);
     CreateDropDown();
     m_xControl->connect_key_press(LINK(this, SvxMenuEntriesListBox, KeyInputHdl));
 }
@@ -1507,7 +1508,8 @@ int SvxConfigPage::AppendEntry(
 
 namespace
 {
-    template<typename itertype> void TmplInsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, itertype& rIter, int nStartCol, SaveInData* pSaveInData, VirtualDevice& rDropDown)
+    template<typename itertype> void TmplInsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, itertype& rIter, SaveInData* pSaveInData,
+                                                           VirtualDevice& rDropDown, bool bMenu)
     {
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewEntryData)));
 
@@ -1515,37 +1517,37 @@ namespace
 
         if (pNewEntryData->IsSeparator())
         {
-            rTreeView.set_text(rIter, "----------------------------------", nStartCol + 1);
+            rTreeView.set_text(rIter, "----------------------------------", 0);
         }
         else
         {
             auto xImage = pSaveInData->GetImage(pNewEntryData->GetCommand());
             if (xImage.is())
-                rTreeView.set_image(rIter, xImage, nStartCol);
+                rTreeView.set_image(rIter, xImage, -1);
             OUString aName = SvxConfigPageHelper::stripHotKey( pNewEntryData->GetName() );
-            rTreeView.set_text(rIter, aName, nStartCol + 1);
+            rTreeView.set_text(rIter, aName, 0);
         }
 
-        if (nStartCol == 0)  // menus
+        if (bMenu)  // menus
         {
             if (pNewEntryData->IsPopup() || pNewEntryData->GetStyle() & css::ui::ItemStyle::DROP_DOWN)
-                rTreeView.set_image(rIter, rDropDown, nStartCol + 2);
+                rTreeView.set_image(rIter, rDropDown, 1);
             else
-                rTreeView.set_image(rIter, css::uno::Reference<css::graphic::XGraphic>(), nStartCol + 2);
+                rTreeView.set_image(rIter, css::uno::Reference<css::graphic::XGraphic>(), 1);
         }
     }
 }
 
-void SvxConfigPage::InsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, int nPos, int nStartCol)
+void SvxConfigPage::InsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, int nPos, bool bMenu)
 {
-    TmplInsertEntryIntoUI<int>(pNewEntryData, rTreeView, nPos, nStartCol,
-            GetSaveInData(), m_xContentsListBox->get_dropdown_image());
+    TmplInsertEntryIntoUI<int>(pNewEntryData, rTreeView, nPos, GetSaveInData(),
+                               m_xContentsListBox->get_dropdown_image(), bMenu);
 }
 
-void SvxConfigPage::InsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, weld::TreeIter& rIter, int nStartCol)
+void SvxConfigPage::InsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, weld::TreeIter& rIter, bool bMenu)
 {
-    TmplInsertEntryIntoUI<weld::TreeIter>(pNewEntryData, rTreeView, rIter, nStartCol,
-            GetSaveInData(), m_xContentsListBox->get_dropdown_image());
+    TmplInsertEntryIntoUI<weld::TreeIter>(pNewEntryData, rTreeView, rIter, GetSaveInData(),
+                                          m_xContentsListBox->get_dropdown_image(), bMenu);
 }
 
 IMPL_LINK(SvxConfigPage, MoveHdl, weld::Button&, rButton, void)

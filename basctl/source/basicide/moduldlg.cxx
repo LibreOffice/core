@@ -897,6 +897,7 @@ LibDialog::LibDialog(weld::Window* pParent)
 {
     m_xLibBox->set_size_request(m_xLibBox->get_approximate_digit_width() * 28,
                                 m_xLibBox->get_height_rows(8));
+    m_xLibBox->enable_toggle_buttons(weld::ColumnToggleType::Check);
     // tdf#93476 The libraries should be listed alphabetically
     m_xLibBox->make_sorted();
 }

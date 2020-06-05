@@ -54,14 +54,15 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
 
     m_xCheckLB->set_size_request(m_xCheckLB->get_approximate_digit_width() * 60,
                                  m_xCheckLB->get_height_rows(8));
+    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xCheckLB->set_help_id(HID_OFA_FONT_SUBST_CLB);
     m_xCheckLB->set_selection_mode(SelectionMode::Multiple);
 
     setColSizes(m_xCheckLB->get_size_request());
     m_xCheckLB->connect_size_allocate(LINK(this, SvxFontSubstTabPage, ResizeHdl));
 
+    m_xCheckLB->set_centered_column(0);
     m_xCheckLB->set_centered_column(1);
-    m_xCheckLB->set_centered_column(2);
 
     Link<weld::ComboBox&,void> aLink2(LINK(this, SvxFontSubstTabPage, SelectComboBoxHdl));
     Link<weld::Button&,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
@@ -114,15 +115,14 @@ IMPL_LINK(SvxFontSubstTabPage, HeaderBarClick, int, nColumn, void)
 
 void SvxFontSubstTabPage::setColSizes(const Size& rSize)
 {
-    int nW1 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(3)).Width();
-    int nW2 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(4)).Width();
+    int nW1 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(2)).Width();
+    int nW2 = m_xCheckLB->get_pixel_size(m_xCheckLB->get_column_title(3)).Width();
     int nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
     int nMin = m_xCheckLB->get_checkbox_column_width();
     nMax = std::max(nMax, nMin);
     const int nDoubleMax = 2*nMax;
     const int nRest = rSize.Width() - nDoubleMax;
     std::vector<int> aWidths;
-    aWidths.push_back(1);   // just abandon the built-in column for checkbuttons and use another
     aWidths.push_back(nMax);
     aWidths.push_back(nMax);
     aWidths.push_back(nRest/2);
@@ -152,10 +152,10 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
 
     m_xCheckLB->all_foreach([this](weld::TreeIter& rIter) {
         SubstitutionStruct aAdd;
-        aAdd.sFont = m_xCheckLB->get_text(rIter, 3);
-        aAdd.sReplaceBy = m_xCheckLB->get_text(rIter, 4);
-        aAdd.bReplaceAlways = m_xCheckLB->get_toggle(rIter, 1);
-        aAdd.bReplaceOnScreenOnly = m_xCheckLB->get_toggle(rIter, 2);
+        aAdd.sFont = m_xCheckLB->get_text(rIter, 2);
+        aAdd.sReplaceBy = m_xCheckLB->get_text(rIter, 3);
+        aAdd.bReplaceAlways = m_xCheckLB->get_toggle(rIter, 0);
+        aAdd.bReplaceOnScreenOnly = m_xCheckLB->get_toggle(rIter, 1);
         m_xConfig->AddSubstitution(aAdd);
         return false;
     });
@@ -215,17 +215,17 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     {
         m_xCheckLB->append(xIter.get());
         const SubstitutionStruct* pSubs = m_xConfig->GetSubstitution(i);
-        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
-        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 2);
-        m_xCheckLB->set_text(*xIter, pSubs->sFont, 3);
-        m_xCheckLB->set_text(*xIter, pSubs->sReplaceBy, 4);
+        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
+        m_xCheckLB->set_text(*xIter, pSubs->sFont, 2);
+        m_xCheckLB->set_text(*xIter, pSubs->sReplaceBy, 3);
     }
 
     m_xCheckLB->thaw();
 
     m_xCheckLB->make_sorted();
-    m_xCheckLB->set_sort_column(3);
-    m_xCheckLB->set_sort_indicator(TRISTATE_TRUE, 3);
+    m_xCheckLB->set_sort_column(2);
+    m_xCheckLB->set_sort_indicator(TRISTATE_TRUE, 2);
 
     CheckEnable();
 
@@ -297,7 +297,7 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
             if (nPos != -1)
             {
                 // change entry
-                m_xCheckLB->set_text(nPos, m_xFont2CB->get_active_text(), 4);
+                m_xCheckLB->set_text(nPos, m_xFont2CB->get_active_text(), 3);
                 m_xCheckLB->select(nPos);
             }
             else
@@ -308,10 +308,10 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
 
                 std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
                 m_xCheckLB->append(xIter.get());
+                m_xCheckLB->set_toggle(*xIter, TRISTATE_FALSE, 0);
                 m_xCheckLB->set_toggle(*xIter, TRISTATE_FALSE, 1);
-                m_xCheckLB->set_toggle(*xIter, TRISTATE_FALSE, 2);
-                m_xCheckLB->set_text(*xIter, sFont1, 3);
-                m_xCheckLB->set_text(*xIter, sFont2, 4);
+                m_xCheckLB->set_text(*xIter, sFont1, 2);
+                m_xCheckLB->set_text(*xIter, sFont2, 3);
                 m_xCheckLB->select(*xIter);
             }
         }

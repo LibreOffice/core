@@ -9112,6 +9112,7 @@ private:
     gint m_nTextCol;
     gint m_nTextView;
     gint m_nImageCol;
+    gint m_nExpanderToggleCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
     int m_nPendingVAdjustment;
@@ -9532,21 +9533,25 @@ private:
     }
 
     // The outside concept of a column maps to a gtk CellRenderer, rather than
-    // a TreeViewColumn. If the first TreeViewColumn has two CellRenderers, and
-    // the first CellRenderer is an image, that CellRenderer is considered to
-    // be index -1.
+    // a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
+    // and/or a leading Image Renderer, those are considered special expander
+    // columns and preceed index 0 and can be accessed via outside index -1
     int to_external_model(int modelcol) const
     {
-        if (m_nExpanderImageCol == -1)
-            return modelcol;
-        return modelcol - 1;
+        if (m_nExpanderToggleCol != -1)
+            --modelcol;
+        if (m_nExpanderImageCol != -1)
+            --modelcol;
+        return modelcol;
     }
 
     int to_internal_model(int modelcol) const
     {
-        if (m_nExpanderImageCol == -1)
-            return modelcol;
-        return modelcol + 1;
+        if (m_nExpanderToggleCol != -1)
+            ++modelcol;
+        if (m_nExpanderImageCol != -1)
+            ++modelcol;
+        return modelcol;
     }
 
     void set_column_editable(int nCol, bool bEditable)
@@ -9783,6 +9788,7 @@ public:
         , m_nTextCol(-1)
         , m_nTextView(-1)
         , m_nImageCol(-1)
+        , m_nExpanderToggleCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
@@ -9798,9 +9804,9 @@ public:
         , m_pChangeEvent(nullptr)
     {
         /* The outside concept of a column maps to a gtk CellRenderer, rather than
-           a TreeViewColumn. If the first TreeViewColumn has two CellRenderers, and
-           the first CellRenderer is an image, that CellRenderer is considered to
-           be index -1.
+           a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
+           and/or a leading Image Renderer, those are considered special expander
+           columns and preceed index 0 and can be accessed via outside index -1
         */
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
@@ -9830,6 +9836,9 @@ public:
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
+                    const bool bExpander = nIndex == 0 || (nIndex == 1 && m_nExpanderImageCol == 0);
+                    if (bExpander)
+                        m_nExpanderToggleCol = nIndex;
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                     m_aToggleVisMap[nIndex] = -1;
                     m_aToggleTriStateMap[nIndex] = -1;
@@ -10379,7 +10388,11 @@ public:
 
     virtual TriState get_toggle(int pos, int col) const override
     {
-        col = to_internal_model(col);
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         if (get_bool(pos, m_aToggleTriStateMap.find(col)->second))
             return TRISTATE_INDET;
         return get_bool(pos, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
@@ -10387,7 +10400,11 @@ public:
 
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col) const override
     {
-        col = to_internal_model(col);
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         if (get_bool(rGtkIter.iter, m_aToggleTriStateMap.find(col)->second))
             return TRISTATE_INDET;
@@ -10396,7 +10413,11 @@ public:
 
     virtual void set_toggle(int pos, TriState eState, int col) override
     {
-        col = to_internal_model(col);
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         // checkbuttons are invisible until toggled on or off
         set(pos, m_aToggleVisMap[col], true);
         if (eState == TRISTATE_INDET)
@@ -10411,7 +10432,12 @@ public:
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        col = to_internal_model(col);
+
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
         // checkbuttons are invisible until toggled on or off
         set(rGtkIter.iter, m_aToggleVisMap[col], true);
         if (eState == TRISTATE_INDET)
@@ -10423,7 +10449,7 @@ public:
         }
     }
 
-    virtual void set_toggle_columns_as_radio() override
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
     {
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
@@ -10435,7 +10461,7 @@ public:
                 if (!GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                     continue;
                 GtkCellRendererToggle* pToggle = GTK_CELL_RENDERER_TOGGLE(pCellRenderer);
-                gtk_cell_renderer_toggle_set_radio(pToggle, true);
+                gtk_cell_renderer_toggle_set_radio(pToggle, eType == weld::ColumnToggleType::Radio);
             }
             g_list_free(pRenderers);
         }
