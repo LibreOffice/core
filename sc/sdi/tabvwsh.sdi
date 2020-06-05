@@ -62,6 +62,7 @@ interface BaseSelection
 
     SID_INSERT_QRCODE           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_EDIT_QRCODE             [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_ADDITIONS_DIALOG        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
     SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
     SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
