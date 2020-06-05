@@ -836,6 +836,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , nUPN_HYPH_MIN_WORD_LENGTH(-1)
     , nUPN_HYPH_MIN_LEADING(-1)
     , nUPN_HYPH_MIN_TRAILING(-1)
+    , m_nDlbClickEventId(nullptr)
     , m_xLinguModulesFT(m_xBuilder->weld_label("lingumodulesft"))
     , m_xLinguModulesCLB(m_xBuilder->weld_tree_view("lingumodules"))
     , m_xLinguModulesEditPB(m_xBuilder->weld_button("lingumodulesedit"))
@@ -903,6 +904,11 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
+    if (m_nDlbClickEventId)
+    {
+        Application::RemoveUserEvent(m_nDlbClickEventId);
+        m_nDlbClickEventId = nullptr;
+    }
     pLinguData.reset();
 }
 
@@ -1282,13 +1288,12 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
 IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, bool)
 {
-    if (&rBox == m_xLinguModulesCLB.get())
+    if (&rBox == m_xLinguModulesCLB.get() && !m_nDlbClickEventId)
     {
         //! in order to avoid a bug causing a GPF when double clicking
         //! on a module entry and exiting the "Edit Modules" dialog
         //! after that.
-        Application::PostUserEvent( LINK(
-                    this, SvxLinguTabPage, PostDblClickHdl_Impl ), nullptr, true);
+        m_nDlbClickEventId = Application::PostUserEvent(LINK(this, SvxLinguTabPage, PostDblClickHdl_Impl));
     }
     else if (&rBox == m_xLinguOptionsCLB.get())
     {
@@ -1299,6 +1304,7 @@ IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, bool)
 
 IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 {
+    m_nDlbClickEventId = nullptr;
     ClickHdl_Impl(*m_xLinguModulesEditPB);
 }
 
