@@ -2108,8 +2108,7 @@ Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
     Size aMinSize( aImageSize );
     aMinSize.AdjustWidth(2 * LROFFS_BOUND );
     aMinSize.AdjustHeight(TBOFFS_BOUND );  // single offset is enough (FileDlg)
-    OUString const aStrDummy( "XXX" );
-    Size aTextSize( pView->GetTextWidth( aStrDummy ), pView->GetTextHeight() );
+    Size aTextSize( pView->GetTextWidth( "XXX" ), pView->GetTextHeight() );
     if( nWinBits & WB_ICON )
     {
         aMinSize.AdjustHeight(VER_DIST_BMP_STRING );

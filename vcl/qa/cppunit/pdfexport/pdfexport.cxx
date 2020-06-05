@@ -1170,12 +1170,11 @@ void PdfExportTest::testTdf115117_1a()
     int nChars = FPDFText_CountChars(pPdfTextPage);
     CPPUNIT_ASSERT_EQUAL(44, nChars);
 
-    OUString aExpectedText = "ti ti test ti\r\nti test fi fl ffi ffl test fi";
     std::vector<sal_uInt32> aChars(nChars);
     for (int i = 0; i < nChars; i++)
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+    CPPUNIT_ASSERT_EQUAL(OUString("ti ti test ti\r\nti test fi fl ffi ffl test fi"), aActualText);
 
     FPDFText_ClosePage(pPdfTextPage);
 #endif

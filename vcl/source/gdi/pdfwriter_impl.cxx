@@ -5081,8 +5081,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    OUString const aComment( "sRGB IEC61966-2.1"  );
-    appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
+    appendLiteralStringEncrypt( OUStringLiteral("sRGB IEC61966-2.1") ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );

@@ -397,8 +397,6 @@ public:
         {
             rDev.SetClipRegion( vcl::Region(r) );
 
-            OUString const aLatinText("Click any rect to zoom!!!!");
-
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
                 0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -419,7 +417,7 @@ public:
             if (bArabicText)
                 aText = aArabicText;
             else
-                aText = aLatinText;
+                aText = "Click any rect to zoom!!!!";
 
             std::vector<OUString> aFontNames;
 

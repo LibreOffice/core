@@ -894,8 +894,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
 
 bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
 {
-    const OUString aPrefix("vnd.sun.star.GraphicObject:");
-    return rURL.startsWith(aPrefix);
+    return rURL.startsWith("vnd.sun.star.GraphicObject:");
 }
 
 // calculate scalings between real image size and logic object size. This

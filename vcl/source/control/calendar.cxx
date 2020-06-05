@@ -202,9 +202,7 @@ void Calendar::ImplFormat()
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
 
-        OUString const a99Text("99");
-
-        long n99TextWidth = GetTextWidth( a99Text );
+        long n99TextWidth = GetTextWidth( "99" );
         long nTextHeight = GetTextHeight();
 
         // calculate width and x-position
@@ -1529,10 +1527,8 @@ void Calendar::EndSelection()
 
 Size Calendar::CalcWindowSizePixel() const
 {
-    OUString  const a99Text("99");
-
     Size    aSize;
-    long    n99TextWidth = GetTextWidth( a99Text );
+    long    n99TextWidth = GetTextWidth( "99" );
     long    nTextHeight = GetTextHeight();
 
     aSize.AdjustWidth((n99TextWidth+DAY_OFFX)*7);
