@@ -849,12 +849,9 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , m_xLinguOptionsEditPB(m_xBuilder->weld_button("linguoptionsedit"))
     , m_xMoreDictsLink(m_xBuilder->weld_link_button("moredictslink"))
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xLinguModulesCLB->get_checkbox_column_width());
-
-    m_xLinguModulesCLB->set_column_fixed_widths(aWidths);
-    m_xLinguDicsCLB->set_column_fixed_widths(aWidths);
-    m_xLinguOptionsCLB->set_column_fixed_widths(aWidths);
+    m_xLinguModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xLinguDicsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xLinguOptionsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     m_xLinguModulesCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguModulesCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
@@ -994,7 +991,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         DicUserData aData(m_xLinguDicsCLB->get_id(i).toUInt32());
         if (aData.GetEntryId() < nDics)
         {
-            bool bChecked = m_xLinguDicsCLB->get_toggle(i, 0) == TRISTATE_TRUE;
+            bool bChecked = m_xLinguDicsCLB->get_toggle(i) == TRISTATE_TRUE;
             uno::Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
             if (xDic.is())
             {
@@ -1027,7 +1024,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         Any aAny;
         if (aData.IsCheckable())
         {
-            bool bChecked = m_xLinguOptionsCLB->get_toggle(j, 0) == TRISTATE_TRUE;
+            bool bChecked = m_xLinguOptionsCLB->get_toggle(j) == TRISTATE_TRUE;
             aAny <<= bChecked;
         }
         else if (aData.HasNumericValue())
@@ -1052,7 +1049,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
 
     // automatic spell checking
-    bool bNewAutoCheck = m_xLinguOptionsCLB->get_toggle(EID_SPELL_AUTO, 0) == TRISTATE_TRUE;
+    bool bNewAutoCheck = m_xLinguOptionsCLB->get_toggle(EID_SPELL_AUTO) == TRISTATE_TRUE;
     const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
     {
@@ -1096,8 +1093,8 @@ void SvxLinguTabPage::AddDicBoxEntry(
     int nEntry = m_xLinguDicsCLB->n_children() - 1;
     DicUserData aData( GetDicUserData( rxDic, nIdx ) );
     m_xLinguDicsCLB->set_id(nEntry, OUString::number(aData.GetUserData()));
-    m_xLinguDicsCLB->set_toggle(nEntry, aData.IsChecked() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguDicsCLB->set_text(nEntry, aTxt, 1);  // append at end
+    m_xLinguDicsCLB->set_toggle(nEntry, aData.IsChecked() ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguDicsCLB->set_text(nEntry, aTxt, 0);  // append at end
 
     m_xLinguDicsCLB->thaw();
 }
@@ -1139,8 +1136,8 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
         const ServiceInfo_Impl &rInfo = rAllDispSrvcArr[i];
         m_xLinguModulesCLB->append();
         m_xLinguModulesCLB->set_id(i, OUString::number(reinterpret_cast<sal_Int64>(&rInfo)));
-        m_xLinguModulesCLB->set_toggle(i, rInfo.bConfigured ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-        m_xLinguModulesCLB->set_text(i, rInfo.sDisplayName, 1);
+        m_xLinguModulesCLB->set_toggle(i, rInfo.bConfigured ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xLinguModulesCLB->set_text(i, rInfo.sDisplayName, 0);
     }
     if (nDispSrvcCount)
     {
@@ -1179,8 +1176,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     if (pItem)
         bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
     nUserData = OptionsUserData( EID_SPELL_AUTO, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sSpellAuto, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sSpellAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1188,8 +1185,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_GRAMMAR_AUTO, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sGrammarAuto, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sGrammarAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1197,8 +1194,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_SPELL_UPPER_CASE ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITAL_WORDS, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sCapitalWords, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sCapitalWords, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1206,8 +1203,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_SPELL_WITH_DIGITS ) >>= bVal;
     nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sWordsWithDigits, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sWordsWithDigits, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1215,8 +1212,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_SPELL_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_SPELL_SPECIAL, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sSpellSpecial, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sSpellSpecial, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1224,7 +1221,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_HYPH_MIN_WORD_LENGTH ) >>= nVal;
     nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
-    m_xLinguOptionsCLB->set_text(nEntry, sNumMinWordlen + " " + OUString::number(nVal), 1);
+    m_xLinguOptionsCLB->set_text(nEntry, sNumMinWordlen + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
     nUPN_HYPH_MIN_WORD_LENGTH = nEntry;
 
@@ -1240,7 +1237,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     if (pHyp)
         nVal = static_cast<sal_Int16>(pHyp->GetMinLead());
     nUserData = OptionsUserData( EID_NUM_PRE_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
-    m_xLinguOptionsCLB->set_text(nEntry, sNumPreBreak + " " + OUString::number(nVal), 1);
+    m_xLinguOptionsCLB->set_text(nEntry, sNumPreBreak + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
     nUPN_HYPH_MIN_LEADING = nEntry;
 
@@ -1251,7 +1248,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     if (pHyp)
         nVal = static_cast<sal_Int16>(pHyp->GetMinTrail());
     nUserData = OptionsUserData( EID_NUM_POST_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
-    m_xLinguOptionsCLB->set_text(nEntry, sNumPostBreak + " " + OUString::number(nVal), 1);
+    m_xLinguOptionsCLB->set_text(nEntry, sNumPostBreak + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
     nUPN_HYPH_MIN_TRAILING = nEntry;
 
@@ -1260,8 +1257,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_HYPH_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_AUTO, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sHyphAuto, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sHyphAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->append();
@@ -1269,8 +1266,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     aLngCfg.GetProperty( UPN_IS_HYPH_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_SPECIAL, false, 0, true, bVal).GetUserData();
-    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xLinguOptionsCLB->set_text(nEntry, sHyphSpecial, 1);
+    m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xLinguOptionsCLB->set_text(nEntry, sHyphSpecial, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
 
     m_xLinguOptionsCLB->thaw();
@@ -1312,15 +1309,15 @@ IMPL_LINK(SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl, const weld::TreeView::
 {
     if (!pLinguData)
         return;
-    pLinguData->Reconfigure(m_xLinguModulesCLB->get_text(rRowCol.first, 1),
-                            m_xLinguModulesCLB->get_toggle(rRowCol.first, 0) == TRISTATE_TRUE);
+    pLinguData->Reconfigure(m_xLinguModulesCLB->get_text(rRowCol.first),
+                            m_xLinguModulesCLB->get_toggle(rRowCol.first) == TRISTATE_TRUE);
 }
 
 IMPL_LINK(SvxLinguTabPage, DicsBoxCheckButtonHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
     const uno::Reference<XDictionary> &rDic = aDics.getConstArray()[m_xLinguDicsCLB->get_iter_index_in_parent(rRowCol.first)];
     if (LinguMgr::GetIgnoreAllList() == rDic)
-        m_xLinguDicsCLB->set_toggle(rRowCol.first, TRISTATE_TRUE, 0);
+        m_xLinguDicsCLB->set_toggle(rRowCol.first, TRISTATE_TRUE);
 }
 
 IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
@@ -1473,11 +1470,11 @@ IMPL_LINK(SvxLinguTabPage, ClickHdl_Impl, weld::Button&, rBtn, void)
                         aData.SetNumericValue( static_cast<sal_uInt8>(nVal) ); //! sets IsModified !
                         m_xLinguOptionsCLB->set_id(nEntry, OUString::number(aData.GetUserData()));
                         if (nEntry == nUPN_HYPH_MIN_WORD_LENGTH)
-                            m_xLinguOptionsCLB->set_text(nEntry, sNumMinWordlen + " " + OUString::number(nVal), 1);
+                            m_xLinguOptionsCLB->set_text(nEntry, sNumMinWordlen + " " + OUString::number(nVal), 0);
                         else if (nEntry == nUPN_HYPH_MIN_LEADING)
-                            m_xLinguOptionsCLB->set_text(nEntry, sNumPreBreak + " " + OUString::number(nVal), 1);
+                            m_xLinguOptionsCLB->set_text(nEntry, sNumPreBreak + " " + OUString::number(nVal), 0);
                         else if (nEntry == nUPN_HYPH_MIN_TRAILING)
-                            m_xLinguOptionsCLB->set_text(nEntry, sNumPostBreak + " " + OUString::number(nVal), 1);
+                            m_xLinguOptionsCLB->set_text(nEntry, sNumPostBreak + " " + OUString::number(nVal), 0);
                         m_xLinguOptionsCLB->set_id(nEntry, OUString::number(aData.GetUserData()));
                     }
                 }
@@ -1556,9 +1553,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xModulesCLB->set_size_request(m_xModulesCLB->get_approximate_digit_width() * 40,
                                     m_xModulesCLB->get_height_rows(12));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xModulesCLB->get_checkbox_column_width());
-    m_xModulesCLB->set_column_fixed_widths(aWidths);
+    m_xModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     pDefaultLinguData.reset( new SvxLinguData_Impl( rLinguData ) );
 
@@ -1639,7 +1634,7 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, const weld::TreeView::iter
         pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(i).toInt64());
         if (!pData->IsParent() && pData->GetType() == TYPE_HYPH && i != nPos)
         {
-            m_xModulesCLB->set_toggle(i, TRISTATE_FALSE, 0);
+            m_xModulesCLB->set_toggle(i, TRISTATE_FALSE);
         }
     }
 }
@@ -1696,8 +1691,8 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 OUString* pChange = aChange.getArray();
                 pChange[nStart] = pData->GetImplName();
                 bChanged |= pData->GetIndex() != nLocalIndex ||
-                    static_cast<TriState>(pData->IsChecked()) != m_xModulesCLB->get_toggle(i, 0);
-                if (m_xModulesCLB->get_toggle(i, 0))
+                    static_cast<TriState>(pData->IsChecked()) != m_xModulesCLB->get_toggle(i);
+                if (m_xModulesCLB->get_toggle(i))
                     nStart++;
                 ++nLocalIndex;
             }
@@ -1728,8 +1723,8 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
         m_xModulesCLB->append(nullptr);
         m_xModulesCLB->set_id(nRow, sId);
-        m_xModulesCLB->set_text(nRow, sSpell, 1);
-        m_xModulesCLB->set_text_emphasis(nRow, true, 1);
+        m_xModulesCLB->set_text(nRow, sSpell, 0);
+        m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
 
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
@@ -1765,9 +1760,9 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
                 m_xModulesCLB->append(nullptr);
                 m_xModulesCLB->set_id(nRow, sId);
-                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                m_xModulesCLB->set_text(nRow, aTxt, 1);
-                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
+                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+                m_xModulesCLB->set_text(nRow, aTxt, 0);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 0);
                 ++nRow;
             }
         }
@@ -1778,8 +1773,8 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         sId = OUString::number(reinterpret_cast<sal_Int64>(pUserData));
         m_xModulesCLB->append(nullptr);
         m_xModulesCLB->set_id(nRow, sId);
-        m_xModulesCLB->set_text(nRow, sGrammar, 1);
-        m_xModulesCLB->set_text_emphasis(nRow, true, 1);
+        m_xModulesCLB->set_text(nRow, sGrammar, 0);
+        m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
@@ -1816,9 +1811,9 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
                 m_xModulesCLB->append(nullptr);
                 m_xModulesCLB->set_id(nRow, sId);
-                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                m_xModulesCLB->set_text(nRow, aTxt, 1);
-                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
+                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+                m_xModulesCLB->set_text(nRow, aTxt, 0);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 0);
                 ++nRow;
             }
         }
@@ -1829,8 +1824,8 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         sId = OUString::number(reinterpret_cast<sal_Int64>(pUserData));
         m_xModulesCLB->append(nullptr);
         m_xModulesCLB->set_id(nRow, sId);
-        m_xModulesCLB->set_text(nRow, sHyph, 1);
-        m_xModulesCLB->set_text_emphasis(nRow, true, 1);
+        m_xModulesCLB->set_text(nRow, sHyph, 0);
+        m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
@@ -1866,9 +1861,9 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
                 m_xModulesCLB->append(nullptr);
                 m_xModulesCLB->set_id(nRow, sId);
-                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                m_xModulesCLB->set_text(nRow, aTxt, 1);
-                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
+                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+                m_xModulesCLB->set_text(nRow, aTxt, 0);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 0);
                 ++nRow;
             }
         }
@@ -1879,8 +1874,8 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         sId = OUString::number(reinterpret_cast<sal_Int64>(pUserData));
         m_xModulesCLB->append(nullptr);
         m_xModulesCLB->set_id(nRow, sId);
-        m_xModulesCLB->set_text(nRow, sThes, 1);
-        m_xModulesCLB->set_text_emphasis(nRow, true, 1);
+        m_xModulesCLB->set_text(nRow, sThes, 0);
+        m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
@@ -1916,9 +1911,9 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
                 m_xModulesCLB->append(nullptr);
                 m_xModulesCLB->set_id(nRow, sId);
-                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                m_xModulesCLB->set_text(nRow, aTxt, 1);
-                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
+                m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+                m_xModulesCLB->set_text(nRow, aTxt, 0);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 0);
                 ++nRow;
             }
         }
@@ -1937,7 +1932,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, weld::Button&, rBtn, void )
 
     OUString sId(m_xModulesCLB->get_id(nCurPos));
     OUString sStr(m_xModulesCLB->get_text(nCurPos));
-    bool bIsChecked = m_xModulesCLB->get_toggle(nCurPos, nCurPos);
+    bool bIsChecked = m_xModulesCLB->get_toggle(nCurPos);
 
     m_xModulesCLB->remove(nCurPos);
 
@@ -1945,7 +1940,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, weld::Button&, rBtn, void )
 
     m_xModulesCLB->insert_text(nDestPos, sStr);
     m_xModulesCLB->set_id(nDestPos, sId);
-    m_xModulesCLB->set_toggle(nDestPos, bIsChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+    m_xModulesCLB->set_toggle(nDestPos, bIsChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
 
     m_xModulesCLB->thaw();
 
