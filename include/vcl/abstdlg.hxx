@@ -131,6 +131,12 @@ protected:
     virtual ~AbstractAboutDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractAdditionsDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractAdditionsDialog() override = default;
+};
+
 class VCL_DLLPUBLIC AbstractTipOfTheDayDialog : public VclAbstractDialog
 {
 protected:
@@ -182,6 +188,10 @@ public:
     // create about dialog
     virtual VclPtr<AbstractAboutDialog>
     CreateAboutDialog(weld::Window* pParent) = 0;
+
+    // create additions dialog
+    virtual VclPtr<AbstractAdditionsDialog>
+        CreateAdditionsDialog(weld::Window* pParent) = 0;
 
     // create info dialog to show tip-of-the-day
     virtual VclPtr<AbstractTipOfTheDayDialog>

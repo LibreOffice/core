@@ -74,6 +74,14 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             pDialog->Execute();
             break;
         }
+        case SID_ADDITIONS_DIALOG:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractAdditionsDialog> pDialog(
+                pFact->CreateAdditionsDialog(GetFrameWeld()));
+            pDialog->Execute();
+            break;
+        }
         case SID_SIGN_SIGNATURELINE:
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
