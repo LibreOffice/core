@@ -343,13 +343,12 @@ void Test::testSharedStringPool()
     CPPUNIT_ASSERT_EQUAL(p1.getData(), p2.getData());
 
     // Test case insensitive string ID's.
-    OUString const aAndyLower("andy"), aAndyUpper("ANDY");
     p1 = aPool.intern(aAndy);
-    p2 = aPool.intern(aAndyLower);
+    p2 = aPool.intern("andy");
     CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData() && p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());
-    p2 = aPool.intern(aAndyUpper);
+    p2 = aPool.intern("ANDY");
     CPPUNIT_ASSERT_MESSAGE("Failed to intern string.", p2.getData());
     CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("These two ID's should be equal.", p2.getDataIgnoreCase(), p1.getDataIgnoreCase());

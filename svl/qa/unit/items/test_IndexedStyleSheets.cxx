@@ -147,10 +147,9 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
 void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
 {
     OUString const name1("name1");
-    OUString const name2("name2");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name1));
-    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name2));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet("name2"));
     rtl::Reference<SfxStyleSheetBase> sheet4(new MockedStyleSheet(name1));
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
