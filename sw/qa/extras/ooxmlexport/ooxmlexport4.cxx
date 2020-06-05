@@ -1225,6 +1225,19 @@ DECLARE_OOXMLEXPORT_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineCo
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[3]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
+{
+    // TODO: Fix export.
+    if (mbExported)
+        return;
+
+    // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredWidth
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2408), nAnchoredWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
