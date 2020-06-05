@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76f8e573_1328e9e7",
+        "filename": "uitest/libreoffice/connection.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-05T06:52:40Z",
+      "side": 1,
+      "message": "What was wrong with the original assert?  When tearDown unconditionally sets self.connection to null, what is a scenario where self.connection can legitimately be non-null here at the start of setUp?",
+      "revId": "1ef6bf449b973962e9d9c359461107346499fb27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
