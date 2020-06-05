@@ -668,8 +668,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
         if ( xFrame.is() )
         {
-            const OUString sSlot( "slot:27115"  );
-            DispatchURL( mxContext, sSlot, xFrame );
+            DispatchURL( mxContext, "slot:27115", xFrame );
         }
     }
 
