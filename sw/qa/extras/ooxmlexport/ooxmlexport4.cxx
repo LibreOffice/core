@@ -1231,6 +1231,19 @@ DECLARE_OOXMLEXPORT_TEST(testDocxTablePosition, "floating-table-position.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
+{
+    // TODO: Fix export.
+    if (mbExported)
+        return;
+
+    // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    const sal_Int32 nAnchoredWidth
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2408), nAnchoredWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
