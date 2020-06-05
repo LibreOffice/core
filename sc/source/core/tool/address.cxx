@@ -1397,7 +1397,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
 
                         if (pRefMgr->getSingleRefToken(nFileId, aTab,
                                     ScAddress(nCol, nRow, 0), nullptr,
-                                    &nTab).get())
+                                    &nTab))
                         {
                             rAddr.SetTab( nTab);
                             nRes |= ScRefFlags::TAB_VALID;

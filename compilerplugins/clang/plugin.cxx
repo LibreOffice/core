@@ -856,7 +856,8 @@ bool isSmartPointerType(const Expr* e)
            || tc2.Class("ScopedReadAccess").Namespace("Bitmap").GlobalNamespace()
            || tc2.Class("ScopedVclPtrInstance").GlobalNamespace()
            || tc2.Class("VclPtr").GlobalNamespace()
-           || tc2.Class("ScopedVclPtr").GlobalNamespace())
+           || tc2.Class("ScopedVclPtr").GlobalNamespace()
+           || tc2.Class("intrusive_ptr").Namespace("boost").GlobalNamespace())
     {
         return true;
     }

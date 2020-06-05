@@ -5437,7 +5437,7 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
 
 bool ScFormulaCell::IsShared() const
 {
-    return mxGroup.get() != nullptr;
+    return bool(mxGroup);
 }
 
 bool ScFormulaCell::IsSharedTop() const

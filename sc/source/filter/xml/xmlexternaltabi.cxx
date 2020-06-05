@@ -210,7 +210,7 @@ void SAL_CALL ScXMLExternalRefRowContext::endFastElement( sal_Int32 /* nElement 
             ScExternalRefCache::TokenRef pToken = pTab->getCell(
                 static_cast<SCCOL>(j), static_cast<SCROW>(mrExternalRefInfo.mnRow));
 
-            if (pToken.get())
+            if (pToken)
             {
                 pTab->setCell(static_cast<SCCOL>(j),
                               static_cast<SCROW>(mrExternalRefInfo.mnRow+i), pToken);

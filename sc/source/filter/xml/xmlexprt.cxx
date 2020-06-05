@@ -4927,7 +4927,7 @@ void ScXMLExport::WriteExternalRefCaches()
                     sal_uInt32 nNumFmt = 0;
                     ScExternalRefCache::TokenRef pToken = pTable->getCell(nCol, nRow, &nNumFmt);
                     OUString aStrVal;
-                    if (pToken.get())
+                    if (pToken)
                     {
                         sal_Int32 nIndex = GetNumberFormatStyleIndex(nNumFmt);
                         if (nIndex >= 0)
