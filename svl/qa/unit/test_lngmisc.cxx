@@ -133,37 +133,30 @@ namespace
 
   void LngMiscTest::testGetThesaurusReplaceText()
   {
-    const OUString str1("");
     const OUString str2("asdf");
-    const OUString str3("asdf (abc)");
-    const OUString str4("asdf*");
-    const OUString str5("asdf * ");
-    const OUString str6("asdf (abc) *");
-    const OUString str7("asdf asdf * (abc)");
-    const OUString str8(" * (abc) asdf *");
 
-    OUString r = linguistic::GetThesaurusReplaceText(str1);
+    OUString r = linguistic::GetThesaurusReplaceText("");
     CPPUNIT_ASSERT(r.isEmpty());
 
     r = linguistic::GetThesaurusReplaceText(str2);
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText(str3);
+    r = linguistic::GetThesaurusReplaceText("asdf (abc)");
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText(str4);
+    r = linguistic::GetThesaurusReplaceText("asdf*");
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText(str5);
+    r = linguistic::GetThesaurusReplaceText("asdf * ");
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText(str6);
+    r = linguistic::GetThesaurusReplaceText("asdf (abc) *");
     CPPUNIT_ASSERT_EQUAL(str2, r);
 
-    r = linguistic::GetThesaurusReplaceText(str7);
+    r = linguistic::GetThesaurusReplaceText("asdf asdf * (abc)");
     CPPUNIT_ASSERT_EQUAL(OUString("asdf asdf"), r);
 
-    r = linguistic::GetThesaurusReplaceText(str8);
+    r = linguistic::GetThesaurusReplaceText(" * (abc) asdf *");
     CPPUNIT_ASSERT(r.isEmpty());
   }
 
