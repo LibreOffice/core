@@ -687,8 +687,7 @@ void AssignmentPersistentData::ImplCommit()
             catch(const Exception&) { }
             if (!m_xDatabaseContext.is())
             {
-                const OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
-                ShowServiceNotAvailableError(m_xDialog.get(), sContextServiceName, false);
+                ShowServiceNotAvailableError(m_xDialog.get(), "com.sun.star.sdb.DatabaseContext", false);
                 return;
             }
         }
@@ -733,8 +732,7 @@ void AssignmentPersistentData::ImplCommit()
         catch(const Exception&) { }
         if (!xHandler.is())
         {
-            const OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
-            ShowServiceNotAvailableError(m_xDialog.get(), sInteractionHandlerServiceName, true);
+            ShowServiceNotAvailableError(m_xDialog.get(), "com.sun.star.task.InteractionHandler", true);
             return;
         }
 

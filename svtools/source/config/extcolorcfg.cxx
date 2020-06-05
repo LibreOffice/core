@@ -317,9 +317,8 @@ void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUStrin
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;
 
             const OUString sColor("/Color");
-            const OUString sDefaultColor("/DefaultColor");
             lcl_addString(aColorNames,sColor);
-            lcl_addString(aDefaultColorNames,sDefaultColor);
+            lcl_addString(aDefaultColorNames,"/DefaultColor");
             uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
             const uno::Any* pColors = aColors.getConstArray();
 

@@ -1066,11 +1066,9 @@ OUString SvtURLBox::GetURL()
 
         bool bSlash = aObj.hasFinalSlash();
         {
-            const OUString aPropName("CasePreservingURL");
-
             OUString aFileURL;
 
-            Any aAny = UCBContentHelper::GetProperty(aURL, aPropName);
+            Any aAny = UCBContentHelper::GetProperty(aURL, "CasePreservingURL");
             bool success = (aAny >>= aFileURL);
             OUString aTitle;
             if(success)
