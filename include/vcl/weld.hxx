@@ -539,6 +539,11 @@ public:
     virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
 };
 
+class VCL_DLLPUBLIC AdditionsDialog : virtual public Dialog
+{
+public:
+};
+
 class VCL_DLLPUBLIC Assistant : virtual public Dialog
 {
 protected:
