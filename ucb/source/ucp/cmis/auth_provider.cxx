@@ -80,10 +80,6 @@ namespace cmis
             const char* /*username*/,
             const char* /*password*/ )
     {
-        OUString instructions = "Open the following link in your browser and "
-            "paste the code from the URL you have been redirected to in the "
-            "box below. For example:\n"
-            "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033";
         OUString url_oustr( url, strlen( url ), RTL_TEXTENCODING_UTF8 );
         const css::uno::Reference<
             css::ucb::XCommandEnvironment> xEnv = getXEnv( );
@@ -97,7 +93,11 @@ namespace cmis
             {
                 rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
                     = new ucbhelper::AuthenticationFallbackRequest (
-                            instructions, url_oustr );
+                            "Open the following link in your browser and "
+                            "paste the code from the URL you have been redirected to in the "
+                            "box below. For example:\n"
+                            "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033",
+                            url_oustr );
 
                 xIH->handle( xRequest.get() );
 
@@ -125,7 +125,6 @@ namespace cmis
             const char* /*username*/,
             const char* /*password*/ )
     {
-        OUString instructions = "PIN:";
         const css::uno::Reference<
             css::ucb::XCommandEnvironment> xEnv = getXEnv( );
 
@@ -138,7 +137,7 @@ namespace cmis
             {
                 rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
                     = new ucbhelper::AuthenticationFallbackRequest (
-                            instructions, "" );
+                            "PIN:", "" );
 
                 xIH->handle( xRequest.get() );
 
