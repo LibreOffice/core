@@ -557,9 +557,8 @@ void OptimizerDialog::InitPage3()
         Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
         for ( sal_Int32 j = 0; j < xShapes->getCount(); j++ )
         {
-            const OUString sOLE2Shape( "com.sun.star.drawing.OLE2Shape"  );
             Reference< XShape > xShape( xShapes->getByIndex( j ), UNO_QUERY_THROW );
-            if ( xShape->getShapeType() == sOLE2Shape )
+            if ( xShape->getShapeType() == "com.sun.star.drawing.OLE2Shape" )
                 nOLECount++;
         }
     }
@@ -678,8 +677,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             {
                 Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY_THROW );
                 bool bVisible = true;
-                const OUString sVisible( "Visible"  );
-                if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
+                if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
                 {
                     if (!bVisible )
                         nDeletedSlides++;
@@ -696,8 +694,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
                 Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
                 bool bVisible = true;
-                const OUString sVisible( "Visible"  );
-                if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
+                if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
                 {
                     if (!bVisible )
                         nDeletedSlides++;
@@ -763,9 +760,8 @@ void OptimizerDialog::UpdateControlStatesPage4()
             Reference< XShapes > xShapes( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             for ( sal_Int32 j = 0; j < xShapes->getCount(); j++ )
             {
-                const OUString sOLE2Shape( "com.sun.star.drawing.OLE2Shape"  );
                 Reference< XShape > xShape( xShapes->getByIndex( j ), UNO_QUERY_THROW );
-                if ( xShape->getShapeType() == sOLE2Shape )
+                if ( xShape->getShapeType() == "com.sun.star.drawing.OLE2Shape" )
                     nOLEReplacements++;
             }
         }

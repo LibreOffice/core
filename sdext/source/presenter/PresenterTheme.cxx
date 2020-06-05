@@ -964,11 +964,10 @@ void ViewStyleContainer::ProcessViewStyle(
         }
     }
 
-    const OUString sPathToFont; // empty string
     Reference<container::XHierarchicalNameAccess> xFontNode (
         PresenterConfigurationAccess::GetProperty(rxProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (
-        ReadContext::ReadFont(xFontNode, sPathToFont, PresenterTheme::SharedFontDescriptor()));
+        ReadContext::ReadFont(xFontNode, "", PresenterTheme::SharedFontDescriptor()));
     if (pFont)
         pStyle->mpFont = pFont;
 

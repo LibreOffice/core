@@ -58,8 +58,7 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");
     m_aLineFeed[0] = '\n';
 
-    OUString aElement = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    write(aElement);
+    write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 }
 
 void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )

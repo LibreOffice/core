@@ -296,15 +296,13 @@ Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString&
 
 void UnoDialog::enableControl( const OUString& rControlName )
 {
-    const OUString sEnabled( "Enabled" );
-    setControlProperty( rControlName, sEnabled, Any( true ) );
+    setControlProperty( rControlName, "Enabled", Any( true ) );
 }
 
 
 void UnoDialog::disableControl( const OUString& rControlName )
 {
-    const OUString sEnabled( "Enabled" );
-    setControlProperty( rControlName, sEnabled, Any( false ) );
+    setControlProperty( rControlName, "Enabled", Any( false ) );
 }
 
 
