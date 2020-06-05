@@ -88,15 +88,16 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     m_xJavaList->set_size_request(m_xJavaList->get_approximate_digit_width() * 30,
                                   m_xJavaList->get_height_rows(8));
 
+    m_xJavaList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
+    m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
+
     std::vector<int> aWidths;
     aWidths.push_back(m_xJavaList->get_checkbox_column_width());
     aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
     m_xJavaList->set_column_fixed_widths(aWidths);
-    m_xJavaList->set_toggle_columns_as_radio();
 
     m_xJavaEnableCB->connect_clicked( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
-    m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
-    m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
     m_xAddBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
     m_xParameterBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_xClassPathBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );

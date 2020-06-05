@@ -498,8 +498,9 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
     m_xOk->connect_clicked(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     m_xLeftPB->connect_clicked(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
     m_xRightPB->connect_clicked(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
+
     m_xHeaderTree->connect_size_allocate(LINK(this, SwAddStylesDlg_Impl, TreeSizeAllocHdl));
-    m_xHeaderTree->set_toggle_columns_as_radio();
+    m_xHeaderTree->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xHeaderTree->connect_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
 
     std::vector<int> aWidths;
@@ -744,16 +745,14 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
 
     sAddStyleContent = m_xAddStylesCB->get_label();
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xFromObjCLB->get_checkbox_column_width());
-    m_xFromObjCLB->set_column_fixed_widths(aWidths);
+    m_xFromObjCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); ++i)
     {
         OUString sId(OUString::number(static_cast<sal_uInt32>(RES_SRCTYPES[i].second)));
         m_xFromObjCLB->append();
-        m_xFromObjCLB->set_toggle(i, TRISTATE_FALSE, 0);
-        m_xFromObjCLB->set_text(i, SwResId(RES_SRCTYPES[i].first), 1);
+        m_xFromObjCLB->set_toggle(i, TRISTATE_FALSE);
+        m_xFromObjCLB->set_text(i, SwResId(RES_SRCTYPES[i].first), 0);
         m_xFromObjCLB->set_id(i, sId);
     }
     m_xFromObjCLB->set_size_request(-1, std::max<int>(m_xFromObjCLB->get_preferred_size().Height(),
@@ -966,7 +965,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         for (int nFromObj = 0, nCount = m_xFromObjCLB->n_children(); nFromObj < nCount; ++nFromObj)
         {
             SwTOOElements nData = static_cast<SwTOOElements>(m_xFromObjCLB->get_id(nFromObj).toInt32());
-            m_xFromObjCLB->set_toggle(nFromObj, bool(nData & nOLEData) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            m_xFromObjCLB->set_toggle(nFromObj, bool(nData & nOLEData) ? TRISTATE_TRUE : TRISTATE_FALSE);
         }
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
@@ -1061,7 +1060,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             SwTOOElements nOLEData = SwTOOElements::NONE;
             for (int i = 0, nCount = m_xFromObjCLB->n_children(); i < nCount; ++i)
             {
-                if (m_xFromObjCLB->get_toggle(i, 0) == TRISTATE_TRUE)
+                if (m_xFromObjCLB->get_toggle(i) == TRISTATE_TRUE)
                 {
                     SwTOOElements nData = static_cast<SwTOOElements>(m_xFromObjCLB->get_id(i).toInt32());
                     nOLEData |= nData;

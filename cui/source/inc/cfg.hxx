@@ -338,7 +338,7 @@ public:
     void set_dropdown(int row, int col) { m_xControl->set_image(row, *m_xDropDown, col); }
     void set_id(int row, const OUString& rId) { m_xControl->set_id(row, rId); }
     void clear() { m_xControl->clear(); } //need frees ?
-    void set_toggle(int row, TriState eState, int col) { m_xControl->set_toggle(row, eState, col); }
+    void set_toggle(int row, TriState eState) { m_xControl->set_toggle(row, eState); }
     void scroll_to_row(int pos) { m_xControl->scroll_to_row(pos); }
     void select(int pos) { m_xControl->select(pos); }
 
@@ -455,15 +455,14 @@ protected:
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           weld::TreeView& rTreeView, int nPos,
-                                          int nStartCol);
+                                          bool bMenu = false);
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,
                                           weld::TreeView& rTreeView, weld::TreeIter& rIter,
-                                          int nStartCol);
+                                          bool bMenu = false);
 
     void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId,
                                          const OUString& sUIItemCommand,
-                                         weld::TreeView& rTreeView, weld::TreeIter& rIter,
-                                         int nStartCol);
+                                         weld::TreeView& rTreeView, weld::TreeIter& rIter);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );

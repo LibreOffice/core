@@ -557,22 +557,12 @@
                             <attribute name="active">0</attribute>
                           </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn9">
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkCellRendererPixbuf" id="cellrenderertext9"/>
                           <attributes>
                             <attribute name="pixbuf">1</attribute>
                           </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn10">
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext10"/>
                           <attributes>
@@ -620,10 +610,6 @@
                             <attribute name="pixbuf">0</attribute>
                           </attributes>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn33">
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext22"/>
                           <attributes>

@@ -459,9 +459,7 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
 {
     m_xCategoryBox->connect_entry_insert_text(LINK(this, SwCaptionOptPage, TextFilterHdl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLB->get_checkbox_column_width());
-    m_xCheckLB->set_column_fixed_widths(aWidths);
+    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
@@ -554,7 +552,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
     int nCheckCount = 0;
     for (int i = 0, nCount = m_xCheckLB->n_children(); i < nCount; ++i)
     {
-        if (m_xCheckLB->get_toggle(i, 0) == TRISTATE_TRUE)
+        if (m_xCheckLB->get_toggle(i) == TRISTATE_TRUE)
             ++nCheckCount;
         InsCaptionOpt* pData = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
         bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
@@ -582,16 +580,16 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     // Writer objects
     int nPos = 0;
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
-    m_xCheckLB->set_text(nPos, m_sSWTable, 1);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE);
+    m_xCheckLB->set_text(nPos, m_sSWTable, 0);
     SetOptions(nPos++, TABLE_CAP);
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
-    m_xCheckLB->set_text(nPos, m_sSWFrame, 1);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE);
+    m_xCheckLB->set_text(nPos, m_sSWFrame, 0);
     SetOptions(nPos++, FRAME_CAP);
     m_xCheckLB->append();
-    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
-    m_xCheckLB->set_text(nPos, m_sSWGraphic, 1);
+    m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE);
+    m_xCheckLB->set_text(nPos, m_sSWGraphic, 0);
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
@@ -615,8 +613,8 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
         // don't show product version
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
         m_xCheckLB->append();
-        m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE, 0);
-        m_xCheckLB->set_text(nPos, sClass, 1);
+        m_xCheckLB->set_toggle(nPos, TRISTATE_FALSE);
+        m_xCheckLB->set_text(nPos, sClass, 0);
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
     m_xLbCaptionOrder->set_active(
@@ -635,7 +633,7 @@ void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
     {
         InsCaptionOpt* pIns = new InsCaptionOpt(*pOpt);
         m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
-        m_xCheckLB->set_toggle(nPos, pOpt->UseCaption() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xCheckLB->set_toggle(nPos, pOpt->UseCaption() ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
     else
     {
@@ -657,7 +655,7 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
 {
     if (nSelEntry != -1)
     {
-        bool bChecked = m_xCheckLB->get_toggle(nSelEntry, 0) == TRISTATE_TRUE;
+        bool bChecked = m_xCheckLB->get_toggle(nSelEntry) == TRISTATE_TRUE;
 
         m_xSettingsGroup->set_sensitive(bChecked);
         bool bNumSep = bChecked && m_xLbCaptionOrder->get_active() == 1;
@@ -780,7 +778,7 @@ void SwCaptionOptPage::SaveEntry(int nEntry)
 
     InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nEntry).toInt64());
 
-    pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry, 0) == TRISTATE_TRUE;
+    pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry) == TRISTATE_TRUE;
     const OUString aName(m_xCategoryBox->get_active_text());
     if (aName == m_sNone)
         pOpt->SetCategory("");
@@ -845,7 +843,7 @@ IMPL_LINK(SwCaptionOptPage, OrderHdl, weld::ComboBox&, rBox, void)
     bool bChecked = false;
     if (nSelEntry != -1)
     {
-        bChecked = m_xCheckLB->get_toggle(nSelEntry, 0) == TRISTATE_TRUE;
+        bChecked = m_xCheckLB->get_toggle(nSelEntry) == TRISTATE_TRUE;
     }
 
     int nPos = rBox.get_active();

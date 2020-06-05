@@ -138,7 +138,7 @@ namespace dbaui
 
             std::unique_ptr<weld::TreeIter> xEntry(m_xTablesList->GetEntryPosByName(sName, xSchema ? xSchema.get() : (xCatalog ? xCatalog.get() : xRootEntry.get())));
             if (xEntry)
-                m_xTablesList->GetWidget().set_toggle(*xEntry, TRISTATE_TRUE, 0);
+                m_xTablesList->GetWidget().set_toggle(*xEntry, TRISTATE_TRUE);
         }
         m_xTablesList->CheckButtons();
     }
@@ -299,7 +299,7 @@ namespace dbaui
         {
             do
             {
-                m_xTablesList->GetWidget().set_toggle(*xEntry, _bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+                m_xTablesList->GetWidget().set_toggle(*xEntry, _bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
             }
             while (m_xTablesList->GetWidget().iter_next(*xEntry));
         }
@@ -350,7 +350,7 @@ namespace dbaui
             std::unique_ptr<weld::TreeIter> xSchema;
             std::unique_ptr<weld::TreeIter> xCatalog;
 
-            if (m_xTablesList->GetWidget().get_toggle(*xEntry, 0) == TRISTATE_TRUE && !m_xTablesList->GetWidget().iter_has_child(*xEntry))
+            if (m_xTablesList->GetWidget().get_toggle(*xEntry) == TRISTATE_TRUE && !m_xTablesList->GetWidget().iter_has_child(*xEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
                 OUStringBuffer sComposedName;
                 OUString sCatalog;

@@ -94,13 +94,13 @@ bool lclFillListBox(weld::TreeView& rLBox, const vector<ScDPLabelData::Member>& 
     {
         rLBox.append();
         int pos = rLBox.n_children() - 1;
-        rLBox.set_toggle(pos, TRISTATE_FALSE, 0);
+        rLBox.set_toggle(pos, TRISTATE_FALSE);
         OUString aName = rMember.getDisplayName();
         if (!aName.isEmpty())
-            rLBox.set_text(pos, aName, 1);
+            rLBox.set_text(pos, aName, 0);
         else
         {
-            rLBox.set_text(pos, ScResId(STR_EMPTYDATA), 1);
+            rLBox.set_text(pos, ScResId(STR_EMPTYDATA), 0);
             bEmpty = true;
         }
     }
@@ -628,9 +628,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj
     , mrDPObj(rDPObj)
     , maLabelData(rLabelData)
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xLbHide->get_checkbox_column_width());
-    m_xLbHide->set_column_fixed_widths(aWidths);
+    m_xLbHide->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     m_xLbSortBy->set_size_request(m_xLbSortBy->get_approximate_digit_width() * 18, -1);
     m_xLbHide->set_size_request(-1, m_xLbHide->get_height_rows(5));
@@ -683,7 +681,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.maMembers = maLabelData.maMembers;
     int nVisCount = m_xLbHide->n_children();
     for (int nPos = 0; nPos < nVisCount; ++nPos)
-        rLabelData.maMembers[nPos].mbVisible = m_xLbHide->get_toggle(nPos, 0) == TRISTATE_FALSE;
+        rLabelData.maMembers[nPos].mbVisible = m_xLbHide->get_toggle(nPos) == TRISTATE_FALSE;
 
     // *** HIERARCHY ***
 
@@ -791,7 +789,7 @@ void ScDPSubtotalOptDlg::InitHideListBox()
     lclFillListBox(*m_xLbHide, maLabelData.maMembers);
     size_t n = maLabelData.maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        m_xLbHide->set_toggle(i, maLabelData.maMembers[i].mbVisible ? TRISTATE_FALSE : TRISTATE_TRUE, 0);
+        m_xLbHide->set_toggle(i, maLabelData.maMembers[i].mbVisible ? TRISTATE_FALSE : TRISTATE_TRUE);
     bool bEnable = m_xLbHide->n_children() > 0;
     m_xHideFrame->set_sensitive(bEnable);
 }
