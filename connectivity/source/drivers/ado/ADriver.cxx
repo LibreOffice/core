@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeCoInitUninit.hxx>
 #include <strings.hrc>
 #include <objbase.h>
 
@@ -47,28 +48,12 @@ ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _
     ,m_xORB(_xORB)
     ,mnNbCallCoInitializeExForReinit(0)
 {
-     HRESULT hr;
-     while ((hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED)) == RPC_E_CHANGED_MODE)
-     {
-         // so we're in RPC_E_CHANGED_MODE case
-         // the pb was it was already initialized with COINIT_MULTITHREADED
-         // close this init
-         CoUninitialize();
-         // and increment counter for dtr part
-         ++mnNbCallCoInitializeExForReinit;
-
-         // and keep on the loop if there were multi initializations
-     }
-     if (FAILED(hr))
-         std::abort();
+     o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 ODriver::~ODriver()
 {
-    CoUninitialize();
-    // Put back all the inits, if there were, before the use of ADO
-    for (int i = 0; i < mnNbCallCoInitializeExForReinit; ++i)
-        CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 void ODriver::disposing()
