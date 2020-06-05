@@ -25,7 +25,6 @@ class OfficeConnection:
     def __init__(self, args):
         self.args = args
         self.soffice = None
-        self.socket = None
         self.xContext = None
 
     def setUp(self):
@@ -137,7 +136,6 @@ class OfficeConnection:
 
             ret = self.soffice.wait()
             self.xContext = None
-            self.socket = None
             self.soffice = None
             if ret != 0:
                 raise Exception("Exit status indicates failure: " + str(ret))
