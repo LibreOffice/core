@@ -52,7 +52,15 @@ class OfficeConnection:
             raise Exception("unsupported connection method: " + method)
 
         # connect to the soffice instance
-        self.xContext = self.connect(socket)
+        success = False
+        try:
+            self.xContext = self.connect(socket)
+            success = True
+        finally:
+            if not success and self.soffice:
+                self.soffice.kill()
+                self.soffice.wait()
+                self.soffice = None
 
     def bootstrap(self, soffice, userdir, socket):
         """ Creates a new LibreOffice process
