@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "498d56fe_20027397",
+        "filename": "include/o3tl/safeCoInitUninit.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-05T11:40:52Z",
+      "side": 1,
+      "message": "But this one must be reference! Or else it doesn\u0027t serve its purpose.",
+      "range": {
+        "startLine": 30,
+        "startChar": 50,
+        "endLine": 30,
+        "endChar": 54
+      },
+      "revId": "8c43dd799b860e6af53926f200fb0b1e785bef52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
