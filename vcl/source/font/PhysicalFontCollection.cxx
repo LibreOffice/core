@@ -357,10 +357,9 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyBySubstFontAttr( c
         const FontWeight eSearchWeight = rFontAttr.Weight;
         const FontWidth  eSearchWidth  = rFontAttr.Width;
         const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
-        const OUString aSearchName;
 
         pFoundData = FindFontFamilyByAttributes( nSearchType,
-            eSearchWeight, eSearchWidth, eSearchSlant, aSearchName );
+            eSearchWeight, eSearchWidth, eSearchSlant, "" );
 
         if( pFoundData )
             return pFoundData;

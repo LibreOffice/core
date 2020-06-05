@@ -242,11 +242,9 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
         sal_uInt8 nBlue  = (i << 2) & 0xC0;
         rRenderContext.SetTextColor(Color(nRed, nGreen, nBlue));
 
-        OUString aPrintText = "SVP test program";
-
         rRenderContext.DrawText(tools::Rectangle(Point((aPaperSize.Width() - 4000) / 2, 2000),
                                 Size(aPaperSize.Width() - 2100, aPaperSize.Height() - 4000)),
-                                aPrintText,
+                                "SVP test program",
                                 DrawTextFlags::MultiLine);
     }
 

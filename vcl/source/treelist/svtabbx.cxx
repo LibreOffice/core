@@ -854,9 +854,6 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::vcl::AccessibleBr
 
     if( _eType == ::vcl::BBTYPE_TABLECELL && _nPos != -1 )
     {
-        const OUString sVar1( "%1" );
-        const OUString sVar2( "%2" );
-
         sal_uInt16 nColumnCount = GetColumnCount();
         if (nColumnCount > 0)
         {
@@ -864,11 +861,11 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::vcl::AccessibleBr
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
             OUString aText( VclResId(STR_SVT_ACC_DESC_TABLISTBOX) );
-            aText = aText.replaceFirst( sVar1, OUString::number( nRow ) );
+            aText = aText.replaceFirst( "%1", OUString::number( nRow ) );
             OUString sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
             if ( sColHeader.isEmpty() )
                 sColHeader = OUString::number( nColumn );
-            aText = aText.replaceFirst( sVar2, sColHeader );
+            aText = aText.replaceFirst( "%2", sColHeader );
             aRetText = aText;
         }
     }

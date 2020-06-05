@@ -68,15 +68,14 @@ void FontFeatureTest::testGetFontFeatures()
 
     CPPUNIT_ASSERT_EQUAL(size_t(53), rDefaultFontFeatures.size());
 
-    OUString aExpectedFeaturesString = "c2sc case dlig fina frac hlig liga lnum "
-                                       "locl onum pnum sa01 sa02 sa03 sa04 sa05 "
-                                       "sa06 sa07 sa08 salt sinf smcp ss01 ss02 "
-                                       "ss03 sups tnum zero ingl cpsp lith litt "
-                                       "itlc para algn arti circ dash dbls foot "
-                                       "frsp grkn hang lng minu nfsp name quot "
-                                       "texm thou vari caps ligc ";
-
-    CPPUNIT_ASSERT_EQUAL(aExpectedFeaturesString, aFeaturesString);
+    CPPUNIT_ASSERT_EQUAL(OUString("c2sc case dlig fina frac hlig liga lnum "
+                                  "locl onum pnum sa01 sa02 sa03 sa04 sa05 "
+                                  "sa06 sa07 sa08 salt sinf smcp ss01 ss02 "
+                                  "ss03 sups tnum zero ingl cpsp lith litt "
+                                  "itlc para algn arti circ dash dbls foot "
+                                  "frsp grkn hang lng minu nfsp name quot "
+                                  "texm thou vari caps ligc "),
+                         aFeaturesString);
 
     // Check C2SC feature
     {

@@ -54,8 +54,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
 void
 IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 {
-    OUString const id("katze");
-    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
+    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName("katze");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("theme id is properly uppercased", OUString("Katze"), displayName);
 }
 
@@ -69,16 +68,14 @@ IconThemeInfoTest::ImagesZipIsNotValid()
 void
 IconThemeInfoTest::ImagesColibreZipIsValid()
 {
-    OUString const id("file://images_colibre.zip");
-    bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
+    bool valid = vcl::IconThemeInfo::UrlCanBeParsed("file://images_colibre.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images_colibre.zip is a valid theme name", true, valid);
 }
 
 void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {
-    OUString const fname("images_colibre.zip");
-    OUString sname = vcl::IconThemeInfo::FileNameToThemeId(fname);
+    OUString sname = vcl::IconThemeInfo::FileNameToThemeId("images_colibre.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme id is returned for 'images_colibre.zip'", OUString("colibre"), sname);
 }
 
@@ -86,9 +83,8 @@ void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined1()
 {
     bool thrown = false;
-    OUString const fname("images_colibre");
     try {
-        vcl::IconThemeInfo::FileNameToThemeId(fname);
+        vcl::IconThemeInfo::FileNameToThemeId("images_colibre");
     }
     catch (std::runtime_error&) {
         thrown = true;
@@ -100,9 +96,8 @@ void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 {
     bool thrown = false;
-    OUString const fname("image_colibre.zip");
     try {
-        vcl::IconThemeInfo::FileNameToThemeId(fname);
+        vcl::IconThemeInfo::FileNameToThemeId("image_colibre.zip");
     }
     catch (std::runtime_error&) {
         thrown = true;
