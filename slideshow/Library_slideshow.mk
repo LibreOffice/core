@@ -24,6 +24,7 @@ $(eval $(call gb_Library_set_precompiled_header,slideshow,slideshow/inc/pch/prec
 
 $(eval $(call gb_Library_use_externals,slideshow,\
 	boost_headers \
+	box2d \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,slideshow,\
@@ -84,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/animationnodes/propertyanimationnode \
     slideshow/source/engine/animationnodes/sequentialtimecontainer \
     slideshow/source/engine/attributemap \
+    slideshow/source/engine/box2dtools \
     slideshow/source/engine/color \
     slideshow/source/engine/delayevent \
     slideshow/source/engine/effectrewinder \
