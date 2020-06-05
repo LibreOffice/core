@@ -596,8 +596,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( !bHasLocation )
                 {
                     // Create a default file name with the correct extension
-                    const OUString aPreviewFileName( "webpreview" );
-                    aFileName = aPreviewFileName;
+                    aFileName = "webpreview";
                 }
                 else
                 {

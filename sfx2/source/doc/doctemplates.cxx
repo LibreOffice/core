@@ -431,8 +431,7 @@ void SfxDocTplService_Impl::init_Impl()
             TOOLS_WARN_EXCEPTION("sfx.doc", "SfxDocTplService_Impl::init_Impl: cannot create DocumentProperties service:");
         }
 
-        OUString const aService = SERVICENAME_TYPEDETECTION;
-        mxType.set( mxContext->getServiceManager()->createInstanceWithContext(aService, mxContext), UNO_QUERY );
+        mxType.set( mxContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, mxContext), UNO_QUERY );
 
         getDirList();
         readFolderList();

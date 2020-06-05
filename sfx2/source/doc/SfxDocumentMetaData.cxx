@@ -1054,13 +1054,11 @@ void SfxDocumentMetaData::init(
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
-    OUString const prefix(
-        "/child::office:document-meta/child::office:meta");
     css::uno::Reference<css::xml::dom::XNode> xDocNode(
         m_xDoc, css::uno::UNO_QUERY_THROW);
     m_xParent.clear();
     try {
-        m_xParent = xPath->selectSingleNode(xDocNode, prefix);
+        m_xParent = xPath->selectSingleNode(xDocNode, "/child::office:document-meta/child::office:meta");
     } catch (const css::uno::Exception &) {
     }
 

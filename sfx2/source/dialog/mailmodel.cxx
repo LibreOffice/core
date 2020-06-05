@@ -432,8 +432,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 if ( !bHasLocation )
                 {
                     // Create a noname file name with the correct extension
-                    const OUString aNoNameFileName( "noname" );
-                    aFileName = aNoNameFileName;
+                    aFileName = "noname";
                 }
                 else
                 {
