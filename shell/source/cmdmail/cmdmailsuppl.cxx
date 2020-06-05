@@ -159,11 +159,10 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         // Query XNameAccess interface of the org.openoffice.Office.Common/ExternalMailer
         // configuration node to retrieve the users preferred email application. This may
         // transparently by redirected to e.g. the corresponding GConf setting in GNOME.
-        OUString aConfigRoot = "org.openoffice.Office.Common/ExternalMailer";
 
         PropertyValue aProperty;
         aProperty.Name = "nodepath";
-        aProperty.Value <<= aConfigRoot;
+        aProperty.Value <<= OUString("org.openoffice.Office.Common/ExternalMailer");
 
         Sequence< Any > aArgumentList( 1 );
         aArgumentList[0] <<= aProperty;
