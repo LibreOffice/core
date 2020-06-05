@@ -75,9 +75,9 @@ TableTreeListBox::TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView)
     , m_bVirtualRoot(false)
     , m_bNoEmptyFolders(false)
     , m_bShowToggles(true)
-    , m_nTextColumn(1)
     , m_xTreeView(std::move(xTreeView))
 {
+    m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
 }
 
 void OTableTreeListBox::implSetDefaultImages()
@@ -366,7 +366,6 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 void TableTreeListBox::DisableCheckButtons()
 {
     m_bShowToggles = false;
-    m_nTextColumn = 0;
 }
 
 void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection, const TNames& _rTables )
@@ -396,8 +395,9 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
             m_xTreeView->insert(nullptr, -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xRet.get());
             m_xTreeView->set_image(*xRet, sImageId, -1);
             if (m_bShowToggles)
-                m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE, 0);
-            m_xTreeView->set_text(*xRet, sRootEntryText, m_nTextColumn);
+                m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xRet, sRootEntryText, 0);
+            m_xTreeView->set_text_emphasis(*xRet, false, 0);
         }
 
         if ( _rTables.empty() )
@@ -441,8 +441,9 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
                         m_xTreeView->insert(xRootEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xRet.get());
                         m_xTreeView->set_image(*xRet, sImageId, -1);
                         if (m_bShowToggles)
-                            m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE, 0);
-                        m_xTreeView->set_text(*xRet, folderName, m_nTextColumn);
+                            m_xTreeView->set_toggle(*xRet, TRISTATE_FALSE);
+                        m_xTreeView->set_text(*xRet, folderName, 0);
+                        m_xTreeView->set_text_emphasis(*xRet, false, 0);
                     }
                 }
             }
@@ -458,14 +459,14 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
 
 bool TableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
 {
-    return m_xTreeView->get_text_emphasis(rEntry, m_nTextColumn);
+    return m_xTreeView->get_text_emphasis(rEntry, 0);
 }
 
 void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)
         return;
-    m_xTreeView->set_toggle(rEntry, TRISTATE_TRUE, 0);
+    m_xTreeView->set_toggle(rEntry, TRISTATE_TRUE);
     checkedButton_noBroadcast(rEntry);
 }
 
@@ -492,11 +493,11 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     implEmphasize(_pEntry, SvButtonState::Checked == eState);
 }
 
-void TableTreeListBox::checkedButton_noBroadcast(weld::TreeIter& rEntry)
+void TableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)
         return;
-    TriState eState = m_xTreeView->get_toggle(rEntry, 0);
+    TriState eState = m_xTreeView->get_toggle(rEntry);
     OSL_ENSURE(TRISTATE_INDET != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
 
     if (m_xTreeView->iter_has_child(rEntry)) // if it has children, check those too
@@ -507,7 +508,7 @@ void TableTreeListBox::checkedButton_noBroadcast(weld::TreeIter& rEntry)
         bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
         while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
         {
-            m_xTreeView->set_toggle(*xChildEntry, eState, 0);
+            m_xTreeView->set_toggle(*xChildEntry, eState);
             bChildEntry = m_xTreeView->iter_next(*xChildEntry);
         }
     }
@@ -515,7 +516,7 @@ void TableTreeListBox::checkedButton_noBroadcast(weld::TreeIter& rEntry)
     if (m_xTreeView->is_selected(rEntry))
     {
         m_xTreeView->selected_foreach([this, eState](weld::TreeIter& rSelected){
-            m_xTreeView->set_toggle(rSelected, eState, 0);
+            m_xTreeView->set_toggle(rSelected, eState);
             if (m_xTreeView->iter_has_child(rSelected)) // if it has children, check those too
             {
                 std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator(&rSelected));
@@ -524,7 +525,7 @@ void TableTreeListBox::checkedButton_noBroadcast(weld::TreeIter& rEntry)
                 bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
                 while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
                 {
-                    m_xTreeView->set_toggle(*xChildEntry, eState, 0);
+                    m_xTreeView->set_toggle(*xChildEntry, eState);
                     bChildEntry = m_xTreeView->iter_next(*xChildEntry);
                 }
             }
@@ -571,7 +572,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
     }
 }
 
-void TableTreeListBox::implEmphasize(weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
+void TableTreeListBox::implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
 {
     // special emphasizing handling for the "all objects" entry
     bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry()->equal(rEntry));
@@ -579,7 +580,7 @@ void TableTreeListBox::implEmphasize(weld::TreeIter& rEntry, bool _bChecked, boo
         ||  bAllObjectsEntryAffected            // or it is the "all objects" entry
         )
     {
-        m_xTreeView->set_text_emphasis(rEntry, _bChecked, m_nTextColumn);
+        m_xTreeView->set_text_emphasis(rEntry, _bChecked, 0);
     }
 
     if (_bUpdateDescendants)
@@ -717,8 +718,9 @@ void TableTreeListBox::implAddEntry(
             m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xFolder.get());
             m_xTreeView->set_image(*xFolder, sImageId, -1);
             if (m_bShowToggles)
-                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE, 0);
-            m_xTreeView->set_text(*xFolder, rFirstName, m_nTextColumn);
+                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xFolder, rFirstName, 0);
+            m_xTreeView->set_text_emphasis(*xFolder, false, 0);
         }
         xParentEntry = std::move(xFolder);
     }
@@ -734,8 +736,9 @@ void TableTreeListBox::implAddEntry(
             m_xTreeView->insert(xParentEntry.get(), -1, nullptr, &sId, nullptr, nullptr, nullptr, false, xFolder.get());
             m_xTreeView->set_image(*xFolder, sImageId, -1);
             if (m_bShowToggles)
-                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE, 0);
-            m_xTreeView->set_text(*xFolder, rSecondName, m_nTextColumn);
+                m_xTreeView->set_toggle(*xFolder, TRISTATE_FALSE);
+            m_xTreeView->set_text(*xFolder, rSecondName, 0);
+            m_xTreeView->set_text_emphasis(*xFolder, false, 0);
         }
         xParentEntry = std::move(xFolder);
     }
@@ -752,8 +755,9 @@ void TableTreeListBox::implAddEntry(
         m_xTreeView->set_image(*xEntry, sImageId, -1);
     }
     if (m_bShowToggles)
-        m_xTreeView->set_toggle(*xEntry, TRISTATE_FALSE, 0);
-    m_xTreeView->set_text(*xEntry, sName, m_nTextColumn);
+        m_xTreeView->set_toggle(*xEntry, TRISTATE_FALSE);
+    m_xTreeView->set_text(*xEntry, sName, 0);
+    m_xTreeView->set_text_emphasis(*xEntry, false, 0);
 }
 
 NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry )
@@ -942,7 +946,7 @@ TriState TableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
     if (!m_bShowToggles)
         return TRISTATE_FALSE;
 
-    TriState eState = m_xTreeView->get_toggle(rEntry, 0);
+    TriState eState = m_xTreeView->get_toggle(rEntry);
     if (!m_xTreeView->iter_has_child(rEntry))
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
@@ -1003,7 +1007,7 @@ TriState TableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
     }
 
     // finally set the entry to the state we just determined
-    m_xTreeView->set_toggle(rEntry, eState, 0);
+    m_xTreeView->set_toggle(rEntry, eState);
 
     return eState;
 }

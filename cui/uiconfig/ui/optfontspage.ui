@@ -137,6 +137,7 @@
                                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                     <property name="resizable">True</property>
                                     <property name="spacing">6</property>
+                                    <property name="title" translatable="yes" context="optfontspage|always">Always</property>
                                     <child>
                                       <object class="GtkCellRendererToggle" id="cellrenderer1"/>
                                       <attributes>
@@ -144,13 +145,6 @@
                                         <attribute name="active">0</attribute>
                                       </attributes>
                                     </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                                    <property name="resizable">True</property>
-                                    <property name="spacing">6</property>
-                                    <property name="title" translatable="yes" context="optfontspage|always">Always</property>
                                     <child>
                                       <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                       <attributes>

@@ -114,9 +114,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
     m_xAttrLB->set_size_request(m_xAttrLB->get_approximate_digit_width() * 50,
                                 m_xAttrLB->get_height_rows(12));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xAttrLB->get_checkbox_column_width());
-    m_xAttrLB->set_column_fixed_widths(aWidths);
+    m_xAttrLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     m_xOKBtn->connect_clicked(LINK( this, SvxSearchAttributeDialog, OKHdl));
 
@@ -150,8 +148,8 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
             {
                 m_xAttrLB->append();
                 const int nRow = m_xAttrLB->n_children() - 1;
-                m_xAttrLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-                m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 1);
+                m_xAttrLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                m_xAttrLB->set_text(nRow, SvxAttrNameTable::GetString(nId), 0);
                 m_xAttrLB->set_id(nRow, OUString::number(nSlot));
             }
             else
@@ -176,7 +174,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
     for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {
         sal_uInt16 nSlot = m_xAttrLB->get_id(i).toUInt32();
-        bool bChecked = m_xAttrLB->get_toggle(i, 0) == TRISTATE_TRUE;
+        bool bChecked = m_xAttrLB->get_toggle(i) == TRISTATE_TRUE;
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )

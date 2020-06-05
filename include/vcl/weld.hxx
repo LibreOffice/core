@@ -660,6 +660,12 @@ public:
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
 };
 
+enum class ColumnToggleType
+{
+    Check,
+    Radio
+};
+
 class VCL_DLLPUBLIC TreeIter
 {
 private:
@@ -672,8 +678,17 @@ public:
     virtual ~TreeIter() {}
 };
 
+/* Model column indexes are considered to begin at 0, but with special columns
+   before index 0. A expander image column (and an additional optional toggle
+   button column when enable_toggle_buttons is used). Column index -1 is
+   reserved to access those columns.
+*/
 class VCL_DLLPUBLIC TreeView : virtual public Container
 {
+public:
+    typedef std::pair<const TreeIter&, int> iter_col;
+    typedef std::pair<const TreeIter&, OUString> iter_string;
+
 private:
     OUString m_sSavedValue;
 
@@ -681,7 +696,7 @@ protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
-    Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
+    Link<const iter_col&, void> m_aRadioToggleHdl;
     Link<const TreeIter&, bool> m_aEditingStartedHdl;
     Link<const std::pair<const TreeIter&, OUString>&, bool> m_aEditingDoneHdl;
     // if handler returns false, the expansion of the row is refused
@@ -710,7 +725,7 @@ protected:
     void signal_model_changed() { m_aModelChangedHdl.Call(*this); }
 
     // arg is pair<row,col>
-    void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
+    void signal_toggled(const iter_col& rIterCol) { m_aRadioToggleHdl.Call(rIterCol); }
 
     bool signal_editing_started(const TreeIter& rIter) { return m_aEditingStartedHdl.Call(rIter); }
 
@@ -777,12 +792,8 @@ public:
     */
     void connect_row_activated(const Link<TreeView&, bool>& rLink) { m_aRowActivatedHdl = rLink; }
 
-    // Argument is a pair of row, col describing the node in non-tree mode.
-    // If in tree mode, then retrieve the toggled node with get_cursor
-    void connect_toggled(const Link<const std::pair<int, int>&, void>& rLink)
-    {
-        m_aRadioToggleHdl = rLink;
-    }
+    // Argument is a pair of iter, col describing the toggled node
+    void connect_toggled(const Link<const iter_col&, void>& rLink) { m_aRadioToggleHdl = rLink; }
 
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
@@ -790,17 +801,28 @@ public:
     virtual OUString get_selected_text() const = 0;
     virtual OUString get_selected_id() const = 0;
 
+    // call before inserting any content and connecting to toggle signals,
+    // an pre-inserted checkbutton column will exist at the start of every row
+    // inserted after this call which can be accessed with col index -1
+    virtual void enable_toggle_buttons(ColumnToggleType eType) = 0;
+
     //by index
     virtual int get_selected_index() const = 0;
     virtual void select(int pos) = 0;
     virtual void unselect(int pos) = 0;
     virtual void remove(int pos) = 0;
+    // col index -1 gets the first text column
     virtual OUString get_text(int row, int col = -1) const = 0;
+    // col index -1 sets the first text column
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
+    // col index -1 sets the first text column
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
-    virtual void set_toggle(int row, TriState eState, int col) = 0;
-    virtual TriState get_toggle(int row, int col) const = 0;
+    // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
+    virtual void set_toggle(int row, TriState eState, int col = -1) = 0;
+    // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
+    virtual TriState get_toggle(int row, int col = -1) const = 0;
+    // col index -1 sets the expander image
     virtual void set_image(int row, const OUString& rImage, int col = -1) = 0;
     virtual void set_image(int row, VirtualDevice& rImage, int col = -1) = 0;
     virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
@@ -808,6 +830,7 @@ public:
         = 0;
     virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(int row, int col) const = 0;
+    virtual void set_text_align(int row, double fAlign, int col) = 0;
     virtual void swap(int pos1, int pos2) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
@@ -876,12 +899,18 @@ public:
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
     virtual void expand_row(const TreeIter& rIter) = 0;
     virtual void collapse_row(const TreeIter& rIter) = 0;
+    // col index -1 sets the first text column
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
+    // col index -1 sets the first text column
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
+    virtual void set_text_align(const TreeIter& rIter, double fAlign, int col) = 0;
+    // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual void set_toggle(const TreeIter& rIter, TriState bOn, int col = -1) = 0;
+    // col index -1 gets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual TriState get_toggle(const TreeIter& rIter, int col = -1) const = 0;
+    // col index -1 gets the first text column
     virtual OUString get_text(const TreeIter& rIter, int col = -1) const = 0;
     virtual void set_id(const TreeIter& rIter, const OUString& rId) = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
@@ -986,8 +1015,6 @@ public:
     virtual int count_selected_rows() const = 0;
     // remove the selected nodes
     virtual void remove_selection() = 0;
-
-    void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
 
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }

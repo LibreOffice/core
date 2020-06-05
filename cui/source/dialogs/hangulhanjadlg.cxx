@@ -761,7 +761,7 @@ namespace svx
 
             DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
 
-            bool bActive = m_xDictsLB->get_toggle(n, 0) == TRISTATE_TRUE;
+            bool bActive = m_xDictsLB->get_toggle(n) == TRISTATE_TRUE;
             xDict->setActive( bActive );
             Reference< util::XFlushable > xFlush( xDict, uno::UNO_QUERY );
             if( xFlush.is() )
@@ -890,9 +890,7 @@ namespace svx
         m_xDictsLB->set_size_request(m_xDictsLB->get_approximate_digit_width() * 32,
                                      m_xDictsLB->get_height_rows(5));
 
-        std::vector<int> aWidths;
-        aWidths.push_back(m_xDictsLB->get_checkbox_column_width());
-        m_xDictsLB->set_column_fixed_widths(aWidths);
+        m_xDictsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
         m_xDictsLB->connect_changed( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
 
@@ -927,8 +925,8 @@ namespace svx
     {
         m_xDictsLB->append();
         int nRow = m_xDictsLB->n_children() - 1;
-        m_xDictsLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-        m_xDictsLB->set_text(nRow, rName, 1);
+        m_xDictsLB->set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xDictsLB->set_text(nRow, rName, 0);
         m_xDictsLB->set_id(nRow, rName);
     }
 

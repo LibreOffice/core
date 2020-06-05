@@ -146,7 +146,6 @@ class TableTreeListBox
     bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
     bool            m_bShowToggles;     // show toggle buttons
-    int             m_nTextColumn;      // column text is in, depends on if toggles are shown
     std::unique_ptr<weld::TreeView> m_xTreeView;
 
 public:
@@ -203,11 +202,11 @@ public:
 
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
-    void            checkedButton_noBroadcast(weld::TreeIter& rEntry);
+    void            checkedButton_noBroadcast(const weld::TreeIter& rEntry);
 private:
     TriState implDetermineState(weld::TreeIter& rEntry);
 
-    void implEmphasize(weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
+    void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
     /** adds the given entry to our list
         @precond

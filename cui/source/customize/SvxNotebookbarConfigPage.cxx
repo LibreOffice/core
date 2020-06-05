@@ -124,28 +124,9 @@ SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
         new SvxNotebookbarEntriesListBox(m_xBuilder->weld_tree_view("toolcontents"), this));
     m_xDropTargetHelper.reset(
         new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
-    std::vector<int> aWidths;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
     rTreeView.set_size_request(aSize.Width(), aSize.Height());
-
-    int nExpectedSize = 16;
-
-    int nStandardImageColWidth = rTreeView.get_checkbox_column_width();
-    int nMargin = nStandardImageColWidth - nExpectedSize;
-    if (nMargin < 16)
-        nMargin = 16;
-
-    if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
-        nExpectedSize = 24;
-    else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
-        nExpectedSize = 32;
-
-    int nImageColWidth = nExpectedSize + nMargin;
-
-    aWidths.push_back(nStandardImageColWidth);
-    aWidths.push_back(nImageColWidth);
-    rTreeView.set_column_fixed_widths(aWidths);
 
     rTreeView.set_hexpand(true);
     rTreeView.set_vexpand(true);
@@ -219,7 +200,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
                                                     const OUString& sUIItemId,
                                                     const OUString& sUIItemCommand,
                                                     weld::TreeView& rTreeView,
-                                                    weld::TreeIter& rIter, int nStartCol)
+                                                    weld::TreeIter& rIter)
 {
     css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap,
         m_xGlobalCommandToLabelMap;
@@ -264,8 +245,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
 
     if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
     {
-        OUString sDataInTree = "--------------------------------------------";
-        rTreeView.set_text(rIter, sDataInTree, nStartCol + 1);
+        rTreeView.set_text(rIter, "--------------------------------------------", 0);
     }
     else
     {
@@ -273,8 +253,8 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
             aName = sUIItemId;
         auto xImage = GetSaveInData()->GetImage(sUIItemCommand);
         if (xImage.is())
-            rTreeView.set_image(rIter, xImage, nStartCol);
-        rTreeView.set_text(rIter, aName, nStartCol + 1);
+            rTreeView.set_image(rIter, xImage, -1);
+        rTreeView.set_text(rIter, aName, 0);
         rTreeView.set_id(rIter, sUIItemId);
     }
 }
@@ -483,15 +463,15 @@ void SvxNotebookbarConfigPage::SelectElement()
             {
                 if (aEntries[nIdx].sVisibleValue == "True")
                 {
-                    rTreeView.set_toggle(rIter, TRISTATE_TRUE, 0);
+                    rTreeView.set_toggle(rIter, TRISTATE_TRUE);
                 }
                 else
                 {
-                    rTreeView.set_toggle(rIter, TRISTATE_FALSE, 0);
+                    rTreeView.set_toggle(rIter, TRISTATE_FALSE);
                 }
             }
             InsertEntryIntoNotebookbarTabUI(aEntries[nIdx].sClassId, aEntries[nIdx].sDisplayName,
-                                            aEntries[nIdx].sActionName, rTreeView, rIter, 1);
+                                            aEntries[nIdx].sActionName, rTreeView, rIter);
         });
 
     aEntries.clear();
@@ -547,7 +527,7 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
     OUString sNotebookbarInterface = getFileName(m_pPage->GetFileName());
 
     OUString sVisible;
-    if (m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE)
+    if (m_xControl->get_toggle(nRow) == TRISTATE_TRUE)
         sVisible = "True";
     else
         sVisible = "False";
@@ -560,9 +540,10 @@ void SvxNotebookbarEntriesListBox::ChangedVisibility(int nRow)
     sfx2::SfxNotebookBar::ReloadNotebookBar(sUIPath);
 }
 
-IMPL_LINK(SvxNotebookbarEntriesListBox, CheckButtonHdl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxNotebookbarEntriesListBox, CheckButtonHdl, const weld::TreeView::iter_col&, rRowCol,
+          void)
 {
-    ChangedVisibility(rRowCol.first);
+    ChangedVisibility(m_xControl->get_iter_index_in_parent(rRowCol.first));
 }
 
 IMPL_LINK(SvxNotebookbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
@@ -570,9 +551,8 @@ IMPL_LINK(SvxNotebookbarEntriesListBox, KeyInputHdl, const KeyEvent&, rKeyEvent,
     if (rKeyEvent.GetKeyCode() == KEY_SPACE)
     {
         int nRow = m_xControl->get_selected_index();
-        m_xControl->set_toggle(
-            nRow, m_xControl->get_toggle(nRow, 0) == TRISTATE_TRUE ? TRISTATE_FALSE : TRISTATE_TRUE,
-            0);
+        m_xControl->set_toggle(nRow, m_xControl->get_toggle(nRow) == TRISTATE_TRUE ? TRISTATE_FALSE
+                                                                                   : TRISTATE_TRUE);
         ChangedVisibility(nRow);
         return true;
     }

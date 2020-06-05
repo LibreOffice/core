@@ -71,6 +71,7 @@ enum class ACFlags : sal_uInt32 {
     IgnoreDoubleSpace    = 0x00000800,   // Ignore 2 Spaces
     ChgSglQuotes         = 0x00001000,   // Replace simple quotes
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
+    TransliterateRTL     = 0x00004000,   // Transliterate RTL text
 
     ChgWordLstLoad       = 0x20000000,   // Replacement list loaded
     CplSttLstLoad        = 0x40000000,   // Exception list for Capital letters Start loaded
