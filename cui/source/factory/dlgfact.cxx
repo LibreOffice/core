@@ -88,6 +88,7 @@
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
 #include <DiagramDialog.hxx>
+#include <AdditionsDialog.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1421,6 +1422,11 @@ short AbstractAboutDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractAdditionsDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short AbstractTipOfTheDayDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1674,6 +1680,13 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
 {
     return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(
         std::make_unique<QrCodeGenDialog>(pParent, xModel, bEditExisting));
+}
+
+VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
+    weld::Window* pParent)
+{
+    return VclPtr<AbstractAdditionsDialog_Impl>::Create(
+        std::make_unique<AdditionsDialog>(pParent));
 }
 
 VclPtr<AbstractAboutDialog>
