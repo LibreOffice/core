@@ -81,8 +81,6 @@ published constants RelOrientation
 
     const short INSIDE_MARGIN = 11;
     const short OUTSIDE_MARGIN = 12;
-    const short RIGHT_MARGIN = 14;
-
 };
 
 

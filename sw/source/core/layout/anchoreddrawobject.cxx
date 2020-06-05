@@ -638,6 +638,8 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 nWidth = GetPageFrame()->getFramePrintArea().SVRect().GetWidth();
             else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_LEFT)
                 nWidth = GetPageFrame()->GetLeftMargin();
+            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_RIGHT)
+                nWidth = GetPageFrame()->GetRightMargin();
             else
                 nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
             nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
