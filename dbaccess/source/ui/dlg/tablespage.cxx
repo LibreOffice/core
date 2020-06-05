@@ -152,7 +152,7 @@ namespace dbaui
 
             std::unique_ptr<weld::TreeIter> xEntry(m_xTablesList->GetEntryPosByName(sName, xSchema ? xSchema.get() : (xCatalog ? xCatalog.get() : xRootEntry.get())));
             if (xEntry)
-                m_xTablesList->GetWidget().set_toggle(*xEntry, TRISTATE_TRUE, 0);
+                m_xTablesList->GetWidget().set_toggle(*xEntry, TRISTATE_TRUE);
         }
         m_xTablesList->CheckButtons();
     }
@@ -317,7 +317,7 @@ namespace dbaui
         {
             do
             {
-                m_xTablesList->GetWidget().set_toggle(*xEntry, _bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+                m_xTablesList->GetWidget().set_toggle(*xEntry, _bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
             }
             while (m_xTablesList->GetWidget().iter_next(*xEntry));
         }
@@ -344,12 +344,9 @@ namespace dbaui
         return nResult;
     }
 
-    IMPL_LINK_NOARG(OTableSubscriptionPage, OnTreeEntryChecked, const row_col&, void)
+    IMPL_LINK(OTableSubscriptionPage, OnTreeEntryChecked, const weld::TreeView::iter_col&, rRowCol, void)
     {
-        weld::TreeView& rTreeView = m_xTablesList->GetWidget();
-        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-        if (rTreeView.get_cursor(xEntry.get()))
-            m_xTablesList->checkedButton_noBroadcast(*xEntry);
+        m_xTablesList->checkedButton_noBroadcast(rRowCol.first);
         callModifiedHdl();
     }
 
@@ -371,7 +368,7 @@ namespace dbaui
             std::unique_ptr<weld::TreeIter> xSchema;
             std::unique_ptr<weld::TreeIter> xCatalog;
 
-            if (m_xTablesList->GetWidget().get_toggle(*xEntry, 0) == TRISTATE_TRUE && !m_xTablesList->GetWidget().iter_has_child(*xEntry))
+            if (m_xTablesList->GetWidget().get_toggle(*xEntry) == TRISTATE_TRUE && !m_xTablesList->GetWidget().iter_has_child(*xEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
                 OUStringBuffer sComposedName;
                 OUString sCatalog;

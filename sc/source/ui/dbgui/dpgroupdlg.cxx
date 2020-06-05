@@ -216,17 +216,15 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
-    std::vector<int> aWidths;
-    aWidths.push_back(mxLbUnits->get_checkbox_column_width());
-    mxLbUnits->set_column_fixed_widths(aWidths);
+    mxLbUnits->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     if( nDatePart == 0 )
         nDatePart = css::sheet::DataPilotFieldGroupBy::MONTHS;
     for (size_t nIdx = 0; nIdx < SAL_N_ELEMENTS(aDatePartResIds); ++nIdx)
     {
         mxLbUnits->append();
-        mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-        mxLbUnits->set_text(nIdx, ScResId(aDatePartResIds[nIdx]), 1);
+        mxLbUnits->set_toggle(nIdx, (nDatePart & spnDateParts[ nIdx ]) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        mxLbUnits->set_text(nIdx, ScResId(aDatePartResIds[nIdx]), 0);
     }
 
     if( rInfo.mbDateValues )
@@ -296,7 +294,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
     for (int nIdx = 0, nCount = mxLbUnits->n_children(); nIdx < nCount; ++nIdx )
-        if (mxLbUnits->get_toggle(nIdx, 0) == TRISTATE_TRUE)
+        if (mxLbUnits->get_toggle(nIdx) == TRISTATE_TRUE)
             nDatePart |= spnDateParts[ nIdx ];
     return nDatePart;
 }
@@ -318,7 +316,7 @@ IMPL_LINK(ScDPDateGroupDlg, ClickHdl, weld::Button&, rButton, void)
         mxLbUnits->set_sensitive(true);
         mxLbUnits->grab_focus();
         // disable OK button if no date part selected
-        CheckHdl(row_col(0, 0));
+        Check();
     }
 }
 
@@ -328,14 +326,19 @@ namespace
     {
         for (int i = 0; i < rView.n_children(); ++i)
         {
-            if (rView.get_toggle(i, 0) == TRISTATE_TRUE)
+            if (rView.get_toggle(i) == TRISTATE_TRUE)
                 return true;
         }
         return false;
     }
 }
 
-IMPL_LINK_NOARG(ScDPDateGroupDlg, CheckHdl, const row_col&, void)
+IMPL_LINK_NOARG(ScDPDateGroupDlg, CheckHdl, const weld::TreeView::iter_col&, void)
+{
+    Check();
+}
+
+void ScDPDateGroupDlg::Check()
 {
     // enable/disable OK button on modifying check list box
     mxBtnOk->set_sensitive(HasCheckedEntryCount(*mxLbUnits));

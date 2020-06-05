@@ -59,9 +59,7 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     m_aDeleteColumns = m_xDeleteColumns->get_label();
     m_aDeleteRows = m_xDeleteRows->get_label();
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xOptionsListBox->get_checkbox_column_width());
-    m_xOptionsListBox->set_column_fixed_widths(aWidths);
+    m_xOptionsListBox->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     Init();
 }
@@ -73,7 +71,7 @@ ScTableProtectionDlg::~ScTableProtectionDlg()
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
     for (size_t i = 0; i < aOptions.size(); ++i)
-        m_xOptionsListBox->set_toggle(i, rData.isOptionEnabled(aOptions[i]) ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xOptionsListBox->set_toggle(i, rData.isOptionEnabled(aOptions[i]) ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
 void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
@@ -84,15 +82,15 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
     rData.setPassword(m_xPassword1Edit->get_text());
 
     for (size_t i = 0; i < aOptions.size(); ++i)
-        rData.setOption(aOptions[i], m_xOptionsListBox->get_toggle(i, 0) == TRISTATE_TRUE);
+        rData.setOption(aOptions[i], m_xOptionsListBox->get_toggle(i) == TRISTATE_TRUE);
 }
 
 void ScTableProtectionDlg::InsertEntry(const OUString& rTxt)
 {
     m_xOptionsListBox->append();
     const int nRow = m_xOptionsListBox->n_children() - 1;
-    m_xOptionsListBox->set_toggle(nRow, TRISTATE_FALSE, 0);
-    m_xOptionsListBox->set_text(nRow, rTxt, 1);
+    m_xOptionsListBox->set_toggle(nRow, TRISTATE_FALSE);
+    m_xOptionsListBox->set_text(nRow, rTxt, 0);
 }
 
 void ScTableProtectionDlg::Init()
@@ -115,8 +113,8 @@ void ScTableProtectionDlg::Init()
     InsertEntry(m_aDeleteColumns);
     InsertEntry(m_aDeleteRows);
 
-    m_xOptionsListBox->set_toggle(0, TRISTATE_TRUE, 0);
-    m_xOptionsListBox->set_toggle(1, TRISTATE_TRUE, 0);
+    m_xOptionsListBox->set_toggle(0, TRISTATE_TRUE);
+    m_xOptionsListBox->set_toggle(1, TRISTATE_TRUE);
 
     m_xOptionsListBox->thaw();
 

@@ -91,19 +91,17 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     m_xJavaList->set_size_request(m_xJavaList->get_approximate_digit_width() * 30,
                                   m_xJavaList->get_height_rows(8));
 
+    m_xJavaList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
+    m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
+    m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
+
     std::vector<int> aWidths;
     aWidths.push_back(m_xJavaList->get_checkbox_column_width());
     aWidths.push_back(m_xJavaList->get_pixel_size("Sun Microsystems Inc.").Width());
     aWidths.push_back(m_xJavaList->get_pixel_size("0.0.0_00-icedtea").Width());
     m_xJavaList->set_column_fixed_widths(aWidths);
 
-    std::vector<int> aRadioColumns;
-    aRadioColumns.push_back(0);
-    m_xJavaList->set_toggle_columns_as_radio(aRadioColumns);
-
     m_xJavaEnableCB->connect_clicked( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
-    m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
-    m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
     m_xAddBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
     m_xParameterBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_xClassPathBtn->connect_clicked( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
@@ -145,9 +143,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, weld::Button&, void)
     m_xJavaList->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxJavaOptionsPage, CheckHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(SvxJavaOptionsPage, CheckHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    HandleCheckEntry(rRowCol.first);
+    HandleCheckEntry(m_xJavaList->get_iter_index_in_parent(rRowCol.first));
 }
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, weld::TreeView&, void)

@@ -105,6 +105,7 @@ class VCL_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
 private:
     bool mbEmphasized;
+    double mfAlign;
 protected:
     OUString maText;
 
@@ -119,6 +120,8 @@ public:
                               SvViewDataItem* pViewData = nullptr) override;
 
     virtual int CalcWidth(const SvTreeListBox* pView) const override;
+
+    void Align(double fAlign) { mfAlign = fAlign; }
 
     void Emphasize(bool bEmphasize) { mbEmphasized = bEmphasize; }
     bool IsEmphasized() const { return mbEmphasized; }

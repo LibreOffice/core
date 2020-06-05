@@ -26,24 +26,15 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     , m_xManualButton(m_xBuilder->weld_button("add"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xCertPathList(m_xBuilder->weld_tree_view("paths"))
+    , m_sAddDialogText(m_xBuilder->weld_label("certdir")->get_label())
+    , m_sManualLabel(m_xBuilder->weld_label("manual")->get_label())
 {
-    // these are just used to get translated strings
-    m_sAddDialogText = m_xBuilder->weld_label("certdir")->get_label();
-    m_sManualLabel = m_xBuilder->weld_label("manual")->get_label();
-
     m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 70,
                                       m_xCertPathList->get_height_rows(6));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCertPathList->get_checkbox_column_width());
-    aWidths.push_back(m_xCertPathList->get_approximate_digit_width() * 20);
-    m_xCertPathList->set_column_fixed_widths(aWidths);
-
-    std::vector<int> aRadioColumns;
-    aRadioColumns.push_back(0);
-    m_xCertPathList->set_toggle_columns_as_radio(aRadioColumns);
-
+    m_xCertPathList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xCertPathList->connect_toggled(LINK(this, CertPathDialog, CheckHdl_Impl));
+
     m_xManualButton->connect_clicked( LINK( this, CertPathDialog, ManualHdl_Impl ) );
     m_xOKButton->connect_clicked( LINK( this, CertPathDialog, OKHdl_Impl ) );
 
@@ -155,14 +146,14 @@ CertPathDialog::~CertPathDialog()
 {
 }
 
-IMPL_LINK(CertPathDialog, CheckHdl_Impl, const row_col&, rRowCol, void)
+IMPL_LINK(CertPathDialog, CheckHdl_Impl, const weld::TreeView::iter_col&, rRowCol, void)
 {
-    HandleEntryChecked(rRowCol.first);
+    HandleEntryChecked(m_xCertPathList->get_iter_index_in_parent(rRowCol.first));
 }
 
 void CertPathDialog::HandleEntryChecked(int nRow)
 {
-    const bool bChecked = m_xCertPathList->get_toggle(nRow, 0) == TRISTATE_TRUE;
+    const bool bChecked = m_xCertPathList->get_toggle(nRow) == TRISTATE_TRUE;
     if (bChecked)
     {
         // we have radio button behavior -> so uncheck the other entries
@@ -171,7 +162,7 @@ void CertPathDialog::HandleEntryChecked(int nRow)
         for (int i = 0; i < nCount; ++i)
         {
             if (i != nRow)
-                m_xCertPathList->set_toggle(i, TRISTATE_FALSE, 0);
+                m_xCertPathList->set_toggle(i, TRISTATE_FALSE);
         }
     }
 }
@@ -185,12 +176,12 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         //already exists, just select the original one
         if (sCertPath == rPath)
         {
-            const bool bWantSelected = bSelect || m_xCertPathList->get_toggle(i, 0);
-            m_xCertPathList->set_toggle(i, bWantSelected ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            const bool bWantSelected = bSelect || m_xCertPathList->get_toggle(i);
+            m_xCertPathList->set_toggle(i, bWantSelected ? TRISTATE_TRUE : TRISTATE_FALSE);
             HandleEntryChecked(i);
             return;
         }
-        else if (m_xCertPathList->get_text(i, 1) == rProfile)
+        else if (m_xCertPathList->get_text(i, 0) == rProfile)
             nRow = i;
     }
 
@@ -202,9 +193,9 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         m_xCertPathList->append();
         nRow = m_xCertPathList->n_children() - 1;
     }
-    m_xCertPathList->set_toggle(nRow, bSelect ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xCertPathList->set_text(nRow, rProfile, 1);
-    m_xCertPathList->set_text(nRow, rPath, 2);
+    m_xCertPathList->set_toggle(nRow, bSelect ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xCertPathList->set_text(nRow, rProfile, 0);
+    m_xCertPathList->set_text(nRow, rPath, 1);
     m_xCertPathList->set_id(nRow, rPath);
     HandleEntryChecked(nRow);
 }

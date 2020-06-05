@@ -127,8 +127,7 @@ private:
     DECL_LINK(allHandler, weld::ToggleButton&, void);
     DECL_LINK(okHandler, weld::Button&, void);
     DECL_LINK(closeHandler, weld::Button&, void);
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(entryToggled, const row_col&, void);
+    DECL_LINK(entryToggled, const weld::TreeView::iter_col&, void);
 
     css::uno::Reference< css::uno::XComponentContext >  m_context;
     OUString m_none;

@@ -75,8 +75,7 @@ public:
 class SvxNotebookbarEntriesListBox final : public SvxMenuEntriesListBox
 {
     void ChangedVisibility(int nRow);
-    typedef std::pair<int, int> row_col;
-    DECL_LINK(CheckButtonHdl, const row_col&, void);
+    DECL_LINK(CheckButtonHdl, const weld::TreeView::iter_col&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:

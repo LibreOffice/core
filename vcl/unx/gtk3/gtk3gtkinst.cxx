@@ -8014,6 +8014,8 @@ private:
     std::map<int, int> m_aWeightMap;
     // map from text column to sensitive column
     std::map<int, int> m_aSensitiveMap;
+    // map from text column to text align column
+    std::map<int, int> m_aAlignMap;
     std::vector<GtkSortType> m_aSavedSortTypes;
     std::vector<int> m_aSavedSortColumns;
     std::vector<int> m_aViewColToModelCol;
@@ -8037,7 +8039,6 @@ private:
     gulong m_nDragBeginSignalId;
     gulong m_nDragEndSignalId;
     gulong m_nKeyPressSignalId;
-    gulong m_nQueryTooltipSignalId;
     GtkAdjustment* m_pVAdjustment;
     ImplSVEvent* m_pChangeEvent;
 
@@ -8248,6 +8249,19 @@ private:
             set(iter, col, bInt);
     }
 
+    void set(const GtkTreeIter& iter, int col, double fValue)
+    {
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, fValue, -1);
+    }
+
+    void set(int pos, int col, double fValue)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            set(iter, col, fValue);
+    }
+
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
@@ -8331,12 +8345,10 @@ private:
         gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
 
         gint depth;
-        gint* indices = gtk_tree_path_get_indices_with_depth(tree_path, &depth);
-        int nRow = indices[depth-1];
 
         set(iter, m_aToggleTriStateMap[nCol], false);
 
-        signal_toggled(std::make_pair(nRow, nCol));
+        signal_toggled(iter_col(GtkInstanceTreeIter(iter), to_external_model(nCol)));
 
         gtk_tree_path_free(tree_path);
     }
@@ -8433,22 +8445,26 @@ private:
         return m_aViewColToModelCol[viewcol];
     }
 
-    // We allow only one CellRenderer per TreeViewColumn except for the first
-    // TreeViewColumn which can have two, where the first CellRenderer is
-    // either an expander image. From outside the second CellRenderer is
-    // considered index 0 in the model and the expander as -1
+    // The outside concept of a column maps to a gtk CellRenderer, rather than
+    // a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
+    // and/or a leading Image Renderer, those are considered special expander
+    // columns and preceed index 0 and can be accessed via outside index -1
     int to_external_model(int modelcol) const
     {
-        if (m_nExpanderImageCol == -1)
-            return modelcol;
-        return modelcol - 1;
+        if (m_nExpanderToggleCol != -1)
+            --modelcol;
+        if (m_nExpanderImageCol != -1)
+            --modelcol;
+        return modelcol;
     }
 
     int to_internal_model(int modelcol) const
     {
-        if (m_nExpanderImageCol == -1)
-            return modelcol;
-        return modelcol + 1;
+        if (m_nExpanderToggleCol != -1)
+            ++modelcol;
+        if (m_nExpanderImageCol != -1)
+            ++modelcol;
+        return modelcol;
     }
 
     static void signalRowDeleted(GtkTreeModel*, GtkTreePath*, gpointer widget)
@@ -8625,6 +8641,7 @@ public:
         , m_nTextCol(-1)
         , m_nTextView(-1)
         , m_nImageCol(-1)
+        , m_nExpanderToggleCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
@@ -8635,10 +8652,14 @@ public:
         , m_nVAdjustmentChangedSignalId(0)
         , m_nPopupMenuSignalId(g_signal_connect(pTreeView, "popup-menu", G_CALLBACK(signalPopupMenu), this))
         , m_nKeyPressSignalId(g_signal_connect(pTreeView, "key-press-event", G_CALLBACK(signalKeyPress), this))
-        , m_nQueryTooltipSignalId(0)
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
+        /* The outside concept of a column maps to a gtk CellRenderer, rather than
+           a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
+           and/or a leading Image Renderer, those are considered special expander
+           columns and preceed index 0 and can be accessed via outside index -1
+        */
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
         int nViewColumn(0);
@@ -8660,12 +8681,16 @@ public:
                     }
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
+                    m_aAlignMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
                 }
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
+                    const bool bExpander = nIndex == 0 || (nIndex == 1 && m_nExpanderImageCol == 0);
+                    if (bExpander)
+                        m_nExpanderToggleCol = nIndex;
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                     m_aToggleVisMap[nIndex] = -1;
                     m_aToggleTriStateMap[nIndex] = -1;
@@ -8694,6 +8719,8 @@ public:
         for (auto& a : m_aWeightMap)
             a.second = nIndex++;
         for (auto& a : m_aSensitiveMap)
+            a.second = nIndex++;
+        for (auto& a : m_aAlignMap)
             a.second = nIndex++;
 
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -9176,7 +9203,39 @@ public:
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        set_toggle(rGtkIter.iter, eState, col);
+
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
+        // checkbuttons are invisible until toggled on or off
+        set(rGtkIter.iter, m_aToggleVisMap[col], true);
+        if (eState == TRISTATE_INDET)
+            set(rGtkIter.iter, m_aToggleTriStateMap[col], true);
+        else
+        {
+            set(rGtkIter.iter, m_aToggleTriStateMap[col], false);
+            set(rGtkIter.iter, col, eState == TRISTATE_TRUE);
+        }
+    }
+
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
+    {
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (!GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+                    continue;
+                GtkCellRendererToggle* pToggle = GTK_CELL_RENDERER_TOGGLE(pCellRenderer);
+                gtk_cell_renderer_toggle_set_radio(pToggle, eType == weld::ColumnToggleType::Radio);
+            }
+            g_list_free(pRenderers);
+        }
     }
 
     virtual void set_toggle(int pos, TriState eState, int col) override
@@ -9211,6 +9270,19 @@ public:
     {
         col = get_model_col(col);
         return get_int(pos, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
+    }
+
+    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = to_internal_model(col);
+        set(rGtkIter.iter, m_aAlignMap[col], fAlign);
+    }
+
+    virtual void set_text_align(int pos, double fAlign, int col) override
+    {
+        col = to_internal_model(col);
+        set(pos, m_aAlignMap[col], fAlign);
     }
 
     using GtkInstanceWidget::set_sensitive;
