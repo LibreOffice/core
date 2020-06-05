@@ -2442,13 +2442,18 @@ SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
 sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
                                                bool* pIsSystemLanguage )
 {
-    if (!m_xImpl->m_xAutoStyles.is())
-        return -1;
+    const SvXMLStyleContext *pStyle = nullptr;
 
-    const SvXMLStyleContext* pStyle =
-        static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
-                  FindStyleChildContext( XmlStyleFamily::DATA_STYLE,
-                                              sStyleName, true );
+    if (m_xImpl->m_xAutoStyles.is())
+    {
+        pStyle = static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
+            FindStyleChildContext(XmlStyleFamily::DATA_STYLE, sStyleName, true);
+    }
+
+    // tdf#133459 explicitly check for non-automatic styles,
+    // as they might not be merged into automatic styles yet.
+    if (!pStyle && GetXMLImport().GetStyles())
+        pStyle = GetXMLImport().GetStyles()->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, sStyleName, true);
 
     // get appropriate context
 

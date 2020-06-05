@@ -1048,5 +1048,15 @@ DECLARE_ODFIMPORT_TEST(testTdf123968, "tdf123968.odt")
                          rStart.GetText());
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf133459, "tdf133459.odt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Test that the number format was imported.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(10121), getProperty<sal_uInt32>(xField, "NumberFormat"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
