@@ -1630,12 +1630,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
                         // Not relevant for fields inside a TOC field.
-                        OUString const sMarker("X");
                         xCursor = xTextAppend->getText()->createTextCursor();
                         if (xCursor.is())
                             xCursor->gotoEnd(false);
                         PropertyMapPtr pEmpty(new PropertyMap());
-                        appendTextPortion(sMarker, pEmpty);
+                        appendTextPortion("X", pEmpty);
                     }
 
                     // Check if top / bottom margin has to be updated, now that we know the numbering status of both the previous and
@@ -4544,8 +4543,7 @@ void DomainMapper_Impl::handleToc
             xTOCMarkerCursor = xCrsr;
 
             // create header of the TOC with the TOC title inside
-            const OUString aObjectType("com.sun.star.text.IndexHeaderSection");
-            createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, aObjectType, true);
+            createSectionForRange(m_xSdtEntryStart, xTextRangeEndOfTocHeader, "com.sun.star.text.IndexHeaderSection", true);
         }
     }
 
