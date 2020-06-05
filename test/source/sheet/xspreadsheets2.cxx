@@ -149,10 +149,8 @@ void XSpreadsheets2::testImportOverExistingNamedRange()
     uno::Reference< sheet::XNamedRange > xDestNamedRange(aNr, UNO_QUERY_THROW);
     OUString aNrDestContent = xDestNamedRange->getContent();
 
-    OUString const aExpectedContent("$Sheet1.$B$1");
-
     std::cout << "testImportSheet : initial1 aNrDestContent " << aNrDestContent << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for initial1", aExpectedContent, aNrDestContent);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for initial1", OUString("$Sheet1.$B$1"), aNrDestContent);
 
 }
 
@@ -197,9 +195,8 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
     uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestRedefinedInSheetNamedRange(aRedefinedInSheetNr, UNO_QUERY_THROW);
     OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
-    OUString const aRedefinedInSheetExpectedContent("$Sheet1.$B$2");
     std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetExpectedContent, aRedefinedInSheetNrDestContent);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for Redefined InSheet named range", OUString("$Sheet1.$B$2"), aRedefinedInSheetNrDestContent);
 }
 
 void XSpreadsheets2::testImportNewNamedRange()

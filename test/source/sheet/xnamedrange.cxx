@@ -25,8 +25,7 @@ void XNamedRange::testGetContent()
 {
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
 
-    OUString const aExpectedContent("$Sheet1.$B$1");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 on GetContent", aExpectedContent, xNamedRange->getContent());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 on GetContent", OUString("$Sheet1.$B$1"), xNamedRange->getContent());
 }
 
 void XNamedRange::testSetContent()
