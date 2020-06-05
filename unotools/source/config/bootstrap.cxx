@@ -532,27 +532,21 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
 
 OUString Bootstrap::getProductKey()
 {
-    OUString const csProductKeyItem(BOOTSTRAP_ITEM_PRODUCT_KEY);
-
     OUString const sDefaultProductKey = getExecutableBaseName();
 
-    return data().getBootstrapValue( csProductKeyItem, sDefaultProductKey );
+    return data().getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY, sDefaultProductKey );
 }
 
 OUString Bootstrap::getProductKey(OUString const& _sDefault)
 {
-    OUString const csProductKeyItem(BOOTSTRAP_ITEM_PRODUCT_KEY);
-
-    return data().getBootstrapValue( csProductKeyItem, _sDefault );
+    return data().getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY, _sDefault );
 }
 
 OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 {
-    OUString const csBuildVersionItem(BOOTSTRAP_ITEM_BUILDVERSION);
-
     OUString sBuildVersion;
     // read BuildVersion from version.ini (versionrc)
-    utl::Bootstrap::Impl::getVersionValue( csBuildVersionItem, sBuildVersion, _sDefault );
+    utl::Bootstrap::Impl::getVersionValue( BOOTSTRAP_ITEM_BUILDVERSION, sBuildVersion, _sDefault );
     return sBuildVersion;
 }
 
@@ -599,8 +593,7 @@ Bootstrap::PathStatus Bootstrap::locateUserData(OUString& _rURL)
     }
     else
     {
-        OUString const csUserDir(BOOTSTRAP_DIRNAME_USERDIR);
-        return getDerivedPath(_rURL, data().aUserInstall_ ,csUserDir, aData, csUserDirItem);
+        return getDerivedPath(_rURL, data().aUserInstall_ ,BOOTSTRAP_DIRNAME_USERDIR, aData, csUserDirItem);
     }
 }
 
@@ -643,10 +636,7 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage,
 
 bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 {
-    OUString const csBaseInstallItem( BOOTSTRAP_ITEM_BASEINSTALLATION );
-    OUString const csBaseInstallDefault( BOOTSTRAP_DEFAULT_BASEINSTALL );
-
-    _rData.getFrom(csBaseInstallItem, aBaseInstall_.path, csBaseInstallDefault);
+    _rData.getFrom(BOOTSTRAP_ITEM_BASEINSTALLATION, aBaseInstall_.path, BOOTSTRAP_DEFAULT_BASEINSTALL);
 
     bool bResult = (PATH_EXISTS == updateStatus(aBaseInstall_));
 
@@ -657,9 +647,7 @@ bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 
 bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap const & _rData)
 {
-    OUString const csUserInstallItem( BOOTSTRAP_ITEM_USERINSTALLATION );
-
-    if (_rData.getFrom(csUserInstallItem, aUserInstall_.path))
+    if (_rData.getFrom(BOOTSTRAP_ITEM_USERINSTALLATION, aUserInstall_.path))
     {
         updateStatus(aUserInstall_);
     }
@@ -674,9 +662,7 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap const & _rData)
         // look for $BASEINSTALLATION/user only if default UserDir setting is used
         if (! _rData.getFrom(csUserDirItem, sDummy))
         {
-            OUString const csUserDir(BOOTSTRAP_DIRNAME_USERDIR);
-
-            if ( PATH_EXISTS == getDerivedPath(sDummy, aBaseInstall_, csUserDir, _rData, csUserDirItem) )
+            if ( PATH_EXISTS == getDerivedPath(sDummy, aBaseInstall_, BOOTSTRAP_DIRNAME_USERDIR, _rData, csUserDirItem) )
                 aUserInstall_ = aBaseInstall_;
         }
     }
