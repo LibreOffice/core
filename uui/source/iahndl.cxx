@@ -862,11 +862,9 @@ UUIInteractionHelper::getInteractionHandlerList(
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
             configuration::theDefaultProvider::get( m_xContext );
 
-        OUString aFullPath = "/org.openoffice.ucb.InteractionHandler/InteractionHandlers";
-
         uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", uno::Any(aFullPath)}
+            {"nodepath", uno::Any(OUString("/org.openoffice.ucb.InteractionHandler/InteractionHandlers"))}
         }));
 
         uno::Reference< uno::XInterface > xInterface(
