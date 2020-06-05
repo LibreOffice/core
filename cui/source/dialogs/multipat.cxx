@@ -57,7 +57,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 void SvxMultiPathDialog::HandleEntryChecked(int nRow)
 {
     m_xRadioLB->select(nRow);
-    bool bChecked = m_xRadioLB->get_toggle(nRow, 0) == TRISTATE_TRUE;
+    bool bChecked = m_xRadioLB->get_toggle(nRow) == TRISTATE_TRUE;
     if (bChecked)
     {
         // we have radio button behavior -> so uncheck the other entries
@@ -65,7 +65,7 @@ void SvxMultiPathDialog::HandleEntryChecked(int nRow)
         for (int i = 0; i < nCount; ++i)
         {
             if (i != nRow)
-                m_xRadioLB->set_toggle(i, TRISTATE_FALSE, 0);
+                m_xRadioLB->set_toggle(i, TRISTATE_FALSE);
         }
     }
 }
@@ -79,8 +79,8 @@ void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
 {
     m_xRadioLB->append();
     const int nRow = m_xRadioLB->n_children() - 1;
-    m_xRadioLB->set_toggle(nRow, TRISTATE_FALSE, 0);
-    m_xRadioLB->set_text(nRow, rText, 1);
+    m_xRadioLB->set_toggle(nRow, TRISTATE_FALSE);
+    m_xRadioLB->set_text(nRow, rText, 0);
     m_xRadioLB->set_id(nRow, rId);
 }
 
@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)
 {
     int nPos = m_xRadioLB->get_selected_index();
-    bool bChecked = m_xRadioLB->get_toggle(nPos, 0) == TRISTATE_TRUE;
+    bool bChecked = m_xRadioLB->get_toggle(nPos) == TRISTATE_TRUE;
     m_xRadioLB->remove(nPos);
     int nCnt = m_xRadioLB->n_children();
     if (nCnt)
@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)
             nPos = nCnt;
         if (bChecked)
         {
-            m_xRadioLB->set_toggle(nPos, TRISTATE_TRUE, 0);
+            m_xRadioLB->set_toggle(nPos, TRISTATE_TRUE);
             HandleEntryChecked(nPos);
         }
         m_xRadioLB->select(nPos);
@@ -193,13 +193,10 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
 {
     m_xRadioLB->set_size_request(m_xRadioLB->get_approximate_digit_width() * 60,
                                  m_xRadioLB->get_text_height() * 10);
-
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xRadioLB->get_checkbox_column_width());
-    m_xRadioLB->set_column_fixed_widths(aWidths);
-    m_xRadioLB->set_toggle_columns_as_radio();
+    m_xRadioLB->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xRadioLB->connect_toggled(LINK(this, SvxMultiPathDialog, CheckHdl_Impl));
     m_xRadioLB->connect_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
+
     m_xAddBtn->connect_clicked(LINK(this, SvxMultiPathDialog, AddHdl_Impl));
     m_xDelBtn->connect_clicked(LINK(this, SvxMultiPathDialog, DelHdl_Impl));
 
@@ -234,7 +231,7 @@ OUString SvxMultiPathDialog::GetPath() const
     OUString sWritable;
     for (int i = 0, nCount = m_xRadioLB->n_children(); i < nCount; ++i)
     {
-        if (m_xRadioLB->get_toggle(i, 0) == TRISTATE_TRUE)
+        if (m_xRadioLB->get_toggle(i) == TRISTATE_TRUE)
             sWritable = m_xRadioLB->get_id(i);
         else
         {
@@ -286,7 +283,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
 
         if (nCount)
         {
-            m_xRadioLB->set_toggle(nCount - 1, TRISTATE_TRUE, 0);
+            m_xRadioLB->set_toggle(nCount - 1, TRISTATE_TRUE);
             HandleEntryChecked(nCount - 1);
         }
     }

@@ -61,10 +61,8 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
     , m_xGlobalOptionsCLB(m_xBuilder->weld_tree_view("globaloptioncheckbox"))
     , m_xDefaultPB(m_xBuilder->weld_button("default"))
 {
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xOptionsLB->get_checkbox_column_width());
-    m_xOptionsLB->set_column_fixed_widths(aWidths);
-    m_xGlobalOptionsCLB->set_column_fixed_widths(aWidths);
+    m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xGlobalOptionsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     int nPos = 0;
     for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
@@ -73,8 +71,8 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
 
         const OUString sEntry = m_xFormattingLB->get_text(nCoptIdx);
         m_xOptionsLB->append();
-        m_xOptionsLB->set_toggle(nPos, TRISTATE_FALSE, 0);
-        m_xOptionsLB->set_text(nPos, sEntry, 1);
+        m_xOptionsLB->set_toggle(nPos, TRISTATE_FALSE);
+        m_xOptionsLB->set_text(nPos, sEntry, 0);
         ++nPos;
     }
 
@@ -88,8 +86,8 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
 
     m_xGlobalOptionsCLB->append();
     const bool bChecked = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
-    m_xGlobalOptionsCLB->set_toggle(0, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-    m_xGlobalOptionsCLB->set_text(0, m_xGlobalOptionsLB->get_text(0), 1);
+    m_xGlobalOptionsCLB->set_toggle(0, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+    m_xGlobalOptionsCLB->set_text(0, m_xGlobalOptionsLB->get_text(0), 0);
 
     m_xGlobalOptionsLB->clear();
 
@@ -279,7 +277,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
             const sal_Int32 nCount = m_xOptionsLB->n_children();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                bool bChecked = m_xOptionsLB->get_toggle(i, 0);
+                bool bChecked = m_xOptionsLB->get_toggle(i);
 
                 int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
                 pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
@@ -297,7 +295,7 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uInt32 nOptions )
     for (int i = 0; i < nCount; ++i)
     {
         bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
-        m_xOptionsLB->set_toggle(i, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xOptionsLB->set_toggle(i, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
         nOptions = nOptions >> 1;
     }
 }
@@ -351,7 +349,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
         for (int i = 0; i < nCount; ++i)
         {
-            bool bChecked = m_xOptionsLB->get_toggle(i, 0) == TRISTATE_TRUE;
+            bool bChecked = m_xOptionsLB->get_toggle(i) == TRISTATE_TRUE;
             bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
@@ -431,7 +429,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     if ( bModified )
         WriteOptions();
 
-    bool bNewMSFormsMenuOption = m_xGlobalOptionsCLB->get_toggle(0, 0);
+    bool bNewMSFormsMenuOption = m_xGlobalOptionsCLB->get_toggle(0);
     if (m_bSavedMSFormsMenuOption != bNewMSFormsMenuOption)
     {
         m_aViewConfigItem.SetMSOCompatibleFormsMenu(bNewMSFormsMenuOption);
@@ -460,7 +458,7 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
 
-    m_xGlobalOptionsCLB->set_toggle(0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+    m_xGlobalOptionsCLB->set_toggle(0, m_aViewConfigItem.HasMSOCompatibleFormsMenu() ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_bSavedMSFormsMenuOption = m_aViewConfigItem.HasMSOCompatibleFormsMenu();
 }
 

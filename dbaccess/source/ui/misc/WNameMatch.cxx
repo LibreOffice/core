@@ -58,9 +58,7 @@ OWizNameMatching::OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWi
     m_xAll->connect_clicked(LINK(this,OWizNameMatching,AllNoneClickHdl));
     m_xNone->connect_clicked(LINK(this,OWizNameMatching,AllNoneClickHdl));
 
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCTRL_LEFT->get_checkbox_column_width());
-    m_xCTRL_LEFT->set_column_fixed_widths(aWidths);
+    m_xCTRL_LEFT->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     m_xCTRL_LEFT->connect_changed(LINK(this,OWizNameMatching,TableListClickHdl));
     m_xCTRL_RIGHT->connect_changed(LINK(this,OWizNameMatching,TableListRightSelectHdl));
@@ -132,7 +130,7 @@ bool OWizNameMatching::LeavePage()
             ++nPos;
         }
 
-        if (m_xCTRL_LEFT->get_toggle(*xLeftEntry, 0) == TRISTATE_TRUE)
+        if (m_xCTRL_LEFT->get_toggle(*xLeftEntry) == TRISTATE_TRUE)
         {
             OFieldDescription* pDestField = reinterpret_cast<OFieldDescription*>(m_xCTRL_RIGHT->get_id(*xRightEntry).toInt64());
             OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
@@ -301,7 +299,7 @@ IMPL_LINK(OWizNameMatching, AllNoneClickHdl, weld::Button&, rButton, void)
 {
     bool bAll = &rButton == m_xAll.get();
     m_xCTRL_LEFT->all_foreach([this, bAll](weld::TreeIter& rEntry){
-        m_xCTRL_LEFT->set_toggle(rEntry, bAll ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xCTRL_LEFT->set_toggle(rEntry, bAll ? TRISTATE_TRUE : TRISTATE_FALSE);
         return false;
     });
 }
@@ -312,17 +310,15 @@ void OWizNameMatching::FillListBox(weld::TreeView& rTreeView, const ODatabaseExp
 
     int nRow(0);
 
-    const int nTextCol = bCheckButtons ? 1 : 0;
-
     for (auto const& elem : rList)
     {
         rTreeView.append();
         if (bCheckButtons)
         {
             bool bChecked = !elem->second->IsAutoIncrement();
-            rTreeView.set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+            rTreeView.set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
         }
-        rTreeView.set_text(nRow, elem->first, nTextCol);
+        rTreeView.set_text(nRow, elem->first, 0);
         rTreeView.set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(elem->second)));
         ++nRow;
     }
