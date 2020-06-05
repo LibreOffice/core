@@ -1606,35 +1606,6 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeTextHighlight, "tdf131841_HighlightColorG
     }
 }
 
-DECLARE_OOXMLIMPORT_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
-{
-    // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    const sal_Int32 nAnchoredWidth
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2408), nAnchoredWidth);
-}
-
-DECLARE_OOXMLIMPORT_TEST(testRelativeAnchorWidthFromInsideOutsideMargin, "tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx")
-{
-    //
-    // The open book: outside --text-- inside | inside --text-- outside
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Outside
-    sal_Int32 nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
-    // Inside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
-    // Inside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
-    // Outside
-    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width").toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
-}
-
-
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

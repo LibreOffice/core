@@ -641,6 +641,9 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             // E.g.: (left margin = 8 && relative size = 150%) -> width of some shape = 12.
             else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_LEFT)
                 nWidth = GetPageFrame()->GetLeftMargin();
+            // Same as the left margin above.
+            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_RIGHT)
+                nWidth = GetPageFrame()->GetRightMargin();
             else
                 nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
             nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
