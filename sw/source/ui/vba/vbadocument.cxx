@@ -428,14 +428,12 @@ void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno
 
 void SAL_CALL SwVbaDocument::PrintPreview(  )
 {
-    OUString url = ".uno:PrintPreview";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:PrintPreview" );
 }
 
 void SAL_CALL SwVbaDocument::ClosePrintPreview(  )
 {
-    OUString url = ".uno:ClosePreview";
-    dispatchRequests( mxModel,url );
+    dispatchRequests( mxModel,".uno:ClosePreview" );
 }
 
 uno::Any SAL_CALL

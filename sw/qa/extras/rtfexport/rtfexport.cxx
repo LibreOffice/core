@@ -200,28 +200,30 @@ DECLARE_RTFEXPORT_TEST(testCommentsNested, "comments-nested.odt")
 DECLARE_RTFEXPORT_TEST(testMathAccents, "math-accents.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} "
-                             "widetilde {a} widehat {a} dot {a} widevec {a} widevec {a} widetilde "
-                             "{a} underline {a}");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} "
+                 "widetilde {a} widehat {a} dot {a} widevec {a} widevec {a} widetilde "
+                 "{a} underline {a}"),
+        aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathEqarray, "math-eqarray.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected(
-        "y = left lbrace stack { 0 , x < 0 # 1 , x = 0 # {x} ^ {2} , x > 0 } right none");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("y = left lbrace stack { 0 , x < 0 # 1 , x = 0 # {x} ^ {2} , x > 0 } right none"),
+        aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathD, "math-d.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("left (x mline y mline z right ) left (1 right ) left [2 right ] left "
-                             "ldbracket 3 right rdbracket left lline 4 right rline left ldline 5 "
-                             "right rdline left langle 6 right rangle left langle a mline b right "
-                             "rangle left ({x} over {y} right )");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("left (x mline y mline z right ) left (1 right ) left [2 right ] left "
+                 "ldbracket 3 right rdbracket left lline 4 right rline left ldline 5 "
+                 "right rdline left langle 6 right rangle left langle a mline b right "
+                 "rangle left ({x} over {y} right )"),
+        aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathEscaping, "math-escaping.rtf")
@@ -241,15 +243,13 @@ DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
 DECLARE_RTFEXPORT_TEST(testMathMatrix, "math-matrix.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString("left [matrix {1 # 2 ## 3 # 4} right ]"), aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathBox, "math-mbox.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("a");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
@@ -301,8 +301,8 @@ DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
 DECLARE_RTFEXPORT_TEST(testMathNary, "math-nary.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}"), aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathLimupp, "math-limupp.rtf")
@@ -341,10 +341,11 @@ DECLARE_RTFEXPORT_TEST(testMathSepchr, "math-sepchr.rtf")
 DECLARE_RTFEXPORT_TEST(testMathSubscripts, "math-subscripts.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString const aExpected("{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} "
-                             "{x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub "
-                             "{2} rsup {1}");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} "
+                 "{x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub "
+                 "{2} rsup {1}"),
+        aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathVerticalstacks, "math-vertical-stacks.rtf")

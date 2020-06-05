@@ -257,9 +257,8 @@ DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_
     if (!pXmlDoc)
         return;
 
-    OUString sTarget = "file:///C:/TEMP/%C3%A9kezet.docx";
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
-                INetURLObject::decode( sTarget, INetURLObject::DecodeMechanism::ToIUri,
+                INetURLObject::decode( OUString("file:///C:/TEMP/%C3%A9kezet.docx"), INetURLObject::DecodeMechanism::ToIUri,
                 RTL_TEXTENCODING_UTF8));
 }
 

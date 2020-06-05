@@ -2870,13 +2870,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118672)
     if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
         return;
 
-    const OUString aLine1(
-        "He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
-        "3 4 5 6 7 8 9 10con-");
     // This ended as "fol*1 2 3 4 5 6 7 8 9", i.e. "10con-" was moved to the next line.
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[1]", "Line", aLine1);
-    const OUString aLine2("setetur");
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[2]", "Line", aLine2);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[1]", "Line",
+                "He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
+                "3 4 5 6 7 8 9 10con-");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[2]", "Line", "setetur");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117923)

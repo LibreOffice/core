@@ -575,8 +575,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
     uno::Reference<text::XText> xFootnoteText(xFootnotes->getByIndex(0), uno::UNO_QUERY);
 
     // The text in the separator footnote should not be added to the footnotes
-    OUString sText = " Microsoft Office.";
-    CPPUNIT_ASSERT_EQUAL(sText, xFootnoteText->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(" Microsoft Office."), xFootnoteText->getString());
 
     // Ensure that paragraph markers are not lost.
     xFootnoteText.set(xFootnotes->getByIndex(1), uno::UNO_QUERY);

@@ -180,14 +180,13 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(aSaveOpt.IsPrettyPrinting()) );
 
     // save show redline mode ...
-    const OUString sShowChanges("ShowChanges");
     RedlineFlags const nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags nRedlineFlags(nOrigRedlineFlags);
     bool isShowChanges;
     // TODO: ideally this would be stored per-view...
     SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    xInfoSet->setPropertyValue(sShowChanges, makeAny(isShowChanges));
+    xInfoSet->setPropertyValue("ShowChanges", makeAny(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;

@@ -48,12 +48,11 @@ bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xModel
     if( !isHeaderFooter( xCurrentText ) )
         return false;
 
-    OUString aPropIsShared = "HeaderIsShared";
     OUString aPropText = "HeaderText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     bool isShared = true;
-    xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
+    xPageProps->getPropertyValue( "HeaderIsShared" ) >>= isShared;
     if( !isShared )
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
@@ -114,12 +113,11 @@ bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xModel
     if( !isHeaderFooter( xCurrentText ) )
         return false;
 
-    OUString aPropIsShared = "FooterIsShared";
     OUString aPropText = "FooterText";
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     bool isShared = true;
-    xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
+    xPageProps->getPropertyValue( "FooterIsShared" ) >>= isShared;
     if( !isShared )
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );

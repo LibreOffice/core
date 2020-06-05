@@ -423,7 +423,6 @@ void SwXMLTextBlocks::WriteInfo()
             comphelper::getProcessComponentContext();
 
         uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
-        OUString sDocName( XMLN_BLOCKLIST );
 
         /*
         if ( xBlkRoot->IsContained( sDocName) )
@@ -435,7 +434,7 @@ void SwXMLTextBlocks::WriteInfo()
 
         try
         {
-        uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( sDocName,
+        uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( XMLN_BLOCKLIST,
                     embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );

@@ -3398,8 +3398,7 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
                 {
                     if (nSelection >= 0)
                     {
-                        OUString sKey = ODF_FORMDROPDOWN_RESULT;
-                        (*pFieldBM->GetParameters())[sKey] <<= nSelection;
+                        (*pFieldBM->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
                         pFieldBM->Invalidate();
                         pDocShell->GetWrtShell()->SetModified();
                         pDocShell->GetView()->GetEditWin().LogicInvalidate(nullptr);

@@ -1470,8 +1470,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 SwTwips nSpace = 0;
                 if( SwFillMode::Tab != rFill.Mode() )
                 {
-                    const OUString aTmp("  ");
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, aTmp, 0, 2 );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, "  ", 0, 2 );
                     nSpace = pFnt->GetTextSize_( aDrawInf ).Width()/2;
                 }
                 if( rFill.X() >= nRight )

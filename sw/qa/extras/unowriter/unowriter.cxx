@@ -555,11 +555,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
     CPPUNIT_ASSERT(xSelections.is());
     uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSelection.is());
-    OUString aExpectedSelection
-        = "Before" SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING
-          "C2" SAL_NEWLINE_STRING "A2" SAL_NEWLINE_STRING "B2" SAL_NEWLINE_STRING
-          "C2" SAL_NEWLINE_STRING;
-    CPPUNIT_ASSERT_EQUAL(aExpectedSelection, xSelection->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Before" SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING
+                                  "B1" SAL_NEWLINE_STRING "C2" SAL_NEWLINE_STRING
+                                  "A2" SAL_NEWLINE_STRING "B2" SAL_NEWLINE_STRING
+                                  "C2" SAL_NEWLINE_STRING),
+                         xSelection->getString());
 
     // Enumerate paragraphs in the selection.
     uno::Reference<container::XEnumerationAccess> xCursor(
