@@ -900,13 +900,12 @@ static bool performTest(
 static bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
     bool bReturn = true;
-    OUString sCompare = STRING_TEST_CONSTANT;
     Reference<XInterface> const x(xLBT->getInterface());
     try
     {
         // Note : the exception may fly or not (e.g. remote scenario).
         //        When it flies, it must contain the correct elements.
-        xLBT->raiseRuntimeExceptionOneway( sCompare, x );
+        xLBT->raiseRuntimeExceptionOneway( STRING_TEST_CONSTANT, x );
     }
     catch( const RuntimeException & e )
     {
