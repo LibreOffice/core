@@ -9439,7 +9439,7 @@ private:
 
         set(iter, m_aToggleTriStateMap[nCol], false);
 
-        signal_toggled(iter_col(GtkInstanceTreeIter(iter), nCol));
+        signal_toggled(iter_col(GtkInstanceTreeIter(iter), to_external_model(nCol)));
 
         gtk_tree_path_free(tree_path);
     }
@@ -9551,6 +9551,8 @@ private:
 
     void set_column_editable(int nCol, bool bEditable)
     {
+        nCol = to_internal_model(nCol);
+
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
@@ -9840,8 +9842,7 @@ public:
                     else if (m_nImageCol == -1)
                         m_nImageCol = nIndex;
                 }
-                int nExternalIndex = to_external_model(nIndex);
-                g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nExternalIndex));
+                g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                 ++nIndex;
             }
             g_list_free(pRenderers);
