@@ -29,6 +29,8 @@
 #include <framework/addonsoptions.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vector>
+#include <vcl/WeldedTabbedNotebookbar.hxx>
+
 using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
@@ -41,6 +43,7 @@ const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
+std::unique_ptr<WeldedTabbedNotebookbar> SfxNotebookBar::m_pNotebookBarWeldedWrapper;
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
@@ -355,18 +358,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         OUString sCurrentFile;
         VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
         if ( pNotebookBar )
-            sCurrentFile = OStringToOUString( pNotebookBar->getUIFile(), RTL_TEXTENCODING_ASCII_US );
+            sCurrentFile = pNotebookBar->GetUIFilePath();
 
-        bool bChangedFile = true;
-        if ( sCurrentFile.getLength() && sNewFile.getLength() )
-        {
-            // delete "/"
-            sCurrentFile = sCurrentFile.copy( 0, sCurrentFile.getLength() - 1 );
-            // delete ".ui"
-            sNewFile = sNewFile.copy( 0, sNewFile.getLength() - 3 );
-
-            bChangedFile = sNewFile != sCurrentFile;
-        }
+        bool bChangedFile = sNewFile != sCurrentFile;
 
         if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
             || bReloadNotebookbar)
@@ -387,6 +381,15 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
+
+            if ((!m_pNotebookBarWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
+            {
+                m_pNotebookBarWeldedWrapper.reset(new WeldedTabbedNotebookbar(pNotebookBar->GetMainContainer(),
+                                                                              pNotebookBar->GetUIFilePath(),
+                                                                              xFrame));
+                pNotebookBar->SetDisposeCallback(LINK(nullptr, SfxNotebookBar, VclDisposeHdl));
+            }
+
             pNotebookBar->GetParent()->Resize();
 
             utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
@@ -545,6 +548,11 @@ void SfxNotebookBar::ReloadNotebookBar(const OUString& sUIPath)
         SfxViewShell* pViewShell = SfxViewShell::Current();
         sfx2::SfxNotebookBar::StateMethod(pViewShell->GetViewFrame()->GetBindings(), sUIPath, true);
     }
+}
+
+IMPL_STATIC_LINK_NOARG(SfxNotebookBar, VclDisposeHdl, const void*, void)
+{
+    m_pNotebookBarWeldedWrapper.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

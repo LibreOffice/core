@@ -200,6 +200,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/listbox \
     vcl/source/control/menubtn \
     vcl/source/control/notebookbar \
+    vcl/source/control/WeldedTabbedNotebookbar \
     vcl/source/control/quickselectionengine \
     vcl/source/control/prgsbar \
     vcl/source/control/roadmap \

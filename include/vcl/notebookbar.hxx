@@ -47,12 +47,22 @@ public:
     void ControlListenerForCurrentController(bool bListen);
     void StopListeningAllControllers();
 
+    bool IsWelded() { return m_bIsWelded; }
+    VclPtr<vcl::Window>& GetMainContainer() { return m_xVclContentArea; }
+    OUString GetUIFilePath() { return m_sUIXMLDescription; }
+    void SetDisposeCallback(const Link<const void*, void> rDisposeCallback);
+
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
     std::set<css::uno::Reference<css::frame::XController>> m_alisteningControllers;
     std::vector<NotebookbarContextControl*> m_pContextContainers;
     css::uno::Reference<css::frame::XFrame> mxFrame;
+
+    VclPtr<vcl::Window> m_xVclContentArea;
+    bool m_bIsWelded;
+    OUString m_sUIXMLDescription;
+    Link<const void*, void> m_rDisposeLink;
 
     AllSettings DefaultSettings;
     AllSettings PersonaSettings;

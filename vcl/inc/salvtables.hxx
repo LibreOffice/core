@@ -22,8 +22,7 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-
-class MessageDialog;
+#include "messagedialog.hxx"
 
 class SalInstanceBuilder : public weld::Builder
 {
