@@ -258,6 +258,11 @@ shell SfxObjectShell
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
+    SID_ADDITIONS_DIALOG
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
     SID_SIGNATURE
     [
         ExecMethod = ExecFile_Impl;

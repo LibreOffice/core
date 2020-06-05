@@ -61,6 +61,7 @@
 #include <tipofthedaydlg.hxx>
 #include <transfrm.hxx>
 #include <zoom.hxx>
+#include <AdditionsDialog.hxx>
 
 class SfxSingleTabDialogController;
 class SfxItemPool;
@@ -753,6 +754,20 @@ public:
     virtual short Execute() override;
 };
 
+class AdditionsDialog;
+class AbstractAdditionsDialog_Impl : public AbstractAdditionsDialog
+{
+protected:
+    std::unique_ptr<AdditionsDialog> m_xDlg;
+
+public:
+    explicit AbstractAdditionsDialog_Impl(std::unique_ptr<AdditionsDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 class TipOfTheDayDialog;
 class AbstractTipOfTheDayDialog_Impl : public AbstractTipOfTheDayDialog
 {
@@ -968,6 +983,8 @@ public:
                               const css::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
 
     virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
+
+    virtual VclPtr<AbstractAdditionsDialog> CreateAdditionsDialog(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 

@@ -660,6 +660,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_ADDITIONS_DIALOG:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAdditionsDialog(rReq.GetFrameWeld()));
+            pDlg->Execute();
+            bDone = true;
+            break;
+        }
+
         case SID_TEMPLATE_MANAGER:
         {
             SfxTemplateManagerDlg aDialog(rReq.GetFrameWeld());
