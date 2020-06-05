@@ -176,7 +176,7 @@ class SbTreeListBox : public DocumentEventListener
 {
 private:
     std::unique_ptr<weld::TreeView> m_xControl;
-    std::unique_ptr<weld::TreeIter> m_xIter;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     weld::Window* m_pTopLevel;
     bool m_bFreezeOnFirstAddRemove;
     BrowseMode nMode;

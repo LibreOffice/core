@@ -43,7 +43,7 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
     xDevice->DrawRect(aRect);
 
     m_xLbChartColors->insert(nullptr, nPos, &rStr, nullptr,
-                             nullptr, xDevice.get(), nullptr, false, nullptr);
+                             nullptr, xDevice.get(), false, nullptr);
 
     if (nPos == -1)
         aColorList.push_back( rColor );

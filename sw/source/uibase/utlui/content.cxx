@@ -863,6 +863,7 @@ static const char* STR_CONTEXT_ARY[] =
 
 SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog)
     : m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
     , m_aDropTargetHelper(*this)
     , m_xDialog(pDialog)
     , m_sSpace(OUString("                    "))
@@ -1406,9 +1407,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 }
 
 void SwContentTree::insert(const weld::TreeIter* pParent, const OUString& rStr, const OUString& rId,
-                           const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet)
+                           bool bChildrenOnDemand, weld::TreeIter* pRet)
 {
-    m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, pExpanderName, bChildrenOnDemand, pRet);
+    m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, bChildrenOnDemand, pRet);
     ++m_nEntryCount;
 }
 
@@ -1455,7 +1456,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
                     if (!bChild || (nLevel == 0))
                     {
-                        insert(&rParent, sEntry, sId, nullptr, false, xChild.get());
+                        insert(&rParent, sEntry, sId, false, xChild.get());
                         m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                         m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
                         bChild = true;
@@ -1465,7 +1466,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                         //back search parent.
                         if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
                         {
-                            insert(xChild.get(), sEntry, sId, nullptr, false, xChild.get());
+                            insert(xChild.get(), sEntry, sId, false, xChild.get());
                             m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                             m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
                             bChild = true;
@@ -1483,7 +1484,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                             }
                             if (bChild)
                             {
-                                insert(xChild.get(), sEntry, sId, nullptr, false, xChild.get());
+                                insert(xChild.get(), sEntry, sId, false, xChild.get());
                                 m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                                 m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
                             }
@@ -1504,7 +1505,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     if (sEntry.isEmpty())
                         sEntry = m_sSpace;
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                    insert(&rParent, sEntry, sId, nullptr, false, xChild.get());
+                    insert(&rParent, sEntry, sId, false, xChild.get());
                     m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                     if (bRegion)
                         m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
@@ -1881,7 +1882,8 @@ void SwContentTree::Display( bool bActive )
                 OUString aImage(GetImageIdForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rpContentT.get())));
-                insert(nullptr, sEntry, sId, &aImage, bChOnDemand, xEntry.get());
+                insert(nullptr, sEntry, sId, bChOnDemand, xEntry.get());
+                m_xTreeView->set_image(*xEntry, aImage);
 
                 m_xTreeView->set_sensitive(*xEntry, bChOnDemand);
 
@@ -1965,7 +1967,8 @@ void SwContentTree::Display( bool bActive )
             OUString aImage(GetImageIdForContentTypeId(m_nRootType));
             bool bChOnDemand = m_nRootType == ContentTypeId::OUTLINE;
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rpRootContentT.get())));
-            insert(nullptr, rpRootContentT->GetName(), sId, &aImage, bChOnDemand, xEntry.get());
+            insert(nullptr, rpRootContentT->GetName(), sId, bChOnDemand, xEntry.get());
+            m_xTreeView->set_image(*xEntry, aImage);
 
             if (!bChOnDemand)
             {
@@ -1981,7 +1984,7 @@ void SwContentTree::Display( bool bActive )
                         if(sEntry.isEmpty())
                             sEntry = m_sSpace;
                         OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                        insert(xEntry.get(), sEntry, sSubId, nullptr, false, xChild.get());
+                        insert(xEntry.get(), sEntry, sSubId, false, xChild.get());
                         m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                         if (bRegion)
                             m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());

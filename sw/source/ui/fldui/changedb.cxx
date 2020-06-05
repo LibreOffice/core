@@ -135,16 +135,19 @@ std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(const OUString& rDBName)
                     }
                 }
                 m_xUsedDBTLB->insert(xIter.get(), -1, &sTableName, &sUserData, nullptr, nullptr,
-                                     &rToInsert, false, xIter.get());
+                                     false, xIter.get());
+                m_xUsedDBTLB->set_image(*xIter, rToInsert);
                 return xIter;
             }
         } while (m_xUsedDBTLB->iter_next_sibling(*xIter));
     }
 
     m_xUsedDBTLB->insert(nullptr, -1, &sDBName, nullptr, nullptr, nullptr,
-                         &aDBImg, false, xIter.get());
+                         false, xIter.get());
+    m_xUsedDBTLB->set_image(*xIter, aDBImg);
     m_xUsedDBTLB->insert(xIter.get(), -1, &sTableName, &sUserData, nullptr, nullptr,
-                         &rToInsert, false, xIter.get());
+                         false, xIter.get());
+    m_xUsedDBTLB->set_image(*xIter, rToInsert);
     return xIter;
 }
 

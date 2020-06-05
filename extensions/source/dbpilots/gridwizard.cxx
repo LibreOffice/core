@@ -405,7 +405,7 @@ namespace dbp
 
         // insert the entry preserving it's "relative position" entry data
         OUString sId(OUString::number(nRelativeIndex));
-        rMoveTo.insert(nullptr, nInsertPos, &sMovingEntry, &sId, nullptr, nullptr, nullptr, false, nullptr);
+        rMoveTo.insert(nullptr, nInsertPos, &sMovingEntry, &sId, nullptr, nullptr, false, nullptr);
 
         // remove the entry from its old list
         if (bMoveRight)

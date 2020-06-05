@@ -476,7 +476,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     OUString sString(aBuf.makeStringAndClear());
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewData.release())));
-    rTreeView.insert(pParent, -1, &sString, &sId, nullptr, nullptr, nullptr, bCreateOnDemand, xEntry.get());
+    rTreeView.insert(pParent, -1, &sString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
     if (!bFlag && bUseColor && !pParent)
     {
         rTreeView.set_font_color(*xEntry, COL_LIGHTBLUE);
@@ -594,7 +594,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             weld::TreeView& rTreeView = pTheView->GetWidget();
             xEntry = rTreeView.make_iterator();
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewData.release())));
-            rTreeView.insert(pParent, -1, &aActionString, &sId, nullptr, nullptr, nullptr, bCreateOnDemand, xEntry.get());
+            rTreeView.insert(pParent, -1, &aActionString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
 
             OUString aRefStr;
             pScChangeAction->GetRefString(aRefStr, pDoc, true);
@@ -723,7 +723,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
     weld::TreeView& rTreeView = pTheView->GetWidget();
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewData.release())));
-    rTreeView.insert(&rParent, -1, &aString, &sId, nullptr, nullptr, nullptr, false, xEntry.get());
+    rTreeView.insert(&rParent, -1, &aString, &sId, nullptr, nullptr, false, xEntry.get());
     if (pTheView->IsValidComment(aComment) && bFlag)
         bHasFilterEntry=true;
     else
@@ -806,9 +806,9 @@ void ScAcceptChgDlg::UpdateView()
     pTPView->EnableRejectAll(bTheFlag);
 
     if (nAcceptCount>0)
-        rTreeView.insert(nullptr, -1, &aStrAllAccepted, nullptr, nullptr, nullptr, nullptr, true, nullptr);
+        rTreeView.insert(nullptr, -1, &aStrAllAccepted, nullptr, nullptr, nullptr, true, nullptr);
     if (nRejectCount>0)
-        rTreeView.insert(nullptr, -1, &aStrAllRejected, nullptr, nullptr, nullptr, nullptr, true, nullptr);
+        rTreeView.insert(nullptr, -1, &aStrAllRejected, nullptr, nullptr, nullptr, true, nullptr);
     rTreeView.thaw();
     m_xDialog->set_busy_cursor(false);
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
@@ -1316,7 +1316,7 @@ IMPL_LINK(ScAcceptChgDlg, ExpandingHandle, const weld::TreeIter&, rEntry, bool)
             if (bTheTestFlag)
             {
                 std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-                rTreeView.insert(&rEntry, -1, &aStrNoEntry, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+                rTreeView.insert(&rEntry, -1, &aStrNoEntry, nullptr, nullptr, nullptr, false, xEntry.get());
                 rTreeView.set_font_color(*xEntry, COL_GRAY);
             }
         }

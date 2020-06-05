@@ -143,11 +143,13 @@ public:
     std::unique_ptr<weld::TreeIter> make_iterator() const { return mxTreeView->make_iterator(); }
     void insert(const OUString &rEntry, const OUString& rId, const OUString& rImage, weld::TreeIter& rIter)
     {
-        mxTreeView->insert(nullptr, -1, &rEntry, &rId, nullptr, nullptr, &rImage, false, &rIter);
+        mxTreeView->insert(nullptr, -1, &rEntry, &rId, nullptr, nullptr, false, &rIter);
+        mxTreeView->set_image(rIter, rImage);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rType, const OUString& rSize, const OUString& rDate, const OUString& rImage)
     {
-        mxTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, mxScratchIter.get());
+        mxTreeView->insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, false, mxScratchIter.get());
+        mxTreeView->set_image(*mxScratchIter, rImage);
         int nCol = 1;
         if (mbShowType)
             mxTreeView->set_text(*mxScratchIter, rType, nCol++);

@@ -142,13 +142,13 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
                         OUString sText(SwResId(STR_CUSTOM_FIELD));
                         OUString sEntryId(OUString::number(USHRT_MAX));
                         m_xTypeTLB->insert(nullptr, -1, &sText, &sEntryId, nullptr,
-                                           nullptr, nullptr, false, xInfo.get());
+                                           nullptr, false, xInfo.get());
                         for (const auto& rProperty : rProperties)
                         {
                             const OUString sEntry = rProperty.Name;
 
                             m_xTypeTLB->insert(xInfo.get(), -1, &sEntry, &sId,
-                                               nullptr, nullptr, nullptr, false, xEntry.get());
+                                               nullptr, nullptr, false, xEntry.get());
                             if (m_sOldCustomFieldName == sEntry)
                             {
                                 m_xSelEntry = m_xTypeTLB->make_iterator(xEntry.get());
@@ -163,7 +163,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
                 if (!(IsFieldDlgHtmlMode() && (i == DI_EDIT || i == DI_SUBJECT || i == DI_PRINT)))
                 {
                     m_xTypeTLB->insert(nullptr, -1, &aLst[i], &sId,
-                                       nullptr, nullptr, nullptr, false, xEntry.get());
+                                       nullptr, nullptr, false, xEntry.get());
                 }
             }
             if (static_cast<size_t>(nSelEntryData) == i)

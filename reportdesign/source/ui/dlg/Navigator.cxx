@@ -383,7 +383,7 @@ void NavigatorTree::insertEntry(const OUString& rName, weld::TreeIter* pParent, 
                                 int nPosition, UserData* pData, weld::TreeIter& rRet)
 {
     OUString sId = pData ? OUString::number(reinterpret_cast<sal_Int64>(pData)) : OUString();
-    m_xTreeView->insert(pParent, nPosition, &rName, &sId, nullptr, nullptr, nullptr, false, &rRet);
+    m_xTreeView->insert(pParent, nPosition, &rName, &sId, nullptr, nullptr, false, &rRet);
     if (!rImageId.isEmpty())
         m_xTreeView->set_image(rRet, rImageId);
 }

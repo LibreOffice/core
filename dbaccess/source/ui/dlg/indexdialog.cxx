@@ -251,7 +251,7 @@ namespace dbaui
         }
 
         std::unique_ptr<weld::TreeIter> xNewEntry(m_xIndexList->make_iterator());
-        m_xIndexList->insert(nullptr, -1, &sNewIndexName, nullptr, nullptr, nullptr, nullptr, false, xNewEntry.get());
+        m_xIndexList->insert(nullptr, -1, &sNewIndexName, nullptr, nullptr, nullptr, false, xNewEntry.get());
         m_xIndexes->insert(sNewIndexName);
 
         // update the user data on the entries in the list box:

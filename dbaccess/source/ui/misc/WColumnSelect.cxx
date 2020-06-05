@@ -334,7 +334,7 @@ void OWizColumnSelect::moveColumn(  weld::TreeView* _pRight,
 
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aSrcIter->second)));
             const OUString& rStr = (*aIter).first;
-            _pRight->insert(nullptr, nPos, &rStr, &sId, nullptr, nullptr, nullptr, false, nullptr);
+            _pRight->insert(nullptr, nPos, &rStr, &sId, nullptr, nullptr, false, nullptr);
             _rRightColumns.push_back(rStr);
             m_pParent->removeColumnNameFromNameMap(_sColumnName);
         }

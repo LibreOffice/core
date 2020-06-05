@@ -34,6 +34,7 @@ class SW_DLLPUBLIC SwDBTreeList
 
     rtl::Reference<SwDBTreeList_Impl> pImpl;
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
     DECL_DLLPRIVATE_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     SAL_DLLPRIVATE void          InitTreeList();

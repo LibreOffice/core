@@ -596,7 +596,7 @@ void ScConflictsDlg::UpdateView()
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pRootUserData.release())));
             std::unique_ptr<weld::TreeIter> xRootEntry(rTreeView.make_iterator());
             std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
-            rTreeView.insert(nullptr, -1, &sString, &sId, nullptr, nullptr, nullptr, false, xRootEntry.get());
+            rTreeView.insert(nullptr, -1, &sString, &sId, nullptr, nullptr, false, xRootEntry.get());
 
             for ( const auto& aSharedAction : rConflictEntry.maSharedActions )
             {
@@ -613,7 +613,7 @@ void ScConflictsDlg::UpdateView()
                         }
                     }
 
-                    rTreeView.insert(xRootEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+                    rTreeView.insert(xRootEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
                     SetActionString(pAction, mpSharedDoc, *xEntry);
                 }
             }
@@ -636,7 +636,7 @@ void ScConflictsDlg::UpdateView()
                     std::unique_ptr<RedlinData> pUserData(new RedlinData());
                     pUserData->pData = static_cast< void* >( pAction );
                     OUString aId(OUString::number(reinterpret_cast<sal_Int64>(pUserData.release())));
-                    rTreeView.insert(xRootEntry.get(), -1, nullptr, &aId, nullptr, nullptr, nullptr, false, xEntry.get());
+                    rTreeView.insert(xRootEntry.get(), -1, nullptr, &aId, nullptr, nullptr, false, xEntry.get());
                     SetActionString(pAction, mpOwnDoc, *xEntry);
                 }
             }

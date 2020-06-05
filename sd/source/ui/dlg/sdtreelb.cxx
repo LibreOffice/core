@@ -639,6 +639,7 @@ void SdPageObjsTLV::AddShapeToTransferable (
 
 SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     : m_xTreeView(std::move(xTreeView))
+    , m_xScratchIter(m_xTreeView->make_iterator())
     , m_xDropTargetHelper(new SdPageObjsTLVDropTarget(*m_xTreeView))
     , m_xAccel(::svt::AcceleratorExecute::createAcceleratorHelper())
     , m_pDoc(nullptr)
@@ -866,7 +867,8 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                 {
                     OUString sId(OUString::number(1));
                     m_xTreeView->insert(&rFileEntry, -1, &pPage->GetName(), &sId,
-                                        nullptr, nullptr, &sImgPage, false, nullptr);
+                                        nullptr, nullptr, false, m_xScratchIter.get());
+                    m_xTreeView->set_image(*m_xScratchIter, sImgPage);
 
                     if (!xPageEntry)
                     {
@@ -887,17 +889,20 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
                             if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgOle, false, nullptr);
+                                                    nullptr, nullptr, false, m_xScratchIter.get());
+                                m_xTreeView->set_image(*m_xScratchIter, sImgOle);
                             }
                             else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgGraphic, false, nullptr);
+                                                    nullptr, nullptr, false, m_xScratchIter.get());
+                                m_xTreeView->set_image(*m_xScratchIter, sImgGraphic);
                             }
                             else
                             {
                                 m_xTreeView->insert(xPageEntry.get(), -1, &aStr, nullptr,
-                                                    nullptr, nullptr, &sImgObjects, false, nullptr);
+                                                    nullptr, nullptr, false, m_xScratchIter.get());
+                                m_xTreeView->set_image(*m_xScratchIter, sImgObjects);
                             }
                         }
                     }
@@ -1125,7 +1130,8 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 
     OUString sId(OUString::number(1));
     // insert document name
-    m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, &sImgDoc, true, nullptr);
+    m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, true, m_xScratchIter.get());
+    m_xTreeView->set_image(*m_xScratchIter, sImgDoc);
 }
 
 /**

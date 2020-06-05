@@ -204,7 +204,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     if (bInsertToPrefBox)
     {
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
-        m_xPrefBox->insert(pParentEntry, -1, &rProp, &sId, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xPrefBox->insert(pParentEntry, -1, &rProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xPrefBox->set_text(*m_xScratchIter, rStatus, 1);
         m_xPrefBox->set_text(*m_xScratchIter, rType, 2);
         m_xPrefBox->set_text(*m_xScratchIter, rValue, 3);
@@ -287,7 +287,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 m_vectorUserData.push_back(std::make_unique<UserData>(xNextNameAccess, lineage + 1));
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
 
-                m_xPrefBox->insert(pParentEntry, -1, &item, &sId, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
+                m_xPrefBox->insert(pParentEntry, -1, &item, &sId, nullptr, nullptr, true, m_xScratchIter.get());
                 //It is needed, without this the selection line will be truncated.
                 m_xPrefBox->set_text(*m_xScratchIter, "", 1);
                 m_xPrefBox->set_text(*m_xScratchIter, "", 2);
@@ -862,7 +862,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
         if (index < 0)
         {
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rEntry.pUserData)));
-            m_xPrefBox->insert(nullptr, -1, &rEntry.sProp, &sId, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+            m_xPrefBox->insert(nullptr, -1, &rEntry.sProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sValue, 3);
@@ -895,7 +895,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
 
         if (!hasEntry)
         {
-            m_xPrefBox->insert(xGrandParentEntry.get(), -1, &sParentName, nullptr, nullptr, nullptr, nullptr, false, xParentEntry.get());
+            m_xPrefBox->insert(xGrandParentEntry.get(), -1, &sParentName, nullptr, nullptr, nullptr, false, xParentEntry.get());
             //It is needed, without this the selection line will be truncated.
             m_xPrefBox->set_text(*xParentEntry, "", 1);
             m_xPrefBox->set_text(*xParentEntry, "", 2);
@@ -906,7 +906,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
     } while(index < sPath.getLength() - 1);
 
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rEntry.pUserData)));
-    m_xPrefBox->insert(xParentEntry.get(), -1, &rEntry.sProp, &sId, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+    m_xPrefBox->insert(xParentEntry.get(), -1, &rEntry.sProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sValue, 3);

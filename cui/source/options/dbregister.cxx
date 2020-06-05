@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl, weld::TreeView&, voi
 void DbRegistrationOptionsPage::insertNewEntry(const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly)
 {
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new DatabaseRegistration(_sLocation, _bReadOnly))));
-    m_xPathBox->insert(nullptr, -1, &_sName, &sId, nullptr, nullptr, nullptr, false, m_xIter.get());
+    m_xPathBox->insert(nullptr, -1, &_sName, &sId, nullptr, nullptr, false, m_xIter.get());
 
     if (_bReadOnly)
         m_xPathBox->set_image(*m_xIter, RID_SVXBMP_LOCK);

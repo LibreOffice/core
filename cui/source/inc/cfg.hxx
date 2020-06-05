@@ -347,7 +347,7 @@ public:
     void insert(int pos, const OUString& rId)
     {
         m_xControl->insert(nullptr, pos, nullptr, &rId,
-                           nullptr, nullptr, nullptr, false, nullptr);
+                           nullptr, nullptr, false, nullptr);
     }
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);

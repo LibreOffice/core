@@ -1740,7 +1740,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
 
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
     std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
-    m_xTreeListBox->insert(nullptr, -1, &aVar, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+    m_xTreeListBox->insert(nullptr, -1, &aVar, &sId, nullptr, nullptr, false, xRet.get());
     m_xTreeListBox->set_text(*xRet, "", 1);
     m_xTreeListBox->set_text(*xRet, "", 2);
 
@@ -2110,7 +2110,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
             WatchItem* pWatchItem = new WatchItem(rName);
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
 
-            m_xTreeListBox->insert(&rParent, -1, &rName, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+            m_xTreeListBox->insert(&rParent, -1, &rName, &sId, nullptr, nullptr, false, xRet.get());
             m_xTreeListBox->set_text(*xRet, "", 1);
             m_xTreeListBox->set_text(*xRet, "", 2);
         }
@@ -2160,7 +2160,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
 
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pChildItem)));
 
-            m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+            m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, false, xRet.get());
             m_xTreeListBox->set_text(*xRet, "", 1);
             m_xTreeListBox->set_text(*xRet, "", 2);
 

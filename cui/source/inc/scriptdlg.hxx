@@ -94,6 +94,7 @@ protected:
     const OUString m_sProdMacros;
 
     std::unique_ptr<weld::TreeView> m_xScriptsBox;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<weld::Button> m_xRunButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
     std::unique_ptr<weld::Button> m_xCreateButton;

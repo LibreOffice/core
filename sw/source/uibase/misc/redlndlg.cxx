@@ -576,7 +576,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator());
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData.release())));
             rTreeView.insert(pParent->xTLBParent.get(), -1, nullptr, &sId, nullptr, nullptr,
-                             nullptr, false, xChild.get());
+                             false, xChild.get());
 
             rTreeView.set_image(*xChild, sImage, -1);
             rTreeView.set_text(*xChild, sAuthor, 1);
@@ -737,7 +737,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
         OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pData.release()));
         std::unique_ptr<weld::TreeIter> xParent(rTreeView.make_iterator());
-        rTreeView.insert(nullptr, i, nullptr, &sId, nullptr, nullptr, nullptr, false, xParent.get());
+        rTreeView.insert(nullptr, i, nullptr, &sId, nullptr, nullptr, false, xParent.get());
 
         rTreeView.set_image(*xParent, sImage, -1);
         rTreeView.set_text(*xParent, sAuthor, 1);

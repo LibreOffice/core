@@ -497,7 +497,7 @@ private:
         OUString sText(m_rTreeView.get_text(*xSelected));
         OUString sId(m_rTreeView.get_id(*xSelected));
         std::unique_ptr<weld::TreeIter> xRet(m_rTreeView.make_iterator());
-        m_rTreeView.get_widget().insert(xNewParent.get(), nNewChildPos, &sText, &sId, nullptr, nullptr, nullptr, false, xRet.get());
+        m_rTreeView.get_widget().insert(xNewParent.get(), nNewChildPos, &sText, &sId, nullptr, nullptr, false, xRet.get());
         if (eType == OBJ_TYPE_MODULE)
             m_rTreeView.get_widget().set_image(*xRet, RID_BMP_MODULE);
         else if (eType == OBJ_TYPE_DIALOG)

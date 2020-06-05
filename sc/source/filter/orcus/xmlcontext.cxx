@@ -74,7 +74,7 @@ void populateTree(
 {
     OUString sEntry(toString(rElemName, rWalker));
     std::unique_ptr<weld::TreeIter> xEntry(rTreeCtrl.make_iterator());
-    rTreeCtrl.insert(pParent, -1, &sEntry, nullptr, nullptr, nullptr, nullptr, false, xEntry.get());
+    rTreeCtrl.insert(pParent, -1, &sEntry, nullptr, nullptr, nullptr, false, xEntry.get());
     rTreeCtrl.set_image(*xEntry, rParam.maImgElementDefault, -1);
 
     ScOrcusXMLTreeParam::EntryData& rEntryData = setUserDataToEntry(rTreeCtrl,
@@ -97,7 +97,7 @@ void populateTree(
     {
         OUString sAttr(toString(rAttrName, rWalker));
         std::unique_ptr<weld::TreeIter> xAttr(rTreeCtrl.make_iterator());
-        rTreeCtrl.insert(xEntry.get(), -1, &sAttr, nullptr, nullptr, nullptr, nullptr, false, xAttr.get());
+        rTreeCtrl.insert(xEntry.get(), -1, &sAttr, nullptr, nullptr, nullptr, false, xAttr.get());
 
         ScOrcusXMLTreeParam::EntryData& rAttrData =
             setUserDataToEntry(rTreeCtrl, *xAttr, rParam.m_UserDataStore, ScOrcusXMLTreeParam::Attribute);

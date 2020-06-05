@@ -117,21 +117,22 @@ public:
     void thaw() { m_xTreeView->thaw(); }
     void append(const OUString& rId, const OUString& rStr, const weld::TreeIter* pParent = nullptr)
     {
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, nullptr);
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, nullptr);
     }
     std::unique_ptr<weld::TreeIter> tree_append(const OUString& rId, const OUString& rStr, const weld::TreeIter* pParent = nullptr)
     {
         std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, xIter.get());
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, xIter.get());
         return xIter;
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage, const weld::TreeIter* pParent = nullptr)
     {
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, &rImage, false, nullptr);
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->set_image(*m_xScratchIter, rImage);
     }
     void append(const OUString& rId, const OUString& rStr, const css::uno::Reference<css::graphic::XGraphic>& rImage, const weld::TreeIter* pParent = nullptr)
     {
-        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->insert(pParent, -1, &rStr, &rId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xTreeView->set_image(*m_xScratchIter, rImage, -1);
     }
     void remove(int nPos) { m_xTreeView->remove(nPos); }
@@ -194,6 +195,7 @@ class CuiConfigGroupListBox
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
     SfxStylesInfo_Impl* m_pStylesInfo;
     std::unique_ptr<weld::TreeView> m_xTreeView;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
     static OUString GetImage(
         const css::uno::Reference< css::script::browse::XBrowseNode >& node,

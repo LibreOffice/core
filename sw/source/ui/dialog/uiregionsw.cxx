@@ -462,7 +462,8 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 OUString sText(pSect->GetSectionName());
                 OUString sImage(BuildBitmap(pSect->IsProtect(),pSect->IsHidden()));
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
-                m_xTree->insert(nullptr, -1, &sText, &sId, nullptr, nullptr, &sImage, false, xIter.get());
+                m_xTree->insert(nullptr, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
+                m_xTree->set_image(*xIter, sImage);
 
                 RecurseList(pFormat, xIter.get());
                 if (m_xTree->iter_has_child(*xIter))
@@ -494,7 +495,8 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 OUString sText(pSect->GetSectionName());
                 OUString sImage = BuildBitmap(pSect->IsProtect(), pSect->IsHidden());
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
-                m_xTree->insert(pEntry, -1, &sText, &sId, nullptr, nullptr, &sImage, false, xIter.get());
+                m_xTree->insert(pEntry, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
+                m_xTree->set_image(*xIter, sImage);
 
                 RecurseList(pSect->GetFormat(), xIter.get());
                 if (m_xTree->iter_has_child(*xIter))

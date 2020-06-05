@@ -185,7 +185,7 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(weld::TreeView& rSour
         OUString sText = mxControl->get_selected_text();
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
         mxControl->remove_id(sId);
-        mxControl->insert(nullptr, nTarget, &sText, &sId, nullptr, nullptr, nullptr, false, nullptr);
+        mxControl->insert(nullptr, nTarget, &sText, &sId, nullptr, nullptr, false, nullptr);
     }
     else
     {
@@ -215,7 +215,7 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, int 
                             rFunctionData.mnDupCount);
 
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pDataItemValue)));
-    mxControl->insert(nullptr, nPosition, &sDataName, &sId, nullptr, nullptr, nullptr, false, nullptr);
+    mxControl->insert(nullptr, nPosition, &sDataName, &sId, nullptr, nullptr, false, nullptr);
 }
 
 void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValue)
