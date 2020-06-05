@@ -226,9 +226,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::s
 {
     m_xLanguageLB->set_size_request(-1, m_xLanguageLB->get_height_rows(10));
     m_xCheckLangLB->set_size_request(-1, m_xCheckLangLB->get_height_rows(10));
-    std::vector<int> aWidths;
-    aWidths.push_back(m_xCheckLangLB->get_checkbox_column_width());
-    m_xCheckLangLB->set_column_fixed_widths(aWidths);
+    m_xCheckLangLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     if (m_xLocalizationMgr->isLibraryLocalized())
     {
@@ -270,8 +268,8 @@ void SetDefaultLanguageDialog::FillLanguageBox()
             LanguageType eLang = m_xLanguageCB->get_id(j);
             m_xCheckLangLB->append();
             const int nRow = m_xCheckLangLB->n_children() - 1;
-            m_xCheckLangLB->set_toggle(nRow, TRISTATE_FALSE, 0);
-            m_xCheckLangLB->set_text(nRow, m_xLanguageCB->get_text(j), 1);
+            m_xCheckLangLB->set_toggle(nRow, TRISTATE_FALSE);
+            m_xCheckLangLB->set_text(nRow, m_xLanguageCB->get_text(j), 0);
             m_xCheckLangLB->set_id(nRow, OUString::number(eLang.get()));
         }
         m_xLanguageCB.reset();
@@ -304,7 +302,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     const sal_Int32 nCount = m_xCheckLangLB->n_children();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        if (m_xCheckLangLB->get_toggle(i, 0) == TRISTATE_TRUE)
+        if (m_xCheckLangLB->get_toggle(i) == TRISTATE_TRUE)
         {
             LanguageType eType(m_xCheckLangLB->get_id(i).toUInt32());
             aLocaleSeq.push_back(LanguageTag::convertToLocale(eType));
