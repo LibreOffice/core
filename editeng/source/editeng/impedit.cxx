@@ -168,6 +168,10 @@ tools::Rectangle LOKSpecialPositioning::convertUnit(const tools::Rectangle& rRec
     return OutputDevice::LogicToLogic(rRect, MapMode(eRectUnit), MapMode(meUnit));
 }
 
+Point LOKSpecialPositioning::GetRefPoint() const
+{
+    return maOutArea.TopLeft();
+}
 
 //  class ImpEditView
 
@@ -548,7 +552,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 }
             }
 
-            bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
+            bool bMm100ToTwip = !mpLOKSpecialPositioning &&
+                    (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
 
             Point aOrigin;
             if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
@@ -556,6 +561,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 aOrigin = pOutWin->GetMapMode().GetOrigin();
 
             OString sRectangle;
+            OString sRefPoint;
+            if (mpLOKSpecialPositioning)
+                sRefPoint = mpLOKSpecialPositioning->GetRefPoint().toString();
             // If we are not in selection mode, then the exported own selection should be empty.
             // This is needed always in Online, regardless whether in "selection mode" (whatever
             // that is) or not, for tdf#125568, but I don't have the clout to make this completely
@@ -564,6 +572,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             {
                 std::vector<tools::Rectangle> aRectangles;
                 pRegion->GetRegionRectangles(aRectangles);
+
                 if (pOutWin->IsChart())
                 {
                     const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
@@ -584,7 +593,11 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                         aStart = OutputDevice::LogicToLogic(aStart, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
 
-                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+                    OString aPayload = aStart.toString();
+                    if (mpLOKSpecialPositioning)
+                        aPayload += ":: " + sRefPoint;
+
+                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload.getStr());
 
                     tools::Rectangle& rEnd = aRectangles.back();
                     tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -592,7 +605,11 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                         aEnd = OutputDevice::LogicToLogic(aEnd, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
 
-                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+                    aPayload = aEnd.toString();
+                    if (mpLOKSpecialPositioning)
+                        aPayload += ":: " + sRefPoint;
+
+                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload.getStr());
                 }
 
                 std::vector<OString> v;
@@ -605,6 +622,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 }
                 sRectangle = comphelper::string::join("; ", v);
             }
+
+            if (mpLOKSpecialPositioning && !sRectangle.isEmpty())
+                sRectangle += ":: " + sRefPoint;
 
             if (mpOtherShell)
             {
@@ -646,6 +666,23 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
 {
     if ( rDocPosTopLeft.X() == rDocPosBottomRight.X() )
         return;
+
+    if (mpLOKSpecialPositioning && pPolyPoly)
+    {
+        MapUnit eDevUnit = _pTarget->GetMapMode().GetMapUnit();
+        tools::Rectangle aSelRect(rDocPosTopLeft, rDocPosBottomRight);
+        aSelRect = mpLOKSpecialPositioning->GetWindowPos(aSelRect, eDevUnit);
+        const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
+        aSelRect.Move(-aRefPoint.X(), -aRefPoint.Y());
+
+        tools::Polygon aTmpPoly(4);
+        aTmpPoly[0] = aSelRect.TopLeft();
+        aTmpPoly[1] = aSelRect.TopRight();
+        aTmpPoly[2] = aSelRect.BottomRight();
+        aTmpPoly[3] = aSelRect.BottomLeft();
+        pPolyPoly->Insert(aTmpPoly);
+        return;
+    }
 
     bool bPixelMode = _pTarget->GetMapMode().GetMapUnit() == MapUnit::MapPixel;
 
@@ -1276,12 +1313,11 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 tools::Rectangle aCursorRectPureLogical(aEditCursor.TopLeft(), GetCursor()->GetSize());
                 // Get rectangle in window-coordinates from editeng(doc) coordinates.
                 aCursorRectPureLogical = mpLOKSpecialPositioning->GetWindowPos(aCursorRectPureLogical, eDevUnit);
-                // Lets use the editeng(doc) origin as the refpoint.
-                const Point aCursorOrigin = mpLOKSpecialPositioning->GetOutputArea().TopLeft();
-                // Get the relative coordinates w.r.t aCursorOrigin.
-                aCursorRectPureLogical.Move(-aCursorOrigin.X(), -aCursorOrigin.Y());
+                const Point aRefPoint = mpLOKSpecialPositioning->GetRefPoint();
+                // Get the relative coordinates w.r.t rRefPoint.
+                aCursorRectPureLogical.Move(-aRefPoint.X(), -aRefPoint.Y());
                 aMessageParams.put("relrect", aCursorRectPureLogical.toString());
-                aMessageParams.put("refpoint", aCursorOrigin.toString());
+                aMessageParams.put("refpoint", aRefPoint.toString());
             }
 
             if (pOutWin && pOutWin->IsChart())
