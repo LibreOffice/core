@@ -238,6 +238,8 @@ public:
     Point            GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const;
     tools::Rectangle GetWindowPos(const tools::Rectangle& rDocRect, MapUnit eDocRectUnit) const;
 
+    Point GetRefPoint() const;
+
 private:
     Point convertUnit(const Point& rPos, MapUnit ePosUnit) const;
     tools::Rectangle convertUnit(const tools::Rectangle& rRect, MapUnit eRectUnit) const;
