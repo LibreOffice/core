@@ -69,6 +69,7 @@ void ScInputOptions::SetDefaults()
 #define SCINPUTOPT_TEXTWYSIWYG             9
 #define SCINPUTOPT_REPLCELLSWARN          10
 #define SCINPUTOPT_LEGACY_CELL_SELECTION  11
+#define SCINPUTOPT_PASTEMODEFORRETURN     12
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -83,7 +84,8 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
             "UseTabCol",                // SCINPUTOPT_USETABCOL
             "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
             "ReplaceCellsWarning",      // SCINPUTOPT_REPLCELLSWARN
-            "LegacyCellSelection"};     // SCINPUTOPT_LEGACY_CELL_SELECTION
+            "LegacyCellSelection",      // SCINPUTOPT_LEGACY_CELL_SELECTION
+            "PasteModeForReturn"};      // SCINPUTOPT_PASTEMODEFORRETURN
 }
 
 ScInputCfg::ScInputCfg() :
@@ -141,6 +143,9 @@ ScInputCfg::ScInputCfg() :
                     case SCINPUTOPT_LEGACY_CELL_SELECTION:
                         SetLegacyCellSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCINPUTOPT_PASTEMODEFORRETURN:
+                        SetPasteModeForReturn( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -192,6 +197,9 @@ void ScInputCfg::ImplCommit()
                 break;
             case SCINPUTOPT_LEGACY_CELL_SELECTION:
                 pValues[nProp] <<= GetLegacyCellSelection();
+                break;
+            case SCINPUTOPT_PASTEMODEFORRETURN:
+                pValues[nProp] <<= GetPasteModeForReturn();
                 break;
         }
     }
