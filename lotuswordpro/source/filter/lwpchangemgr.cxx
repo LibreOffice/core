@@ -60,26 +60,8 @@
 
 #include <lwpchangemgr.hxx>
 #include <rtl/ustring.hxx>
-#include "lwppara.hxx"
-#include "lwpfribheader.hxx"
-#include "lwpfribptr.hxx"
 #include <lwpfrib.hxx>
-#include "lwpstory.hxx"
-#include "lwpfribsection.hxx"
-#include "lwpsection.hxx"
-#include "lwpfribbreaks.hxx"
-#include "lwpfribframe.hxx"
-#include "lwpfribtable.hxx"
-#include "lwphyperlinkmgr.hxx"
-#include "lwpfootnote.hxx"
-#include "lwpnotes.hxx"
-#include "lwpfribmark.hxx"
-#include <xfilter/xftextspan.hxx>
-#include <xfilter/xftextcontent.hxx>
-#include <xfilter/xftabstop.hxx>
-#include <xfilter/xflinebreak.hxx>
-#include <xfilter/xfstylemanager.hxx>
-#include <xfilter/xfhyperlink.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 LwpChangeMgr::LwpChangeMgr()
 {

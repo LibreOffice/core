@@ -55,7 +55,6 @@
  ************************************************************************/
 #include <lwpatomholder.hxx>
 #include <lwptools.hxx>
-#include <osl/thread.h>
 #include <rtl/textenc.h>
 
 LwpAtomHolder::LwpAtomHolder()

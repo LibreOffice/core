@@ -68,12 +68,10 @@
 
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfdrawstyle.hxx>
-#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <xfilter/xfimagestyle.hxx>
 #include <xfilter/xftextboxstyle.hxx>
 #include <xfilter/xfparagraph.hxx>
-#include <xfilter/xftextspan.hxx>
 #include <xfilter/xffont.hxx>
 
 #include <xfilter/xfdrawrect.hxx>

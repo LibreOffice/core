@@ -57,7 +57,6 @@
 #include <lwpdocdata.hxx>
 #include <xfilter/xfofficemeta.hxx>
 #include <localtime.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 

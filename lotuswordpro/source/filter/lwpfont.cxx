@@ -57,8 +57,6 @@
 #include <lwpfont.hxx>
 #include <lwpbasetype.hxx>
 #include <xfilter/xfstylemanager.hxx>
-#include <xfilter/xffontfactory.hxx>
-#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfdefs.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <sal/log.hxx>

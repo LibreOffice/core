@@ -60,11 +60,9 @@
 
 #include "lwpfribbreaks.hxx"
 #include "lwpfribheader.hxx"
+#include "lwppagelayout.hxx"
 #include "lwpstory.hxx"
 #include <xfilter/xfstylemanager.hxx>
-#include <xfilter/xfsectionstyle.hxx>
-#include "lwpsection.hxx"
-#include <xfilter/xfsection.hxx>
 #include <lwpglobalmgr.hxx>
 
 void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)

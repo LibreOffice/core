@@ -57,7 +57,6 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#include <string.h>
 #include <stdio.h>
 #include <xfilter/xfcolor.hxx>
 

@@ -60,7 +60,6 @@
 #include <xfilter/xfparagraph.hxx>
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/ixfattrlist.hxx>
-#include <xfilter/xftextcontent.hxx>
 
 XFParagraph::XFParagraph()
 {

@@ -80,8 +80,6 @@
 #include "lwpmargins.hxx"
 #include "lwptabrack.hxx"
 
-#include "lwpsilverbullet.hxx"
-
 LwpParaStyle::LwpParaStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm) :
 LwpTextStyle(objHdr, pStrm)
 {

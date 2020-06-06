@@ -62,7 +62,6 @@
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/xffont.hxx>
-#include <xfilter/xfutil.hxx>
 
 XFTextStyle::XFTextStyle()
 {

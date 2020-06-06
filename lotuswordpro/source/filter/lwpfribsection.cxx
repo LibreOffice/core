@@ -59,7 +59,6 @@
  ************************************************************************/
 
 #include "lwpfribsection.hxx"
-#include "lwpfribbreaks.hxx"
 #include "lwpstory.hxx"
 #include "lwpsection.hxx"
 #include <xfilter/xfstylemanager.hxx>

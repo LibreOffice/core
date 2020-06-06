@@ -58,17 +58,10 @@
  *  For LWP filter architecture prototype - OLE object
  */
 
-#include <tools/stream.hxx>
-#include <lwpglobalmgr.hxx>
+#include <lwpfilehdr.hxx>
 #include "lwpoleobject.hxx"
-#include <lwpobjfactory.hxx>
-#include <lwpidxmgr.hxx>
-#include "lwp9reader.hxx"
-#include <xfilter/xfparagraph.hxx>
 #include "lwpframelayout.hxx"
 #include <o3tl/numeric.hxx>
-#include <xfilter/xfstylemanager.hxx>
-#include "bento.hxx"
 
 /**
  * @descr:   construction function

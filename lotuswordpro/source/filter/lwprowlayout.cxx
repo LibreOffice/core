@@ -64,10 +64,8 @@
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfrow.hxx>
 #include <xfilter/xfrowstyle.hxx>
-#include <xfilter/xftablestyle.hxx>
 #include <xfilter/xftable.hxx>
 #include <xfilter/xfcell.hxx>
-#include <xfilter/xfcellstyle.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 LwpRowLayout::LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

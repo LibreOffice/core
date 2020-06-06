@@ -64,9 +64,6 @@
 #include "clone.hxx"
 #include <lwpoverride.hxx>
 #include <lwpfilehdr.hxx>
-#include <lwpatomholder.hxx>
-#include "lwpborderstuff.hxx"
-#include "lwpmargins.hxx"
 #include "lwpbackgroundstuff.hxx"
 
 /*class LwpOverride*/
