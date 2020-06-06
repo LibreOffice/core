@@ -3089,7 +3089,7 @@ uno::Reference< embed::XStorage > const & SfxObjectShell::GetStorage()
         catch( uno::Exception& )
         {
             // TODO/LATER: error handling?
-            DBG_UNHANDLED_EXCEPTION("sfx.doc");
+            TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::GetStorage");
         }
     }
 
