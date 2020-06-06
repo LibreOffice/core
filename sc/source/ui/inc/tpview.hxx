@@ -94,6 +94,7 @@ class ScTpLayoutOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xTextFmtCB;
     std::unique_ptr<weld::CheckButton> m_xReplWarnCB;
     std::unique_ptr<weld::CheckButton> m_xLegacyCellSelectionCB;
+    std::unique_ptr<weld::CheckButton> m_xEnterPasteModeCB;
 
     DECL_LINK(MetricHdl, weld::ComboBox&, void );
     DECL_LINK( AlignHdl, weld::ToggleButton&, void );

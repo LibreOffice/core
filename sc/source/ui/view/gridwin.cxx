@@ -123,6 +123,7 @@
 #include <uiobject.hxx>
 #include <undoblk.hxx>
 #include <datamapper.hxx>
+#include <inputopt.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -3260,7 +3261,8 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         pViewData->GetViewShell()->SelectionChanged();
         return ;
     }
-    else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
+    else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode()
+            && SC_MOD()->GetInputOptions().GetEnterPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
         ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, true );
@@ -5905,6 +5907,8 @@ void ScGridWindow::UpdateCopySourceOverlay()
     if (comphelper::LibreOfficeKit::isActive())
         return;
     if (!pViewData->ShowPasteSource())
+        return;
+    if (!SC_MOD()->GetInputOptions().GetEnterPasteMode())
         return;
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
     if (!xOverlayManager.is())

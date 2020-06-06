@@ -113,6 +113,8 @@
 // misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
+// Put this here since all available slots for "SC_INPUT" are taken
+#define SID_SC_INPUT_ENTER_PASTE_MODE (SC_VIEW_START + 64)
 #define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)
 #define SID_MIRROR_HORIZONTAL   (SC_VIEW_START + 66)
 #define SID_CELL_FORMAT_RESET   (SC_VIEW_START + 67)
