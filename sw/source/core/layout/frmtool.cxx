@@ -711,21 +711,21 @@ SwFlyNotify::~SwFlyNotify()
         {
             // lock position
             pFly->LockPosition();
-        }
 
-        if ( !pFly->ConsiderForTextWrap() )
-        {
-            // indicate that object has to be considered for text wrap
-            pFly->SetConsiderForTextWrap( true );
-            // invalidate 'background' in order to allow its 'background'
-            // to wrap around it.
-            pFly->NotifyBackground( pFly->GetPageFrame(),
-                                    pFly->GetObjRectWithSpaces(),
-                                    PrepareHint::FlyFrameArrive );
-            // invalidate position of anchor frame in order to force
-            // a re-format of the anchor frame, which also causes a
-            // re-format of the invalid previous frames of the anchor frame.
-            pFly->AnchorFrame()->InvalidatePos();
+            if ( !pFly->ConsiderForTextWrap() )
+            {
+                // indicate that object has to be considered for text wrap
+                pFly->SetConsiderForTextWrap( true );
+                // invalidate 'background' in order to allow its 'background'
+                // to wrap around it.
+                pFly->NotifyBackground( pFly->GetPageFrame(),
+                                        pFly->GetObjRectWithSpaces(),
+                                        PrepareHint::FlyFrameArrive );
+                // invalidate position of anchor frame in order to force
+                // a re-format of the anchor frame, which also causes a
+                // re-format of the invalid previous frames of the anchor frame.
+                pFly->AnchorFrame()->InvalidatePos();
+            }
         }
     }
 }
