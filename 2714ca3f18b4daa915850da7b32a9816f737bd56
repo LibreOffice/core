@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "819b9eea_f5953c5d",
+        "filename": "sfx2/source/doc/guisaveas.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-06T11:08:58Z",
+      "side": 1,
+      "message": "Since \"fileExtension\" is used once, just put:\nif ( aURL.GetFileExtension().equals( \"pdf\" ) )\nSee https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d31ec2c252425f8a30b25177b4f67dde0a21771fc \nauthor\tStephan Bergmann \u003csbergman@redhat.com\u003e\t2020-06-02 18:46:45 +0200\ncommitter\tStephan Bergmann \u003csbergman@redhat.com\u003e\t2020-06-02 21:43:31 +0200\ncommit\t31ec2c252425f8a30b25177b4f67dde0a21771fc (patch)\ntree\t85bfc52846d84a8f63419ed24ae3338105e7fd72\nparent\t1cfbe26f8f584fb4037ba99572f899a94a238e5b (diff)\nUpcoming loplugin:elidestringvar: basic",
+      "range": {
+        "startLine": 1613,
+        "startChar": 49,
+        "endLine": 1613,
+        "endChar": 62
+      },
+      "revId": "2714ca3f18b4daa915850da7b32a9816f737bd56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
