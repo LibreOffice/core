@@ -16,6 +16,24 @@
       "revId": "b4648b21ea845ed3d330698e9054f3110c3aa775",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4856e5bf_1fa7f7a4",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-06-06T15:30:17Z",
+      "side": 1,
+      "message": "yeah, there can be multiple toggle columns. I\u0027m still just feeling out the problem that the calc autofilter dropdown poses me",
+      "parentUuid": "7f9d61ae_79478b63",
+      "revId": "b4648b21ea845ed3d330698e9054f3110c3aa775",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
