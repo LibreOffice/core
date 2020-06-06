@@ -58,7 +58,6 @@
  *  For LWP filter architecture prototype - table cell numerics format
  */
 
-#include <lwpoverride.hxx>
 #include "lwptblcell.hxx"
 #include "lwppara.hxx"
 #include "lwptblformula.hxx"

@@ -68,8 +68,6 @@
 #include "lwpparastyle.hxx"
 #include "lwpholder.hxx"
 #include "lwpdoc.hxx"
-#include "lwppagehint.hxx"
-#include "lwpdivinfo.hxx"
 #include "lwpgrfobj.hxx"
 #include <lwpfilehdr.hxx>
 #include <osl/thread.h>

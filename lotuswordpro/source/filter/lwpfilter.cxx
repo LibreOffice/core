@@ -58,26 +58,14 @@
  * Circle object.
  ************************************************************************/
 #include "lwpfilter.hxx"
-#include "lwpresource.hxx"
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/xfsaxstream.hxx>
 #include "lwp9reader.hxx"
 #include <lwpsvstream.hxx>
-#include <xfilter/xffontfactory.hxx>
-#include <xfilter/xfstylemanager.hxx>
 
-#include <osl/file.h>
-#include <osl/file.hxx>
 #include <tools/stream.hxx>
-#include <vcl/svapp.hxx>
-#include <xmloff/attrlist.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XText.hpp>
-
-#include <cppuhelper/supportsservice.hxx>
-
-#include <sfx2/docfile.hxx>
 
 #include <memory>
 

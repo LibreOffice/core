@@ -58,9 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "lwpstory.hxx"
+#include "lwpcontent.hxx"
 #include <lwpfilehdr.hxx>
-#include "lwpholder.hxx"
 
 LwpHeadContent::LwpHeadContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)

@@ -65,16 +65,10 @@
 #include <lwptools.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xftextspan.hxx>
-#include <xfilter/xfbookmark.hxx>
-#include <xfilter/xfentry.hxx>
-#include <xfilter/xftextcontent.hxx>
-#include <xfilter/xfcrossref.hxx>
 #include <xfilter/xfpagenumber.hxx>
 #include <xfilter/xfdocfield.hxx>
 #include <xfilter/xfdatestyle.hxx>
 #include <xfilter/xftimestyle.hxx>
-#include <xfilter/xfdate.hxx>
-#include <xfilter/xfannotation.hxx>
 #include <xfilter/xfpagecount.hxx>
 
 LwpFribText::LwpFribText( LwpPara *pPara, bool bNoUnicode )

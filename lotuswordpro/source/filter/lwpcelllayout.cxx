@@ -60,11 +60,6 @@
 
 #include <memory>
 #include "lwpcelllayout.hxx"
-#include <lwpfoundry.hxx>
-#include <lwpobjfactory.hxx>
-#include "lwptblcell.hxx"
-#include "lwptblformula.hxx"
-#include "lwpholder.hxx"
 #include "lwpnumericfmt.hxx"
 #include "lwptable.hxx"
 #include "lwprowlayout.hxx"

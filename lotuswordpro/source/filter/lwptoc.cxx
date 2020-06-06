@@ -64,16 +64,12 @@
 #include "lwpframelayout.hxx"
 #include <lwpglobalmgr.hxx>
 
-#include <xfilter/xffont.hxx>
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
-#include <xfilter/xfparagraph.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <xfilter/xfindex.hxx>
 #include <xfilter/xffloatframe.hxx>
-#include <xfilter/xfframestyle.hxx>
 #include <xfilter/xfframe.hxx>
-#include <xfilter/xftable.hxx>
 
 LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpSuperTableLayout(objHdr, pStrm)

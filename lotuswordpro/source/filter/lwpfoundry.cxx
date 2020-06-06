@@ -71,7 +71,6 @@
 #include <lwpglobalmgr.hxx>
 #include <lwpobjtags.hxx>
 #include <xfilter/xfstylemanager.hxx>
-#include "lwplayout.hxx"
 
 #include <osl/diagnose.h>
 

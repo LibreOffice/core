@@ -64,7 +64,6 @@
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/xfrow.hxx>
 #include <xfilter/xfcell.hxx>
-#include <xfilter/xftable.hxx>
 
 XFRow::XFRow()
     : m_pOwnerTable(nullptr)
