@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="vcl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -156,6 +156,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_right">6</property>
+                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
@@ -338,7 +339,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin_left">6</property>
-                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkScrolledWindow">
@@ -969,7 +969,7 @@
                                                 <child>
                                                   <object class="GtkLabel" id="pagestxt">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
+                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|pagespersheettxt">Pages:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">pagerows</property>
@@ -1020,7 +1020,7 @@
                                                 <child>
                                                   <object class="GtkLabel" id="pagemargintxt1">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
+                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|pagemargintxt1">Margin:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">pagemarginsb</property>
@@ -1057,7 +1057,7 @@
                                                 <child>
                                                   <object class="GtkLabel" id="sheetmargintxt1">
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
+                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|sheetmargintxt1">Distance:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">sheetmarginsb</property>
@@ -1095,7 +1095,7 @@
                                                   <object class="GtkLabel" id="labelorder">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
+                                                    <property name="halign">end</property>
                                                     <property name="label" translatable="yes" context="printdialog|labelorder">Order:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">orderbox</property>
@@ -1129,7 +1129,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">False</property>
-                                                    <property name="halign">start</property>
+                                                    <property name="halign">end</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="draw_indicator">True</property>
                                                   </object>
@@ -1175,20 +1175,9 @@
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">4</property>
-                                                    <property name="top_attach">4</property>
+                                                    <property name="top_attach">0</property>
+                                                    <property name="height">5</property>
                                                   </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
                                                 </child>
                                                 <child>
                                                   <placeholder/>
