@@ -189,8 +189,6 @@ private:
     void                UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry );
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );
 
-    void                CalcCellFocusRect( tools::Rectangle& rRect );
-
     void ExpandAll();
     void CollapseTo(SvTreeListEntry* pParentToCollapse);
 
