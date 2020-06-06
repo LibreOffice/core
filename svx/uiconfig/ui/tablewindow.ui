@@ -32,11 +32,11 @@
         </child>
         <child>
           <object class="GtkButton" id="moreoptions">
-            <property name="label" translatable="yes" context="pagesizecontrol|moreoptions">_More Options</property>
+            <property name="label" translatable="yes" context="tablewindow|moreoptions">_More Options</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
-            <property name="tooltip_text" translatable="yes" context="pagesizecontrol|moreoptions|tooltip_text">More Options</property>
+            <property name="tooltip_text" translatable="yes" context="tablewindow|moreoptions|tooltip_text">More Options</property>
             <property name="relief">none</property>
             <property name="use_underline">True</property>
             <property name="always_show_image">True</property>
