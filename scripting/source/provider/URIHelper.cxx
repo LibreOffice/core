@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>

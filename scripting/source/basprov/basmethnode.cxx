@@ -22,7 +22,6 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <vcl/svapp.hxx>
 #include <basic/sbstar.hxx>

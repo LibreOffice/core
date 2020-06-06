@@ -25,8 +25,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
