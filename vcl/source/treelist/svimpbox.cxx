@@ -210,17 +210,6 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
     }
 }
 
-void SvImpLBox::CalcCellFocusRect( tools::Rectangle& rRect )
-{
-    if (m_pCursor->ItemCount() > o3tl::make_unsigned(FIRST_ENTRY_TAB+1))
-    {
-        SvLBoxItem& rNextItem = m_pCursor->GetItem( FIRST_ENTRY_TAB + 1 );
-        long nRight = m_pView->GetTab( m_pCursor, &rNextItem )->GetPos() - 1;
-        if ( nRight < rRect.Right() )
-            rRect.SetRight( nRight );
-    }
-}
-
 void SvImpLBox::SetStyle( WinBits i_nWinStyle )
 {
     m_nStyle = i_nWinStyle;
@@ -574,7 +563,6 @@ void SvImpLBox::RecalcFocusRect()
         m_pView->HideFocus();
         long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        CalcCellFocusRect( aRect );
         vcl::Region aOldClip( m_pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         m_pView->SetClipRegion( aClipRegion );
@@ -668,7 +656,6 @@ void SvImpLBox::ShowCursor( bool bShow )
     {
         long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        CalcCellFocusRect( aRect );
         vcl::Region aOldClip( m_pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         m_pView->SetClipRegion( aClipRegion );
