@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f9d61ae_79478b63",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-06-06T07:18:53Z",
+      "side": 1,
+      "message": "are we allowed to have toggle columns anywhere else? if not, surely we should just drop the col parameter?",
+      "revId": "b4648b21ea845ed3d330698e9054f3110c3aa775",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
