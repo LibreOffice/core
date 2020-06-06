@@ -61,9 +61,7 @@
 #include "lwpdoc.hxx"
 #include <xfilter/xfstylemanager.hxx>
 #include <lwpdocdata.hxx>
-#include <lwpbookmarkmgr.hxx>
 #include <lwpchangemgr.hxx>
-#include <tools/stream.hxx>
 
 Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
     : m_pDocStream(pInputStream)

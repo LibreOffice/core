@@ -58,9 +58,8 @@
  * Table object.
  ************************************************************************/
 #include <xfilter/xftable.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfrow.hxx>
-#include <xfilter/xfcolstyle.hxx>
-#include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfglobal.hxx>
 #include <cassert>
 

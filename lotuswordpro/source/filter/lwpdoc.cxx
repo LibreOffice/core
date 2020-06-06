@@ -61,7 +61,6 @@
 #include "lwpholder.hxx"
 #include "lwpparastyle.hxx"
 #include "lwpstory.hxx"
-#include "lwppara.hxx"
 #include "lwpsilverbullet.hxx"
 #include "lwpsortopt.hxx"
 #include "lwplayout.hxx"
@@ -72,7 +71,6 @@
 #include "lwpverdocument.hxx"
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
-#include <osl/thread.h>
 #include <o3tl/sorted_vector.hxx>
 
 LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)

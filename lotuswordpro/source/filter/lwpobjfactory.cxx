@@ -81,7 +81,6 @@
 #include "lwptblcell.hxx"
 #include "lwpmarker.hxx"
 #include "lwpproplist.hxx"
-#include <new>
 #include "lwpframelayout.hxx"
 #include "lwptablelayout.hxx"
 #include "lwppagelayout.hxx"

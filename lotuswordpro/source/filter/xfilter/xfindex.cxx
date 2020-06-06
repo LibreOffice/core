@@ -59,7 +59,6 @@
  ************************************************************************/
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfindex.hxx>
-#include <xfilter/xfparagraph.hxx>
 
 XFIndex::XFIndex()
     : m_eType(enumXFIndexTOC)

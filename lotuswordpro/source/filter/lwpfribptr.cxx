@@ -65,7 +65,6 @@
 #include "lwppara.hxx"
 #include "lwpstory.hxx"
 #include <xfilter/xftextspan.hxx>
-#include <xfilter/xftextcontent.hxx>
 #include <xfilter/xftabstop.hxx>
 #include <xfilter/xflinebreak.hxx>
 #include "lwpfribsection.hxx"
@@ -76,7 +75,6 @@
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include "lwphyperlinkmgr.hxx"
-#include <xfilter/xfhyperlink.hxx>
 #include "lwpfootnote.hxx"
 #include "lwpnotes.hxx"
 #include "lwpfribmark.hxx"
