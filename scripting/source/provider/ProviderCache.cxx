@@ -18,13 +18,12 @@
  */
 
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ProviderCache.hxx"
 
 using namespace com::sun::star;

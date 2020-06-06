@@ -18,29 +18,21 @@
  */
 
 
-#include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include "BrowseNodeFactoryImpl.hxx"
 #include "MasterScriptProvider.hxx"
-#include "ActiveMSPList.hxx"
 #include <util/MiscUtils.hxx>
 
 #include <vector>

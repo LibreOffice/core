@@ -20,7 +20,6 @@
 #include "basscript.hxx"
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
@@ -28,7 +27,6 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <bcholder.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <map>

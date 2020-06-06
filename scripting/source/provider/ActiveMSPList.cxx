@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/MiscUtils.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
-#include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
 
 #include <tools/diagnose_ex.h>

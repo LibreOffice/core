@@ -31,18 +31,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <osl/process.h>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>

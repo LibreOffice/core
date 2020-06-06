@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -43,7 +42,6 @@
 
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -60,11 +58,7 @@
 #include <com/sun/star/awt/XListBox.hpp>
 
 #include <sfx2/objsh.hxx>
-#include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#include <basic/sbmeth.hxx>
-#include <basic/sbmod.hxx>
-#include <basic/sbx.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <vbahelper/vbareturntypes.hxx>
 

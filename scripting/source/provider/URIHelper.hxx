@@ -24,8 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <rtl/ustring.hxx>

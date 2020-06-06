@@ -39,7 +39,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -48,7 +47,6 @@
 #include <framework/documentundoguard.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

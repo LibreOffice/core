@@ -22,7 +22,6 @@
 #include "dlgprov.hxx"
 
 #include <sfx2/strings.hrc>
-#include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -39,7 +38,6 @@
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
