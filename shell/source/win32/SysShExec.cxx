@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
+#include <o3tl/safeCoInitUninit.hxx>
 
 #include <prewin.h>
 #include <Shlobj.h>
@@ -146,7 +147,8 @@ namespace
 
 CSysShExec::CSysShExec( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >( m_aMutex ),
-    m_xContext(xContext)
+    m_xContext(xContext),
+    mnNbCallCoInitializeExForReinit(0)
 {
     /*
      * As this service is declared thread-affine, it is ensured to be called from a
@@ -155,8 +157,11 @@ CSysShExec::CSysShExec( const css::uno::Reference< css::uno::XComponentContext >
      * We need COM to be initialized for STA, but osl thread get initialized for MTA.
      * Once this changed, we can remove the uninitialize call.
      */
-    CoUninitialize();
-    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
+}
+CSysShExec::~CSysShExec()
+{
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 namespace
