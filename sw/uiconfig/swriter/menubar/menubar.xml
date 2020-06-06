@@ -121,7 +121,7 @@
       <menu:menuitem menu:id=".uno:SelectTextMode" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
-      <menu:menuitem menu:id=".uno:SearchDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuitem menu:id=".uno:GotoPage" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
@@ -169,7 +169,7 @@
       <menu:menuitem menu:id=".uno:ObjectMenue" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ShadowCursor" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShadowCursor"/>
       <menu:menuitem menu:id=".uno:EditDoc" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
@@ -205,10 +205,10 @@
       <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
       <menu:menuitem menu:id=".uno:TableBoundaries" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:ShowGraphics"/>
+      <menu:menuitem menu:id=".uno:ShowGraphics" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowWhitespace" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewTrackChanges"/>
+      <menu:menuitem menu:id=".uno:ViewTrackChanges" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowResolvedAnnotations" menu:style="text"/>
       <menu:menuseparator/>
@@ -644,7 +644,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoFormat"/>
       <menu:menuitem menu:id=".uno:TableNumberFormatDialog" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:TableNumberRecognition" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:TableNumberRecognition"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HeadingRowsRepeat" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RowSplit" menu:style="text"/>
