@@ -16,37 +16,36 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
 
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/weldutils.hxx>
-#include <vcl/EnumContext.hxx>
-#include <sfx2/sidebar/PanelLayout.hxx>
+#include "WriterInspectorTextPanel.hxx"
 
-namespace svx
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+using namespace css;
+
+namespace sw::sidebar
 {
-namespace sidebar
+VclPtr<vcl::Window>
+WriterInspectorTextPanel::Create(vcl::Window* pParent,
+                                 const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-class InspectorTextPanel : public PanelLayout, public ::sfx2::sidebar::IContextChangeReceiver
-{
-public:
-    virtual ~InspectorTextPanel() override;
-    virtual void dispose() override;
+    if (pParent == nullptr)
+        throw lang::IllegalArgumentException(
+            "no parent Window given to WriterInspectorTextPanel::Create", nullptr, 0);
+    if (!rxFrame.is())
+        throw lang::IllegalArgumentException("no XFrame given to WriterInspectorTextPanel::Create",
+                                             nullptr, 1);
 
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    VclPtr<vcl::Window> PresentWindow;
 
-    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
-
-    InspectorTextPanel(vcl::Window* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
-
-private:
-    std::unique_ptr<weld::TreeView> mxListBoxStyles; // To dump all the properties
-
-    vcl::EnumContext maContext;
-};
+    std::vector<OUString> store;
+    store.push_back("Successful");
+    store.push_back("Testing");
+    store.push_back("Completed");
+    PresentWindow = InspectorTextPanel::Create(pParent, rxFrame, store);
+    return PresentWindow;
 }
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
