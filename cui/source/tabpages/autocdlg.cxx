@@ -1563,7 +1563,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     , m_xDblEndQuotePB(m_xBuilder->weld_button("enddouble"))
     , m_xDblEndExFT(m_xBuilder->weld_label("doubleendex"))
     , m_xDblStandardPB(m_xBuilder->weld_button("defaultdouble"))
-    , m_xStandard(m_xBuilder->weld_label("singlestartex"))
+    , m_sStandard(m_xSglStartExFT->get_label())
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
     , m_xSwCheckLB(m_xBuilder->weld_tree_view("list"))
 {
@@ -1852,7 +1852,7 @@ IMPL_LINK(OfaQuoteTabPage, StdQuoteHdl, weld::Button&, rBtn, void)
 OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
     if (!cChar)
-        return m_xStandard->get_label();
+        return m_sStandard;
 
     // convert codepoint value to unicode-hex string
     sal_UCS4 aStrCodes[32] = { 0, ' ', '(', 'U', '+', '0' };
