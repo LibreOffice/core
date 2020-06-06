@@ -61,13 +61,9 @@
 #include <lwpglobalmgr.hxx>
 #include "lwptablelayout.hxx"
 #include <lwpfoundry.hxx>
-#include <lwpobjfactory.hxx>
 #include "lwpholder.hxx"
 #include "lwptable.hxx"
 #include "lwptblcell.hxx"
-#include "lwpnumericfmt.hxx"
-#include "lwpdlvlist.hxx"
-#include "lwppara.hxx"
 #include "lwprowlayout.hxx"
 #include <lwpfilehdr.hxx>
 
@@ -76,12 +72,12 @@
 #include <xfilter/xfrow.hxx>
 #include <xfilter/xfrowstyle.hxx>
 #include <xfilter/xfcell.hxx>
-#include <xfilter/xfcellstyle.hxx>
 #include <xfilter/xfcolstyle.hxx>
 #include <xfilter/xfframestyle.hxx>
 #include <xfilter/xfframe.hxx>
 #include <xfilter/xffloatframe.hxx>
 #include "lwpframelayout.hxx"
+#include <xfilter/xfnumberstyle.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
