@@ -38,6 +38,7 @@ private:
     bool        bTextWysiwyg;
     bool        bReplCellsWarn;
     bool        bLegacyCellSelection;
+    bool        bEnterPasteMode;
 
 public:
                 ScInputOptions();
@@ -68,6 +69,8 @@ public:
     bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
     void        SetLegacyCellSelection(bool bSet)   { bLegacyCellSelection = bSet; }
     bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
+    void        SetEnterPasteMode(bool bSet)    { bEnterPasteMode = bSet; }
+    bool        GetEnterPasteMode() const       { return bEnterPasteMode; }
 };
 
 // CfgItem for input options
