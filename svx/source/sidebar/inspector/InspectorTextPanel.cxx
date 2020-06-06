@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "InspectorTextPanel.hxx"
+#include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 using namespace css;
 
@@ -29,7 +27,8 @@ namespace svx::sidebar
 {
 VclPtr<vcl::Window>
 InspectorTextPanel::Create(vcl::Window* pParent,
-                           const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                           std::vector<OUString> store)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to InspectorTextPanel::Create",
@@ -38,15 +37,18 @@ InspectorTextPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to InspectorTextPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame);
+    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame, store);
 }
 
 InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
-                                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                       std::vector<OUString> store)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("liststore"))
 {
     mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+    for (auto& str : store)
+        mxListBoxStyles->append_text(str);
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
@@ -56,14 +58,6 @@ void InspectorTextPanel::dispose()
     mxListBoxStyles.reset();
 
     PanelLayout::dispose();
-}
-
-void InspectorTextPanel::HandleContextChange(const vcl::EnumContext& rContext)
-{
-    if (maContext == rContext)
-        return;
-
-    maContext = rContext;
 }
 
 } // end of namespace svx::sidebar
