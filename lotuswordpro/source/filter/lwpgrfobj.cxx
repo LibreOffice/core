@@ -62,7 +62,7 @@
 
 #include <memory>
 
-#include "lwp9reader.hxx"
+#include <lwpfilehdr.hxx>
 #include "lwpgrfobj.hxx"
 #include "lwpsdwfileloader.hxx"
 #include "bento.hxx"

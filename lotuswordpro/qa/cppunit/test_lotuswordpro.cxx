@@ -11,9 +11,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 
-#include <osl/file.hxx>
-#include <osl/process.h>
-
 using namespace ::com::sun::star;
 
 namespace

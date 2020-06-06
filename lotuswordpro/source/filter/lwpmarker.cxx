@@ -58,7 +58,6 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include <lwpfoundry.hxx>
 #include <lwpfilehdr.hxx>
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"

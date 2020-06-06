@@ -60,7 +60,7 @@
 #include <xfilter/xfglobal.hxx>
 #include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfframe.hxx>
-#include <xfilter/xfparagraph.hxx>
+
 #define     ZINDEX_MIN 0
 
 XFFrame::XFFrame()

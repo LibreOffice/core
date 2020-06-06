@@ -71,11 +71,11 @@
 #include <xfilter/xfheaderstyle.hxx>
 #include <xfilter/xffooterstyle.hxx>
 #include <xfilter/xffooter.hxx>
-#include <sfx2/printer.hxx>
 #include <lwpchangemgr.hxx>
 #include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 #include <sal/log.hxx>
+#include <vcl/print.hxx>
 
 LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)

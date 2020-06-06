@@ -58,11 +58,8 @@
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
 #include <xfilter/xfmasterpage.hxx>
-#include <xfilter/xfpagemaster.hxx>
-#include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xffooter.hxx>
 #include <xfilter/xfheader.hxx>
-#include <lwpglobalmgr.hxx>
 
 void XFMasterPage::SetHeader(rtl::Reference<XFHeader> const & rHeader)
 {

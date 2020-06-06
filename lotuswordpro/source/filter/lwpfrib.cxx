@@ -60,13 +60,9 @@
 
 #include <memory>
 #include <lwpfrib.hxx>
-#include "lwpcharsetmgr.hxx"
-#include "lwpsection.hxx"
 #include "lwphyperlinkmgr.hxx"
 #include <xfilter/xfhyperlink.hxx>
 #include <xfilter/xfstylemanager.hxx>
-#include <xfilter/xfsection.hxx>
-#include <xfilter/xfsectionstyle.hxx>
 #include <xfilter/xftextspan.hxx>
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xftextcontent.hxx>
@@ -80,8 +76,6 @@
 #include "lwpfootnote.hxx"
 #include "lwpnotes.hxx"
 #include "lwpfribmark.hxx"
-#include <lwpchangemgr.hxx>
-#include <lwpdocdata.hxx>
 #include <lwpglobalmgr.hxx>
 
 #include <osl/diagnose.h>

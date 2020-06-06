@@ -59,8 +59,8 @@
 #include <algorithm>
 #include <cstring>
 
-#include "first.hxx"
-#include <assert.h>
+#include "bento.hxx"
+
 namespace OpenStormBento
 {
 

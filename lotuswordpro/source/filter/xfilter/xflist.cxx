@@ -58,7 +58,6 @@
  * List object.
  ************************************************************************/
 #include <xfilter/xflist.hxx>
-#include <xfilter/xflistitem.hxx>
 #include <xfilter/ixfstream.hxx>
 #include <xfilter/ixfattrlist.hxx>
 

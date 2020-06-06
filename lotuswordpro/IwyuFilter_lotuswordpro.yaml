@@ -112,3 +112,12 @@ blacklist:
     lotuswordpro/source/filter/lwpusrdicts.hxx:
     # Needed for MPL subset
     - config_lgpl.h
+    lotuswordpro/source/filter/LotusWordProImportFilter.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    lotuswordpro/source/filter/lwppara1.cxx:
+    # Needed for boost::polymorphic_downcast
+    - boost/cast.hpp
+    lotuswordpro/source/filter/xfilter/xfsaxstream.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XDocumentHandler.hpp

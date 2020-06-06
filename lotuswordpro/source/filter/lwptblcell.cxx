@@ -59,10 +59,8 @@
  */
 
 #include <lwpfilehdr.hxx>
-#include <lwpoverride.hxx>
 #include <lwpobjid.hxx>
 #include "lwptblcell.hxx"
-#include "lwppara.hxx"
 
  LwpCellList::LwpCellList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
      : LwpDLVList(objHdr, pStrm)

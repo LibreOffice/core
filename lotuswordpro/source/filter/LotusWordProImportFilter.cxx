@@ -23,12 +23,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/tencinfo.h>
 #include <sal/macros.h>
 #include <tools/stream.hxx>
-#include <vector>
 #include <ucbhelper/content.hxx>
-#include <xmloff/attrlist.hxx>
 
 #include "LotusWordProImportFilter.hxx"
 #include "lwpfilter.hxx"

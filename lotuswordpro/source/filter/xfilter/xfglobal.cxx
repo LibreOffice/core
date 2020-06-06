@@ -59,8 +59,6 @@
  * It's all for the full filter.
  ************************************************************************/
 #include <xfilter/xfglobal.hxx>
-#include <xfilter/xffontfactory.hxx>
-#include <xfilter/xfstylemanager.hxx>
 
 int XFGlobal::s_nFrameID = 1;
 int XFGlobal::s_nSectionID = 1;
