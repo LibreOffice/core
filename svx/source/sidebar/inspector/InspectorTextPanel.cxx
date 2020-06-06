@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "InspectorTextPanel.hxx"
+#include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 using namespace css;
 
@@ -44,9 +42,15 @@ InspectorTextPanel::Create(vcl::Window* pParent,
 InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
-    , mxListBoxStyles(m_xBuilder->weld_tree_view("liststore"))
+    , mxListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
     mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+}
+
+void InspectorTextPanel::updateEntries(std::vector<OUString> store)
+{
+    for (OUString& str : store)
+        mxListBoxStyles->append_text(str);
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
@@ -56,14 +60,6 @@ void InspectorTextPanel::dispose()
     mxListBoxStyles.reset();
 
     PanelLayout::dispose();
-}
-
-void InspectorTextPanel::HandleContextChange(const vcl::EnumContext& rContext)
-{
-    if (maContext == rContext)
-        return;
-
-    maContext = rContext;
 }
 
 } // end of namespace svx::sidebar
