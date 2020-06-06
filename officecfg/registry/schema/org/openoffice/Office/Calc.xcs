@@ -754,6 +754,14 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="EnterPasteMode" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Press Enter to paste and clear clipboard</desc>
+          <label>Press Enter to paste and clear clipboard</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <!-- OldPath: Calc/Input -->
         <!-- OldLocation: Soffice.cfg -->

@@ -1197,6 +1197,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveInputOptions = true;
     }
 
+    if( rOptSet.HasItem( SID_SC_INPUT_ENTER_PASTE_MODE, &pItem ) )
+    {
+        m_pInputCfg->SetEnterPasteMode( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        bSaveInputOptions = true;
+    }
+
     // PrintOptions
     if ( rOptSet.HasItem(SID_SCPRINTOPTIONS,&pItem) )
     {
@@ -1916,6 +1922,8 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
                 SID_SCFORMULAOPTIONS, SID_SCDEFAULTSOPTIONS,
                 // TP_VIEW, TP_CALC:
                 SID_SCVIEWOPTIONS, SID_SCDOCOPTIONS,
+                // TP_INPUT:
+                SID_SC_INPUT_ENTER_PASTE_MODE, SID_SC_INPUT_ENTER_PASTE_MODE,
                 // TP_PRINT:
                 SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS,
                 // TP_INPUT:
@@ -1977,6 +1985,8 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
                     rInpOpt.GetReplaceCellsWarn() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION,
                     rInpOpt.GetLegacyCellSelection() ) );
+        pRet->Put( SfxBoolItem( SID_SC_INPUT_ENTER_PASTE_MODE,
+                    rInpOpt.GetEnterPasteMode() ) );
 
         // RID_SC_TP_PRINT
         pRet->Put( ScTpPrintItem( GetPrintOptions() ) );
