@@ -1,0 +1,6 @@
+---
+assumeFilename: scripting/source/stringresource/stringresource.cxx
+blacklist:
+    scripting/source/protocolhandler/scripthandler.cxx:
+    # Actually used
+    - com/sun/star/lang/XSingleServiceFactory.hpp

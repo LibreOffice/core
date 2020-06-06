@@ -45,7 +45,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/namedvaluecollection.hxx>

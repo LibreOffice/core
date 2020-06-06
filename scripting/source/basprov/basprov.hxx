@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_BASPROV_BASPROV_HXX
 #define INCLUDED_SCRIPTING_SOURCE_BASPROV_BASPROV_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>

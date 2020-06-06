@@ -22,7 +22,6 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 

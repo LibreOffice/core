@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_PROTOCOLHANDLER_SCRIPTHANDLER_HXX
 #define INCLUDED_SCRIPTING_SOURCE_PROTOCOLHANDLER_SCRIPTHANDLER_HXX
 
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
