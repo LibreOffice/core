@@ -756,6 +756,8 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
         m_xFromObjCLB->set_text(i, SwResId(RES_SRCTYPES[i].first), 1);
         m_xFromObjCLB->set_id(i, sId);
     }
+    m_xFromObjCLB->set_size_request(-1, std::max<int>(m_xFromObjCLB->get_preferred_size().Height(),
+                                                      m_xFromObjCLB->get_height_rows(SAL_N_ELEMENTS(RES_SRCTYPES))) + 2);
 
     SetExchangeSupport();
     m_xTypeLB->connect_changed(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
