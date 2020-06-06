@@ -26,9 +26,11 @@
 #include "PageHeaderPanel.hxx"
 #include "PageFooterPanel.hxx"
 #include "WrapPropertyPanel.hxx"
+#include "WriterInspectorTextPanel.hxx"
 #include "TableEditPanel.hxx"
 #include <navipi.hxx>
 #include <redlndlg.hxx>
+#include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -163,6 +165,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
         VclPtrInstance<SwRedlineAcceptPanel> pPanel(pParentWindow, xFrame);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            rsResourceURL,
+            xFrame,
+            pPanel,
+            ui::LayoutSize(-1,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/WriterInspectorTextPanel"))
+    {
+        VclPtr<vcl::Window> pPanel = sw::sidebar::WriterInspectorTextPanel::Create( pParentWindow, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
