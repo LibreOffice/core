@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "InspectorTextPanel.hxx"
+#include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/lok.hxx>
@@ -46,7 +46,7 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mxListBoxStyles(m_xBuilder->weld_tree_view("liststore"))
 {
-    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(10));
+    mxListBoxStyles->set_size_request(-1, mxListBoxStyles->get_height_rows(8));
 }
 
 InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }

@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include "text/TextPropertyPanel.hxx"
-#include "inspector/InspectorTextPanel.hxx"
+#include "svx/sidebar/InspectorTextPanel.hxx"
 #include "styles/StylesPropertyPanel.hxx"
 #include "paragraph/ParaPropertyPanel.hxx"
 #include "lists/ListsPropertyPanel.hxx"
