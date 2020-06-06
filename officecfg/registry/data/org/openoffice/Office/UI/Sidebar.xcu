@@ -411,7 +411,7 @@
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SvxPanelFactory/InspectorTextPanel</value>
+          <value>private:resource/toolpanel/SwPanelFactory/WriterInspectorTextPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>120</value>

@@ -12,6 +12,8 @@
 
 #include <sfx2/AccessibilityIssue.hxx>
 #include <vcl/svapp.hxx>
+#include <bits/stdc++.h>
+using namespace std;
 
 namespace svx
 {

@@ -18,33 +18,32 @@
  */
 #pragma once
 
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/weldutils.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-
+#include <sal/types.h>
+#include <svx/svxdllapi.h>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <vcl/weld.hxx>
 namespace svx
 {
 namespace sidebar
 {
-class InspectorTextPanel : public PanelLayout, public ::sfx2::sidebar::IContextChangeReceiver
+class SVX_DLLPUBLIC InspectorTextPanel final : public PanelLayout
 {
 public:
     virtual ~InspectorTextPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                      std::vector<OUString> store);
 
-    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
-
-    InspectorTextPanel(vcl::Window* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    InspectorTextPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       std::vector<OUString> store);
 
 private:
-    std::unique_ptr<weld::TreeView> mxListBoxStyles; // To dump all the properties
-
-    vcl::EnumContext maContext;
+    std::unique_ptr<weld::TreeView> mxListBoxStyles;
 };
 }
 } // end of namespace svx::sidebar
