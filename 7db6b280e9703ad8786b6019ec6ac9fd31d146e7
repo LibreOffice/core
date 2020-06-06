@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b4c9f43c_038b05e3",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-06-06T10:55:31Z",
+      "side": 1,
+      "message": "My thought was that by making them static, we avoid the cost of constructing (and destructing) the list every time the function is called. It\u0027s a trade-off with incurring the cost of holding the sequence in memory throughout the runtime of the application, of course. I don\u0027t know how frequently these getSupportedServiceNames() methods get called, but I\u0027ll agree that it\u0027s probably not a human-perceivable difference either way.",
+      "parentUuid": "b978e772_70560094",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 10
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59435b3e_6335c4b8",
         "filename": "forms/source/component/Date.cxx",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5ebd10af_999144bb",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-06-06T10:55:31Z",
+      "side": 1,
+      "message": "Nope. Removed.",
+      "parentUuid": "59435b3e_6335c4b8",
+      "range": {
+        "startLine": 120,
+        "startChar": 7,
+        "endLine": 120,
+        "endChar": 16
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ca7abbe_4a2299d8",
         "filename": "sd/source/ui/accessibility/AccessibleDrawDocumentView.cxx",
         "patchSetId": 4
@@ -62,6 +110,24 @@
       "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d0c1153_63227095",
+        "filename": "sd/source/ui/accessibility/AccessibleDrawDocumentView.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-06-06T10:55:31Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "3ca7abbe_4a2299d8",
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -85,6 +151,30 @@
       "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5625ced8_29ea81a0",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2020-06-06T10:55:31Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "566d31e5_e833c8e7",
+      "range": {
+        "startLine": 880,
+        "startChar": 31,
+        "endLine": 880,
+        "endChar": 34
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
