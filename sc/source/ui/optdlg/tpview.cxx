@@ -318,6 +318,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     , m_xTextFmtCB(m_xBuilder->weld_check_button("textfmtcb"))
     , m_xReplWarnCB(m_xBuilder->weld_check_button("replwarncb"))
     , m_xLegacyCellSelectionCB(m_xBuilder->weld_check_button("legacy_cell_selection_cb"))
+    , m_xEnterPasteModeCB(m_xBuilder->weld_check_button("enter_paste_mode_cb"))
 {
     SetExchangeSupport();
 
@@ -463,6 +464,12 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
         bRet = true;
     }
 
+    if (m_xEnterPasteModeCB->get_state_changed_from_saved())
+    {
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_ENTER_PASTE_MODE, m_xEnterPasteModeCB->get_active() ) );
+        bRet = true;
+    }
+
     return bRet;
 }
 
@@ -547,6 +554,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     if( SfxItemState::SET == rCoreSet->GetItemState( SID_SC_INPUT_LEGACY_CELL_SELECTION, false, &pItem ) )
         m_xLegacyCellSelectionCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
+    if( SfxItemState::SET == rCoreSet->GetItemState( SID_SC_INPUT_ENTER_PASTE_MODE, false, &pItem ) )
+        m_xEnterPasteModeCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+
     m_xAlignCB->save_state();
     m_xAlignLB->save_value();
     m_xEditModeCB->save_state();
@@ -559,6 +569,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     m_xReplWarnCB->save_state();
 
     m_xLegacyCellSelectionCB->save_state();
+    m_xEnterPasteModeCB->save_state();
 
     AlignHdl(*m_xAlignCB);
 
