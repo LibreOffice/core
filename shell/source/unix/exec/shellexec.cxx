@@ -17,31 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
 #include <osl/thread.h>
-#include <osl/process.h>
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <rtl/uri.hxx>
 #include "shellexec.hxx"
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-#include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/lok.hxx>
 
-#include <uno/current_context.hxx>
-
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>
 
 #if defined MACOSX
 #include <sys/stat.h>
