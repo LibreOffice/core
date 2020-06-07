@@ -25,6 +25,7 @@
 #include <msdasc.h>
 
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeCoInitUninit.hxx>
 
 #include <initguid.h>
 #include <adoid.h>
@@ -42,7 +43,8 @@ OUString PromptNew(long hWnd)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    int nNbCallCoInitializeExForReinit = 0;
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, nNbCallCoInitializeExForReinit);
 
     // Instantiate DataLinks object.
     hr = CoCreateInstance(
@@ -61,6 +63,7 @@ OUString PromptNew(long hWnd)
     if( FAILED( hr ) )
     {
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return OUString();
     }
 
@@ -70,6 +73,7 @@ OUString PromptNew(long hWnd)
     if( FAILED( hr ) || !piTmpConnection )
     {
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return OUString();
     }
 
@@ -78,12 +82,13 @@ OUString PromptNew(long hWnd)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return OUString();
     }
 
     piTmpConnection->Release( );
     dlPrompt->Release( );
-    CoUninitialize();
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
     // Don't we need SysFreeString(_result)?
     return o3tl::toU(_result);
 }
@@ -96,7 +101,8 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    int nNbCallCoInitializeExForReinit = 0;
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, nNbCallCoInitializeExForReinit);
 
     hr = CoCreateInstance(CLSID_CADOConnection,
                 nullptr,
@@ -106,6 +112,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
@@ -115,6 +122,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
@@ -130,6 +138,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
@@ -138,6 +147,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
@@ -149,6 +159,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
@@ -161,6 +172,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
         if(  FAILED( hr ) || !piTmpConnection )
         {
             dlPrompt->Release( );
+            o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
             return connstr;
         }
     }
@@ -170,12 +182,13 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
+        o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
         return connstr;
     }
 
     piTmpConnection->Release( );
     dlPrompt->Release( );
-    CoUninitialize();
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
     // Don't we need SysFreeString(_result)?
     return o3tl::toU(_result);
 }
