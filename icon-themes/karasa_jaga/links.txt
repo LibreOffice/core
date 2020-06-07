@@ -1611,7 +1611,7 @@ res/lc10853.png cmd/lc_searchdialog.png
 res/library_16.png cmd/sc_viewdatasourcebrowser.png
 res/lock.png dbaccess/res/pkey.png
 res/lx03123.png res/odp_32_8.png
-res/lx03126.png cmd/32/dbviewtables.png
+res/lx03126.png res/ods_32_8.png
 res/lx03127.png res/ods_32_8.png
 res/lx03129.png res/odb_32_8.png
 res/lx03130.png res/otp_32_8.png
@@ -1701,7 +1701,7 @@ res/sc16670.png cmd/sc_sbaexecutesql.png
 res/so03127.png res/so03126.png
 res/so03227.png res/odg_16_8.png
 res/sx03123.png res/odp_16_8.png
-res/sx03126.png cmd/sc_dbviewtables.png
+res/sx03126.png res/ods_16_8.png
 res/sx03127.png res/ots_16_8.png
 res/sx03129.png res/odb_16_8.png
 res/sx03130.png res/otp_16_8.png
