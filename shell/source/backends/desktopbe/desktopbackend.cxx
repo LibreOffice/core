@@ -21,14 +21,12 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/beans/Optional.hpp>
-#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -45,15 +43,11 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <rtl/byteseq.hxx>
-#include <rtl/string.h>
-#include <rtl/textenc.h>
-#include <rtl/ustring.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/diagnose_ex.h>
 #include <uno/current_context.hxx>
-#include <vcl/svapp.hxx>
 
 namespace {
 

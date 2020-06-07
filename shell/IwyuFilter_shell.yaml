@@ -1,0 +1,31 @@
+---
+assumeFilename: shell/source/unix/exec/shellexec.cxx
+blacklist:
+    shell/source/sessioninstall/SyncDbusSessionHelper.hxx:
+    # No hpp->hdl replacement
+    - org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp
+    shell/source/backends/kf5be/kf5access.cxx:
+    # Keep abstract QT headers
+    - QtCore/QDir
+    - QtCore/QStandardPaths
+    - QtCore/QString
+    - QtCore/QUrl
+    - QtGui/QFont
+    - QtGui/QFontDatabase
+    shell/source/backends/kf5be/kf5backend.cxx:
+    # Keep abstract QT headers
+    - QtWidgets/QApplication
+    # Keep abstract boost headers
+    - boost/noncopyable.hpp
+    shell/source/backends/localebe/localebackend.cxx:
+    # Needed on WIN for toU
+    - o3tl/char16_t2wchar_t.hxx
+    shell/source/cmdmail/cmdmailsuppl.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
+    shell/source/tools/lngconvex/lngconvex.cxx:
+    # Needed for std::ifstream
+    - fstream
+    shell/source/unix/exec/shellexec.cxx:
+    # Needed on MAC
+    - osl/file.hxx

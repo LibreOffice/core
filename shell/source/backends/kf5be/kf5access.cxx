@@ -34,10 +34,8 @@
 // #include <kglobalsettings.h>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <cppu/unotype.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.h>
-#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 
 namespace kf5access

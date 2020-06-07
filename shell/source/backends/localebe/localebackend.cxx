@@ -26,13 +26,10 @@
 #include "localebackend.hxx"
 #include <com/sun/star/beans/Optional.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/time.h>
 #include <rtl/character.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-
-#include <stdio.h>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN

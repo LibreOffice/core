@@ -31,6 +31,8 @@
 
 #include <o3tl/safeint.hxx>
 
+#include <zlib.h>
+
 namespace
 {
 
