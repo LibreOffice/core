@@ -42,7 +42,12 @@ OUString PromptNew(long hWnd)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    hr = ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    bool bDoUninit = true;
+    if (FAILED(hr) && hr != RPC_E_CHANGED_MODE)
+        std::abort();
+    if (hr == RPC_E_CHANGED_MODE)
+        bDoUninit = false;
 
     // Instantiate DataLinks object.
     hr = CoCreateInstance(
@@ -83,7 +88,8 @@ OUString PromptNew(long hWnd)
 
     piTmpConnection->Release( );
     dlPrompt->Release( );
-    CoUninitialize();
+    if (bDoUninit)
+        CoUninitialize();
     // Don't we need SysFreeString(_result)?
     return o3tl::toU(_result);
 }
