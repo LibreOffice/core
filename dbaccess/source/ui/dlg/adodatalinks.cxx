@@ -42,7 +42,9 @@ OUString PromptNew(long hWnd)
     BSTR _result=nullptr;
 
     // Initialize COM
-    ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    hr = ::CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    if (FAILED(hr))
+        std::abort();
 
     // Instantiate DataLinks object.
     hr = CoCreateInstance(
