@@ -41,6 +41,7 @@ public:
     bool TraverseWhileStmt( WhileStmt* ) { return complain(); }
     bool TraverseDoStmt( DoStmt* ) { return complain(); }
     bool TraverseForStmt( ForStmt* ) { return complain(); }
+    bool TraverseCXXForRangeStmt( CXXForRangeStmt* ) { return complain(); }
     bool TraverseUnaryLNot( UnaryOperator* ) { return complain(); }
     bool TraverseBinLAnd( BinaryOperator* ) { return complain(); }
     bool TraverseBinLOr( BinaryOperator* ) { return complain(); }

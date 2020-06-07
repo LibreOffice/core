@@ -172,9 +172,8 @@ void SwDBTreeList::InitTreeList()
 
 void SwDBTreeList::AddDataSource(const OUString& rSource)
 {
-    OUString aImg(RID_BMP_DB);
     m_xTreeView->insert(nullptr, -1, &rSource, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
-    m_xTreeView->set_image(*m_xScratchIter, aImg);
+    m_xTreeView->set_image(*m_xScratchIter, RID_BMP_DB);
     m_xTreeView->select(*m_xScratchIter);
 }
 

@@ -45,10 +45,9 @@ IMPL_LINK(FolderTree, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool
 
 void FolderTree::InsertRootEntry(const OUString& rId, const OUString& rRootLabel)
 {
-    OUString sFolderImage(RID_BMP_FOLDER);
     m_xTreeView->insert(nullptr, -1, &rRootLabel, &rId, nullptr, nullptr,
                         true, m_xScratchIter.get());
-    m_xTreeView->set_image(*m_xScratchIter, sFolderImage);
+    m_xTreeView->set_image(*m_xScratchIter, RID_BMP_FOLDER);
     m_xTreeView->set_cursor(*m_xScratchIter);
 }
 
