@@ -1107,6 +1107,12 @@ void ComboBoxUIObject::execute(const OUString& rAction,
             sal_Int32 nPos = aVal.toInt32();
             mxComboBox->SelectEntryPos(nPos);
         }
+        else if(rParameters.find("TEXT") != rParameters.end()){
+            auto itr = rParameters.find("TEXT");
+            OUString aVal = itr->second;
+            sal_Int32 nPos = mxComboBox->GetEntryPos(aVal);
+            mxComboBox->SelectEntryPos(nPos);
+        }
         mxComboBox->Select();
     }
     else if (rAction == "TYPE")
@@ -1127,7 +1133,6 @@ void ComboBoxUIObject::execute(const OUString& rAction,
 StringMap ComboBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-
     return aMap;
 }
 
