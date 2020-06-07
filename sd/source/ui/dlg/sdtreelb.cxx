@@ -1126,12 +1126,10 @@ void SdPageObjsTLV::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     m_pMedium = pInMedium;
     m_aDocName = rDocName;
 
-    OUString sImgDoc(BMP_DOC_OPEN);
-
     OUString sId(OUString::number(1));
     // insert document name
     m_xTreeView->insert(nullptr, -1, &m_aDocName, &sId, nullptr, nullptr, true, m_xScratchIter.get());
-    m_xTreeView->set_image(*m_xScratchIter, sImgDoc);
+    m_xTreeView->set_image(*m_xScratchIter, BMP_DOC_OPEN);
 }
 
 /**

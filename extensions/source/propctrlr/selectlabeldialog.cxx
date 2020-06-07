@@ -104,10 +104,9 @@ namespace pcr
 
             // insert the root
             OUString sRootName(PcrRes(RID_STR_FORMS));
-            OUString aFormImage(RID_EXTBMP_FORMS);
             m_xControlTree->insert(nullptr, -1, &sRootName, nullptr,
                                    nullptr, nullptr, false, m_xScratchIter.get());
-            m_xControlTree->set_image(*m_xScratchIter, aFormImage);
+            m_xControlTree->set_image(*m_xScratchIter, RID_EXTBMP_FORMS);
 
             // build the tree
             m_xInitialSelection.reset();
@@ -179,11 +178,9 @@ namespace pcr
                 Reference< XIndexAccess >  xCont(xAsSet, UNO_QUERY);
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
-                    OUString aFormImage(RID_EXTBMP_FORM);
-
                     m_xControlTree->insert(&rContainerEntry, -1, &sName, nullptr,
                                            nullptr, nullptr, false, m_xScratchIter.get());
-                    m_xControlTree->set_image(*m_xScratchIter, aFormImage);
+                    m_xControlTree->set_image(*m_xScratchIter, RID_EXTBMP_FORM);
                     auto xIter = m_xControlTree->make_iterator(&rContainerEntry);
                     m_xControlTree->iter_nth_child(*xIter, nChildren);
                     sal_Int32 nContChildren = InsertEntries(xCont, *xIter);
