@@ -2036,6 +2036,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 }
                 pFrame->GetModelPositionForViewPoint( GetPoint(), aPt, &eTmpState );
             }
+            bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         }
         else
         {
@@ -2047,12 +2048,17 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             //if cursor has already been at start or end of file,
             //Update cursor to change nUpDownX.
             if ( aOldPos.nContent.GetIndex() == nOffset )
+            {
                 GetDoc()->GetEditShell()->UpdateCursor();
-            else
+                bRet = false;
+            }
+            else{
                 *GetPoint() = aPos; // just give a new position
+                bRet = true;
+            }
+
         }
 
-        bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
     return bRet;
