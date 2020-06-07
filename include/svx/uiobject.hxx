@@ -12,9 +12,12 @@
 
 #include <svx/svxdllapi.h>
 
+#include <svx/SvxColorValueSet.hxx>
+
 #include <vcl/uitest/uiobject.hxx>
 
 class SdrObject;
+class SvxColorValueSet;
 
 class SVXCORE_DLLPUBLIC SdrUIObject : public UIObject
 {
@@ -31,6 +34,27 @@ public:
 
     virtual SdrObject* get_object() = 0;
 };
+
+class SvxColorValueSetUIObject final : public WindowUIObject
+{
+    SvxColorValueSet* mpColorSet;
+
+public:
+
+    SvxColorValueSetUIObject(vcl::Window*  xColorSetWin, SvxColorValueSet* pColorSet);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+    virtual StringMap get_state() override;
+
+private:
+
+    OUString get_name() const override;
+};
+
 
 #endif
 
