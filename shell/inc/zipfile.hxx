@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
 #define INCLUDED_SHELL_INC_INTERNAL_ZIPFILE_HXX
 
-#include <zlib.h>
-
 #include <string>
 #include <vector>
 #include <memory>

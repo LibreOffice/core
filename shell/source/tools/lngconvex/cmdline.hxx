@@ -24,8 +24,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 
 /** Simple command line abstraction
 */

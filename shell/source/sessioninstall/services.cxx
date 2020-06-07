@@ -9,7 +9,6 @@
 
 #include "SyncDbusSessionHelper.hxx"
 #include <comphelper/servicedecl.hxx>
-#include <uno/environment.h>
 
 namespace sdecl = ::comphelper::service_decl;
 

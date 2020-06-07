@@ -18,12 +18,10 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "cmdmailsuppl.hxx"
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;

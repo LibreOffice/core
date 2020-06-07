@@ -49,9 +49,7 @@ typedef unsigned short WORD;
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <sstream>
 #include <iterator>
-#include <algorithm>
 #include <string>
 
 #ifndef _WIN32

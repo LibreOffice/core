@@ -23,8 +23,6 @@
 #include <expat.h>
 #include <stdexcept>
 
-#include <sal/types.h>
-
 class xml_parser_exception final : public std::runtime_error
 {
 public:
