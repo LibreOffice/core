@@ -2427,8 +2427,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RETURN:
-            m_pView->DoubleClickHdl();
-            bKeyUsed = false;
+            bKeyUsed = !m_pView->DoubleClickHdl();
             break;
 
         case KEY_F2:
