@@ -1997,6 +1997,8 @@ static double lcl_getNormalizedCircleAngleRad(const double fWR, const double fHR
     double fEAngleDeg(fmod(fEllipseAngleDeg, 360.0));
     if (fEAngleDeg < 0.0)
         fEAngleDeg += 360.0;
+    if (fEAngleDeg == 0.0 || fEAngleDeg == 90.0 || fEAngleDeg == 180.0 || fEAngleDeg == 270.0)
+        return basegfx::deg2rad(fEAngleDeg);
     const double fX(fHR * cos(basegfx::deg2rad(fEAngleDeg)));
     const double fY(fWR * sin(basegfx::deg2rad(fEAngleDeg)));
     if (fX != 0.0 || fY != 0.0)
