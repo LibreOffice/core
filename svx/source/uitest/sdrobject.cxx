@@ -13,6 +13,10 @@
 
 #include <tools/fract.hxx>
 
+#include <memory>
+#include <svx/SvxColorValueSet.hxx>
+#include <vcl/layout.hxx>
+
 SdrUIObject::~SdrUIObject()
 {
 }
@@ -159,6 +163,58 @@ void SdrUIObject::execute(const OUString& rAction,
 OUString SdrUIObject::get_type() const
 {
     return "SdrUIObject";
+}
+
+
+SvxColorValueSetUIObject::SvxColorValueSetUIObject(vcl::Window*  xColorSetWin, SvxColorValueSet* pColorSet):
+    WindowUIObject(xColorSetWin),
+    mpColorSet(pColorSet)
+{
+}
+
+void SvxColorValueSetUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "CHOOSE")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            OUString aIndexStr = rParameters.find("POS")->second;
+            sal_Int32 nIndex = aIndexStr.toInt32();
+            mpColorSet->SelectItem(nIndex);
+            mpColorSet->Select();
+        }
+    }
+    else
+       WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> SvxColorValueSetUIObject::create(vcl::Window* pWindow)
+{
+    VclDrawingArea* pColorSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
+    assert(pColorSetWin);
+    return std::unique_ptr<UIObject>(new SvxColorValueSetUIObject(pColorSetWin, static_cast<SvxColorValueSet*>(pColorSetWin->GetUserData())));
+}
+
+OUString SvxColorValueSetUIObject::get_name() const
+{
+    return "SvxColorValueSetUIObject";
+}
+
+StringMap SvxColorValueSetUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["CurrColorId"] = OUString::number( mpColorSet->GetSelectedItemId() );
+    aMap["CurrColorPos"] = OUString::number( mpColorSet->GetSelectItemPos() );
+    aMap["ColorsCount"] = OUString::number(mpColorSet->GetItemCount());
+    aMap["ColCount"] = OUString::number(mpColorSet->GetColCount());
+    aMap["ColorText"] = mpColorSet->GetItemText(mpColorSet->GetSelectedItemId());
+    Color currColor = mpColorSet->GetItemColor(mpColorSet->GetSelectedItemId());
+    aMap["R"] = OUString::number(currColor.GetRed());
+    aMap["G"] = OUString::number(currColor.GetGreen());
+    aMap["B"] = OUString::number(currColor.GetBlue());
+    aMap["RGB"] = "("+OUString::number(currColor.GetRed())+","+OUString::number(currColor.GetGreen())+","+OUString::number(currColor.GetBlue())+")";
+    return aMap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
