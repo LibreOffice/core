@@ -2192,11 +2192,8 @@ res/sx03248.png res/odm_16_8.png
 res/sx03249.png res/odp_16_8.png
 res/sx03250.png res/ods_16_8.png
 res/sx03251.png res/odt_16_8.png
-#res/sx03252.png res/otg_16_8.png
 res/sx03252.png res/otg_16_8.png
-#res/sx03253.png res/otp_16_8.png
 res/sx03253.png res/otp_16_8.png
-#res/sx03254.png res/ots_16_8.png
 res/sx03254.png res/ots_16_8.png
 res/sx03255.png res/ott_16_8.png
 res/sx03256.png cmd/sc_insertplugin.png
@@ -2205,7 +2202,6 @@ res/sx10593.png cmd/sc_switchxformsdesignmode.png
 res/sx10594.png cmd/sc_pushbutton.png
 res/sx10595.png cmd/sc_radiobutton.png
 res/sx10596.png cmd/sc_checkbox.png
-res/sx10597.png cmd/sc_color.png
 res/sx10597.png cmd/sc_label.png
 res/sx10598.png cmd/sc_groupbox.png
 res/sx10599.png cmd/sc_text.png
