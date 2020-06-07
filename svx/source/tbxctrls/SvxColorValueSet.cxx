@@ -23,10 +23,17 @@
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>
 
+#include <svx/uiobject.hxx>
+
 SvxColorValueSet::SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : ValueSet(std::move(pWindow))
 {
     SetEdgeBlending(true);
+}
+
+FactoryFunction SvxColorValueSet::GetUITestFactory() const
+{
+    return SvxColorValueSetUIObject::create;
 }
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount()
