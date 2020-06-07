@@ -1346,10 +1346,9 @@ namespace {
 void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() &&
-            pViewShell && pViewShell->isLOKMobilePhone())
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        if (rFuncStrVec.size())
+        if (rFuncStrVec.size() && pViewShell && pViewShell->isLOKMobilePhone())
         {
             auto aPos = pFormulaData->begin();
             sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
@@ -1403,6 +1402,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             OString s = aPayload.makeStringAndClear();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CALC_FUNCTION_LIST, s.getStr());
         }
+        // not tunnel tooltips in the lok case
         return;
     }
 
