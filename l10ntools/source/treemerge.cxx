@@ -133,7 +133,7 @@ namespace
                     << sXhpPath << std::endl;
                 return nullptr;
             }
-            xmlFree( pXhpFile );
+            xmlFreeDoc( pXhpFile );
             xmlCleanupParser();
         }
         return pReturn;
