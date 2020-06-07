@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6beb5600_9909c3e1",
+        "filename": "svx/source/uitest/sdrobject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2020-06-07T22:06:45Z",
+      "side": 1,
+      "message": "I think we should add an entry for the actual current color value (possibly as RGB string).",
+      "revId": "4ccfd10838a01d6b848acd89c64c4c9171b9b8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
