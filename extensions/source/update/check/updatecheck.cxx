@@ -41,6 +41,7 @@
 #include <tools/diagnose_ex.h>
 
 #ifdef _WIN32
+#include <o3tl/safeCoInitUninit.hxx>
 #include <objbase.h>
 #endif
 
@@ -312,6 +313,10 @@ private:
     const uno::Reference<uno::XComponentContext> m_xContext;
     const OUString m_aURL;
     Download m_aDownload;
+#ifdef _WIN32
+    // to put back all the inits with COINIT_MULTITHREADED if needed
+    int mnNbCallCoInitializeExForReinit;
+#endif
 };
 
 
@@ -572,6 +577,9 @@ DownloadThread::DownloadThread(osl::Condition& rCondition,
     m_xContext(xContext),
     m_aURL(rURL),
     m_aDownload(xContext, rHandler)
+#ifdef _WIN32
+    ,mnNbCallCoInitializeExForReinit(0)
+#endif
 {
     createSuspended();
 }
@@ -579,6 +587,9 @@ DownloadThread::DownloadThread(osl::Condition& rCondition,
 
 DownloadThread::~DownloadThread()
 {
+#ifdef _WIN32
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, mnNbCallCoInitializeExForReinit);
+#endif
 }
 
 
@@ -588,8 +599,7 @@ DownloadThread::run()
     osl_setThreadName("DownloadThread");
 
 #ifdef _WIN32
-    CoUninitialize();
-    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
 #endif
 
     while( schedule() )
