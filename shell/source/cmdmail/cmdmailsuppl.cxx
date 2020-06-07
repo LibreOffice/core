@@ -25,21 +25,15 @@
 
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
 #include "cmdmailsuppl.hxx"
 #include "cmdmailmsg.hxx"
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
 
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::system::XSimpleMailClientSupplier;
