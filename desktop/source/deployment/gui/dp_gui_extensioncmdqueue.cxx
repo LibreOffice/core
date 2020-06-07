@@ -80,6 +80,7 @@
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
+#include <o3tl/safeCoInitUninit.hxx>
 #include <windows.h>
 #include <objbase.h>
 #endif
@@ -681,8 +682,8 @@ void ExtensionCmdQueue::Thread::execute()
 #ifdef _WIN32
     //Needed for use of the service "com.sun.star.system.SystemShellExecute" in
     //DialogHelper::openWebBrowser
-    CoUninitialize();
-    (void) CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    int nNbCallCoInitializeExForReinit = 0;
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, nNbCallCoInitializeExForReinit);
 #endif
     for (;;)
     {
@@ -833,7 +834,7 @@ void ExtensionCmdQueue::Thread::execute()
     }
     //end for
 #ifdef _WIN32
-    CoUninitialize();
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
 #endif
 }
 
