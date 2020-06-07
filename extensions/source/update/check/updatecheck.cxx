@@ -41,6 +41,7 @@
 #include <tools/diagnose_ex.h>
 
 #ifdef _WIN32
+#include <o3tl/safeCoInitUninit.hxx>
 #include <objbase.h>
 #endif
 
@@ -588,8 +589,9 @@ DownloadThread::run()
     osl_setThreadName("DownloadThread");
 
 #ifdef _WIN32
-    CoUninitialize();
-    CoInitializeEx( nullptr, COINIT_APARTMENTTHREADED );
+    int nNbCallCoInitializeExForReinit = 0;
+    // for SystemShellExecute
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, nNbCallCoInitializeExForReinit);
 #endif
 
     while( schedule() )
@@ -627,6 +629,9 @@ DownloadThread::run()
             n=0;
         }
     }
+#ifdef _WIN32
+    o3tl::safeCoUninitializeReinit(COINIT_MULTITHREADED, nNbCallCoInitializeExForReinit);
+#endif
 }
 
 
