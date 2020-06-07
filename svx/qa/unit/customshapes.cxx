@@ -663,6 +663,39 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
     }
     CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
+{
+    // tdf103474 custom shape with command T to create quater ellipses in a bracket,
+    // corner case where the ellipse has zero height.
+    // Error was, that the calculation of the circle angle from the ellipse
+    // angle results in a wrong angle for the case 180° and height zero.
+    const OUString sFileName("tdf103474_commandT_CaseZeroHeight.odp");
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    // The end points of the straight line segment should have the same x-coordinate of left
+    // of shape, and different y-coordinates, one top and the other bottom of the shape.
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
+    const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
+                                 aPolyPolygon.count());
+    const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+    // Get the middle points of the polygon. They are the endpoints of the
+    // straight line segment regardless of the quarter ellipse parts, because
+    // the shape is symmetric.
+    const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(aPolygon.count() / 2 - 1));
+    const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() / 2));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart x-coordinate", 13999.0, aStart.getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd x-coordinate", 13999.0, aEnd.getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart y-coordinate", 9999.0, aStart.getY(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd y-coordinate", 1999.0, aEnd.getY(), 1.0);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
