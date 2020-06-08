@@ -261,9 +261,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     if ( bCaughtException )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-        ScopedVclPtr<VclAbstractDialog> pDlg(
-                pFact->CreateScriptErrorDialog( aException ));
-        pDlg->Execute();
+        pFact->ShowAsyncScriptErrorDialog( nullptr, aException );
     }
 
     if ( !xListener.is() )
