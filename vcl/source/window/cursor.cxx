@@ -47,10 +47,6 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
 {
     tools::Rectangle aPaintRect;
 
-    vcl::Window* pWindow = pData ? pData->mpWindow.get() : nullptr;
-    if (!pWindow || pWindow->IsDisposed())
-        return aPaintRect;
-
     bool bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
     InvertFlags nInvertStyle;
