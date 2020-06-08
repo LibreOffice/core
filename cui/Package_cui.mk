@@ -11,6 +11,7 @@ $(eval $(call gb_Package_Package,cui,$(SRCDIR)/cui))
 
 $(eval $(call gb_Package_add_files,cui,$(LIBO_SHARE_FOLDER)/filter,\
 	source/dialogs/signature-line.svg \
+	source/dialogs/signature-line-draw.svg \
 ))
 
 # vim: set noet sw=4 ts=4:
