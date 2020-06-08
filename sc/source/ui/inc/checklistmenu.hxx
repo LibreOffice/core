@@ -439,6 +439,7 @@ private:
     Size maMenuSize; /// size of all menu items combined.
     TriState mePrevToggleAllState;
     ScTabStops maTabStops;
+    bool mbHasDates;
 };
 
 #endif
