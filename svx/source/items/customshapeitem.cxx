@@ -90,7 +90,7 @@ css::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUStrin
             PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
             if ( aHashIter != aPropPairHashMap.end() )
             {
-                pRet = const_cast<css::uno::Any *>(&(*rSecSequence)[ (*aHashIter).second ].Value);
+                pRet = &const_cast<css::uno::Sequence<css::beans::PropertyValue> &>(*rSecSequence)[ (*aHashIter).second ].Value;
             }
         }
     }
