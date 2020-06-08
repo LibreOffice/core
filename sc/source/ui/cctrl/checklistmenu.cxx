@@ -888,7 +888,8 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     maBtnCancel(VclPtr<CancelButton>::Create(this)),
     maWndSize(),
     mePrevToggleAllState(TRISTATE_INDET),
-    maTabStops(this)
+    maTabStops(this),
+    mbHasDates(false)
 {
     maChkToggleAll->EnableTriState(true);
 
@@ -1227,7 +1228,7 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 
     maChecks->SetUpdateMode(false);
 
-    if (bSearchTextEmpty)
+    if (bSearchTextEmpty && !mbHasDates)
     {
         // when there are a lot of rows, it is cheaper to simply clear the tree and re-initialise
         maChecks->Clear();
@@ -1244,13 +1245,27 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
             if ( aLabelDisp.isEmpty() )
                 aLabelDisp = ScResId( STR_EMPTYDATA );
 
-            if ( !bIsDate )
-                bPartialMatch = ( ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
-            else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
-                bPartialMatch = (ScGlobal::getCharClassPtr()->lowercase( OUString(
-                                maMembers[i].maRealName + maMembers[i].maDateParts[1] )).indexOf( aSearchText ) != -1);
-            else
+            if ( !bSearchTextEmpty )
+            {
+                if ( !bIsDate )
+                    bPartialMatch = ( ScGlobal::getCharClassPtr()->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
+                else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
+                    bPartialMatch = (ScGlobal::getCharClassPtr()->lowercase( OUString(
+                                    maMembers[i].maRealName + maMembers[i].maDateParts[1] )).indexOf( aSearchText ) != -1);
+                else
+                    continue;
+            }
+            else if ( bIsDate && maMembers[i].meDatePartType != ScCheckListMember::DAY )
                 continue;
+
+            if ( bSearchTextEmpty )
+            {
+                SvTreeListEntry* pLeaf = maChecks->ShowCheckEntry( aLabelDisp, maMembers[i], true, maMembers[i].mbVisible );
+                updateMemberParents( pLeaf, i );
+                if ( maMembers[i].mbVisible )
+                    ++nSelCount;
+                continue;
+            }
 
             if ( bPartialMatch )
             {
@@ -1881,9 +1896,10 @@ void ScSearchEdit::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ScCheckListMenuWindow::setHasDates(bool bHasDates)
 {
+    mbHasDates = bHasDates;
     // Enables type-ahead search in the check list box.
     maChecks->SetQuickSearch(true);
-    if (bHasDates)
+    if (mbHasDates)
         maChecks->SetStyle(WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
     else
         maChecks->SetStyle(WB_HASBUTTONS);
@@ -1893,7 +1909,6 @@ size_t ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
-
 
     maChecks->SetUpdateMode(false);
     maChecks->GetModel()->EnableInvalidate(false);
