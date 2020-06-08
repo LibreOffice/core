@@ -222,6 +222,7 @@ public:
     void testOpenDocumentAsReadOnly();
     void testKeepSettingsOfBlankRows();
 
+    void testTdf133595();
     void testTdf105272();
     void testTdf118990();
     void testTdf121612();
@@ -368,6 +369,7 @@ public:
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
+    CPPUNIT_TEST(testTdf133595);
     CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
@@ -4537,6 +4539,21 @@ void ScExportTest::testKeepSettingsOfBlankRows()
 
     // saved blank row with not default setting in A2
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf133595()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf133595.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // without the fix in place, mc:AlternateContent would have been added to sheet1
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 0);
 
     xDocSh->DoClose();
 }
