@@ -186,6 +186,22 @@ DECLARE_OOXMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.doc")
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testImageLazyRead0size, "image-lazy-read-0size.doc")
+{
+    // Load a document with a single bitmap in it: it's declared as a WMF one, but actually a TGA
+    // bitmap.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwNode* pNode = pDoc->GetNodes()[6];
+    SwGrfNode* pGrfNode = pNode->GetGrfNode();
+    CPPUNIT_ASSERT(pGrfNode);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7590x10440
+    // - Actual  : 0x0
+    // i.e. the size was 0, even if the actual bitmap had a non-0 size.
+    CPPUNIT_ASSERT_EQUAL(Size(7590, 10440), pGrfNode->GetTwipSize());
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
 {
     // Ensure that all text portions are calculated before testing.
