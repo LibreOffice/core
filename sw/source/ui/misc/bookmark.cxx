@@ -338,6 +338,10 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rS, S
     m_pEditBox->SetCursorAtLast();
 
     sRemoveWarning = SwResId(STR_REMOVE_WARNING);
+
+    // disabled until "Hide" flag is not checked
+    m_pConditionED->Enable(false);
+    m_pConditionFT->Enable(false);
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
