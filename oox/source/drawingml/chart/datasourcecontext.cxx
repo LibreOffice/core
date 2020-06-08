@@ -127,6 +127,9 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                             double fValue = rChars.toDouble();
                             ::Color* pColor = nullptr;
                             OUString aFormattedValue;
+                            // tdf#91250: use UNLIMITED_PRECISION in case of GENERAL Number Format of category axis labels
+                            if( pNumFrmt->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
+                                pNumFrmt->ChangeStandardPrec(SvNumberFormatter::UNLIMITED_PRECISION);
                             pNumFrmt->GetOutputString( fValue, nKey, aFormattedValue, &pColor );
                             mrModel.maData[ mnPtIndex ] <<= aFormattedValue;
                         }
