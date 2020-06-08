@@ -57,7 +57,7 @@ class OfficeConnection:
             success = True
         finally:
             if not success and self.soffice:
-                self.soffice.kill()
+                self.soffice.terminate()
                 self.soffice.wait()
                 self.soffice = None
 

@@ -718,8 +718,10 @@ static void sigterm_handler(int ignored)
 {
     (void) ignored;
 
-    if (g_pProcess)
+    if (g_pProcess) {
         osl_terminateProcess(g_pProcess); // forward signal to soffice.bin
+        osl_joinProcess(g_pProcess);
+    }
 
     _exit(255);
 }
