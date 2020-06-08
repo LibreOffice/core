@@ -1745,6 +1745,11 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
             sLocation = rDocShell.getDocProperties()->getTemplateURL();
         }
     }
+
+    // tdf#128006 take document base url as location
+    if (sLocation.isEmpty())
+        sLocation = rDocShell.getDocumentBaseURL();
+
     return sLocation;
 }
 
