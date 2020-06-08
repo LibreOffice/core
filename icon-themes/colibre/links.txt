@@ -2315,8 +2315,6 @@ sfx2/res/exec_action.png cmd/sc_optionstreedialog.png
 sfx2/res/favourite.png cmd/sc_insertbookmark.png
 sfx2/res/favourite_big.png cmd/lc_insertbookmark.png
 sfx2/res/hlpdoc.png cmd/sc_helpindex.png
-sfx2/res/indexon_big.png cmd/lc_sidebar.png
-sfx2/res/indexon_small.png cmd/sc_sidebar.png
 sfx2/res/minus.png res/minus.png
 sfx2/res/newex.png res/plus.png
 sfx2/res/plus.png res/plus.png
