@@ -4568,6 +4568,11 @@ public:
             m_xTreeView->SetUpdateMode(true);
     }
 
+    void set_show_expanders(bool bShow) override
+    {
+        m_xTreeView->set_property("show-expanders", OUString::boolean(bShow));
+    }
+
     virtual ~SalInstanceTreeView() override
     {
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
