@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="AboutDialog">
@@ -26,10 +26,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnCopyVersion">
-                <property name="label" translatable="yes" context="aboutdialog|copy">Copy _Version Info</property>
+                <property name="label" translatable="yes" context="aboutdialog|copy">Copy _Version</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes" context="aboutdialog|copytip">Copy the full version information of %PRODUCTNAME</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
