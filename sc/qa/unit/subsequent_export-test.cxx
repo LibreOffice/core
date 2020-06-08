@@ -247,6 +247,7 @@ public:
     void testTdf128976();
     void testTdf120502();
     void testTdf131372();
+    void testTdf81470();
     void testTdf122331();
     void testTdf83779();
 
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
     CPPUNIT_TEST(testTdf131372);
+    CPPUNIT_TEST(testTdf81470);
     CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
 
@@ -5029,6 +5031,28 @@ void ScExportTest::testTdf131372()
 
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[2]/x:f", "#N/A");
+
+    xShell->DoClose();
+
+}
+void ScExportTest::testTdf81470()
+{
+    ScDocShellRef xShell = loadDoc("tdf81470.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xShell);
+
+    //without the fix in place, it would have crashed at export time
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    //also check revisions are exported
+    xmlDocUniquePtr pHeaders = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/revisions/revisionHeaders.xml");
+    CPPUNIT_ASSERT(pHeaders);
+
+    assertXPath(pHeaders, "/x:headers/x:header[1]", "dateTime", "2014-07-11T13:46:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[1]", "userName", "Kohei Yoshida");
+    assertXPath(pHeaders, "/x:headers/x:header[2]", "dateTime", "2014-07-11T18:38:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[2]", "userName", "Kohei Yoshida");
+    assertXPath(pHeaders, "/x:headers/x:header[3]", "dateTime", "2014-07-11T18:43:00.000000000Z");
+    assertXPath(pHeaders, "/x:headers/x:header[3]", "userName", "Kohei Yoshida");
 
     xShell->DoClose();
 }
