@@ -24,7 +24,7 @@
 // if addresses are taken and compared) reasons.
 //
 // For one, the historically heavy syntax for such uses of string literals
-// (RTL_CONSTASCII_USTRINGPARAM etc.) probably explains many of these redundant variables, wich can
+// (RTL_CONSTASCII_USTRINGPARAM etc.) probably explains many of these redundant variables, which can
 // now be considered cargo-cult baggage.  For another, some of those variables are used as arguments
 // to functions which also have more efficient overloads directly taking string literals.  And for
 // yet another, some cases with default-initialized variables turned out to be effectively unused

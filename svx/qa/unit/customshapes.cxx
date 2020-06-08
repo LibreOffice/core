@@ -666,7 +666,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
 {
-    // tdf103474 custom shape with command T to create quater ellipses in a bracket,
+    // tdf103474 custom shape with command T to create quarter ellipses in a bracket,
     // corner case where the ellipse has zero height.
     // Error was, that the calculation of the circle angle from the ellipse
     // angle results in a wrong angle for the case 180° and height zero.
