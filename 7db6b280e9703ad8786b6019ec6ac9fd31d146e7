@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d90e3d80_4c52c69e",
+        "filename": "forms/source/component/Date.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-08T08:27:14Z",
+      "side": 1,
+      "message": "I\u0027d suggest to keep this change simple and focused, and not make those variables static.",
+      "parentUuid": "b4c9f43c_038b05e3",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 10
+      },
+      "revId": "7db6b280e9703ad8786b6019ec6ac9fd31d146e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59435b3e_6335c4b8",
         "filename": "forms/source/component/Date.cxx",
         "patchSetId": 4
