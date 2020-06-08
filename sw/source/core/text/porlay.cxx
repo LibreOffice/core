@@ -48,9 +48,11 @@
 #include <doc.hxx>
 #include <swscanner.hxx>
 #include <txatbase.hxx>
+#include <calc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <IMark.hxx>
 
 using namespace ::com::sun::star;
@@ -2515,7 +2517,29 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
                 pBookmarks->emplace_back(pBookmark, MarkKind::End);
             }
         }
+
+        bool bHide = false;
         if (pBookmark && pBookmark->IsHidden())
+        {
+            // bookmark is marked as hidden
+            bHide = true;
+
+            // bookmark is marked as hidden with conditions
+            if (!pBookmark->GetHideCondition().isEmpty())
+            {
+                SwDoc& rDoc = *const_cast<SwDoc*>(rNode.GetDoc());
+                SwCalc aCalc(rDoc);
+                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), USHRT_MAX);
+
+                SwSbxValue aValue = aCalc.Calculate(pBookmark->GetHideCondition());
+                if(!aValue.IsVoidValue())
+                {
+                    bHide = aValue.GetBool();
+                }
+            }
+        }
+
+        if (bHide)
         {
             // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
 
