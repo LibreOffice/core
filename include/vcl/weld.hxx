@@ -1148,6 +1148,8 @@ public:
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 
+    virtual void set_show_expanders(bool bShow) = 0;
+
     // for custom rendering a cell
     void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
