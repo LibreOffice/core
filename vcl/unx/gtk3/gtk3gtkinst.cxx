@@ -9893,6 +9893,11 @@ public:
         gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, GTK_TREE_VIEW_DROP_BEFORE);
     }
 
+    virtual void set_show_expanders(bool bShow) override
+    {
+        gtk_tree_view_set_show_expanders(m_pTreeView, bShow);
+    }
+
     virtual ~GtkInstanceTreeView() override
     {
         if (m_pChangeEvent)

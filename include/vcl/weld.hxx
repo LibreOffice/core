@@ -987,6 +987,8 @@ public:
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
 
+    virtual void set_show_expanders(bool bShow) = 0;
+
     // for dnd
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
     // for dragging and dropping between TreeViews, return the active source
