@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="AboutDialog">
@@ -24,21 +24,6 @@
             <property name="margin_top">12</property>
             <property name="hexpand">True</property>
             <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="btnCopyVersion">
-                <property name="label" translatable="yes" context="aboutdialog|copy">Copy _Version Info</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkButton" id="btnClose">
                 <property name="label">gtk-close</property>
@@ -83,7 +68,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="height">5</property>
+                <property name="height">6</property>
               </packing>
             </child>
             <child>
@@ -109,6 +94,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="margin_start">6</property>
                 <child>
                   <object class="GtkLabel" id="lbVersion">
                     <property name="visible">True</property>
@@ -272,7 +258,7 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">5</property>
               </packing>
             </child>
             <child>
@@ -374,6 +360,48 @@ LibreOffice was based on OpenOffice.org</property>
                 <property name="top_attach">3</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="lbVersionInfo">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="aboutdialog|lbVersionInfo">Version Information</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnCopyVersion">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="aboutdialog|btnCopyVersionTooltip">Copy all version information in English</property>
+                    <property name="image">imCopy</property>
+                    <accelerator key="c" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -386,5 +414,10 @@ LibreOffice was based on OpenOffice.org</property>
     <action-widgets>
       <action-widget response="-7">btnClose</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkImage" id="imCopy">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-copy</property>
   </object>
 </interface>
