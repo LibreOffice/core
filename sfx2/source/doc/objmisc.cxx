@@ -1742,7 +1742,12 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
             // for documents made from a template: get the name of the template
             sLocation = rDocShell.getDocProperties()->getTemplateURL();
         }
+
+        // tdf#128006 take document base url as location
+        if (sLocation.isEmpty())
+            sLocation = rDocShell.getDocumentBaseURL();
     }
+
     return sLocation;
 }
 
