@@ -11440,6 +11440,11 @@ public:
         return signal_custom_get_size(rOutput, rId);
     }
 
+    virtual void set_show_expanders(bool bShow) override
+    {
+        gtk_tree_view_set_show_expanders(m_pTreeView, bShow);
+    }
+
     virtual ~GtkInstanceTreeView() override
     {
         if (m_pChangeEvent)
