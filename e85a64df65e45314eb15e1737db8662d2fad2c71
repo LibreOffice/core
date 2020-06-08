@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c53dbf75_4669ec49",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-06-08T07:39:12Z",
+      "side": 1,
+      "message": "This seems not to be the right place.\nThis spacing is a fixed one, and does not change when changing the last paragraph\u0027s bottom spacing in the header.",
+      "range": {
+        "startLine": 657,
+        "startChar": 4,
+        "endLine": 658,
+        "endChar": 21
+      },
+      "revId": "e85a64df65e45314eb15e1737db8662d2fad2c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
