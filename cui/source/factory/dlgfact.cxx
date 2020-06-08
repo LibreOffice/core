@@ -1123,9 +1123,9 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDia
    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<ActualizeProgress>(pParent, pThm));
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateScriptErrorDialog(const css::uno::Any& rException)
+void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException)
 {
-    return VclPtr<SvxScriptErrorDialog>::Create(rException);
+    return SvxScriptErrorDialog::ShowAsyncErrorDialog(pParent, rException);
 }
 
 VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(weld::Window* pParent,

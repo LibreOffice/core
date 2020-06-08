@@ -150,21 +150,19 @@ public:
     virtual short run() override;
 };
 
-class SvxScriptErrorDialog : public VclAbstractDialog
+class SvxScriptErrorDialog
 {
 private:
-
-    OUString m_sMessage;
+    struct DialogData {
+        weld::Window* pParent;
+        OUString sMessage;
+    };
 
     DECL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, void );
 
 public:
 
-    SvxScriptErrorDialog( css::uno::Any const & aException );
-
-    virtual ~SvxScriptErrorDialog() override;
-
-    short           Execute() override;
+    static void ShowAsyncErrorDialog( weld::Window* pParent, css::uno::Any const & aException );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX

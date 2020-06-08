@@ -59,12 +59,6 @@ using namespace css::script;
 using namespace css::frame;
 using namespace css::document;
 
-static void ShowErrorDialog( const Any& aException )
-{
-    ScopedVclPtrInstance<SvxScriptErrorDialog> pDlg( aException );
-    pDlg->Execute();
-}
-
 void SvxScriptOrgDialog::delUserData(const weld::TreeIter& rIter)
 {
     SFEntry* pUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rIter).toInt64());
@@ -626,19 +620,19 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
             }
             catch ( reflection::InvocationTargetException& ite )
             {
-                ShowErrorDialog(css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(ite));
             }
             catch ( provider::ScriptFrameworkErrorException& ite )
             {
-                ShowErrorDialog(css::uno::Any(ite));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(ite));
             }
             catch ( RuntimeException& re )
             {
-                ShowErrorDialog(css::uno::Any(re));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(re));
             }
             catch ( Exception& e )
             {
-                ShowErrorDialog(css::uno::Any(e));
+                SvxScriptErrorDialog::ShowAsyncErrorDialog(getDialog(), css::uno::Any(e));
             }
         }
         StoreCurrentSelection();
@@ -1300,50 +1294,34 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 
 }
 
-SvxScriptErrorDialog::SvxScriptErrorDialog( css::uno::Any const & aException )
-    : m_sMessage()
+// Show Error dialog asynchronously
+void SvxScriptErrorDialog::ShowAsyncErrorDialog( weld::Window* pParent, css::uno::Any const & aException )
 {
     SolarMutexGuard aGuard;
-    m_sMessage = GetErrorMessage( aException );
-}
-
-SvxScriptErrorDialog::~SvxScriptErrorDialog()
-{
-}
-
-short SvxScriptErrorDialog::Execute()
-{
-    // Show Error dialog asynchronously
+    OUString sMessage = GetErrorMessage( aException );
 
     // Pass a copy of the message to the ShowDialog method as the
     // SvxScriptErrorDialog may be deleted before ShowDialog is called
+    DialogData* pData = new DialogData;
+    pData->sMessage = sMessage;
+    pData->pParent = pParent;
     Application::PostUserEvent(
-        LINK( this, SvxScriptErrorDialog, ShowDialog ),
-        new OUString( m_sMessage ) );
-
-    return 0;
+        LINK( nullptr, SvxScriptErrorDialog, ShowDialog ),
+        pData );
 }
 
 IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
 {
-    OUString* pMessage = static_cast<OUString*>(p);
-    OUString message;
+    std::unique_ptr<DialogData> xData(static_cast<DialogData*>(p));
+    OUString message = xData->sMessage;
 
-    if ( pMessage && !pMessage->isEmpty() )
-    {
-        message = *pMessage;
-    }
-    else
-    {
+    if ( message.isEmpty() )
         message = CuiResId( RID_SVXSTR_ERROR_TITLE );
-    }
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(xData->pParent,
                                               VclMessageType::Warning, VclButtonsType::Ok, message));
     xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
     xBox->run();
-
-    delete pMessage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

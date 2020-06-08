@@ -1435,9 +1435,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     if ( bCaughtException && bRaiseError )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-        ScopedVclPtr<VclAbstractDialog> pScriptErrDlg( pFact->CreateScriptErrorDialog( aException ) );
-        if ( pScriptErrDlg )
-            pScriptErrDlg->Execute();
+        pFact->ShowAsyncScriptErrorDialog( nullptr, aException );
     }
 
     SAL_INFO("sfx", "leaving CallXScript" );
