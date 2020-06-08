@@ -22,6 +22,30 @@
       "revId": "5810a39a2f1198f27daedcc0c8f54d20ccf8cdc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6bd8a64_3fe9e0ab",
+        "filename": "dbaccess/source/ui/dlg/adodatalinks.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-08T13:33:05Z",
+      "side": 1,
+      "message": "Couldn\u0027t we consider RPC_E_CHANGED_MODE as a bug to fix and so the std::abort would force to manage this case?",
+      "parentUuid": "cf8e16f6_e737eaac",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 19
+      },
+      "revId": "5810a39a2f1198f27daedcc0c8f54d20ccf8cdc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
