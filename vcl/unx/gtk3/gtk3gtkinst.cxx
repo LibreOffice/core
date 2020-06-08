@@ -13848,6 +13848,7 @@ public:
         , m_nMRUCount(0)
         , m_nMaxMRUCount(0)
     {
+        int nActive = gtk_combo_box_get_active(m_pComboBox);
         insertAsParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
         gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);
@@ -13935,6 +13936,9 @@ public:
         }
 
         g_list_free(cells);
+
+        if (nActive != -1)
+            tree_view_set_cursor(nActive);
 
         g_signal_connect(m_pMenuWindow, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
         g_signal_connect(m_pMenuWindow, "button-press-event", G_CALLBACK(signalButtonPress), this);
