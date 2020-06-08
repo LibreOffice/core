@@ -316,6 +316,7 @@ public:
     {
         assert(!innermostLoop_.empty());
         assert(innermostLoop_.top() == stmt);
+        (void)stmt;
         innermostLoop_.pop();
         return true;
     }
@@ -341,6 +342,7 @@ public:
     {
         assert(!innermostLoop_.empty());
         assert(innermostLoop_.top() == stmt);
+        (void)stmt;
         innermostLoop_.pop();
         return true;
     }
@@ -366,6 +368,7 @@ public:
     {
         assert(!innermostLoop_.empty());
         assert(innermostLoop_.top() == stmt);
+        (void)stmt;
         innermostLoop_.pop();
         return true;
     }
@@ -391,6 +394,7 @@ public:
     {
         assert(!innermostLoop_.empty());
         assert(innermostLoop_.top() == stmt);
+        (void)stmt;
         innermostLoop_.pop();
         return true;
     }
