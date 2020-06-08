@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf8e16f6_e737eaac",
+        "filename": "dbaccess/source/ui/dlg/adodatalinks.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-08T13:18:36Z",
+      "side": 1,
+      "message": "I suppose we need \"if (FAILED(hr) \u0026\u0026 hr !\u003d RPC_E_CHANGED_MODE)\" here - since it seems that having the different mode is OK here.",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 19
+      },
+      "revId": "5810a39a2f1198f27daedcc0c8f54d20ccf8cdc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
