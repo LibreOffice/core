@@ -2369,6 +2369,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
     const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
+    m_bDiscardHeaderFooter = true;
     m_eInHeaderFooterImport
         = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
 
@@ -2381,6 +2382,11 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         // clear the "Link To Previous" flag so that the header/footer
         // content is not copied from the previous section
         pSectionContext->ClearHeaderFooterLinkToPrevious(bHeader, eType);
+
+        if (!m_bIsNewDoc)
+        {
+            return; // TODO sw cannot Undo insert header/footer without crashing
+        }
 
         uno::Reference< beans::XPropertySet > xPageStyle =
             pSectionContext->GetPageStyle(
@@ -2409,15 +2415,15 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                 xPageStyle->getPropertyValue(getPropertyName(bLeft? ePropTextLeft: ePropText)) >>= xText;
 
                 m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
-                            m_bIsNewDoc? uno::Reference<text::XTextCursor>(): m_xBodyText->createTextCursorByRange(xText->getStart())));
-            }
-            else
-            {
-                m_bDiscardHeaderFooter = true;
+                    m_bIsNewDoc
+                        ? uno::Reference<text::XTextCursor>()
+                        : xText->createTextCursorByRange(xText->getStart())));
+                m_bDiscardHeaderFooter = false; // set only on success!
             }
         }
         catch( const uno::Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
         }
     }
 }
