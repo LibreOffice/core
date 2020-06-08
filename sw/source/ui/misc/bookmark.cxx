@@ -343,6 +343,10 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     }
 
     m_bAreProtected = rSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
+
+    // disabled until "Hide" flag is not checked
+    m_xConditionED->set_sensitive(false);
+    m_xConditionFT->set_sensitive(false);
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
