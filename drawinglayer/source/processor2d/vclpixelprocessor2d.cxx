@@ -61,6 +61,8 @@
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -390,6 +392,12 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processSoftEdgePrimitive2D(
                 static_cast<const drawinglayer::primitive2d::SoftEdgePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
+        {
+            processShadowPrimitive2D(
+                static_cast<const drawinglayer::primitive2d::ShadowPrimitive2D&>(rCandidate));
             break;
         }
         default:
@@ -1055,6 +1063,60 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         // back to old OutDev
         mpOutputDevice = pLastOutputDevice;
         mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)
+{
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
+    aBlurRadiusVector *= maCurrentTransformation;
+    const double fBlurRadius = aBlurRadiusVector.getLength();
+
+    const sal_uInt8 nTransparency = 0;
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    if (aBufferDevice.isVisible())
+    {
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+        mpOutputDevice->Erase();
+        process(rCandidate);
+
+        if (rCandidate.getShadowBlur() > 0)
+        {
+
+            Bitmap bitmap = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
+                                                      Size(aRange.getWidth(), aRange.getHeight()));
+
+            AlphaMask mask
+                = ProcessAndBlurAlphaMask(bitmap, fBlurRadius / 100, fBlurRadius, nTransparency);
+
+            const basegfx::BColor aShadowColor(
+                maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
+
+            bitmap.Erase(Color(aShadowColor));
+            // alpha mask will be scaled up automatically to match bitmap
+            BitmapEx result(bitmap, mask);
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+            mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        }
+        else
+        {
+            //to draw the shadow without blur
+            Bitmap bitmap
+                = mpOutputDevice->GetBitmap(Point(aRange.getMinX(), aRange.getMinY()),
+                                            Size(aRange.getWidth() + 10, aRange.getHeight() + 10));
+
+            BitmapEx result(bitmap);
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+            mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), result);
+        }
     }
     else
         SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
