@@ -41,18 +41,4 @@ OUString SignatureLineDialogBase::getCDataString(const OUString& rString)
     return "<![CDATA[" + rString + "]]>";
 }
 
-OUString SignatureLineDialogBase::getSignatureImage()
-{
-    OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/signature-line.svg");
-    rtl::Bootstrap::expandMacros(aPath);
-    SvFileStream aStream(aPath, StreamMode::READ);
-    if (aStream.GetError() != ERRCODE_NONE)
-    {
-        SAL_WARN("cui.dialogs", "failed to open signature-line.svg");
-    }
-
-    OString const svg = read_uInt8s_ToOString(aStream, aStream.remainingSize());
-    return OUString::fromUtf8(svg);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
