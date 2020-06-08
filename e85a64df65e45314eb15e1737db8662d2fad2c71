@@ -22,6 +22,30 @@
       "revId": "e85a64df65e45314eb15e1737db8662d2fad2c71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bf86e96_76ed083d",
+        "filename": "sw/source/core/layout/hffrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-06-08T07:53:58Z",
+      "side": 1,
+      "message": "I think we discussed this on IRC earlier, then I wrote \"good question, because normally the spacing between 2 para is counted in the \"upper\" spacing of the next para, see SwFlowFrame::CalcUpperSpace(). possibly that\u0027s the reason header frames have no lower space for the last para. which means you don\u0027t have to disable something, rather add some explicit code (just guessing)\"\n\nI don\u0027t know more than that off the top of my head. :-)",
+      "parentUuid": "c53dbf75_4669ec49",
+      "range": {
+        "startLine": 657,
+        "startChar": 4,
+        "endLine": 658,
+        "endChar": 21
+      },
+      "revId": "e85a64df65e45314eb15e1737db8662d2fad2c71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
