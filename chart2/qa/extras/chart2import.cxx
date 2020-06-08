@@ -156,6 +156,7 @@ public:
     void testTdf125444PercentageCustomLabel();
     void testTdf123206CustomLabelField();
     void testStockChartShiftedCategoryPosition();
+    void testTdf91250();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -261,6 +262,7 @@ public:
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
+    CPPUNIT_TEST(testTdf91250);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2442,6 +2444,26 @@ void Chart2ImportTest::testStockChartShiftedCategoryPosition()
     chart2::ScaleData aScaleData = xAxis->getScaleData();
     CPPUNIT_ASSERT(aScaleData.Categories.is());
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
+}
+
+void Chart2ImportTest::testTdf91250()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf91250.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("12.3254"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("11.62315"), aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("9.26"), aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("8.657"), aCategories[3]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
