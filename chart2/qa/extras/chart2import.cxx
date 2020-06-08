@@ -156,6 +156,11 @@ public:
     void testTdf125444PercentageCustomLabel();
     void testTdf123206CustomLabelField();
     void testStockChartShiftedCategoryPosition();
+<<<<<<< HEAD   (e9aaa9 tdf#133065 tdf#133602 DOCX export: fix OLE wrap regression)
+=======
+    void testTdf133376();
+    void testTdf91250();
+>>>>>>> CHANGE (8cde18 tdf#91250 Chart DOCX Import: Fix decimal place formatting is)
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -261,6 +266,11 @@ public:
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
+<<<<<<< HEAD   (e9aaa9 tdf#133065 tdf#133602 DOCX export: fix OLE wrap regression)
+=======
+    CPPUNIT_TEST(testTdf133376);
+    CPPUNIT_TEST(testTdf91250);
+>>>>>>> CHANGE (8cde18 tdf#91250 Chart DOCX Import: Fix decimal place formatting is)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2444,6 +2454,48 @@ void Chart2ImportTest::testStockChartShiftedCategoryPosition()
     CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
+<<<<<<< HEAD   (e9aaa9 tdf#133065 tdf#133602 DOCX export: fix OLE wrap regression)
+=======
+void Chart2ImportTest::testTdf133376()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf133376.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+        "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=2"), UNO_SET_THROW);
+
+    CPPUNIT_ASSERT(xDataPointLabel.is());
+    // Check the position of the 3rd data point label, which is out from the pie slice
+    awt::Point aLabelPosition = xDataPointLabel->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1466, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
+}
+
+void Chart2ImportTest::testTdf91250()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf91250.docx");
+    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XInternalDataProvider> xInternalProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xInternalProvider.is());
+
+    Reference<chart::XComplexDescriptionAccess> xDescAccess(xInternalProvider, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDescAccess.is());
+
+    // Get the category labels.
+    Sequence<OUString> aCategories = xDescAccess->getRowDescriptions();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCategories.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("12.3254"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("11.62315"), aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("9.26"), aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("8.657"), aCategories[3]);
+}
+
+>>>>>>> CHANGE (8cde18 tdf#91250 Chart DOCX Import: Fix decimal place formatting is)
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
