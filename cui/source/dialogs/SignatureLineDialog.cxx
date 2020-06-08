@@ -15,6 +15,7 @@
 #include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
+#include <svx/signaturelinehelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -111,7 +112,7 @@ void SignatureLineDialog::Apply()
     bool bShowSignDate(m_xCheckboxShowSignDate->get_active());
 
     // Read svg and replace placeholder texts
-    OUString aSvgImage(getSignatureImage());
+    OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage());
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(aSignerName));
     aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(aSignerTitle));
 
@@ -122,16 +123,7 @@ void SignatureLineDialog::Apply()
     aSvgImage = aSvgImage.replaceAll("[DATE]", "");
 
     // Insert/Update graphic
-    SvMemoryStream aSvgStream(4096, 4096);
-    aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
-    Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
-
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
-    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+    Reference<XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
 
     bool bIsExistingSignatureLine = m_xExistingShapeProperties.is();
     Reference<XPropertySet> xShapeProps;

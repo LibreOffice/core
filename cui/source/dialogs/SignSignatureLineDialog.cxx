@@ -31,6 +31,7 @@
 #include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/weld.hxx>
+#include <svx/signaturelinehelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -167,33 +168,14 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     if (!pShell->PrepareForSigning(m_xDialog.get()))
         return;
 
-    Reference<XDocumentDigitalSignatures> xSigner;
-    if (pShell->GetMedium()->GetFilter()->IsAlienFormat())
-    {
-        xSigner
-            = DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext());
-    }
-    else
-    {
-        OUString const aODFVersion(
-            comphelper::OStorageHelper::GetODFVersionFromStorage(pShell->GetStorage()));
-        xSigner = DocumentDigitalSignatures::createWithVersion(
-            comphelper::getProcessComponentContext(), aODFVersion);
-    }
-    xSigner->setParentWindow(m_xDialog->GetXWindow());
-    OUString aDescription;
-    CertificateKind certificateKind = CertificateKind_NONE;
-    // When signing ooxml, we only want X.509 certificates
-    if (pShell->GetMedium()->GetFilter()->IsAlienFormat())
-        certificateKind = CertificateKind_X509;
     Reference<XCertificate> xSignCertificate
-        = xSigner->selectSigningCertificateWithType(certificateKind, aDescription);
+        = svx::SignatureLineHelper::getSignatureCertificate(pShell, m_xDialog.get());
 
     if (xSignCertificate.is())
     {
         m_xSelectedCertifate = xSignCertificate;
-        m_xBtnChooseCertificate->set_label(xmlsec::GetContentPart(
-            xSignCertificate->getSubjectName(), xSignCertificate->getCertificateKind()));
+        m_xBtnChooseCertificate->set_label(
+            svx::SignatureLineHelper::getSignerName(xSignCertificate));
     }
     ValidateFields();
 }
@@ -229,15 +211,13 @@ void SignSignatureLineDialog::Apply()
 css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGraphic(bool bValid)
 {
     // Read svg and replace placeholder texts
-    OUString aSvgImage(getSignatureImage());
+    OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage());
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
     aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
 
     OUString aIssuerLine
         = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-              .replaceFirst("%1",
-                            xmlsec::GetContentPart(m_xSelectedCertifate->getSubjectName(),
-                                                   m_xSelectedCertifate->getCertificateKind()));
+              .replaceFirst("%1", svx::SignatureLineHelper::getSignerName(m_xSelectedCertifate));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
@@ -245,10 +225,7 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
     OUString aDate;
     if (m_bShowSignDate && bValid)
     {
-        const SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-        Date aDateTime(Date::SYSTEM);
-        aDate = rLocaleData.getDate(aDateTime);
+        aDate = svx::SignatureLineHelper::getLocalizedDate();
     }
     aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
@@ -278,16 +255,7 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
     }
 
     // Create graphic
-    SvMemoryStream aSvgStream(4096, 4096);
-    aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
-    Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
-
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "InputStream";
-    aMediaProperties[0].Value <<= xInputStream;
-    return xProvider->queryGraphic(aMediaProperties);
+    return svx::SignatureLineHelper::importSVG(aSvgImage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
