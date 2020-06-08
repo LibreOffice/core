@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76855d79_dd6a6664",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-06-08T09:47:40Z",
+      "side": 1,
+      "message": "If \"_Version\" isn\u0027t sufficient, perhaps \"Copy _Version\"?\nSince you consider translation (at least in French) for \"Copy _Version Info\" too long for the button.",
+      "range": {
+        "startLine": 29,
+        "startChar": 85,
+        "endLine": 29,
+        "endChar": 103
+      },
+      "revId": "e16b1a0348d3491b2bdf69009bfc8b5d61409398",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
