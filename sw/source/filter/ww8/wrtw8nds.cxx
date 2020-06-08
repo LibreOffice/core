@@ -252,7 +252,11 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     }
     sal_Int32 fieldSepPos = aText.indexOf(CH_TXT_ATR_FIELDSEP, nStartPos);
     sal_Int32 fieldStartPos = aText.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
-    sal_Int32 formElementPos = aText.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos);
+    sal_Int32 formElementPos = aText.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos - 1);
+    if (0 <= formElementPos && formElementPos < nStartPos)
+    {
+        ++formElementPos; // tdf#133604 put this in its own run
+    }
 
     const sal_Int32 pos = lcl_getMinPos(
         lcl_getMinPos(lcl_getMinPos(fieldEndPos, fieldSepPos), fieldStartPos),
