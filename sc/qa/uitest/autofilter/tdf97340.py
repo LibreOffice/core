@@ -30,9 +30,23 @@ class tdf97340(UITestCase):
 
         gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
+
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(2, len(xTreeList.getChildren()))
+        self.assertEqual("2016", get_state_as_dict(xTreeList.getChild('0'))['Text'])
+        self.assertEqual("2017", get_state_as_dict(xTreeList.getChild('1'))['Text'])
+
         xsearchEdit = xFloatWindow.getChild("search_edit")
         xsearchEdit.executeAction("TYPE", mkPropertyValues({"TEXT":" "}))
+        self.assertEqual(0, len(xTreeList.getChildren()))
+
         xsearchEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+
+        #tdf#133785, without the fix in place, it would have been 0
+        self.assertEqual(2, len(xTreeList.getChildren()))
+        self.assertEqual("2016", get_state_as_dict(xTreeList.getChild('0'))['Text'])
+        self.assertEqual("2017", get_state_as_dict(xTreeList.getChild('1'))['Text'])
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
