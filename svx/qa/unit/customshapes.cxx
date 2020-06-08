@@ -670,8 +670,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     // corner case where the ellipse has zero height.
     // Error was, that the calculation of the circle angle from the ellipse
     // angle results in a wrong angle for the case 180° and height zero.
-    const OUString sFileName("tdf103474_commandT_CaseZeroHeight.odp");
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + sFileName;
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf103474_commandT_CaseZeroHeight.odp";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
     uno::Reference<drawing::XShape> xShape(getShape(0));
