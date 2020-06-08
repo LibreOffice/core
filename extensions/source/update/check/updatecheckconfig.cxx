@@ -308,10 +308,9 @@ UpdateCheckConfig::getLocalFileName() const
 OUString
 UpdateCheckConfig::getDownloadDestination() const
 {
-    OUString aName = DOWNLOAD_DESTINATION;
     OUString aRet;
 
-    const_cast <UpdateCheckConfig *> (this)->getByName(aName) >>= aRet;
+    const_cast <UpdateCheckConfig *> (this)->getByName(DOWNLOAD_DESTINATION) >>= aRet;
 
     return aRet;
 }
