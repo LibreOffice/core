@@ -40,6 +40,7 @@ class FillHatchPrimitive2D;
 class BackgroundColorPrimitive2D;
 class BorderLinePrimitive2D;
 class GlowPrimitive2D;
+class ShadowPrimitive2D;
 class SoftEdgePrimitive2D;
 }
 
@@ -97,6 +98,7 @@ class VclPixelProcessor2D final : public VclProcessor2D
     void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
     void processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate);
     void processSoftEdgePrimitive2D(const primitive2d::SoftEdgePrimitive2D& rCandidate);
+    void processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate);
 
 public:
     /// constructor/destructor

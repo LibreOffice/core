@@ -61,6 +61,7 @@
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -390,6 +391,12 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         {
             processSoftEdgePrimitive2D(
                 static_cast<const drawinglayer::primitive2d::SoftEdgePrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
+        {
+            processShadowPrimitive2D(
+                static_cast<const drawinglayer::primitive2d::ShadowPrimitive2D&>(rCandidate));
             break;
         }
         default:
@@ -1060,6 +1067,52 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         BitmapEx result(bitmap.GetBitmap(), aMask);
 
         // back to old OutDev
+        mpOutputDevice = pLastOutputDevice;
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)
+{
+    if (rCandidate.getShadowBlur() == 0)
+    {
+        process(rCandidate);
+        return;
+    }
+
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
+    aBlurRadiusVector *= maCurrentTransformation;
+    const double fBlurRadius = aBlurRadiusVector.getLength();
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange, true);
+    if (aBufferDevice.isVisible())
+    {
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+        mpOutputDevice->Erase();
+
+        process(rCandidate);
+
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+
+        BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+
+        const basegfx::BColor aShadowColor(
+            maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
+
+        Bitmap bitmap = bitmapEx.GetBitmap();
+        bitmap.Erase(Color(aShadowColor));
+        BitmapEx result(bitmap, mask);
+
         mpOutputDevice = pLastOutputDevice;
         mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
     }
