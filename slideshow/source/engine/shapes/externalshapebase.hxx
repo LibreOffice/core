@@ -84,6 +84,8 @@ namespace slideshow
             virtual ::basegfx::B2DRectangle getUpdateArea() const override;
             virtual bool   isVisible() const override;
             virtual double getPriority() const override;
+            virtual bool   isForeground() const override;
+            virtual void   setIsForeground( const bool bIsForeground ) override;
             virtual bool   isBackgroundDetached() const override;
 
         protected:
@@ -122,6 +124,7 @@ namespace slideshow
 
             // The attributes of this Shape
             const double                                                            mnPriority;
+            bool                                                                    mbIsForeground;
             ::basegfx::B2DRectangle                                                 maBounds;
         };
     }

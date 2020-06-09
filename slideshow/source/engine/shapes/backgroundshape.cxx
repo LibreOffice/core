@@ -83,6 +83,8 @@ namespace slideshow::internal
             virtual ::basegfx::B2DRectangle getUpdateArea() const override;
             virtual bool isVisible() const override;
             virtual double getPriority() const override;
+            virtual bool isForeground() const override;
+            virtual void setIsForeground( const bool bIsForeground) override;
             virtual bool isBackgroundDetached() const override;
 
 
@@ -98,6 +100,7 @@ namespace slideshow::internal
             GDIMetaFileSharedPtr        mpMtf;
 
             // The attributes of this Shape
+            bool                        mbIsForeground;
             ::basegfx::B2DRectangle     maBounds; // always needed for rendering
 
             /// the list of active view shapes (one for each registered view layer)
@@ -111,6 +114,7 @@ namespace slideshow::internal
                                           const uno::Reference< drawing::XDrawPage >& xMasterPage,
                                           const SlideShowContext&                     rContext ) :
             mpMtf(),
+            mbIsForeground(true),
             maBounds(),
             maViewShapes()
         {
@@ -233,6 +237,16 @@ namespace slideshow::internal
         double BackgroundShape::getPriority() const
         {
             return 0.0; // lowest prio, we're the background
+        }
+
+        bool BackgroundShape::isForeground() const
+        {
+            return mbIsForeground;
+        }
+
+        void BackgroundShape::setIsForeground( const bool bIsForeground )
+        {
+            mbIsForeground = bIsForeground;
         }
 
         bool BackgroundShape::update() const
