@@ -495,6 +495,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
         }
         if( bIsGroupShape && pRet )
         {
+            pRet->setIsForeground(false);
             // push new group on the stack: group traversal
             maShapesStack.push( XShapesEntry( pRet ) );
         }

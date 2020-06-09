@@ -83,6 +83,7 @@ namespace slideshow::internal
             virtual ::basegfx::B2DRectangle getUpdateArea() const override;
             virtual bool isVisible() const override;
             virtual double getPriority() const override;
+            virtual bool isForeground() const override { return false; }
             virtual bool isBackgroundDetached() const override;
 
 
