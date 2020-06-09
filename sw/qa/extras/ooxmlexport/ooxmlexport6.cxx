@@ -42,6 +42,16 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133701, "tdf133701.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "hSpace", "567");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "vSpace", "284");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), getProperty<OUString>(getShape(1), "Title"));

@@ -559,7 +559,6 @@ static void lcl_deleteAndResetTheLists( rtl::Reference<sax_fastparser::FastAttri
 
 void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFormat, const Size& rSize)
 {
-
     sax_fastparser::FastAttributeList* attrList = FastSerializerHelper::createAttrList();
 
     awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(), pFrameFormat->GetVertOrient().GetPos());
@@ -569,6 +568,14 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
     attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
+
+    sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
+    sal_Int16 nRight = pFrameFormat->GetLRSpace().GetRight();
+    sal_Int16 nUpper = pFrameFormat->GetULSpace().GetUpper();
+    sal_Int16 nLower = pFrameFormat->GetULSpace().GetLower();
+
+    attrList->add(FSNS(XML_w, XML_hSpace), OString::number((nLeft + nRight) / 2));
+    attrList->add(FSNS(XML_w, XML_vSpace), OString::number((nUpper + nLower) / 2));
 
     OString relativeFromH = convertToOOXMLHoriOrientRel( pFrameFormat->GetHoriOrient().GetRelationOrient() );
     OString relativeFromV = convertToOOXMLVertOrientRel( pFrameFormat->GetVertOrient().GetRelationOrient() );
