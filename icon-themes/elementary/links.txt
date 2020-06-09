@@ -2239,7 +2239,6 @@ svtools/res/folderop.png cmd/sc_open.pngf
 # ==============================================
 svx/res/3dlight.png cmd/sc_extrusionlightingfloater.png
 svx/res/apply.png cmd/sc_ok.png
-svx/res/blend3d.png cmd/sc_sphere.png
 svx/res/caution_11x16.png dbaccess/res/exwarning.png
 svx/res/cd01.png cmd/sc_ok.png
 svx/res/cd015.png cmd/sc_toggleobjectbeziermode.png
@@ -2306,7 +2305,6 @@ svx/res/lightonfromtopright_22.png cmd/lc_extrusionlightingfloater.png
 svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/luminanc.png cmd/sc_graphicfilterinvert.png
 svx/res/matte_16.png cmd/sc_extrusionsurfacefloater.png
-svx/res/modula3d.png cmd/sc_sphere.png
 svx/res/notcertificate_16.png xmlsecurity/res/notcertificate_16.png
 svx/res/nu01.png cmd/sc_ok.png
 svx/res/nu02.png cmd/sc_cancel.png
@@ -2316,7 +2314,6 @@ svx/res/persp3d.png svx/res/perspective_16.png
 svx/res/reloads.png cmd/sc_reload.png
 svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
 svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
-svx/res/sphere3d.png cmd/sc_sphere.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
