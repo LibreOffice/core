@@ -282,6 +282,11 @@
           <desc>Description of a tool bar entry when it is selected.</desc>
         </info>
       </node-ref>
+      <node-ref oor:name="MouseOverSelected" oor:node-type="ToolBarDescription">
+        <info>
+          <desc>Description of a tool bar entry when it is selected and the mouse is over it.</desc>
+        </info>
+      </node-ref>
       <node-ref oor:name="Disabled" oor:node-type="ToolBarDescription">
         <info>
           <desc>Description of a tool bar entry when it is disabled.</desc>
