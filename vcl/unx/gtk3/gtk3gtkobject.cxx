@@ -359,7 +359,14 @@ void GtkSalObjectWidgetClip::ApplyClipRegion()
             allocation.height = m_aClipRect.GetHeight();
         }
 
-        gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
+        if (AllSettings::GetLayoutRTL())
+        {
+            GtkAllocation aParentAllocation;
+            gtk_widget_get_allocation(GTK_WIDGET(pContainer), &aParentAllocation);
+            gtk_fixed_move(pContainer, m_pScrolledWindow, aParentAllocation.width - allocation.width - 1 - allocation.x, allocation.y);
+        }
+        else
+            gtk_fixed_move(pContainer, m_pScrolledWindow, allocation.x, allocation.y);
         gtk_widget_set_size_request(m_pScrolledWindow, allocation.width, allocation.height);
         gtk_widget_size_allocate(m_pScrolledWindow, &allocation);
 
