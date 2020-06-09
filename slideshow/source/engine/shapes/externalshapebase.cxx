@@ -85,6 +85,7 @@ namespace slideshow::internal
             mpShapeManager( rContext.mpSubsettableShapeManager ),
             mrEventMultiplexer( rContext.mrEventMultiplexer ),
             mnPriority( nPrio ), // TODO(F1): When ZOrder someday becomes usable: make this ( getAPIShapePrio( xShape ) ),
+            mbIsForeground(true),
             maBounds( getAPIShapeBounds( xShape ) )
         {
             ENSURE_OR_THROW( mxShape.is(), "ExternalShapeBase::ExternalShapeBase(): Invalid XShape" );
@@ -198,6 +199,15 @@ namespace slideshow::internal
             return mnPriority;
         }
 
+        bool ExternalShapeBase::isForeground() const
+        {
+            return mbIsForeground;
+        }
+
+        void ExternalShapeBase::setIsForeground( const bool bIsForeground )
+        {
+            mbIsForeground = bIsForeground;
+        }
 
         bool ExternalShapeBase::isBackgroundDetached() const
         {

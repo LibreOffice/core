@@ -44,6 +44,7 @@ class ImplTestShape : public TestShape,
     ViewVector               maViewLayers;
     const basegfx::B2DRange  maRect;
     const double             mnPrio;
+    bool                     mbIsForeground;
     sal_Int32                mnAnimated;
     mutable sal_Int32        mnNumUpdates;
     mutable sal_Int32        mnNumRenders;
@@ -55,6 +56,7 @@ public:
         maViewLayers(),
         maRect( rRect ),
         mnPrio( nPrio ),
+        mbIsForeground(true),
         mnAnimated(0),
         mnNumUpdates(0),
         mnNumRenders(0)
@@ -174,6 +176,14 @@ private:
     virtual double getPriority() const override
     {
         return mnPrio;
+    }
+    virtual bool isForeground() const override
+    {
+        return mbIsForeground;
+    }
+    virtual void setIsForeground( const bool bIsForeground ) override
+    {
+        mbIsForeground = bIsForeground;
     }
     virtual bool isBackgroundDetached() const override
     {
