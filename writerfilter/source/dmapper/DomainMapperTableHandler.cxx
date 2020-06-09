@@ -1074,6 +1074,13 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
         // if there is no direct paragraph formatting
         if ( !rParaProp.m_pPropertyMap->isSet(eId) )
         {
+            if ( (eId == PROP_PARA_LEFT_MARGIN || eId == PROP_PARA_FIRST_LINE_INDENT) &&
+                    rParaProp.m_pPropertyMap->isSet(PROP_NUMBERING_RULES) )
+            {
+                // indentation of direct numbering has bigger precedence, than table style
+                continue;
+            }
+
             OUString sPropertyName = getPropertyName(eId);
             auto pCellProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                 [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
