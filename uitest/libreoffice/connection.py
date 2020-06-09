@@ -7,6 +7,7 @@
 
 import subprocess
 import time
+import traceback
 import uuid
 import os
 
@@ -126,10 +127,10 @@ class OfficeConnection:
                     xDesktop.terminate()
                     print("...done")
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
-                    print("caught UnknownPropertyException while TearDown")
+                    print("caught while TearDown:\n", traceback.format_exc())
                     pass  # ignore, also means disposed
                 except pyuno.getClass("com.sun.star.lang.DisposedException"):
-                    print("caught DisposedException while TearDown")
+                    print("caught while TearDown:\n", traceback.format_exc())
                     pass  # ignore
             else:
                 self.soffice.terminate()
