@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18d435b3_dbbe650e",
+        "filename": "sfx2/source/doc/objmisc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-06-09T08:22:12Z",
+      "side": 1,
+      "message": "Does it still work if this section is moved under the\n\n  if ( pMedium )\n\ncheck?  Given the OSL_PRECOND makes it look like that check is redundant, it may be better if all the function\u0027s actual logic is covered by that check, in case anybody ever wants to clean up that suspicious OSL_PRECOND+check combo.",
+      "revId": "62e009c74278780f5ca9e21788d2fcdeabb18f0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
