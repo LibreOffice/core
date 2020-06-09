@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "711ec5dc_7afc30b2",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T18:24:25Z",
+      "side": 1,
+      "message": "why don\u0027t you just derive from InspectorTextPanel?",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "55c321036f05dec3e9697efe1d5b3648e02928dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
