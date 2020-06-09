@@ -10,6 +10,8 @@
 #include <searchresults.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/srchdlg.hxx>
 #include <dociter.hxx>
 #include <document.hxx>
 #include <tabvwsh.hxx>
@@ -41,6 +43,19 @@ SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParen
 
 SearchResultsDlg::~SearchResultsDlg()
 {
+    // tdf#133807 if the search dialog is shown then re-present that dialog
+    // when this results dialog is dismissed
+    SfxViewFrame* pViewFrame = mpBindings->GetDispatcher()->GetFrame();
+    if (!pViewFrame)
+        return;
+    SfxChildWindow* pChildWindow = pViewFrame->GetChildWindow(
+            SvxSearchDialogWrapper::GetChildWindowId());
+    if (!pChildWindow)
+        return;
+    SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetController().get());
+    if (!pSearchDlg)
+        return;
+    pSearchDlg->getDialog()->present();
 }
 
 namespace
