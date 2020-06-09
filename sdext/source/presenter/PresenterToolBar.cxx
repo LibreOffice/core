@@ -299,9 +299,15 @@ namespace {
             const SharedElementMode& rpSelectedMode,
             const SharedElementMode& rpDisabledMode) override;
         virtual void restart() override;
+        virtual bool isPaused() override;
+        virtual void setPauseStatus(const bool pauseStatus) override;
+        virtual TimeValue getPauseTimeValue();
+        virtual void setPauseTimeValue(const TimeValue pauseTime);
     private:
         TimeValue maStartTimeValue;
+        TimeValue pauseTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        bool paused;
         virtual ~PresentationTimeLabel() override;
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
     };
@@ -1778,6 +1784,9 @@ PresentationTimeLabel::PresentationTimeLabel (
       maStartTimeValue()
 {
     restart();
+    setPauseStatus(false);
+    TimeValue pauseTime(0,0);
+    setPauseTimeValue(pauseTime);
     mpToolBar->GetPresenterController()->SetPresentationTime(this);
 }
 
@@ -1785,6 +1794,26 @@ void PresentationTimeLabel::restart()
 {
     maStartTimeValue.Seconds = 0;
     maStartTimeValue.Nanosec = 0;
+}
+
+bool PresentationTimeLabel::isPaused()
+{
+	return paused;
+}
+
+void PresentationTimeLabel::setPauseStatus(const bool pauseStatus)
+{
+	paused = pauseStatus;
+}
+
+TimeValue PresentationTimeLabel::getPauseTimeValue()
+{
+	return pauseTimeValue;
+}
+
+void PresentationTimeLabel::setPauseTimeValue(const TimeValue pauseTime)
+{
+	pauseTimeValue = pauseTime;
 }
 
 void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
@@ -1804,16 +1833,53 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
         maStartTimeValue.Nanosec = 0;
     }
 
+    if(!isPaused())
+	{
+		TimeValue pauseTime = getPauseTimeValue();
+		if(pauseTime.Seconds != 0 || pauseTime.Nanosec != 0)
+		{
+        	maStartTimeValue.Seconds += aCurrentTimeValue.Seconds - pauseTime.Seconds;
+        	if(pauseTime.Nanosec > aCurrentTimeValue.Nanosec)
+        	{
+        		maStartTimeValue.Nanosec += 1000000000 + aCurrentTimeValue.Nanosec - pauseTime.Nanosec;
+        		if(maStartTimeValue.Nanosec >= 1000000000)
+        			maStartTimeValue.Nanosec -= 1000000000;
+        		else
+        			maStartTimeValue.Seconds -= 1;
+        	}
+        	else
+        	{
+        		maStartTimeValue.Nanosec += aCurrentTimeValue.Nanosec - pauseTime.Nanosec;
+        		if(maStartTimeValue.Nanosec >= 1000000000)
+        		{
+        			maStartTimeValue.Nanosec -= 1000000000;
+        			maStartTimeValue.Seconds += 1;
+        		}
+        	}
+
+        	TimeValue pauseTime_(0,0);
+        	setPauseTimeValue(pauseTime_);
+        }    	
+    }
+    else
+	{
+		TimeValue pauseTime = getPauseTimeValue();
+		if(pauseTime.Seconds == 0 && pauseTime.Nanosec == 0)
+		{
+			setPauseTimeValue(aCurrentTimeValue);
+		}
+	}
+
     TimeValue aElapsedTimeValue;
     aElapsedTimeValue.Seconds = aCurrentTimeValue.Seconds - maStartTimeValue.Seconds;
     aElapsedTimeValue.Nanosec = aCurrentTimeValue.Nanosec - maStartTimeValue.Nanosec;
 
     oslDateTime aElapsedDateTime;
-    if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime))
+    if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime) && !isPaused())
     {
-        SetText(TimeFormatter::FormatTime(aElapsedDateTime));
-        Invalidate(false);
-    }
+    	SetText(TimeFormatter::FormatTime(aElapsedDateTime));
+    	Invalidate(false);
+	}
 }
 
 void PresentationTimeLabel::SetModes (
