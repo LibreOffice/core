@@ -21,6 +21,7 @@ namespace weld
 {
 class Window;
 }
+class SdrView;
 class SfxObjectShell;
 
 namespace svx::SignatureLineHelper
@@ -52,6 +53,13 @@ SVX_DLLPUBLIC OUString getLocalizedDate();
  * Interprets rSVG as a graphic and gives back the resuling UNO wrapper.
  */
 SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(const OUString& rSVG);
+
+/**
+ * Sets xCertificate as the signing certificate of the selected shape on pView.
+ */
+SVX_DLLPUBLIC void
+setShapeCertificate(SdrView* pView,
+                    const css::uno::Reference<css::security::XCertificate>& xCertificate);
 }
 
 #endif
