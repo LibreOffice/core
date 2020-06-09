@@ -17,6 +17,9 @@ class tdf131963(UITestCase):
     def test_tdf131963(self):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf131963.docx"))
 
+        document = self.ui_test.get_component()
+        self.assertEqual(11, document.CurrentController.PageCount)
+
         self.xUITest.executeCommand(".uno:SelectAll")
         self.xUITest.executeCommand(".uno:Copy")
         self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
@@ -36,6 +39,9 @@ class tdf131963(UITestCase):
         self.ui_test.close_dialog_through_button(xOkBtn)
 
         # Without the fix in place, it would have crashed here
+
+        # tdf#133169: without the fix in place, it would have been 2 instead of 11
+        self.assertEqual(11, document.CurrentController.PageCount)
 
         self.ui_test.close_doc()
 
