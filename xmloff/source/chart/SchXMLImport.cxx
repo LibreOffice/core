@@ -21,7 +21,6 @@
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
 #include "SchXMLTools.hxx"
-#include <facreg.hxx>
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

@@ -104,7 +104,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/XMLEmbeddedObjectExportFilter \
     xmloff/source/core/XMLEmbeddedObjectImportContext \
     xmloff/source/core/attrlist \
-    xmloff/source/core/facreg \
     xmloff/source/core/i18nmap \
     xmloff/source/core/nmspmap \
     xmloff/source/core/unoatrcn \

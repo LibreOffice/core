@@ -63,7 +63,6 @@
 #include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
-#include <facreg.hxx>
 #include <xmlsdtypes.hxx>
 
 #include <animations.hxx>

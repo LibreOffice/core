@@ -207,7 +207,8 @@
       constructor="XMLVersionListPersistence_get_implementation">
     <service name="com.sun.star.document.DocumentRevisionListPersistence"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"
+      constructor="com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"/>
   </implementation>
   <implementation

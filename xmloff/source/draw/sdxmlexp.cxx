@@ -58,7 +58,6 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include <facreg.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <PropertySetMerger.hxx>
