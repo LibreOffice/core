@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7642c02c_52a578f3",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:05:41Z",
+      "side": 0,
+      "message": "Why remove this?",
+      "range": {
+        "startLine": 115,
+        "startChar": 43,
+        "endLine": 115,
+        "endChar": 59
+      },
+      "revId": "75eeb423196c1e94a0189b7eccff37aed5765853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "363fa5a1_c0f0a7b3",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:05:41Z",
+      "side": 0,
+      "message": "and this?",
+      "revId": "75eeb423196c1e94a0189b7eccff37aed5765853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc206c35_98457a26",
+        "filename": "svx/source/gallery2/gallery1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:05:41Z",
+      "side": 0,
+      "message": "and this",
+      "revId": "75eeb423196c1e94a0189b7eccff37aed5765853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
