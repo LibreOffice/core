@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8526d240_4d390e29",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "I am gonna change it to check on the blur radius at the beginning like you\u0027ve said it\u0027s better.",
+      "parentUuid": "5dd1465d_ec37face",
+      "range": {
+        "startLine": 1082,
+        "startChar": 4,
+        "endLine": 1084,
+        "endChar": 61
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "568ea8e3_ac162d77",
         "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
         "patchSetId": 3
@@ -60,6 +84,30 @@
       "writtenOn": "2020-06-09T07:31:22Z",
       "side": 1,
       "message": "Why not just use 0 in the call to ProcessAndBlurAlphaMask?",
+      "range": {
+        "startLine": 1086,
+        "startChar": 4,
+        "endLine": 1086,
+        "endChar": 34
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c24c4974_f4968ad9",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "I left it as variable just to be known what is passed to the  ProcessAndBlurAlphaMask function, but yes it would be better if I use 0 directly.",
+      "parentUuid": "568ea8e3_ac162d77",
       "range": {
         "startLine": 1086,
         "startChar": 4,
@@ -118,6 +166,54 @@
     },
     {
       "key": {
+        "uuid": "42cc3d5e_08966e77",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "It\u0027s a little bit confusing I will check them both.",
+      "parentUuid": "9150cee3_5529daef",
+      "range": {
+        "startLine": 1103,
+        "startChar": 42,
+        "endLine": 1103,
+        "endChar": 48
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0d649ad_02ab3dec",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "It was more like trial and error. It works well when the passed value is small. I thought it was better to be related to the radius, but I will try to pass 0 and see.",
+      "parentUuid": "043a12d1_0bb17b01",
+      "range": {
+        "startLine": 1103,
+        "startChar": 50,
+        "endLine": 1103,
+        "endChar": 67
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24874281_df91270f",
         "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
         "patchSetId": 3
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "5d395e9a_3a4e1606",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m having an earlier version of the repo before these changes. I will pull the changes and modify my work.",
+      "parentUuid": "24874281_df91270f",
+      "range": {
+        "startLine": 1109,
+        "startChar": 12,
+        "endLine": 1109,
+        "endChar": 73
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2499993c_fb0d7e0a",
         "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
         "patchSetId": 3
@@ -152,6 +272,30 @@
       "writtenOn": "2020-06-09T07:31:22Z",
       "side": 1,
       "message": "Why \"+ 10\"?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 66,
+        "endLine": 1120,
+        "endChar": 71
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8825763c_ba037787",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1002371
+      },
+      "writtenOn": "2020-06-09T23:34:37Z",
+      "side": 1,
+      "message": "when the result is viewed in the draw the shadow shape was cut from right and  bottom in the case when radius is 0, the extra size let the shape to be viewed correctly but I guess if I don\u0027t need to make all of these for the shadow if blur radius was 0 as you said before I will process(rCandidate) and return.",
+      "parentUuid": "2499993c_fb0d7e0a",
       "range": {
         "startLine": 1120,
         "startChar": 66,
