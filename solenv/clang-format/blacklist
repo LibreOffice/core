@@ -17789,7 +17789,6 @@ xmloff/inc/XMLTextColumnsPropertyHandler.hxx
 xmloff/inc/XMLTextHeaderFooterContext.hxx
 xmloff/inc/animationimport.hxx
 xmloff/inc/animimp.hxx
-xmloff/inc/facreg.hxx
 xmloff/inc/fasttokenhandler.hxx
 xmloff/inc/forms/form_handler_factory.hxx
 xmloff/inc/forms/property_handler.hxx
@@ -17881,7 +17880,6 @@ xmloff/source/core/XMLBasicExportFilter.cxx
 xmloff/source/core/XMLEmbeddedObjectExportFilter.cxx
 xmloff/source/core/XMLEmbeddedObjectImportContext.cxx
 xmloff/source/core/attrlist.cxx
-xmloff/source/core/facreg.cxx
 xmloff/source/core/fasttokenhandler.cxx
 xmloff/source/core/i18nmap.cxx
 xmloff/source/core/nmspmap.cxx

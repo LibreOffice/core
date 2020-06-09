@@ -18,7 +18,6 @@
  */
 
 #include "XMLAutoTextEventExport.hxx"
-#include <facreg.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -208,24 +207,13 @@ com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(
         SvXMLExportFlags::ALL | SvXMLExportFlags::OASIS));
 }
 
-// methods to support the component registration
-
-Sequence< OUString > XMLAutoTextEventExportOOO_getSupportedServiceNames()
-    throw()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+com_sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    Sequence<OUString> aSeq { XMLAutoTextEventExportOOO_getImplementationName() };
-    return aSeq;
-}
-
-OUString XMLAutoTextEventExportOOO_getImplementationName() throw()
-{
-    return "com.sun.star.comp.Writer.XMLAutotextEventsExporter";
-}
-
-Reference< XInterface > XMLAutoTextEventExportOOO_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExportOOO_getImplementationName(), SvXMLExportFlags::ALL));
+    return cppu::acquire(new XMLAutoTextEventExport(
+        context, "com.sun.star.comp.Writer.XMLAutotextEventsExporter",
+        SvXMLExportFlags::ALL));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

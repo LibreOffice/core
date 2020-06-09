@@ -197,7 +197,6 @@
 #if PCH_LEVEL >= 4
 #include <PageMasterStyleMap.hxx>
 #include <XMLStringBufferImportContext.hxx>
-#include <facreg.hxx>
 #include <xexptran.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
