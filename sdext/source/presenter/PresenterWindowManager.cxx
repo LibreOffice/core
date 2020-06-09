@@ -67,6 +67,7 @@ PresenterWindowManager::PresenterWindowManager (
       meLayoutMode(LM_Generic),
       mbIsSlideSorterActive(false),
       mbIsHelpViewActive(false),
+      mbisPaused(false),
       maLayoutListeners(),
       mbIsMouseClickPending(false)
 {
@@ -409,6 +410,16 @@ void PresenterWindowManager::SetHelpViewState (bool bIsActive)
         meLayoutMode==LM_Notes,
         mbIsHelpViewActive);
     Layout();
+    NotifyLayoutModeChange();
+}
+
+void PresenterWindowManager::SetPauseState (bool bIsPaused)
+{
+    if (mbisPaused == bIsPaused)
+        return;
+
+    mbisPaused = bIsPaused;
+
     NotifyLayoutModeChange();
 }
 

@@ -90,6 +90,16 @@ namespace {
         rtl::Reference<PresenterController> mpPresenterController;
     };
 
+    class PauseResumeCommand : public Command
+    {
+    public:
+        explicit PauseResumeCommand(const rtl::Reference<PresenterController>& rpPresenterController);
+        virtual void Execute() override;
+        virtual Any GetState() const override;
+    private:
+        rtl::Reference<PresenterController> mpPresenterController;
+    };
+
     /// This command restarts the presentation timer.
     class RestartTimerCommand : public Command
     {
@@ -376,6 +386,8 @@ Command* PresenterProtocolHandler::Dispatch::CreateCommand (
         return new GotoPreviousSlideCommand(rpPresenterController);
     if (rsURLPath == "SwitchMonitor")
         return new SwitchMonitorCommand(rpPresenterController);
+    if (rsURLPath == "PauseResumeTimer")
+        return new PauseResumeCommand(rpPresenterController);
     if (rsURLPath == "RestartTimer")
         return new RestartTimerCommand(rpPresenterController);
     if (rsURLPath == "ShowNotes")
@@ -570,6 +582,56 @@ SwitchMonitorCommand::SwitchMonitorCommand (
 void SwitchMonitorCommand::Execute()
 {
     mpPresenterController->SwitchMonitors();
+}
+
+//===== PauseResumeCommand ==============================================
+
+PauseResumeCommand::PauseResumeCommand (const rtl::Reference<PresenterController>& rpPresenterController)
+: mpPresenterController(rpPresenterController)
+{
+}
+
+void PauseResumeCommand::Execute()
+{
+    if ( ! mpPresenterController.is())
+        return;
+
+    ::rtl::Reference<PresenterWindowManager> pWindowManager (
+        mpPresenterController->GetWindowManager());
+    if ( ! pWindowManager.is())
+        return;
+
+    if (IPresentationTime* pPresentationTime = mpPresenterController->GetPresentationTime())
+    {
+        if(pPresentationTime->isPaused())
+        {
+            pPresentationTime->setPauseStatus(false);
+            pWindowManager->SetPauseState(false);
+        }
+        else
+        {
+            pPresentationTime->setPauseStatus(true);
+            pWindowManager->SetPauseState(true);
+        }
+    }
+}
+
+Any PauseResumeCommand::GetState() const
+{
+    if ( ! mpPresenterController.is())
+        return Any(false);
+
+    ::rtl::Reference<PresenterWindowManager> pWindowManager (
+        mpPresenterController->GetWindowManager());
+    if ( ! pWindowManager.is())
+        return Any(false);
+
+    if (IPresentationTime* pPresentationTime = mpPresenterController->GetPresentationTime())
+    {
+        return Any(pPresentationTime->isPaused());
+    }
+    else
+        return Any(false);
 }
 
 RestartTimerCommand::RestartTimerCommand (const rtl::Reference<PresenterController>& rpPresenterController)
