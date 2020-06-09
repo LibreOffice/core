@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43b4a900_bf553f01",
+        "filename": "include/svx/galbinaryengine.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:03:23Z",
+      "side": 1,
+      "message": "Name of the file should be GalleryBinaryEngine.hxx - no need for cryptic names for new files",
+      "revId": "360699820b3c296e4d01f2474326465c23b3845c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9407507_70f6e907",
+        "filename": "include/svx/galbinaryengine.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:03:23Z",
+      "side": 1,
+      "message": "use #pragma once",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 39
+      },
+      "revId": "360699820b3c296e4d01f2474326465c23b3845c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "938ea741_4a3c1e62",
+        "filename": "include/svx/galbinaryengine.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:03:23Z",
+      "side": 1,
+      "message": "This surely isn\u0027t needed..",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "360699820b3c296e4d01f2474326465c23b3845c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ac9bd1_e09c9ca8",
+        "filename": "svx/source/gallery2/galbinaryengine.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-09T14:03:23Z",
+      "side": 1,
+      "message": "GalleryBinaryEngine.hxx",
+      "range": {
+        "startLine": 20,
+        "startChar": 14,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "360699820b3c296e4d01f2474326465c23b3845c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
