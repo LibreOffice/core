@@ -83,6 +83,7 @@ public:
 
     void SetSlideSorterState (bool bIsActive);
     void SetHelpViewState (bool bIsActive);
+    void SetPauseState (bool bIsPaused);
 
     enum LayoutMode { LM_Standard, LM_Notes, LM_Generic };
 private:
@@ -163,6 +164,7 @@ private:
     LayoutMode meLayoutMode;
     bool mbIsSlideSorterActive;
     bool mbIsHelpViewActive;
+    bool mbisPaused;
     typedef ::std::vector<css::uno::Reference<css::document::XEventListener> >
         LayoutListenerContainer;
     LayoutListenerContainer maLayoutListeners;
