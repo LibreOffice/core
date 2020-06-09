@@ -63,6 +63,8 @@ class IPresentationTime
 {
 public:
     virtual void restart() = 0;
+    virtual bool isPaused() = 0;
+    virtual void setPauseStatus(const bool pauseStatus) = 0;
     virtual ~IPresentationTime();
 };
 
