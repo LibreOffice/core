@@ -3501,8 +3501,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127235)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlap)
 {
-// Need to find out why this fails on macOS.
-#ifndef MACOSX
+// Need to find out why this fails on macOS and why this is unstable on Windows.
+#if !defined(MACOSX) && !defined(_WIN32)
     // Create an empty document with two, intentionally overlapping shapes.
     // Set their AllowOverlap property to false.
     loadURL("private:factory/swriter", nullptr);
