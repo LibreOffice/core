@@ -3200,7 +3200,7 @@ private:
     DECL_LINK(CustomMeasureHdl, svtree_measure_args, Size);
 
     // Each row has a cell for the expander image, (and an optional cell for a
-    // checkbutton if enable_toggle_buttons has been called) which preceed
+    // checkbutton if enable_toggle_buttons has been called) which precede
     // index 0
     int to_internal_model(int col) const
     {

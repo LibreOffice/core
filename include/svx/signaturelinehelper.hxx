@@ -50,7 +50,7 @@ getSignerName(const css::uno::Reference<css::security::XCertificate>& xCertifica
 SVX_DLLPUBLIC OUString getLocalizedDate();
 
 /**
- * Interprets rSVG as a graphic and gives back the resuling UNO wrapper.
+ * Interprets rSVG as a graphic and gives back the resulting UNO wrapper.
  */
 SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(const OUString& rSVG);
 

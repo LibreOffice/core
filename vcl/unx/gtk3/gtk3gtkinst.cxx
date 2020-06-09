@@ -9544,7 +9544,7 @@ private:
     // The outside concept of a column maps to a gtk CellRenderer, rather than
     // a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
     // and/or a leading Image Renderer, those are considered special expander
-    // columns and preceed index 0 and can be accessed via outside index -1
+    // columns and precede index 0 and can be accessed via outside index -1
     int to_external_model(int modelcol) const
     {
         if (m_nExpanderToggleCol != -1)
@@ -9815,7 +9815,7 @@ public:
         /* The outside concept of a column maps to a gtk CellRenderer, rather than
            a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
            and/or a leading Image Renderer, those are considered special expander
-           columns and preceed index 0 and can be accessed via outside index -1
+           columns and precede index 0 and can be accessed via outside index -1
         */
         m_pColumns = gtk_tree_view_get_columns(m_pTreeView);
         int nIndex(0);
