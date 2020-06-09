@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "491a5587_7551b6fc",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "This block is only useful if rCandidate.getShadowBlur() \u003e 0. So possibly it makes sense to move this calculation below, after line 1097.",
+      "range": {
+        "startLine": 1082,
+        "startChar": 4,
+        "endLine": 1084,
+        "endChar": 61
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "568ea8e3_ac162d77",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "Why not just use 0 in the call to ProcessAndBlurAlphaMask?",
+      "range": {
+        "startLine": 1086,
+        "startChar": 4,
+        "endLine": 1086,
+        "endChar": 34
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "043a12d1_0bb17b01",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "What is the reason to dilate the mask by 1/100th of blur radius? It will likely be almost unnoticeable, but incur significant overhead. I\u0027d suggest to pass 0 here, if there\u0027s no reason to do otherwise.",
+      "range": {
+        "startLine": 1103,
+        "startChar": 50,
+        "endLine": 1103,
+        "endChar": 67
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9150cee3_5529daef",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "Note that ProcessAndBlurAlphaMask (starting at ln 933 above) takes the bitmap you pass to it, and treats its full-white pixels as transparent, other pixels as opaque; the idea is that *transparency* mask is passed there, and fully transparent pixels are \"white\", other transparency levels are not considered transparent by blur algorithm.\n\nBut you are passing not a transparency mask to the function, but resulting opaque image itself. White areas of the image would be treated as transparent (even if they are not transparent originally).\n\nOf course, it might look a bit confusing if you look at original commit(s) that created one of blurring effects (either glow or soft edge); but the implementation had evolved over time, and finally made use of proper transparency - see https://gerrit.libreoffice.org/c/core/+/95034 and https://gerrit.libreoffice.org/c/core/+/95051.",
+      "range": {
+        "startLine": 1103,
+        "startChar": 42,
+        "endLine": 1103,
+        "endChar": 48
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24874281_df91270f",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "This comment looks like copied from an older commit, where it made sense because ProcessAndBlurAlphaMask used to return a mask with possibly different dimensions. Since then, https://gerrit.libreoffice.org/c/core/+/95021 had changed that, and now ProcessAndBlurAlphaMask returns the mask having the same dimensions as original passed image.",
+      "range": {
+        "startLine": 1109,
+        "startChar": 12,
+        "endLine": 1109,
+        "endChar": 73
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2499993c_fb0d7e0a",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T07:31:22Z",
+      "side": 1,
+      "message": "Why \"+ 10\"?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 66,
+        "endLine": 1120,
+        "endChar": 71
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
