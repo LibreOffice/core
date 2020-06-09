@@ -85,14 +85,14 @@ namespace slideshow::internal
         };
 
         // A hash map which maps a XShape to the corresponding vector of initial properties
-        typedef std::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
+        typedef std::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeToNamedValuesMap;
 
 
         class NodeFunctor
         {
         public:
             explicit NodeFunctor(
-                XShapeHash& rShapeHash,
+                XShapeToNamedValuesMap& rShapeHash,
                 bool bInitial )
             :   mrShapeHash( rShapeHash ),
                 mxTargetShape(),
@@ -101,7 +101,7 @@ namespace slideshow::internal
             {
             }
 
-            NodeFunctor( XShapeHash&                                rShapeHash,
+            NodeFunctor( XShapeToNamedValuesMap&                    rShapeHash,
                          const uno::Reference< drawing::XShape >&   rTargetShape,
                          sal_Int16                                  nParagraphIndex,
                          bool                                       bInitial) :
@@ -307,7 +307,7 @@ namespace slideshow::internal
             }
 
         private:
-            XShapeHash&                         mrShapeHash;
+            XShapeToNamedValuesMap&             mrShapeHash;
             uno::Reference< drawing::XShape >   mxTargetShape;
             sal_Int16                           mnParagraphIndex;
 
@@ -324,7 +324,7 @@ namespace slideshow::internal
     {
         // scan all nodes for visibility changes, and record first
         // 'visibility=true' for each shape
-        XShapeHash aShapeHash( 101 );
+        XShapeToNamedValuesMap aShapeHash( 101 );
 
         NodeFunctor aFunctor(
             aShapeHash,
