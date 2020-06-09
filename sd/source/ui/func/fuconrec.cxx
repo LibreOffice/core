@@ -59,6 +59,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/signaturelinehelper.hxx>
 
 #include <sdresid.hxx>
 #include <View.hxx>
@@ -430,28 +431,6 @@ void FuConstructRectangle::Activate()
 
 void FuConstructRectangle::Deactivate()
 {
-    if (nSlotId == SID_INSERT_SIGNATURELINE)
-    {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        if (rMarkList.GetMarkCount() > 0)
-        {
-            // Avoid the default solid fill and line, we'll set a graphic instead.
-            const SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObject = pMark->GetMarkedSdrObj();
-            SfxItemSet aSet = pObject->GetMergedItemSet();
-
-            XFillStyleItem aFillStyleItem(aSet.Get(XATTR_FILLSTYLE));
-            aFillStyleItem.SetValue(drawing::FillStyle_NONE);
-            aSet.Put(aFillStyleItem);
-
-            XLineStyleItem aLineStyleItem(aSet.Get(XATTR_LINESTYLE));
-            aLineStyleItem.SetValue(drawing::LineStyle_NONE);
-            aSet.Put(aLineStyleItem);
-
-            pObject->SetMergedItemSet(aSet);
-        }
-    }
-
     if( nSlotId == SID_TOOL_CONNECTOR               ||
         nSlotId == SID_CONNECTOR_ARROW_START        ||
         nSlotId == SID_CONNECTOR_ARROW_END          ||
@@ -491,6 +470,27 @@ void FuConstructRectangle::Deactivate()
         mpView->SetGlueVisible( false );
     }
     FuConstruct::Deactivate();
+
+    if (nSlotId != SID_INSERT_SIGNATURELINE)
+    {
+        return;
+    }
+
+    // Finished drawing a signature rectangle, now set it up.
+    if (!mpViewShell)
+    {
+        return;
+    }
+
+    uno::Reference<security::XCertificate> xCertificate
+        = svx::SignatureLineHelper::getSignatureCertificate(mpViewShell->GetObjectShell(),
+                mpViewShell->GetFrameWeld());
+    if (!xCertificate.is())
+    {
+        return;
+    }
+
+    svx::SignatureLineHelper::setShapeCertificate(mpView, xCertificate);
 }
 
 namespace {
@@ -620,6 +620,12 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             // Leave it to the defaults
             break;
         }
+    }
+    else if (nSlotId == SID_INSERT_SIGNATURELINE)
+    {
+        // Avoid the default solid fill and line, we'll set a graphic instead.
+        rAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
+        rAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     }
 }
 
