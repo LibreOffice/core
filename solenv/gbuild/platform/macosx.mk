@@ -266,10 +266,7 @@ gb_CppunitTest_malloc_check := MallocScribble=1 MallocPreScribble=1
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
-endef
 
-define gb_CppunitTest_postprocess
-$(SRCDIR)/solenv/bin/lldb-core-bt.sh $(1) $(2) $(3)
 endef
 
 # JunitTest class
