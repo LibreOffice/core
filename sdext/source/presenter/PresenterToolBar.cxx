@@ -130,7 +130,8 @@ namespace {
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
-            const SharedElementMode& rpDisabledMode);
+            const SharedElementMode& rpDisabledMode,
+            const SharedElementMode& rpMouseOverSelectedMode);
         void CurrentSlideHasChanged();
         void SetLocation (const awt::Point& rLocation);
         void SetSize (const geometry::RealSize2D& rSize);
@@ -166,6 +167,7 @@ namespace {
         SharedElementMode mpMouseOver;
         SharedElementMode mpSelected;
         SharedElementMode mpDisabled;
+        SharedElementMode mpMouseOverSelected;
         SharedElementMode mpMode;
         bool mbIsOver;
         bool mbIsPressed;
@@ -281,7 +283,8 @@ namespace {
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
-            const SharedElementMode& rpDisabledMode) override;
+            const SharedElementMode& rpDisabledMode,
+            const SharedElementMode& rpMouseOverSelectedMode) override;
     private:
         CurrentTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~CurrentTimeLabel() override;
@@ -297,11 +300,18 @@ namespace {
             const SharedElementMode& rpNormalMode,
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
-            const SharedElementMode& rpDisabledMode) override;
+            const SharedElementMode& rpDisabledMode,
+            const SharedElementMode& rpMouseOverSelectedMode) override;
         virtual void restart() override;
+        virtual bool isPaused() override;
+        virtual void setPauseStatus(const bool pauseStatus) override;
+        virtual TimeValue getPauseTimeValue();
+        virtual void setPauseTimeValue(const TimeValue pauseTime);
     private:
         TimeValue maStartTimeValue;
+        TimeValue pauseTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        bool paused;
         virtual ~PresentationTimeLabel() override;
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
     };
@@ -628,10 +638,12 @@ void PresenterToolBar::ProcessEntry (
     SharedElementMode pMouseOverMode = std::make_shared<ElementMode>();
     SharedElementMode pSelectedMode = std::make_shared<ElementMode>();
     SharedElementMode pDisabledMode = std::make_shared<ElementMode>();
+    SharedElementMode pMouseOverSelectedMode = std::make_shared<ElementMode>();
     pNormalMode->ReadElementMode(rxProperties, "Normal", pNormalMode, rContext);
     pMouseOverMode->ReadElementMode(rxProperties, "MouseOver", pNormalMode, rContext);
     pSelectedMode->ReadElementMode(rxProperties, "Selected", pNormalMode, rContext);
     pDisabledMode->ReadElementMode(rxProperties, "Disabled", pNormalMode, rContext);
+    pMouseOverSelectedMode->ReadElementMode(rxProperties, "MouseOverSelected", pSelectedMode, rContext);
 
     // Create new element.
     ::rtl::Reference<Element> pElement;
@@ -655,7 +667,7 @@ void PresenterToolBar::ProcessEntry (
     }
     if (pElement.is())
     {
-        pElement->SetModes( pNormalMode, pMouseOverMode, pSelectedMode, pDisabledMode);
+        pElement->SetModes( pNormalMode, pMouseOverMode, pSelectedMode, pDisabledMode, pMouseOverSelectedMode);
         pElement->UpdateState();
         if (mpCurrentContainerPart)
             mpCurrentContainerPart->push_back(pElement);
@@ -1130,6 +1142,7 @@ Element::Element (
       mpMouseOver(),
       mpSelected(),
       mpDisabled(),
+      mpMouseOverSelected(),
       mpMode(),
       mbIsOver(false),
       mbIsPressed(false),
@@ -1147,12 +1160,14 @@ void Element::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
     const SharedElementMode& rpSelectedMode,
-    const SharedElementMode& rpDisabledMode)
+    const SharedElementMode& rpDisabledMode,
+    const SharedElementMode& rpMouseOverSelectedMode)
 {
     mpNormal = rpNormalMode;
     mpMouseOver = rpMouseOverMode;
     mpSelected = rpSelectedMode;
     mpDisabled = rpDisabledMode;
+    mpMouseOverSelected = rpMouseOverSelectedMode;
     mpMode = rpNormalMode;
 }
 
@@ -1201,6 +1216,8 @@ bool Element::SetState (
     // When the element is selected then ignore mouse over.
     if ( ! mbIsEnabled)
         mpMode = mpDisabled;
+    else if (mbIsSelected && mbIsOver)
+        mpMode = mpMouseOverSelected;
     else if (mbIsSelected)
         mpMode = mpSelected;
     else if (mbIsOver)
@@ -1751,9 +1768,10 @@ void CurrentTimeLabel::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
     const SharedElementMode& rpSelectedMode,
-    const SharedElementMode& rpDisabledMode)
+    const SharedElementMode& rpDisabledMode,
+    const SharedElementMode& rpMouseOverSelectedMode)
 {
-    TimeLabel::SetModes(rpNormalMode, rpMouseOverMode, rpSelectedMode, rpDisabledMode);
+    TimeLabel::SetModes(rpNormalMode, rpMouseOverMode, rpSelectedMode, rpDisabledMode, rpMouseOverSelectedMode);
     SetText(TimeFormatter::FormatTime(PresenterClockTimer::GetCurrentTime()));
 }
 
@@ -1778,13 +1796,39 @@ PresentationTimeLabel::PresentationTimeLabel (
       maStartTimeValue()
 {
     restart();
+    setPauseStatus(false);
+    TimeValue pauseTime(0,0);
+    setPauseTimeValue(pauseTime);
     mpToolBar->GetPresenterController()->SetPresentationTime(this);
 }
 
 void PresentationTimeLabel::restart()
 {
+    TimeValue pauseTime(0, 0);
+    setPauseTimeValue(pauseTime);
     maStartTimeValue.Seconds = 0;
     maStartTimeValue.Nanosec = 0;
+}
+
+bool PresentationTimeLabel::isPaused()
+{
+	return paused;
+}
+
+void PresentationTimeLabel::setPauseStatus(const bool pauseStatus)
+{
+	paused = pauseStatus;
+}
+
+TimeValue PresentationTimeLabel::getPauseTimeValue()
+{
+	return pauseTimeValue;
+}
+
+void PresentationTimeLabel::setPauseTimeValue(const TimeValue pauseTime)
+{
+    //store the time at which the presentation was paused
+	pauseTimeValue = pauseTime;
 }
 
 void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
@@ -1804,12 +1848,52 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
         maStartTimeValue.Nanosec = 0;
     }
 
+    //The start time value is incremented by the amount of time
+    //the presentation was paused for in order to continue the
+    //timer from the same position
+    if(!isPaused())
+	{
+		TimeValue pauseTime = getPauseTimeValue();
+		if(pauseTime.Seconds != 0 || pauseTime.Nanosec != 0)
+		{
+            TimeValue incrementValue(0, 0);
+            incrementValue.Seconds = aCurrentTimeValue.Seconds - pauseTime.Seconds;
+            if(pauseTime.Nanosec > aCurrentTimeValue.Nanosec)
+            {
+                incrementValue.Nanosec = 1000000000 + aCurrentTimeValue.Nanosec - pauseTime.Nanosec;
+            }
+            else
+            {
+                incrementValue.Nanosec = aCurrentTimeValue.Nanosec - pauseTime.Nanosec;
+            }
+
+            maStartTimeValue.Seconds += incrementValue.Seconds;
+            maStartTimeValue.Nanosec += incrementValue.Nanosec;
+            if(maStartTimeValue.Nanosec >= 1000000000)
+            {
+                maStartTimeValue.Seconds += 1;
+                maStartTimeValue.Nanosec -= 1000000000;
+            }
+
+            TimeValue pauseTime_(0, 0);
+            setPauseTimeValue(pauseTime_);
+        }    	
+    }
+    else
+    {
+        TimeValue pauseTime = getPauseTimeValue();
+        if(pauseTime.Seconds == 0 && pauseTime.Nanosec == 0)
+        {
+            setPauseTimeValue(aCurrentTimeValue);
+        }
+    }
+
     TimeValue aElapsedTimeValue;
     aElapsedTimeValue.Seconds = aCurrentTimeValue.Seconds - maStartTimeValue.Seconds;
     aElapsedTimeValue.Nanosec = aCurrentTimeValue.Nanosec - maStartTimeValue.Nanosec;
 
     oslDateTime aElapsedDateTime;
-    if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime))
+    if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime) && !isPaused())
     {
         SetText(TimeFormatter::FormatTime(aElapsedDateTime));
         Invalidate(false);
@@ -1820,9 +1904,10 @@ void PresentationTimeLabel::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
     const SharedElementMode& rpSelectedMode,
-    const SharedElementMode& rpDisabledMode)
+    const SharedElementMode& rpDisabledMode,
+    const SharedElementMode& rpMouseOverSelectedMode)
 {
-    TimeLabel::SetModes(rpNormalMode, rpMouseOverMode, rpSelectedMode, rpDisabledMode);
+    TimeLabel::SetModes(rpNormalMode, rpMouseOverMode, rpSelectedMode, rpDisabledMode, rpMouseOverSelectedMode);
 
     oslDateTime aStartDateTime;
     if (osl_getDateTimeFromTimeValue(&maStartTimeValue, &aStartDateTime))
