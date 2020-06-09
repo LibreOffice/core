@@ -183,7 +183,11 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
         // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) || (rNEvt.GetType() == MouseNotifyEvent::KEYUP) )
         {
-            if (ImplIsOverlapWindow() || parentNotDialogControl(this))
+            // ScGridWindow has WB_DIALOGCONTROL set, so pressing tab in ScCheckListMenuControl won't
+            // get processed here by the toplevel DockingWindow of ScCheckListMenuControl by
+            // just checking if parentNotDialogControl is true
+            bool bTopLevelFloatingWindow = (pWrapper && pWrapper->IsFloatingMode());
+            if (ImplIsOverlapWindow() || parentNotDialogControl(this) || bTopLevelFloatingWindow)
             {
                 bRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
             }
