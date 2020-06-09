@@ -100,6 +100,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="searchresults|sheet">Sheet</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer1"/>
                       <attributes>
@@ -113,6 +114,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="searchresults|cell">Cell</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer2"/>
                       <attributes>
@@ -126,6 +128,7 @@
                     <property name="resizable">True</property>
                     <property name="spacing">6</property>
                     <property name="title" translatable="yes" context="searchresults|content">Content</property>
+                    <property name="clickable">True</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderer3"/>
                       <attributes>
