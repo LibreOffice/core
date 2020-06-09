@@ -1443,6 +1443,25 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
             }
         }
+        // Paragraph style based right paragraph indentation affects not paragraph style based lists in DOCX.
+        // Apply it as direct formatting, also left and first line indentation of numbering to keep them.
+        else if (isNumberingViaRule)
+        {
+            uno::Any aRightMargin = GetPropertyFromParaStyleSheet(PROP_PARA_RIGHT_MARGIN);
+            if ( aRightMargin != uno::Any() )
+            {
+                pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, aRightMargin, /*bOverwrite=*/false);
+
+                sal_Int32 nListId2(static_cast<ParagraphPropertyMap*>(pPropertyMap.get())->GetListId());
+
+                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId2, nListLevel, "FirstLineIndent");
+                const sal_Int32 nParaLeftMargin  = getNumberingProperty(nListId2, nListLevel, "IndentAt");
+                if (nFirstLineIndent != 0)
+                    pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(nFirstLineIndent), /*bOverwrite=*/false);
+                if (nParaLeftMargin != 0)
+                    pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
+            }
+        }
     }
 
     // apply AutoSpacing: it has priority over all other margin settings
