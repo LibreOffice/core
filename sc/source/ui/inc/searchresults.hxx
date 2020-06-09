@@ -24,11 +24,13 @@ class SearchResultsDlg : public SfxDialogController
     OUString aSkipped;
     SfxBindings* mpBindings;
     ScDocument* mpDoc;
+    bool mbSorted;
     std::unique_ptr<weld::TreeView> mxList;
     std::unique_ptr<weld::Label> mxSearchResults;
     std::unique_ptr<weld::CheckButton> mxShowDialog;
 
     DECL_LINK(ListSelectHdl, weld::TreeView&, void);
+    DECL_LINK(HeaderBarClick, int, void);
     DECL_STATIC_LINK(SearchResultsDlg, OnShowToggled, weld::ToggleButton&, void);
 public:
     SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParent);
