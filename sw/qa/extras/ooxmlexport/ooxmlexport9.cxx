@@ -374,6 +374,20 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118812, "tdf118812_tableStyles-compre
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:color", "val", "AAAA00");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc/w:p/w:r[2]/w:rPr/w:sz", "val", "16");
+
+    // tdf#131070 keep paragraph style based right indentation with indentation of direct numbering
+    // cell A7 - This was <w:ind w:start="1440" w:hanging="0"/>
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[7]/w:tc/w:p/w:pPr/w:ind", 0);
+    // cell A8
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "start", "714");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "end", "1701");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc/w:p/w:pPr/w:ind", "hanging", "357");
+    // cell A9
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "end", "1440");
+    // This was 1440
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "start", "720");
+    // This was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc/w:p/w:pPr/w:ind", "hanging", "360");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107626, "tdf107626.odt")
