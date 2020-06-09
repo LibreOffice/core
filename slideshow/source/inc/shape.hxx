@@ -52,7 +52,7 @@ namespace slideshow
         class Shape
         {
         public:
-            Shape() = default;
+            Shape() : mbIsForeground(true) {}
             virtual ~Shape() {}
             Shape(const Shape&) = delete;
             Shape& operator=(const Shape&) = delete;
@@ -204,6 +204,24 @@ namespace slideshow
              */
             virtual bool isBackgroundDetached() const = 0;
 
+            /** Check whether the shape belongs to the foreground
+
+                For instance, if the shape is in the master slide
+                it does not belong to the foreground.
+
+               @return true if the shape is on the foreground
+             */
+            virtual bool isForeground() const { return mbIsForeground; };
+
+            /**
+               Set the flag that holds wheter the shape is
+               in the foreground or not
+
+               @param bIsForeground
+               Shape is on the foreground
+             */
+            virtual void setIsForeground( const bool bIsForeground ) { mbIsForeground = bIsForeground; };
+
             // Misc
 
 
@@ -247,6 +265,14 @@ namespace slideshow
                 }
 
             };
+
+        private:
+            /** Flag to check whether the shape belongs to the foreground.
+
+                For instance, it is false if the shape belongs to the master slide or
+                a group shape.
+             */
+            bool mbIsForeground;
         };
 
         /** A set which contains all shapes in an ordered fashion.
