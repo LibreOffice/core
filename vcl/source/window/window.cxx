@@ -252,7 +252,7 @@ void Window::dispose()
         ReleaseMouse();
 
 #if OSL_DEBUG_LEVEL > 0
-    if ( true ) // always perform these tests in debug builds
+    // always perform these tests in debug builds
     {
         OStringBuffer aErrorStr;
         bool        bError = false;
