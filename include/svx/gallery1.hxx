@@ -35,32 +35,20 @@ class GalleryThemeEntry
 private:
 
     OUString                aName;
-    INetURLObject           aThmURL;
-    INetURLObject           aSdgURL;
-    INetURLObject           aSdvURL;
-    INetURLObject           aStrURL;
     sal_uInt32              nId;
-    bool                    bReadOnly;
     bool                    bModified;
+    bool                    bReadOnly;
     bool                    bThemeNameFromResource;
 
-    static INetURLObject    ImplGetURLIgnoreCase( const INetURLObject& rURL );
-
 public:
-                            GalleryThemeEntry( bool bCreateUniqueURL,
-                                               const INetURLObject& rBaseURL,
-                                               const OUString& rName,
-                                               bool bReadOnly, bool bNewFile,
-                                               sal_uInt32 nId, bool bThemeNameFromResource );
+
+                            GalleryThemeEntry(
+                                            const OUString& rName,
+                                            bool bReadOnly, bool _bNewFile,
+                                            sal_uInt32 nId,
+                                            bool bThemeNameFromResource);
 
     const OUString&         GetThemeName() const { return aName; }
-
-    const INetURLObject&    GetThmURL() const { return aThmURL; }
-    const INetURLObject&    GetSdgURL() const { return aSdgURL; }
-    const INetURLObject&    GetSdvURL() const { return aSdvURL; }
-    const INetURLObject&    GetStrURL() const { return aStrURL; }
-
-    OUString                ReadStrFromIni(const OUString &aKeyName );
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;

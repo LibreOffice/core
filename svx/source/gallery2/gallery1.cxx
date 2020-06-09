@@ -41,6 +41,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
+#include <svx/galbinaryengine.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -112,45 +113,16 @@ const std::pair<sal_uInt16, const char*> aLocalized[] =
     { RID_GALLERY_THEME_TXTSHAPES, RID_GALLERYSTR_THEME_TXTSHAPES }
 };
 
-GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
-                                      const INetURLObject& rBaseURL, const OUString& rName,
-                                      bool _bReadOnly, bool _bNewFile,
-                                      sal_uInt32 _nId, bool _bThemeNameFromResource ) :
-        nId                     ( _nId ),
-        bReadOnly               ( _bReadOnly ),
-        bThemeNameFromResource  ( _bThemeNameFromResource )
+GalleryThemeEntry::GalleryThemeEntry(const OUString& rName,
+                                        bool bReadOnly, bool _bNewFile,
+                                        sal_uInt32 nId, bool bThemeNameFromResource) :
+                                    nId                     ( _nId ),
+                                    bReadOnly               ( _bReadOnly ),
+                                    bThemeNameFromResource  ( _bThemeNameFromResource )
 {
-    INetURLObject aURL( rBaseURL );
-    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-
-    if (bCreateUniqueURL)
-    {
-        INetURLObject aBaseNoCase( ImplGetURLIgnoreCase( rBaseURL ) );
-        aURL = aBaseNoCase;
-        static sal_Int32 nIdx = 0;
-        while( FileExists( aURL, "thm" ) )
-        { // create new URLs
-            nIdx++;
-            aURL = aBaseNoCase;
-            aURL.setName( aURL.getName() + OUString::number(nIdx));
-        }
-    }
-
-    aURL.setExtension( "thm" );
-    aThmURL = ImplGetURLIgnoreCase( aURL );
-
-    aURL.setExtension( "sdg" );
-    aSdgURL = ImplGetURLIgnoreCase( aURL );
-
-    aURL.setExtension( "sdv" );
-    aSdvURL = ImplGetURLIgnoreCase( aURL );
-
-    aURL.setExtension( "str" );
-    aStrURL = ImplGetURLIgnoreCase( aURL );
-
     SetModified( _bNewFile );
 
-    aName = ReadStrFromIni( "name" );
+    aName = GalleryBinaryEngine::ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -191,26 +163,6 @@ void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
         rListBox.append_text(SvxResId(aLocalized[i].second));
-}
-
-INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )
-{
-    INetURLObject   aURL( rURL );
-
-    // check original file name
-    if( !FileExists( aURL ) )
-    {
-        // check upper case file name
-        aURL.setName( aURL.getName().toAsciiUpperCase() );
-
-        if(!FileExists( aURL ) )
-        {
-            // check lower case file name
-            aURL.setName( aURL.getName().toAsciiLowerCase() );
-        }
-    }
-
-    return aURL;
 }
 
 void GalleryThemeEntry::SetName( const OUString& rNewName )
