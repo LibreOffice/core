@@ -104,7 +104,10 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsAscending(true),
     bFilterConditionSourceRange(false),
     bHasHeader(true),
-    bByRow(false),
+// bs-edit: test changed preset of orientation for databaseranges
+// bs-edit: original was:     bByRow(false),
+// bs-edit: next line test:
+    bByRow(true),
     meRangeType(ScDBCollection::GlobalNamed)
 {
     if( rAttrList.is() )
