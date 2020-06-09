@@ -1224,6 +1224,24 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121597TrackedDeletionOfMultipleParagr
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133643, "tdf133643.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[1]", "val", "Bourgoin-Jallieu, ");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[2]", "val", "Fontaine, ");
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:instrText", " FORMDROPDOWN ");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
+
+    // Without the fix in place, this w:r wouldn't exist
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[6]/w:t", "le 22 fevrier 2013");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
