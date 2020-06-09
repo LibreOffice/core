@@ -5833,6 +5833,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     SCROW nStartRowDiff = 0;
     SCROW nEndRowDiff = 0;
     bool bRangeReduce = false;
+    ScRange aMainRange;
 
     // Range-reduce optimization
     if (nParamCount % 2) // Not COUNTIFS
@@ -5856,7 +5857,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
             if (!pRefData->IsDeleted())
             {
-                ScRange aMainRange, aSubRange;
+                ScRange aSubRange;
                 DoubleRefToRange( *pRefData, aMainRange);
 
                 if (aMainRange.aStart.Tab() == aMainRange.aEnd.Tab())
@@ -6060,6 +6061,13 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
             if (bRangeReduce)
             {
+                // All reference ranges must be of the same size as the main range.
+                if( aMainRange.aEnd.Col() - aMainRange.aStart.Col() != nCol2 - nCol1
+                    || aMainRange.aEnd.Row() - aMainRange.aStart.Row() != nRow2 - nRow1)
+                {
+                    PushError ( FormulaError::IllegalArgument);
+                    return;
+                }
                 nCol1 += nStartColDiff;
                 nRow1 += nStartRowDiff;
 
