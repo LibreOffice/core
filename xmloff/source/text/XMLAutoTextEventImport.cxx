@@ -23,7 +23,6 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <facreg.hxx>
 #include "XMLAutoTextContainerEventImport.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
