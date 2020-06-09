@@ -981,7 +981,10 @@ bool SlideImpl::loadShapes()
                     ShapeSharedPtr const& rShape(
                         aMPShapesFunctor.importShape() );
                     if( rShape )
+                    {
+                        rShape->setIsForeground(false);
                         mpLayerManager->addShape( rShape );
+                    }
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
