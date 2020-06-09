@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5dd1465d_ec37face",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-09T09:12:37Z",
+      "side": 1,
+      "message": "Or maybe even just keep the default processing for \"if (rCandidate.getShadowBlur() \u003d\u003d 0)\" - so right in the very beginning, in that case just do \"process(rCandidate)\" and return, and only deal with (rCandidate.getShadowBlur() \u003e 0) case below.",
+      "parentUuid": "491a5587_7551b6fc",
+      "range": {
+        "startLine": 1082,
+        "startChar": 4,
+        "endLine": 1084,
+        "endChar": 61
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "568ea8e3_ac162d77",
         "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
         "patchSetId": 3
