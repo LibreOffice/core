@@ -638,7 +638,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         // If NWF renders the focus rects itself, that breaks double-buffering.
         mpAutoFilterPopup->RequestDoubleBuffering(true);
 
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
     if (bLOKActive)
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
