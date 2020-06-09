@@ -1110,8 +1110,15 @@ void HeaderBar::Clear()
 
 void HeaderBar::SetOffset( long nNewOffset )
 {
+    // tdf#129856 (see also #i40393#) invalidate old left and right border area if WB_BORDER was set in ImplInit()
+    if (mnBorderOff1 && mnBorderOff2)
+    {
+        Invalidate(tools::Rectangle(0, 0, 1, mnDY));
+        Invalidate(tools::Rectangle(mnDX - 1, 0, mnDX, mnDY));
+    }
+
     // move area
-    tools::Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
+    tools::Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2 );
     long nDelta = mnOffset-nNewOffset;
     mnOffset = nNewOffset;
     Scroll( nDelta, 0, aRect );
