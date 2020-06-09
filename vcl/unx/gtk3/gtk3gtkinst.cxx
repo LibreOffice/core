@@ -7415,6 +7415,15 @@ public:
         {
             GtkWidget* pPlaceHolder = gtk_popover_new(GTK_WIDGET(m_pMenuButton));
             gtk_popover_set_transitions_enabled(GTK_POPOVER(pPlaceHolder), false);
+
+            // tdf#132540 theme the unwanted popover into invisibility
+            GtkStyleContext *pPopoverContext = gtk_widget_get_style_context(pPlaceHolder);
+            GtkCssProvider *pProvider = gtk_css_provider_new();
+            static const gchar data[] = "popover { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
+            gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
+            gtk_style_context_add_provider(pPopoverContext, GTK_STYLE_PROVIDER(pProvider),
+                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
             gtk_menu_button_set_popover(m_pMenuButton, pPlaceHolder);
         }
         else
