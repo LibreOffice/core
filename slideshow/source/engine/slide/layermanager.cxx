@@ -302,7 +302,7 @@ namespace slideshow::internal
         {
             ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
 
-            const XShapeHash::const_iterator aIter( maXShapeHash.find( xShape ));
+            const XShapeToShapeMap::const_iterator aIter( maXShapeHash.find( xShape ));
             if( aIter == maXShapeHash.end() )
                 return ShapeSharedPtr(); // not found
 
@@ -339,6 +339,11 @@ namespace slideshow::internal
             }
 
             return pSubset;
+        }
+
+        const XShapeToShapeMap& LayerManager::getXShapeToShapeMap() const
+        {
+            return maXShapeHash;
         }
 
         void LayerManager::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,

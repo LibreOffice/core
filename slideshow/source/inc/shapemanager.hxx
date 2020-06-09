@@ -23,6 +23,8 @@
 #include "disposable.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#include <unordered_map>
+#include "tools.hxx"
 
 namespace com::sun::star::drawing { class XShape; }
 
@@ -35,6 +37,11 @@ namespace slideshow
         class HyperlinkArea;
         class AnimatableShape;
         class Shape;
+        typedef std::unordered_map<
+              css::uno::Reference< css::drawing::XShape >,
+              ShapeSharedPtr,
+              hash< css::uno::Reference< css::drawing::XShape > >
+            > XShapeToShapeMap;
         typedef ::std::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
         typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
         typedef std::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
@@ -91,6 +98,13 @@ namespace slideshow
              */
             virtual ShapeSharedPtr lookupShape(
                 css::uno::Reference< css::drawing::XShape > const & xShape ) const = 0;
+
+            /** Get a map that maps all Shapes with their XShape reference as the key
+             *
+             *  @return an unordered map that contains all shapes in the
+             *  current page with their XShape reference as the key
+             */
+            virtual const XShapeToShapeMap& getXShapeToShapeMap() const = 0;
 
             /** Register given shape as a hyperlink target
 
