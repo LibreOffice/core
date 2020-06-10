@@ -21,10 +21,8 @@
     <whitelist>
     </whitelist>
     <blacklist>
-<!-- example:
-        <entry os="all" vendor="amd" compare="equal" version="2.0.106">
+        <entry os="all" vendor="intel" compare="less_equal" version="0.16.2">
             <device id="all"/>
         </entry>
--->
     </blacklist>
 </root>
