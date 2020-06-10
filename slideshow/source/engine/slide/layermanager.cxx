@@ -67,7 +67,7 @@ namespace slideshow::internal
                                     bool                       bDisableAnimationZOrder ) :
             mrViews(rViews),
             maLayers(),
-            maXShapeHash( 101 ),
+            mpXShapeHash( std::make_shared<XShapeToShapeMap>(101) ),
             maAllShapes(),
             maUpdateShapes(),
             mnActiveSprites(0),
@@ -210,7 +210,7 @@ namespace slideshow::internal
             ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
 
             // add shape to XShape hash map
-            if( !maXShapeHash.emplace(rShape->getXShape(),
+            if( !mpXShapeHash->emplace(rShape->getXShape(),
                                       rShape).second )
             {
                 // entry already present, nothing to do
@@ -252,7 +252,7 @@ namespace slideshow::internal
         bool LayerManager::removeShape( const ShapeSharedPtr& rShape )
         {
             // remove shape from XShape hash map
-            if( maXShapeHash.erase( rShape->getXShape() ) == 0 )
+            if( mpXShapeHash->erase( rShape->getXShape() ) == 0 )
                 return false; // shape not in map
 
             OSL_ASSERT( maAllShapes.find(rShape) != maAllShapes.end() );
@@ -302,8 +302,8 @@ namespace slideshow::internal
         {
             ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
 
-            const XShapeHash::const_iterator aIter( maXShapeHash.find( xShape ));
-            if( aIter == maXShapeHash.end() )
+            const XShapeToShapeMap::const_iterator aIter( mpXShapeHash->find( xShape ));
+            if( aIter == mpXShapeHash->end() )
                 return ShapeSharedPtr(); // not found
 
             // found, return data part of entry pair.
@@ -339,6 +339,11 @@ namespace slideshow::internal
             }
 
             return pSubset;
+        }
+
+        std::shared_ptr<XShapeToShapeMap const> LayerManager::getXShapeToShapeMapPtr() const
+        {
+            return mpXShapeHash;
         }
 
         void LayerManager::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
