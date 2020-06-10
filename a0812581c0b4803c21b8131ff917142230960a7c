@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46ad210b_8c316708",
+        "filename": "offapi/com/sun/star/text/RelOrientation.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-06-10T10:38:57Z",
+      "side": 1,
+      "message": "What is the difference between LEFT_MARGIN and PAGE_LEFT, RIGHT_MARGIN and PAGE_RIGHT?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 34
+      },
+      "revId": "a0812581c0b4803c21b8131ff917142230960a7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
