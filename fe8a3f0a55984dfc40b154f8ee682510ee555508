@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "9f0f551e_a809b52f",
+        "filename": "include/svx/gallery1.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T10:22:24Z",
+      "side": 1,
+      "message": "There is no need to friend it if ImplGetURLIgnoreCase would be public, is it.",
+      "parentUuid": "cd94b0d7_b2fa056d",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 31
+      },
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cfff791_0b1584b1",
+        "filename": "include/svx/gallery1.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T10:22:24Z",
+      "side": 1,
+      "message": "new members should be prefixed with \"m\" or \"m_\" - like m_aGalleryBinaryEngine or maGalleryBinaryEngine\n\nIf it is a pointer then it should be mpGalleryBinaryEngine",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cdd6ad62_7149092c",
         "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
         "patchSetId": 2
