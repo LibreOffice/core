@@ -24,6 +24,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
+#include <svx/gallerybinaryengine.hxx>
 
 #include <cstdio>
 #include <memory>
@@ -32,8 +33,10 @@
 
 class GalleryThemeEntry
 {
+    friend GalleryBinaryEngine;
 private:
 
+    std::unique_ptr<GalleryBinaryEngine> aGalleryBinaryEngine;
     OUString                aName;
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
@@ -55,7 +58,7 @@ public:
 
     const OUString&         GetThemeName() const { return aName; }
 
-    const INetURLObject&    GetThmURL() const { return aThmURL; }
+    const INetURLObject&    GetThmURL() const { return aGalleryBinaryEngine->GetThmURL(); }
     const INetURLObject&    GetSdgURL() const { return aSdgURL; }
     const INetURLObject&    GetSdvURL() const { return aSdvURL; }
     const INetURLObject&    GetStrURL() const { return aStrURL; }
