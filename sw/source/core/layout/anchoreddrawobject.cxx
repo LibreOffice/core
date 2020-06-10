@@ -620,6 +620,26 @@ SwRect SwAnchoredDrawObject::GetObjRect() const
     return GetDrawObj()->GetSnapRect();
 }
 
+namespace
+{
+    // Imagine an open book, inside margin is the one that is at the inner side of the pages, at the center of the book,
+    // outside margin is at the two opposite edges of the book.
+    // outside --text-- inside | inside --text-- outside
+    // With mirrored margins, when relating the size of an object from the inside margin for example, on the
+    // first page we calculate the new size of the object using the size of the right margin,
+    // on second page the left margin, third page right margin, etc.
+    long getInsideOutsideRelativeWidth(bool isOutside, const SwPageFrame* const pPageFrame)
+    {
+        // Alternating between the only two possible cases: inside and outside.
+        // Inside = false, Outside = true.
+        auto nPageNum = pPageFrame->GetPhyPageNum();
+        if (nPageNum % 2 == (isOutside ? 0 : 1))
+            return pPageFrame->GetRightMargin();
+        else
+            return pPageFrame->GetLeftMargin();
+    }
+}
+
 // --> #i70122#
 SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
@@ -640,6 +660,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 nWidth = GetPageFrame()->GetLeftMargin();
             else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::PAGE_RIGHT)
                 nWidth = GetPageFrame()->GetRightMargin();
+            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::INSIDE_MARGIN)
+                nWidth = getInsideOutsideRelativeWidth(false, GetPageFrame());
+            else if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::OUTSIDE_MARGIN)
+                nWidth = getInsideOutsideRelativeWidth(true, GetPageFrame());
             else
                 nWidth = GetPageFrame( )->GetBoundRect( GetPageFrame()->getRootFrame()->GetCurrShell()->GetOut() ).SVRect().GetWidth();
             nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
