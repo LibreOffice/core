@@ -296,7 +296,8 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
         SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
         rNodes.InsertNode( this, rWhere );
-        if( nullptr == ( m_pStartOfSection = pNd->GetStartNode()) )
+        m_pStartOfSection = pNd->GetStartNode();
+        if( nullptr == m_pStartOfSection )
         {
             m_pStartOfSection = pNd->m_pStartOfSection;
             if( pNd->GetEndNode() )     // Skip EndNode ? Section
@@ -328,7 +329,8 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
         rNodes.InsertNode( this, nPos );
-        if( nullptr == ( m_pStartOfSection = pNd->GetStartNode()) )
+        m_pStartOfSection = pNd->GetStartNode();
+        if( nullptr == m_pStartOfSection )
         {
             m_pStartOfSection = pNd->m_pStartOfSection;
             if( pNd->GetEndNode() )     // Skip EndNode ? Section!
@@ -423,7 +425,8 @@ bool SwNode::IsProtect() const
     if( pSttNd && static_cast<const SwSectionNode*>(pSttNd)->GetSection().IsProtectFlag() )
         return true;
 
-    if( nullptr != ( pSttNd = FindTableBoxStartNode() ) )
+    pSttNd = FindTableBoxStartNode();
+    if( nullptr != pSttNd )
     {
         SwContentFrame* pCFrame;
         if( IsContentNode() && nullptr != (pCFrame = static_cast<const SwContentNode*>(this)->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ))
@@ -449,7 +452,8 @@ bool SwNode::IsProtect() const
         return &rAnchorNd != this && rAnchorNd.IsProtect();
     }
 
-    if( nullptr != ( pSttNd = FindFootnoteStartNode() ) )
+    pSttNd = FindFootnoteStartNode();
+    if( nullptr != pSttNd )
     {
         const SwTextFootnote* pTFootnote = GetDoc()->GetFootnoteIdxs().SeekEntry(
                                 SwNodeIndex( *pSttNd ) );
@@ -682,7 +686,8 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                 }
             }
 
-            if( nullptr != ( pNd = aInfo.GetFoundNode() ))
+            pNd = aInfo.GetFoundNode();
+            if( nullptr != pNd )
             {
                 if( pNd->IsContentNode() )
                     pPgDesc = static_cast<const SwFormatPageDesc&>(pNd->GetContentNode()->

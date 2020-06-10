@@ -474,7 +474,8 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     // On the way there, we invalidate as required.
     if ( pSibling )
     {
-        if ( nullptr != (pStart->mpPrev = pSibling->GetPrev()) )
+        pStart->mpPrev = pSibling->GetPrev();
+        if ( nullptr != pStart->mpPrev )
             pStart->GetPrev()->mpNext = pStart;
         else
             pParent->m_pLower = pStart;
@@ -483,7 +484,8 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     }
     else
     {
-        if ( nullptr == (pStart->mpPrev = pParent->Lower()) )
+        pStart->mpPrev = pParent->Lower();
+        if ( nullptr == pStart->mpPrev )
             pParent->m_pLower = pStart;
         else
         //i#100782

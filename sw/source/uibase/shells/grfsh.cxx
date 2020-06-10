@@ -167,8 +167,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else if (nState == RET_NO)
             {
-                const Graphic *pGraphic;
-                if(nullptr != (pGraphic = rSh.GetGraphic()))
+                const Graphic *pGraphic = rSh.GetGraphic();
+                if(nullptr != pGraphic)
                 {
                     OUString sGrfNm;
                     OUString sFilterNm;

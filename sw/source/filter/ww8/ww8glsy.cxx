@@ -116,7 +116,8 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 ++rIdx;
-                if( nullptr == ( pCNd = rIdx.GetNode().GetTextNode() ) )
+                pCNd = rIdx.GetNode().GetTextNode();
+                if( nullptr == pCNd )
                 {
                     pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
                     rIdx = *pCNd;
@@ -203,7 +204,8 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         rStrm->Seek(0);
 
-        if ( 0 != (nStrings = static_cast< sal_uInt16 >(aStrings.size())))
+        nStrings = static_cast< sal_uInt16 >(aStrings.size());
+        if ( 0 != nStrings )
         {
             SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             if (xDocSh->DoInitNew())

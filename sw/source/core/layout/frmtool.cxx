@@ -2718,8 +2718,8 @@ SwFrame *SaveContent( SwLayoutFrame *pLay, SwFrame *pStart )
     if( pLay->IsSctFrame() && pLay->Lower() && pLay->Lower()->IsColumnFrame() )
         sw_RemoveFootnotes( static_cast<SwColumnFrame*>(pLay->Lower()), true, true );
 
-    SwFrame *pSav;
-    if ( nullptr == (pSav = pLay->ContainsAny()) )
+    SwFrame *pSav = pLay->ContainsAny();
+    if ( nullptr == pSav )
         return nullptr;
 
     if( pSav->IsInFootnote() && !pLay->IsInFootnote() )

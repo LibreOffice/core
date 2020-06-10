@@ -1194,11 +1194,13 @@ void RtfExport::OutColorTable()
     {
         auto pCol = GetDfltAttr(RES_CHRATR_COLOR);
         InsColor(pCol->GetValue());
-        if ((pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR)))
+        pCol = rPool.GetPoolDefaultItem(RES_CHRATR_COLOR);
+        if (pCol)
             InsColor(pCol->GetValue());
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_COLOR))
         {
-            if ((pCol = dynamic_cast<const SvxColorItem*>(pItem)))
+            pCol = dynamic_cast<const SvxColorItem*>(pItem);
+            if (pCol)
                 InsColor(pCol->GetValue());
         }
 
@@ -1206,7 +1208,8 @@ void RtfExport::OutColorTable()
         InsColor(pUnder->GetColor());
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_UNDERLINE))
         {
-            if ((pUnder = dynamic_cast<const SvxUnderlineItem*>(pItem)))
+            pUnder = dynamic_cast<const SvxUnderlineItem*>(pItem);
+            if (pUnder)
                 InsColor(pUnder->GetColor());
         }
 
@@ -1214,7 +1217,8 @@ void RtfExport::OutColorTable()
         InsColor(pOver->GetColor());
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_OVERLINE))
         {
-            if ((pOver = dynamic_cast<const SvxOverlineItem*>(pItem)))
+            pOver = dynamic_cast<const SvxOverlineItem*>(pItem);
+            if (pOver)
                 InsColor(pOver->GetColor());
         }
     }
@@ -1226,13 +1230,15 @@ void RtfExport::OutColorTable()
     {
         auto pBackground = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
         InsColor(pBackground->GetColor());
-        if ((pBackground = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
+        pBackground = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds));
+        if (pBackground)
         {
             InsColor(pBackground->GetColor());
         }
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(*pIds))
         {
-            if ((pBackground = static_cast<const SvxBrushItem*>(pItem)))
+            pBackground = static_cast<const SvxBrushItem*>(pItem);
+            if (pBackground)
             {
                 InsColor(pBackground->GetColor());
             }
@@ -1243,13 +1249,15 @@ void RtfExport::OutColorTable()
     {
         auto pShadow = GetDfltAttr(RES_SHADOW);
         InsColor(pShadow->GetColor());
-        if (nullptr != (pShadow = rPool.GetPoolDefaultItem(RES_SHADOW)))
+        pShadow = rPool.GetPoolDefaultItem(RES_SHADOW);
+        if (nullptr != pShadow)
         {
             InsColor(pShadow->GetColor());
         }
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_SHADOW))
         {
-            if ((pShadow = dynamic_cast<const SvxShadowItem*>(pItem)))
+            pShadow = dynamic_cast<const SvxShadowItem*>(pItem);
+            if (pShadow)
             {
                 InsColor(pShadow->GetColor());
             }
@@ -1258,23 +1266,25 @@ void RtfExport::OutColorTable()
 
     // frame border color
     {
-        const SvxBoxItem* pBox;
-        if (nullptr != (pBox = rPool.GetPoolDefaultItem(RES_BOX)))
+        const SvxBoxItem* pBox = rPool.GetPoolDefaultItem(RES_BOX);
+        if (nullptr != pBox)
             InsColorLine(*pBox);
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_BOX))
         {
-            if ((pBox = dynamic_cast<const SvxBoxItem*>(pItem)))
+            pBox = dynamic_cast<const SvxBoxItem*>(pItem);
+            if (pBox)
                 InsColorLine(*pBox);
         }
     }
 
     {
-        const SvxBoxItem* pCharBox;
-        if ((pCharBox = rPool.GetPoolDefaultItem(RES_CHRATR_BOX)))
+        const SvxBoxItem* pCharBox = rPool.GetPoolDefaultItem(RES_CHRATR_BOX);
+        if (pCharBox)
             InsColorLine(*pCharBox);
         for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(RES_CHRATR_BOX))
         {
-            if ((pCharBox = dynamic_cast<const SvxBoxItem*>(pItem)))
+            pCharBox = dynamic_cast<const SvxBoxItem*>(pItem);
+            if (pCharBox)
                 InsColorLine(*pCharBox);
         }
     }

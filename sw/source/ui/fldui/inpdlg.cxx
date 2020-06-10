@@ -70,8 +70,9 @@ SwFieldInputDlg::SwFieldInputDlg(weld::Widget *pParent, SwWrtShell &rS,
 
             case INP_USR:
                 // user field
-                if( nullptr != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
-                            SwFieldIds::User, pInpField->GetPar1() ) )  ) )
+                pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
+                            SwFieldIds::User, pInpField->GetPar1() ));
+                if( nullptr != pUsrType )
                     aStr = pUsrType->GetContent();
                 break;
         }

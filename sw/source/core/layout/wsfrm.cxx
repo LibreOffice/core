@@ -827,7 +827,8 @@ void SwFrame::InsertBefore( SwLayoutFrame* pParent, SwFrame* pBehind )
     mpNext = pBehind;
     if( pBehind )
     {   //Insert before pBehind.
-        if( nullptr != (mpPrev = pBehind->mpPrev) )
+        mpPrev = pBehind->mpPrev;
+        if( nullptr != mpPrev )
             mpPrev->mpNext = this;
         else
             mpUpper->m_pLower = this;
@@ -863,7 +864,8 @@ void SwFrame::InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore )
     if ( pBefore )
     {
         //Insert after pBefore
-        if ( nullptr != (mpNext = pBefore->mpNext) )
+        mpNext = pBefore->mpNext;
+        if ( nullptr != mpNext )
             mpNext->mpPrev = this;
         pBefore->mpNext = this;
     }
@@ -968,7 +970,8 @@ bool SwFrame::InsertGroupBefore( SwFrame* pParent, SwFrame* pBehind, SwFrame* pS
         pLast->mpNext = pBehind;
         if( pBehind )
         {   // Insert before pBehind.
-            if( nullptr != (mpPrev = pBehind->mpPrev) )
+            mpPrev = pBehind->mpPrev;
+            if( nullptr != mpPrev )
                 mpPrev->mpNext = this;
             else
                 mpUpper->m_pLower = this;
@@ -1101,7 +1104,8 @@ void SwContentFrame::Paste( SwFrame* pParent, SwFrame* pSibling)
     {
         while ( pNxt && pNxt->IsInTab() )
         {
-            if( nullptr != (pNxt = pNxt->FindTabFrame()) )
+            pNxt = pNxt->FindTabFrame();
+            if( nullptr != pNxt )
                 pNxt = pNxt->FindNextCnt();
         }
         if ( pNxt )
@@ -1143,7 +1147,8 @@ void SwContentFrame::Cut()
     {
         while ( pNxt && pNxt->IsInTab() )
         {
-            if( nullptr != (pNxt = pNxt->FindTabFrame()) )
+            pNxt = pNxt->FindTabFrame();
+            if( nullptr != pNxt )
                 pNxt = pNxt->FindNextCnt();
         }
         if ( pNxt )
@@ -1154,7 +1159,8 @@ void SwContentFrame::Cut()
         }
     }
 
-    if( nullptr != (pFrame = GetIndNext()) )
+    pFrame = GetIndNext();
+    if( pFrame )
     {
         // The old follow may have calculated a gap to the predecessor which
         // now becomes obsolete or different as it becomes the first one itself
@@ -1187,7 +1193,8 @@ void SwContentFrame::Cut()
     {
         InvalidateNextPos();
         //Someone needs to do the retouching: predecessor or upper
-        if ( nullptr != (pFrame = GetPrev()) )
+        pFrame = GetPrev();
+        if ( nullptr != pFrame )
         {   pFrame->SetRetouche();
             pFrame->Prepare( PrepareHint::WidowsOrphans );
             pFrame->InvalidatePos_();

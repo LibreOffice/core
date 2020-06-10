@@ -1234,7 +1234,8 @@ void SwUndoSaveSection::SaveSection(
     SwContentNode* pCNd = aPam.GetContentNode( false );
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
-    if( nullptr != ( pCNd = aPam.GetContentNode()) )
+    pCNd = aPam.GetContentNode();
+    if( nullptr != pCNd )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     // Keep positions as SwIndex so that this section can be deleted in DTOR

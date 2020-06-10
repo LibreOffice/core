@@ -338,7 +338,8 @@ ErrCode SwASCIIParser::ReadChars()
                                 ),
                                 &nInfo,
                                 &nCntBytes );
-                if( 0 != ( nArrOffset = lGCount - nCntBytes ) )
+                nArrOffset = lGCount - nCntBytes;
+                if( 0 != nArrOffset )
                     memmove( pArr.get(), pArr.get() + nCntBytes, nArrOffset );
 
                 pStt = pLastStt = aWork.get();

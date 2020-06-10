@@ -82,8 +82,8 @@ public:
 
 void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 {
-    SwQueuedPaint *pPt;
-    if (nullptr != (pPt = s_pPaintQueue))
+    SwQueuedPaint *pPt = s_pPaintQueue;
+    if (nullptr != pPt)
     {
         while ( pPt->pSh != pNew && pPt->pNext )
             pPt = pPt->pNext;
@@ -132,8 +132,8 @@ void SwPaintQueue::Repaint()
 
 void SwPaintQueue::Remove( SwViewShell const *pSh )
 {
-    SwQueuedPaint *pPt;
-    if (nullptr != (pPt = s_pPaintQueue))
+    SwQueuedPaint *pPt = s_pPaintQueue;
+    if (nullptr != pPt)
     {
         SwQueuedPaint *pPrev = nullptr;
         while ( pPt && pPt->pSh != pSh )

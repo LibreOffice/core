@@ -264,7 +264,8 @@ void SwEditShell::UpdateOneField(SwField &rField)
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
-                    if( nullptr != (pTextField = GetTextFieldAtPos( pCurStt, true )) )
+                    pTextField = GetTextFieldAtPos( pCurStt, true );
+                    if( nullptr != pTextField )
                     {
                         pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
                         SwField *pCurField = pFormatField->GetField();

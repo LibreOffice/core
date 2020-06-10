@@ -453,7 +453,8 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
         nPoolId = RES_POOLCOLL_FOOTNOTE;
     }
 
-    if( nullptr == (pFormatColl = pInfo->GetFootnoteTextColl() ) )
+    pFormatColl = pInfo->GetFootnoteTextColl();
+    if( nullptr == pFormatColl )
         pFormatColl = rNodes.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId );
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),

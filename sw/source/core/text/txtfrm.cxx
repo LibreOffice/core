@@ -2584,8 +2584,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             if ( !nWhich )
             {
                 // is called by e. g. HiddenPara with 0
-                SwFrame *pNxt;
-                if ( nullptr != (pNxt = FindNext()) )
+                SwFrame *pNxt = FindNext();
+                if ( nullptr != pNxt )
                     pNxt->InvalidatePrt();
             }
         }
@@ -3004,8 +3004,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
                 InvalidateSize();
                 InvalidatePrt_();
-                SwFrame* pNxt;
-                if ( nullptr != ( pNxt = GetIndNext() ) )
+                SwFrame* pNxt = GetIndNext();
+                if ( nullptr != pNxt )
                 {
                     pNxt->InvalidatePrt_();
                     if ( pNxt->IsLayoutFrame() )
@@ -3783,7 +3783,8 @@ void SwTextFrame::ChgThisLines()
             SwFrame *pNxt = GetNextContentFrame();
             while( pNxt && pNxt->IsInTab() )
             {
-                if( nullptr != (pNxt = pNxt->FindTabFrame()) )
+                pNxt = pNxt->FindTabFrame();
+                if( nullptr != pNxt )
                     pNxt = pNxt->FindNextCnt();
             }
             if( pNxt )

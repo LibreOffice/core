@@ -3067,10 +3067,14 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 {
     SolarMutexGuard g;
 
-    SwFrameFormat* pFormat;
     if(IsDescriptor())
+    {
         attachToRange(xTextRange);
-    else if(nullptr != (pFormat = GetFrameFormat()))
+        return;
+    }
+
+    SwFrameFormat* pFormat = GetFrameFormat();
+    if( pFormat )
     {
         SwDoc* pDoc = pFormat->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
@@ -3091,7 +3095,6 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         aAnchor.SetAnchor( aIntPam.Start() );
         aSet.Put(aAnchor);
         pDoc->SetFlyFrameAttr( *pFormat, aSet );
-
     }
 }
 

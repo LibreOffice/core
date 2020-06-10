@@ -1362,7 +1362,8 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
         if( pULPara->bUL )  // Left ?
         {
             // if there are Boxes before it, move them
-            if( 0 != ( nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox ) ) )
+            nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox );
+            if( 0 != nPos )
                 lcl_CpyBoxes( 0, nPos, *pBoxes, pULPara->pInsLine );
         }
         else                // Right

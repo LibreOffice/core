@@ -215,7 +215,8 @@ SwTableNode* SwDoc::IsIdxInTable(const SwNodeIndex& rIdx)
     sal_uLong nIndex = rIdx.GetIndex();
     do {
         SwNode* pNd = GetNodes()[ nIndex ]->StartOfSectionNode();
-        if( nullptr != ( pTableNd = pNd->GetTableNode() ) )
+        pTableNd = pNd->GetTableNode();
+        if( nullptr != pTableNd )
             break;
 
         nIndex = pNd->GetIndex();
@@ -245,19 +246,25 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
     {
         if( nInsPos < pLine->GetTabBoxes().size() )
         {
-            if( nullptr == (pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable(),
-                            pLine->GetTabBoxes()[ nInsPos ] )))
+            pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable(),
+                            pLine->GetTabBoxes()[ nInsPos ] );
+            if( nullptr == pPrvBox )
                 pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable() );
         }
         else
         {
-            if( nullptr == (pNxtBox = pLine->FindNextBox( pTableNd->GetTable(),
-                            pLine->GetTabBoxes().back() )))
+            pNxtBox = pLine->FindNextBox( pTableNd->GetTable(),
+                            pLine->GetTabBoxes().back() );
+            if( nullptr == pNxtBox )
                 pNxtBox = pLine->FindNextBox( pTableNd->GetTable() );
         }
     }
-    else if( nullptr == ( pNxtBox = pLine->FindNextBox( pTableNd->GetTable() )))
-        pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable() );
+    else
+    {
+        pNxtBox = pLine->FindNextBox( pTableNd->GetTable() );
+        if( nullptr == pNxtBox )
+            pPrvBox = pLine->FindPreviousBox( pTableNd->GetTable() );
+    }
 
     if( !pPrvBox && !pNxtBox )
     {
@@ -1650,7 +1657,8 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         SwSectionNode *pSNd;
         while( aDelRg.aStart.GetIndex() < nEnd )
         {
-            if( nullptr != ( pCNd = aDelRg.aStart.GetNode().GetContentNode()))
+            pCNd = aDelRg.aStart.GetNode().GetContentNode();
+            if( nullptr != pCNd )
             {
                 if( pFrameNd->IsContentNode() )
                     static_cast<SwContentNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(*pCNd);
@@ -1660,14 +1668,18 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                     static_cast<SwSectionNode*>(pFrameNd)->MakeFramesForAdjacentContentNode(aDelRg.aStart);
                 pFrameNd = pCNd;
             }
-            else if( nullptr != ( pSNd = aDelRg.aStart.GetNode().GetSectionNode()))
+            else
             {
-                if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
+                pSNd = aDelRg.aStart.GetNode().GetSectionNode();
+                if( pSNd )
                 {
-                    pSNd->MakeOwnFrames(&aFrameIdx, &aDelRg.aEnd);
-                    break;
+                    if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
+                    {
+                        pSNd->MakeOwnFrames(&aFrameIdx, &aDelRg.aEnd);
+                        break;
+                    }
+                    aDelRg.aStart = *pSNd->EndOfSectionNode();
                 }
-                aDelRg.aStart = *pSNd->EndOfSectionNode();
             }
             ++aDelRg.aStart;
         }

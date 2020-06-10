@@ -1455,7 +1455,8 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     // If we have just one single inline graphic then
                     // don't insert a field for the single frame, set
                     // the frames hyperlink field attribute directly.
-                    if (nullptr != (pFrame = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion)))
+                    pFrame = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion);
+                    if (nullptr != pFrame)
                     {
                         const SwFormatINetFormat *pAttr = static_cast<const SwFormatINetFormat *>(
                             rEntry.pAttr.get());

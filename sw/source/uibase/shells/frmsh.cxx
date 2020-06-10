@@ -1117,13 +1117,17 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
                     std::unique_ptr<SvxBoxItem> aNewBox(static_cast<SvxBoxItem*>(pItem->Clone()));
                     const SvxBorderLine* pBorderLine;
 
-                    if ((pBorderLine = aBoxItem->GetTop()) != nullptr)
+                    pBorderLine = aBoxItem->GetTop();
+                    if (pBorderLine != nullptr)
                         lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem->GetBottom()) != nullptr)
+                    pBorderLine = aBoxItem->GetBottom();
+                    if (pBorderLine != nullptr)
                         lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem->GetLeft()) != nullptr)
+                    pBorderLine = aBoxItem->GetLeft();
+                    if (pBorderLine != nullptr)
                         lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
-                    if ((pBorderLine = aBoxItem->GetRight()) != nullptr)
+                    pBorderLine = aBoxItem->GetRight();
+                    if (pBorderLine != nullptr)
                         lcl_FrameGetMaxLineWidth(pBorderLine, aBorderLine);
 
                     if(aBorderLine.GetOutWidth() == 0)

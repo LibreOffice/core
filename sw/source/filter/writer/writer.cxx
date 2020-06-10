@@ -368,7 +368,8 @@ void Writer::PutNumFormatFontsInAttrPool()
                 if( SVX_NUM_CHAR_SPECIAL == (pFormat = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFormat->GetNumberingType() )
                 {
-                    if( nullptr == ( pFont = pFormat->GetBulletFont() ) )
+                    pFont = pFormat->GetBulletFont();
+                    if( nullptr == pFont )
                         pFont = pDefFont;
 
                     if( bCheck )
@@ -401,7 +402,8 @@ void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetDefaultItem( nW ));
     AddFontItem( rPool, *pFont );
 
-    if( nullptr != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
+    pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ));
+    if( nullptr != pFont )
         AddFontItem( rPool, *pFont );
 
     for (const SfxPoolItem* pItem : rPool.GetItemSurrogates(nW))

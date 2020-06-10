@@ -517,7 +517,9 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 
         SwContentNode* pCNd;
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
-            if( nullptr != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
+        {
+            pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode();
+            if( nullptr != pCNd )
             {
                 pCNd = sw::GetParaPropsNode(*GetLayout(), *pCNd);
                 const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
@@ -539,6 +541,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                         bRet = false;
                 }
             }
+        }
 
         if( !bRet )
             break;

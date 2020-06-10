@@ -780,7 +780,8 @@ void SwEditShell::SetNumberingRestart()
                 switch( pNd->GetNodeType() )
                 {
                 case SwNodeType::Text:
-                    if( nullptr != ( pContentFrame = static_cast<SwTextNode*>(pNd)->getLayoutFrame( GetLayout() )) )
+                    pContentFrame = static_cast<SwTextNode*>(pNd)->getLayoutFrame( GetLayout() );
+                    if( nullptr != pContentFrame )
                     {
                         // skip hidden frames - ignore protection!
                         if( !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )

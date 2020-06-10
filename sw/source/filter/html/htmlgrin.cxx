@@ -120,7 +120,8 @@ void SwHTMLParser::ConnectImageMaps()
     while( m_nMissingImgMaps > 0 && nIdx < nEndIdx )
     {
         SwNode *pNd = rNds[nIdx + 1];
-        if( nullptr != (pGrfNd = pNd->GetGrfNode()) )
+        pGrfNd = pNd->GetGrfNode();
+        if( nullptr != pGrfNd )
         {
             SwFrameFormat *pFormat = pGrfNd->GetFlyFormat();
             SwFormatURL aURL( pFormat->GetURL() );

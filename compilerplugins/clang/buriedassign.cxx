@@ -182,8 +182,25 @@ public:
             return;
         if (fn == SRCDIR "/sw/source/core/doc/notxtfrm.cxx")
             return;
-        // the point at which I gave up on sw/ because it just does it EVERYWHERE
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/"))
+        if (fn == SRCDIR "/sw/source/core/docnode/node.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/layout/ftnfrm.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/table/swtable.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/unocore/unoframe.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/filter/xml/xmlimp.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/uibase/docvw/edtwin.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/uibase/shells/langhelper.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/uibase/shells/tabsh.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/uibase/shells/textsh1.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/uibase/uiview/view2.cxx")
             return;
         if (fn == SRCDIR "/starmath/source/mathtype.cxx")
             return;
@@ -212,6 +229,7 @@ public:
 
 private:
     void MarkIfAssignment(Stmt const*);
+    void MarkAll(Stmt const*);
     void MarkConditionForControlLoops(Expr const*);
 
     std::unordered_set<const Stmt*> m_handled;
@@ -297,7 +315,7 @@ bool BuriedAssign::VisitBinaryOperator(BinaryOperator const* binaryOp)
     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
            compat::getBeginLoc(binaryOp))
         << binaryOp->getSourceRange();
-    //getParentStmt(getParentStmt(getParentStmt(binaryOp)))->dump();
+    //getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(binaryOp))))))->dump();
     return true;
 }
 
@@ -392,13 +410,84 @@ void BuriedAssign::MarkIfAssignment(Stmt const* stmt)
     }
 }
 
+void BuriedAssign::MarkAll(Stmt const* stmt)
+{
+    m_handled.insert(stmt);
+    for (auto it = stmt->child_begin(); it != stmt->child_end(); ++it)
+        MarkAll(*it);
+}
+
+/**
+ * Restrict this to cases where the buried assignment is part of the first
+ * condition inside the if condition. Other cases tend to be too hard
+ * too extract (notably in sw/)
+ */
 bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
 {
     if (ignoreLocation(ifStmt))
         return true;
-    MarkConditionForControlLoops(ifStmt->getCond());
     MarkIfAssignment(ifStmt->getThen());
     MarkIfAssignment(ifStmt->getElse());
+
+    auto expr = ifStmt->getCond();
+    expr = IgnoreImplicitAndConversionOperator(expr);
+    expr = expr->IgnoreParens();
+    expr = IgnoreImplicitAndConversionOperator(expr);
+    MarkAll(expr);
+
+    if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
+    {
+        if (isAssignmentOp(binaryOp->getOpcode()))
+        {
+            report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+                   compat::getBeginLoc(expr))
+                << expr->getSourceRange();
+        }
+        else if (binaryOp->isComparisonOp())
+        {
+            if (auto binaryOp2
+                = dyn_cast<BinaryOperator>(binaryOp->getLHS()->IgnoreParenImpCasts()))
+            {
+                if (binaryOp->getRHS()->isCXX11ConstantExpr(compiler.getASTContext())
+                    && isAssignmentOp(binaryOp2->getOpcode()))
+                    report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+                           compat::getBeginLoc(expr))
+                        << expr->getSourceRange();
+            }
+            if (auto binaryOp2
+                = dyn_cast<BinaryOperator>(binaryOp->getRHS()->IgnoreParenImpCasts()))
+            {
+                if (binaryOp->getLHS()->isCXX11ConstantExpr(compiler.getASTContext())
+                    && isAssignmentOp(binaryOp2->getOpcode()))
+                    report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+                           compat::getBeginLoc(expr))
+                        << expr->getSourceRange();
+            }
+        }
+        else if (binaryOp->isLogicalOp())
+        {
+            if (auto binaryOp2
+                = dyn_cast<BinaryOperator>(binaryOp->getLHS()->IgnoreParenImpCasts()))
+            {
+                if (isAssignmentOp(binaryOp2->getOpcode()))
+                    report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+                           compat::getBeginLoc(expr))
+                        << expr->getSourceRange();
+            }
+        }
+    }
+    else if (auto operCall = dyn_cast<CXXOperatorCallExpr>(expr))
+    {
+        // Ignore chained assignment.
+        // TODO limit this to only ordinary assignment
+        if (isAssignmentOp(operCall->getOperator()))
+        {
+            report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+                   compat::getBeginLoc(expr))
+                << expr->getSourceRange();
+        }
+    }
+
     return true;
 }
 

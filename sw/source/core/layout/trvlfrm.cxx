@@ -1099,7 +1099,8 @@ bool GetFrameInPage( const SwContentFrame *pCnt, SwWhichPage fnWhichPage,
         return false;
 
     //Now the desired ContentFrame below the page
-    if( nullptr == (pCnt = (*fnPosPage)(pLayoutFrame)) )
+    pCnt = (*fnPosPage)(pLayoutFrame);
+    if( nullptr == pCnt )
         return false;
     else
     {

@@ -2566,7 +2566,9 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         // All Numbers have been flagged accordingly, so identify the right Number
         nNum = mpNumRuleTable->size();
         for( sal_uInt16 n = 0; n < nFlagSize; ++n )
-            if( 0xff != ( nTmp = pSetFlags[ n ] ))
+        {
+            nTmp = pSetFlags[ n ];
+            if( 0xff != nTmp )
             {
                 // identify the Number
                 nNum = n * 8;
@@ -2577,6 +2579,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
                 }
                 break;
             }
+        }
     }
     if( pChkStr && !pChkStr->isEmpty() )
         return *pChkStr;

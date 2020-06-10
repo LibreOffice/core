@@ -1210,7 +1210,8 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
                 return true;
             }
-            if( nullptr != ( pTmpFollow = GetFollow() ) )
+            pTmpFollow = GetFollow();
+            if( nullptr != pTmpFollow )
             {   // Skip protected follows
                 const SwContentFrame* pTmp = pTmpFollow;
                 SwViewShell *pSh = getRootFrame()->GetCurrShell();

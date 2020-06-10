@@ -1855,7 +1855,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,true);
         }
 
-        if (0 != (nOpaque = pGraphicObject->GetAttr().GetTransparency()))
+        nOpaque = pGraphicObject->GetAttr().GetTransparency();
+        if (0 != nOpaque)
             bSetOpacity = true;
 
         rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -1869,7 +1870,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
         rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
 
-        if (0 != (nOpaque = rBrush.GetColor().GetTransparency()))
+        nOpaque = rBrush.GetColor().GetTransparency();
+        if (0 != nOpaque)
             bSetOpacity = true;
     }
 
@@ -1897,7 +1899,9 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
         const SvxBorderLine* pLine;
 
         for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
-            if( nullptr != ( pLine = static_cast<const SvxBoxItem*>(pItem)->GetLine( n )) )
+        {
+            pLine = static_cast<const SvxBoxItem*>(pItem)->GetLine( n );
+            if( nullptr != pLine )
             {
                 if( bFirstLine )
                 {
@@ -1956,6 +1960,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
             }
             else
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(static_cast<const SvxBoxItem*>(pItem)->GetDistance( n )) );
+        }
     }
     else
     {
@@ -2253,7 +2258,8 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     nBorderThick = WriteFlyFrame(*pObj, nShapeId, aSorted);
                     break;
                 case ww8::Frame::eFormControl:
-                    WriteOCXControl(rFormat, nShapeId = GenerateShapeId());
+                    nShapeId = GenerateShapeId();
+                    WriteOCXControl(rFormat, nShapeId);
                     break;
                 case ww8::Frame::eDrawing:
                 {
@@ -2749,10 +2755,12 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
         switch( aIdx.GetNode().GetNodeType() )
         {
         case SwNodeType::Grf:
-            nBorderThick = WriteGrfFlyFrame( rFormat, rShapeId = GenerateShapeId() );
+            rShapeId = GenerateShapeId();
+            nBorderThick = WriteGrfFlyFrame( rFormat, rShapeId );
             break;
         case SwNodeType::Ole:
-            nBorderThick = WriteOLEFlyFrame( rFormat, rShapeId = GenerateShapeId() );
+            rShapeId = GenerateShapeId();
+            nBorderThick = WriteOLEFlyFrame( rFormat, rShapeId );
             break;
         default:
             if (const SdrObject* pObj = rFormat.FindRealSdrObject())
@@ -2975,7 +2983,8 @@ sal_uInt32 SwEscherEx::GetFlyShapeId(const SwFrameFormat& rFormat,
     sal_uInt32 nShapeId;
     if (USHRT_MAX != nPos)
     {
-        if (0 == (nShapeId = aFollowShpIds[nPos]))
+        nShapeId = aFollowShpIds[nPos];
+        if (0 == nShapeId)
         {
             nShapeId = GenerateShapeId();
             aFollowShpIds[ nPos ] = nShapeId;

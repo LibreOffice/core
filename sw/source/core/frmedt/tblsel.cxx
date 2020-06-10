@@ -405,7 +405,8 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
             pTable->Calc(pTable->getRootFrame()->GetCurrShell()->GetOut());
             pTable->SetCompletePaint();
 
-            if( nullptr == (pTable = pTable->GetFollow()) )
+            pTable = pTable->GetFollow();
+            if( nullptr == pTable )
                 break;
         }
 
@@ -654,7 +655,8 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             pTable->Calc(pTable->getRootFrame()->GetCurrShell()->GetOut());
             pTable->SetCompletePaint();
 
-            if( nullptr == (pTable = pTable->GetFollow()) )
+            pTable = pTable->GetFollow();
+            if( nullptr == pTable )
                 break;
         }
         --nLoopMax;
@@ -737,9 +739,11 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
                     {
                         sal_uInt16 nWhichId = 0;
                         for( size_t n = rBoxes.size(); n; )
-                            if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
-                                ->GetTabBox()->IsFormulaOrValueBox() ))
+                        {
+                            nWhichId = rBoxes[ --n ]->GetTabBox()->IsFormulaOrValueBox();
+                            if( USHRT_MAX != nWhichId )
                                 break;
+                        }
 
                         // all boxes together, do not check the
                         // row, if a formula or value was found
@@ -805,9 +809,12 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
                         {
                             sal_uInt16 nWhichId = 0;
                             for( size_t n = rBoxes.size(); n; )
-                                if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
-                                    ->GetTabBox()->IsFormulaOrValueBox() ))
+                            {
+                                nWhichId = rBoxes[ --n ]
+                                    ->GetTabBox()->IsFormulaOrValueBox();
+                                if( USHRT_MAX != nWhichId )
                                     break;
+                            }
 
                             // all boxes together, do not check the
                             // row if a formula or value was found

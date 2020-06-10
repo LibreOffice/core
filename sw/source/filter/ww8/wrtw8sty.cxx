@@ -874,7 +874,8 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
         pFont->GetFamily(), pFont->GetCharSet()));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    if (nullptr != (pFont = rPool.GetPoolDefaultItem(RES_CHRATR_FONT)))
+    pFont = rPool.GetPoolDefaultItem(RES_CHRATR_FONT);
+    if (nullptr != pFont)
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet()));

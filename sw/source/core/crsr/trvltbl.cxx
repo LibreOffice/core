@@ -820,10 +820,11 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
                         GetTableBox( m_pBoxIdx->GetIndex() ) )
             pChkBox = m_pBoxPtr;
     }
-    else if( nullptr != ( pSttNd = pPos->nNode.GetNode().
-                                FindSttNodeByType( SwTableBoxStartNode )) )
+    else
     {
-        pChkBox = pSttNd->FindTableNode()->GetTable().GetTableBox( pSttNd->GetIndex() );
+        pSttNd = pPos->nNode.GetNode().FindSttNodeByType( SwTableBoxStartNode );
+        if( pSttNd)
+            pChkBox = pSttNd->FindTableNode()->GetTable().GetTableBox( pSttNd->GetIndex() );
     }
 
     // box has more than one paragraph

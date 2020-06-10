@@ -148,8 +148,8 @@ bool SwFlyCntPortion::Format( SwTextFormatInfo &rInf )
 void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
         TextFrameIndex const nStart, TextFrameIndex const nEnd)
 {
-    SwSortedObjs *pObjs = nullptr;
-    if ( nullptr != (pObjs = GetDrawObjs()) )
+    SwSortedObjs *pObjs = GetDrawObjs();
+    if ( nullptr != pObjs )
     {
         for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
         {

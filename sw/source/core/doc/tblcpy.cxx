@@ -747,11 +747,13 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
             // Do not create empty Sections, otherwise they will be deleted!
             lcl_CpyBox( rCpyTable, pCpyBox, *this, pMyBox, bDelContent, pUndo );
 
-            if( nullptr == (pTmp = pCpyBox->FindNextBox( rCpyTable, pCpyBox, false )))
+            pTmp = pCpyBox->FindNextBox( rCpyTable, pCpyBox, false );
+            if( !pTmp )
                 break;      // no more Boxes
             pCpyBox = pTmp;
 
-            if( nullptr == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
+            pTmp = pMyBox->FindNextBox( *this, pMyBox, false );
+            if( !pTmp )
                 bDelContent = false;  // No space left?
             else
                 pMyBox = const_cast<SwTableBox*>(pTmp);

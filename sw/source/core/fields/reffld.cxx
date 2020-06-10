@@ -1236,7 +1236,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                     if( pIdx )
                     {
                         SwNodeIndex aIdx( *pIdx, 1 );
-                        if( nullptr == ( pTextNd = aIdx.GetNode().GetTextNode()))
+                        pTextNd = aIdx.GetNode().GetTextNode();
+                        if( nullptr == pTextNd )
                             pTextNd = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext( &aIdx ));
                     }
                     *pStt = 0;

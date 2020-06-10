@@ -1320,12 +1320,15 @@ void SwSectionNode::NodesArrChgd()
     // Set the right StartNode for all in this Area
     sal_uLong nStart = GetIndex()+1, nEnd = EndOfSectionIndex();
     for( sal_uLong n = nStart; n < nEnd; ++n )
+    {
         // Make up the Format's nesting
-        if( nullptr != ( pSectNd = rNds[ n ]->GetSectionNode() ) )
+        pSectNd = rNds[ n ]->GetSectionNode();
+        if( nullptr != pSectNd )
         {
             pSectNd->GetSection().GetFormat()->SetDerivedFrom( pFormat );
             n = pSectNd->EndOfSectionIndex();
         }
+    }
 
     // Moving Nodes to the UndoNodes array?
     if( rNds.IsDocNodes() )

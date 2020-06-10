@@ -281,8 +281,10 @@ void SwSectionFrame::Cut_( bool bRemove )
     {
         InvalidateNextPos();
         // Someone has to take over the retouching: predecessor or Upper
-        if ( nullptr != (pFrame = GetPrev()) )
-        {   pFrame->SetRetouche();
+        pFrame = GetPrev();
+        if ( nullptr != pFrame )
+        {
+            pFrame->SetRetouche();
             pFrame->Prepare( PrepareHint::WidowsOrphans );
             if ( pFrame->IsContentFrame() )
                 pFrame->InvalidatePage( pPage );

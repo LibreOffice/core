@@ -1451,7 +1451,8 @@ void SwDoc::SetAllUniqueFlyNames()
     const OUString sGrfNm(SwResId(STR_GRAPHIC_DEFNAME));
     const OUString sOLENm(SwResId(STR_OBJECT_DEFNAME));
 
-    if( 255 < ( n = GetSpzFrameFormats()->size() ))
+    n = GetSpzFrameFormats()->size();
+    if( 255 < n )
         n = 255;
     SwFrameFormatsV aArr;
     aArr.reserve( n );

@@ -349,8 +349,8 @@ static const SwFieldPack aSwFields[] =
 // access to the shell
 static SwWrtShell* lcl_GetShell()
 {
-    SwView* pView;
-    if ( nullptr != (pView = ::GetActiveView()) )
+    SwView* pView = ::GetActiveView();
+    if ( nullptr != pView )
         return pView->GetWrtShellPtr();
     OSL_FAIL("no current shell found!");
     return nullptr;
