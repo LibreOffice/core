@@ -105,6 +105,7 @@ void IncomingRequest::execute() const {
         } catch (const std::exception & e) {
             SAL_INFO("binaryurp", "caught C++ exception " << e.what());
         }
+        SAL_DEBUG("SB:terminate 3");
         bridge_->terminate(false);
     } else {
         if (isExc) {

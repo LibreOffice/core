@@ -307,6 +307,7 @@ void Bridge::terminate(bool final) {
         }
         assert(tp != nullptr);
         uno_threadpool_dispose(tp);
+        SAL_DEBUG("SB:terminating "<<r.is()<<" "<<(r.is()&&isThread(r.get()))<<" "<<joinW<<" "<<w.is()<<" "<<(w.is()&&isThread(w.get())));
         Stubs s;
         {
             osl::MutexGuard g(mutex_);
@@ -912,6 +913,7 @@ void Bridge::dispose() {
     // that dispose is not called from a thread pool worker thread (that dispose
     // is never called from the reader or writer thread is already ensured
     // internally):
+    SAL_DEBUG("SB:terminate 1");
     terminate(true);
     // OOo expects dispose to not return while there are still remote calls in
     // progress; an external protocol must ensure that dispose is not called
@@ -1018,6 +1020,7 @@ void Bridge::terminateWhenUnused(bool unused) {
         // That the current thread considers the bridge unused implies that it
         // is not within an incoming or outgoing remote call (so calling
         // terminate cannot lead to deadlock):
+        SAL_DEBUG("SB:terminate 2");
         terminate(false);
     }
 }
