@@ -22,6 +22,30 @@
       "revId": "a0812581c0b4803c21b8131ff917142230960a7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e15f5bd_3e88d9bd",
+        "filename": "offapi/com/sun/star/text/RelOrientation.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-06-10T14:05:02Z",
+      "side": 1,
+      "message": "relOrientation corresponds to section 20.299 style:horizontal-rel, ODF 1.3.\nWhich reference do you want to name \"LEFT_MARGIN\"? I think, that all relevant reference areas already exist.",
+      "parentUuid": "46ad210b_8c316708",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 34
+      },
+      "revId": "a0812581c0b4803c21b8131ff917142230960a7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
