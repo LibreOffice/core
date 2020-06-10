@@ -86,7 +86,7 @@ void test()
 
     // check that we see don't see writes when calling operator<<=
     // expected-error@+1 {{read m_bar10 [loplugin:writeonlyvars]}}
-    sal_Int32 m_bar10;
+    sal_Int32 m_bar10 = 0;
     // expected-error@+2 {{write any2 [loplugin:writeonlyvars]}}
     // expected-error@+1 {{read any2 [loplugin:writeonlyvars]}}
     css::uno::Any any2;
