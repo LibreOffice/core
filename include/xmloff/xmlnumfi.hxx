@@ -91,6 +91,7 @@ public:
     SvXMLNumImpData* getData() { return pData.get(); }
 
     const SvXMLTokenMap&    GetStylesElemTokenMap();
+    LanguageType            GetLanguageForKey(sal_Int32 nKey);
 
 //  sal_uInt32  GetKeyForName( const OUString& rName );
 };
@@ -164,6 +165,7 @@ public:
                                     const OUString& rLName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
+                                    LanguageType nLang,
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext() override;
 

@@ -1470,7 +1470,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                    const sal_Int32 nTempKey,
+                                    const sal_Int32 nTempKey, LanguageType nLang,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::DATA_STYLE ),
     pData( nullptr ),
@@ -1478,7 +1478,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     aMyConditions(),
     nType( 0 ),
     nKey(nTempKey),
-    nFormatLang( LANGUAGE_SYSTEM ),
+    nFormatLang( nLang ),
     bAutoOrder( false ),
     bFromSystem( false ),
     bTruncate( true ),
@@ -2300,6 +2300,18 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
 const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()
 {
     return pData->GetStylesElemTokenMap();
+}
+
+LanguageType SvXMLNumFmtHelper::GetLanguageForKey(sal_Int32 nKey)
+{
+    if (pData->GetNumberFormatter())
+    {
+        const SvNumberformat* pEntry = pData->GetNumberFormatter()->GetEntry(nKey);
+        if (pEntry)
+            return pEntry->GetLanguage();
+    }
+
+    return LANGUAGE_SYSTEM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
