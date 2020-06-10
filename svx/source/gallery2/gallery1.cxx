@@ -41,6 +41,7 @@
 #include <svx/galmisc.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
+#include <svx/gallerybinaryengine.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -136,8 +137,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         }
     }
 
-    aURL.setExtension( "thm" );
-    aThmURL = ImplGetURLIgnoreCase( aURL );
+    maGalleryBinaryEngine.SetThmExtension(aURL);
 
     aURL.setExtension( "sdg" );
     aSdgURL = ImplGetURLIgnoreCase( aURL );
