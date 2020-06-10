@@ -163,6 +163,7 @@ public:
                                     const OUString& sSecondaryMessage,
                                     InfobarType eType);
     bool              HasInfoBarWithID(const OUString& sId);
+    void AppendReadOnlyInfobar();
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );

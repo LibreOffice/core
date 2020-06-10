@@ -491,6 +491,14 @@ void FuConstructRectangle::Deactivate()
     }
 
     svx::SignatureLineHelper::setShapeCertificate(mpView, xCertificate);
+
+    // Update infobar to offer "finish signing".
+    SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+    if (pFrame && pFrame->HasInfoBarWithID("readonly"))
+    {
+        pFrame->RemoveInfoBar("readonly");
+        pFrame->AppendReadOnlyInfobar();
+    }
 }
 
 namespace {
