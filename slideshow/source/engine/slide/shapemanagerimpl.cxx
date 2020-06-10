@@ -267,6 +267,14 @@ ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > 
     return ShapeSharedPtr();
 }
 
+XShapeToShapeMapSharedPtr ShapeManagerImpl::getXShapeToShapeMapPtr() const
+{
+    if( mpLayerManager )
+        return mpLayerManager->getXShapeToShapeMapPtr();
+
+    return XShapeToShapeMapSharedPtr();
+}
+
 void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
 {
     maHyperlinkShapes.insert(rArea);
