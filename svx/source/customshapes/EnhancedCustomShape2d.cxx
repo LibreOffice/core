@@ -2356,58 +2356,80 @@ void EnhancedCustomShape2d::CreateSubPath(
 
                 case ARCANGLETO :
                 {
-                    double fWR, fHR, fStartAngle, fSwingAngle;
+                    double fWR, fHR; // in Shape coordinate system
+                    double fStartAngle, fSwingAngle; // in deg
 
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        GetParameter ( fWR, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].First, true, false );
-                        GetParameter ( fHR, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].Second, false, true );
+                        basegfx::B2DPoint aTempPair;
+                        aTempPair = GetPointAsB2DPoint(seqCoordinates[static_cast<sal_uInt16>(rSrcPt)], false /*bScale*/, false /*bReplaceGeoSize*/);
+                        fWR = aTempPair.getX();
+                        fHR = aTempPair.getY();
+                        aTempPair = GetPointAsB2DPoint(seqCoordinates[static_cast<sal_uInt16>(rSrcPt + 1)], false /*bScale*/, false /*bReplaceGeoSize*/);
+                        fStartAngle = aTempPair.getX();
+                        fSwingAngle = aTempPair.getY();
 
-                        GetParameter ( fStartAngle, seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + 1) ].First, false, false );
-                        GetParameter ( fSwingAngle, seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + 1 ) ].Second, false, false );
-
-                        // Convert angles to radians, but don't do any scaling / translation yet.
-
-                        fStartAngle = basegfx::deg2rad(fStartAngle);
-                        fSwingAngle = basegfx::deg2rad(fSwingAngle);
+                        // tdf#122323 MS Office clamps the swing angle to [-360,360]. Such restriction
+                        // is neither in OOXML nor in ODF. Nevertheless, to be compatible we do it for
+                        // "ooxml-foo" shapes. Those shapes have their origin in MS Office.
+                        if (bOOXMLShape)
+                        {
+                            fSwingAngle = std::clamp(fSwingAngle, -360.0, 360.0);
+                        }
 
                         SAL_INFO("svx", "ARCANGLETO scale: " << fWR << "x" << fHR << " angles: " << fStartAngle << "," << fSwingAngle);
 
-                        bool bClockwise = fSwingAngle >= 0.0;
-
-                        if (aNewB2DPolygon.count() > 0)
+                        if (aNewB2DPolygon.count() > 0) // otherwise no "current point"
                         {
-                            basegfx::B2DPoint aStartPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
-                            Point aStartPoint( 0, 0 );
+                            // use similar methods as in command U
+                            basegfx::B2DPolygon aTempB2DPolygon;
 
-                            double fT = atan2((fWR*sin(fStartAngle)), (fHR*cos(fStartAngle)));
-                            double fTE = atan2((fWR*sin(fStartAngle + fSwingAngle)), fHR*cos(fStartAngle + fSwingAngle));
+                            if (fWR == 0.0 && fHR == 0.0)
+                            {
+                                // degenerated ellipse, add this one point
+                                aTempB2DPolygon.append(basegfx::B2DPoint(0.0, 0.0));
+                            }
+                            else
+                            {
+                                double fEndAngle = fStartAngle + fSwingAngle;
+                                // Generate arc with ellipse left|top = 0|0.
+                                basegfx::B2DPoint aCenter(fWR, fHR);
+                                if (fSwingAngle < 0.0)
+                                    std::swap(fStartAngle, fEndAngle);
+                                double fS; // fFrom in radians in [0..2Pi[
+                                double fE; // fTo or fEndAngle in radians in [0..2PI[
+                                double fFrom(fStartAngle);
+                                // createPolygonFromEllipseSegment expects angles in [0..2PI[.
+                                if (fSwingAngle >= 360.0 || fSwingAngle <= -360.0)
+                                {
+                                    double fTo(fFrom + 180.0);
+                                    while (fTo < fEndAngle)
+                                    {
+                                        fS = lcl_getNormalizedCircleAngleRad(fWR, fHR, fFrom);
+                                        fE = lcl_getNormalizedCircleAngleRad(fWR, fHR, fTo);
+                                        aTempB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fWR, fHR, fS,fE));
+                                        fFrom = fTo;
+                                        fTo += 180.0;
+                                    }
+                                }
+                                fS = lcl_getNormalizedCircleAngleRad(fWR, fHR, fFrom);
+                                fE = lcl_getNormalizedCircleAngleRad(fWR, fHR, fEndAngle);
+                                aTempB2DPolygon.append(basegfx::utils::createPolygonFromEllipseSegment(aCenter, fWR, fHR,fS, fE));
+                                if (fSwingAngle < 0)
+                                    aTempB2DPolygon.flip();
+                                aTempB2DPolygon.removeDoublePoints();
+                            }
+                            // Scale arc to 1/100mm
+                            basegfx::B2DHomMatrix aMatrix = basegfx::utils::createScaleB2DHomMatrix(fXScale, fYScale);
+                            aTempB2DPolygon.transform(aMatrix);
 
-                            SAL_INFO("svx", "ARCANGLETO angles: " << fStartAngle << ", " << fSwingAngle
-                                             << " --> parameters: " << fT <<", " << fTE );
-
-                            fWR *= fXScale;
-                            fHR *= fYScale;
-
-                            tools::Rectangle aRect ( Point ( aStartPoint.getX() - fWR*cos(fT) - fWR, aStartPoint.getY() - fHR*sin(fT) - fHR ),
-                                              Point ( aStartPoint.getX() - fWR*cos(fT) + fWR, aStartPoint.getY() - fHR*sin(fT) + fHR) );
-
-                            Point aEndPoint ( aStartPoint.getX() - fWR*(cos(fT) - cos(fTE)), aStartPoint.getY() - fHR*(sin(fT) - sin(fTE)) );
-
-                            SAL_INFO(
-                                "svx",
-                                "ARCANGLETO rect: " << aRect.Left() << ", "
-                                    << aRect.Top() << "   x   " << aRect.Right()
-                                    << ", " << aRect.Bottom() << "   start: "
-                                    << aStartPoint.X() << ", "
-                                    << aStartPoint.Y() << " end: "
-                                    << aEndPoint.X() << ", " << aEndPoint.Y()
-                                    << " clockwise: " << int(bClockwise));
-                            basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && ((bClockwise && fSwingAngle > F_PI) || (!bClockwise && fSwingAngle < -F_PI)));
-                            // Now that we have the arc, move it to aStartPointB2D.
-                            basegfx::B2DHomMatrix aMatrix = basegfx::utils::createTranslateB2DHomMatrix(aStartPointB2D.getX(), aStartPointB2D.getY());
-                            aArc.transform(aMatrix);
-                            aNewB2DPolygon.append(aArc);
+                            // Now that we have the arc, move it to the "current point".
+                            basegfx::B2DPoint aCurrentPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
+                            const double fDx(aCurrentPointB2D.getX() - aTempB2DPolygon.getB2DPoint(0).getX());
+                            const double fDy(aCurrentPointB2D.getY() - aTempB2DPolygon.getB2DPoint(0).getY());
+                            aMatrix = basegfx::utils::createTranslateB2DHomMatrix(fDx, fDy);
+                            aTempB2DPolygon.transform(aMatrix);
+                            aNewB2DPolygon.append(aTempB2DPolygon);
                         }
 
                         rSrcPt += 2;
