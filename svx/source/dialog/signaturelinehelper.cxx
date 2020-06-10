@@ -145,6 +145,16 @@ void setShapeCertificate(SdrView* pView,
     aMap["SignatureCertificate"] <<= xCertificate;
     xShapeProps->setPropertyValue("InteropGrabBag",
                                   uno::makeAny(aMap.getAsConstPropertyValueList()));
+
+    // Read svg and replace placeholder texts.
+    OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage("signature-line-draw.svg"));
+    OUString aSignerName = svx::SignatureLineHelper::getSignerName(xCertificate);
+    aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", aSignerName);
+    OUString aDate = svx::SignatureLineHelper::getLocalizedDate();
+    aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
+
+    uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
+    xShapeProps->setPropertyValue("Graphic", uno::Any(xGraphic));
 }
 }
 
