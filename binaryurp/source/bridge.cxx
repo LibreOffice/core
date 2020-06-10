@@ -839,7 +839,8 @@ Bridge::~Bridge() {
         osl::MutexGuard g(mutex_);
         SAL_WARN_IF(
             state_ == STATE_STARTED || state_ == STATE_TERMINATED, "binaryurp",
-            "undisposed bridge, potential deadlock ahead");
+            "undisposed bridge \"" << name_ <<"\" in state " << state_
+                << ", potential deadlock ahead");
     }
 #endif
     dispose();
