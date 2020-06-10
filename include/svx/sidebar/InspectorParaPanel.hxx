@@ -16,37 +16,32 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#include "WriterInspectorTextPanel.hxx"
+#include <sfx2/sidebar/PanelLayout.hxx>
+#include <svx/svxdllapi.h>
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-using namespace css;
-
-namespace sw::sidebar
+namespace svx
 {
-VclPtr<vcl::Window>
-WriterInspectorTextPanel::Create(vcl::Window* pParent,
-                                 const css::uno::Reference<css::frame::XFrame>& rxFrame)
+namespace sidebar
 {
-    if (pParent == nullptr)
-        throw lang::IllegalArgumentException(
-            "no parent Window given to WriterInspectorTextPanel::Create", nullptr, 0);
-    if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to WriterInspectorTextPanel::Create",
-                                             nullptr, 1);
+class SVX_DLLPUBLIC InspectorParaPanel : public PanelLayout
+{
+public:
+    virtual ~InspectorParaPanel() override;
+    virtual void dispose() override;
 
-    return VclPtr<WriterInspectorTextPanel>::Create(pParent, rxFrame);
+    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    InspectorParaPanel(vcl::Window* pParent,
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    virtual void updateEntries(std::vector<OUString> store);
+
+private:
+    std::unique_ptr<weld::TreeView> mxListBoxStyles;
+};
 }
-WriterInspectorTextPanel::WriterInspectorTextPanel(
-    vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : InspectorTextPanel(pParent, rxFrame)
-{
-    return;
-    std::vector<OUString> store;
-    InspectorTextPanel::updateEntries(store);
-}
-
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
