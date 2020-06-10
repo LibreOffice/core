@@ -576,7 +576,9 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         {
             pContentStore->Clear();
             if( pTextNd )
-                pContentStore->Save( GetDoc(), aSttIdx.GetIndex(), pTextNd->GetText().getLength() );
+            {
+                pContentStore->Save(GetDoc(), aSttIdx.GetIndex(), SAL_MAX_INT32);
+            }
         }
 
         if( pTextNd )

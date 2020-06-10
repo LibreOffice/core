@@ -1065,7 +1065,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwPosition aCntPos( aSttIdx, SwIndex( pTextNd ));
 
         const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save( pDoc, aSttIdx.GetIndex(), pTextNd->GetText().getLength() );
+        pContentStore->Save(pDoc, aSttIdx.GetIndex(), SAL_MAX_INT32);
 
         if( T2T_PARA != cCh )
         {
@@ -1564,7 +1564,7 @@ static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
 
                 const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
                 const sal_Int32 nOldTextLen = aCntIdx.GetIndex();
-                pContentStore->Save( pDoc, nNdIdx, pCurTextNd->GetText().getLength() );
+                pContentStore->Save(pDoc, nNdIdx, SAL_MAX_INT32);
 
                 pDelPara->pLastNd->JoinNext();
 
