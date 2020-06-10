@@ -136,8 +136,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         }
     }
 
-    aURL.setExtension( "thm" );
-    aThmURL = ImplGetURLIgnoreCase( aURL );
+    aGalleryBinaryEngine.SetThmExtension(aURL);
 
     aURL.setExtension( "sdg" );
     aSdgURL = ImplGetURLIgnoreCase( aURL );
