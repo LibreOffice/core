@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b5214eb_c917439b",
+        "filename": "sw/source/core/text/porlay.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2300,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-06-10T15:55:32Z",
+      "side": 1,
+      "message": "the parameter type should be sal_Int32 - but that\u0027s not a problem introduced by this commit",
+      "range": {
+        "startLine": 2300,
+        "startChar": 86,
+        "endLine": 2300,
+        "endChar": 95
+      },
+      "revId": "47f0202d1d99635cee305c708f0076ef1b8f963d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
