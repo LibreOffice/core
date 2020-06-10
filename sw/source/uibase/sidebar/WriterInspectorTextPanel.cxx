@@ -43,8 +43,8 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(
     : InspectorTextPanel(pParent, rxFrame)
 {
     std::vector<OUString> store;
-    store.push_back("Successful");
-    store.push_back("Testing");
+    store.push_back("Successful testing");
+    store.push_back("of CS UI");
     store.push_back("Completed");
     InspectorTextPanel::updateEntries(store);
 }
