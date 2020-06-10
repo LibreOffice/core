@@ -2776,7 +2776,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             SwInsertTableOptions aInsTableOptsIn( SwInsertTableFlags::All, 1 );
             OUString aTableNameIn;
             OUString aAutoNameIn;
-            std::unique_ptr<SwTableAutoFormat> pTAFormatIn = nullptr;
+            std::unique_ptr<SwTableAutoFormat> pTAFormatIn;
 
             if( pArgs && pArgs->Count() >= 2 )
             {
@@ -2826,7 +2826,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
 
                 weld::DialogController::runAsync(pDialogController,
-                    [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, &pTAFormatIn] (sal_Int32 nResult) {
+                    [pAbstractDialog, &rSh, &rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn] (sal_Int32 nResult) {
                         if( RET_OK == nResult )
                         {
                             sal_uInt16 nCols = nColsIn;
@@ -2834,12 +2834,13 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                             SwInsertTableOptions aInsTableOpts = aInsTableOptsIn;
                             OUString aTableName = aTableNameIn;
                             OUString aAutoName = aAutoNameIn;
+                            std::unique_ptr<SwTableAutoFormat> pTAFormat;
 
-                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormatIn );
+                            pAbstractDialog->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
 
                             if( nCols && nRows )
                             {
-                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormatIn );
+                                InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
                                 EndUndo(rSh);
                             }
                         }
