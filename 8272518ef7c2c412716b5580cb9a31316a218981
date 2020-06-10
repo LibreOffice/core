@@ -305,6 +305,30 @@
       "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc5615bc_407f7f47",
+        "filename": "drawinglayer/source/processor2d/vclpixelprocessor2d.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-06-10T05:31:41Z",
+      "side": 1,
+      "message": "The problem might be in truncation of point and size dimensions. aRange has its coordinates as floating-point numbers; Point and Size structures use `long`. So using\n\n    Point(aRange.getMinX(), aRange.getMinY())\n\nyou get top-left corner up to almost 1 pixel shifted to top and to left; and then\n\n    Size(aRange.getWidth(), aRange.getHeight())\n\nwould give you the size up to 1 pixel shorter in both directions - combined, that can give you up to two pixels cut from bottom and right.\n\nSee https://gerrit.libreoffice.org/c/core/+/95020 where I addressed that making sure that bottom-right corner is calculated using ceil() applied to double bottom-right coordinates, not size.\n\nNote that even though you would eliminate the \"else\" (rCandidate.getShadowBlur() \u003d\u003d 0) branch, the same problem is still in the main (rCandidate.getShadowBlur() \u003e 0) branch.",
+      "parentUuid": "8825763c_ba037787",
+      "range": {
+        "startLine": 1120,
+        "startChar": 66,
+        "endLine": 1120,
+        "endChar": 71
+      },
+      "revId": "8272518ef7c2c412716b5580cb9a31316a218981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
