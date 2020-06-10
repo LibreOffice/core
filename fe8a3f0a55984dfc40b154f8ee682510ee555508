@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd94b0d7_b2fa056d",
+        "filename": "include/svx/gallery1.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-10T09:31:04Z",
+      "side": 1,
+      "message": "I did this so that GalleryBinaryEngine can use ImplGetURLIgnoreCase. It is temporary until all the other members (aSdgURL, aSdvURL, aStrURL) move to the new class. After that, I will remove this friend.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 31
+      },
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd6ad62_7149092c",
+        "filename": "svx/source/gallery2/gallerybinaryengine.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-10T09:31:04Z",
+      "side": 1,
+      "message": "My unit test for Gallery::CreateTheme() fails in this statement. \n\nwarn:sfx.appl:10552:17840:sfx2/source/appl/app.cxx:151: No DDE-Service possible. Error: 16399\nAssertion failed: newStr, file C:/cygwin/home/adith/lode/dev/core/sal/rtl/ustrbuf.cxx, line 82\nabort() has been calledwarn:unotools.config:10552:17840:unotools/source/config/configmgr.cxx:140: ConfigManager not empty",
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
