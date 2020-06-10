@@ -21,6 +21,7 @@
 #include "threadpool.hxx"
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace ::osl;
 
@@ -53,6 +54,7 @@ namespace cppu_threadpool {
             MutexGuard guard( m_mutex );
             if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
+                SAL_DEBUG("SB-disposed 1");
                 return nullptr;
             }
             m_lstCallstack.push_front( nDisposeId );
@@ -86,6 +88,7 @@ namespace cppu_threadpool {
                     {
                         m_cndWait.reset();
                     }
+                    SAL_DEBUG("SB-disposed 3");
                     break;
                 }
 
