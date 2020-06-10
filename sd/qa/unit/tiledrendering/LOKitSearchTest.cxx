@@ -57,6 +57,7 @@ public:
     void testDontSearchInMasterPages();
     void testSearchInPDFNonExisting();
     void testSearchInPDF();
+    void testSearchInPDFOnePDFObject();
     void testSearchInPDFInMultiplePages();
     void testSearchInPDFInMultiplePagesBackwards();
     void testSearchIn2MixedObjects();
@@ -71,6 +72,7 @@ public:
     CPPUNIT_TEST(testDontSearchInMasterPages);
     CPPUNIT_TEST(testSearchInPDFNonExisting);
     CPPUNIT_TEST(testSearchInPDF);
+    CPPUNIT_TEST(testSearchInPDFOnePDFObject);
     CPPUNIT_TEST(testSearchInPDFInMultiplePages);
     CPPUNIT_TEST(testSearchInPDFInMultiplePagesBackwards);
     CPPUNIT_TEST(testSearchIn2MixedObjects);
@@ -339,6 +341,43 @@ void LOKitSearchTest::testSearchInPDF()
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
                          mpCallbackRecorder->m_aSelection[0]);
+#endif
+}
+
+void LOKitSearchTest::testSearchInPDFOnePDFObject()
+{
+#if HAVE_FEATURE_PDFIUM
+    SdXImpressDocument* pXImpressDocument = createDoc("OnePDFObject.odg");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+
+    SdrGrafObj* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+    CPPUNIT_ASSERT(pGraphicObject);
+
+    Graphic aGraphic = pGraphicObject->GetGraphic();
+    auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    // Search down
+    lcl_search("ABC", false, false);
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+
+    // Search up
+    lcl_search("ABC", false, true); // This caused a crash
+
+    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
 #endif
 }
 

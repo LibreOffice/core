@@ -82,7 +82,7 @@ public:
     /** constructs a reference from another reference */
     inline WeakReference( const WeakReference< reference_type >& rWeakRef );
 
-    /** constructs a reference from another reference */
+    /** move a reference from another reference */
     inline WeakReference( WeakReference< reference_type >&& rWeakRef );
 
     /** returns true if the reference object is not null and still alive */
@@ -96,6 +96,9 @@ public:
 
     /** sets this reference to the given object or null */
     inline void reset( reference_type* pReference );
+
+    /** resets this reference to null */
+    inline void reset();
 
     /** returns the pointer to the reference object or null */
     inline reference_type * operator->() const;
