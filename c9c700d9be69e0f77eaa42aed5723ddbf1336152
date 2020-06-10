@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "200dad3a_c902ba35",
+        "filename": "cui/uiconfig/ui/additionsdialog.ui",
+        "patchSetId": 13
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-10T10:50:11Z",
+      "side": 1,
+      "message": "You plan to put all extensions into a grid? Probably with a limit to 20 or so and paging.",
+      "range": {
+        "startLine": 63,
+        "startChar": 33,
+        "endLine": 63,
+        "endChar": 40
+      },
+      "revId": "c9c700d9be69e0f77eaa42aed5723ddbf1336152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99efa512_3340f040",
+        "filename": "cui/uiconfig/ui/additionsdialog.ui",
+        "patchSetId": 13
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-10T10:50:11Z",
+      "side": 1,
+      "message": "Guess this is mostly a placeholder yet. Haven\u0027t loaded the ui file into Glade.",
+      "range": {
+        "startLine": 69,
+        "startChar": 37,
+        "endLine": 69,
+        "endChar": 43
+      },
+      "revId": "c9c700d9be69e0f77eaa42aed5723ddbf1336152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a95d19cf_74d93168",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-10T10:50:11Z",
+      "side": 1,
+      "message": "Don\u0027t think we need another welded dialog.",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 542,
+        "endChar": 59
+      },
+      "revId": "c9c700d9be69e0f77eaa42aed5723ddbf1336152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "579a929a_fba783cb",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 13
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-06-10T10:50:11Z",
+      "side": 1,
+      "message": "Place holder",
+      "revId": "c9c700d9be69e0f77eaa42aed5723ddbf1336152",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
