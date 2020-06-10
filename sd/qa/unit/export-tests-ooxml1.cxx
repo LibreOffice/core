@@ -90,6 +90,7 @@ public:
     void testRoundtripOwnLineStyles();
     void testRoundtripPrstDash();
     void testDashOnHairline();
+    void testCustomshapeBitmapfillSrcrect();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testRoundtripOwnLineStyles);
     CPPUNIT_TEST(testRoundtripPrstDash);
     CPPUNIT_TEST(testDashOnHairline);
+    CPPUNIT_TEST(testCustomshapeBitmapfillSrcrect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1068,6 +1070,29 @@ void SdOOXMLExportTest1::testDashOnHairline()
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sXmlPath = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:ln/a:custDash/a:ds";
     assertXPath(pXmlDoc, sXmlPath, 11);
+}
+
+void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/customshape-bitmapfill-srcrect.pptx"),
+        PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sXmlPath = "//a:blipFill/a:srcRect";
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//a:blipFill/a:srcRect' number of nodes is incorrect
+    // i.e. <a:srcRect> was exported as <a:fillRect> in <a:stretch>, which made part of the image
+    // invisible.
+    double fLeftPercent = std::round(getXPath(pXmlDoc, sXmlPath, "l").toDouble() / 1000);
+    CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
+    double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
+    CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);

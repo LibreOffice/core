@@ -1443,6 +1443,12 @@ void DrawingML::WriteXGraphicBlipFill(uno::Reference<beans::XPropertySet> const 
 
     WriteXGraphicBlip(rXPropSet, rxGraphic, bRelPathToMedia);
 
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        // Write the crop rectangle of Impress as a source rectangle.
+        WriteSrcRectXGraphic(rXPropSet, rxGraphic);
+    }
+
     if (bWriteMode)
     {
         WriteXGraphicBlipMode(rXPropSet, rxGraphic);
@@ -1538,6 +1544,13 @@ void DrawingML::WriteSrcRectXGraphic(uno::Reference<beans::XPropertySet> const &
 void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const & rXPropSet,
                                      uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        // Limiting the area used for stretching is not supported in Impress.
+        mpFS->singleElementNS(XML_a, XML_stretch);
+        return;
+    }
+
     mpFS->startElementNS(XML_a, XML_stretch);
 
     bool bCrop = false;
