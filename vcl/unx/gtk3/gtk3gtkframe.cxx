@@ -3093,10 +3093,6 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
         return;
     // change of focus between native widgets within the toplevel
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    // tdf#129634 ignore floating toolbars
-    if (pThis->m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION)
-        return;
-
     // tdf#129634 interpret losing focus as focus passing explicitly to another widget
     bool bLoseFocus = pWidget && pWidget != GTK_WIDGET(pThis->m_pFixedContainer);
     pThis->CallCallbackExc(bLoseFocus ? SalEvent::LoseFocus : SalEvent::GetFocus, nullptr);
