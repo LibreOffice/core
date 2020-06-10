@@ -1690,7 +1690,7 @@ SaveBookmark::SaveBookmark(
     const SwNodeIndex & rMvPos,
     const SwIndex* pIdx)
     : m_aName(rBkmk.GetName())
-    , m_aShortName()
+    , m_bHidden(false)
     , m_aCode()
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
 {
@@ -1699,6 +1699,8 @@ SaveBookmark::SaveBookmark(
     {
         m_aShortName = pBookmark->GetShortName();
         m_aCode = pBookmark->GetKeyCode();
+        m_bHidden = pBookmark->IsHidden();
+        m_aHideCondition = pBookmark->GetHideCondition();
 
         ::sfx2::Metadatable const*const pMetadatable(
                 dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
@@ -1767,6 +1769,9 @@ void SaveBookmark::SetInDoc(
         {
             pBookmark->SetKeyCode(m_aCode);
             pBookmark->SetShortName(m_aShortName);
+            pBookmark->Hide(m_bHidden);
+            pBookmark->SetHideCondition(m_aHideCondition);
+
             if (m_pMetadataUndo)
             {
                 ::sfx2::Metadatable * const pMeta(
