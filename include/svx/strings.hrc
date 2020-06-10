@@ -1708,6 +1708,9 @@
 
 #define RID_SVXSTR_FONTWORK                                 NC_("RID_SVXSTR_FONTWORK", "Fontwork")
 
+#define RID_SVXSTR_SIGNATURELINE_DSIGNED_BY                 NC_("RID_SVXSTR_SIGNATURELINE_DSIGNED_BY", "Digitally signed by:")
+#define RID_SVXSTR_SIGNATURELINE_DATE                       NC_("RID_SVXSTR_SIGNATURELINE_DATE", "Date: %1")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
