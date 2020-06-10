@@ -911,6 +911,16 @@ void setupSidebar(bool bShow)
         SetLastExceptionMsg("No view shell or sidebar");
 }
 
+void hideSidebar()
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
+    if (pViewFrame)
+        pViewFrame->SetChildWindow(SID_SIDEBAR, false , false );
+    else
+        SetLastExceptionMsg("No view shell or sidebar");
+}
+
 VclPtr<Window> getSidebarWindow()
 {
     VclPtr<Window> xRet;
@@ -3894,7 +3904,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")
     {
-        setupSidebar(false);
+        hideSidebar();
         return;
     }
 
