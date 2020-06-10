@@ -346,6 +346,7 @@ namespace slideshow::internal
                                 ? MTF_LOAD_FOREIGN_SOURCE : MTF_LOAD_NONE ),
             maCurrentShapeUnitBounds(),
             mnPriority( nPrio ), // TODO(F1): When ZOrder someday becomes usable: make this ( getAPIShapePrio( xShape ) ),
+            mbOnMasterSlide(false),
             maBounds( getAPIShapeBounds( xShape ) ),
             mpAttributeLayer(),
             mpIntrinsicAnimationActivity(),
@@ -455,6 +456,7 @@ namespace slideshow::internal
             mnCurrMtfLoadFlags( rSrc.mnCurrMtfLoadFlags ),
             maCurrentShapeUnitBounds(),
             mnPriority( nPrio ),
+            mbOnMasterSlide(false),
             maBounds( rSrc.maBounds ),
             mpAttributeLayer(),
             mpIntrinsicAnimationActivity(),
@@ -794,6 +796,16 @@ namespace slideshow::internal
         double DrawShape::getPriority() const
         {
             return mnPriority;
+        }
+
+        bool DrawShape::isOnMasterSlide() const
+        {
+            return mbOnMasterSlide;
+        }
+
+        void DrawShape::setIsOnMasterSlide(const bool bOnMasterSlide)
+        {
+            mbOnMasterSlide = bOnMasterSlide;
         }
 
         bool DrawShape::isBackgroundDetached() const

@@ -137,6 +137,8 @@ namespace slideshow
             virtual ::basegfx::B2DRectangle getUpdateArea() const override;
             virtual bool isVisible() const override;
             virtual double getPriority() const override;
+            virtual bool isOnMasterSlide() const override;
+            virtual void setIsOnMasterSlide( const bool bOnMasterSlide ) override;
 
 
             // animation methods
@@ -296,6 +298,7 @@ namespace slideshow
 
             // The attributes of this Shape
             const double                                                            mnPriority;
+            bool                                                                    mbOnMasterSlide;
             ::basegfx::B2DRectangle                                                 maBounds; // always needed for rendering.
                                                                                               // for subset shapes, this member
                                                                                               // might change when views are

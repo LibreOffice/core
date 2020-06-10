@@ -204,6 +204,10 @@ namespace slideshow
              */
             virtual bool isBackgroundDetached() const = 0;
 
+            virtual bool isOnMasterSlide() const = 0;
+
+            virtual void setIsOnMasterSlide( const bool bOnMasterSlide ) = 0;
+
             // Misc
 
 

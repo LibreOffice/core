@@ -97,12 +97,15 @@ public:
     virtual basegfx::B2DRectangle getUpdateArea() const override;
     virtual bool isVisible() const override;
     virtual double getPriority() const override;
+    virtual bool isOnMasterSlide() const override;
+    virtual void setIsOnMasterSlide( const bool bOnMasterSlide ) override;
     virtual bool isBackgroundDetached() const override;
 
 private:
     ShapeSharedPtr const                  mpGroupShape;
     uno::Reference<drawing::XShape> const mxShape;
     double const                          mnPrio;
+    bool                                  mbOnMasterSlide;
     basegfx::B2DPoint                     maPosOffset;
     double                                mnWidth;
     double                                mnHeight;
@@ -114,7 +117,8 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
                             double                                     nPrio ) :
     mpGroupShape(pGroupShape),
     mxShape(xShape),
-    mnPrio(nPrio)
+    mnPrio(nPrio),
+    mbOnMasterSlide(false)
 {
     // read bound rect
     uno::Any const aTmpRect_( xPropSet->getPropertyValue( "BoundRect" ));
@@ -186,6 +190,16 @@ bool ShapeOfGroup::isVisible() const
 double ShapeOfGroup::getPriority() const
 {
     return mnPrio;
+}
+
+bool ShapeOfGroup::isOnMasterSlide() const
+{
+    return mbOnMasterSlide;
+}
+
+void ShapeOfGroup::setIsOnMasterSlide(const bool bOnMasterSlide)
+{
+    mbOnMasterSlide = bOnMasterSlide;
 }
 
 bool ShapeOfGroup::isBackgroundDetached() const
@@ -426,6 +440,7 @@ ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedE
                                   uno::UNO_QUERY_THROW),
                               mrContext) );
     mnAscendingPrio += 1.0;
+    pBgShape->setIsOnMasterSlide(true);
 
     return pBgShape;
 }

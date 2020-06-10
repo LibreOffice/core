@@ -44,6 +44,7 @@ class ImplTestShape : public TestShape,
     ViewVector               maViewLayers;
     const basegfx::B2DRange  maRect;
     const double             mnPrio;
+    bool                     mbOnMasterSlide;
     sal_Int32                mnAnimated;
     mutable sal_Int32        mnNumUpdates;
     mutable sal_Int32        mnNumRenders;
@@ -55,6 +56,7 @@ public:
         maViewLayers(),
         maRect( rRect ),
         mnPrio( nPrio ),
+        mbOnMasterSlide(false),
         mnAnimated(0),
         mnNumUpdates(0),
         mnNumRenders(0)
@@ -174,6 +176,14 @@ private:
     virtual double getPriority() const override
     {
         return mnPrio;
+    }
+    virtual bool isOnMasterSlide() const override
+    {
+        return mbOnMasterSlide;
+    }
+    virtual void setIsOnMasterSlide( const bool bOnMasterSlide ) override
+    {
+        mbOnMasterSlide = bOnMasterSlide;
     }
     virtual bool isBackgroundDetached() const override
     {
