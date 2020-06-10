@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e7ba1046_04cf921e",
+        "filename": "include/svx/gallery1.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-10T11:05:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f0f551e_a809b52f",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 31
+      },
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cfff791_0b1584b1",
         "filename": "include/svx/gallery1.hxx",
         "patchSetId": 2
@@ -69,6 +93,30 @@
       "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31e1bf1f_4c102901",
+        "filename": "include/svx/gallery1.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-06-10T11:05:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6cfff791_0b1584b1",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "fe8a3f0a55984dfc40b154f8ee682510ee555508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
