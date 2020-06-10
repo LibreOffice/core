@@ -23,6 +23,7 @@
 #include "disposable.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#include "tools.hxx"
 
 namespace com::sun::star::drawing { class XShape; }
 
@@ -35,9 +36,15 @@ namespace slideshow
         class HyperlinkArea;
         class AnimatableShape;
         class Shape;
+        typedef std::unordered_map<
+              css::uno::Reference< css::drawing::XShape >,
+              ShapeSharedPtr,
+              hash< css::uno::Reference< css::drawing::XShape > >
+            > XShapeHash;
         typedef ::std::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
         typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
         typedef std::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
+        typedef std::shared_ptr<XShapeHash> XShapeHashSharedPtr;
 
         /** ShapeManager interface
 
@@ -91,6 +98,8 @@ namespace slideshow
              */
             virtual ShapeSharedPtr lookupShape(
                 css::uno::Reference< css::drawing::XShape > const & xShape ) const = 0;
+
+            virtual XShapeHashSharedPtr getXShapeHashSharedPtr() const = 0;
 
             /** Register given shape as a hyperlink target
 

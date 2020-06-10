@@ -38,6 +38,17 @@ namespace slideshow
 {
     namespace internal
     {
+        /** A hash map which maps the XShape to the corresponding Shape object.
+
+            Provides quicker lookup than ShapeSet for simple mappings
+         */
+        typedef std::unordered_map<
+              css::uno::Reference< css::drawing::XShape >,
+              ShapeSharedPtr,
+              hash< css::uno::Reference< css::drawing::XShape > >
+            > XShapeHash;
+
+        typedef std::shared_ptr<XShapeHash> XShapeHashSharedPtr;
         /* Definition of Layermanager class */
 
         /** This class manages all of a slide's layers (and shapes)
@@ -132,6 +143,8 @@ namespace slideshow
             AttributableShapeSharedPtr getSubsetShape( const AttributableShapeSharedPtr&    rOrigShape,
                                                        const DocTreeNode&                   rTreeNode );
 
+            XShapeHashSharedPtr getXShapeHashPtr();
+
             /** Revoke a previously queried subset shape.
 
                 With this method, a previously requested subset shape
@@ -219,15 +232,7 @@ namespace slideshow
             bool renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const;
 
         private:
-            /** A hash map which maps the XShape to the corresponding Shape object.
 
-                Provides quicker lookup than ShapeSet for simple mappings
-             */
-            typedef std::unordered_map<
-                  css::uno::Reference< css::drawing::XShape >,
-                  ShapeSharedPtr,
-                  hash< css::uno::Reference< css::drawing::XShape > >
-                > XShapeHash;
 
             class ShapeComparator
             {
@@ -311,7 +316,7 @@ namespace slideshow
 
             /** Contains all shapes with their XShape reference as the key
              */
-            XShapeHash               maXShapeHash;
+            XShapeHashSharedPtr      mpXShapeHash;
 
             /** Set of shapes this LayerManager own
 
