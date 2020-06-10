@@ -139,7 +139,7 @@ struct Bar
     // check that we see writes of the LHS when calling operator<<=
     void bar12()
     {
-        int x;
+        int x = 0;
         m_bar12 <<= x;
     }
 };
