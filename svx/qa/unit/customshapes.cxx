@@ -696,6 +696,59 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandT_CaseZeroHeight)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart y-coordinate", 9999.0, aStart.getY(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd y-coordinate", 1999.0, aEnd.getY(), 1.0);
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf103474_commandG_CaseZeroHeight)
+{
+    // Some as above, but with shape with command G.
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf103474_commandG_CaseZeroHeight.odp";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    // The end points of the straight line segment should have the same x-coordinate of left
+    // of shape, and different y-coordinates, one top and the other bottom of the shape.
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
+    const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", static_cast<sal_uInt32>(1),
+                                 aPolyPolygon.count());
+    const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+    // Get the middle points of the polygon. They are the endpoints of the
+    // straight line segment regardless of the quarter ellipse parts, because
+    // the shape is symmetric.
+    const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(aPolygon.count() / 2 - 1));
+    const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() / 2));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart x-coordinate", 1999.0, aStart.getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd x-coordinate", 1999.0, aEnd.getX(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aStart y-coordinate", 9999.0, aStart.getY(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("aEnd y-coordinate", 1999.0, aEnd.getY(), 1.0);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
+{
+    // SwingAngles are clamped to [-360;360] in MS Office. Error was, that LO calculated
+    // the end angle and used it modulo 360, no full ellipse was drawn.
+    OUString sURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf122323_swingAngle_larger360deg.pptx";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    SdrObjCustomShape& rSdrObjCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+    SdrPathObj* pPathObj = static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry());
+    CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
+    const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
+    const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+    const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(0));
+    // last point comes from line to center, therefore -2 instead of -1
+    const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Start <> End", aStart, aEnd);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
