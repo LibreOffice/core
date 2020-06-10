@@ -11046,8 +11046,6 @@ public:
         gtk_widget_set_has_tooltip(m_pWidget, true);
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
-        gtk_widget_add_events(m_pWidget, GDK_BUTTON_PRESS_MASK);
-        gtk_widget_add_events(m_pWidget, GDK_BUTTON_RELEASE_MASK);
     }
 
     AtkObject* GetAtkObject(AtkObject* pDefaultAccessible)
