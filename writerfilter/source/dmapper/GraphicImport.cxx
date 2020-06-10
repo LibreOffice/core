@@ -963,6 +963,22 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::PAGE_RIGHT));
                     }
                     break;
+                case NS_ooxml::LN_ST_SizeRelFromH_insideMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        // TODO: This should be text::RelOrientation::INSIDE_MARGIN.
+                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::FRAME_LEFT));
+                    }
+                    break;
+                case NS_ooxml::LN_ST_SizeRelFromH_outsideMargin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        // TODO: This should be text::RelOrientation::OUTSIDE_MARGIN.
+                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::FRAME_RIGHT));
+                    }
+                    break;
                 case NS_ooxml::LN_ST_SizeRelFromH_page:
                     if (m_xShape.is())
                     {
