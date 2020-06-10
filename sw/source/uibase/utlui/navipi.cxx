@@ -405,6 +405,10 @@ bool SwNavigationPI::EditAction()
     if (m_aPageChgIdle.IsActive())
         m_aPageChgIdle.Stop();
 
+    // if the user has clicked into the document, forget about changing the page
+    if (pView->GetEditWin().HasFocus())
+        return false;
+
     SwWrtShell &rSh = m_pCreateView->GetWrtShell();
     sal_uInt16 nNewPage = m_xEdit->get_value();
 
