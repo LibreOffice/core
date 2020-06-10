@@ -207,25 +207,25 @@ void Test::testSharedStringPool()
     // Check the string counts after purging. Purging shouldn't remove any strings in this case.
     svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
 
     // Clear A1 and purge again.
     clearRange(m_pDoc, ScAddress(0,0,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
 
     // Clear A2 and purge again.
     clearRange(m_pDoc, ScAddress(0,1,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
 
     // Clear A3 and purge again.
     clearRange(m_pDoc, ScAddress(0,2,0));
     rPool.purge();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
 
     // Clear A4 and purge again.
