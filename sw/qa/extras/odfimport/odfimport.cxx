@@ -30,6 +30,9 @@
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -1046,6 +1049,33 @@ DECLARE_ODFIMPORT_TEST(testTdf123968, "tdf123968.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
                                   + "New value" + OUStringChar(CH_TXT_ATR_INPUTFIELDEND)),
                          rStart.GetText());
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf133459, "tdf133459.odt")
+{
+    // Test that the number format was correctly imported, and used by both fields.
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+
+    // First Field
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    const OUString sPresentation(xField->getPresentation(false));
+    const sal_Int32 nFormat(getProperty<sal_Int32>(xField, "NumberFormat"));
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xField, "IsFixedLanguage"));
+
+    // Second field
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sPresentation, xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(nFormat, getProperty<sal_Int32>(xField, "NumberFormat"));
+    CPPUNIT_ASSERT_EQUAL(sal_True, getProperty<sal_Bool>(xField, "IsFixedLanguage"));
+
+    // Test the number format itself
+    uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFormat(xNumberFormatsSupplier->getNumberFormats()->getByKey(nFormat));
+    lang::Locale aLocale(getProperty<lang::Locale>(xFormat, "Locale"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ru"), aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("RU"), aLocale.Country);
+    CPPUNIT_ASSERT_EQUAL(OUString("QQ YYYY"), getProperty<OUString>(xFormat, "FormatString"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
