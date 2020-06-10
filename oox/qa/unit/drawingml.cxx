@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -50,6 +51,7 @@ public:
     void setUp() override;
     void tearDown() override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+    void load(const OUString& rURL);
     void loadAndReload(const OUString& rURL, const OUString& rFilterName);
 };
 
@@ -68,9 +70,11 @@ void OoxDrawingmlTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+void OoxDrawingmlTest::load(const OUString& rURL) { mxComponent = loadFromDesktop(rURL); }
+
 void OoxDrawingmlTest::loadAndReload(const OUString& rURL, const OUString& rFilterName)
 {
-    mxComponent = loadFromDesktop(rURL);
+    load(rURL);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= rFilterName;
@@ -126,6 +130,30 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
     // Without the accompanying fix in place, this test would have failed with:
     // with drawing::FillStyle_NONE - 0
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eFillStyle);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "preset-adjust-value.pptx";
+
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    aGeoPropMap.getValue("AdjustmentValues") >>= aAdjustmentSeq;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aAdjustmentSeq.getLength());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 11587
+    // - Actual  : 10813
+    // i.e. the adjust value was set from the placeholder, not from the shape.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11587), aAdjustmentSeq[0].Value.get<sal_Int32>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

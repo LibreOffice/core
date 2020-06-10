@@ -203,7 +203,11 @@ void CustomShapeProperties::pushToPropSet(
                                     aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
                                     aAdjustmentVal.Name = adjustmentGuide.maName;
-                                    aAdjustmentSeq[ nIndex++ ] = aAdjustmentVal;
+                                    if (nIndex < aAdjustmentSeq.getLength())
+                                    {
+                                        aAdjustmentSeq[nIndex] = aAdjustmentVal;
+                                        ++nIndex;
+                                    }
                                 }
                             }
                             rGeoProp.Value <<= aAdjustmentSeq;

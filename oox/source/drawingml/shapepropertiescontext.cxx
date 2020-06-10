@@ -28,6 +28,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <drawingml/customshapeproperties.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -71,6 +72,10 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
             {
                 mrShape.getServiceName() = "com.sun.star.drawing.CustomShape";
             }
+
+            // We got a preset geometry, forget the geometry inherited from the placeholder shape.
+            mrShape.getCustomShapeProperties() = std::make_shared<CustomShapeProperties>();
+
             return new PresetShapeGeometryContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
         }
 
