@@ -49,6 +49,7 @@ template< class reference_type >
 inline WeakReference< reference_type >::WeakReference( WeakReference< reference_type >&& rWeakRef )
 {
     mpWeakConnection = std::move(rWeakRef.mpWeakConnection);
+    rWeakRef.reset();
 }
 
 template< class reference_type >
@@ -73,7 +74,13 @@ inline void WeakReference< reference_type >::reset( reference_type* pReference )
     if( pReference )
         mpWeakConnection = pReference->getWeakConnection();
     else
-        mpWeakConnection = new WeakConnection;
+        reset();
+}
+
+template< class reference_type >
+inline void WeakReference< reference_type >::reset()
+{
+    mpWeakConnection = new WeakConnection;
 }
 
 template< class reference_type >
