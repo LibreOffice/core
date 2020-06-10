@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f987d8c_3114ece0",
+        "filename": "include/svx/sidebar/InspectorTextPanel.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T06:06:53Z",
+      "side": 1,
+      "message": "You don\u0027t want this to be set from outside, but from inside the class. \n\nCreate something like a :\nvoid updateEntries(std::vector\u003cOUString\u003e store) in InspectorTextPanel, then inside WriterInspectorTextPanel you can call this which will manipulate mxListBoxStyles in in this class",
+      "range": {
+        "startLine": 36,
+        "startChar": 37,
+        "endLine": 36,
+        "endChar": 65
+      },
+      "revId": "f0e65acd2e1c486e0210e5c2299435000a2eec58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f96c55f_92eca694",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T06:06:53Z",
+      "side": 1,
+      "message": "You want to create a WriterInspectorTextPanel here.... InspectorTextPanel::Create shouldn\u0027t be needed at all.",
+      "range": {
+        "startLine": 45,
+        "startChar": 20,
+        "endLine": 45,
+        "endChar": 38
+      },
+      "revId": "f0e65acd2e1c486e0210e5c2299435000a2eec58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a76f5f5_f0aaf12a",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T06:06:53Z",
+      "side": 1,
+      "message": "also variables shouldn\u0027t start with a capital case letter - this implies it is a class",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 17
+      },
+      "revId": "f0e65acd2e1c486e0210e5c2299435000a2eec58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a960932_ea22f042",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-06-10T06:06:53Z",
+      "side": 1,
+      "message": "The purpose of this class is to have writer specific, so you want to gather what changed in this class",
+      "revId": "f0e65acd2e1c486e0210e5c2299435000a2eec58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
