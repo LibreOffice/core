@@ -282,6 +282,7 @@
 #define STR_CHECKOUT                            NC_("STR_CHECKOUT", "Check Out")
 #define STR_READONLY_EDIT                       NC_("STR_READONLY_EDIT", "Edit Document")
 #define STR_READONLY_SIGN                       NC_("STR_READONLY_SIGN", "Sign Document")
+#define STR_READONLY_FINISH_SIGN                NC_("STR_READONLY_FINISH_SIGN", "Finish Signing")
 #define STR_SIGNATURE_BROKEN                    NC_("STR_SIGNATURE_BROKEN", "This document has an invalid signature.")
 #define STR_SIGNATURE_INVALID                   NC_("STR_SIGNATURE_INVALID", "The signature was valid, but the document has been modified")
 #define STR_SIGNATURE_NOTVALIDATED              NC_("STR_SIGNATURE_NOTVALIDATED", "The signature is OK, but the certificate could not be validated.")

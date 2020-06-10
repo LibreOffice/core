@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -88,6 +89,7 @@
 #include <optional>
 
 #include <unotools/configmgr.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1219,6 +1221,82 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl() const
     return m_pImpl->aBorder;
 }
 
+namespace
+{
+/// Does the current selection have a shape with an associated signing certificate?
+bool IsSignWithCert(SfxViewShell* pViewShell)
+{
+    uno::Reference<frame::XModel> xModel = pViewShell->GetCurrentDocument();
+    if (!xModel.is())
+    {
+        return false;
+    }
+
+    uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
+    if (!xShapes.is() || xShapes->getCount() < 1)
+    {
+        return false;
+    }
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
+    if (!xShapeProps.is())
+    {
+        return false;
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
+    return aMap.find("SignatureCertificate") != aMap.end();
+}
+}
+
+void SfxViewFrame::AppendReadOnlyInfobar()
+{
+    bool bSignPDF = m_xObjSh->IsSignPDF();
+    bool bSignWithCert = false;
+    if (bSignPDF)
+    {
+        bSignWithCert = IsSignWithCert(GetViewShell());
+    }
+
+    auto pInfoBar = AppendInfoBar("readonly", "",
+                                  SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT),
+                                  InfobarType::INFO);
+    if (pInfoBar)
+    {
+        if (bSignPDF)
+        {
+            // SID_SIGNPDF opened a read-write PDF
+            // read-only for signing purposes.
+            VclPtrInstance<PushButton> xSignButton(&GetWindow());
+            if (bSignWithCert)
+            {
+                xSignButton->SetText(SfxResId(STR_READONLY_FINISH_SIGN));
+            }
+            else
+            {
+                xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
+            }
+
+            xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
+            xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+            pInfoBar->addButton(xSignButton);
+        }
+
+        bool showEditDocumentButton = true;
+        if (m_xObjSh->isEditDocLocked())
+            showEditDocumentButton = false;
+
+        if (showEditDocumentButton)
+        {
+            VclPtrInstance<PushButton> xBtn(&GetWindow());
+            xBtn->SetText(SfxResId(STR_READONLY_EDIT));
+            xBtn->SetSizePixel(xBtn->GetOptimalSize());
+            xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
+            pInfoBar->addButton(xBtn);
+        }
+    }
+}
+
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(m_pImpl->bIsDowning)
@@ -1364,35 +1442,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
                         (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
-                    bool bSignPDF = m_xObjSh->IsSignPDF();
-
-                    auto pInfoBar = AppendInfoBar("readonly", "", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT), InfobarType::INFO);
-                    if (pInfoBar)
-                    {
-                        if (bSignPDF)
-                        {
-                            // SID_SIGNPDF opened a read-write PDF
-                            // read-only for signing purposes.
-                            VclPtrInstance<PushButton> xSignButton(&GetWindow());
-                            xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
-                            xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
-                            xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
-                            pInfoBar->addButton(xSignButton);
-                        }
-
-                        bool showEditDocumentButton = true;
-                        if (m_xObjSh->isEditDocLocked())
-                            showEditDocumentButton = false;
-
-                        if (showEditDocumentButton)
-                        {
-                            VclPtrInstance<PushButton> xBtn(&GetWindow());
-                            xBtn->SetText(SfxResId(STR_READONLY_EDIT));
-                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                            xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-                            pInfoBar->addButton(xBtn);
-                        }
-                    }
+                    AppendReadOnlyInfobar();
                 }
 
                 if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
