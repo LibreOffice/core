@@ -97,12 +97,15 @@ public:
     virtual basegfx::B2DRectangle getUpdateArea() const override;
     virtual bool isVisible() const override;
     virtual double getPriority() const override;
+    virtual bool isForeground() const override;
+    virtual void setIsForeground( const bool bIsForeground ) override;
     virtual bool isBackgroundDetached() const override;
 
 private:
     ShapeSharedPtr const                  mpGroupShape;
     uno::Reference<drawing::XShape> const mxShape;
     double const                          mnPrio;
+    bool                                  mbIsForeground;
     basegfx::B2DPoint                     maPosOffset;
     double                                mnWidth;
     double                                mnHeight;
@@ -114,7 +117,8 @@ ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupSha
                             double                                     nPrio ) :
     mpGroupShape(pGroupShape),
     mxShape(xShape),
-    mnPrio(nPrio)
+    mnPrio(nPrio),
+    mbIsForeground(true)
 {
     // read bound rect
     uno::Any const aTmpRect_( xPropSet->getPropertyValue( "BoundRect" ));
@@ -186,6 +190,16 @@ bool ShapeOfGroup::isVisible() const
 double ShapeOfGroup::getPriority() const
 {
     return mnPrio;
+}
+
+bool ShapeOfGroup::isForeground() const
+{
+    return mbIsForeground;
+}
+
+void ShapeOfGroup::setIsForeground(const bool bIsForeground)
+{
+    mbIsForeground = bIsForeground;
 }
 
 bool ShapeOfGroup::isBackgroundDetached() const
@@ -426,6 +440,7 @@ ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedE
                                   uno::UNO_QUERY_THROW),
                               mrContext) );
     mnAscendingPrio += 1.0;
+    pBgShape->setIsForeground(false);
 
     return pBgShape;
 }
@@ -495,6 +510,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
         }
         if( bIsGroupShape && pRet )
         {
+            pRet->setIsForeground(false);
             // push new group on the stack: group traversal
             maShapesStack.push( XShapesEntry( pRet ) );
         }
