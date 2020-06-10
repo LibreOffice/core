@@ -26,6 +26,7 @@
 #include "PageHeaderPanel.hxx"
 #include "PageFooterPanel.hxx"
 #include "WrapPropertyPanel.hxx"
+#include "WriterInspectorParaPanel.hxx"
 #include "WriterInspectorTextPanel.hxx"
 #include "TableEditPanel.hxx"
 #include <navipi.hxx>
@@ -164,6 +165,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
         VclPtrInstance<SwRedlineAcceptPanel> pPanel(pParentWindow, xFrame);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            rsResourceURL,
+            xFrame,
+            pPanel,
+            ui::LayoutSize(-1,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/WriterInspectorParaPanel"))
+    {
+        VclPtr<vcl::Window> pPanel = sw::sidebar::WriterInspectorParaPanel::Create( pParentWindow, xFrame);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
