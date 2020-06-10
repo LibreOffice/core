@@ -40,7 +40,7 @@ class watermark(UITestCase):
 
         self.assertEqual(get_state_as_dict(xTextInput)["Text"], "Watermark")
         self.assertEqual(get_state_as_dict(xAngle)["Text"], "46°")
-        self.assertEqual(get_state_as_dict(xTransparency)["Text"], "51%")
+        self.assertEqual(get_state_as_dict(xTransparency)["Text"], "55%")
 
         xCancBtn = xDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancBtn)
