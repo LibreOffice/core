@@ -1229,8 +1229,8 @@ SwFrame *SwFrame::FindPrev_()
 
 void SwFrame::ImplInvalidateNextPos( bool bNoFootnote )
 {
-    SwFrame *pFrame;
-    if ( nullptr != (pFrame = FindNext_()) )
+    SwFrame *pFrame = FindNext_();
+    if ( nullptr != pFrame )
     {
         if( pFrame->IsSctFrame() )
         {

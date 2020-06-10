@@ -2914,12 +2914,14 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             const SwFormatChain &rChain = pFormat->GetChain();
             const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
-            if ((pFlyFormat = rChain.GetPrev()) != nullptr)
+            pFlyFormat = rChain.GetPrev();
+            if (pFlyFormat != nullptr)
             {
                 sPrevChain = pFlyFormat->GetName();
             }
 
-            if ((pFlyFormat = rChain.GetNext()) != nullptr)
+            pFlyFormat = rChain.GetNext();
+            if (pFlyFormat != nullptr)
             {
                 sNextChain = pFlyFormat->GetName();
             }
@@ -3063,10 +3065,12 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
             const SwFormatChain &rChain = pFormat->GetChain();
             const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
-            if ((pFlyFormat = rChain.GetPrev()) != nullptr)
+            pFlyFormat = rChain.GetPrev();
+            if (pFlyFormat != nullptr)
                 sPrevChain = pFlyFormat->GetName();
 
-            if ((pFlyFormat = rChain.GetNext()) != nullptr)
+            pFlyFormat = rChain.GetNext();
+            if (pFlyFormat != nullptr)
                 sNextChain = pFlyFormat->GetName();
             if(sPrevChain != sCurrentPrevChain)
                 bRet |= nullptr != rSet->Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));

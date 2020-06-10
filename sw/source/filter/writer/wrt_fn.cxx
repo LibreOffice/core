@@ -32,8 +32,8 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
     sal_uInt16 nId = rHt.Which();
     OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
-    FnAttrOut pOut;
-    if( nullptr != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
+    FnAttrOut pOut = pTab[ nId - RES_CHRATR_BEGIN];
+    if( nullptr != pOut )
         (*pOut)( rWrt, rHt );
     return rWrt;
 
@@ -70,7 +70,8 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
             // pTab only covers POOLATTR_BEGIN..POOLATTR_END.
             if( pItem->Which() <= POOLATTR_END )
             {
-                if( nullptr != ( pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN]) )
+                pOut = pTab[ pItem->Which() - RES_CHRATR_BEGIN];
+                if( nullptr != pOut )
                 {
                     (*pOut)( rWrt, *pItem );
                 }
@@ -93,7 +94,8 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
                         *pItem != pSet->GetParent()->Get( nWhich ))
                 ))
             {
-                if( nullptr != ( pOut = pTab[ nWhich - RES_CHRATR_BEGIN] ))
+                pOut = pTab[ nWhich - RES_CHRATR_BEGIN];
+                if( nullptr != pOut )
                 {
                     (*pOut)( rWrt, *pItem );
                 }
@@ -114,7 +116,8 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         // may be handled more directly in HTML export to handle them.
         const std::unique_ptr<SvxBrushItem> aSvxBrushItem(getSvxBrushItemFromSourceSet(*pSet, RES_BACKGROUND, bDeep));
 
-        if( nullptr != ( pOut = pTab[RES_BACKGROUND - RES_CHRATR_BEGIN] ))
+        pOut = pTab[RES_BACKGROUND - RES_CHRATR_BEGIN];
+        if( nullptr != pOut )
         {
             (*pOut)( rWrt, *aSvxBrushItem );
         }
@@ -146,8 +149,8 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             OSL_FAIL("What kind of node is it now?");
             break;
     }
-    FnNodeOut pOut;
-    if( nullptr != ( pOut = pTab[ nId - RES_NODE_BEGIN ] ))
+    FnNodeOut pOut = pTab[ nId - RES_NODE_BEGIN ];
+    if( nullptr != pOut )
         (*pOut)( rWrt, *pCNd );
     return rWrt;
 }

@@ -700,8 +700,9 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.m_reserved1=8;rTypo.m_reserved1>0;rTypo.m_reserved1-=2)
     {
-        if (nullptr != (pForbidden = m_pDoc->getIDocumentSettingAccess().getForbiddenCharacters(rTypo.GetConvertedLang(),
-            false)))
+        pForbidden = m_pDoc->getIDocumentSettingAccess().getForbiddenCharacters(rTypo.GetConvertedLang(),
+            false);
+        if (nullptr != pForbidden)
         {
             int nIdx = (rTypo.m_reserved1-2)/2;
             if( lcl_CmpBeginEndChars( pForbidden->endLine,
@@ -2496,7 +2497,8 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
                 &(GetExport().m_pParentFrame->GetFrameFormat()) :
                     GetExport().m_pDoc->GetPageDesc(0).GetPageFormatOfNode(*pTextNd, false);
             aRect = pParentFormat->FindLayoutRect(true);
-            if ( 0 == ( nPageSize = aRect.Width() ) )
+            nPageSize = aRect.Width();
+            if ( 0 == nPageSize )
             {
                 const SvxLRSpaceItem& rLR = pParentFormat->GetLRSpace();
                 nPageSize = pParentFormat->GetFrameSize().GetWidth() - rLR.GetLeft()

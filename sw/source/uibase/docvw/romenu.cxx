@@ -118,8 +118,8 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     }
 
     bool bLink = false;
-    const Graphic *pGrf;
-    if ( nullptr == (pGrf = rSh.GetGrfAtPos( rDPos, m_sGrfName, bLink )) )
+    const Graphic *pGrf = rSh.GetGrfAtPos( rDPos, m_sGrfName, bLink );
+    if ( nullptr == pGrf )
     {
         m_xMenu->EnableItem(m_nReadonlySaveGraphic, false);
     }

@@ -747,10 +747,10 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         SwAsciiOptions aOpt;
         OUString sItemOpt;
-        const SfxItemSet* pSet;
-        const SfxPoolItem* pItem;
-        if( nullptr != ( pSet = rMedium.GetItemSet() ) )
+        const SfxItemSet* pSet = rMedium.GetItemSet();
+        if( nullptr != pSet )
         {
+            const SfxPoolItem* pItem;
             if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
                                                     true, &pItem ) )
                 sItemOpt = static_cast<const SfxStringItem*>(pItem)->GetValue();

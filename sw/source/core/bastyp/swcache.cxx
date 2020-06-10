@@ -230,8 +230,8 @@ void SwCache::ToTop( SwCacheObj *pObj )
 SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
                           const bool bToTop )
 {
-    SwCacheObj *pRet;
-    if ( nullptr != (pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ].get() : nullptr) )
+    SwCacheObj *pRet = (nIndex < m_aCacheObjects.size()) ? m_aCacheObjects[ nIndex ].get() : nullptr;
+    if ( pRet )
     {
         if ( !pRet->IsOwner( pOwner ) )
             pRet = nullptr;
@@ -335,8 +335,8 @@ void SwCache::Delete(void const*const pOwner, sal_uInt16 const nIndex)
 void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( m_nDelete );
-    SwCacheObj *pObj;
-    if ( nullptr != (pObj = Get( pOwner, false )) )
+    SwCacheObj *pObj = Get( pOwner, false );
+    if ( pObj )
         DeleteObj( pObj );
 }
 

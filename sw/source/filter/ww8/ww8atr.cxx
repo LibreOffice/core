@@ -302,7 +302,8 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             // No explicit adjust set ?
             if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
             {
-                if ( nullptr != ( pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet ) ) )
+                pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet );
+                if ( nullptr != pItem )
                 {
                     // then set the adjust used by the parent format
                     AttrOutput().OutputItem( *pItem );

@@ -2703,8 +2703,8 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                             }
                             if (-1 != nEnd)
                             {
-                                if (-1 ==
-                                    (nBegin = sPart.indexOf(',',nEnd)))
+                                nBegin = sPart.indexOf(',',nEnd);
+                                if (-1 == nBegin)
                                 {
                                     nBegin = sPart.indexOf(';',nEnd);
                                 }

@@ -222,7 +222,8 @@ bool SetGetExpField::operator<( const SetGetExpField& rField ) const
         else
             pFirstStt = pFirst->StartOfSectionNode();
 
-        if( nullptr != ( pTableNd = pNext->FindTableNode() ) )
+        pTableNd = pNext->FindTableNode();
+        if( pTableNd )
             pNextStt = pTableNd->StartOfSectionNode();
         else
             pNextStt = pNext->StartOfSectionNode();

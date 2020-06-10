@@ -71,7 +71,8 @@ struct PercentHdl
     PercentHdl( sal_uLong nStt, sal_uLong nEnd, SwDocShell* pSh )
         : pDSh(pSh), nActPos(nStt), bBack(false), bNodeIdx(false)
     {
-        if( ( bBack = (nStt > nEnd )) )
+        bBack = (nStt > nEnd);
+        if( bBack )
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;
         }
@@ -95,7 +96,8 @@ struct PercentHdl
             nEnd = rPam.GetPoint()->nNode.GetIndex();
         }
         nActPos = nStt;
-        if( ( bBack = (nStt > nEnd )) )
+        bBack = (nStt > nEnd );
+        if( bBack )
         {
             sal_uLong n = nStt; nStt = nEnd; nEnd = n;
         }
@@ -269,12 +271,14 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             if( !bValidNodesRange )
             {
                 rPtIdx = m_vSavePos.back().nNode;
-                if( nullptr == ( pCNd = rPtIdx.GetNode().GetContentNode() ) )
+                pCNd = rPtIdx.GetNode().GetContentNode();
+                if( !pCNd )
                 {
                     bIsValidPos = false;
                     nContentPos = 0;
                     rPtIdx = aIdx;
-                    if( nullptr == ( pCNd = rPtIdx.GetNode().GetContentNode() ) )
+                    pCNd = rPtIdx.GetNode().GetContentNode();
+                    if( !pCNd )
                     {
                         // then to the beginning of the document
                         rPtIdx = rNds.GetEndOfExtras();
@@ -519,7 +523,8 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 if ( nullptr == pMyNd)
                     break;
 
-                if( nullptr != ( pPtNd = pMyNd->FindTableNode() ))
+                pPtNd = pMyNd->FindTableNode();
+                if( pPtNd )
                     continue;
             }
 
@@ -616,7 +621,8 @@ GoNextCell:
             if( !aCellStt.GetNode().IsStartNode() )
                 break;
             ++aCellStt;
-            if( nullptr == ( pCNd = aCellStt.GetNode().GetContentNode() ))
+            pCNd = aCellStt.GetNode().GetContentNode();
+            if( !pCNd )
                 pCNd = aCellStt.GetNodes().GoNext( &aCellStt );
             bProt = pCNd->IsProtect();
             if( !bProt )
@@ -667,7 +673,8 @@ GoPrevCell:
             if( !pNd->IsEndNode() )
                 break;
             aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
-            if( nullptr == ( pCNd = aCellStt.GetNode().GetContentNode() ))
+            pCNd = aCellStt.GetNode().GetContentNode();
+            if( !pCNd )
                 pCNd = pNd->GetNodes().GoNext( &aCellStt );
             bProt = pCNd->IsProtect();
             if( !bProt )
@@ -963,9 +970,10 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     {
         // if string was not found in region then get all sections (cursors
         // stays unchanged)
-        if( 0 == ( nFound = lcl_FindSelection( rParas, this, fnMove,
-                                                pFndRing, aRegion, eFndRngs,
-                                                bInReadOnly, bCancel ) ))
+        nFound = lcl_FindSelection( rParas, this, fnMove,
+                                    pFndRing, aRegion, eFndRngs,
+                                    bInReadOnly, bCancel );
+        if( 0 == nFound )
             return nFound;
 
         // found string at least once; it's all in new Cursor ring thus delete old one

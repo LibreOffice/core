@@ -96,4 +96,36 @@ void foo()
         pTask->exec();
 }
 }
+
+namespace test5
+{
+void main(OUString sUserAutoCorrFile, int* p2)
+{
+    OUString sRet;
+    int* p1;
+    if (sUserAutoCorrFile == "yyy" && (p1 = p2))
+        sRet = sUserAutoCorrFile;
+    if (sUserAutoCorrFile == "yyy" && nullptr != (p1 = p2))
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if (nullptr != (p1 = p2))
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if ((p1 = p2) != nullptr)
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if ((p1 = p2))
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if ((p1 = p2) && sUserAutoCorrFile == "yyy")
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if ((p1 = p2) || sUserAutoCorrFile == "yyy")
+        sRet = sUserAutoCorrFile;
+    // expected-error@+1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
+    if ((p1 = p2) && sUserAutoCorrFile == "yyy")
+        sRet = sUserAutoCorrFile;
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -419,7 +419,8 @@ void SwIndexMarkPane::InsertUpdate()
     m_pSh->EndAllAction();
     m_pSh->EndUndo(m_bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
 
-    if((nTypePos = m_xTypeDCB->find_text(m_xTypeDCB->get_active_text())) == -1)
+    nTypePos = m_xTypeDCB->find_text(m_xTypeDCB->get_active_text());
+    if(nTypePos == -1)
         nTypePos = 0;
 
     nKey1Pos = m_xKey1DCB->find_text(m_xKey1DCB->get_active_text());

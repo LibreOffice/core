@@ -3796,9 +3796,9 @@ bool SwFlyFrame::IsBackgroundTransparent() const
 
 bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 {
-    SdrObjUserCall *pUserCall;
+    SdrObjUserCall *pUserCall = GetUserCall(pObj);
 
-    if ( nullptr == ( pUserCall = GetUserCall(pObj) ) )
+    if ( nullptr == pUserCall )
         return true;
 
     //Attribute dependent, don't paint for printer or Preview

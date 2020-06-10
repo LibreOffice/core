@@ -2231,7 +2231,8 @@ SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollNam
     SwTextFormatColl *pColl;
     if ( pParent == nullptr )
         pParent = &GetTextFormatColl(0);
-    if (  (pColl=GetDoc()->MakeTextFormatColl(rFormatCollName, pParent)) == nullptr )
+    pColl = GetDoc()->MakeTextFormatColl(rFormatCollName, pParent);
+    if ( pColl == nullptr )
     {
         OSL_FAIL( "MakeTextFormatColl failed" );
     }

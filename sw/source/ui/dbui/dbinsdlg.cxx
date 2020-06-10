@@ -838,7 +838,8 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
     while( -1 != ( nFndPos = sText.indexOf( cDBFieldStart, nSttPos )))
     {
         nSttPos = nFndPos + 1;
-        if( -1 != ( nEndPos = sText.indexOf( cDBFieldEnd, nSttPos+1 )))
+        nEndPos = sText.indexOf( cDBFieldEnd, nSttPos+1 );
+        if( -1 != nEndPos )
         {
             // Text in <> brackets found: what is it:
             SwInsDBColumn aSrch( sText.copy( nSttPos, nEndPos - nSttPos ));

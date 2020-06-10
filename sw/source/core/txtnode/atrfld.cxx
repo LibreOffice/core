@@ -384,9 +384,10 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
 
 bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const
 {
-    const SwTextNode* pTextNd;
-    return RES_AUTOFMT_DOCNODE != rInfo.Which() ||
-        !mpTextField || nullptr == ( pTextNd = mpTextField->GetpTextNode() ) ||
+    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !mpTextField )
+        return true;
+    const SwTextNode* pTextNd = mpTextField->GetpTextNode();
+    return nullptr == pTextNd ||
         &pTextNd->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 

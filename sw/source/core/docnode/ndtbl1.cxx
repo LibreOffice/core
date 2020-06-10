@@ -278,8 +278,8 @@ static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& r
 static void lcl_ProcessRowAttr(std::vector<std::unique_ptr<SwTableFormatCmp>>& rFormatCmp,
                                SwTableLine* pLine, const SfxPoolItem& rNew)
 {
-    SwFrameFormat *pNewFormat;
-    if ( nullptr != (pNewFormat = SwTableFormatCmp::FindNewFormat( rFormatCmp, pLine->GetFrameFormat(), 0 )))
+    SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( rFormatCmp, pLine->GetFrameFormat(), 0 );
+    if ( nullptr != pNewFormat )
         pLine->ChgFrameFormat( static_cast<SwTableLineFormat*>(pNewFormat) );
     else
     {
@@ -800,8 +800,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             }
 
             SwTableBox *pBox = const_cast<SwTableBox*>(pCell->GetTabBox());
-            SwFrameFormat *pNewFormat;
-            if ( nullptr != (pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), nType )))
+            SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), nType );
+            if ( nullptr != pNewFormat )
                 pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
             else
             {
@@ -1163,8 +1163,8 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
         {
             SwTableBox *pBox = aBoxes[i];
 
-            SwFrameFormat *pNewFormat;
-            if ( nullptr != (pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), 0 )))
+            SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), 0 );
+            if ( nullptr != pNewFormat )
                 pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
             else
             {

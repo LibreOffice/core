@@ -181,10 +181,11 @@ SwContact* GetUserCall( const SdrObject* pObj )
 /// Returns true if the SrdObject is a Marquee-Object (scrolling text)
 bool IsMarqueeTextObj( const SdrObject& rObj )
 {
-    SdrTextAniKind eTKind;
-    return SdrInventor::Default == rObj.GetObjInventor() &&
-        OBJ_TEXT == rObj.GetObjIdentifier() &&
-        ( SdrTextAniKind::Scroll == ( eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind())
+    if (SdrInventor::Default != rObj.GetObjInventor() ||
+        OBJ_TEXT != rObj.GetObjIdentifier())
+        return false;
+    SdrTextAniKind eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind();
+    return ( SdrTextAniKind::Scroll == eTKind
          || SdrTextAniKind::Alternate == eTKind || SdrTextAniKind::Slide == eTKind );
 }
 
@@ -518,8 +519,8 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
     // order to transport the z-order.
     // After creating the first Reference the Masters are removed from the
     // List and are not important anymore.
-    SdrPage* pPg(nullptr);
-    if(nullptr != (pPg = pContact->GetMaster()->getSdrPageFromSdrObject()))
+    SdrPage* pPg = pContact->GetMaster()->getSdrPageFromSdrObject();
+    if(nullptr != pPg)
     {
         const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
         pPg->ReplaceObject(pDrawObj, nOrdNum);
@@ -2222,9 +2223,9 @@ void SwDrawVirtObj::AddToDrawingPage()
     SdrObject* pOrgMasterSdrObj = mrDrawContact.GetMaster();
 
     // insert 'virtual' drawing object into page, set layer and user call.
-    SdrPage* pDrawPg;
+    SdrPage* pDrawPg = pOrgMasterSdrObj->getSdrPageFromSdrObject();
     // #i27030# - apply order number of referenced object
-    if ( nullptr != ( pDrawPg = pOrgMasterSdrObj->getSdrPageFromSdrObject() ) )
+    if ( nullptr != pDrawPg )
     {
         // #i27030# - apply order number of referenced object
         pDrawPg->InsertObject( this, GetReferencedObj().GetOrdNum() );

@@ -3236,8 +3236,8 @@ void SwTabFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             InvalidatePrt_();
         if ( nInvFlags & 0x40 )
             InvalidatePos_();
-        SwFrame *pTmp;
-        if ( nullptr != (pTmp = GetIndNext()) )
+        SwFrame *pTmp = GetIndNext();
+        if ( nullptr != pTmp )
         {
             if ( nInvFlags & 0x04 )
             {
@@ -3599,8 +3599,10 @@ void SwTabFrame::Cut()
     {
         InvalidateNextPos();
         //Someone has to do the retouch: predecessor or upper
-        if ( nullptr != (pFrame = GetPrev()) )
-        {   pFrame->SetRetouche();
+        pFrame = GetPrev();
+        if ( nullptr != pFrame )
+        {
+            pFrame->SetRetouche();
             pFrame->Prepare( PrepareHint::WidowsOrphans );
             pFrame->InvalidatePos_();
             if ( pFrame->IsContentFrame() )

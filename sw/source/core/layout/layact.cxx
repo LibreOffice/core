@@ -862,8 +862,8 @@ static const SwFrame *lcl_FindFirstInvaLay( const SwFrame *pFrame, long nBottom 
         {
             if (lcl_IsInvaLay(pFrame, nBottom))
                 return pFrame;
-            const SwFrame *pTmp;
-            if ( nullptr != (pTmp = lcl_FindFirstInvaLay( pFrame, nBottom )) )
+            const SwFrame *pTmp = lcl_FindFirstInvaLay( pFrame, nBottom );
+            if ( nullptr != pTmp )
                 return pTmp;
         }
         pFrame = pFrame->GetNext();

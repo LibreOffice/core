@@ -1227,8 +1227,8 @@ void SwFEShell::EndTextEdit()
     StartAllAction();
     SdrView *pView = Imp()->GetDrawView();
     SdrObject *pObj = pView->GetTextEditObject();
-    SdrObjUserCall* pUserCall;
-    if( nullptr != ( pUserCall = GetUserCall(pObj) ) )
+    SdrObjUserCall* pUserCall = GetUserCall(pObj);
+    if( nullptr != pUserCall )
     {
         SdrObject *pTmp = static_cast<SwContact*>(pUserCall)->GetMaster();
         if( !pTmp )

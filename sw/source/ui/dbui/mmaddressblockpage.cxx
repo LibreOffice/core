@@ -1171,8 +1171,8 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
     m_xEditEngine->GetCharAttribs(nPara, aAttribList);
 
     sal_Int32 nIndex = aSelection.nEndPara;
-    const EECharAttrib* pAttrib;
-    if(nullptr != (pAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList)))
+    const EECharAttrib* pAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    if(nullptr != pAttrib)
         nIndex = pAttrib->nEnd;
     InsertNewEntryAtPosition( rStr, nPara, nIndex );
 

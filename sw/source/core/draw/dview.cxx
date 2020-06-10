@@ -224,8 +224,8 @@ void SwDrawView::AddCustomHdl()
     if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
 
-    const SwFrame* pAnch;
-    if(nullptr == (pAnch = CalcAnchor()))
+    const SwFrame* pAnch = CalcAnchor();
+    if(nullptr == pAnch)
         return;
 
     Point aPos(m_aAnchorPoint);

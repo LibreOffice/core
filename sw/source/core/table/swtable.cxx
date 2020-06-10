@@ -1297,7 +1297,8 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
             sal_Unicode cChar = rStr[nPos];
             if ((cChar<'A' || cChar>'Z') && (cChar<'a' || cChar>'z'))
                 break;
-            if( (cChar -= 'A') >= 26 )
+            cChar -= 'A';
+            if( cChar >= 26 )
                 cChar -= 'a' - '[';
             if( bFirst )
                 bFirst = false;
@@ -1793,7 +1794,8 @@ void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm )
         else
             rNm = OUStringChar( sal_Unicode('A' + nCalc) ) + rNm;
 
-        if( 0 == (nCol = nCol - nCalc) )
+        nCol = nCol - nCalc;
+        if( 0 == nCol )
             break;
         nCol /= coDiff;
         --nCol;
@@ -1851,7 +1853,8 @@ OUString SwTableBox::GetName() const
 
         nPos = pBox->GetUpper()->GetBoxPos( pBox );
         sTmp = OUString::number(nPos + 1);
-        if( nullptr != ( pBox = pLine->GetUpper()) )
+        pBox = pLine->GetUpper();
+        if( nullptr != pBox )
             sNm = sTmp + "." + sNm;
         else
             sw_GetTableBoxColStr( nPos, sNm );

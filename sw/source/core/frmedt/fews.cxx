@@ -168,7 +168,8 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     break;
 
         case CurRectType::HeaderFooter:
-                                    if( nullptr == (pFrame = pFrame->FindFooterOrHeader()) )
+                                    pFrame = pFrame->FindFooterOrHeader();
+                                    if( nullptr == pFrame )
                                         return GetLayout()->getFrameArea();
                                     break;
 
@@ -702,7 +703,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     if( _opRef )
     {
         pFrame = GetCurrFrame();
-        if( nullptr != ( pFly = pFrame->FindFlyFrame() ) )
+        pFly = pFrame->FindFlyFrame();
+        if( nullptr != pFly )
             pFrame = pFly->GetAnchorFrame();
     }
     else

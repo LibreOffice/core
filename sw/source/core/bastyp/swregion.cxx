@@ -74,8 +74,8 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // now split; only those rectangles should be left over that are in
             // the "old" but not in the "new" area; hence, not in intersection.
-            long nTmp;
-            if ( 0 < (nTmp = aInter.Top() - aTmp.Top()) )
+            long nTmp = aInter.Top() - aTmp.Top();
+            if ( 0 < nTmp )
             {
                 const long nOldVal = aTmp.Height();
                 aTmp.Height(nTmp);
@@ -89,7 +89,8 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             aTmp.Top( aInter.Top() );
             aTmp.Bottom( aInter.Bottom() );
-            if ( 0 < (nTmp = aInter.Left() - aTmp.Left()) )
+            nTmp = aInter.Left() - aTmp.Left();
+            if ( 0 < nTmp )
             {
                 const long nOldVal = aTmp.Width();
                 aTmp.Width( nTmp );

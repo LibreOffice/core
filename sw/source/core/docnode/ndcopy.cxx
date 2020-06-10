@@ -339,7 +339,8 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
     SwAttrSet aPgBrkSet( pDestDoc->GetAttrPool(), aBreakSetRange );
     const SwAttrSet* pSet;
 
-    if( nullptr != ( pSet = rDestNd.GetpSwAttrSet() ) )
+    pSet = rDestNd.GetpSwAttrSet();
+    if( nullptr != pSet )
     {
         // Special cases for Break-Attributes
         const SfxPoolItem* pAttr;
@@ -351,7 +352,8 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
     }
 
     rDestNd.ChgFormatColl( pDestDoc->CopyTextColl( *GetTextColl() ));
-    if( nullptr != ( pSet = GetpSwAttrSet() ) )
+    pSet = GetpSwAttrSet();
+    if( nullptr != pSet )
         pSet->CopyToModify( rDestNd );
 
     if( aPgBrkSet.Count() )

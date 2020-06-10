@@ -369,7 +369,8 @@ void SwRedlineAcceptDlg::Activate()
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
             // Redline-Parents were inserted, changed or deleted
-            if ((i = CalcDiff(i, false)) == SwRedlineTable::npos)
+            i = CalcDiff(i, false);
+            if (i == SwRedlineTable::npos)
                 return;
             continue;
         }
@@ -380,7 +381,8 @@ void SwRedlineAcceptDlg::Activate()
         if (!pRedlineData && pBackupData)
         {
             // Redline-Children were deleted
-            if ((i = CalcDiff(i, true)) == SwRedlineTable::npos)
+            i = CalcDiff(i, true);
+            if (i == SwRedlineTable::npos)
                 return;
             continue;
         }
@@ -391,7 +393,8 @@ void SwRedlineAcceptDlg::Activate()
                 if (pRedlineData != pBackupData->pChild)
                 {
                     // Redline-Children were inserted, changed or deleted
-                    if ((i = CalcDiff(i, true)) == SwRedlineTable::npos)
+                    i = CalcDiff(i, true);
+                    if (i == SwRedlineTable::npos)
                         return;
                     continue;
                 }
@@ -703,7 +706,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         if( !pCurrRedline )
         {
             pSh->SwCursorShell::Push();
-            if( nullptr == (pCurrRedline = pSh->SelNextRedline()))
+            pCurrRedline = pSh->SelNextRedline();
+            if( nullptr == pCurrRedline )
                 pCurrRedline = pSh->SelPrevRedline();
             pSh->SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
         }

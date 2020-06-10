@@ -290,7 +290,8 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
         }
         else
         {
-            if( RES_TXTATR_END <= (nWhich = pItem->Which() ))
+            nWhich = pItem->Which();
+            if( RES_TXTATR_END <= nWhich )
                 break; // end of text attributes
 
             if( CmpAttr( rSet.Get( nWhich, !m_bNoColls ), *pItem ) )
@@ -761,7 +762,9 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
                 continue;
 
             // then we have our search area
-            if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+            nSttPos = rCmpArr.Start();
+            nEndPos = rCmpArr.End();
+            if( nSttPos > nEndPos )
                 return false;
 
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, true );
@@ -850,7 +853,9 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
                 continue;
 
             // then we have our search area
-            if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+            nSttPos = rCmpArr.Start();
+            nEndPos = rCmpArr.End();
+            if( nSttPos > nEndPos )
                 return false;
 
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );

@@ -759,8 +759,8 @@ SwCalcOper SwCalc::GetToken()
                                   nSttPos = nFndPos;
 
                         do {
-                            if( -1 != ( nFndPos =
-                                m_sCommand.indexOf( ']', nFndPos )) )
+                            nFndPos = m_sCommand.indexOf( ']', nFndPos );
+                            if( -1 != nFndPos )
                             {
                                 // ignore the ]
                                 if ('\\' == m_sCommand[nFndPos-1])

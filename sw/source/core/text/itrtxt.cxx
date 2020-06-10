@@ -75,7 +75,8 @@ SwLineLayout *SwTextIter::GetPrev_()
         return nullptr;
     while( pLay->GetNext() != m_pCurr )
         pLay = pLay->GetNext();
-    return m_pPrev = pLay;
+    m_pPrev = pLay;
+    return m_pPrev;
 }
 
 const SwLineLayout *SwTextIter::GetPrev()
@@ -113,7 +114,8 @@ const SwLineLayout *SwTextIter::Next()
         m_nY += GetLineHeight();
         if( m_pCurr->GetLen() || ( m_nLineNr>1 && !m_pCurr->IsDummy() ) )
             ++m_nLineNr;
-        return m_pCurr = m_pCurr->GetNext();
+        m_pCurr = m_pCurr->GetNext();
+        return m_pCurr;
     }
     else
         return nullptr;

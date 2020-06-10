@@ -200,11 +200,14 @@ OUString SwSortTextElement::GetKey(sal_uInt16 nId) const
 
     // Find the delimiter
     while( nStart != -1 && i < nDCount)
-        if( -1 != ( nStart = rStr.indexOf( nDeli, nStart ) ) )
+    {
+        nStart = rStr.indexOf( nDeli, nStart );
+        if( -1 != nStart )
         {
             nStart++;
             i++;
         }
+    }
 
     // Found next delimiter or end of String
     // and copy

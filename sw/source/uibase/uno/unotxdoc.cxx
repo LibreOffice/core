@@ -1917,10 +1917,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawModel * pDrawDoc;
+            SwDrawModel * pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
             bool bAuto = *o3tl::doAccess<bool>(aValue);
 
-            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != pDrawDoc )
                 pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
@@ -1937,10 +1937,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawModel * pDrawDoc;
+            SwDrawModel * pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
             bool bMode = *o3tl::doAccess<bool>(aValue);
 
-            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != pDrawDoc )
                 pDrawDoc->SetOpenInDesignMode( bMode );
             else if (!bMode)
             {
@@ -2095,9 +2095,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawModel * pDrawDoc;
+            SwDrawModel * pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
             bool bAuto;
-            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != pDrawDoc )
                 bAuto = pDrawDoc->GetAutoControlFocus();
             else
                 bAuto = false;
@@ -2106,9 +2106,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawModel * pDrawDoc;
+            SwDrawModel * pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
             bool bMode;
-            if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
+            if ( nullptr != pDrawDoc )
                 bMode = pDrawDoc->GetOpenInDesignMode();
             else
                 bMode = true;
