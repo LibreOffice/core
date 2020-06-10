@@ -53,6 +53,7 @@ namespace cppu_threadpool {
             MutexGuard guard( m_mutex );
             if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
+                assert(false && "SB1");
                 return nullptr;
             }
             m_lstCallstack.push_front( nDisposeId );
@@ -86,6 +87,7 @@ namespace cppu_threadpool {
                     {
                         m_cndWait.reset();
                     }
+                    assert(false && "SB3");
                     break;
                 }
 
