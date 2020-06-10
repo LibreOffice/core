@@ -291,6 +291,8 @@ namespace
             {
                 pNewBookmark->SetKeyCode(pOldBookmark->GetKeyCode());
                 pNewBookmark->SetShortName(pOldBookmark->GetShortName());
+                pNewBookmark->Hide(pOldBookmark->IsHidden());
+                pNewBookmark->SetHideCondition(pOldBookmark->GetHideCondition());
             }
             ::sw::mark::IFieldmark* const pNewFieldmark =
                 dynamic_cast< ::sw::mark::IFieldmark* const >(pNewMark);

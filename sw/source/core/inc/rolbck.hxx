@@ -248,6 +248,8 @@ class SwHistoryBookmark : public SwHistoryHint
     private:
         const OUString m_aName;
         OUString m_aShortName;
+        bool m_bHidden;
+        OUString m_aHideCondition;
         vcl::KeyCode m_aKeycode;
         const sal_uLong m_nNode;
         const sal_uLong m_nOtherNode;
