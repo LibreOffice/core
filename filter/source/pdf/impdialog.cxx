@@ -516,6 +516,8 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxSlidesFt(m_xBuilder->weld_label("slides"))
     , mxSheetsFt(m_xBuilder->weld_label("selectedsheets"))
 {
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+        mxCbPDFUA->set_visible(false);
 }
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
