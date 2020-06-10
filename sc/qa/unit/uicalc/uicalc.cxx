@@ -149,6 +149,28 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
     CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132431)
+{
+    ScModelObj* pModelObj = createDoc("tdf132431.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString aFormula;
+    pDoc->GetFormula(7, 219, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIFS($H$2:$H$198,B$2:B$198,G220)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(7, 219, 0)));
+
+    // Without the fix in place, it would crash here with
+    // uncaught exception of type std::exception (or derived).
+    // - vector::_M_fill_insert
+    pDoc->SetString(ScAddress(7, 219, 0), "=SUMIFS($H$2:$DB$198,B$2:B$198,G220)");
+
+    pDoc->GetFormula(7, 219, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMIFS($H$2:$DB$198,B$2:B$198,G220)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(7, 219, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Err:502"), pDoc->GetString(ScAddress(7, 219, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
