@@ -418,6 +418,8 @@ void SvxNotebookbarConfigPage::SelectElement()
     OString sUIFileUIPath = CustomNotebookbarGenerator::getSystemPath(
         CustomNotebookbarGenerator::getCustomizedUIPath());
     xmlDocPtr pDoc = xmlParseFile(sUIFileUIPath.getStr());
+    if (!pDoc)
+        return;
     xmlNodePtr pNodePtr = xmlDocGetRootElement(pDoc);
 
     std::vector<NotebookbarEntries> aEntries;
@@ -479,10 +481,7 @@ void SvxNotebookbarConfigPage::SelectElement()
 
     aEntries.clear();
 
-    if (pDoc != nullptr)
-    {
-        xmlFreeDoc(pDoc);
-    }
+    xmlFreeDoc(pDoc);
 }
 
 SvxNotebookbarEntriesListBox::SvxNotebookbarEntriesListBox(std::unique_ptr<weld::TreeView> xParent,
