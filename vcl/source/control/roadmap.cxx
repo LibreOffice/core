@@ -208,6 +208,7 @@ ORoadmap::ORoadmap(vcl::Window* _pParent, WinBits _nWinStyle)
 
 void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
 {
+    delete m_pImpl->InCompleteHyperLabel;
     m_pImpl->InCompleteHyperLabel = nullptr;
     m_pImpl->setCurItemID(-1);
     m_pImpl->setComplete(true);
