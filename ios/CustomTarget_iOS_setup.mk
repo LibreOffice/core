@@ -49,7 +49,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),EN2)
 
 	# generate native-code.h (used by LibreOffice.c)
-	$(SRCDIR)/solenv/bin/native-code.py \
+	xcrun python3 $(SRCDIR)/solenv/bin/native-code.py \
 	    -C -g core -g writer -g calc -g draw -g edit \
 	    > $(IOSGEN)/native-code.h
 
