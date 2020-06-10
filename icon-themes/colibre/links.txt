@@ -295,7 +295,7 @@ cmd/sc_config.png cmd/sc_choosecontrols.png
 
 # Formatmenu
 cmd/32/anchormenu.png cmd/32/toggleanchortype.png
-cmd/32/conditionalformatmenu.png cmd/32/colorscaleformatdialog.png
+cmd/32/conditionalformatmenu.png cmd/32/conditionalformatdialog.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatframemenu.png cmd/32/framedialog.png
 cmd/32/formatimagemenu.png cmd/32/graphic.png
@@ -304,7 +304,7 @@ cmd/32/formattextmenu.png cmd/32/charfontname.png
 cmd/32/textalign.png cmd/32/alignblock.png
 
 cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
-cmd/lc_conditionalformatmenu.png cmd/lc_colorscaleformatdialog.png
+cmd/lc_conditionalformatmenu.png cmd/lc_conditionalformatdialog.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatframemenu.png cmd/lc_framedialog.png
 cmd/lc_formatimagemenu.png cmd/lc_graphicdialog.png
@@ -313,7 +313,7 @@ cmd/lc_formattextmenu.png cmd/lc_charfontname.png
 cmd/lc_textalign.png cmd/lc_alignblock.png
 
 cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
-cmd/sc_conditionalformatmenu.png cmd/sc_colorscaleformatdialog.png
+cmd/sc_conditionalformatmenu.png cmd/sc_conditionalformatdialog.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_framedialog.png
 cmd/sc_formatimagemenu.png cmd/sc_graphicdialog.png
