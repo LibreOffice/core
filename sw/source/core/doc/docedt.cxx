@@ -412,7 +412,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pOldTextNd->FormatToTextAttr( pTextNd );
 
                 const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-                pContentStore->Save( pDoc, aOldIdx.GetIndex(), pOldTextNd->Len() );
+                pContentStore->Save(pDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
 
                 SwIndex aAlphaIdx(pTextNd);
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwIndex(pOldTextNd),
