@@ -590,6 +590,7 @@ interface BaseTextSelection
     SID_ACCESSIBILITY_CHECK
     [
         ExecMethod = ExecDlg;
+        StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }
