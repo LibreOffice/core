@@ -164,6 +164,7 @@ friend class SfxPrinterController;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
+    bool                        mLOKHideSidebar;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -359,6 +360,8 @@ public:
 
     /// Set the LibreOfficeKit locale of this view.
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
+    /// Set mLOKHideSidebar
+    void SetLOKHideSidebar(bool hidden);
     /// Get the LibreOfficeKit locale of this view.
     const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
     /// Get the form factor of the device where the lok client is running.
@@ -369,6 +372,8 @@ public:
     bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
     /// Check if the lok client is running on a mobile device.
     bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
+    /// Check if sidebar should start hidden
+    bool shouldHideSidebar() const { return mLOKHideSidebar; }
 };
 
 

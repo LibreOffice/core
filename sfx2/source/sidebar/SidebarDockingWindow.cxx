@@ -19,6 +19,7 @@
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sidebar/PanelDescriptor.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
@@ -90,6 +91,15 @@ public:
             const std::string message = OString(posMessage + sizeMessage).getStr();
             const vcl::LOKWindowId lokWindowId = m_rSidebarDockingWin.GetLOKWindowId();
 
+            const SfxViewShell* pViewShell = SfxViewShell::Current();
+            bool shouldHideSidebar = pViewShell && pViewShell->shouldHideSidebar();
+            // Start sidebar hidden
+            if (shouldHideSidebar)
+            {
+                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                pViewFrm->SetChildWindow(SID_SIDEBAR, false, false);
+                return;
+            }
             if (lokWindowId != m_LastLOKWindowId || message != m_LastNotificationMessage)
             {
                 m_LastLOKWindowId = lokWindowId;

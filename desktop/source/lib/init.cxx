@@ -3639,6 +3639,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     SetLastExceptionMsg();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    SfxViewShell* pViewShell = SfxViewShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -3707,7 +3708,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else if (gImpl && aCommand == ".uno:TransformDialog")
     {
         bool bNeedConversion = false;
-        SfxViewShell* pViewShell = SfxViewShell::Current();
         LokChartHelper aChartHelper(pViewShell);
 
         if (aChartHelper.GetWindow() )
@@ -3770,8 +3770,13 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             return;
         }
     }
+    else if (gImpl && aCommand == ".uno:Sidebar")
+    {
+        pViewShell->SetLOKHideSidebar(false);
+    }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
+        pViewShell->SetLOKHideSidebar(false);
         setupSidebar(true);
         return;
     }

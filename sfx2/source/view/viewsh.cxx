@@ -1076,6 +1076,7 @@ SfxViewShell::SfxViewShell
 ,   maLOKLanguageTag(LANGUAGE_NONE)
 ,   maLOKLocale(LANGUAGE_NONE)
 ,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
+,   mLOKHideSidebar(true)
 {
     SetMargin( pViewFrame->GetMargin_Impl() );
 
@@ -1522,6 +1523,11 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
 void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
 {
     maLOKLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
+}
+
+void SfxViewShell::SetLOKHideSidebar(bool hidden)
+{
+    mLOKHideSidebar = hidden;
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
