@@ -1169,6 +1169,29 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromLeftMargin, "tdf132976_testR
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1133), nAnchoredWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorWidthFromInsideOutsideMargin, "tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx")
+{
+    // TODO: Fix export.
+    if (mbExported)
+        return;
+
+    // tdf#133863 tdf#133864 The sizes of the width of these shapes depend on the sizes of the inside and outside margins.
+    // The open book: outside --text-- inside | inside --text-- outside
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Outside
+    sal_Int32 nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[1]/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
+    // Inside
+    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
+    // Inside
+    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1440), nAnchoredWidth);
+    // Outside
+    nAnchoredWidth = getXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2552), nAnchoredWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
