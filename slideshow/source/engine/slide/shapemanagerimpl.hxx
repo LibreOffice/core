@@ -120,6 +120,7 @@ private:
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
     virtual ShapeSharedPtr lookupShape(
         css::uno::Reference< css::drawing::XShape > const & xShape ) const override;
+    virtual std::shared_ptr<XShapeToShapeMap const> getXShapeToShapeMapPtr() const override;
     virtual void addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea ) override;
 
 
