@@ -24,16 +24,19 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
+#include <svx/gallerybinaryengine.hxx>
 
 #include <cstdio>
 #include <memory>
 #include <vector>
 
+class GalleryBinaryEngine;
 
 class GalleryThemeEntry
 {
 private:
 
+    GalleryBinaryEngine     maGalleryBinaryEngine;
     OUString                aName;
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
@@ -44,8 +47,6 @@ private:
     bool                    bModified;
     bool                    bThemeNameFromResource;
 
-    static INetURLObject    ImplGetURLIgnoreCase( const INetURLObject& rURL );
-
 public:
                             GalleryThemeEntry( bool bCreateUniqueURL,
                                                const INetURLObject& rBaseURL,
@@ -53,12 +54,14 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
+    static INetURLObject    ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
     const OUString&         GetThemeName() const { return aName; }
 
-    const INetURLObject&    GetThmURL() const { return aThmURL; }
-    const INetURLObject&    GetSdgURL() const { return aSdgURL; }
-    const INetURLObject&    GetSdvURL() const { return aSdvURL; }
-    const INetURLObject&    GetStrURL() const { return aStrURL; }
+    const INetURLObject&    GetThmURL() const { return maGalleryBinaryEngine.GetThmURL(); }
+    const INetURLObject&    GetSdgURL() const { return maGalleryBinaryEngine.GetSdgURL(); }
+    const INetURLObject&    GetSdvURL() const { return maGalleryBinaryEngine.GetSdvURL(); }
+    const INetURLObject&    GetStrURL() const { return maGalleryBinaryEngine.GetStrURL(); }
 
     OUString                ReadStrFromIni(const OUString &aKeyName );
 
