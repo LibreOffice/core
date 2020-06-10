@@ -23,6 +23,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <tools/stream.hxx>
@@ -148,9 +150,11 @@ void setShapeCertificate(SdrView* pView,
 
     // Read svg and replace placeholder texts.
     OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage("signature-line-draw.svg"));
+    aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", SvxResId(RID_SVXSTR_SIGNATURELINE_DSIGNED_BY));
     OUString aSignerName = svx::SignatureLineHelper::getSignerName(xCertificate);
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", aSignerName);
     OUString aDate = svx::SignatureLineHelper::getLocalizedDate();
+    aDate = SvxResId(RID_SVXSTR_SIGNATURELINE_DATE).replaceFirst("%1", aDate);
     aSvgImage = aSvgImage.replaceAll("[DATE]", aDate);
 
     uno::Reference<graphic::XGraphic> xGraphic = svx::SignatureLineHelper::importSVG(aSvgImage);
