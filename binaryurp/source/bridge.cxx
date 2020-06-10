@@ -307,6 +307,7 @@ void Bridge::terminate(bool final) {
         }
         assert(tp != nullptr);
         uno_threadpool_dispose(tp);
+        SAL_DEBUG("SB:dispose "<<r.is()<<" "<<(r.is()&&isThread(r.get()))<<" "<<joinW<<" "<<w.is()<<" "<<(w.is()&&isThread(w.get())));
         Stubs s;
         {
             osl::MutexGuard g(mutex_);
