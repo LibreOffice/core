@@ -136,7 +136,7 @@ void printProperties(
     const OUString& prefix,
     const uno::Sequence< beans::PropertyValue >& aProp )
 {
-    for (PropertyValue const & aPropVal : aProp)
+    for (beans::PropertyValue const & aPropVal : aProp)
     {
         OUString tmp;
 
