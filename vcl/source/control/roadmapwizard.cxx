@@ -586,6 +586,11 @@ namespace vcl
         {
             // check how many paths are still allowed
             const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
+
+            // if current path has only the base item, it is not possible to proceed without activating another path
+            if(rActivePath.size()<=1)
+                return false;
+
             sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
 
             size_t nPossiblePaths(0);
