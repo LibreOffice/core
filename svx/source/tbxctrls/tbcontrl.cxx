@@ -263,7 +263,13 @@ private:
             InterimItemWindow::Disable();
     }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
+    virtual void GetFocus() override
+    {
+        if (m_xWidget)
+            m_xWidget->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
     void            SetOptimalSize();
 };
 
