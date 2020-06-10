@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8f26a02_93d9af6b",
+        "filename": "slideshow/source/inc/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-10T14:32:04Z",
+      "side": 1,
+      "message": "needs some documentation ;)",
+      "revId": "d7d5837a9d6691118bcb77b9565a65c2f90e7a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f666e307_97b96f46",
+        "filename": "slideshow/source/inc/shape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-06-10T14:32:04Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "d7d5837a9d6691118bcb77b9565a65c2f90e7a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
