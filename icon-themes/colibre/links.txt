@@ -877,7 +877,6 @@ cmd/32/basicshapes.circle.png cmd/32/circle.png
 cmd/32/basicshapes.parallelogram.png cmd/32/flowchartshapes.flowchart-data.png
 cmd/32/basicshapes.round-rectangle.png cmd/32/rect_rounded.png
 cmd/32/calloutshapes.round-rectangular-callout.png cmd/32/calloutshapes.png
-cmd/32/emojicontrol.png cmd/32/symbolshapes.png
 cmd/32/flowchartshapes.flowchart-alternate-process.png cmd/32/basicshapes.round-quadrat.png
 cmd/32/flowchartshapes.flowchart-connector.png cmd/32/circle.png
 cmd/32/flowchartshapes.flowchart-extract.png cmd/32/basicshapes.isosceles-triangle.png
@@ -897,7 +896,6 @@ cmd/lc_basicshapes.circle.png cmd/lc_circle.png
 cmd/lc_basicshapes.parallelogram.png cmd/lc_flowchartshapes.flowchart-data.png
 cmd/lc_basicshapes.round-rectangle.png cmd/lc_rect_rounded.png
 cmd/lc_calloutshapes.round-rectangular-callout.png cmd/lc_calloutshapes.png
-cmd/lc_emojicontrol.png cmd/lc_symbolshapes.png
 cmd/lc_flowchartshapes.flowchart-alternate-process.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_circle.png
 cmd/lc_flowchartshapes.flowchart-extract.png cmd/lc_basicshapes.isosceles-triangle.png
@@ -916,7 +914,6 @@ cmd/sc_basicshapes.circle.png cmd/sc_circle.png
 cmd/sc_basicshapes.parallelogram.png cmd/sc_flowchartshapes.flowchart-data.png
 cmd/sc_basicshapes.round-rectangle.png cmd/sc_rect_rounded.png
 cmd/sc_calloutshapes.round-rectangular-callout.png cmd/sc_calloutshapes.png
-cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
 cmd/sc_flowchartshapes.flowchart-alternate-process.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_flowchartshapes.flowchart-connector.png cmd/sc_circle.png
 cmd/sc_flowchartshapes.flowchart-extract.png cmd/sc_basicshapes.isosceles-triangle.png
@@ -2254,9 +2251,6 @@ sc/res/nc07.png cmd/sc_insertbookmark.png
 sc/res/nc08.png cmd/sc_insertgraphic.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
-sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
-sc/res/paste_values_formats.png cmd/lc_formatpaintbrush.png
-sc/res/paste_values_only.png cmd/lc_numberformatstandard.png
 sc/res/sc26047.png cmd/sc_dbviewfunctions.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
