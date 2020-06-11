@@ -45,7 +45,8 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
                                     MediaFileManager&                    rMediaFileManager,
                                     const UnoViewContainer&           rViewContainer,
                                     const uno::Reference<
-                                          uno::XComponentContext>&    rComponentContext ) :
+                                          uno::XComponentContext>&    rComponentContext,
+                                    box2d::utils::Box2DWorldSharedPtr rBox2DWorldPtr ) :
         mpSubsettableShapeManager( rSubsettableShapeManager ),
         mrEventQueue( rEventQueue ),
         mrEventMultiplexer( rEventMultiplexer ),
@@ -55,7 +56,8 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
         mrCursorManager( rCursorManager ),
         mrMediaFileManager( rMediaFileManager ),
         mrViewContainer( rViewContainer ),
-        mxComponentContext( rComponentContext )
+        mxComponentContext( rComponentContext ),
+        mpBox2DWorld( rBox2DWorldPtr )
     {}
 
 void SlideShowContext::dispose()
