@@ -466,7 +466,7 @@ class tdf93506(UITestCase):
     yVarName = xDialog.getChild("entry_Yname")
 
     self.assertEqual(get_state_as_dict(movingAverage)["Checked"], "true")
-    self.assertEqual(get_state_as_dict(period)["Text"], "3")
+    self.assertEqual(get_state_as_dict(period)["Text"], "4")
     self.assertEqual(get_state_as_dict(xentryname)["Text"], "Name")
 
     #Click on tab "Line".
