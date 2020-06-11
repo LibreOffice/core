@@ -760,6 +760,7 @@ namespace o3tl
 #define LANGUAGE_USER_LIGURIAN              LanguageType(0x06A6)
 #define LANGUAGE_USER_MINANGKABAU           LanguageType(0x06A7)
 #define LANGUAGE_USER_SUNDANESE             LanguageType(0x06A8)
+#define LANGUAGE_USER_YAKA_DRCONGO          LanguageType(0x06A9)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
