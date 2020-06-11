@@ -216,7 +216,6 @@ private:
     bool mbUserDrawEnabled : 1;  ///< UserDraw possible
     bool mbInUserDraw : 1;       ///< In UserDraw
     bool mbReadOnly : 1;         ///< ReadOnly
-    bool mbMirroring : 1;        ///< pb: #106948# explicit mirroring for calc
     bool mbCenter : 1;           ///< center Text output
     bool mbRight : 1;            ///< right align Text output
     bool mbEdgeBlending : 1;
@@ -362,10 +361,6 @@ public:
 
     DrawTextFlags   ImplGetTextStyle() const;
 
-    /// pb: #106948# explicit mirroring for calc
-    void     EnableMirroring()       { mbMirroring = true; }
-    bool     IsMirroring() const { return mbMirroring; }
-
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
@@ -498,9 +493,6 @@ public:
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew);
-
-    /// pb: #106948# explicit mirroring for calc
-    void     EnableMirroring()   { maLBWindow->EnableMirroring(); }
 };
 
 class ImplListBoxFloatingWindow : public FloatingWindow

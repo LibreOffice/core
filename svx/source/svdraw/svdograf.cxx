@@ -888,11 +888,6 @@ GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
     return GDIMetaFile();
 }
 
-sal_Int32 SdrGrafObj::getEmbeddedPageNumber() const
-{
-   return mpGraphicObject->GetGraphic().getPageNumber();
-}
-
 SdrObjectUniquePtr SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 {
     SdrObject* pRetval = nullptr;

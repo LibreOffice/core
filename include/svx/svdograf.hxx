@@ -199,9 +199,6 @@ public:
     bool isEmbeddedVectorGraphicData() const;
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;
 
-    /// Returns the page number of the embedded data (typically to re-render or import it).
-    sal_Int32 getEmbeddedPageNumber() const;
-
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void            AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;

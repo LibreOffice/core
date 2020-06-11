@@ -270,8 +270,6 @@ private:
 
         std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aFormattedFormatterAdjustmentMaps;
-        std::vector<WidgetAdjustmentMap> m_aTimeFormatterAdjustmentMaps;
-        std::vector<WidgetAdjustmentMap> m_aDateFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aSliderAdjustmentMaps;
 
@@ -341,8 +339,6 @@ private:
 
     void        connectNumericFormatterAdjustment(const OString &id, const OUString &rAdjustment);
     void        connectFormattedFormatterAdjustment(const OString &id, const OUString &rAdjustment);
-    void        connectTimeFormatterAdjustment(const OString &id, const OUString &rAdjustment);
-    void        connectDateFormatterAdjustment(const OString &id, const OUString &rAdjustment);
 
     void        extractGroup(const OString &id, stringmap &rVec);
     void        extractModel(const OString &id, stringmap &rVec);

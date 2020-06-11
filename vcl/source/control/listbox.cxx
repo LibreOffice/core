@@ -1351,11 +1351,6 @@ sal_uInt16 ListBox::GetDisplayLineCount() const
     return mpImplLB->GetDisplayLineCount();
 }
 
-void ListBox::EnableMirroring()
-{
-    mpImplLB->EnableMirroring();
-}
-
 tools::Rectangle ListBox::GetDropDownPosSizePixel() const
 {
     return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ListBox*>(this) ) : tools::Rectangle();
